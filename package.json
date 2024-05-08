@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  },
+  "dependencies": {
+    "@preline/dropdown": "^2.0.2",
+    "preline": "^2.0.3"
+  }
+}
