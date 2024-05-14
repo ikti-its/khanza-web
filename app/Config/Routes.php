@@ -11,6 +11,8 @@ $routes->get('/login', 'authController::index');
 $routes->get('/logout', 'authController::logout', ['filter' => 'auth']);
 
 $routes->get('/profile', 'userPegawaiController::lihatProfil', ['filter' => 'auth']);
+$routes->post('/submiteditprofil', 'userPegawaiController::submitEditProfil', ['filter' => 'auth']);
+
 
 $routes->get('/admin', 'authController::dashboard', ['filter' => 'auth']);
 $routes->post('/admin', 'authController::login', ['filter' => 'noauth']);
