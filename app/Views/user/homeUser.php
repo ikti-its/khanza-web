@@ -2,6 +2,8 @@
 <?= $this->section('content'); ?>
 
 
+
+
 <div class="overflow overflow-x-auto mt-5 mr-4 ml-4 bg-white shadow-xl rounded-lg text-gray-900">
     <div class="rounded-t-lg h-40 overflow-hidden">
         <img class="object-cover object-top w-full" src="/img/bg-profile.png">
@@ -41,182 +43,170 @@
 </div>
 
 
+
+
 <div class="mt-3">
     <div id="tabs-with-icons-1" role="tabpanel" aria-labelledby="tabs-with-icons-item-1">
 
-        <div class="mt-5 pt-5 mr-4 ml-4 bg-white shadow-xl rounded-xl text-gray-900 sm:p-7 dark:bg-slate-900">
-            <div class="mb-8">
-                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                    Biodata diri
-                </h2>
+        <!-- Card Section -->
+        <div class="overflow overflow-x-auto px-4 py-10 sm:px-6 lg:px-8 mx-auto"><!-- Card -->
+            <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-neutral-800">
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-neutral-200">
+                        Biodata Diri
+                    </h2>
+                </div>
+
+                <form>
+                    <!-- Grid -->
+                    <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
+
+                        <div class="sm:col-span-3">
+                            <label for="af-account-email" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Email
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+                            <input id="af-account-email" type="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-teal-600 focus:ring-teal-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="maria@site.com" value="<?= $akun_data['email'] ?? '' ?>" readonly>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-3">
+                            <label for="af-account-role" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Role
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+                            <input id="af-account-role" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your role" value="<?= $akun_data['nip'] ?? '' ?>" readonly>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-3">
+                            <label for="af-account-alamat" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Alamat Lengkap
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+                            <input id="af-account-alamat" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your alamat" value="<?= $akun_data['alamat'] ?? '' ?>" readonly>
+                        </div>
+                        <!-- End Col -->
+
+
+                        <div class="sm:col-span-3">
+                            <label for="af-account-bio" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Denah Lokasi
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+
+                            <div id="location-map" class="py-2 px-3 block w-full h-72 rounded-xl"></div>
+                        </div>
+                        <!-- End Col -->
+                    </div>
+                    <!-- End Grid -->
+                </form>
             </div>
-
-            <form action="/submiteditprofil" method="post">
-
-                <div class="sm:flex sm:items-center py-4">
-                    <!-- Grid -->
-                    <div class="sm:w-1/6">
-                        <label for="af-account-id-akun" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                            Email
-                        </label>
-                    </div>
-
-                    <!-- End Col -->
-
-                    <div class="sm:col-span-9">
-                        <input id="af-id-akun" name="id_akun" type="text" class="mx-28 py-5 px-3  block w-full border-gray-900 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" readonly placeholder="36 characters uuid" value="<?= $akun_data['email'] ?? '' ?>">
-                    </div>
-                    <!-- End Col -->
-                </div>
-
-
-                <div class="sm:flex sm:items-center py-4">
-                    <!-- Grid -->
-                    <div class="sm:w-1/6">
-                        <label for="af-account-id-akun" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                            Role
-                        </label>
-                    </div>
-
-                    <!-- End Col -->
-
-                    <div class="sm:col-span-9">
-                        <input id="af-id-akun" name="id_akun" type="text" class="mx-28 py-5 px-3  block w-full border-gray-900 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" readonly placeholder="36 characters uuid" value="<?= $akun_data['nip'] ?? '' ?>">
-                    </div>
-                    <!-- End Col -->
-                </div>
-
-                <div class="sm:flex sm:items-center py-4">
-                    <!-- Grid -->
-                    <div class="sm:w-1/6">
-                        <label for="af-account-id-akun" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                            Alamat Lengkap
-                        </label>
-                    </div>
-
-                    <!-- End Col -->
-
-                    <div class="sm:col-span-9">
-                        <input id="af-id-akun" name="id_akun" type="text" class="mx-28 py-5 px-3  block w-full border-gray-900 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" readonly placeholder="36 characters uuid" value="<?= $akun_data['alamat'] ?? '' ?>">
-                    </div>
-                    <!-- End Col -->
-                </div>
-
-                <div class="sm:flex sm:items-center py-4">
-                    <!-- Grid -->
-                    <div class="sm:w-1/6">
-                        <label for="location-input" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                            Denah Lokasi
-                        </label>
-                    </div>
-
-                    <!-- End Col -->
-                    <div class="sm:w-5/6">
-                        <!-- Update input fields with latitude and longitude values from API -->
-                        <input id="location-input" name="location-input" type="text" class="mx-28 py-5 px-3 block w-full border-gray-900 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" readonly placeholder="Latitude, Longitude" value="<?= ($akun_data['alamat_lat'] ?? '') . ', ' . ($akun_data['alamat_lon'] ?? '') ?>">
-                        <!-- Map container -->
-                        <div id="location-map" class="h-96 w-96 mx-28 py-5 mt-5 px-3"></div>
-                    </div>
-                </div>
-
-
-            </form>
-
+            <!-- End Card -->
         </div>
+        <!-- End Card Section -->
     </div>
     <div id="tabs-with-icons-2" class="hidden" role="tabpanel" aria-labelledby="tabs-with-icons-item-2">
-        <div class="mt-5 pt-5 mr-4 ml-4 bg-white shadow-xl rounded-xl text-gray-900 sm:p-7 dark:bg-slate-900">
-            <div class="mb-8">
-                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                    Ubah Profil
-                </h2>
+        <!-- Card Section -->
+        <div class="overflow overflow-x-auto px-4 py-10 sm:px-6 lg:px-8 mx-auto"><!-- Card -->
+            <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-neutral-800">
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-neutral-200">
+                        Ubah Profil
+                    </h2>
+                </div>
+
+                <form action="/submiteditprofil" method="post">
+                    <!-- Grid -->
+                    <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
+
+                        <div class="sm:col-span-3">
+                            <label for="af-account-email" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Email
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+                            <input id="af-account-email" type="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="maria@site.com" value="<?= $akun_data['email'] ?? '' ?>">
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-3">
+                            <label for="af-account-role" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Role
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+                            <input id="af-account-role" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your role" value="<?= $akun_data['nip'] ?? '' ?>">
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-3">
+                            <label for="af-account-alamat" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Alamat Lengkap
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+                            <input id="af-account-alamat" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your alamat" value="<?= $akun_data['alamat'] ?? '' ?>">
+                        </div>
+                        <!-- End Col -->
+
+
+                        <div class="sm:col-span-3">
+                            <label for="af-account-likasi" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Denah Lokasi
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+
+                            <div id="map2" class="py-2 px-3 block w-full h-72 rounded-xl"></div>
+                        </div>
+
+                        <!-- End Col -->
+                    </div>
+                    <!-- End Grid -->
+
+                    <div class="mt-5 flex justify-end gap-x-2">
+                        <button type="button" id="edit-location-btn" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-white/10 dark:hover:bg-white/20 dark:text-white dark:hover:text-white">
+                            Edit lokasi
+                        </button>
+                    </div>
+
+                    <hr class="mt-10 border-gray-300 dark:border-white">
+
+
+                    <div class="mt-10 flex justify-end gap-x-2">
+                        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                            Batal
+                        </button>
+                        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-teal-900 text-teal-100 hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+                            Simpan
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            <form action="" method="post">
-
-                <div class="sm:flex sm:items-center py-4">
-                    <!-- Grid -->
-                    <div class="sm:w-1/6">
-                        <label for="af-account-id-akun" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                            Email
-                        </label>
-                    </div>
-
-                    <!-- End Col -->
-
-                    <div class="sm:col-span-9">
-                        <input id="af-id-akun" name="id_akun" type="text" class="mx-28 py-5 px-3  block w-full border-gray-900 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="36 characters uuid" value="<?= $akun_data['email'] ?? '' ?>">
-                    </div>
-                    <!-- End Col -->
-                </div>
-
-
-                <div class="sm:flex sm:items-center py-4">
-                    <!-- Grid -->
-                    <div class="sm:w-1/6">
-                        <label for="af-account-id-akun" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                            Role
-                        </label>
-                    </div>
-
-                    <!-- End Col -->
-
-                    <div class="sm:col-span-9">
-                        <input id="af-id-akun" name="id_akun" type="text" class="mx-28 py-5 px-3  block w-full border-gray-900 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="36 characters uuid" value="<?= $akun_data['nip'] ?? '' ?>">
-                    </div>
-                    <!-- End Col -->
-                </div>
-
-                <div class="sm:flex sm:items-center py-4">
-                    <!-- Grid -->
-                    <div class="sm:w-1/6">
-                        <label for="af-account-id-akun" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                            Alamat Lengkap
-                        </label>
-                    </div>
-
-                    <!-- End Col -->
-
-                    <div class="sm:col-span-9">
-                        <input id="af-id-akun" name="id_akun" type="text" class="mx-28 py-5 px-3  block w-full border-gray-900 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="36 characters uuid" value="<?= $akun_data['alamat'] ?? '' ?>">
-                    </div>
-                </div>
-                <!-- End Col -->
-
-                <div class=" sm:flex sm:items-center py-4">
-                    <!-- Grid -->
-                    <div class="sm:w-1/6">
-                        <label for="af-account-id-akun" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                            Denah Lokasi
-                        </label>
-                    </div>
-
-                    <!-- End Col -->
-
-                    <div class="sm:col-span-9">
-                        <!-- Update input fields with latitude and longitude values from API -->
-                        <input id="loc2" name="loc2" type="text" class="mx-28 py-5 px-3 block w-full border-gray-900 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" readonly placeholder="Latitude" value="<?= ($akun_data['alamat_lat'] ?? '') . ', ' . ($akun_data['alamat_lon'] ?? '') ?>">
-                        <!-- Map container -->
-                        <div id="map2" class="h-96 w-96 mx-28 py-5 mt-8 px-3"></div>
-
-                    </div>
-                    <button type="button" id="edit-location-btn" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
-                        Edit lokasi
-                    </button>
-
-
-
-                </div>
-
-                <div class="mt-5 flex justify-center gap-x-2">
-                    <button type="button" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
-                        Submit your project
-                    </button>
-                </div>
-
-
-            </form>
+            <!-- End Card -->
         </div>
+        <!-- End Card Section -->
     </div>
 
 </div>
@@ -225,6 +215,7 @@
 <script>
     var map1Initialized = false;
     var map2Initialized = false;
+
 
     function initMap() {
         if (!map1Initialized) {
@@ -256,72 +247,72 @@
         }
 
         if (!map2Initialized) {
-    // Get latitude and longitude from PHP variable
-    var latLng = '<?= ($akun_data['alamat_lat'] ?? '') . ', ' . ($akun_data['alamat_lon'] ?? '') ?>';
-    var latLngArray = latLng.split(',').map(function(item) {
-        return parseFloat(item);
-    });
+            // Get latitude and longitude from PHP variable
+            var latLng = '<?= ($akun_data['alamat_lat'] ?? '') . ', ' . ($akun_data['alamat_lon'] ?? '') ?>';
+            var latLngArray = latLng.split(',').map(function(item) {
+                return parseFloat(item);
+            });
 
-    // If latitude and longitude are valid
-    if (!isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
-        // Create a LatLng object
-        var myLatLng = {
-            lat: latLngArray[0],
-            lng: latLngArray[1]
-        };
+            // If latitude and longitude are valid
+            if (!isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
+                // Create a LatLng object
+                var myLatLng = {
+                    lat: latLngArray[0],
+                    lng: latLngArray[1]
+                };
 
-        // Create a new map object
-        var map = new google.maps.Map(document.getElementById('map2'), {
-            zoom: 12, // Set the initial zoom level
-            center: myLatLng // Center the map on the specified location
-        });
-
-        // Add a marker to the map
-        var marker = new google.maps.Marker({
-            position: myLatLng,
-            map: map,
-            title: 'Your Location'
-        });
-
-        // Add click event listener to the "Edit Location" button
-        document.getElementById('edit-location-btn').addEventListener('click', function() {
-            // Request the user's current location
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var userLatLng = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-
-                    // Center the map to the user's current location
-                    map.setCenter(userLatLng);
-                    map.setZoom(15);
-
-                    // Remove previous marker
-                    if (marker) {
-                        marker.setMap(null);
-                    }
-
-                    // Add a new marker to the map
-                    marker = new google.maps.Marker({
-                        position: userLatLng,
-                        map: map,
-                        title: 'Your Location'
-                    });
-
-                    // Update the input field with the new coordinates
-                    document.getElementById('loc2').value = userLatLng.lat + ', ' + userLatLng.lng;
-                }, function() {
-                    alert('Error: The Geolocation service failed.');
+                // Create a new map object
+                var map = new google.maps.Map(document.getElementById('map2'), {
+                    zoom: 12, // Set the initial zoom level
+                    center: myLatLng // Center the map on the specified location
                 });
-            } else {
-                alert('Error: Your browser doesn\'t support Geolocation.');
-            }
-        });
-    }
 
-    map2Initialized = true;
-}
+                // Add a marker to the map
+                var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: 'Your Location'
+                });
+
+                // Add click event listener to the "Edit Location" button
+                document.getElementById('edit-location-btn').addEventListener('click', function() {
+                    // Request the user's current location
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            var userLatLng = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+
+                            // Center the map to the user's current location
+                            map.setCenter(userLatLng);
+                            map.setZoom(15);
+
+                            // Remove previous marker
+                            if (marker) {
+                                marker.setMap(null);
+                            }
+
+                            // Add a new marker to the map
+                            marker = new google.maps.Marker({
+                                position: userLatLng,
+                                map: map,
+                                title: 'Your Location'
+                            });
+
+                            // Update the input field with the new coordinates
+                            document.getElementById('loc2').value = userLatLng.lat + ', ' + userLatLng.lng;
+                        }, function() {
+                            alert('Error: The Geolocation service failed.');
+                        });
+                    } else {
+                        alert('Error: Your browser doesn\'t support Geolocation.');
+                    }
+                });
+            }
+
+            map2Initialized = true;
+        }
 
     }
 </script>
