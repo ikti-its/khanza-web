@@ -8,8 +8,9 @@
     <div class="rounded-t-lg h-40 overflow-hidden">
         <img class="object-cover object-top w-full" src="/img/bg-profile.png">
     </div>
+ 
     <div class="mx-auto w-48 h-48 relative -mt-20 border-4 border-white rounded-full overflow-hidden">
-        <img class="object-cover object-center h-48" src="<?php echo session('user_details')['foto'] ?>" alt="Image Description">>
+        <img class="object-cover object-center h-48" src="<?= $akun_data['foto'] ?? '' ?>" alt="Image Description">>
     </div>
     <div class="flex justify-center mt-2 px-4">
 
@@ -81,7 +82,7 @@
                         <!-- End Col -->
 
                         <div class="sm:col-span-9">
-                            <input id="af-account-role" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your role" value="<?= $akun_data['nip'] ?? '' ?>" readonly>
+                            <input id="af-account-role" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your role" value="<?= $akun_data['role'] ?? '' ?>" readonly>
                         </div>
                         <!-- End Col -->
 
@@ -128,7 +129,8 @@
                     </h2>
                 </div>
 
-                <form action="/submiteditprofil" method="post">
+                
+                <form action="/submiteditprofil/<?=$akun_data['akun']?>" method="post">
                     <!-- Grid -->
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
 
@@ -140,19 +142,19 @@
                         <!-- End Col -->
 
                         <div class="sm:col-span-9">
-                            <input id="af-account-email" type="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="maria@site.com" value="<?= $akun_data['email'] ?? '' ?>">
+                            <input id="af-account-email" type="email" name="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="maria@site.com" value="<?= $akun_data['email'] ?? '' ?>">
                         </div>
                         <!-- End Col -->
 
                         <div class="sm:col-span-3">
-                            <label for="af-account-role" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
-                                Role
+                            <label for="af-account-password" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Password
                             </label>
                         </div>
                         <!-- End Col -->
 
                         <div class="sm:col-span-9">
-                            <input id="af-account-role" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your role" value="<?= $akun_data['nip'] ?? '' ?>">
+                            <input id="af-account-password" type="text" name="password" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your New Password" value="<?= $akun_data['password'] ?? '' ?>">
                         </div>
                         <!-- End Col -->
 
@@ -164,7 +166,7 @@
                         <!-- End Col -->
 
                         <div class="sm:col-span-9">
-                            <input id="af-account-alamat" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your alamat" value="<?= $akun_data['alamat'] ?? '' ?>">
+                            <input id="af-account-alamat" type="text" name="alamat" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your alamat" value="<?= $akun_data['alamat'] ?? '' ?>">
                         </div>
                         <!-- End Col -->
 
@@ -177,7 +179,9 @@
                         <!-- End Col -->
 
                         <div class="sm:col-span-9">
+                            <input id="af-account-alamat-lat" type="hidden" name="alamat_lat" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your alamat" value="<?= $akun_data['alamat_lat'] ?? '' ?>">
 
+                            <input id="af-account-alamat-lon" type="hidden" name="alamat_lon" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your alamat" value="<?= $akun_data['alamat_lon'] ?? '' ?>">
                             <div id="map2" class="py-2 px-3 block w-full h-72 rounded-xl"></div>
                         </div>
 
@@ -198,10 +202,18 @@
                         <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
                             Batal
                         </button>
-                        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-teal-900 text-teal-100 hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+                        <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-teal-900 text-teal-100 hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
                             Simpan
                         </button>
                     </div>
+
+                    <input id="af-account-akun" type="hidden" name="akun" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['akun'] ?? '' ?>">
+                    <input id="af-account-profil" type="hidden" name="profil" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['profil'] ?? '' ?>">
+                    <input id="af-account-foto" type="hidden" name="foto" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['foto'] ?? '' ?>">
+                    <input id="af-account-shift" type="hidden" name="shift" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['shift'] ?? '' ?>">
+                    <input id="af-account-jam-masuk" type="hidden" name="jam_masuk" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['jam_masuk'] ?? '' ?>">
+                    <input id="af-account-jam-pulang" type="hidden" name="jam_pulang" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['jam_pulang'] ?? '' ?>">
+                    <input id="af-account-akun-status" type="hidden" name="status" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['status'] ?? '' ?>">
                 </form>
             </div>
             <!-- End Card -->
@@ -241,7 +253,7 @@
                     map: map1,
                     title: 'Your Location'
                 });
-
+                
                 map1Initialized = true;
             }
         }
@@ -301,7 +313,8 @@
                             });
 
                             // Update the input field with the new coordinates
-                            document.getElementById('loc2').value = userLatLng.lat + ', ' + userLatLng.lng;
+                            document.getElementById('af-account-alamat-lat').value = userLatLng.lat;
+                            document.getElementById('af-account-alamat-lon').value = userLatLng.lng;
                         }, function() {
                             alert('Error: The Geolocation service failed.');
                         });
