@@ -206,7 +206,206 @@
                             </div>
                         </div>
 
-                        
+                        <!-- Card Section -->
+                        <div class="max-w-[85rem] px-6 py-2 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+                            <!-- Grid -->
+                            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                                <!-- Card -->
+                                <div class="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+                                    <!-- Grid -->
+                                    <div class="mb-1 pb-5 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
+
+                                        <!-- Col -->
+
+                                        <div class="inline-flex gap-x-2">
+                                            <img class="inline-block size-[38px] rounded-full ring-2 ring-white dark:ring-gray-800" src="<?php echo session('user_details')['foto'] ?>" alt="Image Description">
+                                            <div class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-black">
+                                                Jim Green
+                                            </div>
+                                        </div>
+                                        <!-- Col -->
+                                        <div class="inline-flex items-center gap-x-1 text-[#24A793]">
+                                            <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M20.992,9.98A8.991,8.991,0,0,0,3.01,9.932a13.95,13.95,0,0,0,8.574,12.979A1,1,0,0,0,12,23a1.012,1.012,0,0,0,.419-.09A13.948,13.948,0,0,0,20.992,9.98ZM12,20.9A11.713,11.713,0,0,1,5.008,10a6.992,6.992,0,1,1,13.984,0c0,.021,0,.045,0,.065A11.7,11.7,0,0,1,12,20.9ZM12,6a4,4,0,1,0,4,4A4,4,0,0,0,12,6Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,12Z"/>
+                                            </svg>
+                                            <h2 class="text-m font-semibold dark:text-neutral-200">1 km</h2>
+                                        </div>
+                                    </div>
+                                    <!-- End Grid -->
+
+                                    <!-- Grid -->
+                                    <div class="grid md:grid-cols-2 gap-2">
+                                        <div>
+                                            <div class="grid space-y-2">
+                                                <div class="grid sm:flex gap-x-2 text-xs">
+                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <label for="af-payment-billing-contact" class="inline-block font-medium dark:text-white">
+                                                            Billing contact
+                                                        </label>
+
+                                                        <div class="mt-2 space-y-3">
+                                                            <input id="af-payment-billing-contact" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="grid sm:flex gap-x-2 text-xs">
+                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <label for="af-payment-billing-contact" class="inline-block font-medium dark:text-white">
+                                                            Billing contact
+                                                        </label>
+
+                                                        <div class="mt-2 space-y-3">
+                                                            <input id="af-payment-billing-contact" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="grid sm:flex gap-x-2 text-xs">
+                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <label for="af-payment-billing-contact" class="inline-block font-medium dark:text-white">
+                                                            Billing contact
+                                                        </label>
+
+                                                        <div class="mt-2 space-y-3">
+                                                            <input id="af-payment-billing-contact" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="grid sm:flex gap-x-2 text-xs">
+                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <label for="af-payment-billing-contact" class="inline-block font-medium dark:text-white">
+                                                            Billing contact
+                                                        </label>
+
+                                                        <div class="mt-2 space-y-3">
+                                                            <input id="af-payment-billing-contact" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Col -->
+
+                                        <div>
+                                            <div class="grid space-y-2">
+                                                <div class="grid sm:flex gap-x-2 text-xs">
+                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <label for="af-payment-billing-contact" class="inline-block font-medium dark:text-white">
+                                                            Billing contact
+                                                        </label>
+
+                                                        <div class="mt-2 space-y-3">
+                                                            <input id="af-payment-billing-contact" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="grid sm:flex gap-x-2 text-xs">
+                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <label for="af-payment-billing-contact" class="inline-block font-medium dark:text-white">
+                                                            Billing contact
+                                                        </label>
+
+                                                        <div class="mt-2 space-y-3">
+                                                            <input id="af-payment-billing-contact" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="grid sm:flex gap-x-2 text-xs">
+                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <label for="af-payment-billing-contact" class="inline-block font-medium dark:text-white">
+                                                            Billing contact
+                                                        </label>
+
+                                                        <div class="mt-2 space-y-3">
+                                                            <input id="af-payment-billing-contact" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <!-- Col -->
+                                    </div>
+                                    <!-- End Grid -->
+                                </div>
+                                <!-- End Card -->
+
+                                <!-- Card -->
+                                <div class="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+                                    <div class="inline-flex justify-center items-center">
+                                        <span class="size-2 inline-block bg-green-500 rounded-full me-2"></span>
+                                        <span class="text-xs font-semibold uppercase text-gray-600 dark:text-neutral-400">Successful conversions</span>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <h3 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-800 dark:text-neutral-200">
+                                            25
+                                        </h3>
+                                    </div>
+
+                                    <dl class="flex justify-center items-center divide-x divide-gray-200 dark:divide-neutral-800">
+                                        <dt class="pe-3">
+                                            <span class="text-green-600">
+                                                <svg class="inline-block size-4 self-center" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                                                </svg>
+                                                <span class="inline-block text-sm">
+                                                    5.6%
+                                                </span>
+                                            </span>
+                                            <span class="block text-sm text-gray-500 dark:text-neutral-500">change</span>
+                                        </dt>
+                                        <dd class="text-start ps-3">
+                                            <span class="text-sm font-semibold text-gray-800 dark:text-neutral-200">7</span>
+                                            <span class="block text-sm text-gray-500 dark:text-neutral-500">last week</span>
+                                        </dd>
+                                    </dl>
+                                </div>
+                                <!-- End Card -->
+
+                                <!-- Card -->
+                                <div class="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+                                    <div class="inline-flex justify-center items-center">
+                                        <span class="size-2 inline-block bg-red-500 rounded-full me-2"></span>
+                                        <span class="text-xs font-semibold uppercase text-gray-600 dark:text-neutral-400">Failed conversions</span>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <h3 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-800 dark:text-neutral-200">
+                                            4
+                                        </h3>
+                                    </div>
+
+                                    <dl class="flex justify-center items-center divide-x divide-gray-200 dark:divide-neutral-800">
+                                        <dt class="pe-3">
+                                            <span class="text-red-600">
+                                                <svg class="inline-block size-4 self-center" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                                                </svg>
+                                                <span class="inline-block text-sm">
+                                                    5.6%
+                                                </span>
+                                            </span>
+                                            <span class="block text-sm text-gray-500 dark:text-neutral-500">change</span>
+                                        </dt>
+                                        <dd class="text-start ps-3">
+                                            <span class="text-sm font-semibold text-gray-800 dark:text-neutral-200">7</span>
+                                            <span class="block text-sm text-gray-500 dark:text-neutral-500">last week</span>
+                                        </dd>
+                                    </dl>
+                                </div>
+                                <!-- End Card -->
+                            </div>
+                            <!-- End Grid -->
+                        </div>
+                        <!-- End Card Section -->
+
+
                     </div>
 
 
