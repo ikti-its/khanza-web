@@ -12,6 +12,8 @@ $routes->get('/logout', 'authController::logout', ['filter' => 'auth']);
 
 $routes->get('/profile', 'userPegawaiController::lihatProfil', ['filter' => 'auth']);
 $routes->post('/submiteditprofil/(:segment)', 'userPegawaiController::submitEditProfil/$1', ['filter' => 'auth']);
+$routes->get('/datauserpegawai', 'userPegawaiController::lihatPegawai', ['filter' => 'auth']);
+$routes->get('/detailberkaspegawai/(:segment)', 'userPegawaiController::detailBerkasPegawai/$1', ['filter' => 'auth']);
 
 
 $routes->get('/admin', 'authController::dashboard', ['filter' => 'auth']);
