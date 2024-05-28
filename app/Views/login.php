@@ -23,19 +23,11 @@
                     <input id="password" name="password" type="password" placeholder="Enter your password" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-black "required>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="w-full px-6 py-3 bg-[#4318FF] text-white font-semibold rounded-md hover:bg-indigo-600 transition duration-200 ease">Submit</button>
+                    <button type="submit" class="w-full px-6 py-3 bg-teal-800  text-white font-semibold rounded-md hover:bg-indigo-600 transition duration-200 ease">Submit</button>
                 </div>
             </div>
         </form>
-        <div class="text-center">
-            <a href="admin">
-            <button class="w-full px-6 py-3 bg-indigo-500 text-white font-semibold rounded-md hover:bg-indigo-600 transition duration-200 ease">Login</button>
-            </a>
-            <a href="signup">
-            <button class="w-full px-6 py-3 bg-indigo-500 text-white font-semibold rounded-md hover:bg-indigo-600 transition duration-200 ease">Daftar</button>
-            </a>
-            
-        </div>
+    
     </div>
 
 

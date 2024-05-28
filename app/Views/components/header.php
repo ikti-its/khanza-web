@@ -166,19 +166,195 @@
 
                 </li>
 
-                <li>
-                    <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+
+                <li class="hs-accordion" id="account-accordion">
+                    <button type="button" class="hs-accordion-toggle hs-accordion-active:text-slate-700 hs-accordion-active:hover:bg-teal-200 w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 dark:hs-accordion-active:text-white">
                         <svg class="flex-shrink-0 size-4" fill="#000000" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                             <g id="SVGRepo_iconCarrier">
-                                <path d="M68.00586,128.0094a130.696,130.696,0,0,1-13.73438,58.69433,4.00047,4.00047,0,1,1-7.16406-3.5625A122.75147,122.75147,0,0,0,60.00586,128.0094a67.71834,67.71834,0,0,1,25.49805-53.084,4.00012,4.00012,0,0,1,5.0039,6.24219A59.75391,59.75391,0,0,0,68.00586,128.0094Zm60-4a4.00019,4.00019,0,0,0-4,4,188.14011,188.14011,0,0,1-23.47363,91.04,4,4,0,1,0,6.99609,3.87988,196.15115,196.15115,0,0,0,24.47754-94.91992A4.0002,4.0002,0,0,0,128.00586,124.0094Zm0-32a36.04061,36.04061,0,0,0-36,36,4,4,0,0,0,8,0,28,28,0,0,1,56,0,218.07144,218.07144,0,0,1-20.89258,93.70019,4.00022,4.00022,0,1,0,7.23633,3.41211,226.01563,226.01563,0,0,0,21.65625-97.1123A36.04061,36.04061,0,0,0,128.00586,92.0094Zm0-64.001a100.11269,100.11269,0,0,0-100,100,91.75393,91.75393,0,0,1-5.23438,30.667,4.00013,4.00013,0,1,0,7.543,2.666,99.75234,99.75234,0,0,0,5.69141-33.333,92,92,0,0,1,184,0,286.23362,286.23362,0,0,1-5.36621,55.22656,4.00093,4.00093,0,0,0,3.15137,4.69825,4.071,4.071,0,0,0,.77734.07617,4.00267,4.00267,0,0,0,3.9209-3.22754,294.305,294.305,0,0,0,5.5166-56.77344A100.1127,100.1127,0,0,0,128.00586,28.00842ZM93.60156,156.0885a3.99683,3.99683,0,0,0-4.71582,3.124,154.73465,154.73465,0,0,1-17.65918,46.64161,4.00015,4.00015,0,1,0,6.92969,3.998,162.72659,162.72659,0,0,0,18.56934-49.04785A3.99978,3.99978,0,0,0,93.60156,156.0885Zm34.4043-96.0791a68.7229,68.7229,0,0,0-8.49512.52637,3.99952,3.99952,0,0,0,.99024,7.9375,60.92544,60.92544,0,0,1,7.50488-.46387,60.06812,60.06812,0,0,1,60,60,255.60237,255.60237,0,0,1-1.94922,31.5039,3.99966,3.99966,0,0,0,3.47363,4.46485,4.1247,4.1247,0,0,0,.5.03027,3.9994,3.9994,0,0,0,3.96387-3.50488,263.39955,263.39955,0,0,0,2.01172-32.49414A68.07728,68.07728,0,0,0,128.00586,60.0094Zm56.93262,128.125a4.00027,4.00027,0,0,0-4.8711,2.87695c-1.4873,5.78125-3.20312,11.57617-5.09961,17.22363a4.00011,4.00011,0,1,0,7.584,2.54688c1.957-5.83008,3.72754-11.81055,5.26367-17.77637A4.00014,4.00014,0,0,0,184.93848,188.1344Z"></path>
+                                <path d="M232.00586,128.00842a298.25279,298.25279,0,0,1-5.59277,57.54688,7.99962,7.99962,0,0,1-15.69727-3.09375,282.27848,282.27848,0,0,0,5.29-54.45313,88,88,0,0,0-176,0,103.74958,103.74958,0,0,1-5.91992,34.666A8.00025,8.00025,0,0,1,19,157.34241a87.786,87.786,0,0,0,5.00586-29.334,104,104,0,0,1,208,0ZM93.00977,84.2887A8.00025,8.00025,0,0,0,83.00195,71.80432,71.69909,71.69909,0,0,0,56.00586,128.0094,118.80142,118.80142,0,0,1,43.52637,181.361,7.99964,7.99964,0,1,0,57.85254,188.484,134.64637,134.64637,0,0,0,72.00586,128.0094,55.77314,55.77314,0,0,1,93.00977,84.2887Zm34.99609,35.7207a8.00039,8.00039,0,0,0-8,8A184.12954,184.12954,0,0,1,97.03418,217.11a7.99993,7.99993,0,1,0,13.99219,7.75977,200.16824,200.16824,0,0,0,24.97949-96.86035A8.00039,8.00039,0,0,0,128.00586,120.0094Zm0-32a40.04583,40.04583,0,0,0-40,40,8,8,0,0,0,16,0,24,24,0,0,1,48,0,214.09658,214.09658,0,0,1-20.51074,91.99512,8,8,0,1,0,14.47265,6.82226,229.98738,229.98738,0,0,0,22.03809-98.81738A40.04583,40.04583,0,0,0,128.00586,88.0094ZM94.39648,152.16858a8.00778,8.00778,0,0,0-9.43066,6.249,150.78976,150.78976,0,0,1-17.2041,45.4375,8.00031,8.00031,0,1,0,13.85937,7.9961,166.73312,166.73312,0,0,0,19.02442-50.252A7.99971,7.99971,0,0,0,94.39648,152.16858ZM128.00586,56.0094a72.92874,72.92874,0,0,0-8.99121.55664A8.00012,8.00012,0,1,0,120.99707,72.443a56.70946,56.70946,0,0,1,7.00879-.43359,56.0629,56.0629,0,0,1,56,56,251.41194,251.41194,0,0,1-1.919,31.00879,8,8,0,1,0,15.877,1.98047,267.59018,267.59018,0,0,0,2.042-32.98926A72.08124,72.08124,0,0,0,128.00586,56.0094Zm57.92969,128.252a7.99377,7.99377,0,0,0-9.74121,5.75293c-1.46485,5.68848-3.15332,11.39063-5.01856,16.94824a7.9999,7.9999,0,1,0,15.168,5.0918c1.9873-5.91992,3.78613-11.99316,5.34473-18.05176A7.999,7.999,0,0,0,185.93555,184.26135Z"></path>
                             </g>
                         </svg>
                         Kehadiran
-                    </a>
 
+
+                        <svg class="hs-accordion-active:block ms-auto hidden size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m18 15-6-6-6 6" />
+                        </svg>
+
+                        <svg class="hs-accordion-active:hidden ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+
+                    <div id="account-accordion" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
+                        <ul class="pt-2 ps-2">
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/presensi">
+                                    <svg class="flex-shrink-0 size-4" fill="#000000" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M144.48633,136.48438l-41.98926,42a12.0001,12.0001,0,0,1-16.97266-16.96875L107.03467,140H24a12,12,0,0,1,0-24h83.03467L85.52441,94.48438a12.0001,12.0001,0,0,1,16.97266-16.96875l41.98926,42A12.00093,12.00093,0,0,1,144.48633,136.48438ZM192,28H136a12,12,0,0,0,0,24h52V204H136a12,12,0,0,0,0,24h56a20.02229,20.02229,0,0,0,20-20V48A20.02229,20.02229,0,0,0,192,28Z" />
+                                    </svg>
+                                    Presensi
+                                </a>
+
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
+                                    Face Recognition
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/swafoto">
+                                    Swafoto
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
+
+                <li class="hs-accordion" id="account-accordion">
+                    <button type="button" class="hs-accordion-toggle hs-accordion-active:text-slate-700 hs-accordion-active:hover:bg-teal-200 w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 dark:hs-accordion-active:text-white">
+                        <svg class="flex-shrink-0 size-4" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <g clip-path="url(#clip0_901_1126)">
+                                    <path d="M27 16V11C27 11 27 10 26 9L19 2C18 1 17 1 17 1M17 1H2C2 1 1 1 1 2V30C1 30 1 31 2 31H18M17 1V10C17 10 17 11 18 11H23M23 25L25 23M25 23L27 25M25 23V27M31 25C31 21.687 28.313 19 25 19C21.687 19 19 21.687 19 25C19 28.313 21.687 31 25 31C28.313 31 31 28.313 31 25Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_901_1126">
+                                        <rect width="32" height="32" fill="white"></rect>
+                                    </clipPath>
+                                </defs>
+                            </g>
+                        </svg>
+                        Pengajuan
+
+
+                        <svg class="hs-accordion-active:block ms-auto hidden size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m18 15-6-6-6 6" />
+                        </svg>
+
+                        <svg class="hs-accordion-active:hidden ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+
+                    <div id="account-accordion" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
+                        <ul class="pt-2 ps-2">
+                            <li>
+
+
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/izincuti">
+                                    Izin cuti
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
+                                    Link 2
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
+                                    Link 3
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="hs-accordion" id="account-accordion">
+                    <button type="button" class="hs-accordion-toggle hs-accordion-active:text-slate-700 hs-accordion-active:hover:bg-teal-200 w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 dark:hs-accordion-active:text-white">
+                        <svg fill="none" class="flex-shrink-0 size-4" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.2572 10.9622C21.7314 11.5813 21.7314 12.4187 21.2572 13.0378C19.764 14.9868 16.1818 19 12 19C7.81823 19 4.23598 14.9868 2.74284 13.0378C2.26857 12.4187 2.26856 11.5813 2.74283 10.9622C4.23598 9.01321 7.81823 5 12 5C16.1818 5 19.764 9.01321 21.2572 10.9622Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <circle cx="12" cy="12" r="3" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+
+                        Peninjauan
+
+                        <svg class="hs-accordion-active:block ms-auto hidden size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m18 15-6-6-6 6" />
+                        </svg>
+
+                        <svg class="hs-accordion-active:hidden ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+
+                    <div id="account-accordion" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
+                        <ul class="pt-2 ps-2">
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/catatankehadiran">
+                                    Catatan Kehadiran
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/statusizin">
+                                    Status Pengajuan Izin
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
+                                    Jadwal Kerja
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
+                                    Daftar Pengajuan Izin
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="hs-accordion" id="account-accordion">
+                    <button type="button" class="hs-accordion-toggle hs-accordion-active:text-slate-700 hs-accordion-active:hover:bg-teal-200 w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 dark:hs-accordion-active:text-white">
+                        <svg class="flex-shrink-0 size-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M20.8477 1.87868C19.6761 0.707109 17.7766 0.707105 16.605 1.87868L2.44744 16.0363C2.02864 16.4551 1.74317 16.9885 1.62702 17.5692L1.03995 20.5046C0.760062 21.904 1.9939 23.1379 3.39334 22.858L6.32868 22.2709C6.90945 22.1548 7.44285 21.8693 7.86165 21.4505L22.0192 7.29289C23.1908 6.12132 23.1908 4.22183 22.0192 3.05025L20.8477 1.87868ZM18.0192 3.29289C18.4098 2.90237 19.0429 2.90237 19.4335 3.29289L20.605 4.46447C20.9956 4.85499 20.9956 5.48815 20.605 5.87868L17.9334 8.55027L15.3477 5.96448L18.0192 3.29289ZM13.9334 7.3787L3.86165 17.4505C3.72205 17.5901 3.6269 17.7679 3.58818 17.9615L3.00111 20.8968L5.93645 20.3097C6.13004 20.271 6.30784 20.1759 6.44744 20.0363L16.5192 9.96448L13.9334 7.3787Z" fill="#0F0F0F"></path>
+                            </g>
+                        </svg>
+
+
+
+                        Ubah
+
+                        <svg class="hs-accordion-active:block ms-auto hidden size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m18 15-6-6-6 6" />
+                        </svg>
+
+                        <svg class="hs-accordion-active:hidden ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+
+                    <div id="account-accordion" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
+                        <ul class="pt-2 ps-2">
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
+                                    <svg class="flex-shrink-0 size-4" fill="#000000" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M144.48633,136.48438l-41.98926,42a12.0001,12.0001,0,0,1-16.97266-16.96875L107.03467,140H24a12,12,0,0,1,0-24h83.03467L85.52441,94.48438a12.0001,12.0001,0,0,1,16.97266-16.96875l41.98926,42A12.00093,12.00093,0,0,1,144.48633,136.48438ZM192,28H136a12,12,0,0,0,0,24h52V204H136a12,12,0,0,0,0,24h56a20.02229,20.02229,0,0,0,20-20V48A20.02229,20.02229,0,0,0,192,28Z" />
+                                    </svg>
+                                    Presensi
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
+                                    Link 2
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
+                                    Link 3
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
 
                 <li>
                     <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/datauserpegawai">
@@ -193,6 +369,51 @@
                         Pegawai
                     </a>
 
+                </li>
+
+                <li class="hs-accordion" id="account-accordion">
+                    <button type="button" class="hs-accordion-toggle hs-accordion-active:text-slate-700 hs-accordion-active:hover:bg-teal-200 w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 dark:hs-accordion-active:text-white">
+                        <svg class="flex-shrink-0 size-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M0 4.6A2.6 2.6 0 0 1 2.6 2h18.8A2.6 2.6 0 0 1 24 4.6v.8A2.6 2.6 0 0 1 21.4 8H21v10.6c0 1.33-1.07 2.4-2.4 2.4H5.4C4.07 21 3 19.93 3 18.6V8h-.4A2.6 2.6 0 0 1 0 5.4v-.8ZM2.6 4a.6.6 0 0 0-.6.6v.8a.6.6 0 0 0 .6.6h18.8a.6.6 0 0 0 .6-.6v-.8a.6.6 0 0 0-.6-.6H2.6ZM8 10a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H8Z" fill="#000000"></path>
+                            </g>
+                        </svg>
+
+                        Inventaris
+
+                        <svg class="hs-accordion-active:block ms-auto hidden size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m18 15-6-6-6 6" />
+                        </svg>
+
+                        <svg class="hs-accordion-active:hidden ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+
+                    <div id="account-accordion" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
+                        <ul class="pt-2 ps-2">
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
+                                    <svg class="flex-shrink-0 size-4" fill="#000000" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M144.48633,136.48438l-41.98926,42a12.0001,12.0001,0,0,1-16.97266-16.96875L107.03467,140H24a12,12,0,0,1,0-24h83.03467L85.52441,94.48438a12.0001,12.0001,0,0,1,16.97266-16.96875l41.98926,42A12.00093,12.00093,0,0,1,144.48633,136.48438ZM192,28H136a12,12,0,0,0,0,24h52V204H136a12,12,0,0,0,0,24h56a20.02229,20.02229,0,0,0,20-20V48A20.02229,20.02229,0,0,0,192,28Z" />
+                                    </svg>
+                                    Presensi
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
+                                    Link 2
+                                </a>
+                            </li>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
+                                    Link 3
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
 
                 <li><a href="<?= base_url('/logout') ?>" class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
