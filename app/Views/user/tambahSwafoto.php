@@ -31,10 +31,10 @@
             <!-- Progress Upload -->
 
             <div id="uploading-section" class="hidden mt-4">
-                
-            <div class="py-1 flex flex-col text-xs font-medium">
-                1 file sedang diunggah...
-            </div>
+
+                <div class="py-1 flex flex-col text-xs font-medium">
+                    1 file sedang diunggah...
+                </div>
 
                 <div class="px-2 py-2 flex flex-col bg-gray-100 border shadow-sm rounded-xl dark:bg-neutral-800 dark:border-neutral-700">
                     <div class="mb-2 flex justify-between items-center">
@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="inline-flex items-center gap-x-2">
-                            <a class="text-gray-500 hover:text-gray-800 dark:text-neutral-500 dark:hover:text-neutral-200" href="#">
+                            <a id="trash-icon" class="text-gray-500 hover:text-gray-800 dark:text-neutral-500 dark:hover:text-neutral-200" href="#">
                                 <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M3 6h18"></path>
                                     <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
@@ -89,6 +89,7 @@
     function uploadFile() {
         const fileInput = document.getElementById('af-submit-app-upload-images');
         const file = fileInput.files[0];
+
         if (!file) return;
 
         // Show uploading section
@@ -108,18 +109,20 @@
             }
         };
 
-        // xhr.onload = function() {
-        //     if (xhr.status === 200) {
-        //         alert('File uploaded successfully!');
-        //         document.getElementById('uploading-section').classList.add('hidden');
-        //         document.getElementById('progress-bar').style.width = '1%';
-        //     } else {
-        //         alert('File upload failed.');
-        //     }
-        // };
-
         xhr.send(formData);
     }
+
+    // Function to delete the uploaded file
+    function deleteFile() {
+        // Remove the uploaded file from the input
+        document.getElementById('af-submit-app-upload-images').value = '';
+
+        // Hide the uploading section
+        document.getElementById('uploading-section').classList.add('hidden');
+    }
+
+    // Attach event listener to the trash bin icon
+    document.getElementById('trash-icon').addEventListener('click', deleteFile);
 </script>
 
 <?= $this->endSection(); ?>
