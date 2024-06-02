@@ -5,5 +5,8 @@
   "dependencies": {
     "@preline/dropdown": "^2.0.2",
     "preline": "^2.0.3"
+  },
+  "scripts": {
+    "dev": "npx tailwindcss -i ./public/css/input.css -o ./public/css/style.css --watch"
   }
 }

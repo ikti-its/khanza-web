@@ -20,7 +20,7 @@ $routes->get('/admin', 'authController::dashboard', ['filter' => 'auth']);
 $routes->post('/admin', 'authController::login', ['filter' => 'noauth']);
 
 //kalo mau akses halaman pake auth, pertama kali pake no auth(contoh di login)
-$routes->get('/dataakun', 'akunController::dataAkun', ['filter' => 'auth'] );
+$routes->get('/dataakun', 'akunController::dataAkun', ['filter' => 'auth']);
 
 $routes->get('/tambahakun', 'akunController::tambahAkun', ['filter' => 'auth']);
 $routes->post('/submittambahakun', 'akunController::submitTambahAkun', ['filter' => 'auth']);
@@ -46,8 +46,8 @@ $routes->get('/hapusakun/(:segment)', 'AkunController::hapusAkun/$1');
 // $routes->get('/presensipegawai', 'adminController::presensiPegawai');
 
 //==============================================================================
-$routes->get('/datapegawai', 'pegawaiController::dataPegawai', ['filter' => 'auth'] );
-$routes->get('/datapegawai-test', 'pegawaiController::dataPegawaiTest',  ['filter' => 'auth'] );
+$routes->get('/datapegawai', 'pegawaiController::dataPegawai', ['filter' => 'auth']);
+$routes->get('/datapegawai-test', 'pegawaiController::dataPegawaiTest',  ['filter' => 'auth']);
 
 $routes->get('/tambahpegawai', 'pegawaiController::tambahPegawai', ['filter' => 'auth']);
 $routes->post('/submittambahpegawai', 'pegawaiController::submitTambahPegawai', ['filter' => 'auth']);
@@ -64,7 +64,7 @@ $routes->get('loadModel.js', 'PresensiController::script', ['filter' => 'auth'])
 
 
 //==========================================================================================
-$routes->get('/alamatpegawai', 'alamatController::alamatPegawai', ['filter' => 'auth'] );
+$routes->get('/alamatpegawai', 'alamatController::alamatPegawai', ['filter' => 'auth']);
 $routes->get('/tambahalamat', 'alamatController::tambahAlamat', ['filter' => 'auth']);
 
 $routes->post('/submittambahalamat', 'alamatController::submitTambahAlamat', ['filter' => 'auth']);
@@ -75,7 +75,7 @@ $routes->post('/submiteditalamat/(:segment)', 'alamatController::submitEditAlama
 $routes->get('/hapusalamat/(:segment)', 'alamatController::hapusAlamat/$1', ['filter' => 'auth']);
 
 //===========================================================================================
-$routes->get('/berkaspegawai', 'berkasController::berkasPegawai', ['filter' => 'auth'] );
+$routes->get('/berkaspegawai', 'berkasController::berkasPegawai', ['filter' => 'auth']);
 $routes->get('/tambahberkas', 'berkasController::tambahBerkas', ['filter' => 'auth']);
 
 $routes->post('/submittambahberkas', 'berkasController::submitTambahBerkas', ['filter' => 'auth']);
@@ -94,4 +94,62 @@ $routes->post('/submiteditserkom/(:segment)', 'berkasController::submitEditSerko
 
 $routes->get('/hapusberkas/(:segment)', 'berkasController::hapusBerkas/$1', ['filter' => 'auth']);
 
-?>
+
+$routes->get('/datamedis', 'MedisController::dataMedis', ['filter' => 'auth']);
+$routes->get('/tambahmedis', 'MedisController::tambahMedis', ['filter' => 'auth']);
+$routes->post('/submittambahmedis', 'MedisController::submitTambahMedis', ['filter' => 'auth']);
+$routes->get('/editmedis/(:any)', 'MedisController::editMedis/$1', ['filter' => 'auth']);
+$routes->post('/submiteditmedis', 'MedisController::submitEditMedis', ['filter' => 'auth']);
+$routes->post('/submiteditmedis/(:segment)', 'MedisController::submitEditMedis/$1');
+$routes->get('/hapusmedis/(:segment)', 'MedisController::hapusMedis/$1');
+
+$routes->get('/dashboardpengadaanmedis', 'PengajuanController::dashboardPengadaan', ['filter' => 'auth']);
+
+//Persetujuan
+$routes->get('/persetujuanpengadaan', 'PersetujuanController::dataPersetujuan', ['filter' => 'auth']);
+$routes->post('/submitpersetujuan', 'PersetujuanController::submitTambahPersetujuan', ['filter' => 'auth']);
+$routes->post('/submitpersetujuan/(:segment)', 'PersetujuanController::submitTambahPersetujuan/$1');
+//Pengajuan
+$routes->get('/pengajuanmedis', 'PengajuanController::dataPengajuanMedis', ['filter' => 'auth']);
+$routes->get('/tambahpengajuanmedis', 'PengajuanController::tambahPengajuanMedis', ['filter' => 'auth']);
+$routes->post('/submittambahpengajuanmedis', 'PengajuanController::submitTambahPengajuanMedis', ['filter' => 'auth']);
+$routes->get('/editpengajuanmedis/(:any)', 'PengajuanController::editPengajuanMedis/$1', ['filter' => 'auth']);
+$routes->post('/submiteditpengajuanmedis', 'PengajuanController::submitEditPengajuanMedis', ['filter' => 'auth']);
+$routes->post('/submiteditpengajuanmedis/(:segment)', 'PengajuanController::submitEditPengajuanMedis/$1');
+$routes->get('/hapuspengajuanmedis/(:segment)', 'PengajuanController::hapusPengajuanMedis/$1');
+
+//Pemesanan
+$routes->get('/pemesananmedis', 'PemesananController::dataPemesananMedis', ['filter' => 'auth']);
+$routes->get('/tambahpemesananmedis', 'PemesananController::tambahPemesananMedis', ['filter' => 'auth']);
+$routes->post('/submittambahpemesananmedis', 'PemesananController::submitTambahPemesananMedis', ['filter' => 'auth']);
+$routes->get('/editpemesananmedis/(:any)', 'PemesananController::editPemesananMedis/$1', ['filter' => 'auth']);
+$routes->post('/submiteditpemesananmedis', 'PemesananController::submitEditPemesananMedis', ['filter' => 'auth']);
+$routes->post('/submiteditpemesananmedis/(:segment)', 'PemesananController::submitEditPemesananMedis/$1');
+$routes->get('/hapuspemesananmedis/(:segment)', 'PemesananController::hapusPemesananMedis/$1');
+
+//Penerimaan
+$routes->get('/penerimaanmedis', 'PenerimaanController::dataPenerimaanMedis', ['filter' => 'auth']);
+$routes->get('/tambahpenerimaanmedis', 'PenerimaanController::tambahPenerimaanMedis', ['filter' => 'auth']);
+$routes->post('/submittambahpenerimaanmedis', 'PenerimaanController::submitTambahPenerimaanMedis', ['filter' => 'auth']);
+$routes->get('/editpenerimaanmedis/(:any)', 'PenerimaanController::editPenerimaanMedis/$1', ['filter' => 'auth']);
+$routes->post('/submiteditpenerimaanmedis', 'PenerimaanController::submitEditPenerimaanMedis', ['filter' => 'auth']);
+$routes->post('/submiteditpenerimaanmedis/(:segment)', 'PenerimaanController::submitEditPenerimaanMedis/$1');
+$routes->get('/hapuspenerimaanmedis/(:segment)', 'PenerimaanController::hapusPenerimaanMedis/$1');
+
+//Tagihan
+$routes->get('/tagihanmedis', 'TagihanController::dataTagihanMedis', ['filter' => 'auth']);
+$routes->get('/tambahtagihanmedis', 'TagihanController::tambahTagihanMedis', ['filter' => 'auth']);
+$routes->post('/submittambahtagihanmedis', 'TagihanController::submitTambahTagihanMedis', ['filter' => 'auth']);
+$routes->get('/edittagihanmedis/(:any)', 'TagihanController::editTagihanMedis/$1', ['filter' => 'auth']);
+$routes->post('/submitedittagihanmedis', 'TagihanController::submitEditTagihanMedis', ['filter' => 'auth']);
+$routes->post('/submitedittagihanmedis/(:segment)', 'TagihanController::submitEditTagihanMedis/$1');
+$routes->get('/hapustagihanmedis/(:segment)', 'TagihanController::hapusTagihanMedis/$1');
+
+//Stok Keluar
+$routes->get('/stokkeluarmedis', 'StokKeluarController::dataStokKeluarMedis', ['filter' => 'auth']);
+$routes->get('/tambahstokkeluarmedis', 'StokKeluarController::tambahStokKeluarMedis', ['filter' => 'auth']);
+$routes->post('/submittambahstokkeluarmedis', 'StokKeluarController::submitTambahStokKeluarMedis', ['filter' => 'auth']);
+$routes->get('/editstokkeluarmedis/(:any)', 'StokKeluarController::editStokKeluarMedis/$1', ['filter' => 'auth']);
+$routes->post('/submiteditstokkeluarmedis', 'StokKeluarController::submitEditStokKeluarMedis', ['filter' => 'auth']);
+$routes->post('/submiteditstokkeluarmedis/(:segment)', 'StokKeluarController::submitEditStokKeluarMedis/$1');
+$routes->get('/hapusstokkeluarmedis/(:segment)', 'StokKeluarController::hapusStokKeluarMedis/$1');
