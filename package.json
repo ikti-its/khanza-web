@@ -1,9 +1,11 @@
 {
+  "type": "module",
   "devDependencies": {
     "tailwindcss": "^3.4.1"
   },
   "dependencies": {
     "@preline/dropdown": "^2.0.2",
+    "face-api.js": "^0.22.2",
     "preline": "^2.0.3"
   }
 }

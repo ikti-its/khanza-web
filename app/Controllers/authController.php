@@ -33,8 +33,6 @@ class authController extends BaseController
         ];
 
         return  view('/admin/dashboardAdmin', $data);
-
-        
     }
 
 
@@ -99,8 +97,8 @@ class authController extends BaseController
                     session()->set('jwt_token', $token);
 
 
-                    // Define the API endpoint URL for user details
-                    $user_details_url = $this->api_url .  '/auth';
+                    // URL for fetching akun data
+                    $user_details_url = $this->api_url . '/auth';
 
                     // Set the Authorization header with the JWT token
                     $headers = [
@@ -127,15 +125,42 @@ class authController extends BaseController
                         // Close the cURL session for user details
                         curl_close($user_details_ch);
 
+
+
+                        // Check if the user role is 2
+                        if ($user_details['data']['role'] == 2) {
+                            // If the user role is 2, make another API request
+                            
+                            $tanggal = date('Y-m-d');
+                            $user_specific_url = $this->api_url . '/m/home?tanggal=' . $tanggal;
+
+                            // Initialize cURL session for user specific data
+                            $user_specific_ch = curl_init($user_specific_url);
+                            curl_setopt($user_specific_ch, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($user_specific_ch, CURLOPT_HTTPHEADER, $headers);
+
+                            // Execute the cURL request for user specific data
+                            $user_specific_response = curl_exec($user_specific_ch);
+
+                            if ($user_specific_response) {
+                                // Decode the JSON response
+                                $user_specific_data = json_decode($user_specific_response, true);
+
+                                // Store the user specific data in session or handle it as needed
+                                session()->set('user_specific_data', $user_specific_data['data']);
+                            } else {
+                                // Failed to get user specific data
+                                echo "Failed to retrieve user specific data.";
+                            }
+                        }
+
                         // Redirect to user dashboard
-                        return view('/admin/dashboardAdmin', ['title' => $title, 'user_details'=> $user_details]);
+                        return view('/admin/dashboardAdmin', ['title' => $title, 'user_details' => $user_details]);
                     } else {
                         // Failed to get user details
                         echo "Failed to retrieve user details.";
                     }
 
-                    // Redirect to user dashboard
-                    return  view('/admin/dashboardAdmin', ['title' => $title]);
                 } elseif ($http_status_code === 401) {
                     // Wrong password
                     echo "Wrong password. Please check your password and try again";

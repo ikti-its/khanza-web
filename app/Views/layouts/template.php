@@ -10,13 +10,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <!-- Include TensorFlow.js library -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="<?= base_url('js/face-api.min.js'); ?>"></script>
+
+    
 
     <title><?= $title ?></title>
 </head>
 
 <body>
     <?= $this->include('components/header') ?>
-    <div class="container">
+    <div class="container mx-auto">
         <div class="w-full h-full lg:pl-72 z-[1] overflow-clip">
             <!-- Content -->
             <?= $this->renderSection('content') ?>

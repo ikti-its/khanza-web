@@ -15,6 +15,7 @@ $routes->post('/submiteditprofil/(:segment)', 'userPegawaiController::submitEdit
 $routes->get('/datauserpegawai', 'userPegawaiController::lihatPegawai', ['filter' => 'auth']);
 $routes->get('/detailberkaspegawai/(:segment)', 'userPegawaiController::detailBerkasPegawai/$1', ['filter' => 'auth']);
 $routes->get('/izincuti', 'userPegawaiController::tambahCuti', ['filter' => 'auth']);
+$routes->post('/submittambahcuti', 'userPegawaiController::submitTambahCuti', ['filter' => 'auth']);
 $routes->get('/catatankehadiran', 'userPegawaiController::tampilCatatanKehadiran', ['filter' => 'auth']);
 $routes->get('/statusizin', 'userPegawaiController::tampilStatusIzin', ['filter' => 'auth']);
 $routes->get('/presensi', 'userPegawaiController::tambahPresensi', ['filter' => 'auth']);

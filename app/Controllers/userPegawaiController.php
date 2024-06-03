@@ -344,9 +344,91 @@ class userPegawaiController extends BaseController
 
     public function tambahCuti()
     {
-        $title = 'Detail berkas';
-        return view('/user/izinCuti', ['title' => $title]);
+        $title = 'Tambah Cuti';
+
+        // Check if the user is logged in by checking the presence of the JWT token in the session
+        if (session()->has('jwt_token')) {
+            // Return the view with the title
+            return view('/user/izinCuti', ['title' => $title]);
+        } else {
+            // Redirect to login page or show an appropriate message
+            return redirect()->to('/login')->with('error', 'User not logged in. Please log in first.');
+        }
     }
+
+    public function submitTambahCuti()
+    {
+        if ($this->request->getPost()) {
+
+            // Retrieve the form data from the POST request
+            $id_pegawai = $this->request->getPost('id_pegawai');
+            $tanggal_mulai = $this->request->getPost('tanggal_mulai');
+            $tanggal_selesai = $this->request->getPost('tanggal_selesai');
+            $id_alasan_cuti = $this->request->getPost('id_alasan_cuti');
+
+            // Prepare the data to be sent to the API
+            $postData = [
+                'id_pegawai' => $id_pegawai,
+                'tanggal_mulai' => $tanggal_mulai,
+                'tanggal_selesai' => $tanggal_selesai,
+                'id_alasan_cuti' => $id_alasan_cuti
+            ];
+
+            $tambah_cuti_JSON = json_encode($postData);
+
+            $cuti_url = $this->api_url . '/kehadiran/cuti';
+
+            // Check if required fields are provided
+            if (session()->has('jwt_token')) {
+                // Assume you have some validation logic here for the required fields
+
+                $token = session()->get('jwt_token');
+
+                // Initialize cURL session for sending the POST request
+                $ch = curl_init($cuti_url);
+
+                // Set cURL options for sending a POST request
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, ($tambah_cuti_JSON));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($tambah_cuti_JSON),
+                    'Authorization: Bearer ' . $token,
+                ]);
+
+                // Execute the cURL request
+                $response = curl_exec($ch);
+
+                // Check if the API request was successful
+                if ($response) {
+
+                    // Check if the HTTP status code in the response
+                    $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+                    if ($http_status_code === 201) {
+                        // Leave (cuti) created successfully
+                        return redirect()->to(base_url('izincuti'));
+                    } else {
+                        // Error response from the API
+                        return "Error creating leave: " . $tambah_cuti_JSON;
+                    }
+                } else {
+                    // Error sending request to the API
+                    return "Error sending request to the API.";
+                }
+
+                // Close the cURL session
+                curl_close($ch);
+            } else {
+                // User is not logged in
+                return redirect()->to('/login')->with('error', 'User not logged in. Please log in first.');
+            }
+        }
+    }
+
+
+
 
     public function tambahPresensi()
     {
@@ -359,6 +441,4 @@ class userPegawaiController extends BaseController
         $title = 'Detail berkas';
         return view('/user/tambahSwafoto', ['title' => $title]);
     }
-
-
 }
