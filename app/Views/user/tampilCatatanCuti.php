@@ -19,9 +19,23 @@
                         <div class="grid gap-3 md:flex md:justify-between md:items-center">
                             <div class="sm:col-span-12">
                                 <h2 class="text-lg font-semibold text-gray-800 dark:text-neutral-200">
-                                    Catatan Kehadiran
+                                    Catatan Cuti
                                 </h2>
                             </div>
+
+                        </div>
+
+                        <div class="justify-end items-center">
+                            <a href="/izincuti">
+                                <button type="button" class="py-2 px-4 my-2 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+
+                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 12H20M12 4V20" stroke="#ACF2E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+
+                                    Tambah
+                                </button>
+                            </a>
 
                         </div>
 
@@ -50,25 +64,25 @@
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-start border-s border-gray-200 dark:border-neutral-700">
                                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Tanggal
+                                        Tanggal Mulai Cuti
                                     </span>
                                 </th>
 
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Status Hadir
+                                        Tanggal Selesai
                                     </span>
                                 </th>
 
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Jam Hadir
+                                        Alasan Cuti
                                     </span>
                                 </th>
 
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Jam Pulang
+                                        Status
                                     </span>
                                 </th>
 
@@ -76,12 +90,12 @@
                         </thead>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-neutral-700 text-xs">
-                            <?php foreach ($kehadiran_data as $kehadiranEntry) : ?>
+                            <?php foreach ($cuti_data as $cutiEntry) : ?>
                                 <tr>
                                     <td class="h-px w-auto whitespace-nowrap">
                                         <div class="px-6 py-2 flex items-center gap-x-3">
                                             <a class="flex items-center gap-x-2" href="">
-                                                <span class="font-semibold hover:underline"><?= $kehadiranEntry['tanggal'] ?? 'N/A' ?></span>
+                                                <span class="font-semibold hover:underline"><?= $cutiEntry['tanggal_mulai'] ?? 'N/A' ?></span>
                                             </a>
                                         </div>
                                     </td>
@@ -91,19 +105,19 @@
                                                 <svg class="w-2 h-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                                                 </svg>
-                                                <?= $kehadiranEntry['keterangan'] ?? 'N/A' ?>
+                                                <?= $cutiEntry['tanggal_selesai'] ?? 'N/A' ?>
                                             </span>
                                         </div>
                                     </td>
 
                                     <td class="h-px w-auto whitespace-nowrap">
                                         <div class="px-6 py-2">
-                                            <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $kehadiranEntry['jam_masuk'] ?? 'N/A' ?></span>
+                                            <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $cutiEntry['id_alasan_cuti'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-auto whitespace-nowrap">
                                         <div class="px-6 py-2">
-                                            <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $kehadiranEntry['jam_pulang'] ?? 'N/A' ?></span>
+                                            <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $cutiEntry['status'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
 
@@ -114,7 +128,7 @@
                     <!-- End Table -->
 
 
-                   
+
 
                 </div>
             </div>

@@ -6,17 +6,22 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 // $routes->get('/', 'Home::index');
-$routes->get('/', 'authController::index');
+$routes->get('/', 'userPegawaiController::lihatDashboard', ['filter' => 'auth']);
 $routes->get('/login', 'authController::index');
 $routes->get('/logout', 'authController::logout', ['filter' => 'auth']);
 
+$routes->get('/dashboard', 'userPegawaiController::lihatDashboard', ['filter' => 'auth']);
+$routes->post('/dashboard', 'authController::login', ['filter' => 'noauth']);
 $routes->get('/profile', 'userPegawaiController::lihatProfil', ['filter' => 'auth']);
 $routes->post('/submiteditprofil/(:segment)', 'userPegawaiController::submitEditProfil/$1', ['filter' => 'auth']);
 $routes->get('/datauserpegawai', 'userPegawaiController::lihatPegawai', ['filter' => 'auth']);
 $routes->get('/detailberkaspegawai/(:segment)', 'userPegawaiController::detailBerkasPegawai/$1', ['filter' => 'auth']);
+
 $routes->get('/izincuti', 'userPegawaiController::tambahCuti', ['filter' => 'auth']);
+$routes->get('/lihatizincuti/(:segment)', 'userPegawaiController::tampilCuti/$1', ['filter' => 'auth']);
+
 $routes->post('/submittambahcuti', 'userPegawaiController::submitTambahCuti', ['filter' => 'auth']);
-$routes->get('/catatankehadiran', 'userPegawaiController::tampilCatatanKehadiran', ['filter' => 'auth']);
+$routes->get('/catatankehadiran/(:segment)', 'userPegawaiController::tampilCatatanKehadiran/$1', ['filter' => 'auth']);
 $routes->get('/statusizin', 'userPegawaiController::tampilStatusIzin', ['filter' => 'auth']);
 $routes->get('/presensi', 'userPegawaiController::tambahPresensi', ['filter' => 'auth']);
 $routes->get('/swafoto', 'userPegawaiController::tambahSwafoto', ['filter' => 'auth']);

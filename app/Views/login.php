@@ -11,7 +11,7 @@
 <body class="bg-[#E2E8F0]">
 
     <div class="bg-white min-h-screen flex items-center justify-center">
-        <form action="admin" method="post" class="w-full max-w-md">
+        <form action="dashboard" method="post" class="w-full max-w-md">
             <div class="px-8 py-10 bg-white shadow-lg rounded-xl">
                 <h2 class="text-3xl font-semibold text-center mb-6">Login</h2>
                 <div class="mb-6">
