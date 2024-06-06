@@ -1143,6 +1143,14 @@ video {
   max-width: 24rem;
 }
 
+.max-w-\[30rem\] {
+  max-width: 30rem;
+}
+
+.max-w-\[72rem\] {
+  max-width: 72rem;
+}
+
 .flex-none {
   flex: none;
 }
@@ -1180,6 +1188,10 @@ video {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
 .flex-row {
   flex-direction: row;
 }
@@ -1198,6 +1210,10 @@ video {
 
 .items-center {
   align-items: center;
+}
+
+.justify-start {
+  justify-content: flex-start;
 }
 
 .justify-end {
@@ -1230,6 +1246,18 @@ video {
 
 .gap-6 {
   gap: 1.5rem;
+}
+
+.gap-10 {
+  gap: 2.5rem;
+}
+
+.gap-7 {
+  gap: 1.75rem;
+}
+
+.gap-8 {
+  gap: 2rem;
 }
 
 .gap-x-1 {
@@ -2844,6 +2872,14 @@ video {
     width: 24rem;
   }
 
+  .sm\:w-\[24rem\] {
+    width: 24rem;
+  }
+
+  .sm\:w-\[30rem\] {
+    width: 30rem;
+  }
+
   .sm\:min-w-\[24rem\] {
     min-width: 24rem;
   }
@@ -2920,6 +2956,11 @@ video {
     padding-right: 3rem;
   }
 
+  .sm\:px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
   .sm\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
@@ -2959,6 +3000,10 @@ video {
 
   .md\:w-auto {
     width: auto;
+  }
+
+  .md\:w-\[24rem\] {
+    width: 24rem;
   }
 
   .md\:grid-cols-2 {
@@ -3058,6 +3103,14 @@ video {
     width: 24rem;
   }
 
+  .lg\:w-\[24rem\] {
+    width: 24rem;
+  }
+
+  .lg\:w-full {
+    width: 100%;
+  }
+
   .lg\:translate-x-0 {
     --tw-translate-x: 0px;
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -3071,12 +3124,24 @@ video {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .lg\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .lg\:flex-row {
     flex-direction: row;
   }
 
   .lg\:gap-y-5 {
     row-gap: 1.25rem;
+  }
+
+  .lg\:gap-y-16 {
+    row-gap: 4rem;
+  }
+
+  .lg\:gap-y-8 {
+    row-gap: 2rem;
   }
 
   .lg\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
@@ -3126,6 +3191,11 @@ video {
     padding-bottom: 5rem;
   }
 
+  .lg\:px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
   .lg\:pl-72 {
     padding-left: 18rem;
   }
@@ -3150,6 +3220,10 @@ video {
 
   .xl\:w-4\/6 {
     width: 66.666667%;
+  }
+
+  .xl\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .xl\:px-28 {
