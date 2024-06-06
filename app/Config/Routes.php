@@ -19,13 +19,15 @@ $routes->get('/detailberkaspegawai/(:segment)', 'userPegawaiController::detailBe
 
 $routes->get('/izincuti', 'userPegawaiController::tambahCuti', ['filter' => 'auth']);
 $routes->get('/lihatizincuti/(:segment)', 'userPegawaiController::tampilCuti/$1', ['filter' => 'auth']);
-
 $routes->post('/submittambahcuti', 'userPegawaiController::submitTambahCuti', ['filter' => 'auth']);
+
+$routes->get('/lihatjadwal/(:segment)', 'userPegawaiController::tampilJadwal/$1', ['filter' => 'auth']);
+
 $routes->get('/catatankehadiran/(:segment)', 'userPegawaiController::tampilCatatanKehadiran/$1', ['filter' => 'auth']);
 $routes->get('/statusizin', 'userPegawaiController::tampilStatusIzin', ['filter' => 'auth']);
 $routes->get('/presensi', 'userPegawaiController::tambahPresensi', ['filter' => 'auth']);
 $routes->get('/swafoto', 'userPegawaiController::tambahSwafoto', ['filter' => 'auth']);
-
+$routes->get('/tesmenukehadiran', 'userPegawaiController::lihatOpsiHadir', ['filter' => 'auth']);
 
 $routes->get('/admin', 'authController::dashboard', ['filter' => 'auth']);
 $routes->post('/admin', 'authController::login', ['filter' => 'noauth']);

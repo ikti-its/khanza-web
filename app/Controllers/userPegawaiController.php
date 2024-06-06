@@ -393,6 +393,62 @@ class userPegawaiController extends BaseController
     }
 
 
+    public function tampilJadwal($pegawaiId)
+    {
+        $title = 'Tampil Jadwal';
+
+        // // Retrieve the value of the 'page' parameter from the request, default to 1 if not present
+        // $page = $this->request->getGet('page') ?? 1;
+
+        // // Retrieve the value of the 'size' parameter from the request, default to 5 if not present
+        // $size = $this->request->getGet('size') ?? 10;
+
+        // Check if the user is logged in
+        // Retrieve the stored JWT token
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+            // URL for fetching akun data
+            $jadwal_url = $this->api_url . '/kehadiran/jadwal/pegawai/' . $pegawaiId;
+
+            // Initialize cURL session
+            $ch_jadwal = curl_init($jadwal_url);
+
+            // Set cURL options
+            curl_setopt($ch_jadwal, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_jadwal, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            // Execute the cURL request for fetching akun data
+            $response_jadwal = curl_exec($ch_jadwal);
+
+            // Check the API response for akun data
+            if ($response_jadwal) {
+                $http_status_code_akun = curl_getinfo($ch_jadwal, CURLINFO_HTTP_CODE);
+
+                if ($http_status_code_akun === 200) {
+                    // Akun data fetched successfully
+                    $jadwal_data = json_decode($response_jadwal, true);
+
+                    // $total_pages = $akun_data['data']['total'];
+
+                    return  view('/user/tampilJadwalPegawai', ['kehadiran_data' => $jadwal_data['data'] , 'title' => $title]);
+                } else {
+                    // Error fetching akun data
+                    return "Error fetching akun data. HTTP Status Code: $http_status_code_akun";
+                }
+            } else {
+                // Error fetching akun data
+                return "Error fetching akun data.";
+            }
+
+            // Close the cURL session for akun data
+            curl_close($ch_jadwal);
+        } else {
+            return "User not logged in. Please log in first.";
+        }
+    }
+
     public function tampilStatusIzin()
     {
         $title = 'Detail berkas';
@@ -483,6 +539,13 @@ class userPegawaiController extends BaseController
             }
         }
     }
+
+    public function lihatOpsiHadir()
+    {
+        $title = 'OpsiHadir';
+        return view('/user/opsiHadir', ['title' => $title]);
+    }
+
 
     public function lihatDashboard()
     {

@@ -25,7 +25,7 @@
                     <?php
                     if (session()->has('user_specific_data') && session('user_specific_data')['status'] == true) {
                         echo '<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none" class="mr-2">
-                    <circle cx="4" cy="4" r="4" fill="#0A2D27"/>
+                    <circle cx="4" cy="4" r="4" fill="#30DFC4"/>
                   </svg> Hadir';
                     } else {
                         echo '<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none" class="mr-2">
