@@ -7,53 +7,84 @@
     <!-- Grid -->
     <div class="grid sm:grid-cols-2 gap-6">
         <!-- Card -->
-        <div class="h-72 flex flex-col justify-center items-center bg-[#D6F9F3] rounded-xl">
-            <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 44" fill="none">
-                <rect x="5.5" y="5" width="34" height="34" rx="6" fill="#26B29D" />
-                <path d="M16.25 30.3335C18.0208 31.646 20.1771 32.4168 22.5 32.4168C24.8229 32.4168 26.9792 31.646 28.75 30.3335" stroke="#0A2D27" stroke-width="2" stroke-linecap="round" />
-                <path d="M30.3337 18.875C30.3337 19.653 30.1225 20.3347 29.8074 20.8074C29.49 21.2835 29.1064 21.5 28.7503 21.5C28.3942 21.5 28.0106 21.2835 27.6932 20.8074C27.3781 20.3347 27.167 19.653 27.167 18.875C27.167 18.097 27.3781 17.4153 27.6932 16.9426C28.0106 16.4665 28.3942 16.25 28.7503 16.25C29.1064 16.25 29.49 16.4665 29.8074 16.9426C30.1225 17.4153 30.3337 18.097 30.3337 18.875Z" fill="#0A2D27" stroke="#0A2D27" />
-                <path d="M17.8337 18.875C17.8337 19.653 17.6225 20.3347 17.3074 20.8074C16.99 21.2835 16.6064 21.5 16.2503 21.5C15.8942 21.5 15.5106 21.2835 15.1932 20.8074C14.8781 20.3347 14.667 19.653 14.667 18.875C14.667 18.097 14.8781 17.4153 15.1932 16.9426C15.5106 16.4665 15.8942 16.25 16.2503 16.25C16.6064 16.25 16.99 16.4665 17.3074 16.9426C17.6225 17.4153 17.8337 18.097 17.8337 18.875Z" fill="#0A2D27" stroke="#0A2D27" />
-                <path d="M43.1667 26C43.1667 33.8563 43.1667 37.7854 40.725 40.225C38.2854 42.6667 34.3563 42.6667 26.5 42.6667M18.1667 42.6667C10.3104 42.6667 6.38125 42.6667 3.94167 40.225C1.5 37.7854 1.5 33.8563 1.5 26M18.1667 1C10.3104 1 6.38125 1 3.94167 3.44167C1.5 5.88125 1.5 9.81042 1.5 17.6667M26.5 1C34.3563 1 38.2854 1 40.725 3.44167C43.1667 5.88125 43.1667 9.81042 43.1667 17.6667" stroke="#0A2D27" stroke-width="2" stroke-linecap="round" />
+        <div class="h-72 flex flex-col justify-center items-center border-2 bg-[#FDFDFD] rounded-xl relative overflow-hidden">
+            <!-- SVG for the blur effect -->
+
+            <svg class="absolute bottom-0 right-0 w-full h-48" viewBox="0 0 432 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g filter="url(#filter0_f_1725_22124)">
+                    <ellipse cx="350" cy="223.5" rx="200" ry="73.5" fill="#83ECDC" />
+                </g>
+                <defs>
+                    <filter id="filter0_f_1725_22124" x="0" y="0" width="700" height="447" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+                        <feGaussianBlur stdDeviation="75" result="effect1_foregroundBlur_1725_22124" />
+                    </filter>
+                </defs>
+            </svg>
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="51" height="50" viewBox="0 0 51 50" fill="none">
+                <rect x="8.49988" y="8" width="34" height="34" rx="6" fill="#ACF2E7" />
+                <path d="M19.25 33.3335C21.0208 34.646 23.1771 35.4168 25.5 35.4168C27.8229 35.4168 29.9792 34.646 31.75 33.3335" stroke="#24A793" stroke-width="2" stroke-linecap="round" />
+                <path d="M33.3333 21.875C33.3333 22.653 33.1222 23.3347 32.8071 23.8074C32.4897 24.2835 32.1061 24.5 31.75 24.5C31.3939 24.5 31.0103 24.2835 30.6928 23.8074C30.3778 23.3347 30.1666 22.653 30.1666 21.875C30.1666 21.097 30.3778 20.4153 30.6928 19.9426C31.0103 19.4665 31.3939 19.25 31.75 19.25C32.1061 19.25 32.4897 19.4665 32.8071 19.9426C33.1222 20.4153 33.3333 21.097 33.3333 21.875Z" fill="#24A793" stroke="#24A793" />
+                <path d="M20.8333 21.875C20.8333 22.653 20.6222 23.3347 20.3071 23.8074C19.9897 24.2835 19.6061 24.5 19.25 24.5C18.8939 24.5 18.5103 24.2835 18.1928 23.8074C17.8778 23.3347 17.6666 22.653 17.6666 21.875C17.6666 21.097 17.8778 20.4153 18.1928 19.9426C18.5103 19.4665 18.8939 19.25 19.25 19.25C19.6061 19.25 19.9897 19.4665 20.3071 19.9426C20.6222 20.4153 20.8333 21.097 20.8333 21.875Z" fill="#24A793" stroke="#24A793" />
+                <path d="M46.1665 29C46.1665 36.8563 46.1665 40.7854 43.7249 43.225C41.2853 45.6667 37.3561 45.6667 29.4999 45.6667M21.1665 45.6667C13.3103 45.6667 9.38113 45.6667 6.94154 43.225C4.49988 40.7854 4.49988 36.8563 4.49988 29M21.1665 4C13.3103 4 9.38113 4 6.94154 6.44167C4.49988 8.88125 4.49988 12.8104 4.49988 20.6667M29.4999 4C37.3561 4 41.2853 4 43.7249 6.44167C46.1665 8.88125 46.1665 12.8104 46.1665 20.6667" stroke="#0A2D27" stroke-width="2" stroke-linecap="round" />
             </svg>
 
             <div class="p-2 md:p-4 flex justify-center">
-                <span class="block mb-1 text-xs font-semibold  text-black">
+                <span class="block mb-1 text-lg font-semibold text-black">
                     Face Recognition
                 </span>
             </div>
 
             <div class="flex justify-center items-center">
                 <div class="w-full md:w-auto sm:w-auto lg:w-auto">
-                    <a class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#">
+                    <a class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="/presensi">
                         Mulai Autentikasi Dengan Wajah
                     </a>
                 </div>
             </div>
-
-
         </div>
+
 
         <!-- End Card -->
 
         <!-- Card -->
-        <div class="h-72 flex flex-col justify-center items-center bg-[#0A2D27] rounded-xl">
-            <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M45.6667 29C45.6667 36.8563 45.6667 40.7854 43.225 43.225C40.7854 45.6667 36.8563 45.6667 29 45.6667M20.6667 45.6667C12.8104 45.6667 8.88125 45.6667 6.44167 43.225C4 40.7854 4 36.8563 4 29M20.6667 4C12.8104 4 8.88125 4 6.44167 6.44167C4 8.88125 4 12.8104 4 20.6667M29 4C36.8563 4 40.7854 4 43.225 6.44167C45.6667 8.88125 45.6667 12.8104 45.6667 20.6667" stroke="#FDFDFD" stroke-width="2" stroke-linecap="round" />
-                <path d="M21.4802 39.2501H28.5165C33.4581 39.2501 35.9297 39.2501 37.7046 38.0863C38.4705 37.5844 39.1301 36.9366 39.6458 36.18C40.8317 34.4383 40.8317 32.0111 40.8317 27.1597C40.8317 22.3068 40.8317 19.8812 39.6458 18.1395C39.1301 17.3828 38.4705 16.7351 37.7046 16.2332C36.5646 15.4842 35.1365 15.2167 32.9499 15.1217C31.9065 15.1217 31.0087 14.3458 30.8045 13.3404C30.6484 12.6039 30.2428 11.944 29.6563 11.472C29.0698 11 28.3383 10.745 27.5855 10.7501H22.4112C20.8469 10.7501 19.4995 11.8347 19.1923 13.3404C18.988 14.3458 18.0903 15.1217 17.0469 15.1217C14.8619 15.2167 13.4337 15.4858 12.2921 16.2332C11.5268 16.7352 10.8677 17.3829 10.3525 18.1395C9.16504 19.8812 9.16504 22.3068 9.16504 27.1597C9.16504 32.0111 9.16504 34.4367 10.351 36.18C10.864 36.9337 11.5226 37.5812 12.2921 38.0863C14.067 39.2501 16.5386 39.2501 21.4802 39.2501Z" fill="#ACF2E7" />
-                <path d="M33.7955 20.6807C33.6237 20.6793 33.4534 20.7116 33.2941 20.776C33.1349 20.8404 32.9899 20.9355 32.8674 21.0559C32.745 21.1763 32.6474 21.3197 32.5803 21.4778C32.5133 21.6359 32.478 21.8057 32.4766 21.9775C32.4766 22.6931 33.0671 23.2726 33.7955 23.2726H35.5546C36.2829 23.2726 36.8751 22.6916 36.8751 21.9775C36.8736 21.8056 36.8383 21.6357 36.7711 21.4775C36.704 21.3192 36.6063 21.1758 36.4836 21.0554C36.361 20.9349 36.2158 20.8399 36.0564 20.7756C35.897 20.7113 35.7264 20.6791 35.5546 20.6807H33.7955Z" fill="#24A793" />
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M24.9985 20.6807C21.3568 20.6807 18.4023 23.5813 18.4023 27.1581C18.4023 30.7364 21.3553 33.6355 25.0001 33.6355C28.6418 33.6355 31.5963 30.7364 31.5963 27.1597C31.5963 23.5813 28.6433 20.6807 25.0001 20.6807M25.0001 23.2726C22.8151 23.2726 21.0418 25.0127 21.0418 27.1581C21.0418 29.3051 22.8151 31.0452 25.0001 31.0452C27.1867 31.0452 28.9584 29.3051 28.9584 27.1581C28.9584 25.0127 27.1867 23.2726 25.0001 23.2726Z" fill="#24A793" />
+        <div class="h-72 flex flex-col justify-center items-center border-2 bg-[#FDFDFD] rounded-xl relative overflow-hidden">
+
+            <!-- SVG for the blur effect -->
+
+            <svg class="absolute bottom-0 right-0 w-full h-48" viewBox="0 0 432 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g filter="url(#filter0_f_1725_22127)">
+                    <ellipse cx="350" cy="223.5" rx="200" ry="73.5" fill="#26B29D" />
+                </g>
+                <defs>
+                    <filter id="filter0_f_1725_22127" x="0" y="0" width="700" height="447" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+                        <feGaussianBlur stdDeviation="75" result="effect1_foregroundBlur_1725_22127" />
+                    </filter>
+                </defs>
+            </svg>
+
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M42.6665 26C42.6665 33.8563 42.6665 37.7854 40.2249 40.225C37.7853 42.6667 33.8561 42.6667 25.9999 42.6667M17.6665 42.6667C9.8103 42.6667 5.88113 42.6667 3.44154 40.225C0.999878 37.7854 0.999878 33.8563 0.999878 26M17.6665 1C9.8103 1 5.88113 1 3.44154 3.44167C0.999878 5.88125 0.999878 9.81042 0.999878 17.6667M25.9999 1C33.8561 1 37.7853 1 40.2249 3.44167C42.6665 5.88125 42.6665 9.81042 42.6665 17.6667" stroke="#272727" stroke-width="2" stroke-linecap="round" />
+                <path d="M18.4801 36.2501H25.5164C30.458 36.2501 32.9296 36.2501 34.7045 35.0863C35.4703 34.5844 36.1299 33.9366 36.6457 33.18C37.8316 31.4383 37.8316 29.0111 37.8316 24.1597C37.8316 19.3068 37.8316 16.8812 36.6457 15.1395C36.13 14.3828 35.4704 13.7351 34.7045 13.2332C33.5645 12.4842 32.1363 12.2167 29.9497 12.1217C28.9063 12.1217 28.0086 11.3458 27.8043 10.3404C27.6482 9.60395 27.2427 8.94396 26.6562 8.472C26.0697 8.00003 25.3382 7.74502 24.5854 7.75007H19.4111C17.8468 7.75007 16.4993 8.83466 16.1922 10.3404C15.9879 11.3458 15.0902 12.1217 14.0468 12.1217C11.8618 12.2167 10.4336 12.4858 9.292 13.2332C8.52665 13.7352 7.86759 14.3829 7.35242 15.1395C6.16492 16.8812 6.16492 19.3068 6.16492 24.1597C6.16492 29.0111 6.16492 31.4367 7.35083 33.18C7.86383 33.9337 8.5225 34.5812 9.292 35.0863C11.0669 36.2501 13.5385 36.2501 18.4801 36.2501Z" fill="#ACF2E7" />
+                <path d="M30.7954 17.6807C30.6236 17.6793 30.4533 17.7116 30.294 17.776C30.1348 17.8404 29.9898 17.9355 29.8673 18.0559C29.7448 18.1763 29.6473 18.3197 29.5802 18.4778C29.5132 18.6359 29.4779 18.8057 29.4764 18.9775C29.4764 19.6931 30.067 20.2726 30.7954 20.2726H32.5544C33.2828 20.2726 33.8749 19.6916 33.8749 18.9775C33.8735 18.8056 33.8382 18.6357 33.771 18.4775C33.7038 18.3192 33.6061 18.1758 33.4835 18.0554C33.3609 17.9349 33.2157 17.8399 33.0563 17.7756C32.8968 17.7113 32.7263 17.6791 32.5544 17.6807H30.7954Z" fill="#24A793" />
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M21.9984 17.6807C18.3567 17.6807 15.4022 20.5813 15.4022 24.1581C15.4022 27.7364 18.3551 30.6355 22 30.6355C25.6416 30.6355 28.5961 27.7364 28.5961 24.1597C28.5961 20.5813 25.6432 17.6807 22 17.6807M22 20.2726C19.815 20.2726 18.0416 22.0127 18.0416 24.1581C18.0416 26.3051 19.815 28.0452 22 28.0452C24.1866 28.0452 25.9583 26.3051 25.9583 24.1581C25.9583 22.0127 24.1866 20.2726 22 20.2726Z" fill="#24A793" />
             </svg>
 
 
+
             <div class="p-2 md:p-4 flex justify-center">
-                <span class="block mb-1 text-xs font-semibold  text-white">
+                <span class="block mb-1 text-lg font-semibold  text-black">
                     Manual Swafoto
                 </span>
             </div>
 
             <div class="flex justify-center items-center">
                 <div class="w-full md:w-auto sm:w-auto lg:w-auto">
-                    <a class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#ACF2E7] text-black shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#">
+                    <a class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="/swafoto">
                         Mulai Pengambilan Wajah
                     </a>
                 </div>

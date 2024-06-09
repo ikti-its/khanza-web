@@ -243,7 +243,7 @@
                             <li>
 
 
-                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/lihatizincuti/<?php echo session('user_specific_data')['pegawai'] ?>">
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/izincuti">
                                     Izin cuti
                                 </a>
                             </li>
@@ -286,19 +286,19 @@
                                     Catatan Kehadiran
                                 </a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/statusizin">
                                     Status Pengajuan Izin
                                 </a>
-                            </li>
+                            </li> -->
                             <li>
                                 <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/lihatjadwal/<?php echo session('user_specific_data')['pegawai'] ?>">
                                     Jadwal Kerja
                                 </a>
                             </li>
                             <li>
-                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
-                                    Daftar Pengajuan Izin
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/lihatizincuti/<?php echo session('user_specific_data')['pegawai'] ?>">
+                                    Daftar Pengajuan Cuti
                                 </a>
                             </li>
                         </ul>

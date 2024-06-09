@@ -24,7 +24,7 @@
                             </div>
 
                         </div>
-
+                        <!-- 
                         <div class="justify-end items-center">
                             <a href="/izincuti">
                                 <button type="button" class="py-2 px-4 my-2 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
@@ -37,7 +37,7 @@
                                 </button>
                             </a>
 
-                        </div>
+                        </div> -->
 
 
                     </div>
@@ -76,13 +76,13 @@
 
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Alasan Cuti
+                                        Status Pengajuan
                                     </span>
                                 </th>
 
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Status
+                                        Alasan Cuti
                                     </span>
                                 </th>
 
@@ -90,7 +90,19 @@
                         </thead>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-neutral-700 text-xs">
-                            <?php foreach ($cuti_data as $cutiEntry) : ?>
+                            <?php
+
+                            // Define an associative array for id_alasan_cuti
+                            $alasanCuti = [
+                                'S' => 'Sakit',
+                                'I' => 'Izin',
+                                'CT' => 'Cuti Tahunan',
+                                'CB' => 'Cuti Besar',
+                                'CM' => 'Cuti Melahirkan',
+                                'CU' => 'Cuti Karena Alasan Penting'
+                            ];
+
+                            foreach ($cuti_data as $cutiEntry) : ?>
                                 <tr>
                                     <td class="h-px w-auto whitespace-nowrap">
                                         <div class="px-6 py-2 flex items-center gap-x-3">
@@ -101,23 +113,28 @@
                                     </td>
                                     <td class="h-px w-auto whitespace-nowrap">
                                         <div class="px-6 py-2">
-                                            <span class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                                                <svg class="w-2 h-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                            <span class="font-semibold text-gray-800 dark:text-neutral-200"> <?= $cutiEntry['tanggal_selesai'] ?></span>
+                                        </div>
+                                    </td>
+
+                                    <td class="h-px w-auto whitespace-nowrap">
+                                        <div class="px-6 py-2">
+                                            <span class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium <?= $cutiEntry['status'] ? 'bg-[#D6F9F3] text-[#13594E]' : 'bg-[#FEE2E2] text-[#991B1B]' ?> rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-2.5">
+                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                    <g id="SVGRepo_iconCarrier">
+                                                        <circle cx="12" cy="12" r="9" fill="<?= $cutiEntry['status'] ? '#13594E' : '#991B1B' ?>"></circle>
+                                                    </g>
                                                 </svg>
-                                                <?= $cutiEntry['tanggal_selesai'] ?? 'N/A' ?>
+                                                <?= $cutiEntry['status'] ? 'Diterima' : 'Ditolak' ?>
                                             </span>
                                         </div>
                                     </td>
 
                                     <td class="h-px w-auto whitespace-nowrap">
                                         <div class="px-6 py-2">
-                                            <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $cutiEntry['id_alasan_cuti'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-auto whitespace-nowrap">
-                                        <div class="px-6 py-2">
-                                            <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $cutiEntry['status'] ?? 'N/A' ?></span>
+                                            <span class="font-semibold text-gray-800 dark:text-neutral-200"> <?= $alasanCuti[$cutiEntry['id_alasan_cuti']] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
 
