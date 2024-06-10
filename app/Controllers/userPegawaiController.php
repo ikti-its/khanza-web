@@ -12,57 +12,35 @@ class userPegawaiController extends BaseController
     {
         $title = 'Data Akun';
 
-        // Retrieve the value of the 'page' parameter from the request, default to 1 if not present
-        $page = $this->request->getGet('page') ?? 1;
-
-        // Retrieve the value of the 'size' parameter from the request, default to 5 if not present
-        $size = $this->request->getGet('size') ?? 10;
-
-        // Check if the user is logged in
-        // Retrieve the stored JWT token
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
-
             $tanggal = date('Y-m-d');
-            // URL for fetching akun data
             $akun_url = $this->api_url . '/m/home?tanggal=' . $tanggal;
-
-            // Initialize cURL session
             $ch_akun = curl_init($akun_url);
 
-            // Set cURL options
             curl_setopt($ch_akun, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_akun, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
 
-            // Execute the cURL request for fetching akun data
             $response_akun = curl_exec($ch_akun);
 
-            // Check the API response for akun data
             if ($response_akun) {
                 $http_status_code_akun = curl_getinfo($ch_akun, CURLINFO_HTTP_CODE);
 
                 if ($http_status_code_akun === 200) {
-                    // Akun data fetched successfully
                     $akun_data = json_decode($response_akun, true);
-
-                    // $total_pages = $akun_data['data']['total'];
-
-                    return  view('/user/homeUser', ['akun_data' => $akun_data['data'], 'title' => $title]);
+                    return view('/user/homeUser', ['akun_data' => $akun_data['data'], 'title' => $title]);
                 } else {
-                    // Error fetching akun data
-                    return "Error fetching akun data. HTTP Status Code: $http_status_code_akun";
+                    return $this->renderErrorView($http_status_code_akun);
                 }
             } else {
-                // Error fetching akun data
-                return "Error fetching akun data.";
+                return $this->renderErrorView(500);
             }
 
-            // Close the cURL session for akun data
             curl_close($ch_akun);
         } else {
-            return "User not logged in. Please log in first.";
+            return $this->renderErrorView(401);
         }
     }
 
@@ -135,18 +113,18 @@ class userPegawaiController extends BaseController
                         return redirect()->to(base_url('profile'));
                     } else {
                         // Error response from the API
-                        return "Error updating account: " . $response . $edit_pegawai_JSON;
+                        return $this->renderErrorView($http_status_code);
                     }
                 } else {
                     // Error sending request to the API
-                    return "Error sending request to the API.";
+                    return $this->renderErrorView(500);
                 }
 
                 // Close the cURL session
                 curl_close($ch);
             } else {
-                // Email or role is empty
-                return "Email and role are required.";
+                // User not logged in
+                return $this->renderErrorView(401);
             }
         }
     }
@@ -192,18 +170,19 @@ class userPegawaiController extends BaseController
 
                     return  view('/user/dataPegawai', ['akun_data' => $akun_data['data']['pegawai'], 'meta_data' => $akun_data['data'], 'title' => $title]);
                 } else {
-                    // Error fetching akun data
-                    return "Error fetching akun data. HTTP Status Code: $http_status_code_akun";
+                    // Error fetching pegawai data
+                    return $this->renderErrorView($http_status_code_akun);
                 }
             } else {
-                // Error fetching akun data
-                return "Error fetching akun data.";
+                // Error fetching pegawai data
+                return $this->renderErrorView(500); // Assume 500 for cURL error
             }
 
             // Close the cURL session for akun data
             curl_close($ch_akun);
         } else {
-            return "User not logged in. Please log in first.";
+            // User not logged in
+            return $this->renderErrorView(401);
         }
     }
 
@@ -261,22 +240,28 @@ class userPegawaiController extends BaseController
                             $berkasData = json_decode($response_berkas, true);
                             //Render the view to edit user data, passing the user data
                             return view('/user/berkasPegawai', ['userData' => $userData['data'], 'berkasData' => $berkasData['data'], 'pegawaiId' => $pegawaiId, 'title' => 'Edit Pegawai']);
+                        } else {
+                            // Error fetching file data
+                            return $this->renderErrorView($http_status_berkas);
                         }
+                    } else {
+                        // Error fetching file data
+                        return $this->renderErrorView(500); // Assume 500 for cURL error
                     }
                 } else {
                     // Error fetching user data
-                    return "Error fetching user data. HTTP Status Code: $http_status_code $pegawaiId";
+                    return $this->renderErrorView($http_status_code);
                 }
             } else {
-                //Error fetching user data
-                return "Error fetching user data.";
+                // Error fetching file data
+                return $this->renderErrorView(500); // Assume 500 for cURL error
             }
 
             //Close the cURL session for user data
             curl_close($ch_user);
         } else {
-            //User not logged in
-            return "User not logged in. Please log in first. ";
+            // User not logged in
+            return $this->renderErrorView(401);
         }
     }
 
@@ -311,28 +296,29 @@ class userPegawaiController extends BaseController
 
             // Check the API response for akun data
             if ($response_kehadiran) {
-                $http_status_code_akun = curl_getinfo($ch_kehadiran, CURLINFO_HTTP_CODE);
+                $http_status_code_kehadiran = curl_getinfo($ch_kehadiran, CURLINFO_HTTP_CODE);
 
-                if ($http_status_code_akun === 200) {
+                if ($http_status_code_kehadiran === 200) {
                     // Akun data fetched successfully
                     $kehadiran_data = json_decode($response_kehadiran, true);
 
                     // $total_pages = $akun_data['data']['total'];
 
-                    return  view('/user/tampilCatatanKehadiran', ['kehadiran_data' => $kehadiran_data['data'] , 'title' => $title]);
+                    return  view('/user/tampilCatatanKehadiran', ['kehadiran_data' => $kehadiran_data['data'], 'title' => $title]);
                 } else {
-                    // Error fetching akun data
-                    return "Error fetching akun data. HTTP Status Code: $http_status_code_akun";
+                    // Error fetching kehadiran data
+                    return $this->renderErrorView($http_status_code_kehadiran);
                 }
             } else {
-                // Error fetching akun data
-                return "Error fetching akun data.";
+                // Error fetching kehadiran data
+                return $this->renderErrorView(500); // Assume 500 for cURL error
             }
 
             // Close the cURL session for akun data
             curl_close($ch_kehadiran);
         } else {
-            return "User not logged in. Please log in first.";
+            // User not logged in
+            return $this->renderErrorView(401);
         }
     }
 
@@ -367,28 +353,29 @@ class userPegawaiController extends BaseController
 
             // Check the API response for akun data
             if ($response_cuti) {
-                $http_status_code_akun = curl_getinfo($ch_cuti, CURLINFO_HTTP_CODE);
+                $http_status_code_cuti = curl_getinfo($ch_cuti, CURLINFO_HTTP_CODE);
 
-                if ($http_status_code_akun === 200) {
+                if ($http_status_code_cuti === 200) {
                     // Akun data fetched successfully
                     $cuti_data = json_decode($response_cuti, true);
 
                     // $total_pages = $akun_data['data']['total'];
 
-                    return  view('/user/tampilCatatanCuti', ['cuti_data' => $cuti_data['data'] , 'title' => $title]);
+                    return  view('/user/tampilCatatanCuti', ['cuti_data' => $cuti_data['data'], 'title' => $title]);
                 } else {
-                    // Error fetching akun data
-                    return "Error fetching akun data. HTTP Status Code: $http_status_code_akun";
+                    // Error fetching cuti data
+                    return $this->renderErrorView($http_status_code_cuti);
                 }
             } else {
-                // Error fetching akun data
-                return "Error fetching akun data.";
+                // Error fetching cuti data
+                return $this->renderErrorView(500); // Assume 500 for cURL error
             }
 
             // Close the cURL session for akun data
             curl_close($ch_cuti);
         } else {
-            return "User not logged in. Please log in first.";
+            // User not logged in
+            return $this->renderErrorView(401);
         }
     }
 
@@ -424,28 +411,29 @@ class userPegawaiController extends BaseController
 
             // Check the API response for akun data
             if ($response_jadwal) {
-                $http_status_code_akun = curl_getinfo($ch_jadwal, CURLINFO_HTTP_CODE);
+                $http_status_code_jadwal = curl_getinfo($ch_jadwal, CURLINFO_HTTP_CODE);
 
-                if ($http_status_code_akun === 200) {
+                if ($http_status_code_jadwal === 200) {
                     // Akun data fetched successfully
                     $jadwal_data = json_decode($response_jadwal, true);
 
                     // $total_pages = $akun_data['data']['total'];
 
-                    return  view('/user/tampilJadwalPegawai', ['kehadiran_data' => $jadwal_data['data'] , 'title' => $title]);
+                    return  view('/user/tampilJadwalPegawai', ['kehadiran_data' => $jadwal_data['data'], 'title' => $title]);
                 } else {
-                    // Error fetching akun data
-                    return "Error fetching akun data. HTTP Status Code: $http_status_code_akun";
+                    // Error fetching jadwal data
+                    return $this->renderErrorView($http_status_code_jadwal);
                 }
             } else {
-                // Error fetching akun data
-                return "Error fetching akun data.";
+                // Error fetching jadwal data
+                return $this->renderErrorView(500); // Assume 500 for cURL error
             }
 
             // Close the cURL session for akun data
             curl_close($ch_jadwal);
         } else {
-            return "User not logged in. Please log in first.";
+            // User not logged in
+            return $this->renderErrorView(401);
         }
     }
 
@@ -523,12 +511,12 @@ class userPegawaiController extends BaseController
                         // Leave (cuti) created successfully
                         return redirect()->to(base_url('izincuti'));
                     } else {
-                        // Error response from the API
-                        return "Error creating leave: " . $tambah_cuti_JSON;
+                         // Error response from the API
+                    return $this->renderErrorView($http_status_code);
                     }
                 } else {
                     // Error sending request to the API
-                    return "Error sending request to the API.";
+                return $this->renderErrorView(500);
                 }
 
                 // Close the cURL session

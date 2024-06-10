@@ -660,6 +660,10 @@ video {
   top: 100%;
 }
 
+.z-10 {
+  z-index: 10;
+}
+
 .z-20 {
   z-index: 20;
 }
@@ -759,6 +763,10 @@ video {
 
 .me-5 {
   margin-inline-end: 1.25rem;
+}
+
+.ml-0 {
+  margin-left: 0px;
 }
 
 .ml-3 {
@@ -971,6 +979,10 @@ video {
   height: 72%;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .h-full {
   height: 100%;
 }
@@ -1037,6 +1049,10 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-screen {
+  width: 100vw;
 }
 
 .min-w-60 {
@@ -1378,6 +1394,11 @@ video {
   background-color: rgb(36 167 147 / var(--tw-bg-opacity));
 }
 
+.bg-\[\#D6F9F3\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(214 249 243 / var(--tw-bg-opacity));
+}
+
 .bg-\[\#E2E8F0\] {
   --tw-bg-opacity: 1;
   background-color: rgb(226 232 240 / var(--tw-bg-opacity));
@@ -1391,6 +1412,11 @@ video {
 .bg-\[\#FDFDFD\] {
   --tw-bg-opacity: 1;
   background-color: rgb(253 253 253 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#FEE2E2\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 226 226 / var(--tw-bg-opacity));
 }
 
 .bg-blue-600 {
@@ -1447,22 +1473,12 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-\[\#D6F9F3\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(214 249 243 / var(--tw-bg-opacity));
-}
-
-.bg-\[\#FEE2E2\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(254 226 226 / var(--tw-bg-opacity));
-}
-
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
 
-.bg-opacity-80 {
-  --tw-bg-opacity: 0.8;
+.bg-gradient-to-b {
+  background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
 }
 
 .bg-gradient-to-br {
@@ -1473,6 +1489,21 @@ video {
   --tw-gradient-from: #2563eb var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(37 99 235 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.from-white {
+  --tw-gradient-from: #fff var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.via-\[\#D6F9F3\] {
+  --tw-gradient-to: rgb(214 249 243 / 0)  var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), #D6F9F3 var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+
+.to-\[\#24A793\] {
+  --tw-gradient-to: #24A793 var(--tw-gradient-to-position);
 }
 
 .to-violet-600 {
@@ -1516,10 +1547,6 @@ video {
 
 .p-6 {
   padding: 1.5rem;
-}
-
-.p-8 {
-  padding: 2rem;
 }
 
 .px-1 {
@@ -1631,6 +1658,14 @@ video {
   padding-bottom: 2.5rem;
 }
 
+.pb-16 {
+  padding-bottom: 4rem;
+}
+
+.pb-28 {
+  padding-bottom: 7rem;
+}
+
 .pb-5 {
   padding-bottom: 1.25rem;
 }
@@ -1717,6 +1752,11 @@ video {
   line-height: 2.25rem;
 }
 
+.text-6xl {
+  font-size: 3.75rem;
+  line-height: 1;
+}
+
 .text-\[16px\] {
   font-size: 16px;
 }
@@ -1744,11 +1784,6 @@ video {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
-}
-
-.text-5xl {
-  font-size: 3rem;
-  line-height: 1;
 }
 
 .font-bold {
@@ -1779,6 +1814,11 @@ video {
   letter-spacing: 0.025em;
 }
 
+.text-\[\#13594E\] {
+  --tw-text-opacity: 1;
+  color: rgb(19 89 78 / var(--tw-text-opacity));
+}
+
 .text-\[\#1D8676\] {
   --tw-text-opacity: 1;
   color: rgb(29 134 118 / var(--tw-text-opacity));
@@ -1787,6 +1827,11 @@ video {
 .text-\[\#24A793\] {
   --tw-text-opacity: 1;
   color: rgb(36 167 147 / var(--tw-text-opacity));
+}
+
+.text-\[\#991B1B\] {
+  --tw-text-opacity: 1;
+  color: rgb(153 27 27 / var(--tw-text-opacity));
 }
 
 .text-\[\#ACF2E7\] {
@@ -1862,21 +1907,6 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.text-\[\#13594E\] {
-  --tw-text-opacity: 1;
-  color: rgb(19 89 78 / var(--tw-text-opacity));
-}
-
-.text-\[\#991B1B\] {
-  --tw-text-opacity: 1;
-  color: rgb(153 27 27 / var(--tw-text-opacity));
-}
-
-.text-teal-600 {
-  --tw-text-opacity: 1;
-  color: rgb(13 148 136 / var(--tw-text-opacity));
 }
 
 .decoration-2 {
@@ -2129,11 +2159,6 @@ video {
 .hover\:text-gray-800:hover {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
-}
-
-.hover\:text-teal-800:hover {
-  --tw-text-opacity: 1;
-  color: rgb(17 94 89 / var(--tw-text-opacity));
 }
 
 .hover\:underline:hover {

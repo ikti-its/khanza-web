@@ -18,8 +18,8 @@
 </head>
 
 <body>
-    <div class="container mx-auto">
-        <div class="w-full h-full lg:pl-72 z-[1] overflow-clip">
+    <div class="container mx-auto ml-0">
+        <div class="w-screen h-screen">
             <!-- Content -->
             <?= $this->renderSection('content') ?>
             <!-- End Content -->

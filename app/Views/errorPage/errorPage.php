@@ -1,72 +1,61 @@
-<?= $this->extend('layouts/errortemplate'); ?>
-<?= $this->section('content'); ?>
+    <?= $this->extend('layouts/errortemplate'); ?>
+    <?= $this->section('content'); ?>
+    <div class="min-h-screen bg-gradient-to-b from-white via-[#D6F9F3] to-[#24A793] flex flex-col justify-center items-center relative">
+        <div class="text-center z-10 pb-28">
+            <h1 class="text-6xl font-bold text-black mb-4">Halaman tidak ditemukan</h1>
+            <p class="text-2xl text-black">Kami tidak dapat menemukan halaman yang Anda cari. Periksa URL atau kembali ke halaman utama</p>
+        </div>
 
-<div class="relative w-full h-screen flex items-center justify-center">
-    <!-- SVG Background Placeholder -->
-    <div class="absolute inset-0">
-        <svg width="1440" height="846" viewBox="0 0 1440 846" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g clip-path="url(#clip0_529_2236)">
-                <rect width="1440" height="846" fill="url(#paint0_linear_529_2236)" />
-                <path d="M720 1540C1117.64 1540 1440 1316.81 1440 1041.5C1440 766.186 1117.64 543 720 543C322.355 543 0 766.186 0 1041.5C0 1316.81 322.355 1540 720 1540Z" stroke="url(#paint1_linear_529_2236)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M720 1500.33C1086 1500.33 1382.7 1294.9 1382.7 1041.5C1382.7 788.096 1086 582.672 720 582.672C354.001 582.672 57.3008 788.096 57.3008 1041.5C57.3008 1294.9 354.001 1500.33 720 1500.33Z" stroke="url(#paint2_linear_529_2236)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M720 1460.64C1054.34 1460.64 1325.38 1272.99 1325.38 1041.5C1325.38 810.016 1054.34 622.361 720 622.361C385.659 622.361 114.622 810.016 114.622 1041.5C114.622 1272.99 385.659 1460.64 720 1460.64Z" stroke="url(#paint3_linear_529_2236)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M720.001 1420.97C1022.7 1420.97 1268.08 1251.07 1268.08 1041.5C1268.08 831.924 1022.7 662.031 720.001 662.031C417.306 662.031 171.923 831.924 171.923 1041.5C171.923 1251.07 417.306 1420.97 720.001 1420.97Z" stroke="url(#paint4_linear_529_2236)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M720.001 1381.28C991.037 1381.28 1210.76 1229.16 1210.76 1041.5C1210.76 853.846 991.037 701.722 720.001 701.722C448.964 701.722 229.245 853.846 229.245 1041.5C229.245 1229.16 448.964 1381.28 720.001 1381.28Z" stroke="url(#paint5_linear_529_2236)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M720 1341.61C959.39 1341.61 1153.45 1207.24 1153.45 1041.5C1153.45 875.754 959.39 741.392 720 741.392C480.609 741.392 286.545 875.754 286.545 1041.5C286.545 1207.24 480.609 1341.61 720 1341.61Z" stroke="url(#paint6_linear_529_2236)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M720 1301.92C927.733 1301.92 1096.13 1185.33 1096.13 1041.5C1096.13 897.674 927.733 781.08 720 781.08C512.268 781.08 343.867 897.674 343.867 1041.5C343.867 1185.33 512.268 1301.92 720 1301.92Z" stroke="url(#paint7_linear_529_2236)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M720 1262.25C896.086 1262.25 1038.83 1163.42 1038.83 1041.5C1038.83 919.584 896.086 820.752 720 820.752C543.913 820.752 401.167 919.584 401.167 1041.5C401.167 1163.42 543.913 1262.25 720 1262.25Z" stroke="url(#paint8_linear_529_2236)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-            </g>
+        <svg class="w-full h-auto absolute bottom-0" viewBox="0 0 1440 346" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M720 1000C1117.64 1000 1440 776.814 1440 501.5C1440 226.186 1117.64 3 720 3C322.355 3 0 226.186 0 501.5C0 776.814 322.355 1000 720 1000Z" stroke="url(#paint0_linear_529_2237)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M720 960.327C1086 960.327 1382.7 754.903 1382.7 501.5C1382.7 248.096 1086 42.6724 720 42.6724C354.001 42.6724 57.3008 248.096 57.3008 501.5C57.3008 754.903 354.001 960.327 720 960.327Z" stroke="url(#paint1_linear_529_2237)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M720 920.641C1054.34 920.641 1325.38 732.985 1325.38 501.501C1325.38 270.016 1054.34 82.3608 720 82.3608C385.659 82.3608 114.622 270.016 114.622 501.501C114.622 732.985 385.659 920.641 720 920.641Z" stroke="url(#paint2_linear_529_2237)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M720.001 880.966C1022.7 880.966 1268.08 711.072 1268.08 501.498C1268.08 291.924 1022.7 122.031 720.001 122.031C417.306 122.031 171.923 291.924 171.923 501.498C171.923 711.072 417.306 880.966 720.001 880.966Z" stroke="url(#paint3_linear_529_2237)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M720.001 841.282C991.037 841.282 1210.76 689.157 1210.76 501.502C1210.76 313.846 991.037 161.722 720.001 161.722C448.964 161.722 229.245 313.846 229.245 501.502C229.245 689.157 448.964 841.282 720.001 841.282Z" stroke="url(#paint4_linear_529_2237)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M720 801.606C959.39 801.606 1153.45 667.244 1153.45 501.499C1153.45 335.754 959.39 201.392 720 201.392C480.609 201.392 286.545 335.754 286.545 501.499C286.545 667.244 480.609 801.606 720 801.606Z" stroke="url(#paint5_linear_529_2237)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M720 761.92C927.733 761.92 1096.13 645.326 1096.13 501.5C1096.13 357.674 927.733 241.08 720 241.08C512.268 241.08 343.867 357.674 343.867 501.5C343.867 645.326 512.268 761.92 720 761.92Z" stroke="url(#paint6_linear_529_2237)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M720 722.247C896.086 722.247 1038.83 623.415 1038.83 501.5C1038.83 379.584 896.086 280.752 720 280.752C543.913 280.752 401.167 379.584 401.167 501.5C401.167 623.415 543.913 722.247 720 722.247Z" stroke="url(#paint7_linear_529_2237)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
             <defs>
-                <linearGradient id="paint0_linear_529_2236" x1="720" y1="0" x2="720" y2="846" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#FDFDFD" />
-                    <stop offset="0.25" stop-color="#D6F9F3" />
-                    <stop offset="1" stop-color="#24A793" />
-                </linearGradient>
-                <linearGradient id="paint1_linear_529_2236" x1="720" y1="543" x2="720" y2="1540" gradientUnits="userSpaceOnUse">
+                <linearGradient id="paint0_linear_529_2237" x1="720" y1="3" x2="720" y2="1000" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#ACF2E7" />
                     <stop offset="1" stop-color="#1D8676" />
                 </linearGradient>
-                <linearGradient id="paint2_linear_529_2236" x1="720" y1="582.672" x2="720" y2="1500.33" gradientUnits="userSpaceOnUse">
+                <linearGradient id="paint1_linear_529_2237" x1="720" y1="42.6724" x2="720" y2="960.327" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#ACF2E7" />
                     <stop offset="1" stop-color="#1D8676" />
                 </linearGradient>
-                <linearGradient id="paint3_linear_529_2236" x1="720" y1="622.361" x2="720" y2="1460.64" gradientUnits="userSpaceOnUse">
+                <linearGradient id="paint2_linear_529_2237" x1="720" y1="82.3608" x2="720" y2="920.641" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#ACF2E7" />
                     <stop offset="1" stop-color="#1D8676" />
                 </linearGradient>
-                <linearGradient id="paint4_linear_529_2236" x1="720.001" y1="662.031" x2="720.001" y2="1420.97" gradientUnits="userSpaceOnUse">
+                <linearGradient id="paint3_linear_529_2237" x1="720.001" y1="122.031" x2="720.001" y2="880.966" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#ACF2E7" />
                     <stop offset="1" stop-color="#1D8676" />
                 </linearGradient>
-                <linearGradient id="paint5_linear_529_2236" x1="720.001" y1="701.722" x2="720.001" y2="1381.28" gradientUnits="userSpaceOnUse">
+                <linearGradient id="paint4_linear_529_2237" x1="720.001" y1="161.722" x2="720.001" y2="841.282" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#ACF2E7" />
                     <stop offset="1" stop-color="#1D8676" />
                 </linearGradient>
-                <linearGradient id="paint6_linear_529_2236" x1="720" y1="741.392" x2="720" y2="1341.61" gradientUnits="userSpaceOnUse">
+                <linearGradient id="paint5_linear_529_2237" x1="720" y1="201.392" x2="720" y2="801.606" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#ACF2E7" />
                     <stop offset="1" stop-color="#1D8676" />
                 </linearGradient>
-                <linearGradient id="paint7_linear_529_2236" x1="720" y1="781.08" x2="720" y2="1301.92" gradientUnits="userSpaceOnUse">
+                <linearGradient id="paint6_linear_529_2237" x1="720" y1="241.08" x2="720" y2="761.92" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#ACF2E7" />
                     <stop offset="1" stop-color="#1D8676" />
                 </linearGradient>
-                <linearGradient id="paint8_linear_529_2236" x1="720" y1="820.752" x2="720" y2="1262.25" gradientUnits="userSpaceOnUse">
+                <linearGradient id="paint7_linear_529_2237" x1="720" y1="280.752" x2="720" y2="722.247" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#ACF2E7" />
                     <stop offset="1" stop-color="#1D8676" />
                 </linearGradient>
-                <clipPath id="clip0_529_2236">
-                    <rect width="1440" height="846" fill="white" />
-                </clipPath>
             </defs>
         </svg>
 
+
+
     </div>
 
-    <div class="relative text-center bg-white bg-opacity-80 p-8 rounded-lg shadow-lg">
-        <h1 class="text-5xl font-bold text-gray-800 mb-4">404</h1>
-        <p class="text-xl text-gray-600 mb-8">Oops! The page you're looking for doesn't exist.</p>
-        <a href="/" class="text-lg font-semibold text-teal-600 hover:text-teal-800">Go Back Home</a>
-    </div>
-</div>
 
-<?= $this->endSection(); ?>
+
+
+    <?= $this->endSection(); ?>

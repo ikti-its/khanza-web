@@ -5,6 +5,8 @@ namespace Config;
 use CodeIgniter\Events\Events;
 use CodeIgniter\Exceptions\FrameworkException;
 use CodeIgniter\HotReloader\HotReloader;
+use Config\Services;
+use App\Libraries\MyExceptionHandler;
 
 /*
  * --------------------------------------------------------------------
@@ -24,7 +26,10 @@ use CodeIgniter\HotReloader\HotReloader;
  */
 
 Events::on('pre_system', static function () {
+
     if (ENVIRONMENT !== 'testing') {
+
+
         if (ini_get('zlib.output_compression')) {
             throw FrameworkException::forEnabledZlibOutputCompression();
         }

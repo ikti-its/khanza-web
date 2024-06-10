@@ -101,4 +101,6 @@ class Exceptions extends BaseConfig
     {
         return new ExceptionHandler($this);
     }
+
+    
 }
