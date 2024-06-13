@@ -19,7 +19,7 @@
         </h1>
         <div class="max-w-4xl flex justify-between">
 
-            <div class="group mt-20 pt-10 items-center py-2 px-2 text-lg font-medium text-white">
+            <div class="group mt-28 pt-10 items-center py-2 px-2 text-lg font-medium text-white">
                 <span>Status</span>
                 <p class="text-white mt-1 flex items-center">
                     <?php
@@ -37,7 +37,7 @@
             </div>
 
 
-            <div class="group mt-20 pt-10 items-center py-2 px-2 text-lg font-medium text-white">
+            <div class="group mt-28 pt-10 items-center py-2 px-2 text-lg font-medium text-white">
                 <span>Shift</span>
                 <p class="text-white mt-1"><?php echo session('user_specific_data')['jam_masuk'] ?> - <?php echo session('user_specific_data')['jam_pulang'] ?> </p>
             </div>

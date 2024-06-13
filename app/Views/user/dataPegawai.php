@@ -8,9 +8,9 @@
 <div class="overflow overflow-auto px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <!-- Card -->
     <div class="flex flex-col">
-        <div class="-m-3.5 overflow-x-auto">
+        <div class="-m-3.5 overflow-y-auto">
             <div class="p-1.5 w-full inline-block align-middle">
-                <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
+                <div class="border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
                     <!-- Header -->
                     <div class="px-6 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                         <div class="border-b border-gray-200 dark:border-neutral-700">
@@ -61,133 +61,135 @@
                         </div>
 
                         <!-- Table -->
-                        <table id="myTable" class="min-w-full divide-y divide-gray-50 dark:divid e-neutral-700 text-xs">
-                            <thead class="bg-gray-50 divide-y divide-gray-200 dark:bg-neutral-800 dark:divide-neutral-700">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-start border-s border-gray-200 dark:border-neutral-700">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                            Nama
-                                        </span>
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3 text-start">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                            NIP
-                                        </span>
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3 text-start">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                            Jenis Kelamin
-                                        </span>
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3 text-start">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                            Jabatan
-                                        </span>
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3 text-start">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                            Departemen
-                                        </span>
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3 text-start">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                            Status
-                                        </span>
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3 text-start">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                            Jenis Pegawai
-                                        </span>
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3 text-start">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                            No. Telepon
-                                        </span>
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3 text-start">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                            Awal Masuk
-                                        </span>
-                                    </th>
-
-                                    <th scope="col" class="px-6 py-3 text-start">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                            Aksi
-                                        </span>
-                                    </th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="divide-y divide-gray-200 dark:divide-neutral-700 text-xs">
-                                <?php foreach ($akun_data as $pegawaiEntry) : ?>
+                        <div class="overflow-x-auto">
+                            <table id="myTable" class="min-w-full divide-y divide-gray-50 dark:divid e-neutral-700 text-xs">
+                                <thead class="bg-gray-50 divide-y divide-gray-200 dark:bg-neutral-800 dark:divide-neutral-700">
                                     <tr>
-                                        <td class="h-px w-auto whitespace-nowrap">
-                                            <div class="px-6 py-2 flex items-center gap-x-3">
-                                                <a class="flex items-center gap-x-2" href="/detailberkaspegawai/<?= $pegawaiEntry['id'] ?>">
-                                                    <span class="font-semibold hover:underline"><?= $pegawaiEntry['nama'] ?? 'N/A' ?></span>
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td class="h-px w-auto whitespace-nowrap">
-                                            <div class="px-6 py-2">
-                                                <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['nip'] ?? 'N/A' ?></span>
-                                            </div>
-                                        </td>
-                                        <td class="h-px w-auto whitespace-nowrap">
-                                            <div class="px-6 py-2">
-                                                <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['jenis_kelamin'] ?? 'N/A' ?></span>
-                                            </div>
-                                        </td>
-                                        <td class="h-px w-auto whitespace-nowrap">
-                                            <div class="px-6 py-2">
-                                                <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['jabatan'] ?? 'N/A' ?></span>
-                                            </div>
-                                        </td>
-                                        <td class="h-px w-auto whitespace-nowrap">
-                                            <div class="px-6 py-2">
-                                                <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['departemen'] ?? 'N/A' ?></span>
-                                            </div>
-                                        </td>
-                                        <td class="h-px w-auto whitespace-nowrap">
-                                            <div class="px-6 py-2">
-                                                <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['status_aktif'] ?? 'N/A' ?></span>
-                                            </div>
-                                        </td>
-                                        <td class="h-px w-auto whitespace-nowrap">
-                                            <div class="px-6 py-2">
-                                                <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['jenis_pegawai'] ?? 'N/A' ?></span>
-                                            </div>
-                                        </td>
-                                        <td class="h-px w-auto whitespace-nowrap">
-                                            <div class="px-6 py-2">
-                                                <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['telepon'] ?? 'N/A' ?></span>
-                                            </div>
-                                        </td>
-                                        <td class="h-px w-auto whitespace-nowrap">
-                                            <div class="px-6 py-2">
-                                                <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['tanggal_masuk'] ?? 'N/A' ?></span>
-                                            </div>
-                                        </td>
-                                        <td class="h-px w-auto whitespace-nowrap">
-                                            <div class="px-6 py-2">
-                                                <a class="flex items-center gap-x-2" href="#">
-                                                    <span class="font-semibold text-teal-500 decoration-2 hover:underline dark:text-blue-500">Hubungi</span>
-                                                </a>
-                                            </div>
-                                        </td>
+                                        <th scope="col" class="px-6 py-3 text-start border-s border-gray-200 dark:border-neutral-700">
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                Nama
+                                            </span>
+                                        </th>
+
+                                        <th scope="col" class="px-6 py-3 text-start">
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                NIP
+                                            </span>
+                                        </th>
+
+                                        <th scope="col" class="px-6 py-3 text-start">
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                Jenis Kelamin
+                                            </span>
+                                        </th>
+
+                                        <th scope="col" class="px-6 py-3 text-start">
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                Jabatan
+                                            </span>
+                                        </th>
+
+                                        <th scope="col" class="px-6 py-3 text-start">
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                Departemen
+                                            </span>
+                                        </th>
+
+                                        <th scope="col" class="px-6 py-3 text-start">
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                Status
+                                            </span>
+                                        </th>
+
+                                        <th scope="col" class="px-6 py-3 text-start">
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                Jenis Pegawai
+                                            </span>
+                                        </th>
+
+                                        <th scope="col" class="px-6 py-3 text-start">
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                No. Telepon
+                                            </span>
+                                        </th>
+
+                                        <th scope="col" class="px-6 py-3 text-start">
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                Awal Masuk
+                                            </span>
+                                        </th>
+
+                                        <th scope="col" class="px-6 py-3 text-start">
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                                Aksi
+                                            </span>
+                                        </th>
                                     </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                        <!-- End Table -->
+                                </thead>
+
+                                <tbody class="divide-y divide-gray-200 dark:divide-neutral-700 text-xs">
+                                    <?php foreach ($akun_data as $pegawaiEntry) : ?>
+                                        <tr>
+                                            <td class="h-px w-auto whitespace-nowrap">
+                                                <div class="px-6 py-2 flex items-center gap-x-3">
+                                                    <a class="flex items-center gap-x-2" href="/detailberkaspegawai/<?= $pegawaiEntry['id'] ?>">
+                                                        <span class="font-semibold hover:underline"><?= $pegawaiEntry['nama'] ?? 'N/A' ?></span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td class="h-px w-auto whitespace-nowrap">
+                                                <div class="px-6 py-2">
+                                                    <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['nip'] ?? 'N/A' ?></span>
+                                                </div>
+                                            </td>
+                                            <td class="h-px w-auto whitespace-nowrap">
+                                                <div class="px-6 py-2">
+                                                    <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['jenis_kelamin'] ?? 'N/A' ?></span>
+                                                </div>
+                                            </td>
+                                            <td class="h-px w-auto whitespace-nowrap">
+                                                <div class="px-6 py-2">
+                                                    <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['jabatan'] ?? 'N/A' ?></span>
+                                                </div>
+                                            </td>
+                                            <td class="h-px w-auto whitespace-nowrap">
+                                                <div class="px-6 py-2">
+                                                    <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['departemen'] ?? 'N/A' ?></span>
+                                                </div>
+                                            </td>
+                                            <td class="h-px w-auto whitespace-nowrap">
+                                                <div class="px-6 py-2">
+                                                    <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['status_aktif'] ?? 'N/A' ?></span>
+                                                </div>
+                                            </td>
+                                            <td class="h-px w-auto whitespace-nowrap">
+                                                <div class="px-6 py-2">
+                                                    <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['jenis_pegawai'] ?? 'N/A' ?></span>
+                                                </div>
+                                            </td>
+                                            <td class="h-px w-auto whitespace-nowrap">
+                                                <div class="px-6 py-2">
+                                                    <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['telepon'] ?? 'N/A' ?></span>
+                                                </div>
+                                            </td>
+                                            <td class="h-px w-auto whitespace-nowrap">
+                                                <div class="px-6 py-2">
+                                                    <span class="font-semibold text-gray-800 dark:text-neutral-200"><?= $pegawaiEntry['tanggal_masuk'] ?? 'N/A' ?></span>
+                                                </div>
+                                            </td>
+                                            <td class="h-px w-auto whitespace-nowrap">
+                                                <div class="px-6 py-2">
+                                                    <a class="flex items-center gap-x-2" href="#">
+                                                        <span class="font-semibold text-teal-500 decoration-2 hover:underline dark:text-blue-500">Hubungi</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                            <!-- End Table -->
+                        </div>
                     </div>
 
 

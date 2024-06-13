@@ -9,14 +9,14 @@
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <!-- Include TensorFlow.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script> -->
 
     
 
     <title><?= $title ?></title>
 </head>
 
-<body>
+<body class="font-gilroy">
     <?= $this->include('components/header') ?>
     <div class="container mx-auto">
         <div class="w-full h-full lg:pl-72 z-[1] overflow-clip">

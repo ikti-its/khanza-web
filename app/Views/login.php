@@ -8,7 +8,7 @@
     <title>Halaman Login</title>
 </head>
 
-<body class="bg-[#E2E8F0]">
+<body class="bg-[#E2E8F0] font-gilroy">
 
     <div class="bg-white min-h-screen flex items-center justify-center">
         <form action="dashboard" method="post" class="w-full max-w-md">

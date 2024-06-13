@@ -20,20 +20,12 @@
                     </div>
                     <!-- Camera Frame -->
                     <div class="px-6 py-4">
-                        <div class="border-2 border-dashed border-gray-400 rounded-lg h-96 flex justify-center items-center">
-                            <video id="camera" class="rounded-lg h-full w-full object-cover"></video>
+                        <div class="border-2 border-dashed border-gray-400 rounded-lg h-96 flex justify-center items-center relative">
+                            <video id="video" class="rounded-lg object-cover" autoplay muted></video>
+                            <canvas id="overlay" class="absolute top-0 left-0"></canvas>
                         </div>
                     </div>
-                    <!-- Buttons -->
-                    <div class="py-4 flex gap-3 w-full justify-center items-center">
-                        <a class="w-48 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-black shadow-sm hover:bg-gray-600 disabled:opacity-50 disabled:pointer-events-none text-center" href="#">
-                            Batal
-                        </a>
-                        <a class="w-48 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#0A2D27] text-[#ACF2E7] shadow-sm hover:bg-gray-600 disabled:opacity-50 disabled:pointer-events-none text-center" href="#">
-                            Contact Sales Team
-                        </a>
-                    </div>
-                    <!-- End Buttons -->
+                    <!-- End Camera Frame -->
                 </div>
             </div>
         </div>
@@ -42,20 +34,44 @@
 </div>
 <!-- End Table Section -->
 
-<!-- Add the script for camera access -->
+<!-- Include face-api.js -->
+<script src="<?= base_url('/models/face-api.min.js') ?>"></script>
 <script>
-    const video = document.getElementById('camera');
+    const video = document.getElementById('video');
+    const overlay = document.getElementById('overlay');
+    const ctx = overlay.getContext('2d');
 
-    // Access the camera
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-            video.srcObject = stream;
-            video.play();
-        }).catch(function(err) {
-            console.error("Error accessing the camera: " + err);
-        });
-    } else {
-        console.error("getUserMedia not supported by this browser.");
+    Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+        faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+        faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
+        faceapi.nets.faceExpressionNet.loadFromUri('/models')
+    ]).then(startVideo);
+
+    function startVideo() {
+        navigator.getUserMedia(
+            { video: {} },
+            stream => {
+                video.srcObject = stream;
+                video.addEventListener('play', () => {
+                    const displaySize = { width: video.videoWidth, height: video.videoHeight };
+                    overlay.width = video.videoWidth;
+                    overlay.height = video.videoHeight;
+                    overlay.style.width = video.videoWidth + 'px';
+                    overlay.style.height = video.videoHeight + 'px';
+                    faceapi.matchDimensions(overlay, displaySize);
+                    setInterval(async () => {
+                        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+                        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+                        ctx.clearRect(0, 0, overlay.width, overlay.height);
+                        faceapi.draw.drawDetections(overlay, resizedDetections);
+                        faceapi.draw.drawFaceLandmarks(overlay, resizedDetections);
+                        faceapi.draw.drawFaceExpressions(overlay, resizedDetections);
+                    }, 100);
+                });
+            },
+            err => console.error(err)
+        );
     }
 </script>
 
