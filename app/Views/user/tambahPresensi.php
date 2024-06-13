@@ -12,70 +12,55 @@
             </p>
         </div>
 
-        <div class="relative flex justify-center overflow-hidden">
-            <video class="rounded-xl" id="camera" autoplay width="100%"></video>
+        <!-- Camera Frame -->
+        <div class="px-6 py-4">
+            <div class="border-2 border-dashed border-gray-400 rounded-lg h-auto flex justify-center items-center relative">
+                <video id="video" class="rounded-lg" autoplay muted></video>
+                <canvas id="overlay" class="absolute"></canvas>
+            </div>
         </div>
-        <canvas id="detectionCanvas" width="640" height="480" style="display: none;"></canvas>
+        <!-- End Camera Frame -->
     </div>
 </div>
-<script type="module">
-    import {
-        loadModels
-    } from "./presensiJs/model.js";
-    const video = document.getElementById('camera');
-    const canvas = document.getElementById('detectionCanvas');
-    const ctx = canvas.getContext('2d'); // 2D drawing context
 
-    async function startCamera() {
-        try {
-            console.log('Loading camera...');
+<!-- Include face-api.js -->
+<script src="<?= base_url('/models/face-api.min.js') ?>"></script>
+<script>
+    const video = document.getElementById('video');
+    const overlay = document.getElementById('overlay');
+    const ctx = overlay.getContext('2d');
 
-            // Request camera access with constraints (optional)
-            const constraints = {
-                video: {
-                    width: 640,
-                    height: 480
-                }
-            }; // Adjust constraints as needed
+    Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+        faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+        faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
+        faceapi.nets.faceExpressionNet.loadFromUri('/models')
+    ]).then(startVideo);
 
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            video.srcObject = stream;
+    function startVideo() {
+        navigator.getUserMedia(
+            { video: {} },
+            stream => {
+                video.srcObject = stream;
+                video.addEventListener('play', () => {
+                    const displaySize = { width: video.videoWidth, height: video.videoHeight };
+                    overlay.width = displaySize.width;
+                    overlay.height = displaySize.height;
+                    faceapi.matchDimensions(overlay, displaySize);
 
-            console.log('Camera loaded successfully');
-
-            // Load face detection models (if not already loaded)
-            await loadModels(); // Call the function from model.js
-
-            // Function to detect faces and draw boxes (optional)
-            const detectFace = async () => {
-                const detections = await getFullFaceDescription(video);
-
-                // Clear the canvas before drawing new detections
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                detections.forEach(detection => {
-                    const {
-                        detection: {
-                            box
-                        }
-                    } = detection;
-                    // Draw a box around the detected face (optional)
-                    ctx.strokeStyle = 'red';
-                    ctx.lineWidth = 2;
-                    ctx.strokeRect(box.x, box.y, box.width, box.height);
+                    setInterval(async () => {
+                        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+                        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+                        ctx.clearRect(0, 0, overlay.width, overlay.height);
+                        faceapi.draw.drawDetections(overlay, resizedDetections);
+                        faceapi.draw.drawFaceLandmarks(overlay, resizedDetections);
+                        faceapi.draw.drawFaceExpressions(overlay, resizedDetections);
+                    }, 100);
                 });
-            };
-
-            // Detect faces periodically
-            setInterval(detectFace, 100); // Adjust interval as needed
-
-        } catch (err) {
-            console.error('Error accessing camera:', err);
-        }
+            },
+            err => console.error(err)
+        );
     }
-
-    // Call startCamera when the page loads
-    window.addEventListener('DOMContentLoaded', startCamera);
 </script>
 
 <?= $this->endSection(); ?>

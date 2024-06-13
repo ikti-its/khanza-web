@@ -25,7 +25,7 @@ $routes->get('/lihatjadwal/(:segment)', 'userPegawaiController::tampilJadwal/$1'
 
 $routes->get('/catatankehadiran/(:segment)', 'userPegawaiController::tampilCatatanKehadiran/$1', ['filter' => 'auth']);
 $routes->get('/statusizin', 'userPegawaiController::tampilStatusIzin', ['filter' => 'auth']);
-$routes->get('/presensi', 'userPegawaiController::tambahPresensi', ['filter' => 'auth']);
+$routes->add('/presensi', 'userPegawaiController::tambahPresensi', ['filter' => 'auth']);
 $routes->get('/swafoto', 'userPegawaiController::tambahSwafoto', ['filter' => 'auth']);
 $routes->get('/tesmenukehadiran', 'userPegawaiController::lihatOpsiHadir', ['filter' => 'auth']);
 

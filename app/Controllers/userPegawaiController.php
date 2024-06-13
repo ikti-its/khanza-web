@@ -269,12 +269,6 @@ class userPegawaiController extends BaseController
     {
         $title = 'Tampil Catatan Kehadiran';
 
-        // // Retrieve the value of the 'page' parameter from the request, default to 1 if not present
-        // $page = $this->request->getGet('page') ?? 1;
-
-        // // Retrieve the value of the 'size' parameter from the request, default to 5 if not present
-        // $size = $this->request->getGet('size') ?? 10;
-
         // Check if the user is logged in
         // Retrieve the stored JWT token
         if (session()->has('jwt_token')) {
@@ -511,12 +505,12 @@ class userPegawaiController extends BaseController
                         // Leave (cuti) created successfully
                         return redirect()->to(base_url('izincuti'));
                     } else {
-                         // Error response from the API
-                    return $this->renderErrorView($http_status_code);
+                        // Error response from the API
+                        return $this->renderErrorView($http_status_code);
                     }
                 } else {
                     // Error sending request to the API
-                return $this->renderErrorView(500);
+                    return $this->renderErrorView(500);
                 }
 
                 // Close the cURL session
@@ -541,13 +535,52 @@ class userPegawaiController extends BaseController
         return view('/user/dashboard', ['title' => $title]);
     }
 
-
-
     public function tambahPresensi()
     {
         $title = 'Detail berkas';
-        return view('/user/tambahPresensi', ['title' => $title]);
+
+        // Check if the user is logged in
+        if (session()->has('jwt_token')) {
+            // Get latitude and longitude from the POST data
+            $latitude = $this->request->getPost('latitude');
+            $longitude = $this->request->getPost('longitude');
+
+            // Define the latitude and longitude range
+            $minLatitude = -7.285;
+            $maxLatitude = -7.279;
+            $minLongitude = 112.775;
+            $maxLongitude = 112.797;
+
+            // Check if latitude and longitude are within the specified range
+            if (
+                $latitude >= $minLatitude && $latitude <= $maxLatitude &&
+                $longitude >= $minLongitude && $longitude <= $maxLongitude
+            ) {
+
+                // User's IP address (local IP simulated for testing)
+                $ipAddress = $_SERVER['REMOTE_ADDR'];
+                if ($ipAddress === '::1' || $ipAddress === '127.0.0.1') {
+                    $ipAddress = '10.183.0.1'; // Example local IP for testing
+                }
+
+                // Check if the IP address starts with '10.183'
+                if (strpos($ipAddress, '10.183') === 0) {
+                    // User's IP address starts with '10.183', proceed to the view
+                    return view('/user/tambahPresensi', ['title' => $title]);
+                } else {
+                    // User's IP address does not start with '10.183'
+                    return $this->renderErrorView(403); // Forbidden
+                }
+            } else {
+                // Latitude or longitude is outside the allowed area
+                return $this->renderErrorView(403); // Forbidden
+            }
+        } else {
+            // User not logged in
+            return $this->renderErrorView(401); // Unauthorized
+        }
     }
+
 
     public function tambahSwafoto()
     {

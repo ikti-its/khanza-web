@@ -37,11 +37,16 @@
                 </span>
             </div>
 
-            <div class="flex justify-center items-center">
+            <div class="flex justify-center items-center z-10">
                 <div class="w-full md:w-auto sm:w-auto lg:w-auto">
-                    <a class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="/presensi">
-                        Mulai Autentikasi Dengan Wajah
-                    </a>
+                    <form id="locationForm" method="POST" action="/presensi">
+                        <!-- Hidden input fields for latitude and longitude -->
+                        <input type="hidden" id="latitude" name="latitude">
+                        <input type="hidden" id="longitude" name="longitude">
+                        <button type="button" id="authButton" class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" onclick="getLocation()">
+                            Mulai Autentikasi Dengan Wajah
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -82,9 +87,9 @@
                 </span>
             </div>
 
-            <div class="flex justify-center items-center">
+            <div class="flex justify-center items-center z-10">
                 <div class="w-full md:w-auto sm:w-auto lg:w-auto">
-                    <a class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="/swafoto">
+                    <a class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm" href="/swafoto">
                         Mulai Pengambilan Wajah
                     </a>
                 </div>
@@ -98,6 +103,35 @@
     <!-- End Grid -->
 </div>
 <!-- End Card Blog -->
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<?= getenv('api_map_key') ?>&callback=initMap" async defer></script>
+
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // Set the latitude and longitude values in the hidden form fields
+                    document.getElementById('latitude').value = latitude;
+                    document.getElementById('longitude').value = longitude;
+
+                    // Submit the form
+                    document.getElementById('locationForm').submit();
+                },
+                (error) => {
+                    console.error("Error getting geolocation:", error);
+                    // Handle error cases if needed
+                }
+            );
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+            // Handle the case where geolocation is not supported by the browser
+        }
+    }
+</script>
 
 
 
