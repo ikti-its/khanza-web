@@ -23,7 +23,7 @@
         <div class="min-h-screen bg-gradient-to-b from-white via-[#D6F9F3] to-[#24A793] flex flex-col justify-center items-center relative">
         <div class="text-center z-10 pb-16">
             <h1 class="text-6xl font-bold text-black mb-4">Akses ditolak</h1>
-            <p class="text-2xl text-black">Anda tidak memiliki izin untuk melihat halaman ini. Kalau Anda merasa ini salah, hubungi admin.</p>
+            <p class="text-2xl text-black"><?=$message?></p>
         </div>
 
         <svg class="w-full h-auto absolute bottom-0" viewBox="0 0 1440 346" fill="none" xmlns="http://www.w3.org/2000/svg">

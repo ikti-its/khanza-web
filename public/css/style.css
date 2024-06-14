@@ -2176,11 +2176,6 @@ video {
   background-color: rgb(19 78 74 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-\[\#0A2D27\]:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(10 45 39 / var(--tw-bg-opacity));
-}
-
 .hover\:text-black:hover {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
@@ -2199,11 +2194,6 @@ video {
 .hover\:text-gray-800:hover {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
-}
-
-.hover\:text-white:hover {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .hover\:underline:hover {
@@ -2267,11 +2257,6 @@ video {
 .focus\:ring-teal-500:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(20 184 166 / var(--tw-ring-opacity));
-}
-
-.focus\:ring-\[\#83ECDC\]:focus {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(131 236 220 / var(--tw-ring-opacity));
 }
 
 .focus\:ring-offset-2:focus {

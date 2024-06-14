@@ -537,7 +537,7 @@ class userPegawaiController extends BaseController
 
     public function tambahPresensi()
     {
-        $title = 'Detail berkas';
+        $title = 'Tambah Presensi';
 
         // Check if the user is logged in
         if (session()->has('jwt_token')) {
@@ -552,10 +552,7 @@ class userPegawaiController extends BaseController
             $maxLongitude = 112.797;
 
             // Check if latitude and longitude are within the specified range
-            if (
-                $latitude >= $minLatitude && $latitude <= $maxLatitude &&
-                $longitude >= $minLongitude && $longitude <= $maxLongitude
-            ) {
+            if ($latitude >= $minLatitude && $latitude <= $maxLatitude && $longitude >= $minLongitude && $longitude <= $maxLongitude) {
 
                 // User's IP address (local IP simulated for testing)
                 $ipAddress = $_SERVER['REMOTE_ADDR'];
@@ -569,11 +566,11 @@ class userPegawaiController extends BaseController
                     return view('/user/tambahPresensi', ['title' => $title]);
                 } else {
                     // User's IP address does not start with '10.183'
-                    return $this->renderErrorView(403); // Forbidden
+                    return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap gunakan jaringan internal rumah sakit'); // Forbidden with custom message
                 }
             } else {
                 // Latitude or longitude is outside the allowed area
-                return $this->renderErrorView(403); // Forbidden
+                return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap berada pada area rumah sakit'); // Forbidden with custom message
             }
         } else {
             // User not logged in
