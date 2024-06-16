@@ -30,17 +30,10 @@
     const overlay = document.getElementById('overlay');
     const ctx = overlay.getContext('2d');
 
-    Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-        faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-        faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
-        faceapi.nets.faceExpressionNet.loadFromUri('/models')
-    ]).then(startVideo);
-
-    function startVideo() {
-        navigator.getUserMedia(
-            { video: {} },
-            stream => {
+    // Function to start webcam and face detection
+    function startWebcam() {
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then((stream) => {
                 video.srcObject = stream;
                 video.addEventListener('play', () => {
                     const displaySize = { width: video.videoWidth, height: video.videoHeight };
@@ -48,19 +41,67 @@
                     overlay.height = displaySize.height;
                     faceapi.matchDimensions(overlay, displaySize);
 
+                    // Interval to continuously detect faces and draw results
                     setInterval(async () => {
-                        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+                        const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors();
                         const resizedDetections = faceapi.resizeResults(detections, displaySize);
                         ctx.clearRect(0, 0, overlay.width, overlay.height);
                         faceapi.draw.drawDetections(overlay, resizedDetections);
                         faceapi.draw.drawFaceLandmarks(overlay, resizedDetections);
-                        faceapi.draw.drawFaceExpressions(overlay, resizedDetections);
+
+                        // Using labeled face descriptors for face matching
+                        if (labeledFaceDescriptors) {
+                            const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
+                            const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor));
+
+                            results.forEach((result, i) => {
+                                const box = resizedDetections[i].detection.box;
+                                const text = result.toString();
+                                const drawBox = new faceapi.draw.DrawBox(box, { label: text });
+                                drawBox.draw(overlay);
+                            });
+                        }
                     }, 100);
                 });
-            },
-            err => console.error(err)
+            })
+            .catch((error) => {
+                console.error('Error accessing webcam:', error);
+            });
+    }
+
+    let labeledFaceDescriptors;
+
+    // Function to load labeled face descriptors from images
+    async function loadLabeledImages() {
+        const labels = ['ruben', 'sam', 'aaron']; // Adjust labels as needed
+        return Promise.all(
+            labels.map(async label => {
+                const descriptions = [];
+                for (let i = 1; i <= 3; i++) { // Adjust number of images per label
+                    try {
+                        const img = await faceapi.fetchImage(`<?= base_url('/img') ?>/${label}/${i}.jpg`);
+                        const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+                        descriptions.push(detections.descriptor);
+                    } catch (error) {
+                        console.error(`Failed to load image for ${label}:`, error);
+                    }
+                }
+                return new faceapi.LabeledFaceDescriptors(label, descriptions);
+            })
         );
     }
+
+    // Start loading labeled face descriptors and start webcam after loading
+    Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri('<?= base_url('/models') ?>'),
+        faceapi.nets.faceRecognitionNet.loadFromUri('<?= base_url('/models') ?>'),
+        faceapi.nets.faceLandmark68Net.loadFromUri('<?= base_url('/models') ?>')
+    ]).then(() => {
+        loadLabeledImages().then(descriptors => {
+            labeledFaceDescriptors = descriptors;
+            startWebcam(); // Start webcam after loading descriptors
+        }).catch(err => console.error('Error loading labeled face descriptors:', err));
+    }).catch(err => console.error('Error loading face detection models:', err));
 </script>
 
 <?= $this->endSection(); ?>

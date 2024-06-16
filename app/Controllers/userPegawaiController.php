@@ -132,59 +132,135 @@ class userPegawaiController extends BaseController
     public function lihatPegawai()
     {
         $title = 'Data Akun';
-
+    
         // Retrieve the value of the 'page' parameter from the request, default to 1 if not present
         $page = $this->request->getGet('page') ?? 1;
-
-        // Retrieve the value of the 'size' parameter from the request, default to 5 if not present
+    
+        // Retrieve the value of the 'size' parameter from the request, default to 10 if not present
         $size = $this->request->getGet('size') ?? 10;
-
+    
         // Check if the user is logged in
-        // Retrieve the stored JWT token
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
+    
             // URL for fetching akun data
             $akun_url = $this->api_url . '/pegawai?page=' . $page . '&size=' . $size;
-
-            // Initialize cURL session
+    
+            // Initialize cURL session for akun data
             $ch_akun = curl_init($akun_url);
-
-            // Set cURL options
             curl_setopt($ch_akun, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_akun, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-
+    
             // Execute the cURL request for fetching akun data
             $response_akun = curl_exec($ch_akun);
-
+    
             // Check the API response for akun data
             if ($response_akun) {
                 $http_status_code_akun = curl_getinfo($ch_akun, CURLINFO_HTTP_CODE);
-
+    
                 if ($http_status_code_akun === 200) {
                     // Akun data fetched successfully
                     $akun_data = json_decode($response_akun, true);
-
-                    // $total_pages = $akun_data['data']['total'];
-
-                    return  view('/user/dataPegawai', ['akun_data' => $akun_data['data']['pegawai'], 'meta_data' => $akun_data['data'], 'title' => $title]);
+    
+                    // Close the cURL session for akun data
+                    curl_close($ch_akun);
+    
+                    // Now fetch data from ketersediaan_url
+                    $tanggal = date('Y-m-d');
+                    $ketersediaan_url = $this->api_url . '/m/ketersediaan?tanggal=' . $tanggal . '&page=' . $page . '&size=' . $size;
+    
+                    // Initialize cURL session for ketersediaan data
+                    $ch_ketersediaan = curl_init($ketersediaan_url);
+                    curl_setopt($ch_ketersediaan, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch_ketersediaan, CURLOPT_HTTPHEADER, [
+                        'Authorization: Bearer ' . $token,
+                    ]);
+    
+                    // Execute the cURL request for fetching ketersediaan data
+                    $response_ketersediaan = curl_exec($ch_ketersediaan);
+    
+                    // Check the API response for ketersediaan data
+                    if ($response_ketersediaan) {
+                        $http_status_code_ketersediaan = curl_getinfo($ch_ketersediaan, CURLINFO_HTTP_CODE);
+    
+                        if ($http_status_code_ketersediaan === 200) {
+                            // Ketersediaan data fetched successfully
+                            $ketersediaan_data = json_decode($response_ketersediaan, true);
+    
+                            // Coordinates of the origin (assuming these are fixed for demonstration)
+                            $latitudeOrg = 7.2575; // User's latitude or fixed origin point
+                            $longitudeOrg = 112.7521; // User's longitude or fixed origin point
+    
+                            // Calculate distances using Haversine formula and assign to each entry
+                            foreach ($ketersediaan_data['data']['ketersediaan'] as &$item) {
+                                if (isset($item['latitude']) && isset($item['longitude'])) {
+                                    // Extract latitude and longitude from the current item
+                                    $ketersediaanLat = $item['latitude'];
+                                    $ketersediaanLng = $item['longitude'];
+    
+                                    // Calculate distance using Haversine formula
+                                    $distance = $this->calculateDistance($latitudeOrg, $longitudeOrg, $ketersediaanLat, $ketersediaanLng);
+    
+                                    // Assign distance to the current item
+                                    $item['distance'] = $distance;
+                                }
+                            }
+    
+                            // Close the cURL session for ketersediaan data
+                            curl_close($ch_ketersediaan);
+    
+                            // Pass data to the view, including the distances array
+                            return view('/user/dataPegawai', [
+                                'akun_data' => $akun_data['data']['pegawai'],
+                                'meta_data' => $akun_data['data'],
+                                'ketersediaan_data' => $ketersediaan_data['data']['ketersediaan'],
+                                'meta_ketersediaan_data' => $ketersediaan_data['data'],
+                                'title' => $title,
+                            ]);
+                        } else {
+                            // Error fetching ketersediaan data
+                            curl_close($ch_ketersediaan);
+                            return $this->renderErrorView($http_status_code_ketersediaan);
+                        }
+                    } else {
+                        // Error fetching ketersediaan data
+                        curl_close($ch_ketersediaan);
+                        return $this->renderErrorView(500); // Assume 500 for cURL error
+                    }
                 } else {
-                    // Error fetching pegawai data
+                    // Error fetching akun data
+                    curl_close($ch_akun);
                     return $this->renderErrorView($http_status_code_akun);
                 }
             } else {
-                // Error fetching pegawai data
+                // Error fetching akun data
+                curl_close($ch_akun);
                 return $this->renderErrorView(500); // Assume 500 for cURL error
             }
-
-            // Close the cURL session for akun data
-            curl_close($ch_akun);
         } else {
             // User not logged in
             return $this->renderErrorView(401);
         }
     }
+    
+    // Function to calculate distance between two points using Haversine formula
+    private function calculateDistance($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371; // Radius of the earth in kilometers
+    
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+    
+        $a = sin($dLat / 2) * sin($dLat / 2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) * sin($dLon / 2);
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+    
+        $distance = $earthRadius * $c; // Distance in kilometers
+    
+        return $distance;
+    }
+    
 
     public function detailBerkasPegawai($pegawaiId)
     {
@@ -460,13 +536,15 @@ class userPegawaiController extends BaseController
             $tanggal_mulai = $this->request->getPost('tanggal_mulai');
             $tanggal_selesai = $this->request->getPost('tanggal_selesai');
             $id_alasan_cuti = $this->request->getPost('id_alasan_cuti');
+            $status = 'Diproses';
 
             // Prepare the data to be sent to the API
             $postData = [
                 'id_pegawai' => $id_pegawai,
                 'tanggal_mulai' => $tanggal_mulai,
                 'tanggal_selesai' => $tanggal_selesai,
-                'id_alasan_cuti' => $id_alasan_cuti
+                'id_alasan_cuti' => $id_alasan_cuti,
+                'status' => $status
             ];
 
             $tambah_cuti_JSON = json_encode($postData);
@@ -541,9 +619,9 @@ class userPegawaiController extends BaseController
 
         // Check if the user is logged in
         if (session()->has('jwt_token')) {
-            // Get latitude and longitude from the POST data
-            $latitude = $this->request->getPost('latitude');
-            $longitude = $this->request->getPost('longitude');
+            // Get latitude and longitude from the POST data -7.280280992376773, 112.79587908222712
+            $latitude =  -7.280280992376773;
+            $longitude = 112.79587908222712;
 
             // Define the latitude and longitude range
             $minLatitude = -7.285;

@@ -192,7 +192,6 @@
                         </div>
                     </div>
 
-
                     <div id="tabs-with-icons-2" class="hidden" role="tabpanel" aria-labelledby="tabs-with-icons-item-2">
                         <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-gray-200 dark:border-neutral-700">
                             <div class="sm:col-span-1">
@@ -211,499 +210,218 @@
                         <!-- Card Section -->
                         <div class="max-w-[85rem] px-6 py-2 sm:px-6 lg:px-8 lg:py-4 mx-auto">
                             <!-- Grid -->
-                            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                                <!-- Card -->
-                                <div class="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
-                                    <!-- Grid -->
-                                    <div class="mb-1 pb-5 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
+                                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                                    <?php foreach ($ketersediaan_data as $ketersediaanEntry) : ?>
+                                        <!-- Card -->
+                                        <div class="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+                                            <!-- Grid -->
+                                            <div class="mb-1 pb-5 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
 
-                                        <!-- Col -->
+                                                <!-- Col -->
 
-                                        <div class="inline-flex gap-x-2">
-                                            <img class="inline-block size-[38px] rounded-full ring-2 ring-white dark:ring-gray-800" src="<?php echo session('user_details')['foto'] ?>" alt="Image Description">
-                                            <div class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-black">
-                                                Jim Green
-                                            </div>
-                                        </div>
-                                        <!-- Col -->
-                                        <div class="inline-flex items-center gap-x-1 text-[#24A793]">
-                                            <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M20.992,9.98A8.991,8.991,0,0,0,3.01,9.932a13.95,13.95,0,0,0,8.574,12.979A1,1,0,0,0,12,23a1.012,1.012,0,0,0,.419-.09A13.948,13.948,0,0,0,20.992,9.98ZM12,20.9A11.713,11.713,0,0,1,5.008,10a6.992,6.992,0,1,1,13.984,0c0,.021,0,.045,0,.065A11.7,11.7,0,0,1,12,20.9ZM12,6a4,4,0,1,0,4,4A4,4,0,0,0,12,6Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,12Z" />
-                                            </svg>
-                                            <h2 class="text-m font-semibold dark:text-neutral-200">1 km</h2>
-                                        </div>
-                                    </div>
-                                    <!-- End Grid -->
-
-                                    <!-- Grid -->
-                                    <div class="grid md:grid-cols-2 gap-2">
-                                        <div>
-                                            <div class="grid space-y-2">
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            NIP
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
+                                                <div class="inline-flex gap-x-2">
+                                                    <img class="inline-block size-[38px] rounded-full ring-2 ring-white dark:ring-gray-800" src="<?= $ketersediaanEntry['foto']?>" alt="Image Description">
+                                                    <div class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-black">
+                                                    <?= $ketersediaanEntry['nama'] ?? 'N/A' ?>
                                                     </div>
                                                 </div>
-
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Jenis Kelamin
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Jabatan
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Departemen
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
+                                                <!-- Col -->
+                                                
+                                                <div class="inline-flex items-center gap-x-1 text-[#24A793]">
+                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M20.992,9.98A8.991,8.991,0,0,0,3.01,9.932a13.95,13.95,0,0,0,8.574,12.979A1,1,0,0,0,12,23a1.012,1.012,0,0,0,.419-.09A13.948,13.948,0,0,0,20.992,9.98ZM12,20.9A11.713,11.713,0,0,1,5.008,10a6.992,6.992,0,1,1,13.984,0c0,.021,0,.045,0,.065A11.7,11.7,0,0,1,12,20.9ZM12,6a4,4,0,1,0,4,4A4,4,0,0,0,12,6Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,12Z" />
+                                                    </svg>
+                                                    <h2 class="text-m font-semibold dark:text-neutral-200"><?= number_format($ketersediaanEntry['distance'], 2)?? 'N/A'?> km</h2>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- Col -->
+                                            <!-- End Grid -->
 
-                                        <div>
-                                            <div class="grid space-y-2">
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Jenis Pegawai
-                                                        </label>
+                                        <!-- Grid -->
+                                        <div class="grid md:grid-cols-2 gap-2">
+                                            <div>
+                                                <div class="grid space-y-2">
+                                                    <div class="grid sm:flex gap-x-2 text-xs">
+                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
+                                                                NIP
+                                                            </label>
 
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
+                                                            <div class="mt-2 space-y-3">
+                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $ketersediaanEntry['nip'] ?? 'N/A' ?></div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            No. Telepon
-                                                        </label>
+                                                    <div class="grid sm:flex gap-x-2 text-xs">
+                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
+                                                                Jenis Kelamin
+                                                            </label>
 
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
+                                                            <div class="mt-2 space-y-3">
+                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Awal Masuk
-                                                        </label>
+                                                    <div class="grid sm:flex gap-x-2 text-xs">
+                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
+                                                                Jabatan
+                                                            </label>
 
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
+                                                            <div class="mt-2 space-y-3">
+                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $ketersediaanEntry['jabatan'] ?? 'N/A' ?></div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
+                                                    <div class="grid sm:flex gap-x-2 text-xs">
+                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
+                                                                Departemen
+                                                            </label>
 
-                                            </div>
-                                        </div>
-                                        <!-- Col -->
-                                    </div>
-                                    <!-- Grid -->
-                                    <div class="mb-1 flex justify-center items-center">
-
-                                        <!-- Col -->
-
-                                        <a class="py-2 px-16 md:px-18 lg:px-20 xl:px-28 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#">
-                                            Hubungi
-                                        </a>
-
-
-
-
-
-
-                                    </div>
-                                    <!-- End Grid -->
-                                    <!-- End Grid -->
-                                </div>
-                                <!-- End Card -->
-
-                                <!-- Card -->
-                                <div class="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
-                                    <!-- Grid -->
-                                    <div class="mb-1 pb-5 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
-
-                                        <!-- Col -->
-
-                                        <div class="inline-flex gap-x-2">
-                                            <img class="inline-block size-[38px] rounded-full ring-2 ring-white dark:ring-gray-800" src="<?php echo session('user_details')['foto'] ?>" alt="Image Description">
-                                            <div class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-black">
-                                                Jim Green
-                                            </div>
-                                        </div>
-                                        <!-- Col -->
-                                        <div class="inline-flex items-center gap-x-1 text-[#24A793]">
-                                            <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M20.992,9.98A8.991,8.991,0,0,0,3.01,9.932a13.95,13.95,0,0,0,8.574,12.979A1,1,0,0,0,12,23a1.012,1.012,0,0,0,.419-.09A13.948,13.948,0,0,0,20.992,9.98ZM12,20.9A11.713,11.713,0,0,1,5.008,10a6.992,6.992,0,1,1,13.984,0c0,.021,0,.045,0,.065A11.7,11.7,0,0,1,12,20.9ZM12,6a4,4,0,1,0,4,4A4,4,0,0,0,12,6Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,12Z" />
-                                            </svg>
-                                            <h2 class="text-m font-semibold dark:text-neutral-200">1 km</h2>
-                                        </div>
-                                    </div>
-                                    <!-- End Grid -->
-
-                                    <!-- Grid -->
-                                    <div class="grid md:grid-cols-2 gap-2">
-                                        <div>
-                                            <div class="grid space-y-2">
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            NIP
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Jenis Kelamin
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Jabatan
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Departemen
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
+                                                            <div class="mt-2 space-y-3">
+                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- Col -->
+                                            <!-- Col -->
 
-                                        <div>
-                                            <div class="grid space-y-2">
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Jenis Pegawai
-                                                        </label>
+                                            <div>
+                                                <div class="grid space-y-2">
+                                                    <div class="grid sm:flex gap-x-2 text-xs">
+                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
+                                                                Jenis Pegawai
+                                                            </label>
 
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
+                                                            <div class="mt-2 space-y-3">
+                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $ketersediaanEntry['departemen'] ?? 'N/A' ?></div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            No. Telepon
-                                                        </label>
+                                                    <div class="grid sm:flex gap-x-2 text-xs">
+                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
+                                                                No. Telepon
+                                                            </label>
 
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
+                                                            <div class="mt-2 space-y-3">
+                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $ketersediaanEntry['telepon'] ?? 'N/A' ?></div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Awal Masuk
-                                                        </label>
+                                                    <div class="grid sm:flex gap-x-2 text-xs">
+                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
+                                                                Awal Masuk
+                                                            </label>
 
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
+                                                            <div class="mt-2 space-y-3">
+                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
 
-                                            </div>
-                                        </div>
-                                        <!-- Col -->
-                                    </div>
-                                    <!-- Grid -->
-                                    <div class="mb-1 flex justify-center items-center">
-
-                                        <!-- Col -->
-
-                                        <a class="py-2 px-16 md:px-18 lg:px-20 xl:px-28 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#">
-                                            Hubungi
-                                        </a>
-
-
-
-
-
-
-                                    </div>
-                                    <!-- End Grid -->
-                                    <!-- End Grid -->
-                                </div>
-                                <!-- End Card -->
-
-                                <!-- Card -->
-                                <div class="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
-                                    <!-- Grid -->
-                                    <div class="mb-1 pb-5 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
-
-                                        <!-- Col -->
-
-                                        <div class="inline-flex gap-x-2">
-                                            <img class="inline-block size-[38px] rounded-full ring-2 ring-white dark:ring-gray-800" src="<?php echo session('user_details')['foto'] ?>" alt="Image Description">
-                                            <div class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-black">
-                                                Jim Green
-                                            </div>
-                                        </div>
-                                        <!-- Col -->
-                                        <div class="inline-flex items-center gap-x-1 text-[#24A793]">
-                                            <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M20.992,9.98A8.991,8.991,0,0,0,3.01,9.932a13.95,13.95,0,0,0,8.574,12.979A1,1,0,0,0,12,23a1.012,1.012,0,0,0,.419-.09A13.948,13.948,0,0,0,20.992,9.98ZM12,20.9A11.713,11.713,0,0,1,5.008,10a6.992,6.992,0,1,1,13.984,0c0,.021,0,.045,0,.065A11.7,11.7,0,0,1,12,20.9ZM12,6a4,4,0,1,0,4,4A4,4,0,0,0,12,6Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,12Z" />
-                                            </svg>
-                                            <h2 class="text-m font-semibold dark:text-neutral-200">1 km</h2>
-                                        </div>
-                                    </div>
-                                    <!-- End Grid -->
-
-                                    <!-- Grid -->
-                                    <div class="grid md:grid-cols-2 gap-2">
-                                        <div>
-                                            <div class="grid space-y-2">
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            NIP
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Jenis Kelamin
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Jabatan
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Departemen
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
+                                            <!-- Col -->
                                         </div>
-                                        <!-- Col -->
+                                        <!-- Grid -->
+                                        <div class="mb-1 flex justify-center items-center">
 
-                                        <div>
-                                            <div class="grid space-y-2">
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Jenis Pegawai
-                                                        </label>
+                                            <!-- Col -->
 
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            No. Telepon
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="grid sm:flex gap-x-2 text-xs">
-                                                    <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                        <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                            Awal Masuk
-                                                        </label>
-
-                                                        <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
+                                            <a class="py-2 px-16 md:px-18 lg:px-20 xl:px-28 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#">
+                                                Hubungi
+                                            </a>
                                         </div>
-                                        <!-- Col -->
+                                        <!-- End Grid -->
                                     </div>
-                                    <!-- Grid -->
-                                    <div class="mb-1 flex justify-center items-center">
+                                    <!-- End Card -->
 
-                                        <!-- Col -->
+                                <?php endforeach; ?>
 
-                                        <a class="py-2 px-16 md:px-18 lg:px-20 xl:px-28 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#">
-                                            Hubungi
-                                        </a>
-
-                                    </div>
-                                    <!-- End Grid -->
-                                    <!-- End Grid -->
-                                </div>
-                                <!-- End Card -->
                             </div>
-                            <!-- End Grid -->
+
+
+
                         </div>
-                        <!-- End Card Section -->
 
 
-                    </div>
-
-
-                    <!-- Footer -->
-                    <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
-                        <!-- Pagination -->
-                        <nav class="flex w-full justify-between items-center gap-x-1">
-                            <!-- Previous Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m15 18-6-6 6-6"></path>
-                                    </svg>
-                                    <span aria-hidden="true" class="hidden sm:block">Previous</span>
-                                </button>
-                            </div>
-
-                            <!-- Page Numbers -->
-                            <div class="flex items-center gap-x-1">
-                                <?php for ($i = 1; $i <= $meta_data['total']; $i++) : ?>
-                                    <button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center <?= $meta_data['page'] == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10' ?> py-2 px-3 text-sm rounded-lg" <?= $meta_data['page'] == $i ? 'aria-current="page"' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $i ?>&size=<?= $meta_data['size'] ?>'">
-                                        <?= $i ?>
+                        <!-- Footer -->
+                        <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
+                            <!-- Pagination -->
+                            <nav class="flex w-full justify-between items-center gap-x-1">
+                                <!-- Previous Button -->
+                                <div class="inline-flex gap-x-2">
+                                    <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                        <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="m15 18-6-6 6-6"></path>
+                                        </svg>
+                                        <span aria-hidden="true" class="hidden sm:block">Previous</span>
                                     </button>
-                                <?php endfor; ?>
-                            </div>
+                                </div>
 
-                            <!-- Next Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $meta_data['page'] >= $meta_data['total'] ? 'disabled' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $meta_data['page'] + 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <span aria-hidden="true" class="hidden sm:block">Next</span>
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m9 18 6-6-6-6"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </nav>
+                                <!-- Page Numbers -->
+                                <div class="flex items-center gap-x-1">
+                                    <?php for ($i = 1; $i <= $meta_data['total']; $i++) : ?>
+                                        <button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center <?= $meta_data['page'] == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10' ?> py-2 px-3 text-sm rounded-lg" <?= $meta_data['page'] == $i ? 'aria-current="page"' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $i ?>&size=<?= $meta_data['size'] ?>'">
+                                            <?= $i ?>
+                                        </button>
+                                    <?php endfor; ?>
+                                </div>
+
+                                <!-- Next Button -->
+                                <div class="inline-flex gap-x-2">
+                                    <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $meta_data['page'] >= $meta_data['total'] ? 'disabled' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $meta_data['page'] + 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                        <span aria-hidden="true" class="hidden sm:block">Next</span>
+                                        <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="m9 18 6-6-6-6"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </nav>
+                        </div>
+
+                        <!-- End Footer -->
+
                     </div>
-
-                    <!-- End Footer -->
-
                 </div>
             </div>
         </div>
+        <!-- End Card -->
     </div>
-    <!-- End Card -->
-</div>
-<!-- End Table Section -->
+    <!-- End Table Section -->
 
-<script>
-    function myFunction() {
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
+    <script>
+        function myFunction() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
 
 
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
                 }
             }
         }
-    }
-</script>
+    </script>
 
-<?= $this->endSection(); ?>
+    <?= $this->endSection(); ?>
