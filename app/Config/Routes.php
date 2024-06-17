@@ -29,7 +29,8 @@ $routes->add('/presensi', 'userPegawaiController::tambahPresensi', ['filter' => 
 $routes->get('/swafoto', 'userPegawaiController::tambahSwafoto', ['filter' => 'auth']);
 $routes->get('/tesmenukehadiran', 'userPegawaiController::lihatOpsiHadir', ['filter' => 'auth']);
 
-$routes->get('/ubahstatuscuti', 'userAdminController::ubahStatusCuti', ['filter' => 'auth']);
+$routes->get('/lihatstatuscuti', 'userAdminController::lihatStatusCuti', ['filter' => 'auth']);
+$routes->post('/submiteditstatuscuti/(:segment)', 'userAdminController::submitEditStatusCuti/$1', ['filter' => 'auth']);
 
 
 $routes->get('/admin', 'authController::dashboard', ['filter' => 'auth']);
@@ -45,8 +46,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
     $routes->get('error/500', 'ErrorHandler::show500');
 });
 
-// $routes->get('test-400', 'ErrorHandler::show400');
-// $routes->get('test-401', 'ErrorHandler::show401');
-// $routes->get('test-403', 'ErrorHandler::show403');
-// $routes->get('test-404', 'ErrorHandler::show404');
-// $routes->get('test-500', 'ErrorHandler::show500');
+$routes->get('test-400', 'ErrorHandler::show400');
+$routes->get('test-401', 'ErrorHandler::show401');
+$routes->get('test-403', 'ErrorHandler::show403');
+$routes->get('test-404', 'ErrorHandler::show404');
+$routes->get('test-500', 'ErrorHandler::show500');

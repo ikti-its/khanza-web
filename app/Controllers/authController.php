@@ -50,7 +50,7 @@ class authController extends BaseController
         //Check if the form is submitted
         if ($this->request->getPost()) {
 
-            $title = 'Dashboard Admin';
+            $title = 'Dashboard';
             //Get the username and password from the form
             $email = $this->request->getPost('email');
             $password = $this->request->getPost('password');
@@ -126,11 +126,10 @@ class authController extends BaseController
                         curl_close($user_details_ch);
 
 
-
                         // Check if the user role is 2
-                        if ($user_details['data']['role'] == 2) {
+                        if ($user_details['data']['role'] == 2 || $user_details['data']['role'] == 1) {
                             // If the user role is 2, make another API request
-                            
+
                             $tanggal = date('Y-m-d');
                             $user_specific_url = $this->api_url . '/m/home?tanggal=' . $tanggal;
 
@@ -154,15 +153,12 @@ class authController extends BaseController
                             }
                         }
 
-                       
-
                         // Redirect to user dashboard
                         return redirect()->to('/dashboard')->with('title', $title, 'user_details', $user_details);
                     } else {
                         // Failed to get user details
                         echo "Failed to retrieve user details.";
                     }
-
                 } elseif ($http_status_code === 401) {
                     // Wrong password
                     echo "Wrong password. Please check your password and try again";

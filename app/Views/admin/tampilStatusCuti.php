@@ -24,21 +24,6 @@
                             </div>
 
                         </div>
-                        <!-- 
-                        <div class="justify-end items-center">
-                            <a href="/izincuti">
-                                <button type="button" class="py-2 px-4 my-2 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
-
-                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 12H20M12 4V20" stroke="#ACF2E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-
-                                    Tambah
-                                </button>
-                            </a>
-
-                        </div> -->
-
 
                     </div>
 
@@ -64,6 +49,12 @@
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-start border-s border-gray-200 dark:border-neutral-700">
                                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        ID Pegawai
+                                    </span>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 text-start border-s border-gray-200 dark:border-neutral-700">
+                                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
                                         Tanggal Mulai Cuti
                                     </span>
                                 </th>
@@ -86,6 +77,12 @@
                                     </span>
                                 </th>
 
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                        Aksi
+                                    </span>
+                                </th>
+
                             </tr>
                         </thead>
 
@@ -103,23 +100,28 @@
                             ];
 
                             foreach ($cuti_data as $cutiEntry) : ?>
-                                <tr>
-                                    <td class="h-px w-auto whitespace-nowrap">
-                                        <div class="px-6 py-2 flex items-center gap-x-3">
-                                            <a class="flex items-center gap-x-2" href="">
-                                                <span class="font-semibold hover:underline"><?= $cutiEntry['tanggal_mulai'] ?? 'N/A' ?></span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-auto whitespace-nowrap">
-                                        <div class="px-6 py-2">
-                                            <span class="font-semibold text-gray-800 dark:text-neutral-200"> <?= $cutiEntry['tanggal_selesai'] ?></span>
-                                        </div>
-                                    </td>
+                                <form action="/submiteditstatuscuti/<?= $cutiEntry['id'] ?>" method="POST">
+                                    <tr>
+                                        <td class="h-px w-auto whitespace-nowrap">
+                                            <div class="px-6 py-2 flex items-center gap-x-3">
+                                                <input type="text" id="id_pegawai" name="id_pegawai" class="font-semibold text-gray-800 bg-transparent border-none outline-none" value="<?= $cutiEntry['id'] ?>" readonly>
+                                            </div>
+                                        </td>
 
-                                    <td class="h-px w-auto whitespace-nowrap">
-                                        <div class="px-6 py-2">
-                                            <span class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium 
+                                        <td class="h-px w-auto whitespace-nowrap">
+                                            <div class="px-6 py-2 flex items-center gap-x-3">
+                                                <input type="text" id="tanggal_mulai" name="tanggal_mulai" class="font-semibold text-gray-800 bg-transparent border-none outline-none" value="<?= $cutiEntry['tanggal_mulai'] ?>" readonly>
+                                            </div>
+                                        </td>
+                                        <td class="h-px w-auto whitespace-nowrap">
+                                            <div class="px-6 py-2">
+                                                <input type="text" id="tanggal_selesai" name="tanggal_selesai" class="font-semibold text-gray-800 bg-transparent border-none outline-none" value="<?= $cutiEntry['tanggal_selesai'] ?>" readonly>
+                                            </div>
+                                        </td>
+
+                                        <td id="status" name="status" class="h-px w-auto whitespace-nowrap">
+                                            <div class="px-6 py-2">
+                                                <span class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium 
             <?php
                                 if ($cutiEntry['status'] == 'Diterima') {
                                     echo 'bg-[#D6F9F3] text-[#13594E]';
@@ -129,31 +131,45 @@
                                     echo 'bg-[#FEF9C3] text-[#713F12]';
                                 }
             ?> rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-2.5">
-                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                                    <g id="SVGRepo_iconCarrier">
-                                                        <circle cx="12" cy="12" r="9" fill="<?php
-                                                                                            if ($cutiEntry['status'] == 'Diterima') {
-                                                                                                echo '#13594E';
-                                                                                            } elseif ($cutiEntry['status'] == 'Ditolak') {
-                                                                                                echo '#991B1B';
-                                                                                            } elseif ($cutiEntry['status'] == 'Diproses') {
-                                                                                                echo '#713F12';
-                                                                                            }
-                                                                                            ?>"></circle>
-                                                    </g>
-                                                </svg>
-                                                <?= $cutiEntry['status'] ?>
-                                            </span>
-                                        </div>
-                                    </td>
+                                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-2.5">
+                                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                        <g id="SVGRepo_iconCarrier">
+                                                            <circle cx="12" cy="12" r="9" fill="<?php
+                                                                                                if ($cutiEntry['status'] == 'Diterima') {
+                                                                                                    echo '#13594E';
+                                                                                                } elseif ($cutiEntry['status'] == 'Ditolak') {
+                                                                                                    echo '#991B1B';
+                                                                                                } elseif ($cutiEntry['status'] == 'Diproses') {
+                                                                                                    echo '#713F12';
+                                                                                                }
+                                                                                                ?>"></circle>
+                                                        </g>
+                                                    </svg>
+                                                    <?= $cutiEntry['status'] ?>
+                                                </span>
+                                            </div>
+                                        </td>
 
-                                    <td class="h-px w-auto whitespace-nowrap">
-                                        <div class="px-6 py-2">
-                                            <span class="font-semibold text-gray-800 dark:text-neutral-200"> <?= $alasanCuti[$cutiEntry['id_alasan_cuti']] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
+                                        <td class="h-px w-auto whitespace-nowrap">
+                                            <div class="px-6 py-2">
+                                                <span class="font-semibold text-gray-800 dark:text-neutral-200"> <?= $alasanCuti[$cutiEntry['id_alasan_cuti']] ?? 'N/A'  ?></span>
+                                                <input type="hidden" name="id_alasan_cuti" id="id_alasan_cuti" value="<?= $cutiEntry['id_alasan_cuti'] ?>">
+                                            </div>
+
+                                        </td>
+
+                                        <td class="h-px w-auto whitespace-nowrap">
+                                            <div class="px-6 py-2">
+                                                <?php if ($cutiEntry['status'] == 'Diproses') : ?>
+                                                    <button type="submit" name="status" value="Diterima" class="py-1 px-3 bg-teal-500 text-white rounded-lg">Terima</button>
+                                                    <!-- Tolak button -->
+                                                    <button type="submit" name="status" value="Ditolak" class="py-1 px-3 bg-red-500 text-white rounded-lg">Tolak</button>
+                                                <?php endif; ?>
+                                            </div>
+                                        </td>
+
+                                </form>
 
                                 </tr>
                             <?php endforeach; ?>
