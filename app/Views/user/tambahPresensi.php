@@ -32,11 +32,17 @@
 
     // Function to start webcam and face detection
     function startWebcam() {
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            })
             .then((stream) => {
                 video.srcObject = stream;
                 video.addEventListener('play', () => {
-                    const displaySize = { width: video.videoWidth, height: video.videoHeight };
+                    const displaySize = {
+                        width: video.videoWidth,
+                        height: video.videoHeight
+                    };
                     overlay.width = displaySize.width;
                     overlay.height = displaySize.height;
                     faceapi.matchDimensions(overlay, displaySize);
@@ -57,7 +63,9 @@
                             results.forEach((result, i) => {
                                 const box = resizedDetections[i].detection.box;
                                 const text = result.toString();
-                                const drawBox = new faceapi.draw.DrawBox(box, { label: text });
+                                const drawBox = new faceapi.draw.DrawBox(box, {
+                                    label: text
+                                });
                                 drawBox.draw(overlay);
                             });
                         }
@@ -73,23 +81,47 @@
 
     // Function to load labeled face descriptors from images
     async function loadLabeledImages() {
-        const labels = ['ruben', 'sam', 'aaron']; // Adjust labels as needed
-        return Promise.all(
-            labels.map(async label => {
-                const descriptions = [];
-                for (let i = 1; i <= 3; i++) { // Adjust number of images per label
-                    try {
-                        const img = await faceapi.fetchImage(`<?= base_url('/img') ?>/${label}/${i}.jpg`);
-                        const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
-                        descriptions.push(detections.descriptor);
-                    } catch (error) {
-                        console.error(`Failed to load image for ${label}:`, error);
-                    }
+        const pegawaiId = '<?= session()->get('user_specific_data')['pegawai']; ?>';
+        const namaPegawai = '<?= session()->get('user_specific_data')['nama']; ?>';
+        const apiUrl = '<?= $api_url; ?>'; // Get api_url from passed variable
+        const jwtToken = '<?= session()->get('jwt_token'); ?>'; // Get JWT token from session
+
+        const descriptions = [];
+        try {
+            // Fetch data from API to get the image URL
+            const response = await fetch(`${apiUrl}/${pegawaiId}`, {
+                headers: {
+                    'Authorization': `Bearer ${jwtToken}`
                 }
-                return new faceapi.LabeledFaceDescriptors(label, descriptions);
-            })
-        );
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log(data);
+            const imgUrl = data.data.foto; // Extract the image URL from the API response
+            
+
+            // Fetch the image using the obtained URL
+            const imgResponse = await fetch(imgUrl);
+            if (!imgResponse.ok) {
+                throw new Error(`Failed to fetch image. Status: ${imgResponse.status}`);
+            }
+
+            const blob = await imgResponse.blob();
+            const img = await faceapi.bufferToImage(blob);
+
+            const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+            descriptions.push(detections.descriptor);
+        } catch (error) {
+            console.error(`Failed to load image for ${namaPegawai}:`, error);
+        }
+        return new faceapi.LabeledFaceDescriptors(namaPegawai, descriptions);
     }
+
+
 
     // Start loading labeled face descriptors and start webcam after loading
     Promise.all([

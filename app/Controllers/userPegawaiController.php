@@ -617,6 +617,8 @@ class userPegawaiController extends BaseController
     {
         $title = 'Tambah Presensi';
 
+        $api_url = $this->api_url . '/pegawai/foto';
+
         // Check if the user is logged in
         if (session()->has('jwt_token')) {
             // Get latitude and longitude from the POST data -7.280280992376773, 112.79587908222712
@@ -641,7 +643,7 @@ class userPegawaiController extends BaseController
                 // Check if the IP address starts with '10.183'
                 if (strpos($ipAddress, '10.183') === 0) {
                     // User's IP address starts with '10.183', proceed to the view
-                    return view('/user/tambahPresensi', ['title' => $title]);
+                    return view('/user/tambahPresensi', ['api_url' => $api_url ,'title' => $title]);
                 } else {
                     // User's IP address does not start with '10.183'
                     return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap gunakan jaringan internal rumah sakit'); // Forbidden with custom message
