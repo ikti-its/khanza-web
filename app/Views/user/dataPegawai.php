@@ -179,7 +179,12 @@
                                             </td>
                                             <td class="h-px w-auto whitespace-nowrap">
                                                 <div class="px-6 py-2">
-                                                    <a class="flex items-center gap-x-2" href="#">
+                                                    <?php
+                                                    $phoneNumber = $pegawaiEntry['telepon'];
+                                                    $message = "Hello, I would like to inquire about your availability.";
+                                                    $whatsappLink = "https://wa.me/$phoneNumber?text=" . urlencode($message);
+                                                    ?>
+                                                    <a class="flex items-center gap-x-2" href="<?= $whatsappLink ?>" target="_blank">
                                                         <span class="font-semibold text-teal-500 decoration-2 hover:underline dark:text-blue-500">Hubungi</span>
                                                     </a>
                                                 </div>
@@ -210,31 +215,31 @@
                         <!-- Card Section -->
                         <div class="max-w-[85rem] px-6 py-2 sm:px-6 lg:px-8 lg:py-4 mx-auto">
                             <!-- Grid -->
-                                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                                    <?php foreach ($ketersediaan_data as $ketersediaanEntry) : ?>
-                                        <!-- Card -->
-                                        <div class="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
-                                            <!-- Grid -->
-                                            <div class="mb-1 pb-5 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
+                            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                                <?php foreach ($ketersediaan_data as $ketersediaanEntry) : ?>
+                                    <!-- Card -->
+                                    <div class="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+                                        <!-- Grid -->
+                                        <div class="mb-1 pb-5 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
 
-                                                <!-- Col -->
+                                            <!-- Col -->
 
-                                                <div class="inline-flex gap-x-2">
-                                                    <img class="inline-block size-[38px] rounded-full ring-2 ring-white dark:ring-gray-800" src="<?= $ketersediaanEntry['foto']?>" alt="Image Description">
-                                                    <div class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-black">
+                                            <div class="inline-flex gap-x-2">
+                                                <img class="inline-block size-[38px] rounded-full ring-2 ring-white dark:ring-gray-800" src="<?= $ketersediaanEntry['foto'] ?>" alt="Image Description">
+                                                <div class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-black">
                                                     <?= $ketersediaanEntry['nama'] ?? 'N/A' ?>
-                                                    </div>
-                                                </div>
-                                                <!-- Col -->
-                                                
-                                                <div class="inline-flex items-center gap-x-1 text-[#24A793]">
-                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M20.992,9.98A8.991,8.991,0,0,0,3.01,9.932a13.95,13.95,0,0,0,8.574,12.979A1,1,0,0,0,12,23a1.012,1.012,0,0,0,.419-.09A13.948,13.948,0,0,0,20.992,9.98ZM12,20.9A11.713,11.713,0,0,1,5.008,10a6.992,6.992,0,1,1,13.984,0c0,.021,0,.045,0,.065A11.7,11.7,0,0,1,12,20.9ZM12,6a4,4,0,1,0,4,4A4,4,0,0,0,12,6Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,12Z" />
-                                                    </svg>
-                                                    <h2 class="text-m font-semibold dark:text-neutral-200"><?= number_format($ketersediaanEntry['distance'], 2)?? 'N/A'?> km</h2>
                                                 </div>
                                             </div>
-                                            <!-- End Grid -->
+                                            <!-- Col -->
+
+                                            <div class="inline-flex items-center gap-x-1 text-[#24A793]">
+                                                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M20.992,9.98A8.991,8.991,0,0,0,3.01,9.932a13.95,13.95,0,0,0,8.574,12.979A1,1,0,0,0,12,23a1.012,1.012,0,0,0,.419-.09A13.948,13.948,0,0,0,20.992,9.98ZM12,20.9A11.713,11.713,0,0,1,5.008,10a6.992,6.992,0,1,1,13.984,0c0,.021,0,.045,0,.065A11.7,11.7,0,0,1,12,20.9ZM12,6a4,4,0,1,0,4,4A4,4,0,0,0,12,6Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,12Z" />
+                                                </svg>
+                                                <h2 class="text-m font-semibold dark:text-neutral-200"><?= number_format($ketersediaanEntry['distance'], 2) ?? 'N/A' ?> km</h2>
+                                            </div>
+                                        </div>
+                                        <!-- End Grid -->
 
                                         <!-- Grid -->
                                         <div class="grid md:grid-cols-2 gap-2">

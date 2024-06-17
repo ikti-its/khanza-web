@@ -45,7 +45,20 @@ class userAdminController extends BaseController
 
                     // $total_pages = $akun_data['data']['total'];
 
-                    return  view('/admin/tampilStatusCuti', ['cuti_data' => $cuti_data['data']['cuti'], 'meta_data' => $cuti_data['data'], 'title' => $title]);
+                    // Check if the user has admin privileges (role == 1)
+                    $user_details = session()->get('user_details');
+
+                    if ($user_details['role'] == 1) {
+                        // Return the view with cuti data
+                        return view('/admin/tampilStatusCuti', [
+                            'cuti_data' => $cuti_data['data']['cuti'],
+                            'meta_data' => $cuti_data['data'],
+                            'title' => $title
+                        ]);
+                    } else {
+                        // Return 403 Forbidden error for non-admin users
+                        return $this->renderErrorView(403);
+                    }
                 } else {
                     // Error fetching cuti data
                     return $this->renderErrorView($http_status_code_cuti);
@@ -73,7 +86,7 @@ class userAdminController extends BaseController
             $tanggal_selesai = $this->request->getPost('tanggal_selesai');
             $status = $this->request->getPost('status');
             $id_alasan_cuti = $this->request->getPost('id_alasan_cuti');
- 
+
 
 
             // Prepare the data to be sent to the API
@@ -143,5 +156,4 @@ class userAdminController extends BaseController
             }
         }
     }
-
 }
