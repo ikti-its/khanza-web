@@ -13,12 +13,12 @@
 
                 <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
 
-                    <form method="post" action="/submittambahabsenmasuk">
+                    <form method="post" action="/submittambahabsenpulang">
 
                         <div class="px-6 py-5 grid gap-3 md:flex md:justify-between md:items-center">
                             <div class="sm:col-span-12">
                                 <h2 class="text-lg font-bold text-gray-800 dark:text-neutral-200">
-                                    Presensi
+                                    Absen Pulang
                                 </h2>
                             </div>
 

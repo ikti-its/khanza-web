@@ -34,8 +34,12 @@ $routes->post('/submiteditstatuscuti/(:segment)', 'userAdminController::submitEd
 
 $routes->get('/kehadiranmanual', 'userPegawaiController::LihatAbsen', ['filter' => 'auth']);
 $routes->get('/absenmasuk/(:segment)', 'userPegawaiController::LihatAbsenMasuk/$1', ['filter' => 'auth']);
-$routes->post('/submittambahabsenmasuk', 'userpegawaiController::submitTambahAbsenMasuk', ['filter' => 'auth']);
+$routes->post('/submittambahabsenmasuk', 'userPegawaiController::submitTambahAbsenMasuk', ['filter' => 'auth']);
 
+
+// $routes->post('/absenpulang', 'userPegawaiController::submitAbsenPulang', ['filter' => 'auth']);
+$routes->get('/absenpulang/(:segment)', 'userPegawaiController::LihatAbsenPulang/$1', ['filter' => 'auth']);
+$routes->post('/submittambahabsenpulang', 'userPegawaiController::submitTambahAbsenPulang', ['filter' => 'auth']);
 
 $routes->get('/admin', 'authController::dashboard', ['filter' => 'auth']);
 $routes->post('/admin', 'authController::login', ['filter' => 'noauth']);

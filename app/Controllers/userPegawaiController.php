@@ -851,6 +851,12 @@ class userPegawaiController extends BaseController
                     // Check if the HTTP status code in the response
                     $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
+                    // Decode the response
+                    $response_data = json_decode($response, true);
+
+                    // Store user details in session along with the token
+                    session()->set('response_data', $response_data['data']['id']);
+
                     if ($http_status_code === 201) {
                         // Leave (cuti) created successfully
 
@@ -899,4 +905,144 @@ class userPegawaiController extends BaseController
             }
         }
     }
+
+
+    public function lihatAbsenPulang($pegawaiId)
+    {
+        $title = 'Tambah Absen Masuk';
+
+        // Check if the user is logged in
+        // Retrieve the stored JWT token
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+            // URL for fetching akun data
+            $jadwal_url = $this->api_url . '/kehadiran/jadwal/pegawai/' . $pegawaiId;
+
+            // Initialize cURL session
+            $ch_jadwal = curl_init($jadwal_url);
+
+            // Set cURL options
+            curl_setopt($ch_jadwal, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_jadwal, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            // Execute the cURL request for fetching akun data
+            $response_jadwal = curl_exec($ch_jadwal);
+
+            // Check the API response for akun data
+            if ($response_jadwal) {
+                $http_status_code_jadwal = curl_getinfo($ch_jadwal, CURLINFO_HTTP_CODE);
+
+
+                if ($http_status_code_jadwal === 200) {
+                    // Akun data fetched successfully
+                    $jadwal_data = json_decode($response_jadwal, true)['data'];
+
+                    // Get the current day of the week (1 for Monday, 7 for Sunday)
+                    $currentDay = date('N'); // Returns 1 (Monday) to 7 (Sunday)
+
+                    // Find the schedule data for today (id_hari = $currentDay)
+                    $jadwal_today = array_values(array_filter($jadwal_data, function ($item) use ($currentDay) {
+                        return $item['id_hari'] == $currentDay;
+                    }));
+
+                    // Check if there is a schedule for today
+                    if (!empty($jadwal_today)) {
+                        return view('/user/tampilAbsenPulang', [
+                            'kehadiran_data' => $jadwal_today,
+                            'title' => $title
+                        ]);
+                    } else {
+                        // No schedule found for today
+                        return $this->renderErrorView(404); // Replace with appropriate error code
+                    }
+                } else {
+                    // Error fetching jadwal data
+                    return $this->renderErrorView($http_status_code_jadwal);
+                }
+            } else {
+                // Error fetching jadwal data
+                return $this->renderErrorView(500); // Assume 500 for cURL error
+            }
+
+            // Close the cURL session for akun data
+            curl_close($ch_jadwal);
+        } else {
+            // User not logged in
+            return $this->renderErrorView(401);
+        }
+    }
+
+
+
+    public function submitTambahAbsenPulang()
+    {
+        if ($this->request->getPost()) {
+
+            // Retrieve session data
+            $abseniId = session()->get('response_data');
+            $pegawaiId = session()->get('user_specific_data')['pegawai'];
+          
+
+            // Prepare the data to be sent to the API
+            $postData = [
+                'id' => $abseniId,
+                'id_pegawai' => $pegawaiId
+            ];
+
+            $tambah_pulang_JSON = json_encode($postData);
+
+            $pulang_url = $this->api_url . '/kehadiran/presensi/leave';
+
+            // Check if required fields are provided
+            if (session()->has('jwt_token')) {
+                // Assume you have some validation logic here for the required fields
+
+                $token = session()->get('jwt_token');
+
+                // Initialize cURL session for sending the POST request
+                $ch = curl_init($pulang_url);
+
+                // Set cURL options for sending a POST request
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, ($tambah_pulang_JSON));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($tambah_pulang_JSON),
+                    'Authorization: Bearer ' . $token,
+                ]);
+
+                // Execute the cURL request
+                $response = curl_exec($ch);
+
+                // Check if the API request was successful
+                if ($response) {
+
+                    // Check if the HTTP status code in the response
+                    $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+                    if ($http_status_code === 200) {
+                        // Leave (cuti) created successfully
+                        return redirect()->to(base_url('dashboard'));
+                    } else {
+                        // Error response from the API
+
+                        return $this->renderErrorView($http_status_code);
+                    }
+                } else {
+                    // Error sending request to the API
+                    return $this->renderErrorView(500);
+                }
+
+                // Close the cURL session
+                curl_close($ch);
+            } else {
+                // User is not logged in
+                return redirect()->to('/login')->with('error', 'User not logged in. Please log in first.');
+            }
+        }
+    }
+
 }

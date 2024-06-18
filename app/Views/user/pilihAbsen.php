@@ -33,15 +33,15 @@
 
             <div class="flex justify-center items-center z-10">
                 <div class="w-full md:w-auto sm:w-auto lg:w-auto">
-                  
-                        <!-- Hidden input fields for latitude and longitude -->
-                        <input type="hidden" id="latitude" name="latitude">
-                        <input type="hidden" id="longitude" name="longitude">
-                        <button type="button" id="authButton" class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" >
-                            <a href="/absenmasuk/<?php echo session('user_specific_data')['pegawai'] ?>">
+
+                    <!-- Hidden input fields for latitude and longitude -->
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                    <button type="button" id="authButton" class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
+                        <a href="/absenmasuk/<?php echo session('user_specific_data')['pegawai'] ?>">
                             Absen masuk
-                            </a>
-                        </button>
+                        </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -75,12 +75,17 @@
             </svg>
 
             <div class="flex justify-center items-center z-10">
+
                 <div class="w-full md:w-auto sm:w-auto lg:w-auto">
-                    <a class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm" href="/swafoto">
-                        Absen pulang
-                    </a>
+                    <button type="button" id="authButton" class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
+                        <a href="/absenpulang/<?php echo session('user_specific_data')['pegawai'] ?>">
+                            Absen pulang
+                        </a>
+                    </button>
                 </div>
+
             </div>
+
 
 
         </div>
