@@ -508,11 +508,11 @@ class userPegawaiController extends BaseController
         }
     }
 
-    public function tampilStatusIzin()
-    {
-        $title = 'Detail berkas';
-        return view('/user/statusPengajuanIzin', ['title' => $title]);
-    }
+    // public function tampilStatusIzin()
+    // {
+    //     $title = 'Detail berkas';
+    //     return view('/user/statusPengajuanIzin', ['title' => $title]);
+    // }
 
     public function tambahCuti()
     {
@@ -615,97 +615,97 @@ class userPegawaiController extends BaseController
     }
 
     public function tambahPresensi()
-{
-    $title = 'Tambah Presensi';
+    {
+        $title = 'Tambah Presensi';
 
-    // Retrieve session data
-    $pegawaiId = session()->get('user_specific_data')['pegawai'];
-    $namaPegawai = session()->get('user_specific_data')['nama'];
-    $jwtToken = session()->get('jwt_token');
-    $api_url = $this->api_url . '/pegawai/foto'; // Example API URL
+        // Retrieve session data
+        $pegawaiId = session()->get('user_specific_data')['pegawai'];
+        $namaPegawai = session()->get('user_specific_data')['nama'];
+        $jwtToken = session()->get('jwt_token');
+        $api_url = $this->api_url . '/pegawai/foto'; // Example API URL
 
-    // Check if the user is logged in
-    if ($jwtToken) {
-        // Get latitude and longitude from the POST data (example values)
-        $latitude = -7.280280992376773;
-        $longitude = 112.79587908222712;
+        // Check if the user is logged in
+        if ($jwtToken) {
+            // Get latitude and longitude from the POST data (example values)
+            $latitude = -7.280280992376773;
+            $longitude = 112.79587908222712;
 
-        // Define the latitude and longitude range
-        $minLatitude = -7.285;
-        $maxLatitude = -7.279;
-        $minLongitude = 112.775;
-        $maxLongitude = 112.797;
+            // Define the latitude and longitude range
+            $minLatitude = -7.285;
+            $maxLatitude = -7.279;
+            $minLongitude = 112.775;
+            $maxLongitude = 112.797;
 
-        // Check if latitude and longitude are within the specified range
-        if ($latitude >= $minLatitude && $latitude <= $maxLatitude && $longitude >= $minLongitude && $longitude <= $maxLongitude) {
+            // Check if latitude and longitude are within the specified range
+            if ($latitude >= $minLatitude && $latitude <= $maxLatitude && $longitude >= $minLongitude && $longitude <= $maxLongitude) {
 
-            // User's IP address (local IP simulated for testing)
-            $ipAddress = $_SERVER['REMOTE_ADDR'];
-            if ($ipAddress === '::1' || $ipAddress === '127.0.0.1') {
-                $ipAddress = '10.183.0.1'; // Example local IP for testing
-            }
-
-            // Check if the IP address starts with '10.183'
-            if (strpos($ipAddress, '10.183') === 0) {
-
-                // Initialize cURL session
-                $foto_url = $this->api_url . '/pegawai/foto/' . $pegawaiId;
-                $ch_foto = curl_init($foto_url);
-
-                // Set cURL options
-                curl_setopt($ch_foto, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch_foto, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer ' . $jwtToken,
-                ]);
-
-                // Execute the cURL request for fetching employee photo data
-                $response_foto = curl_exec($ch_foto);
-
-                // Check for cURL errors
-                if ($response_foto === false) {
-                    $error_message = curl_error($ch_foto);
-                    curl_close($ch_foto);
-                    return $this->renderErrorView(500, 'Error fetching employee photo data: ' . $error_message);
+                // User's IP address (local IP simulated for testing)
+                $ipAddress = $_SERVER['REMOTE_ADDR'];
+                if ($ipAddress === '::1' || $ipAddress === '127.0.0.1') {
+                    $ipAddress = '10.183.0.1'; // Example local IP for testing
                 }
 
-                // Get HTTP status code
-                $http_status_response_foto = curl_getinfo($ch_foto, CURLINFO_HTTP_CODE);
+                // Check if the IP address starts with '10.183'
+                if (strpos($ipAddress, '10.183') === 0) {
 
-                // Close cURL session
-                curl_close($ch_foto);
+                    // Initialize cURL session
+                    $foto_url = $this->api_url . '/pegawai/foto/' . $pegawaiId;
+                    $ch_foto = curl_init($foto_url);
 
-                // Check HTTP status
-                if ($http_status_response_foto === 200) {
-                    // Parse JSON response
-                    $foto_data = json_decode($response_foto, true);
-                    
-
-                    // Render the view with fetched data
-                    return view('/user/tambahPresensi', [
-                        'api_url' => $api_url,
-                        'pegawaiId' => $pegawaiId,
-                        'namaPegawai' => $namaPegawai,
-                        'jwtToken' => $jwtToken,
-                        'title' => $title,
-                        'foto_data' => $foto_data['data']['foto'],
+                    // Set cURL options
+                    curl_setopt($ch_foto, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch_foto, CURLOPT_HTTPHEADER, [
+                        'Authorization: Bearer ' . $jwtToken,
                     ]);
+
+                    // Execute the cURL request for fetching employee photo data
+                    $response_foto = curl_exec($ch_foto);
+
+                    // Check for cURL errors
+                    if ($response_foto === false) {
+                        $error_message = curl_error($ch_foto);
+                        curl_close($ch_foto);
+                        return $this->renderErrorView(500, 'Error fetching employee photo data: ' . $error_message);
+                    }
+
+                    // Get HTTP status code
+                    $http_status_response_foto = curl_getinfo($ch_foto, CURLINFO_HTTP_CODE);
+
+                    // Close cURL session
+                    curl_close($ch_foto);
+
+                    // Check HTTP status
+                    if ($http_status_response_foto === 200) {
+                        // Parse JSON response
+                        $foto_data = json_decode($response_foto, true);
+
+
+                        // Render the view with fetched data
+                        return view('/user/tambahPresensi', [
+                            'api_url' => $api_url,
+                            'pegawaiId' => $pegawaiId,
+                            'namaPegawai' => $namaPegawai,
+                            'jwtToken' => $jwtToken,
+                            'title' => $title,
+                            'foto_data' => $foto_data['data']['foto'],
+                        ]);
+                    } else {
+                        // Handle HTTP error
+                        return $this->renderErrorView($http_status_response_foto, 'Error fetching employee photo data');
+                    }
                 } else {
-                    // Handle HTTP error
-                    return $this->renderErrorView($http_status_response_foto, 'Error fetching employee photo data');
+                    // User's IP address does not start with '10.183'
+                    return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap gunakan jaringan internal rumah sakit'); // Forbidden with custom message
                 }
             } else {
-                // User's IP address does not start with '10.183'
-                return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap gunakan jaringan internal rumah sakit'); // Forbidden with custom message
+                // Latitude or longitude is outside the allowed area
+                return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap berada pada area rumah sakit'); // Forbidden with custom message
             }
         } else {
-            // Latitude or longitude is outside the allowed area
-            return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap berada pada area rumah sakit'); // Forbidden with custom message
+            // User not logged in
+            return $this->renderErrorView(401); // Unauthorized
         }
-    } else {
-        // User not logged in
-        return $this->renderErrorView(401); // Unauthorized
     }
-}
 
 
 
@@ -713,5 +713,162 @@ class userPegawaiController extends BaseController
     {
         $title = 'Detail berkas';
         return view('/user/tambahSwafoto', ['title' => $title]);
+    }
+
+
+    public function lihatAbsen()
+    {
+
+        $title = 'Lihat Absen';
+
+        // Check if the user is logged in by checking the presence of the JWT token in the session
+        if (session()->has('jwt_token')) {
+            // Return the view with the title
+            return view('/user/pilihAbsen', ['title' => $title]);
+        } else {
+            // Redirect to login page or show an appropriate message
+            return redirect()->to('/login')->with('error', 'User not logged in. Please log in first.');
+        }
+    }
+
+    public function lihatAbsenMasuk($pegawaiId)
+    {
+        $title = 'Tambah Absen Masuk';
+
+        // Check if the user is logged in
+        // Retrieve the stored JWT token
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+            // URL for fetching akun data
+            $jadwal_url = $this->api_url . '/kehadiran/jadwal/pegawai/' . $pegawaiId;
+
+            // Initialize cURL session
+            $ch_jadwal = curl_init($jadwal_url);
+
+            // Set cURL options
+            curl_setopt($ch_jadwal, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_jadwal, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            // Execute the cURL request for fetching akun data
+            $response_jadwal = curl_exec($ch_jadwal);
+
+            // Check the API response for akun data
+            if ($response_jadwal) {
+                $http_status_code_jadwal = curl_getinfo($ch_jadwal, CURLINFO_HTTP_CODE);
+
+
+                if ($http_status_code_jadwal === 200) {
+                    // Akun data fetched successfully
+                    $jadwal_data = json_decode($response_jadwal, true)['data'];
+
+                    // Get the current day of the week (1 for Monday, 7 for Sunday)
+                    $currentDay = date('N'); // Returns 1 (Monday) to 7 (Sunday)
+
+                    // Find the schedule data for today (id_hari = $currentDay)
+                    $jadwal_today = array_values(array_filter($jadwal_data, function ($item) use ($currentDay) {
+                        return $item['id_hari'] == $currentDay;
+                    }));
+
+                    // Check if there is a schedule for today
+                    if (!empty($jadwal_today)) {
+                        return view('/user/tampilAbsenMasuk', [
+                            'kehadiran_data' => $jadwal_today,
+                            'title' => $title
+                        ]);
+                    } else {
+                        // No schedule found for today
+                        return $this->renderErrorView(404); // Replace with appropriate error code
+                    }
+                } else {
+                    // Error fetching jadwal data
+                    return $this->renderErrorView($http_status_code_jadwal);
+                }
+            } else {
+                // Error fetching jadwal data
+                return $this->renderErrorView(500); // Assume 500 for cURL error
+            }
+
+            // Close the cURL session for akun data
+            curl_close($ch_jadwal);
+        } else {
+            // User not logged in
+            return $this->renderErrorView(401);
+        }
+    }
+
+    public function submitTambahAbsenMasuk()
+    {
+        if ($this->request->getPost()) {
+
+            // Retrieve session data
+            $pegawaiId = session()->get('user_specific_data')['pegawai'];
+            // Retrieve the form data from the POST request
+            $id_shift = $this->request->getPost('id_shift');
+            $jam_masuk = $this->request->getPost('jam_masuk');
+            $jam_pulang = $this->request->getPost('jam_pulang');
+
+            // Debugging output
+        var_dump($id_shift, $jam_masuk, $jam_pulang);
+
+            // Prepare the data to be sent to the API
+            $postData = [
+                'id_shift' => $id_shift,
+                'jam_masuk' => $jam_masuk,
+                'jam_pulang' => $jam_pulang,
+            ];
+
+            $tambah_cuti_JSON = json_encode($postData);
+
+            $cuti_url = $this->api_url . '/kehadiran/presensi/attend';
+
+            // Check if required fields are provided
+            if (session()->has('jwt_token')) {
+                // Assume you have some validation logic here for the required fields
+
+                $token = session()->get('jwt_token');
+
+                // Initialize cURL session for sending the POST request
+                $ch = curl_init($cuti_url);
+
+                // Set cURL options for sending a POST request
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, ($tambah_cuti_JSON));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($tambah_cuti_JSON),
+                    'Authorization: Bearer ' . $token,
+                ]);
+
+                // Execute the cURL request
+                $response = curl_exec($ch);
+
+                // Check if the API request was successful
+                if ($response) {
+
+                    // Check if the HTTP status code in the response
+                    $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+                    if ($http_status_code === 201) {
+                        // Leave (cuti) created successfully
+                        return redirect()->to(base_url('dashboard'));
+                    } else {
+                        // Error response from the API
+                        return $this->renderErrorView($http_status_code);
+                    }
+                } else {
+                    // Error sending request to the API
+                    return $this->renderErrorView(500);
+                }
+
+                // Close the cURL session
+                curl_close($ch);
+            } else {
+                // User is not logged in
+                return redirect()->to('/login')->with('error', 'User not logged in. Please log in first.');
+            }
+        }
     }
 }

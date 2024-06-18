@@ -32,6 +32,10 @@ $routes->get('/tesmenukehadiran', 'userPegawaiController::lihatOpsiHadir', ['fil
 $routes->get('/lihatstatuscuti', 'userAdminController::lihatStatusCuti', ['filter' => 'auth']);
 $routes->post('/submiteditstatuscuti/(:segment)', 'userAdminController::submitEditStatusCuti/$1', ['filter' => 'auth']);
 
+$routes->get('/kehadiranmanual', 'userPegawaiController::LihatAbsen', ['filter' => 'auth']);
+$routes->get('/absenmasuk/(:segment)', 'userPegawaiController::LihatAbsenMasuk/$1', ['filter' => 'auth']);
+$routes->post('/submittambahabsenmasuk', 'userpegawaiController::submitTambahAbsenMasuk', ['filter' => 'auth']);
+
 
 $routes->get('/admin', 'authController::dashboard', ['filter' => 'auth']);
 $routes->post('/admin', 'authController::login', ['filter' => 'noauth']);
