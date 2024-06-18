@@ -24,7 +24,7 @@
 
                         </div>
 
-                        <div class=" py-4 mx-6 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
+                        <div class="py-4 mx-6 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
 
                             <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
 
@@ -69,7 +69,8 @@
                                 <!-- End Col -->
                                 <!-- Hidden input field for pegawai_id -->
                                 <input type="hidden" name="id_pegawai" id="id_pegawai" value="<?=$kehadiran_data[0]['id_pegawai']?>">
-                                <input type="hidden" id="id_jadwal" name="id_jadwal" type="text" placeholder="Selected Date" value="<?=$kehadiran_data[0]['id']?>" readonly>
+                                <input type="hidden" id="id_jadwal" name="id_jadwal" placeholder="Selected Date" value="<?=$kehadiran_data[0]['id']?>" readonly>
+                                <input type="hidden" id="tanggal" name="tanggal" placeholder="Selected Date" value="<?= date('Y-m-d') ?>" readonly>
                             </div>
 
 

@@ -805,21 +805,21 @@ class userPegawaiController extends BaseController
             // Retrieve session data
             $pegawaiId = session()->get('user_specific_data')['pegawai'];
             // Retrieve the form data from the POST request
-            $id_shift = $this->request->getPost('id_shift');
-            $jam_masuk = $this->request->getPost('jam_masuk');
-            $jam_pulang = $this->request->getPost('jam_pulang');
+            $id_pegawai = $this->request->getPost('id_pegawai');
+            $id_jadwal = $this->request->getPost('id_jadwal');
+            $tanggal = $this->request->getPost('tanggal');
 
-            // Debugging output
-        var_dump($id_shift, $jam_masuk, $jam_pulang);
 
             // Prepare the data to be sent to the API
             $postData = [
-                'id_shift' => $id_shift,
-                'jam_masuk' => $jam_masuk,
-                'jam_pulang' => $jam_pulang,
+                'id_pegawai' => $id_pegawai,
+                'id_jadwal_pegawai' => $id_jadwal,
+                'tanggal' => $tanggal,
             ];
 
             $tambah_cuti_JSON = json_encode($postData);
+
+            var_dump($tambah_cuti_JSON);
 
             $cuti_url = $this->api_url . '/kehadiran/presensi/attend';
 
@@ -853,6 +853,34 @@ class userPegawaiController extends BaseController
 
                     if ($http_status_code === 201) {
                         // Leave (cuti) created successfully
+
+                        // Set the Authorization header with the JWT token
+                        $headers = [
+                            'Authorization: Bearer ' . $token,
+                            'Content-Type: application/json'
+                        ];
+
+                        $user_specific_url = $this->api_url . '/m/home?tanggal=' . $tanggal;
+
+                        // Initialize cURL session for user specific data
+                        $user_specific_ch = curl_init($user_specific_url);
+                        curl_setopt($user_specific_ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($user_specific_ch, CURLOPT_HTTPHEADER, $headers);
+
+                        // Execute the cURL request for user specific data
+                        $user_specific_response = curl_exec($user_specific_ch);
+
+                        if ($user_specific_response) {
+                            // Decode the JSON response
+                            $user_specific_data = json_decode($user_specific_response, true);
+
+                            // Store the user specific data in session or handle it as needed
+                            session()->set('user_specific_data', $user_specific_data['data']);
+                        } else {
+                            // Failed to get user specific data
+                            echo "Failed to retrieve user specific data.";
+                        }
+
                         return redirect()->to(base_url('dashboard'));
                     } else {
                         // Error response from the API

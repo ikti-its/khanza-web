@@ -20,10 +20,10 @@
         <div class="max-w-4xl flex justify-between">
 
             <div class="group mt-28 pt-10 items-center py-2 px-2 text-lg font-medium text-white">
-                <span>Status</span>
+                <span>Status </span>
                 <p class="text-white mt-1 flex items-center">
                     <?php
-                    if (session()->has('user_specific_data') && session('user_specific_data')['status'] == true) {
+                    if (session()->has('user_specific_data') && session('user_specific_data')['status'] === true) {
                         echo '<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none" class="mr-2">
                     <circle cx="4" cy="4" r="4" fill="#30DFC4"/>
                   </svg> Hadir';
