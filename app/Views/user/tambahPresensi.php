@@ -35,6 +35,15 @@
     const overlay = document.getElementById('overlay');
     const ctx = overlay.getContext('2d');
 
+    // Define a flag to track if redirection has occurred
+    let redirectionDone = false;
+
+
+    // Define a function to handle redirection after face recognition
+    function redirectToHalamanPresensi() {
+        window.location.href = '/absenmasuk/' + pegawaiId; // Replace with your actual URL
+    }
+
     // Function to start webcam and face detection
     function startWebcam() {
         navigator.mediaDevices.getUserMedia({
@@ -72,6 +81,14 @@
                                     label: text
                                 });
                                 drawBox.draw(overlay);
+
+                                // Check if recognized face matches namaPegawai
+                                if (result.label === namaPegawai && redirectionDone === false) {
+                                    // Redirect to halamanpresensi
+                                    console.log('sesuai bro');
+                                    redirectToHalamanPresensi();
+                                    redirectionDone = true;
+                                }
                             });
                         }
                     }, 100);
@@ -84,34 +101,33 @@
 
     let labeledFaceDescriptors;
 
-   // Function to load labeled face descriptors from images
-async function loadLabeledImages() {
-    const foto_data = <?= json_encode($foto_data); ?>;
+    // Function to load labeled face descriptors from images
+    async function loadLabeledImages() {
+        const foto_data = <?= json_encode($foto_data); ?>;
+        const pegawaiId = '<?= $pegawaiId ?>';
+        const namaPegawai = '<?= $namaPegawai ?>';
 
-    const pegawaiId = '<?= $pegawaiId ?>';
-    const namaPegawai = '<?= $namaPegawai ?>';
+        try {
+            const fotoUrl = foto_data;
 
-    try {
-        const fotoUrl = foto_data;
+            // Fetch the image using the obtained URL
+            const imgResponse = await fetch(fotoUrl);
+            if (!imgResponse.ok) {
+                throw new Error(`Failed to fetch image. Status: ${imgResponse.status}`);
+            }
 
-        // Fetch the image using the obtained URL
-        const imgResponse = await fetch(fotoUrl);
-        if (!imgResponse.ok) {
-            throw new Error(`Failed to fetch image. Status: ${imgResponse.status}`);
+            const blob = await imgResponse.blob();
+            const img = await faceapi.bufferToImage(blob);
+
+            const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+            const descriptions = detections ? [detections.descriptor] : [];
+
+            return new faceapi.LabeledFaceDescriptors(namaPegawai, descriptions);
+        } catch (error) {
+            console.error(`Failed to load image for ${namaPegawai}:`, error);
+            throw error; // Rethrow the error to handle it further up the call stack if needed
         }
-
-        const blob = await imgResponse.blob();
-        const img = await faceapi.bufferToImage(blob);
-
-        const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
-        const descriptions = detections ? [detections.descriptor] : [];
-
-        return new faceapi.LabeledFaceDescriptors(namaPegawai, descriptions);
-    } catch (error) {
-        console.error(`Failed to load image for ${namaPegawai}:`, error);
-        throw error; // Rethrow the error to handle it further up the call stack if needed
     }
-}
 
 
 
