@@ -23,6 +23,11 @@
     </div>
 </div>
 
+<script>
+    const pegawaiId = '<?= session()->get('user_specific_data')['pegawai']; ?>';
+    const namaPegawai = '<?= session()->get('user_specific_data')['nama']; ?>';
+</script>
+
 <!-- Include face-api.js -->
 <script src="<?= base_url('/models/face-api.min.js') ?>"></script>
 <script>
@@ -79,47 +84,34 @@
 
     let labeledFaceDescriptors;
 
-    // Function to load labeled face descriptors from images
-    async function loadLabeledImages() {
-        const pegawaiId = '<?= session()->get('user_specific_data')['pegawai']; ?>';
-        const namaPegawai = '<?= session()->get('user_specific_data')['nama']; ?>';
-        const apiUrl = '<?= $api_url; ?>'; // Get api_url from passed variable
-        const jwtToken = '<?= session()->get('jwt_token'); ?>'; // Get JWT token from session
+   // Function to load labeled face descriptors from images
+async function loadLabeledImages() {
+    const foto_data = <?= json_encode($foto_data); ?>;
 
-        const descriptions = [];
-        try {
-            // Fetch data from API to get the image URL
-            const response = await fetch(`${apiUrl}/${pegawaiId}`, {
-                headers: {
-                    'Authorization': `Bearer ${jwtToken}`
-                }
-            });
+    const pegawaiId = '<?= $pegawaiId ?>';
+    const namaPegawai = '<?= $namaPegawai ?>';
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+    try {
+        const fotoUrl = foto_data;
 
-            const data = await response.json();
-            console.log(data);
-            const imgUrl = data.data.foto; // Extract the image URL from the API response
-            
-
-            // Fetch the image using the obtained URL
-            const imgResponse = await fetch(imgUrl);
-            if (!imgResponse.ok) {
-                throw new Error(`Failed to fetch image. Status: ${imgResponse.status}`);
-            }
-
-            const blob = await imgResponse.blob();
-            const img = await faceapi.bufferToImage(blob);
-
-            const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
-            descriptions.push(detections.descriptor);
-        } catch (error) {
-            console.error(`Failed to load image for ${namaPegawai}:`, error);
+        // Fetch the image using the obtained URL
+        const imgResponse = await fetch(fotoUrl);
+        if (!imgResponse.ok) {
+            throw new Error(`Failed to fetch image. Status: ${imgResponse.status}`);
         }
+
+        const blob = await imgResponse.blob();
+        const img = await faceapi.bufferToImage(blob);
+
+        const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+        const descriptions = detections ? [detections.descriptor] : [];
+
         return new faceapi.LabeledFaceDescriptors(namaPegawai, descriptions);
+    } catch (error) {
+        console.error(`Failed to load image for ${namaPegawai}:`, error);
+        throw error; // Rethrow the error to handle it further up the call stack if needed
     }
+}
 
 
 

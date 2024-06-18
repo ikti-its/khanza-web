@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 
+
 class userPegawaiController extends BaseController
 {
 
@@ -132,85 +133,85 @@ class userPegawaiController extends BaseController
     public function lihatPegawai()
     {
         $title = 'Data Akun';
-    
+
         // Retrieve the value of the 'page' parameter from the request, default to 1 if not present
         $page = $this->request->getGet('page') ?? 1;
-    
+
         // Retrieve the value of the 'size' parameter from the request, default to 10 if not present
         $size = $this->request->getGet('size') ?? 10;
-    
+
         // Check if the user is logged in
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
-    
+
             // URL for fetching akun data
             $akun_url = $this->api_url . '/pegawai?page=' . $page . '&size=' . $size;
-    
+
             // Initialize cURL session for akun data
             $ch_akun = curl_init($akun_url);
             curl_setopt($ch_akun, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_akun, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-    
+
             // Execute the cURL request for fetching akun data
             $response_akun = curl_exec($ch_akun);
-    
+
             // Check the API response for akun data
             if ($response_akun) {
                 $http_status_code_akun = curl_getinfo($ch_akun, CURLINFO_HTTP_CODE);
-    
+
                 if ($http_status_code_akun === 200) {
                     // Akun data fetched successfully
                     $akun_data = json_decode($response_akun, true);
-    
+
                     // Close the cURL session for akun data
                     curl_close($ch_akun);
-    
+
                     // Now fetch data from ketersediaan_url
                     $tanggal = date('Y-m-d');
                     $ketersediaan_url = $this->api_url . '/m/ketersediaan?tanggal=' . $tanggal . '&page=' . $page . '&size=' . $size;
-    
+
                     // Initialize cURL session for ketersediaan data
                     $ch_ketersediaan = curl_init($ketersediaan_url);
                     curl_setopt($ch_ketersediaan, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch_ketersediaan, CURLOPT_HTTPHEADER, [
                         'Authorization: Bearer ' . $token,
                     ]);
-    
+
                     // Execute the cURL request for fetching ketersediaan data
                     $response_ketersediaan = curl_exec($ch_ketersediaan);
-    
+
                     // Check the API response for ketersediaan data
                     if ($response_ketersediaan) {
                         $http_status_code_ketersediaan = curl_getinfo($ch_ketersediaan, CURLINFO_HTTP_CODE);
-    
+
                         if ($http_status_code_ketersediaan === 200) {
                             // Ketersediaan data fetched successfully
                             $ketersediaan_data = json_decode($response_ketersediaan, true);
-    
+
                             // Coordinates of the origin (assuming these are fixed for demonstration)
                             $latitudeOrg = 7.2575; // User's latitude or fixed origin point
                             $longitudeOrg = 112.7521; // User's longitude or fixed origin point
-    
+
                             // Calculate distances using Haversine formula and assign to each entry
                             foreach ($ketersediaan_data['data']['ketersediaan'] as &$item) {
                                 if (isset($item['latitude']) && isset($item['longitude'])) {
                                     // Extract latitude and longitude from the current item
                                     $ketersediaanLat = $item['latitude'];
                                     $ketersediaanLng = $item['longitude'];
-    
+
                                     // Calculate distance using Haversine formula
                                     $distance = $this->calculateDistance($latitudeOrg, $longitudeOrg, $ketersediaanLat, $ketersediaanLng);
-    
+
                                     // Assign distance to the current item
                                     $item['distance'] = $distance;
                                 }
                             }
-    
+
                             // Close the cURL session for ketersediaan data
                             curl_close($ch_ketersediaan);
-    
+
                             // Pass data to the view, including the distances array
                             return view('/user/dataPegawai', [
                                 'akun_data' => $akun_data['data']['pegawai'],
@@ -244,23 +245,23 @@ class userPegawaiController extends BaseController
             return $this->renderErrorView(401);
         }
     }
-    
+
     // Function to calculate distance between two points using Haversine formula
     private function calculateDistance($lat1, $lon1, $lat2, $lon2)
     {
         $earthRadius = 6371; // Radius of the earth in kilometers
-    
+
         $dLat = deg2rad($lat2 - $lat1);
         $dLon = deg2rad($lon2 - $lon1);
-    
+
         $a = sin($dLat / 2) * sin($dLat / 2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) * sin($dLon / 2);
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-    
+
         $distance = $earthRadius * $c; // Distance in kilometers
-    
+
         return $distance;
     }
-    
+
 
     public function detailBerkasPegawai($pegawaiId)
     {
@@ -614,49 +615,98 @@ class userPegawaiController extends BaseController
     }
 
     public function tambahPresensi()
-    {
-        $title = 'Tambah Presensi';
+{
+    $title = 'Tambah Presensi';
 
-        $api_url = $this->api_url . '/pegawai/foto';
+    // Retrieve session data
+    $pegawaiId = session()->get('user_specific_data')['pegawai'];
+    $namaPegawai = session()->get('user_specific_data')['nama'];
+    $jwtToken = session()->get('jwt_token');
+    $api_url = $this->api_url . '/pegawai/foto'; // Example API URL
 
-        // Check if the user is logged in
-        if (session()->has('jwt_token')) {
-            // Get latitude and longitude from the POST data -7.280280992376773, 112.79587908222712
-            $latitude =  -7.280280992376773;
-            $longitude = 112.79587908222712;
+    // Check if the user is logged in
+    if ($jwtToken) {
+        // Get latitude and longitude from the POST data (example values)
+        $latitude = -7.280280992376773;
+        $longitude = 112.79587908222712;
 
-            // Define the latitude and longitude range
-            $minLatitude = -7.285;
-            $maxLatitude = -7.279;
-            $minLongitude = 112.775;
-            $maxLongitude = 112.797;
+        // Define the latitude and longitude range
+        $minLatitude = -7.285;
+        $maxLatitude = -7.279;
+        $minLongitude = 112.775;
+        $maxLongitude = 112.797;
 
-            // Check if latitude and longitude are within the specified range
-            if ($latitude >= $minLatitude && $latitude <= $maxLatitude && $longitude >= $minLongitude && $longitude <= $maxLongitude) {
+        // Check if latitude and longitude are within the specified range
+        if ($latitude >= $minLatitude && $latitude <= $maxLatitude && $longitude >= $minLongitude && $longitude <= $maxLongitude) {
 
-                // User's IP address (local IP simulated for testing)
-                $ipAddress = $_SERVER['REMOTE_ADDR'];
-                if ($ipAddress === '::1' || $ipAddress === '127.0.0.1') {
-                    $ipAddress = '10.183.0.1'; // Example local IP for testing
+            // User's IP address (local IP simulated for testing)
+            $ipAddress = $_SERVER['REMOTE_ADDR'];
+            if ($ipAddress === '::1' || $ipAddress === '127.0.0.1') {
+                $ipAddress = '10.183.0.1'; // Example local IP for testing
+            }
+
+            // Check if the IP address starts with '10.183'
+            if (strpos($ipAddress, '10.183') === 0) {
+
+                // Initialize cURL session
+                $foto_url = $this->api_url . '/pegawai/foto/' . $pegawaiId;
+                $ch_foto = curl_init($foto_url);
+
+                // Set cURL options
+                curl_setopt($ch_foto, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch_foto, CURLOPT_HTTPHEADER, [
+                    'Authorization: Bearer ' . $jwtToken,
+                ]);
+
+                // Execute the cURL request for fetching employee photo data
+                $response_foto = curl_exec($ch_foto);
+
+                // Check for cURL errors
+                if ($response_foto === false) {
+                    $error_message = curl_error($ch_foto);
+                    curl_close($ch_foto);
+                    return $this->renderErrorView(500, 'Error fetching employee photo data: ' . $error_message);
                 }
 
-                // Check if the IP address starts with '10.183'
-                if (strpos($ipAddress, '10.183') === 0) {
-                    // User's IP address starts with '10.183', proceed to the view
-                    return view('/user/tambahPresensi', ['api_url' => $api_url ,'title' => $title]);
+                // Get HTTP status code
+                $http_status_response_foto = curl_getinfo($ch_foto, CURLINFO_HTTP_CODE);
+
+                // Close cURL session
+                curl_close($ch_foto);
+
+                // Check HTTP status
+                if ($http_status_response_foto === 200) {
+                    // Parse JSON response
+                    $foto_data = json_decode($response_foto, true);
+                    
+
+                    // Render the view with fetched data
+                    return view('/user/tambahPresensi', [
+                        'api_url' => $api_url,
+                        'pegawaiId' => $pegawaiId,
+                        'namaPegawai' => $namaPegawai,
+                        'jwtToken' => $jwtToken,
+                        'title' => $title,
+                        'foto_data' => $foto_data['data']['foto'],
+                    ]);
                 } else {
-                    // User's IP address does not start with '10.183'
-                    return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap gunakan jaringan internal rumah sakit'); // Forbidden with custom message
+                    // Handle HTTP error
+                    return $this->renderErrorView($http_status_response_foto, 'Error fetching employee photo data');
                 }
             } else {
-                // Latitude or longitude is outside the allowed area
-                return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap berada pada area rumah sakit'); // Forbidden with custom message
+                // User's IP address does not start with '10.183'
+                return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap gunakan jaringan internal rumah sakit'); // Forbidden with custom message
             }
         } else {
-            // User not logged in
-            return $this->renderErrorView(401); // Unauthorized
+            // Latitude or longitude is outside the allowed area
+            return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap berada pada area rumah sakit'); // Forbidden with custom message
         }
+    } else {
+        // User not logged in
+        return $this->renderErrorView(401); // Unauthorized
     }
+}
+
 
 
     public function tambahSwafoto()
