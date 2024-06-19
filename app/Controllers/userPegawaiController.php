@@ -191,8 +191,8 @@ class userPegawaiController extends BaseController
                             $ketersediaan_data = json_decode($response_ketersediaan, true);
 
                             // Coordinates of the origin (assuming these are fixed for demonstration)
-                            $latitudeOrg = 7.2575; // User's latitude or fixed origin point
-                            $longitudeOrg = 112.7521; // User's longitude or fixed origin point
+                            $latitudeOrg = -7.281696177416258; // User's latitude or fixed origin point
+                            $longitudeOrg = 112.79505404588785; // User's longitude or fixed origin point
 
                             // Calculate distances using Haversine formula and assign to each entry
                             foreach ($ketersediaan_data['data']['ketersediaan'] as &$item) {

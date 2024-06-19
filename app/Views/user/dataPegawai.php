@@ -242,7 +242,7 @@
                                         <!-- End Grid -->
 
                                         <!-- Grid -->
-                                        <div class="grid md:grid-cols-2 gap-2">
+                                        <div class="grid md:grid-cols-2 gap-2 h-72">
                                             <div>
                                                 <div class="grid space-y-2">
                                                     <div class="grid sm:flex gap-x-2 text-xs">
@@ -253,59 +253,6 @@
 
                                                             <div class="mt-2 space-y-3">
                                                                 <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $ketersediaanEntry['nip'] ?? 'N/A' ?></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="grid sm:flex gap-x-2 text-xs">
-                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                                Jenis Kelamin
-                                                            </label>
-
-                                                            <div class="mt-2 space-y-3">
-                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="grid sm:flex gap-x-2 text-xs">
-                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                                Jabatan
-                                                            </label>
-
-                                                            <div class="mt-2 space-y-3">
-                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $ketersediaanEntry['jabatan'] ?? 'N/A' ?></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="grid sm:flex gap-x-2 text-xs">
-                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                                Departemen
-                                                            </label>
-
-                                                            <div class="mt-2 space-y-3">
-                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Col -->
-
-                                            <div>
-                                                <div class="grid space-y-2">
-                                                    <div class="grid sm:flex gap-x-2 text-xs">
-                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
-                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                                Jenis Pegawai
-                                                            </label>
-
-                                                            <div class="mt-2 space-y-3">
-                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $ketersediaanEntry['departemen'] ?? 'N/A' ?></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -325,30 +272,71 @@
                                                     <div class="grid sm:flex gap-x-2 text-xs">
                                                         <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
                                                             <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
-                                                                Awal Masuk
+                                                                Alamat
                                                             </label>
 
                                                             <div class="mt-2 space-y-3">
-                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">John</div>
+                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $ketersediaanEntry['alamat'] ?? 'N/A' ?></div>
                                                             </div>
                                                         </div>
                                                     </div>
 
+                                                </div>
+                                            </div>
+                                            <!-- Col -->
+
+                                            <div>
+                                                <div class="grid space-y-2">
+                                                    <div class="grid sm:flex gap-x-2 text-xs">
+                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
+                                                                Jabatan
+                                                            </label>
+
+                                                            <div class="mt-2 space-y-3">
+                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $ketersediaanEntry['jabatan'] ?? 'N/A' ?></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="grid sm:flex gap-x-2 text-xs">
+                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                            <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
+                                                                Departemen
+                                                            </label>
+
+                                                            <div class="mt-2 space-y-3">
+                                                                <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $ketersediaanEntry['departemen'] ?? 'N/A' ?></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
                                             </div>
                                             <!-- Col -->
                                         </div>
+
                                         <!-- Grid -->
                                         <div class="mb-1 flex justify-center items-center">
 
                                             <!-- Col -->
+                                            <a class="py-2 px-16 md:px-18 lg:px-20 xl:px-28 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#">
+                                                Pegawai Sedang Cuti
+                                            </a>
+                                        </div>
+                                        <!-- End Grid -->
 
+                                        <!-- Grid -->
+                                        <div class="mb-1 flex justify-center items-center">
+
+                                            <!-- Col -->
                                             <a class="py-2 px-16 md:px-18 lg:px-20 xl:px-28 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#">
                                                 Hubungi
                                             </a>
                                         </div>
                                         <!-- End Grid -->
+
+
                                     </div>
                                     <!-- End Card -->
 
