@@ -10,7 +10,7 @@
     </div>
 
     <div class="mx-auto w-48 h-48 relative -mt-20 border-4 border-white rounded-full overflow-hidden">
-        <img class="object-cover object-center h-auto" src="<?= $akun_data['foto'] ?? '' ?>" alt="Image Description">>
+        <img class="object-cover object-center h-auto" src="<?= $akun_data['profil'] ?? '' ?>" alt="Image Description">>
     </div>
     <div class="flex justify-center mt-2 px-4">
 
