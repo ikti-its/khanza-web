@@ -215,18 +215,17 @@
                         <!-- Card Section -->
                         <div class="max-w-[85rem] px-6 py-2 sm:px-6 lg:px-8 lg:py-4 mx-auto">
                             <!-- Grid -->
-                            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4"> <!-- Adjusted gap here -->
                                 <?php foreach ($ketersediaan_data as $ketersediaanEntry) : ?>
                                     <!-- Card -->
-                                    <div class="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
+                                    <div class="flex flex-col gap-y-2 lg:gap-y-3 p-3 md:p-4 bg-white border shadow-sm rounded-lg dark:bg-neutral-900 dark:border-neutral-800"> <!-- Adjusted padding here -->
                                         <!-- Grid -->
-                                        <div class="mb-1 pb-5 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
+                                        <div class="mb-1 pb-3 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700"> <!-- Adjusted padding and margin here -->
 
                                             <!-- Col -->
-
                                             <div class="inline-flex gap-x-2">
                                                 <img class="inline-block size-[38px] rounded-full ring-2 ring-white dark:ring-gray-800" src="<?= $ketersediaanEntry['foto'] ?>" alt="Image Description">
-                                                <div class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-black">
+                                                <div class="py-1 px-2 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-black"> <!-- Adjusted padding here -->
                                                     <?= $ketersediaanEntry['nama'] ?? 'N/A' ?>
                                                 </div>
                                             </div>
@@ -242,11 +241,11 @@
                                         <!-- End Grid -->
 
                                         <!-- Grid -->
-                                        <div class="grid md:grid-cols-2 gap-2 h-72">
+                                        <div class="grid md:grid-cols-2 gap-2 lg:h-60 sm:h-96 md:h-96"> <!-- Adjusted height here -->
                                             <div>
                                                 <div class="grid space-y-2">
                                                     <div class="grid sm:flex gap-x-2 text-xs">
-                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <div class="py-4 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent"> <!-- Adjusted padding here -->
                                                             <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
                                                                 NIP
                                                             </label>
@@ -258,7 +257,7 @@
                                                     </div>
 
                                                     <div class="grid sm:flex gap-x-2 text-xs">
-                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <div class="py-4 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent"> <!-- Adjusted padding here -->
                                                             <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
                                                                 No. Telepon
                                                             </label>
@@ -270,7 +269,7 @@
                                                     </div>
 
                                                     <div class="grid sm:flex gap-x-2 text-xs">
-                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <div class="py-4 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent"> <!-- Adjusted padding here -->
                                                             <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
                                                                 Alamat
                                                             </label>
@@ -288,7 +287,7 @@
                                             <div>
                                                 <div class="grid space-y-2">
                                                     <div class="grid sm:flex gap-x-2 text-xs">
-                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <div class="py-4 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent"> <!-- Adjusted padding here -->
                                                             <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
                                                                 Jabatan
                                                             </label>
@@ -300,7 +299,7 @@
                                                     </div>
 
                                                     <div class="grid sm:flex gap-x-2 text-xs">
-                                                        <div class="py-6 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent">
+                                                        <div class="py-4 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200 dark:border-neutral-700 dark:first:border-transparent"> <!-- Adjusted padding here -->
                                                             <label for="af-payment-billing-contact" class="inline-block font-normal dark:text-white">
                                                                 Departemen
                                                             </label>
@@ -316,105 +315,112 @@
                                             <!-- Col -->
                                         </div>
 
-                                        <!-- Grid -->
-                                        <div class="mb-1 flex justify-center items-center">
+                                        <div class="relative py-3">
+                                            <!-- Container with fixed height to ensure consistent spacing -->
+                                            <div class="flex flex-col items-center mb-3 h-10 md:h-12 lg:h-14 xl:h-16"> <!-- Adjusted height here -->
+                                                <?php if ($ketersediaanEntry['available'] === false) : ?>
+                                                    <!-- Pegawai Sedang Cuti Message -->
+                                                    <div class="mb-2">
+                                                        <div class="text-red-500 text-sm text-center">
+                                                            Pegawai Sedang Cuti
+                                                        </div>
+                                                    </div>
+                                                <?php endif; ?>
 
-                                            <!-- Col -->
-                                            <a class="py-2 px-16 md:px-18 lg:px-20 xl:px-28 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#">
-                                                Pegawai Sedang Cuti
-                                            </a>
+                                                <!-- Spacer for consistent positioning when message is not present -->
+                                                <?php if ($ketersediaanEntry['available'] !== false) : ?>
+                                                    <div class="mb-2 invisible">
+                                                        <div class="text-red-500 text-sm text-center">
+                                                            Placeholder
+                                                        </div>
+                                                    </div>
+                                                <?php endif; ?>
+
+                                                <!-- Grid -->
+                                                <div class="flex justify-center items-center">
+                                                    <!-- Col -->
+                                                    <a class="py-2 px-12 md:px-14 lg:px-16 xl:px-20 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#"> <!-- Adjusted padding here -->
+                                                        Hubungi
+                                                    </a>
+                                                </div>
+                                                <!-- End Grid -->
+                                            </div>
                                         </div>
-                                        <!-- End Grid -->
-
-                                        <!-- Grid -->
-                                        <div class="mb-1 flex justify-center items-center">
-
-                                            <!-- Col -->
-                                            <a class="py-2 px-16 md:px-18 lg:px-20 xl:px-28 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#">
-                                                Hubungi
-                                            </a>
-                                        </div>
-                                        <!-- End Grid -->
-
-
                                     </div>
                                     <!-- End Card -->
-
                                 <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
 
+
+
+                    <!-- Footer -->
+                    <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
+                        <!-- Pagination -->
+                        <nav class="flex w-full justify-between items-center gap-x-1">
+                            <!-- Previous Button -->
+                            <div class="inline-flex gap-x-2">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m15 18-6-6 6-6"></path>
+                                    </svg>
+                                    <span aria-hidden="true" class="hidden sm:block">Previous</span>
+                                </button>
                             </div>
 
-
-
-                        </div>
-
-
-                        <!-- Footer -->
-                        <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
-                            <!-- Pagination -->
-                            <nav class="flex w-full justify-between items-center gap-x-1">
-                                <!-- Previous Button -->
-                                <div class="inline-flex gap-x-2">
-                                    <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                        <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="m15 18-6-6 6-6"></path>
-                                        </svg>
-                                        <span aria-hidden="true" class="hidden sm:block">Previous</span>
+                            <!-- Page Numbers -->
+                            <div class="flex items-center gap-x-1">
+                                <?php for ($i = 1; $i <= $meta_data['total']; $i++) : ?>
+                                    <button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center <?= $meta_data['page'] == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10' ?> py-2 px-3 text-sm rounded-lg" <?= $meta_data['page'] == $i ? 'aria-current="page"' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $i ?>&size=<?= $meta_data['size'] ?>'">
+                                        <?= $i ?>
                                     </button>
-                                </div>
+                                <?php endfor; ?>
+                            </div>
 
-                                <!-- Page Numbers -->
-                                <div class="flex items-center gap-x-1">
-                                    <?php for ($i = 1; $i <= $meta_data['total']; $i++) : ?>
-                                        <button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center <?= $meta_data['page'] == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10' ?> py-2 px-3 text-sm rounded-lg" <?= $meta_data['page'] == $i ? 'aria-current="page"' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $i ?>&size=<?= $meta_data['size'] ?>'">
-                                            <?= $i ?>
-                                        </button>
-                                    <?php endfor; ?>
-                                </div>
-
-                                <!-- Next Button -->
-                                <div class="inline-flex gap-x-2">
-                                    <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $meta_data['page'] >= $meta_data['total'] ? 'disabled' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $meta_data['page'] + 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                        <span aria-hidden="true" class="hidden sm:block">Next</span>
-                                        <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="m9 18 6-6-6-6"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </nav>
-                        </div>
-
-                        <!-- End Footer -->
-
+                            <!-- Next Button -->
+                            <div class="inline-flex gap-x-2">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $meta_data['page'] >= $meta_data['total'] ? 'disabled' : '' ?> onclick="window.location.href='/datauserpegawai?page=<?= $meta_data['page'] + 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                    <span aria-hidden="true" class="hidden sm:block">Next</span>
+                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m9 18 6-6-6-6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </nav>
                     </div>
+
+                    <!-- End Footer -->
+
                 </div>
             </div>
         </div>
-        <!-- End Card -->
     </div>
-    <!-- End Table Section -->
+    <!-- End Card -->
+</div>
+<!-- End Table Section -->
 
-    <script>
-        function myFunction() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("myInput");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("myTable");
-            tr = table.getElementsByTagName("tr");
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
 
 
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0];
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
                 }
             }
         }
-    </script>
+    }
+</script>
 
-    <?= $this->endSection(); ?>
+<?= $this->endSection(); ?>
