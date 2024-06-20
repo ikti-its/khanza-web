@@ -7,74 +7,109 @@ class userAdminController extends BaseController
 {
 
     public function lihatStatusCuti()
-    {
-        $title = 'Tampil Status Cuti';
+{
+    $title = 'Tampil Status Cuti';
 
-        // Retrieve the value of the 'page' parameter from the request, default to 1 if not present
-        $page = $this->request->getGet('page') ?? 1;
+    // Retrieve the value of the 'page' parameter from the request, default to 1 if not present
+    $page = $this->request->getGet('page') ?? 1;
 
-        // Retrieve the value of the 'size' parameter from the request, default to 10 if not present
-        $size = $this->request->getGet('size') ?? 10;
+    // Retrieve the value of the 'size' parameter from the request, default to 10 if not present
+    $size = $this->request->getGet('size') ?? 10;
 
-        // Check if the user is logged in
-        // Retrieve the stored JWT token
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
-            // URL for fetching akun data
-            $cuti_url = $this->api_url . '/kehadiran/cuti?page=' . $page . '&size=' . $size;
+    // Check if the user is logged in
+    // Retrieve the stored JWT token
+    if (session()->has('jwt_token')) {
+        $token = session()->get('jwt_token');
+        // URL for fetching cuti data
+        $cuti_url = $this->api_url . '/kehadiran/cuti?page=' . $page . '&size=' . $size;
 
-            // Initialize cURL session
-            $ch_cuti = curl_init($cuti_url);
+        // Initialize cURL session
+        $ch_cuti = curl_init($cuti_url);
 
-            // Set cURL options
-            curl_setopt($ch_cuti, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_cuti, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-            ]);
+        // Set cURL options
+        curl_setopt($ch_cuti, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_cuti, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+        ]);
 
-            // Execute the cURL request for fetching akun data
-            $response_cuti = curl_exec($ch_cuti);
+        // Execute the cURL request for fetching cuti data
+        $response_cuti = curl_exec($ch_cuti);
 
-            // Check the API response for akun data
-            if ($response_cuti) {
-                $http_status_code_cuti = curl_getinfo($ch_cuti, CURLINFO_HTTP_CODE);
+        // Check the API response for cuti data
+        if ($response_cuti) {
+            $http_status_code_cuti = curl_getinfo($ch_cuti, CURLINFO_HTTP_CODE);
 
-                if ($http_status_code_cuti === 200) {
-                    // Akun data fetched successfully
-                    $cuti_data = json_decode($response_cuti, true);
+            if ($http_status_code_cuti === 200) {
+                // Cuti data fetched successfully
+                $cuti_data = json_decode($response_cuti, true);
 
-                    // $total_pages = $akun_data['data']['total'];
+                // Filter cuti_data to only include entries with status 'Diproses'
+                $cuti_entries_diproses = array_filter($cuti_data['data']['cuti'], function ($cutiEntry) {
+                    return $cutiEntry['status'] == 'Diproses';
+                });
 
-                    // Check if the user has admin privileges (role == 1)
-                    $user_details = session()->get('user_details');
+                // Fetch employee names and append to $cuti_entries_diproses
+                foreach ($cuti_entries_diproses as &$cutiEntry) {
+                    // Make API call to fetch employee details
+                    $pegawai_url = $this->api_url . '/pegawai/' . $cutiEntry['id_pegawai'];
 
-                    if ($user_details['role'] == 1) {
-                        // Return the view with cuti data
-                        return view('/admin/tampilStatusCuti', [
-                            'cuti_data' => $cuti_data['data']['cuti'],
-                            'meta_data' => $cuti_data['data'],
-                            'title' => $title
-                        ]);
+                    // Initialize cURL session for fetching employee details
+                    $ch_pegawai = curl_init($pegawai_url);
+                    curl_setopt($ch_pegawai, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch_pegawai, CURLOPT_HTTPHEADER, [
+                        'Authorization: Bearer ' . $token,
+                    ]);
+
+                    // Execute cURL request for fetching employee details
+                    $response_pegawai = curl_exec($ch_pegawai);
+
+                    if ($response_pegawai) {
+                        $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
+
+                        if ($http_status_code_pegawai === 200) {
+                            // Employee details fetched successfully
+                            $pegawai_data = json_decode($response_pegawai, true);
+
+                            // Assign employee name to the current $cutiEntry
+                            $cutiEntry['nama_pegawai'] = $pegawai_data['data']['nama'];
+                        } else {
+                            // Error fetching employee details
+                            // Handle error response as per your application's logic
+                            $cutiEntry['nama_pegawai'] = 'Error: Failed to fetch name';
+                        }
                     } else {
-                        // Return 403 Forbidden error for non-admin users
-                        return $this->renderErrorView(403);
+                        // Error fetching employee details
+                        // Handle cURL error or API response error
+                        $cutiEntry['nama_pegawai'] = 'Error: Failed to fetch name';
                     }
-                } else {
-                    // Error fetching cuti data
-                    return $this->renderErrorView($http_status_code_cuti);
+
+                    // Close the cURL session for employee details
+                    curl_close($ch_pegawai);
                 }
+
+                // Return the view with filtered cuti data and additional employee names
+                return view('/admin/tampilStatusCuti', [
+                    'cuti_data' => $cuti_entries_diproses, // Filtered data with employee names
+                    'meta_data' => $cuti_data['data'],
+                    'title' => $title
+                ]);
             } else {
                 // Error fetching cuti data
-                return $this->renderErrorView(500); // Assume 500 for cURL error
+                return $this->renderErrorView($http_status_code_cuti);
             }
-
-            // Close the cURL session for akun data
-            curl_close($ch_cuti);
         } else {
-            // User not logged in
-            return $this->renderErrorView(401);
+            // Error fetching cuti data
+            return $this->renderErrorView(500); // Assume 500 for cURL error
         }
+
+        // Close the cURL session for cuti data
+        curl_close($ch_cuti);
+    } else {
+        // User not logged in
+        return $this->renderErrorView(401);
     }
+}
+
 
     public function submitEditStatusCuti($pegawaiId)
     {

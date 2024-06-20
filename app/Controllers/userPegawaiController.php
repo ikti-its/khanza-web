@@ -45,40 +45,6 @@ class userPegawaiController extends BaseController
         }
     }
 
-    public function lihatPegawaiSebagaiPegawai($pegawaiId)
-    {
-        $title = 'Data DetailPegawai';
-
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
-            $pegawai_url = $this->api_url . '/pegawai/' . $pegawaiId;
-            $ch_pegawai = curl_init($pegawai_url);
-
-            curl_setopt($ch_pegawai, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_pegawai, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-            ]);
-
-            $response_pegawai = curl_exec($ch_pegawai);
-
-            if ($response_pegawai) {
-                $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
-
-                if ($http_status_code_pegawai === 200) {
-                    $pegawai_data = json_decode($response_pegawai, true);
-                    return view('/user/datadetailPegawai', ['akun_data' => $pegawai_data['data'], 'title' => $title]);
-                } else {
-                    return $this->renderErrorView($http_status_code_pegawai);
-                }
-            } else {
-                return $this->renderErrorView(500);
-            }
-
-            curl_close($ch_pegawai);
-        } else {
-            return $this->renderErrorView(401);
-        }
-    }
 
     public function submitEditProfil($pegawaiId)
     {
