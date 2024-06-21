@@ -54,13 +54,75 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = \Config\Services::session();
+
     }
+
+    public function checkNotifications()
+{
+    // Get user ID from session
+    $userId = session()->get('user_details')['id'];
+    $token = session()->get('jwt_token');
+
+    // API URL to check notifications
+    $notif_url = $this->api_url . '/w/notification/' . $userId;
+
+    // Initialize cURL session for fetching notifications
+    $ch = curl_init($notif_url);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $token,
+    ]);
+
+    // Execute the cURL request
+    $response = curl_exec($ch);
+    $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    // Check for cURL errors
+    if ($response === false) {
+        $error_message = curl_error($ch);
+        curl_close($ch);
+        log_message('error', 'cURL Error: ' . $error_message);
+        return; // Exit method on error
+    }
+
+    curl_close($ch);
+
+    // Check HTTP status code
+    if ($http_status_code !== 200) {
+        log_message('error', 'HTTP Error: ' . $http_status_code);
+        return; // Exit method on HTTP error
+    }
+
+    // Decode the JSON response
+    $data = json_decode($response, true);
+
+    // Log the data for debugging purposes
+    log_message('debug', 'Notification API Response: ' . print_r($data, true));
+
+    // Initialize notification count
+    $notificationCount = 0;
+
+    // Check if there are notifications
+    if (isset($data['data']) && is_array($data['data'])) {
+        // Count the number of notifications
+        $notificationCount = count($data['data']);
+    }
+
+    // Store notification count in session or do further processing as needed
+    session()->set('notification_count', $notificationCount);
+}
+
+
 
     protected $api_url;
 
     public function __construct()
     {
         $this->api_url = getenv('api_URL');
+        // Check notifications and set session variable
+        $this->checkNotifications();
     }
 
     protected function renderErrorView($status_code, $custom_message = null)

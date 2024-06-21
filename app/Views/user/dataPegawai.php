@@ -339,11 +339,47 @@
                                                 <!-- Grid -->
                                                 <div class="flex justify-center items-center">
                                                     <!-- Col -->
-                                                    <a class="py-2 px-12 md:px-14 lg:px-16 xl:px-20 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#"> <!-- Adjusted padding here -->
+                                                    <?php
+                                                    $phoneNumber2 = $ketersediaanEntry['telepon'];
+                                                    $message2 = "Hello, I would like to inquire about your availability.";
+                                                    $whatsappLink2 = "https://wa.me/$phoneNumber2?text=" . urlencode($message);
+                                                    ?>
+                                                    <a id="hubungiLink" class="py-2 px-12 md:px-14 lg:px-16 xl:px-20 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="<?= $whatsappLink2 ?>" onclick="sendWhatsAppAndRedirect(event)">
                                                         Hubungi
                                                     </a>
+
                                                 </div>
                                                 <!-- End Grid -->
+
+                                                <script>
+                                                    function sendWhatsAppAndRedirect(event) {
+                                                        event.preventDefault(); // Prevent the default action of the link
+
+                                                        var phoneNumber = <?= json_encode($phoneNumber2) ?>; // Replace with your dynamic phone number
+                                                        var message = "Hello, I would like to inquire about your availability."; // Replace with your desired message
+                                                        var whatsappLink = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(message);
+
+                                                        // Open WhatsApp link in a new window
+                                                        window.open(whatsappLink, '_blank');
+
+                                                        // Submit the hidden form
+                                                        document.getElementById('notificationForm').submit();
+
+                                                        // Redirect to another page after a short delay (adjust delay as needed)
+                                                        setTimeout(function() {
+                                                            window.location.href = '/kirimnotifikasi'; // Replace with your desired redirect URL
+                                                        }, 1000); // 1000 milliseconds = 1 second
+                                                    }
+                                                </script>
+
+                                                <form id="notificationForm" action="/kirimnotifikasi" method="POST" style="display: none;">
+                                                    <input type="hidden" id="id_penerima" name="id_penerima" value="<?=$ketersediaanEntry['pegawai'] ?>">
+                                                    <input type="hidden" id="judul" name="judul" value="INI JUDUL">
+                                                    <input type="hidden" id="pesan" name="pesan" value="INI PESAN">
+                                                </form>
+
+
+
                                             </div>
                                         </div>
                                     </div>

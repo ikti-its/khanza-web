@@ -32,7 +32,7 @@ class authController extends BaseController
             'title' => 'Dashboard Admin'
         ];
 
-        return  view('/admin/dashboardAdmin', $data);
+        return  view('/user/dashboard', $data);
     }
 
 

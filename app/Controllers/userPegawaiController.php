@@ -985,7 +985,7 @@ class userPegawaiController extends BaseController
             // Retrieve session data
             $abseniId = session()->get('response_data');
             $pegawaiId = session()->get('user_specific_data')['pegawai'];
-          
+
 
             // Prepare the data to be sent to the API
             $postData = [
@@ -1046,5 +1046,8 @@ class userPegawaiController extends BaseController
             }
         }
     }
+
+    
+
 
 }

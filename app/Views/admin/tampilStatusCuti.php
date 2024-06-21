@@ -105,7 +105,8 @@
                                     <tr>
                                         <td class="h-px w-auto whitespace-nowrap">
                                             <div class="px-6 py-2 flex items-center gap-x-3">
-                                                <input type="text" id="id_pegawai" name="id_pegawai" class="font-semibold text-gray-800 bg-transparent border-none outline-none" value="<?= $cutiEntry['nama_pegawai'] ?>" readonly>
+                                                <input type="text" id="nama_pegawai" name="nama_pegawai" class="font-semibold text-gray-800 bg-transparent border-none outline-none" value="<?= $cutiEntry['nama_pegawai'] ?>" readonly>
+                                                <input type="text" id="id_pegawai" name="id_pegawai" class="font-semibold text-gray-800 bg-transparent border-none outline-none" value="<?= $cutiEntry['id_pegawai'] ?>" readonly>
                                             </div>
                                         </td>
 
