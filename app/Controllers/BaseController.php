@@ -112,6 +112,7 @@ abstract class BaseController extends Controller
 
     // Store notification count in session or do further processing as needed
     session()->set('notification_count', $notificationCount);
+    session()->set('notif_data', $data['data']);
 }
 
 
