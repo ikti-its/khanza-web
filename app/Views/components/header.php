@@ -55,9 +55,23 @@
                                         <?php $notifications = session('notif_data'); ?>
                                         <?php if (!empty($notifications)) : ?>
                                             <?php foreach ($notifications as $notification) : ?>
-                                                <li class="py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700">
-                                                    <?php echo htmlspecialchars($notification['pesan']); ?>
-                                                </li>
+                                                <li class="flex  hover:bg-gray-100 rounded-lg">
+                                                    <div class="flex-shrink-0">
+                                                        <svg class="flex-shrink-0 size-4 text-blue-600 mt-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <circle cx="12" cy="12" r="10"></circle>
+                                                            <path d="M12 16v-4"></path>
+                                                            <path d="M12 8h.01"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        <h3 class="text-gray-800 font-semibold dark:text-white">
+                                                        <?php echo htmlspecialchars($notification['judul']); ?>
+                                                        </h3>
+                                                        <p class="mt-2 text-sm text-gray-700 dark:text-neutral-400">
+                                                        <?php echo htmlspecialchars($notification['pesan']); ?>
+                                                        </p>
+                                                    </div>
+                                            </li>
                                             <?php endforeach; ?>
                                         <?php else : ?>
                                             <li class="py-2 px-3 rounded-lg text-sm text-gray-800 dark:text-gray-400">
@@ -164,7 +178,7 @@
                 </li>
 
                 <li>
-                    <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                    <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/profile">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M3.10488 12.8234L3.10488 12.8234L3.10661 12.8224C4.56789 11.9517 6.26747 11.4292 8.08886 11.3861C7.83131 12.1848 7.73369 13.0293 7.80483 13.8709C7.87103 14.654 8.08168 15.4151 8.4232 16.1166H2.50008C2.3455 16.1166 2.21675 15.9878 2.21675 15.8333V14.4583C2.21675 13.7752 2.55497 13.1484 3.10488 12.8234Z" stroke="#272727" stroke-width="1.1" />
                             <path d="M11.1167 6.66659C11.1167 8.20378 9.87053 9.44992 8.33333 9.44992C6.79614 9.44992 5.55 8.20378 5.55 6.66659C5.55 5.12939 6.79614 3.88325 8.33333 3.88325C9.87053 3.88325 11.1167 5.12939 11.1167 6.66659Z" stroke="#272727" stroke-width="1.1" />
