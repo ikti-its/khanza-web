@@ -23,11 +23,16 @@
                     </div>
                     <!-- End Icon -->
 
-                    <div class="mt-3">
-                        <h3 class="text-sm sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
-                            Data Akun
-                        </h3>
-                    </div>
+                    <?php if (isset($foto_data)) : ?>
+                        <div class="mt-3">
+                            <h3 class="text-sm sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
+                                Data Akun
+                            </h3>
+                            <div class="mt-2">
+                                <img src="<?= esc($foto_data['foto']) ?>" alt="Uploaded Foto" class="rounded-lg">
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </a>
 

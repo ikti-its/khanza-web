@@ -736,6 +736,8 @@ class userPegawaiController extends BaseController
     public function lihatAbsenMasuk($pegawaiId)
     {
         $title = 'Tambah Absen Masuk';
+        // Retrieve flash data 'foto_data'
+        $foto_data = session()->get('foto_data');
 
         // Check if the user is logged in
         // Retrieve the stored JWT token
@@ -777,6 +779,7 @@ class userPegawaiController extends BaseController
                     if (!empty($jadwal_today)) {
                         return view('/user/tampilAbsenMasuk', [
                             'kehadiran_data' => $jadwal_today,
+                            'foto_data' => $foto_data,
                             'title' => $title
                         ]);
                     } else {
@@ -810,6 +813,7 @@ class userPegawaiController extends BaseController
             $id_pegawai = $this->request->getPost('id_pegawai');
             $id_jadwal = $this->request->getPost('id_jadwal');
             $tanggal = $this->request->getPost('tanggal');
+            $foto = $this->request->getPost('foto');
 
 
             // Prepare the data to be sent to the API
@@ -817,6 +821,7 @@ class userPegawaiController extends BaseController
                 'id_pegawai' => $id_pegawai,
                 'id_jadwal_pegawai' => $id_jadwal,
                 'tanggal' => $tanggal,
+                'foto' => $foto
             ];
 
             $tambah_cuti_JSON = json_encode($postData);
@@ -1049,107 +1054,107 @@ class userPegawaiController extends BaseController
 
     public function submitPresensiSwafoto()
     {
+        // Retrieve session data
+        $pegawaiId = session()->get('user_specific_data')['pegawai'];
         // Check if it's a POST request
         if ($this->request->getMethod() === 'post') {
+
+
             // Get the base64 image data from the request
             $base64Image = $this->request->getPost('photo');
-    
+
             // Decode the base64 image data
             $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Image));
-    
+
             // Generate a unique name for the image file
             $imageFileName = uniqid() . '.png';
-    
+
             // Define the path to save the image file
             $imageFilePath = ROOTPATH . 'public/uploads/' . $imageFileName;
-    
+
             // Save the decoded image data to a file
             if (file_put_contents($imageFilePath, $imageData)) {
                 // Obtain the file path after saving
                 $foto_url = $imageFilePath;
-    
+
                 // Call the uploadFileImg method to upload the file and get the URL
                 $foto_url2 = $this->uploadFileImg($foto_url);
-    
+
                 // Delete the uploaded file if the final URL was successfully obtained
                 if ($foto_url2) {
                     unlink($foto_url);
                 }
-    
+
                 // Prepare the data to be sent to the view
                 $postData = [
                     'foto' => $foto_url2
                 ];
-    
-                // Return the view with the data
-                return view('/admin/dashboardAdmin', [
-                    'foto_data' => $postData,
-                    'title' => 'Tes',
-                ]);
+
+                session()->set('foto_data', $postData);
+
+                return redirect()->to("/absenmasuk/$pegawaiId");
             } else {
                 // Handle error if file could not be saved
                 return redirect()->back()->with('error', 'Failed to save the photo.');
             }
         }
-    
+
         // Handle cases where the request is not a POST request
         return redirect()->to('/');
     }
-    
 
 
 
 
-private function uploadFileImg($file_path)
-{
-    // Check if the file exists
-    if (!file_exists($file_path)) {
-        return "Error: File not found.";
-    }
 
-    // Check if email and role are provided
-    if (session()->has('jwt_token')) {
-        $token = session()->get('jwt_token');
+    private function uploadFileImg($file_path)
+    {
+        // Check if the file exists
+        if (!file_exists($file_path)) {
+            return "Error: File not found.";
+        }
 
-        // Initialize cURL session for sending the POST request to upload KTP image
-        $ch = curl_init($this->api_url . '/file/img');
+        // Check if email and role are provided
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
 
-        // Set cURL options for sending a POST request to upload KTP image
-        $file_data = ['file' => new \CurlFile($file_path)]; // Create CurlFile object with the file path
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $file_data); // Send as multipart form data
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-        ]);
+            // Initialize cURL session for sending the POST request to upload KTP image
+            $ch = curl_init($this->api_url . '/file/img');
 
-        // Execute the cURL request to upload KTP image
-        $response = curl_exec($ch);
+            // Set cURL options for sending a POST request to upload KTP image
+            $file_data = ['file' => new \CurlFile($file_path)]; // Create CurlFile object with the file path
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $file_data); // Send as multipart form data
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
 
-        // Check for errors
-        if (curl_errno($ch)) {
-            $error_message = curl_error($ch);
+            // Execute the cURL request to upload KTP image
+            $response = curl_exec($ch);
+
+            // Check for errors
+            if (curl_errno($ch)) {
+                $error_message = curl_error($ch);
+                curl_close($ch);
+                return "Error uploading KTP image: " . $error_message;
+            }
+
+            // Close the cURL session for uploading KTP image
             curl_close($ch);
-            return "Error uploading KTP image: " . $error_message;
-        }
 
-        // Close the cURL session for uploading KTP image
-        curl_close($ch);
+            // Decode the response
+            $responseData = json_decode($response, true);
 
-        // Decode the response
-        $responseData = json_decode($response, true);
-
-        // Check if the response contains URL
-        if (isset($responseData['data']['url'])) {
-            return $responseData['data']['url']; // Return the URL of the uploaded KTP image
+            // Check if the response contains URL
+            if (isset($responseData['data']['url'])) {
+                return $responseData['data']['url']; // Return the URL of the uploaded KTP image
+            } else {
+                return "Error uploading KTP image: Response does not contain URL. $response";
+            }
         } else {
-            return "Error uploading KTP image: Response does not contain URL. $response";
+            // Email or role is empty
+            return "Error: Email and role are required.";
         }
-    } else {
-        // Email or role is empty
-        return "Error: Email and role are required.";
     }
-}
-
-
 }
