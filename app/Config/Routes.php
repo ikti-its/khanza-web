@@ -120,6 +120,7 @@ $routes->get('/hapuspengajuanmedis/(:segment)', 'PengajuanController::hapusPenga
 
 //Pemesanan
 $routes->get('/pemesananmedis', 'PemesananController::dataPemesananMedis', ['filter' => 'auth']);
+$routes->get('/cetakpemesananbrgmedis/(:segment)', 'PemesananController::cetakPemesananBrgMedis/$1', ['filter' => 'auth']);
 $routes->get('/tambahpemesananmedis', 'PemesananController::tambahPemesananMedis', ['filter' => 'auth']);
 $routes->post('/submittambahpemesananmedis', 'PemesananController::submitTambahPemesananMedis', ['filter' => 'auth']);
 $routes->get('/editpemesananmedis/(:any)', 'PemesananController::editPemesananMedis/$1', ['filter' => 'auth']);

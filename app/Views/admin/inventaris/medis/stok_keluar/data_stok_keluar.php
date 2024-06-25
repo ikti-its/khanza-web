@@ -2,35 +2,44 @@
 <?= $this->section('content'); ?>
 
 <!-- Table Section -->
-<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div class="max-w-[85rem] py-6 mx-auto">
+    <div class="px-4 mb-4">
+        <!-- breadcrumbs -->
+    </div>
     <!-- Card -->
-    <div class="flex flex-col ">
+    <div class="flex flex-col">
         <div class="-m-1.5 overflow-y-auto">
-            <div class="p-1.5 min-w-full inline-block align-middle">
-                <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700">
+            <div class="sm:px-6 min-w-full inline-block align-middle">
+                <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700">
                     <!-- Header -->
-                    <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-gray-700">
+                    <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
-                            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                            <h2 class="mb-2 text-xl font-semibold text-gray-800 dark:text-gray-200">
                                 Stok Keluar Barang Medis
                             </h2>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                Add Stok Keluar Barang Medis, edit and more.
-                            </p>
+
                         </div>
-
-                        <div>
-                            <div class="inline-flex gap-x-2">
-                                <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                    View all
-                                </a>
-
-                                <a href='/tambahstokkeluarmedis' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                                    <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <div class="flex gap-x-2 md:items-start">
+                            <div>
+                                <a href='/tambahstokkeluarmedis' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                    <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
                                         <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                     </svg>
-                                    Add
+                                    Tambah
                                 </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="py-4 grid gap-3 md:items-start">
+                        <div class="sm:col-span-1">
+                            <label for="hs-as-table-product-review-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <input type="text" id="myInput" onkeyup="myFunction()" class="py-2 px-4 ps-11 block border w-full xl:w-96 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
+                                <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
+                                    <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -38,175 +47,138 @@
 
                     <!-- Table -->
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <colgroup>
+                            <!-- <col width="5%"> -->
+                            <col width="30%">
+                            <col width="25%">
+                            <!-- <col width="20%"> -->
+                            <col width="20%">
+                            <col width="25%">
+                        </colgroup>
                         <thead class="bg-gray-50 dark:bg-slate-800">
                             <tr>
-                                <th scope="col" class="ps-6 py-3 text-start">
+                                <!-- <th scope="col" class="ps-6 py-3 text-start">
                                     <label for="hs-at-with-checkboxes-main" class="flex">
                                         <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-main">
                                         <span class="sr-only">Checkbox</span>
                                     </label>
-                                </th>
+                                </th> -->
 
-                                <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
+                                <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center gap-x-2">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
-                                            Foto
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
                                             Nama
                                         </span>
                                     </div>
                                 </th>
 
-                                <th scope="col" class="px-6 py-3 text-start">
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex gap-x-2">
+                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                            No Keluar
+                                        </span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center gap-x-2">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
-                                            Kategori
+                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                            Pegawai
                                         </span>
                                     </div>
                                 </th>
 
-                                <th scope="col" class="px-6 py-3 text-start">
+                                <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center gap-x-2">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
-                                            Action
+                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                            Aksi
                                         </span>
                                     </div>
                                 </th>
 
-
-
-                                <th scope="col" class="px-6 py-3 text-end"></th>
                             </tr>
                         </thead>
-
-
-
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($stok_keluar_medis_data as $stok) : ?>
                                 <tr>
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="ps-6 py-3">
-                                            <label class="flex">
-                                                <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
-                                                <span class="sr-only">Checkbox</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                                            <div class="flex items-center gap-x-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $stok['tanggal_stok_keluar'] ?? 'N/A' ?></span>
-                                            </div>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline"><?= $stok['tanggal_stok_keluar'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-72 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $stok['no_keluar'] ?? 'N/A' ?></span>
+                                            <span class="block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $stok['no_keluar'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
-                                    <td class="size-px whitespace-nowrap">
+                                    <td class="h-px w-72 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                                                <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                                </svg>
-                                                <?= $stok['id'] ?? 'N/A' ?>
-                                            </span>
+                                            <span class="block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $stok['keterangan'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
-                                        <div class="px-6 py-1.5">
-                                            <a href="/editstokkeluarmedis/<?= $stok['id'] ?>" class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                                                Edit
-                                            </a>
+                                        <div class="px-3 py-1.5 inline-flex">
+                                            <div class="px-3 py-1.5">
+                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stok['id'] ?>">
+                                                    Lihat Detail
+                                                </button>
+                                            </div>
+                                            <div class="px-3 py-1.5">
+                                                <a href="/editstokkeluarmedis/<?= $stok['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                    Edit
+                                                </a>
+                                            </div>
+                                            <div class="px-3 py-1.5">
+                                                <a href="/hapusstokkeluarmedis/<?= $stok['id'] ?>" class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                    Hapus
+                                                </a>
+                                            </div>
                                         </div>
                                     </td>
 
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-6 py-1.5">
-                                            <a href="/hapusstokkeluarmedis/<?= $stok['id'] ?>" class="inline-flex items-center gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                                                Delete
-                                            </a>
-                                        </div>
-                                    </td>
+
                                 </tr>
 
                             <?php endforeach; ?>
-
-
                         </tbody>
-
-
                     </table>
                     <!-- End Table -->
 
                     <!-- Footer -->
-                    <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-gray-700">
+                    <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
                         <!-- Pagination -->
-                        <nav class="flex items-center gap-x-1">
-                            <?php if ($meta_data['page'] > 1) : ?>
-                                <a href="/stokkeluarmedis?page=<?= $meta_data['page'] - 1 ?>&size=5" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10">
+                        <nav class="flex w-full justify-between items-center gap-x-1">
+                            <!-- Previous Button -->
+                            <div class="inline-flex gap-x-2">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
                                     <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m15 18-6-6 6-6" />
+                                        <path d="m15 18-6-6 6-6"></path>
                                     </svg>
-                                    <span aria-hidden="true" class="sr-only">Previous</span>
-                                </a>
-                            <?php endif; ?>
+                                    <span aria-hidden="true" class="hidden sm:block">Previous</span>
+                                </button>
+                            </div>
 
+                            <!-- Page Numbers -->
                             <div class="flex items-center gap-x-1">
-                                <span class="min-h-[38px] min-w-[38px] flex justify-center items-center border border-gray-200 text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:border-gray-700 dark:text-white dark:focus:bg-white/10"><?= $meta_data['page'] ?></span>
-                                <span class="min-h-[38px] flex justify-center items-center text-gray-500 py-2 px-1.5 text-sm dark:text-gray-500">of</span>
-                                <span class="min-h-[38px] flex justify-center items-center text-gray-500 py-2 px-1.5 text-sm dark:text-gray-500"><?= $meta_data['total'] ?></span>
+                                <?php for ($i = 1; $i <= $meta_data['total']; $i++) : ?>
+                                    <button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center <?= $meta_data['page'] == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10' ?> py-2 px-3 text-sm rounded-lg" <?= $meta_data['page'] == $i ? 'aria-current="page"' : '' ?> onclick="window.location.href='/datamedis?page=<?= $i ?>&size=<?= $meta_data['size'] ?>'">
+                                        <?= $i ?>
+                                    </button>
+                                <?php endfor; ?>
                             </div>
 
-                            <?php if ($meta_data['page'] < $meta_data['total']) : ?>
-                                <a href="/stokkeluarmedis?page=<?= $meta_data['page'] + 1 ?>&size=5" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10">
-                                    <span aria-hidden="true" class="sr-only">Next</span>
+                            <!-- Next Button -->
+                            <div class="inline-flex gap-x-2">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $meta_data['page'] >= $meta_data['total'] ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $meta_data['page'] + 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                    <span aria-hidden="true" class="hidden sm:block">Next</span>
                                     <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m9 18 6-6-6-6" />
+                                        <path d="m9 18 6-6-6-6"></path>
                                     </svg>
-                                </a>
-                            <?php endif; ?>
-
-                        </nav>
-
-
-                        <!-- Dropdown -->
-                        <div class="hs-dropdown relative inline-flex [--placement:top-left]">
-                            <button id="dropDownButton" type="button" class="hs-dropdown-toggle min-h-[32px] py-1 px-2 inline-flex items-center gap-x-1 text-sm rounded-lg border border-gray-200 text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
-                                <?= $meta_data['size'] ?> page
-                                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="m6 9 6 6 6-6" />
-                                </svg>
-                            </button>
-                            <div id="dropdown" class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-48 hidden z-50 transition-[margin,opacity] opacity-0 duration-300 mb-2 bg-white shadow-md rounded-lg p-2 dark:bg-gray-800 dark:border dark:border-gray-700 dark:divide-gray-700" aria-labelledby="hs-small-pagination-dropdown">
-
-                                <a href="/stokkeluarmedis?page=1&size=5">
-                                    <button type="button" class="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700">
-                                        5 page
-                                    </button>
-                                </a>
-
-                                <a href="/stokkeluarmedis?page=1&size=10">
-                                    <button type="button" class="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700">
-                                        10 page
-                                    </button>
-                                </a>
-
+                                </button>
                             </div>
-                        </div>
-                        <!-- End Dropdown -->
-
-
-                        <!-- End Pagination -->
+                        </nav>
                     </div>
+
 
                     <!-- End Footer -->
                 </div>
@@ -216,5 +188,16 @@
     <!-- End Card -->
 </div>
 <!-- End Table Section -->
+<script>
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     const resetButton = document.getElementById("reset-notification");
 
+    //     resetButton.addEventListener("click", function() {
+    //         // Reset the notification count to 0
+    //         document.getElementById("notification-count").innerText = "0";
+    //         // Redirect to the same page with reset parameter
+    //         window.location.href = window.location.pathname + "?reset=true";
+    //     });
+    // });
+</script>
 <?= $this->endSection(); ?>

@@ -9,12 +9,10 @@
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
                 Tambah Penerimaan Barang Medis
             </h2>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Manage your name, password and account settings.
-            </p>
+
         </div>
 
-        <form action="/submittambahpenerimaanmedis" method="post">
+        <form action="/submittambahpenerimaanmedis" id="penerimaanform" method="post">
             <!-- Grid -->
             <input type="hidden" value="" name="idpengajuan" class="text-center border mr-1">
             <input type="hidden" value="" name="tglpengajuan" class="text-center border mr-1">
@@ -23,133 +21,84 @@
             <input type="hidden" value="" name="pegawaipengajuan" class="text-center border mr-1">
             <input type="hidden" value="" name="catatanpengajuan" class="text-center border mr-1">
             <input type="hidden" value="" name="diskonpersen" class="text-center border" readonly>
-            <input type="hidden" value="" name="diskonjumlah" class="text-center w-full border border-gray-300 text-center" readonly>
+            <input type="hidden" value="" name="diskonjumlah" class="w-full border border-gray-300 text-center" readonly>
             <input type="hidden" value="" name="pajakpersen" class=" text-center border" readonly>
-            <input type="hidden" value="" name="pajakjumlah" class="text-center w-full border border-gray-300 text-center" readonly>
-            <input type="hidden" value="" name="materai" class="text-center w-full border border-gray-300 text-center" readonly>
+            <input type="hidden" value="" name="pajakjumlah" class="w-full border border-gray-300 text-center" readonly>
+            <input type="hidden" value="" name="materai" class="w-full border border-gray-300 text-center" readonly>
 
-            <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Tanggal Penerimaan
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <input name="tgldatang" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Paracetamol">
-                </div>
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Tanggal Faktur
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <input name="tglfaktur" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Paracetamol">
-                </div>
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Tanggal Jatuh Tempo
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <input name="tgljatuhtempo" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Paracetamol">
-                </div>
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Nomor Faktur
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <input name="nofaktur" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" value="">
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-3">
-                    <div class="inline-block">
-                        <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                            Nomor Pemesanan
-                        </label>
-                    </div>
-                </div>
-                <div class="sm:col-span-9">
-                    <div class="sm:flex">
-                        <select name="idpemesanan" id="dropdown-id-pemesanan" class="py-2 px-3 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600">
-                            <option value="">-</option>
-
-                            <?php foreach ($pemesanan_data as $pemesanan) : ?>
-
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Pemesanan</label>
+                <select name="idpemesanan" id="dropdown-id-pemesanan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <option value="">-</option>
+                    <?php
+                    foreach ($pengajuan_data as $pengajuan) {
+                        foreach ($pemesanan_data as $pemesanan) {
+                            if ($pengajuan['id'] === $pemesanan['id_pengajuan'] && $pengajuan['status_pesanan'] === '3') { ?>
                                 <option value="<?= $pemesanan['id'] ?>"><?= $pemesanan['no_pemesanan'] ?></option>
-
-                            <?php endforeach; ?>
-
-                        </select>
-                    </div>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Pegawai
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <div class="sm:flex">
-                        <select name="pegawaipenerimaan" class="py-2 px-3 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600">
-                            <option value="" selected>-</option>
-                            <?php foreach ($pegawai_data as $pegawai) : ?>
-                                <option value="<?= $pegawai['id'] ?>"><?= $pegawai['nama'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Ruangan
-                    </label>
-                </div>
-                <!-- End Col -->
-                <div class="sm:col-span-9">
-                    <select name="idruangan" class="py-2 px-3 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600">
-                        <option selected>-</option>
-                        <option value="1000">VIP 1</option>
-                        <option value="2000">VIP 2</option>
-                        <option value="3000">VVIP 1</option>
-                        <option value="4000">VVIP 2</option>
-                        <option value="5000">Gudang</option>
-                    </select>
-                </div>
-
+                    <?php }
+                        }
+                    } ?>
+                </select>
             </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Penerimaan</label>
+                <input type="date" name="tgldatang" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Faktur</label>
+                <input type="date" name="tglfaktur" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Jatuh Tempo</label>
+                <input type="date" name="tgljatuhtempo" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Faktur</label>
+                <input type="text" name="nofaktur" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pegawai</label>
+                <select name="pegawaipenerimaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <option value="" selected>-</option>
+                    <?php foreach ($pegawai_data as $pegawai) : ?>
+                        <option value="<?= $pegawai['id'] ?>"><?= $pegawai['nama'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Ruangan</label>
+                <select name="idruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <option selected>-</option>
+                    <option value="1000">VIP 1</option>
+                    <option value="2000">VIP 2</option>
+                    <option value="3000">VVIP 1</option>
+                    <option value="4000">VVIP 2</option>
+                    <option value="5000">Gudang</option>
+                </select>
+            </div>
+
+
             <!-- End Grid -->
             <div class="mt-5 flex flex-col">
                 <div class="-m-1.5 overflow-x-auto">
                     <div class="p-1.5 min-w-full inline-block align-middle">
                         <div class="border rounded-lg overflow-hidden dark:border-neutral-700">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
+                            <table class="pt-5 min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
                                 <colgroup>
 
-                                    <col width="7%">
-                                    <!-- 38% -->
-                                    <col width="13%">
-                                    <col width="25%">
                                     <col width="10%">
-                                    <col width="20%">
+                                    <!-- 38% -->
+                                    <col width="15%">
                                     <col width="25%">
+                                    <col width="18%">
+                                    <col width="18%">
+                                    <col width="18%">
+
                                 </colgroup>
-                                <thead>
+                                <thead class="bg-[#DCDCDC]">
                                     <tr class="bg-navy disabled">
 
-                                        <th class="px-1 py-1 text-center">Qty</th>
+                                        <th class="px-1 py-1 text-center">Jumlah</th>
                                         <th class="px-1 py-1 text-center">Satuan</th>
                                         <th class="px-1 py-1">Item</th>
                                         <th class="px-1 py-1 text-center">Jumlah Diterima</th>
@@ -173,13 +122,13 @@
                                         </td>
 
                                         <td class="align-middle p-1 text-center">
-                                            <input type="text" class="text-center w-full border" name="" readonly />
+                                            <input type="text" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="" readonly />
                                         </td>
                                         <td class="align-middle p-1 text-center">
-                                            <input type="date" class="text-center w-full border" name="" readonly />
+                                            <input type="date" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="" readonly />
                                         </td>
                                         <td class="align-middle p-1 text-center">
-                                            <input type="text" class="text-center w-full border" name="" readonly />
+                                            <input type="text" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="" readonly />
                                         </td>
 
                                     </tr>
@@ -198,10 +147,10 @@
             </div>
             <div class="mt-5 flex justify-end gap-x-2">
                 <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Cancel
+                    Batal
                 </button>
-                <button type="submit" value="4" name="statuspesanan" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Save changes
+                <button type="submit" name="statuspesanan" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    Simpan
                 </button>
             </div>
         </form>
@@ -218,12 +167,11 @@
 
         dropdown.addEventListener('change', function() {
             const selectedId = this.value;
-            console.log('ID yang dipilih:', selectedId);
 
             // URL API berdasarkan nilai yang dipilih dari dropdown
             const pemesananApiUrl = '<?php echo $_ENV["api_URL"]; ?>/pengadaan/pemesanan/' + selectedId;
             // Token yang digunakan untuk otentikasi
-            const token = '<?= $token ?>'; // Ganti dengan token Anda
+            const token = '<?= $token ?>'; 
             const barangMedis = <?php echo json_encode($medis_data); ?>;
             const satuanMedis = <?php echo json_encode($satuan_data); ?>;
 
@@ -270,7 +218,7 @@
 
                                 const input1 = document.createElement('input');
                                 input1.type = 'text';
-                                input1.className = 'text-center w-full';
+                                input1.className = 'text-center w-full rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] bg-[#F6F6F6]';
                                 input1.readOnly = true;
                                 input1.name = 'jumlah_pesanan[]'; // Ganti dengan nama yang sesuai
                                 input1.value = pesanan.jumlah_pesanan; // Contoh: pesanan.id
@@ -287,7 +235,7 @@
                                         satuanIdInput.value = satuan.id;
                                         const satuaninput = document.createElement('input');
                                         satuaninput.type = 'text';
-                                        satuaninput.className = 'text-center w-full';
+                                        satuaninput.className = 'text-center w-full rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] bg-[#F6F6F6]';
                                         satuaninput.readOnly = true;
                                         satuaninput.name = ''; // Ganti dengan nama yang sesuai
                                         satuaninput.value = satuan.nama; // Contoh: pesanan.id
@@ -307,7 +255,7 @@
                                         medisIdInput.value = pesanan.id_barang_medis;
                                         const medis = document.createElement('input');
                                         medis.type = 'text';
-                                        medis.className = 'text-center w-full';
+                                        medis.className = 'text-center w-full rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] bg-[#F6F6F6]';
                                         medis.name = ''; // Ganti dengan nama yang sesuai
                                         medis.value = barang.nama; // Contoh: pesanan.jumlah_pesanan
                                         const tdmedis = document.createElement('td');
@@ -323,17 +271,29 @@
                                 input3.type = 'hidden';
                                 input3.className = 'text-center w-full';
                                 input3.readOnly = true;
-                                input3.name = 'harga_satuan[]'; // Ganti dengan nama yang sesuai
-                                input3.value = pesanan.harga_satuan; // Contoh: pesanan.harga_satuan
+                                input3.name = 'harga_satuan_pengajuan[]'; // Ganti dengan nama yang sesuai
+                                input3.value = pesanan.harga_satuan_pengajuan; // Contoh: pesanan.harga_satuan
                                 const td3 = document.createElement('td');
                                 td3.className = 'align-middle p-1';
                                 td3.appendChild(input3);
                                 tr.appendChild(td3);
                                 td3.style.display = 'none';
 
+                                const hargapemesanan = document.createElement('input');
+                                hargapemesanan.type = 'hidden';
+                                hargapemesanan.className = 'text-center w-full';
+                                hargapemesanan.readOnly = true;
+                                hargapemesanan.name = 'harga_satuan_pemesanan[]'; // Ganti dengan nama yang sesuai
+                                hargapemesanan.value = pesanan.harga_satuan_pemesanan; // Contoh: pesanan.harga_satuan
+                                const tdhargapemesanan = document.createElement('td');
+                                tdhargapemesanan.className = 'align-middle p-1';
+                                tdhargapemesanan.appendChild(hargapemesanan);
+                                tr.appendChild(tdhargapemesanan);
+                                tdhargapemesanan.style.display = 'none';
+
                                 const input5 = document.createElement('input');
                                 input5.type = 'text';
-                                input5.className = 'text-center w-full border';
+                                input5.className = 'text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]';
                                 input5.name = 'jumlah_diterima[]'; // Ganti dengan nama yang sesuai
                                 const td5 = document.createElement('td');
                                 td5.className = 'align-middle p-1 text-center';
@@ -342,7 +302,7 @@
 
                                 const input6 = document.createElement('input');
                                 input6.type = 'date';
-                                input6.className = 'text-center w-full border';
+                                input6.className = 'text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]';
                                 input6.name = 'kadaluwarsa[]'; // Ganti dengan nama yang sesuai
                                 const td6 = document.createElement('td');
                                 td6.className = 'align-middle p-1 text-center';
@@ -351,7 +311,7 @@
 
                                 const input7 = document.createElement('input');
                                 input7.type = 'text';
-                                input7.className = 'text-center w-full border';
+                                input7.className = 'text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]';
                                 input7.name = 'no_batch[]'; // Ganti dengan nama yang sesuai
                                 const td7 = document.createElement('td');
                                 td7.className = 'align-middle p-1 text-center';
@@ -416,5 +376,30 @@
 
         })
     };
+
+    document.getElementById('penerimaanform').addEventListener('submit', function(event) {
+        const jumlahPesananInputs = document.querySelectorAll('.tabelbodypesanan input[name="jumlah_pesanan[]"]');
+        const jumlahDiterimaInputs = document.querySelectorAll('.tabelbodypesanan input[name="jumlah_diterima[]"]');
+
+        // Check if both arrays have the same length
+        // if (jumlahPesananInputs.length !== jumlahDiterimaInputs.length) {
+        //     console.error("Number of 'jumlah_pesanan[]' inputs doesn't match number of 'jumlah_diterima[]' inputs.");
+        //     return; // Exit the function
+        // }
+
+        let allMatch = true;
+
+        // Loop through each 'jumlah_diterima[]' input
+        jumlahDiterimaInputs.forEach((input, index) => {
+            // Compare the value with corresponding 'jumlah_pesanan[]' input
+            if (input.value !== jumlahPesananInputs[index].value) {
+                allMatch = false;
+                return; // Exit the loop early if a mismatch is found
+            }
+        });
+
+        const submitButton = document.querySelector('button[name="statuspesanan"]');
+        submitButton.value = allMatch ? '5' : '4';
+    });
 </script>
 <?= $this->endSection(); ?>

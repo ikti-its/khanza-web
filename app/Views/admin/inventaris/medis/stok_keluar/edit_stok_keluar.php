@@ -7,11 +7,9 @@
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Tambah StokKeluar Barang Medis
+                Edit Stok Keluar Barang Medis
             </h2>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Manage your name, password and account settings.
-            </p>
+            
         </div>
 
         <form action="/submittambahstokkeluarmedis" method="post">
@@ -23,10 +21,10 @@
             <input type="hidden" value="" name="pegawaipengajuan" class="text-center border mr-1">
             <input type="hidden" value="" name="catatanpengajuan" class="text-center border mr-1">
             <input type="hidden" value="" name="diskonpersen" class="text-center border" readonly>
-            <input type="hidden" value="" name="diskonjumlah" class="text-center w-full border border-gray-300 text-center" readonly>
+            <input type="hidden" value="" name="diskonjumlah" class="text-center w-full border border-gray-300" readonly>
             <input type="hidden" value="" name="pajakpersen" class=" text-center border" readonly>
-            <input type="hidden" value="" name="pajakjumlah" class="text-center w-full border border-gray-300 text-center" readonly>
-            <input type="hidden" value="" name="materai" class="text-center w-full border border-gray-300 text-center" readonly>
+            <input type="hidden" value="" name="pajakjumlah" class="text-center w-full border border-gray-300" readonly>
+            <input type="hidden" value="" name="materai" class="text-center w-full border border-gray-300" readonly>
 
             <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
                 <div class="sm:col-span-3">

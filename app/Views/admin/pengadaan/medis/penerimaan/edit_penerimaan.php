@@ -9,15 +9,86 @@
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
                 Edit Penerimaan Barang Medis
             </h2>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Manage your name, password and account settings.
-            </p>
         </div>
 
-        <form action="/submiteditpenerimaanmedis/<?= $penerimaan_data['id'] ?>" method="post">
+        <form action="/submiteditpenerimaanmedis/<?= $penerimaan_data['id'] ?>" id="penerimaanform" method="post">
             <!-- Grid -->
-            <input type="hidden" value="<?= $penerimaan_data['id_pengajuan'] ?>" name="idpengajuan" class="text-center w-full border border-gray-300 text-center" readonly>
+            <input type="hidden" value="<?= $penerimaan_data['id_pengajuan'] ?>" name="idpengajuan" class="w-full border border-gray-300 text-center" readonly>
+            <input type="hidden" value="<?= $pengajuan_data['tanggal_pengajuan'] ?>" name="tglpengajuan" class="text-center border mr-1">
+            <input type="hidden" value="<?= $pengajuan_data['nomor_pengajuan'] ?>" name="nopengajuan" class="text-center border mr-1">
+            <input type="hidden" value="<?= $pengajuan_data['id_pegawai'] ?>" name="pegawaipengajuan" class="text-center border mr-1">
+            <input type="hidden" value="<?= $pengajuan_data['catatan'] ?>" name="catatanpengajuan" class="text-center border mr-1">
+            <input type="hidden" value="<?= $pengajuan_data['diskon_persen'] ?>" name="diskonpersen" class="text-center border" readonly>
+            <input type="hidden" value="<?= $pengajuan_data['diskon_jumlah'] ?>" name="diskonjumlah" class="w-full border border-gray-300 text-center" readonly>
+            <input type="hidden" value="<?= $pengajuan_data['pajak_persen'] ?>" name="pajakpersen" class=" text-center border" readonly>
+            <input type="hidden" value="<?= $pengajuan_data['pajak_jumlah'] ?>" name="pajakjumlah" class="w-full border border-gray-300 text-center" readonly>
+            <input type="hidden" value="<?= $pengajuan_data['materai'] ?>" name="materai" class="w-full border border-gray-300 text-center" readonly>
 
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Pengajuan</label>
+                <input type="hidden" name="idpemesanan" value="<?= $penerimaan_data['id_pemesanan'] ?>">
+                <input type="text" name="idpemesanan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?php foreach ($pemesanan_data as $pemesanan) {
+                                                                                                                                                                                                                                    if ($penerimaan_data['id_pemesanan'] === $pemesanan['id']) {
+                                                                                                                                                                                                                                        echo $pemesanan['no_pemesanan'];
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                } ?>">
+
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Penerimaan</label>
+                <input type="date" name="tgldatang" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $penerimaan_data['tanggal_datang'] ?>">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Faktur</label>
+                <input type="date" name="tglfaktur" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $penerimaan_data['tanggal_faktur'] ?>">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Jatuh Tempo</label>
+                <input type="date" name="tgljatuhtempo" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $penerimaan_data['tanggal_jthtempo'] ?>">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Faktur</label>
+                <input type="text" name="nofaktur" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $penerimaan_data['no_faktur'] ?>">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pegawai</label>
+                <select name="pegawaipenerimaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <?php
+                    foreach ($pegawai_data as $pegawai) {
+                        $optionpegawai = [$pegawai['id'] => $pegawai['nama']];
+                        foreach ($optionpegawai as $pegawaiid => $pegawainama) {
+                            if ($pegawaiid === $penerimaan_data['id_pegawai']) {
+                                echo '<option value="' . $pegawai['id'] . '" selected>' . $pegawai['nama'] . '</option>';
+                            } else {
+                                echo '<option value="' . $pegawai['id'] . '">' . $pegawai['nama'] . '</option>';
+                            }
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Ruangan</label>
+                <select name="idruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <?php
+                    $optionsruangan = [
+                        "1000" => "VIP 1",
+                        "2000" => "VIP 2",
+                        "3000" => "VVIP 1",
+                        "4000" => "VVIP 2",
+                        "5000" => "Gudang Farmasi"
+                    ];
+
+                    foreach ($optionsruangan as $valueruangan => $textruangan) {
+                        if ($valueruangan === $penerimaan_data['id_ruangan']) {
+                            echo '<option value="' . $valueruangan . '" selected>' . $textruangan . '</option>';
+                        } else {
+                            echo '<option value="' . $valueruangan . '">' . $textruangan . '</option>';
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
             <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
                 <div class="sm:col-span-3">
                     <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
@@ -70,12 +141,12 @@
                 </div>
                 <div class="sm:col-span-9">
                     <div class="sm:flex">
-                        <input name="idpemesanan" value="<?= $penerimaan_data['id_pemesanan'] ?>" type="hidden">
-                        <input name="" value="<?php foreach ($pemesanan_data as $pemesanan) {
-                                                    if ($penerimaan_data['id_pemesanan'] === $pemesanan['id']) {
-                                                        echo $pemesanan['no_pemesanan'];
-                                                    }
-                                                } ?>" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" value="">
+                        <input type="hidden" name="idpemesanan" value="<?= $penerimaan_data['id_pemesanan'] ?>">
+                        <input type="text" name="" value="<?php foreach ($pemesanan_data as $pemesanan) {
+                                                                if ($penerimaan_data['id_pemesanan'] === $pemesanan['id']) {
+                                                                    echo $pemesanan['no_pemesanan'];
+                                                                }
+                                                            } ?>" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" value="">
                     </div>
                 </div>
                 <!-- End Col -->
@@ -165,7 +236,8 @@
                                     <?php foreach ($pesanan_data as $pesanan) : ?>
                                         <tr>
                                             <input type="hidden" value="<?= $pesanan['id'] ?>" class="text-center w-full border" name="idpesanan[]" />
-                                            <input type="hidden" value="<?= $pesanan['harga_satuan'] ?>" class="text-center w-full border" name="harga_satuan[]" />
+                                            <input type="hidden" value="<?= $pesanan['harga_satuan_pengajuan'] ?>" class="text-center w-full border" name="harga_satuan_pengajuan[]" />
+                                            <input type="hidden" value="<?= $pesanan['harga_satuan_pemesanan'] ?>" class="text-center w-full border" name="harga_satuan_pemesanan[]" />
 
                                             <td class="align-middle p-1 text-center">
                                                 <input type="number" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full" step="any" name="jumlah_pesanan[]" readonly />
@@ -213,10 +285,10 @@
             </div>
             <div class="mt-5 flex justify-end gap-x-2">
                 <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Cancel
+                    Batal
                 </button>
-                <button type="submit" value="4" name="statuspesanan" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Save changes
+                <button type="submit" name="statuspesanan" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    Simpan
                 </button>
             </div>
         </form>
@@ -227,5 +299,30 @@
 </div>
 
 <!-- End Card Section -->
+<script>
+    document.getElementById('penerimaanform').addEventListener('submit', function(event) {
+        const jumlahPesananInputs = document.querySelectorAll('.tabelbodypesanan input[name="jumlah_pesanan[]"]');
+        const jumlahDiterimaInputs = document.querySelectorAll('.tabelbodypesanan input[name="jumlah_diterima[]"]');
 
+        // Check if both arrays have the same length
+        // if (jumlahPesananInputs.length !== jumlahDiterimaInputs.length) {
+        //     console.error("Number of 'jumlah_pesanan[]' inputs doesn't match number of 'jumlah_diterima[]' inputs.");
+        //     return; // Exit the function
+        // }
+
+        let allMatch = true;
+
+        // Loop through each 'jumlah_diterima[]' input
+        jumlahDiterimaInputs.forEach((input, index) => {
+            // Compare the value with corresponding 'jumlah_pesanan[]' input
+            if (input.value !== jumlahPesananInputs[index].value) {
+                allMatch = false;
+                return; // Exit the loop early if a mismatch is found
+            }
+        });
+
+        const submitButton = document.querySelector('button[name="statuspesanan"]');
+        submitButton.value = allMatch ? '5' : '4';
+    });
+</script>
 <?= $this->endSection(); ?>

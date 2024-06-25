@@ -11,15 +11,16 @@
     <!-- Include TensorFlow.js library -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 
-    <title><?= $title ?? "SIMKES Khanza"?></title>
+    <title><?= $title ?? "SIMKES Khanza" ?></title>
 </head>
 
 <body>
     <?= $this->include('components/header') ?>
     <div class="container lg:mx-0 mx-auto">
-        <div class="w-full h-full lg:pl-72 z-[1] overflow-clip">
+        <div class="w-full lg:w-[108%] mx-auto h-full lg:pl-72 z-[1] overflow-clip">
             <!-- Content -->
             <?= $this->renderSection('content') ?>
+            
             <!-- End Content -->
         </div>
 
@@ -27,7 +28,6 @@
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="<?= base_url('/css/preline/preline.js') ?>"></script>
-
 
 
 </body>

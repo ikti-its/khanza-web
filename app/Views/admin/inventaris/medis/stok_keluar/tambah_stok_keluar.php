@@ -7,11 +7,9 @@
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Tambah StokKeluar Barang Medis
+                Tambah Stok Keluar Barang Medis
             </h2>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Manage your name, password and account settings.
-            </p>
+
         </div>
 
         <form action="/submittambahstokkeluarmedis" method="post">
@@ -27,60 +25,28 @@
             <input type="hidden" value="" name="pajakpersen" class=" text-center border" readonly>
             <input type="hidden" value="" name="pajakjumlah" class="text-center w-full border border-gray-300" readonly>
             <input type="hidden" value="" name="materai" class="text-center w-full border border-gray-300" readonly>
-
-            <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Tanggal Stok Keluar
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <input name="tglkeluar" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600">
-                </div>
-
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Nomor Keluar
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <input name="nokeluar" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" value="">
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Pegawai
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <div class="sm:flex">
-                        <select name="pegawaistokkeluar" class="py-2 px-3 pe-9 block w-full sm:w-auto border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600">
-                            <option value="" selected>-</option>
-                            <?php foreach ($pegawai_data as $pegawai) : ?>
-                                <option value="<?= $pegawai['id'] ?>"><?= $pegawai['nama'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Keterangan
-                    </label>
-                </div>
-                <!-- End Col -->
-                <div class="sm:col-span-9">
-                    <input name="keteranganstokkeluar" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="0">
-                </div>
-
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Stok Keluar</label>
+                <input type="date" name="tglkeluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">No Keluar</label>
+                <input type="text" name="nokeluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pegawai</label>
+                <select name="pegawaistokkeluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <option value="">-</option>
+                    <?php foreach ($pegawai_data as $pegawai) : ?>
+                        <option value="<?= $pegawai['id'] ?>"><?= $pegawai['nama'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Keterangan</label>
+                <input type="text" name="keteranganstokkeluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+            </div>
+        
             <!-- End Grid -->
             <div class="mt-5 flex flex-col">
                 <div class="-m-1.5 overflow-x-auto">

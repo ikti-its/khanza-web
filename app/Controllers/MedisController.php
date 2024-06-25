@@ -18,6 +18,8 @@ class MedisController extends BaseController
             $medis_url = $this->api_url . '/inventaris/medis?page=' . $page . '&size=' . $size;
             $medis_tanpa_params_url = $this->api_url . '/inventaris/medis';
             $satuan_url = $this->api_url . '/inventaris/satuan';
+            $penerimaan_url = $this->api_url . '/pengadaan/penerimaan';
+            $pesanan_url = $this->api_url . '/pengadaan/pesanan';
             $jenis_url = [
                 'obat' => $this->api_url . '/inventaris/obat',
                 'alkes' => $this->api_url . '/inventaris/alkes',
@@ -44,15 +46,31 @@ class MedisController extends BaseController
             curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-
             $response_satuan = curl_exec($ch_satuan);
 
-            if ($response_medis) {
+            $ch_penerimaan = curl_init($penerimaan_url);
+            curl_setopt($ch_penerimaan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_penerimaan, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_penerimaan = curl_exec($ch_penerimaan);
+
+            $ch_pesanan = curl_init($pesanan_url);
+            curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_pesanan = curl_exec($ch_pesanan);
+
+            if ($response_medis && $response_medis_tanpa_params && $response_satuan && $response_penerimaan && $response_pesanan) {
+                // Handle medis data
                 $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
                 if ($http_status_code_medis === 200) {
                     $medis_data = json_decode($response_medis, true);
                     $medis_tanpa_params_data = json_decode($response_medis_tanpa_params, true);
                     $satuan_data = json_decode($response_satuan, true);
+
+                    // Handle jenis data
                     foreach ($jenis_url as $jenis => $url) {
                         $ch_jenis = curl_init($url);
                         curl_setopt($ch_jenis, CURLOPT_RETURNTRANSFER, true);
@@ -65,10 +83,16 @@ class MedisController extends BaseController
                         curl_close($ch_jenis);
                     }
 
+                    // Handle penerimaan data
+                    $penerimaan_data = json_decode($response_penerimaan, true);
+
+                    // Handle pesanan data
+                    $pesanan_data = json_decode($response_pesanan, true);
+
+                    // Check response status codes
                     if ($response_jenis) {
                         $http_status_code_jenis = curl_getinfo($ch_jenis, CURLINFO_HTTP_CODE);
                         if ($http_status_code_jenis === 200) {
-                            // $jenis_data = json_decode($response_jenis, true);
                             return view('/admin/inventaris/medis/data_medis', [
                                 'medis_data' => $medis_data['data']['barang_medis'],
                                 'medis_tanpa_params_data' => $medis_tanpa_params_data['data'],
@@ -77,6 +101,8 @@ class MedisController extends BaseController
                                 'alkes_data' => $jenis_data['alkes'],
                                 'bhp_data' => $jenis_data['bhp'],
                                 'darah_data' => $jenis_data['darah'],
+                                'penerimaan_data' => $penerimaan_data['data'],
+                                'pesanan_data' => $pesanan_data['data'],
                                 'meta_data' => $medis_data['data'],
                                 'title' => $title
                             ]);
@@ -90,12 +116,13 @@ class MedisController extends BaseController
                     return "Response medis data:" . $response_medis;
                 }
             } else {
-                return "Error fetching medis data.";
+                return "Error fetching data.";
             }
         } else {
             return "User not logged in. Please log in first.";
         }
     }
+
 
 
     public function tambahMedis()
@@ -157,6 +184,8 @@ class MedisController extends BaseController
             $kategori = intval($this->request->getPost('kategoriobat'));
             $golongan = intval($this->request->getPost('golonganobat'));
             $kadaluwarsa = $this->request->getPost('kadaluwarsaobat');
+            $notifkadaluwarsa = intval($this->request->getPost('notifkadaluwarsa'));
+            $stokminimum = intval($this->request->getPost('stokminimum'));
 
             //Alkes
             $merekalkes = $this->request->getPost('merekalkes');
@@ -183,6 +212,8 @@ class MedisController extends BaseController
                 'jenis' => $jenisbrgmedis,
                 'harga' => $harga,
                 'stok' => $stok,
+                'stok_minimum' => $stokminimum,
+                'notifikasi_kadaluwarsa_hari' => $notifkadaluwarsa,
             ];
             $tambah_medis_JSON = json_encode($postDataMedis);
             if (session()->has('jwt_token')) {
@@ -382,6 +413,8 @@ class MedisController extends BaseController
             $jenisbrgmedis = $this->request->getPost('jenisbrgmedis');
             $harga = intval($this->request->getPost('harga'));
             $stok = intval($this->request->getPost('stok'));
+            $stok_minimum = intval($this->request->getPost('stok_minimum'));
+            $notif_kadaluwarsa = intval($this->request->getPost('notif_kadaluwarsa'));
             $idjenisbrgmedis = $this->request->getPost('idjenisbrgmedis');
             $satuanbrgmedis = intval($this->request->getPost('satuanbrgmedis'));
 
@@ -395,6 +428,7 @@ class MedisController extends BaseController
             $kategori = intval($this->request->getPost('kategoriobat'));
             $golongan = intval($this->request->getPost('golonganobat'));
             $kadaluwarsa = $this->request->getPost('kadaluwarsaobat');
+            
 
             //Alkes
             $merekalkes = $this->request->getPost('merekalkes');
@@ -414,6 +448,8 @@ class MedisController extends BaseController
                 'satuan' => $satuanbrgmedis,
                 'harga' => $harga,
                 'stok' => $stok,
+                'stok_minimum' => $stok_minimum,
+                'notifikasi_kadaluwarsa_hari' => $notif_kadaluwarsa,
             ];
             $edit_medis_JSON = json_encode($postDataMedis);
 
