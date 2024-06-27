@@ -64,14 +64,14 @@
                                                         </svg>
                                                     </div>
                                                     <div class="ms-3">
-                                                        <h3 class="text-gray-800 font-semibold dark:text-white">
-                                                        <?php echo htmlspecialchars($notification['judul']); ?>
-                                                        </h3>
+                                                        <h2 class="text-gray-800 font-semibold dark:text-white">
+                                                            <?php echo htmlspecialchars($notification['judul']); ?>
+                                                        </h2>
                                                         <p class="mt-2 text-sm text-gray-700 dark:text-neutral-400">
-                                                        <?php echo htmlspecialchars($notification['pesan']); ?>
+                                                            <?php echo htmlspecialchars($notification['pesan']); ?>
                                                         </p>
                                                     </div>
-                                            </li>
+                                                </li>
                                             <?php endforeach; ?>
                                         <?php else : ?>
                                             <li class="py-2 px-3 rounded-lg text-sm text-gray-800 dark:text-gray-400">
@@ -83,6 +83,14 @@
                             </div>
                         </div>
                     </div>
+                    <script>
+                        document.getElementById('hs-dropdown-with-header').addEventListener('click', function() {
+                            const badge = document.getElementById('notification-badge');
+                            if (badge) {
+                                badge.style.display = 'none';
+                            }
+                        });
+                    </script>
 
 
 
