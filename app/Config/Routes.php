@@ -25,6 +25,7 @@ $routes->get('/lihatizincuti/(:segment)', 'userPegawaiController::tampilCuti/$1'
 $routes->post('/submittambahcuti', 'userPegawaiController::submitTambahCuti', ['filter' => 'auth']);
 
 $routes->get('/lihatjadwal/(:segment)', 'userPegawaiController::tampilJadwal/$1', ['filter' => 'auth']);
+$routes->get('/lihatjadwal', 'userPegawaiController::tampilJadwalPenuh', ['filter' => 'auth']);
 
 $routes->get('/catatankehadiran/(:segment)', 'userPegawaiController::tampilCatatanKehadiran/$1', ['filter' => 'auth']);
 $routes->get('/statusizin', 'userPegawaiController::tampilStatusIzin', ['filter' => 'auth']);

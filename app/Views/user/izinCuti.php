@@ -18,7 +18,7 @@
                         <div class="px-6 py-5 grid gap-3 md:flex md:justify-between md:items-center">
                             <div class="sm:col-span-12">
                                 <h2 class="text-lg font-semibold text-gray-800 dark:text-neutral-200">
-                                    Submit your application
+                                    Pengajuan Cuti
                                 </h2>
                             </div>
 
@@ -37,7 +37,7 @@
 
                                 <div class="sm:col-span-9">
                                     <!-- Input field to display the selected date -->
-                                    <input id="selected-date-mulai" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:outline-teal-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Selected Date" readonly>
+                                    <input id="selected-date-mulai" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:outline-teal-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Pilih tanggal awal cuti" readonly>
                                     <!-- Hidden input field to store the selected date value -->
                                     <input id="tanggal_mulai" name="tanggal_mulai" type="hidden">
                                 </div>
@@ -52,7 +52,7 @@
 
                                 <div class="sm:col-span-9">
                                     <!-- Input field to display the selected date -->
-                                    <input id="selected-date-selesai" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:outline-teal-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Selected Date" readonly>
+                                    <input id="selected-date-selesai" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:outline-teal-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Pilih tanggal selesai cuti" readonly>
                                     <!-- Hidden input field to store the selected date value -->
                                     <input id="tanggal_selesai" name="tanggal_selesai" type="hidden">
                                 </div>

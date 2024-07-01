@@ -18,7 +18,7 @@
                         <div class="px-6 py-5 grid gap-3 md:flex md:justify-between md:items-center">
                             <div class="sm:col-span-12">
                                 <h2 class="text-lg font-bold text-gray-800 dark:text-neutral-200">
-                                    Absen Pulang
+                                    Absen Masuk
                                 </h2>
                             </div>
 

@@ -44,12 +44,13 @@
 
 
                     <!-- Table -->
-                    <table id="myTable" class="min-w-full divide-y divide-gray-50 dark:divid e-neutral-700 text-xs">
+                     <div class="overflow-x-auto">
+                     <table id="myTable" class="min-w-full divide-y divide-gray-50 dark:divid e-neutral-700 text-xs">
                         <thead class="bg-gray-50 divide-y divide-gray-200 dark:bg-neutral-800 dark:divide-neutral-700">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-start border-s border-gray-200 dark:border-neutral-700">
                                     <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        ID Pegawai
+                                        Nama Pegawai
                                     </span>
                                 </th>
 
@@ -106,7 +107,6 @@
                                         <td class="h-px w-auto whitespace-nowrap">
                                             <div class="px-6 py-2 flex items-center gap-x-3">
                                                 <input type="text" id="nama_pegawai" name="nama_pegawai" class="font-semibold text-gray-800 bg-transparent border-none outline-none" value="<?= $cutiEntry['nama_pegawai'] ?>" readonly>
-                                                <input type="text" id="id_pegawai" name="id_pegawai" class="font-semibold text-gray-800 bg-transparent border-none outline-none" value="<?= $cutiEntry['id_pegawai'] ?>" readonly>
                                             </div>
                                         </td>
 
@@ -178,6 +178,8 @@
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                     </div>
+                    
                     <!-- End Table -->
 
 
@@ -193,25 +195,31 @@
 
 <script>
     function myFunction() {
-        var input, filter, table, tr, td, i, txtValue;
+        var input, filter, table, tr, td, i, j, txtValue, found;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");  
+        tr = table.getElementsByTagName("tr");
 
-
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
+        for (i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+            tr[i].style.display = "none"; // Hide the row initially
+            td = tr[i].getElementsByTagName("td");
+            found = false;
+            for (j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
                 }
+            }
+            if (found) {
+                tr[i].style.display = "";
             }
         }
     }
 </script>
+
 
 <?= $this->endSection(); ?>

@@ -510,6 +510,113 @@ class userPegawaiController extends BaseController
         }
     }
 
+
+    public function tampilJadwalPenuh()
+{
+    $title = 'Tampil Jadwal';
+
+    // Retrieve the value of the 'page' parameter from the request, default to 1 if not present
+    $page = $this->request->getGet('page') ?? 1;
+
+    // Retrieve the value of the 'size' parameter from the request, default to 5 if not present
+    $size = $this->request->getGet('size') ?? 10;
+
+    // Check if the user is logged in
+    // Retrieve the stored JWT token
+    if (session()->has('jwt_token')) {
+        $token = session()->get('jwt_token');
+
+        // URL for fetching jadwal data
+        $jadwal_url = $this->api_url . '/kehadiran/jadwal?page='  . $page . '&size=' . $size;
+
+        // Initialize cURL session for jadwal data
+        $ch_jadwal = curl_init($jadwal_url);
+
+        // Set cURL options for jadwal data
+        curl_setopt($ch_jadwal, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_jadwal, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+        ]);
+
+        // Execute the cURL request for fetching jadwal data
+        $response_jadwal = curl_exec($ch_jadwal);
+
+        // Check the API response for jadwal data
+        if ($response_jadwal) {
+            $http_status_code_jadwal = curl_getinfo($ch_jadwal, CURLINFO_HTTP_CODE);
+
+            if ($http_status_code_jadwal === 200) {
+                // Jadwal data fetched successfully
+                $jadwal_data = json_decode($response_jadwal, true);
+                $kehadiran_data = $jadwal_data['data']['jadwal_pegawai'];
+
+                // Close the cURL session for jadwal data
+                curl_close($ch_jadwal);
+
+                // URL for fetching pegawai data
+                $pegawai_url = $this->api_url . '/pegawai';
+
+                // Initialize cURL session for pegawai data
+                $ch_pegawai = curl_init($pegawai_url);
+
+                // Set cURL options for pegawai data
+                curl_setopt($ch_pegawai, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch_pegawai, CURLOPT_HTTPHEADER, [
+                    'Authorization: Bearer ' . $token,
+                ]);
+
+                // Execute the cURL request for fetching pegawai data
+                $response_pegawai = curl_exec($ch_pegawai);
+
+                // Check the API response for pegawai data
+                if ($response_pegawai) {
+                    $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
+
+                    if ($http_status_code_pegawai === 200) {
+                        // Pegawai data fetched successfully
+                        $pegawai_data = json_decode($response_pegawai, true)['data'];
+
+                        // Match kehadiran_data with pegawai_data and get names
+                        foreach ($kehadiran_data as &$kehadiran) {
+                            foreach ($pegawai_data as $pegawai) {
+                                if ($kehadiran['id_pegawai'] === $pegawai['id']) {
+                                    $kehadiran['nama_pegawai'] = $pegawai['nama'];
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Return view with combined data
+                        return view('/user/tampilJadwalPegawaiPenuh', [
+                            'kehadiran_data' => $kehadiran_data,
+                            'meta_data' => $jadwal_data['data'],
+                            'title' => $title,
+                        ]);
+                    } else {
+                        // Error fetching pegawai data
+                        return $this->renderErrorView($http_status_code_pegawai);
+                    }
+                } else {
+                    // Error fetching pegawai data
+                    return $this->renderErrorView(500); // Assume 500 for cURL error
+                }
+
+                // Close the cURL session for pegawai data
+                curl_close($ch_pegawai);
+            } else {
+                // Error fetching jadwal data
+                return $this->renderErrorView($http_status_code_jadwal);
+            }
+        } else {
+            // Error fetching jadwal data
+            return $this->renderErrorView(500); // Assume 500 for cURL error
+        }
+    } else {
+        // User not logged in
+        return $this->renderErrorView(401);
+    }
+}
+
     // public function tampilStatusIzin()
     // {
     //     $title = 'Detail berkas';
@@ -998,6 +1105,7 @@ class userPegawaiController extends BaseController
                 'id_pegawai' => $pegawaiId
             ];
 
+     
             $tambah_pulang_JSON = json_encode($postData);
 
             $pulang_url = $this->api_url . '/kehadiran/presensi/leave';
@@ -1035,7 +1143,7 @@ class userPegawaiController extends BaseController
                         return redirect()->to(base_url('dashboard'));
                     } else {
                         // Error response from the API
-
+                        var_dump($postData);
                         return $this->renderErrorView($http_status_code);
                     }
                 } else {

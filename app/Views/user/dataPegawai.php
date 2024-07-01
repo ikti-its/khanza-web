@@ -181,7 +181,7 @@
                                                 <div class="px-6 py-2">
                                                     <?php
                                                     $phoneNumber = $pegawaiEntry['telepon'];
-                                                    $message = "Hello, I would like to inquire about your availability.";
+                                                    $message = "Halo {$pegawaiEntry['nama']} Kami butuh Anda di rumah sakit, apakah Anda bersedia?";
                                                     $whatsappLink = "https://wa.me/$phoneNumber?text=" . urlencode($message);
                                                     ?>
                                                     <a class="flex items-center gap-x-2" href="<?= $whatsappLink ?>" target="_blank">
