@@ -12,7 +12,7 @@
 
         </div>
 
-        <form action="/submittambahmedis" method="post">
+        <form action="/submittambahmedis" id="myForm" onsubmit="return validateForm()" method="post">
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis</label>
                 <select id="jenis" name="jenisbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
@@ -25,7 +25,7 @@
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama</label>
-                <input type="text" name="nama" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" name="nama" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
 
@@ -41,7 +41,7 @@
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kandungan</label>
-                    <input type="text" name="kandungan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="text" name="kandungan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Isi</label>
@@ -114,7 +114,7 @@
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Merek</label>
                     <select name="merekalkes" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <option selected>-</option>
+                        <option value="" selected>-</option>
                         <?php
                         $companies = array('Omron', 'Philips', 'GE Healthcare', 'Siemens Healthineers', 'Medtronic', 'Johnson & Johnson', 'Becton', 'Dickinson and Company (BD)', 'Stryker', 'Boston Scientific', 'Olympus Corporation', 'Roche Diagnostics');
                         foreach ($companies as $company) : ?>
@@ -219,43 +219,74 @@
         var additionalInputBHPs = document.getElementsByClassName('additionalInputBHP');
         var additionalInputDarahs = document.getElementsByClassName('additionalInputDarah');
 
-        // Loop melalui setiap elemen additionalInputObat dan atur tampilan sesuai dengan nilai jenisValue
+        // Utility function to toggle required attribute
+        function toggleRequired(fields, isRequired) {
+            for (var i = 0; i < fields.length; i++) {
+                var inputs = fields[i].querySelectorAll('select, input');
+                for (var j = 0; j < inputs.length; j++) {
+                    inputs[j].required = isRequired;
+                }
+            }
+        }
+
+        // Handle Obat fields
         for (var i = 0; i < additionalInputObats.length; i++) {
             var additionalInputObat = additionalInputObats[i];
             if (jenisValue === 'Obat') {
                 additionalInputObat.style.display = 'block';
+                toggleRequired([additionalInputObat], true);
             } else {
                 additionalInputObat.style.display = 'none';
+                toggleRequired([additionalInputObat], false);
             }
         }
 
-        // Loop melalui setiap elemen additionalInputAlkes dan atur tampilan sesuai dengan nilai jenisValue
+        // Handle Alat Kesehatan fields
         for (var j = 0; j < additionalInputAlkess.length; j++) {
             var additionalInputAlkes = additionalInputAlkess[j];
             if (jenisValue === 'Alat Kesehatan') {
                 additionalInputAlkes.style.display = 'block';
+                toggleRequired([additionalInputAlkes], true);
             } else {
                 additionalInputAlkes.style.display = 'none';
+                toggleRequired([additionalInputAlkes], false);
             }
         }
 
+        // Handle Bahan Habis Pakai fields
         for (var k = 0; k < additionalInputBHPs.length; k++) {
             var additionalInputBHP = additionalInputBHPs[k];
             if (jenisValue === 'Bahan Habis Pakai') {
                 additionalInputBHP.style.display = 'block';
+
             } else {
                 additionalInputBHP.style.display = 'none';
+
             }
         }
 
+        // Handle Darah fields
         for (var l = 0; l < additionalInputDarahs.length; l++) {
             var additionalInputDarah = additionalInputDarahs[l];
             if (jenisValue === 'Darah') {
                 additionalInputDarah.style.display = 'block';
+                toggleRequired([additionalInputDarah], true);
             } else {
                 additionalInputDarah.style.display = 'none';
+                toggleRequired([additionalInputDarah], false);
             }
         }
     });
+
+    function validateForm() {
+        var requiredFields = document.querySelectorAll('select[required], input[required]');
+        for (var i = 0; i < requiredFields.length; i++) {
+            if (!requiredFields[i].value) {
+                alert("Please fill all required fields.");
+                return false;
+            }
+        }
+        return true;
+    }
 </script>
 <?= $this->endSection(); ?>

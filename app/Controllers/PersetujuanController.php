@@ -21,7 +21,9 @@ class PersetujuanController extends BaseController
             $pesanan_url = $this->api_url . '/pengadaan/pesanan';
             $user_url = $this->api_url . '/auth';
             $persetujuan_url = $this->api_url . '/pengadaan/persetujuan';
-            $pegawai_url = $this->api_url . '/pegawai'; // URL untuk data pegawai
+            $pegawai_url = $this->api_url . '/pegawai';
+            $medis_url = $this->api_url . '/inventaris/medis';
+            $satuan_url = $this->api_url . '/inventaris/satuan';
 
             // Initialize cURL for fetching pengajuan data
             $ch_pengajuan = curl_init($pengajuan_url);
@@ -73,37 +75,63 @@ class PersetujuanController extends BaseController
             // Execute the cURL request to fetch pegawai data
             $response_pegawai = curl_exec($ch_pegawai);
 
-            if ($response_pengajuan && $response_pesanan && $response_persetujuan && $response_pegawai) {
+            // Initialize cURL for fetching medis data
+            $ch_medis = curl_init($medis_url);
+            curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            // Execute the cURL request to fetch medis data
+            $response_medis = curl_exec($ch_medis);
+
+            // Initialize cURL for fetching satuan data
+            $ch_satuan = curl_init($satuan_url);
+            curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            // Execute the cURL request to fetch satuan data
+            $response_satuan = curl_exec($ch_satuan);
+
+            if ($response_pengajuan && $response_pesanan && $response_persetujuan && $response_pegawai && $response_medis && $response_satuan) {
                 // Check if the responses are successful
 
                 $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
                 $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
                 $http_status_code_persetujuan = curl_getinfo($ch_persetujuan, CURLINFO_HTTP_CODE);
                 $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
+                $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
+                $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
 
-                if ($http_status_code_pengajuan === 200 && $http_status_code_pesanan === 200 && $http_status_code_persetujuan === 200 && $http_status_code_pegawai === 200) {
+                if ($http_status_code_pengajuan === 200 && $http_status_code_pesanan === 200 && $http_status_code_persetujuan === 200 && $http_status_code_pegawai === 200 && $http_status_code_medis === 200 && $http_status_code_satuan === 200) {
                     // Decode the JSON responses
                     $pengajuan_medis_data = json_decode($response_pengajuan, true);
                     $pesanan_data = json_decode($response_pesanan, true);
                     $user_data = json_decode($response_user, true);
                     $persetujuan_data = json_decode($response_persetujuan, true);
                     $pegawai_data = json_decode($response_pegawai, true);
+                    $medis_data = json_decode($response_medis, true);
+                    $satuan_data = json_decode($response_satuan, true);
 
                     // Render the view with the fetched data
                     return view('/admin/pengadaan/persetujuan', [
                         'pengajuan_medis_data' => $pengajuan_medis_data['data']['pengajuan_barang_medis'],
-                        'meta_data' => $pengajuan_medis_data['data'],
                         'pesanan_data' => $pesanan_data['data'],
                         'user_data' => $user_data['data'],
                         'persetujuan_data' => $persetujuan_data['data'],
                         'pegawai_data' => $pegawai_data['data'], // Add pegawai data to the view
+                        'medis_data' => $medis_data['data'], // Add medis data to the view
+                        'satuan_data' => $satuan_data['data'], // Add satuan data to the view
+                        'meta_data' => $pengajuan_medis_data['data'],
                         'api_url' => $api_url,
                         'token' => $token,
                         'title' => $title
                     ]);
                 } else {
                     // Error handling for unsuccessful HTTP status codes
-                    return "Error fetching data. HTTP Status Code Pengajuan: " . $http_status_code_pengajuan . ", HTTP Status Code Pesanan: " . $http_status_code_pesanan . ", HTTP Status Code Persetujuan: " . $http_status_code_persetujuan . ", HTTP Status Code Pegawai: " . $http_status_code_pegawai;
+                    return "Error fetching data. HTTP Status Code Pengajuan: " . $http_status_code_pengajuan . ", HTTP Status Code Pesanan: " . $http_status_code_pesanan . ", HTTP Status Code Persetujuan: " . $http_status_code_persetujuan . ", HTTP Status Code Pegawai: " . $http_status_code_pegawai . ", HTTP Status Code Medis: " . $http_status_code_medis . ", HTTP Status Code Satuan: " . $http_status_code_satuan;
                 }
             } else {
                 // Error handling for failed cURL requests
@@ -113,6 +141,7 @@ class PersetujuanController extends BaseController
             return "User not logged in. Please log in first.";
         }
     }
+
 
     public function submitTambahPersetujuan($pengajuanId)
     {

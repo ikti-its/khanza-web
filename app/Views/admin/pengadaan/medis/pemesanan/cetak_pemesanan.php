@@ -91,6 +91,7 @@
                                 <td><?php echo $medis['nama']; ?></td>
                                 <td align="right"><?php echo $pesanan['jumlah_pesanan'] . " " . $satuan['nama'];  ?></td>
                                 <td align="right"><?php echo number_format($pesanan['harga_satuan_pemesanan'], 2); ?></td>
+                                <td align="right"><?php echo number_format($pesanan['total_per_item'], 2); ?></td>
 
                             </tr>
             <?php
@@ -131,13 +132,18 @@
             </tr>
             <tr>
                 <td colspan="3"></td>
-                <td align="right">Tax</td>
-                <td align="right"><?php $pemesanan_medis_data['pajak_jumlah'] ?></td>
+                <td align="right">Diskon</td>
+                <td align="right"><?= $pemesanan_medis_data['diskon_jumlah'] ?></td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td align="right">Pajak</td>
+                <td align="right"><?= $pemesanan_medis_data['pajak_jumlah'] ?></td>
             </tr>
             <tr>
                 <td colspan="3"></td>
                 <td align="right">Total</td>
-                <td align="right" class="gray"></td>
+                <td align="right" class="gray"><?= $pemesanan_medis_data['total_pemesanan'] ?></td>
             </tr>
 
         </tfoot>

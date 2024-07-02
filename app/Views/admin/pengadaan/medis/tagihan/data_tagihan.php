@@ -62,7 +62,7 @@
                                 </th> -->
 
                                 <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center gap-x-2">
+                                    <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
                                             Tanggal Bayar
                                         </span>
@@ -70,21 +70,21 @@
                                 </th>
 
                                 <th scope="col" class="px-6 py-3">
-                                    <div class="flex gap-x-2">
+                                    <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
                                             No Faktur
                                         </span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center gap-x-2">
+                                    <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
                                             Jumlah bayar
                                         </span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center gap-x-2">
+                                    <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
                                             Status
                                         </span>
@@ -92,7 +92,7 @@
                                 </th>
 
                                 <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center gap-x-2">
+                                    <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
                                             Aksi
                                         </span>
@@ -140,21 +140,35 @@
                                                 <tr>
                                                     <td class="h-px w-64 whitespace-nowrap">
                                                         <div class="px-6 py-3">
-                                                            <span class="block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tagihan['id'] ?>" data-id="<?= $tagihan['id'] ?>"><?= $tagihan['tanggal_bayar'] ?? 'N/A' ?></span>
+                                                            <span class=" text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tagihan['id'] ?>" data-id="<?= $tagihan['id'] ?>"><?php $original_date = $tagihan['tanggal_bayar'];
+                                                                                                                                                                                                                                                                                                    $day = date("d", strtotime($original_date));
+                                                                                                                                                                                                                                                                                                    $month = date("m", strtotime($original_date));
+                                                                                                                                                                                                                                                                                                    $year = date("Y", strtotime($original_date));
+
+                                                                                                                                                                                                                                                                                                    // Daftar nama bulan dalam bahasa Indonesia
+                                                                                                                                                                                                                                                                                                    $bulan = array(
+                                                                                                                                                                                                                                                                                                        1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                                                                                                                                                                                                                        7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                                                                                                                                                                                                                    );
+
+                                                                                                                                                                                                                                                                                                    // Format tanggal sesuai dengan format yang diinginkan
+                                                                                                                                                                                                                                                                                                    $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+
+                                                                                                                                                                                                                                                                                                    echo $formatted_date; ?></span>
                                                         </div>
                                                     </td>
                                                     <td class="h-px w-72 whitespace-nowrap">
                                                         <div class="px-6 py-3">
-                                                            <span class="block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $penerimaan['no_faktur'] ?? 'N/A' ?></span>
+                                                            <span class=" text-center block text-sm font-semibold cursor-pointer hover:underline text-gray-800 dark:text-gray-200"><?= $penerimaan['no_faktur'] ?? 'N/A' ?></span>
                                                         </div>
                                                     </td>
                                                     <td class="h-px w-72 whitespace-nowrap">
                                                         <div class="px-6 py-3">
-                                                            <span class="block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $tagihan['jumlah_bayar'] ?? 'N/A' ?></span>
+                                                            <span class=" text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $tagihan['jumlah_bayar'] ?? 'N/A' ?></span>
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <div class="px-6 py-3">
+                                                        <div class="px-6 py-3 text-center ">
                                                             <?php
                                                             switch ($pengajuan['status_pesanan']) {
                                                                 case '0':
@@ -238,7 +252,10 @@
                                                     </span>';
                                                                     break;
                                                                 default:
-                                                                    echo 'Sorry, there was an error processing your request. Please try again later';
+                                                                    echo '<span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-[#F1F1F1]">
+                                                    <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
+                                                         Tidak ada status
+                                                    </span>';
                                                                     break;
                                                             }
                                                             ?>
@@ -257,14 +274,14 @@
                                                                 </a>
                                                             </div>
                                                             <div class="px-3 py-1.5">
-                                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm')" href="#">
+                                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $tagihan['id'] ?>')" href="#">
                                                                     Hapus
                                                                 </button>
-                                                                <div id="modelConfirm" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                                <div id="modelConfirm-<?= $tagihan['id'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
                                                                     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 
                                                                         <div class="flex justify-end p-2">
-                                                                            <button onclick="closeModal('modelConfirm')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                                            <button onclick="closeModal('modelConfirm-<?= $tagihan['id'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                                                                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                                                                 </svg>
@@ -284,10 +301,10 @@
                                                                             Hapus data
                                                                             <h3 class="text-xl font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin untuk menghapus data ini?</h3>
                                                                             <div class="w-full sm:flex justify-center">
-                                                                                <a href="/hapustagihanmedis/<?= $tagihan['id'] ?>" onclick="closeModal('modelConfirm')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                                <a href="/hapustagihanmedis/<?= $tagihan['id'] ?>" onclick="closeModal('modelConfirm-<?= $tagihan['id'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
                                                                                     Hapus
                                                                                 </a>
-                                                                                <a href="#" onclick="closeModal('modelConfirm')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                                <a href="#" onclick="closeModal('modelConfirm-<?= $tagihan['id'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
                                                                                     Batal
                                                                                 </a>
                                                                             </div>
@@ -316,7 +333,7 @@
                         <nav class="flex w-full justify-between items-center gap-x-1">
                             <!-- Previous Button -->
                             <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/tagihanmedis?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
                                     <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="m15 18-6-6 6-6"></path>
                                     </svg>
@@ -334,25 +351,25 @@
 
                                 if ($total_pages <= $show_items) {
                                     for ($i = 1; $i <= $total_pages; $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/tagihanmedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
                                     }
                                 } else {
                                     if ($current_page > $range + 1) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=1&size=' . $meta_data['size'] . '\'">1</button>';
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/tagihanmedis?page=1&size=' . $meta_data['size'] . '\'">1</button>';
                                         if ($current_page > $range + 2) {
                                             echo '<span class="py-2 px-3 text-sm">...</span>';
                                         }
                                     }
 
                                     for ($i = max($current_page - $range, 1); $i <= min($current_page + $range, $total_pages); $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/tagihanmedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
                                     }
 
                                     if ($current_page < $total_pages - $range - 1) {
                                         if ($current_page < $total_pages - $range - 2) {
                                             echo '<span class="py-2 px-3 text-sm">...</span>';
                                         }
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/tagihanmedis?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
                                     }
                                 }
                                 ?>
@@ -360,7 +377,7 @@
 
                             <!-- Next Button -->
                             <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/tagihanmedis?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
                                     <span aria-hidden="true" class="hidden sm:block">Next</span>
                                     <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="m9 18 6-6-6-6"></path>

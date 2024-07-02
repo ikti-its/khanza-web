@@ -12,16 +12,17 @@
 
         </div>
 
-        <form action="/submittambahpengajuanmedis" method="post">
+        <form action="/submittambahpengajuanmedis" id="myForm" method="post" onsubmit="return validateForm()">
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Pengajuan</label>
                 <input type="text" name="nopengajuan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Pengajuan</label>
-                <input type="date" name="tglpengajuan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="date" id="tglpengajuan" name="tglpengajuan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <span id="dateError" class="text-red-500 text-sm hidden">Tanggal pengajuan harus hari ini atau setelah hari ini.</span>
             </div>
-            
+
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pegawai</label>
                 <select name="pegawai" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
@@ -113,7 +114,7 @@
                                                 <input type="text" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="harga_satuan_pengajuan[]" />
                                             </td>
                                             <td class="align-middle p-1 text-right">
-                                                <input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="total[]" readonly />
+                                                <input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="totalperitem[]" readonly />
                                             </td>
                                         </tr>
 
@@ -122,7 +123,7 @@
                                         <tr class="pt-5">
                                             <th class="p-1 pt-2" style="text-align: right;" colspan="5">
 
-                                                Discount (%)
+                                                Diskon (%)
                                                 <input type="number" step="any" name="diskonpersen" class="border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" style="width: 20%;">
                                             </th>
 
@@ -132,7 +133,7 @@
                                         </tr>
 
                                         <tr>
-                                            <th class="p-1" style="text-align: right;" colspan="5">Tax Inclusive (%)
+                                            <th class="p-1" style="text-align: right;" colspan="5">Pajak (%)
                                                 <input type="number" step="any" name="pajakpersen" class="border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" style="width: 20%;">
                                             </th>
 
@@ -148,7 +149,7 @@
                                         </tr>
                                         <tr>
                                             <th class="p-1" style="text-align: right;" colspan="5">Total</th>
-                                            <th class="p-1" id="total"><input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="totalkeseluruhan" disabled></th>
+                                            <th class="p-1"><input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="totalkeseluruhan" disabled></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -164,7 +165,7 @@
                     Batal
                 </button>
                 <button type="submit" value="0" name="status" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Tambah
+                    Simpan
                 </button>
             </div>
         </form>
@@ -178,19 +179,23 @@
 <script>
     var jumlahPesananInputs = document.querySelectorAll('input[name="jumlah_pesanan[]"]');
     var hargaSatuanPengajuanInputs = document.querySelectorAll('input[name="harga_satuan_pengajuan[]"]');
-    var totalInputs = document.querySelectorAll('input[name="total[]"]');
+    var totalInputs = document.querySelectorAll('input[name="totalperitem[]"]');
     var totalKeseluruhanInputs = document.querySelector('input[name="totalkeseluruhan"]');
     var diskonPersenInput = document.querySelector('input[name="diskonpersen"]');
     var diskonJumlahInput = document.querySelector('input[name="diskonjumlah"]');
+    var pajakPersenInput = document.querySelector('input[name="pajakpersen"]');
+    var pajakJumlahInput = document.querySelector('input[name="pajakjumlah"]');
+    var materaiInput = document.querySelector('input[name="materai"]');
 
-    // Tambahkan event listener untuk setiap input jumlah_pesanan[]
     function hitungTotal(index) {
         var jumlahPesanan = jumlahPesananInputs[index].value || 0;
         var hargaSatuanPengajuan = hargaSatuanPengajuanInputs[index].value || 0;
         var total = jumlahPesanan * hargaSatuanPengajuan;
-        totalInputs[index].value = total; // Atur jumlah desimal yang diinginkan
+        totalInputs[index].value = total.toFixed(1); // Atur jumlah desimal yang diinginkan
 
         hitungDiskon();
+        hitungPajak();
+        hitungTotalKeseluruhan();
     }
 
     function hitungDiskon() {
@@ -201,7 +206,22 @@
 
         var diskonPersen = parseFloat(diskonPersenInput.value) || 0;
         var diskonJumlah = totalSemua * (diskonPersen / 100);
-        diskonJumlahInput.value = diskonJumlah.toFixed(0);
+        diskonJumlahInput.value = diskonJumlah.toFixed(1);
+
+        hitungTotalKeseluruhan();
+    }
+
+    function hitungPajak() {
+        var totalSemua = 0;
+        totalInputs.forEach(function(input) {
+            totalSemua += parseFloat(input.value) || 0;
+        });
+
+        var pajakPersen = parseFloat(pajakPersenInput.value) || 0;
+        var pajakJumlah = totalSemua * (pajakPersen / 100);
+        pajakJumlahInput.value = pajakJumlah.toFixed(1);
+
+        hitungTotalKeseluruhan();
     }
 
     jumlahPesananInputs.forEach(function(input, index) {
@@ -210,7 +230,6 @@
         });
     });
 
-    // Tambahkan event listener untuk setiap input harga_satuan_pengajuan[]
     hargaSatuanPengajuanInputs.forEach(function(input, index) {
         input.addEventListener('input', function() {
             hitungTotal(index);
@@ -221,8 +240,44 @@
         hitungDiskon();
     });
 
-    // Fungsi untuk menghitung total dan mengisi ke dalam input total[]
+    pajakPersenInput.addEventListener('input', function() {
+        hitungPajak();
+    });
 
+    materaiInput.addEventListener('input', function() {
+        hitungTotalKeseluruhan();
+    });
+
+    function hitungTotalKeseluruhan() {
+        var totalSemua = 0;
+        totalInputs.forEach(function(input) {
+            totalSemua += parseFloat(input.value) || 0;
+        });
+
+        var diskonPersen = parseFloat(diskonPersenInput.value) || 0;
+        var diskonJumlah = totalSemua * (diskonPersen / 100);
+
+        var pajakPersen = parseFloat(pajakPersenInput.value) || 0;
+        var pajakJumlah = totalSemua * (pajakPersen / 100);
+
+        var materai = parseFloat(materaiInput.value) || 0;
+        var totalKeseluruhan = totalSemua - diskonJumlah + pajakJumlah + materai;
+        totalKeseluruhanInputs.value = totalKeseluruhan.toFixed(1);
+    }
+
+    // Fungsi untuk mengecek duplikat saat perubahan
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('select[name="idbrgmedis[]"]').forEach(function(select) {
+            select.addEventListener('change', function() {
+                if (isDuplicate(select)) {
+                    alert('Barang medis ini sudah dipilih. Pilih barang medis lain.');
+                    select.value = "";
+                }
+            });
+        });
+    });
+
+    // Fungsi untuk menambah baris baru
     function addRow() {
         var newRow = '<tr>' +
             '<td>' +
@@ -256,13 +311,15 @@
             '<input type="text" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="harga_satuan_pengajuan[]" />' +
             '</td>' +
             '<td class="align-middle p-1 text-right">' +
-            '<input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="total[]" readonly />' +
+            '<input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="totalperitem[]" readonly />' +
             '</td>' +
             '</tr>';
         document.getElementById('item-list').getElementsByTagName('tbody')[0].insertAdjacentHTML('beforeend', newRow);
+
+        // Perbarui variabel setelah menambah baris baru
         jumlahPesananInputs = document.querySelectorAll('input[name="jumlah_pesanan[]"]');
         hargaSatuanPengajuanInputs = document.querySelectorAll('input[name="harga_satuan_pengajuan[]"]');
-        totalInputs = document.querySelectorAll('input[name="total[]"]');
+        totalInputs = document.querySelectorAll('input[name="totalperitem[]"]');
 
         // Tambahkan event listener untuk setiap input jumlah_pesanan[] dan harga_satuan_pengajuan[] yang baru
         jumlahPesananInputs.forEach(function(input, index) {
@@ -276,11 +333,71 @@
                 hitungTotal(index);
             });
         });
+
+        var newSelectInputs = document.querySelectorAll('select[name="idbrgmedis[]"]');
+
+        newSelectInputs[newSelectInputs.length - 1].addEventListener('change', function() {
+            if (isDuplicate(this)) {
+                alert('Barang medis ini sudah dipilih. Pilih barang medis lain.');
+                this.value = "";
+            }
+        });
+
+        newJumlahPesananInput[newJumlahPesananInput.length - 1].addEventListener('input', function() {
+            hitungTotal(newJumlahPesananInput.length - 1);
+        });
+
+        newHargaSatuanPengajuanInput[newHargaSatuanPengajuanInput.length - 1].addEventListener('input', function() {
+            hitungTotal(newHargaSatuanPengajuanInput.length - 1);
+        });
     }
+
+    function isDuplicate(select) {
+        var selectedValues = Array.from(document.querySelectorAll('select[name="idbrgmedis[]"]')).map(s => s.value);
+        var currentValue = select.value;
+        return selectedValues.filter(value => value === currentValue).length > 1;
+    }
+
 
     function removeRow(btn) {
         var row = btn.parentNode.parentNode;
         row.parentNode.removeChild(row);
+    }
+
+    document.getElementById('tglpengajuan').addEventListener('input', function() {
+        var tglpengajuanInput = document.getElementById('tglpengajuan');
+        var dateError = document.getElementById('dateError');
+        var selectedDate = new Date(tglpengajuanInput.value);
+        var today = new Date();
+        today.setHours(0, 0, 0, 0); // Clear the time part
+
+        if (selectedDate < today) {
+            tglpengajuanInput.classList.add('border-red-500');
+            dateError.classList.remove('hidden');
+            dateError.classList.add('block');
+        } else {
+            tglpengajuanInput.classList.remove('border-red-500');
+            dateError.classList.add('hidden');
+            dateError.classList.remove('block');
+        }
+    });
+
+    function validateForm() {
+        var tglpengajuanInput = document.getElementById('tglpengajuan');
+        var dateError = document.getElementById('dateError');
+        var selectedDate = new Date(tglpengajuanInput.value);
+        var today = new Date();
+        today.setHours(0, 0, 0, 0); // Clear the time part
+
+        if (selectedDate < today) {
+            tglpengajuanInput.classList.add('border-red-500');
+            dateError.classList.remove('hidden');
+            dateError.classList.add('block');
+            alert("Tanggal pengajuan harus hari ini atau setelah hari ini.");
+            return false;
+        }
+
+        return true;
     }
 </script>
 <?= $this->endSection(); ?>

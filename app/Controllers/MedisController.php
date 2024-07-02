@@ -20,6 +20,7 @@ class MedisController extends BaseController
             $satuan_url = $this->api_url . '/inventaris/satuan';
             $penerimaan_url = $this->api_url . '/pengadaan/penerimaan';
             $pesanan_url = $this->api_url . '/pengadaan/pesanan';
+            $transaksi_url = $this->api_url . '/inventaris/transaksi';
             $jenis_url = [
                 'obat' => $this->api_url . '/inventaris/obat',
                 'alkes' => $this->api_url . '/inventaris/alkes',
@@ -27,12 +28,15 @@ class MedisController extends BaseController
                 'darah' => $this->api_url . '/inventaris/darah'
             ];
 
+            // Inisialisasi cURL untuk masing-masing endpoint
             $ch_medis = curl_init($medis_url);
             curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
             $response_medis = curl_exec($ch_medis);
+            $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
+            curl_close($ch_medis);
 
             $ch_medis_tanpa_params = curl_init($medis_tanpa_params_url);
             curl_setopt($ch_medis_tanpa_params, CURLOPT_RETURNTRANSFER, true);
@@ -40,6 +44,8 @@ class MedisController extends BaseController
                 'Authorization: Bearer ' . $token,
             ]);
             $response_medis_tanpa_params = curl_exec($ch_medis_tanpa_params);
+            $http_status_code_medis_tanpa_params = curl_getinfo($ch_medis_tanpa_params, CURLINFO_HTTP_CODE);
+            curl_close($ch_medis_tanpa_params);
 
             $ch_satuan = curl_init($satuan_url);
             curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
@@ -47,6 +53,8 @@ class MedisController extends BaseController
                 'Authorization: Bearer ' . $token,
             ]);
             $response_satuan = curl_exec($ch_satuan);
+            $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
+            curl_close($ch_satuan);
 
             $ch_penerimaan = curl_init($penerimaan_url);
             curl_setopt($ch_penerimaan, CURLOPT_RETURNTRANSFER, true);
@@ -54,6 +62,8 @@ class MedisController extends BaseController
                 'Authorization: Bearer ' . $token,
             ]);
             $response_penerimaan = curl_exec($ch_penerimaan);
+            $http_status_code_penerimaan = curl_getinfo($ch_penerimaan, CURLINFO_HTTP_CODE);
+            curl_close($ch_penerimaan);
 
             $ch_pesanan = curl_init($pesanan_url);
             curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
@@ -61,14 +71,25 @@ class MedisController extends BaseController
                 'Authorization: Bearer ' . $token,
             ]);
             $response_pesanan = curl_exec($ch_pesanan);
+            $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
+            curl_close($ch_pesanan);
 
-            if ($response_medis && $response_medis_tanpa_params && $response_satuan && $response_penerimaan && $response_pesanan) {
+            $ch_transaksi = curl_init($transaksi_url);
+            curl_setopt($ch_transaksi, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_transaksi, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_transaksi = curl_exec($ch_transaksi);
+            $http_status_code_transaksi = curl_getinfo($ch_transaksi, CURLINFO_HTTP_CODE);
+            curl_close($ch_transaksi);
+
+            if ($response_medis && $response_medis_tanpa_params && $response_satuan && $response_penerimaan && $response_pesanan && $response_transaksi) {
                 // Handle medis data
-                $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
-                if ($http_status_code_medis === 200) {
+                if ($http_status_code_medis === 200 && $http_status_code_medis_tanpa_params === 200 && $http_status_code_satuan === 200 && $http_status_code_penerimaan === 200 && $http_status_code_pesanan === 200 && $http_status_code_transaksi === 200) {
                     $medis_data = json_decode($response_medis, true);
                     $medis_tanpa_params_data = json_decode($response_medis_tanpa_params, true);
                     $satuan_data = json_decode($response_satuan, true);
+                    $transaksi_data = json_decode($response_transaksi, true);
 
                     // Handle jenis data
                     foreach ($jenis_url as $jenis => $url) {
@@ -103,6 +124,7 @@ class MedisController extends BaseController
                                 'darah_data' => $jenis_data['darah'],
                                 'penerimaan_data' => $penerimaan_data['data'],
                                 'pesanan_data' => $pesanan_data['data'],
+                                'transaksi_keluar_data' => $transaksi_data['data'],
                                 'meta_data' => $medis_data['data'],
                                 'title' => $title
                             ]);
@@ -122,6 +144,7 @@ class MedisController extends BaseController
             return "User not logged in. Please log in first.";
         }
     }
+
 
 
 
@@ -184,7 +207,12 @@ class MedisController extends BaseController
             $kategori = intval($this->request->getPost('kategoriobat'));
             $golongan = intval($this->request->getPost('golonganobat'));
             $kadaluwarsa = $this->request->getPost('kadaluwarsaobat');
-            $notifkadaluwarsa = intval($this->request->getPost('notifkadaluwarsa'));
+            $notifkadaluwarsa = $this->request->getPost('notifkadaluwarsa');
+            if (($jenisbrgmedis === 'Obat' || $jenisbrgmedis === 'Bahan Habis Pakai' || $jenisbrgmedis === 'Darah') && $notifkadaluwarsa === null || $notifkadaluwarsa === '') {
+                $notifkadaluwarsa = 30; // Atur default menjadi 30 jika tidak ada input atau null
+            } else {
+                $notifkadaluwarsa = intval($notifkadaluwarsa); // Konversi ke integer jika ada input
+            }
             $stokminimum = intval($this->request->getPost('stokminimum'));
 
             //Alkes
@@ -193,6 +221,11 @@ class MedisController extends BaseController
             //BHP
             $jumlahbhp = intval($this->request->getPost('jumlahbhp'));
             $kadaluwarsabhp = $this->request->getPost('kadaluwarsabhp');
+            if ($kadaluwarsabhp === '' || $kadaluwarsabhp === null) {
+                $kadaluwarsabhp = '0001-01-01';
+            } else {
+                $kadaluwarsabhp = $kadaluwarsabhp; // Konversi ke integer jika ada input
+            }
 
             //Darah
             $keterangandarah = $this->request->getPost('keterangandarah');
@@ -428,7 +461,7 @@ class MedisController extends BaseController
             $kategori = intval($this->request->getPost('kategoriobat'));
             $golongan = intval($this->request->getPost('golonganobat'));
             $kadaluwarsa = $this->request->getPost('kadaluwarsaobat');
-            
+
 
             //Alkes
             $merekalkes = $this->request->getPost('merekalkes');
@@ -648,24 +681,20 @@ class MedisController extends BaseController
                     $http_status_code_idjenis = curl_getinfo($ch_idjenis, CURLINFO_HTTP_CODE);
                     curl_close($ch_idjenis);
 
-                    if ($http_status_code_idjenis === 204) {
-                        curl_setopt($ch_medis, CURLOPT_CUSTOMREQUEST, "DELETE");
-                        curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
-                        curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
-                            'Authorization: Bearer ' . $token,
-                        ]);
+                    curl_setopt($ch_medis, CURLOPT_CUSTOMREQUEST, "DELETE");
+                    curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
+                        'Authorization: Bearer ' . $token,
+                    ]);
 
-                        $response = curl_exec($ch_medis);
-                        $http_status_code = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
-                        curl_close($ch_medis);
+                    $response = curl_exec($ch_medis);
+                    $http_status_code = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
+                    curl_close($ch_medis);
 
-                        if ($http_status_code === 204) {
-                            return redirect()->to(base_url('datamedis?page=1&size=5'));
-                        } else {
-                            return "Error deleting medis: " . $response;
-                        }
+                    if ($http_status_code === 204 && $http_status_code_idjenis === 204) {
+                        return redirect()->to(base_url('datamedis?page=1&size=5'));
                     } else {
-                        return "Error deleting related jenis barang medis: " . $response_idjenis;
+                        return "Error delete data: " . $response . $response_idjenis;
                     }
                 } else {
                     return "Error fetching medis data: " . $response_medis;

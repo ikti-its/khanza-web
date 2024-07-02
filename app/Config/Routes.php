@@ -122,6 +122,7 @@ $routes->get('/hapuspengajuanmedis/(:segment)', 'PengajuanController::hapusPenga
 $routes->get('/pemesananmedis', 'PemesananController::dataPemesananMedis', ['filter' => 'auth']);
 $routes->get('/cetakpemesananbrgmedis/(:segment)', 'PemesananController::cetakPemesananBrgMedis/$1', ['filter' => 'auth']);
 $routes->get('/tambahpemesananmedis', 'PemesananController::tambahPemesananMedis', ['filter' => 'auth']);
+$routes->get('/tambahpemesananmedis/(:any)', 'PemesananController::tambahPemesananMedisbyId/$1', ['filter' => 'auth']);
 $routes->post('/submittambahpemesananmedis', 'PemesananController::submitTambahPemesananMedis', ['filter' => 'auth']);
 $routes->get('/editpemesananmedis/(:any)', 'PemesananController::editPemesananMedis/$1', ['filter' => 'auth']);
 $routes->post('/submiteditpemesananmedis', 'PemesananController::submitEditPemesananMedis', ['filter' => 'auth']);
@@ -131,6 +132,7 @@ $routes->get('/hapuspemesananmedis/(:segment)', 'PemesananController::hapusPemes
 //Penerimaan
 $routes->get('/penerimaanmedis', 'PenerimaanController::dataPenerimaanMedis', ['filter' => 'auth']);
 $routes->get('/tambahpenerimaanmedis', 'PenerimaanController::tambahPenerimaanMedis', ['filter' => 'auth']);
+$routes->get('/tambahpenerimaanmedis/(:any)', 'PenerimaanController::tambahPenerimaanMedisbyId/$1', ['filter' => 'auth']);
 $routes->post('/submittambahpenerimaanmedis', 'PenerimaanController::submitTambahPenerimaanMedis', ['filter' => 'auth']);
 $routes->get('/editpenerimaanmedis/(:any)', 'PenerimaanController::editPenerimaanMedis/$1', ['filter' => 'auth']);
 $routes->post('/submiteditpenerimaanmedis', 'PenerimaanController::submitEditPenerimaanMedis', ['filter' => 'auth']);
@@ -140,6 +142,7 @@ $routes->get('/hapuspenerimaanmedis/(:segment)', 'PenerimaanController::hapusPen
 //Tagihan
 $routes->get('/tagihanmedis', 'TagihanController::dataTagihanMedis', ['filter' => 'auth']);
 $routes->get('/tambahtagihanmedis', 'TagihanController::tambahTagihanMedis', ['filter' => 'auth']);
+$routes->get('/tambahtagihanmedis/(:any)', 'TagihanController::tambahTagihanMedisbyId/$1', ['filter' => 'auth']);
 $routes->post('/submittambahtagihanmedis', 'TagihanController::submitTambahTagihanMedis', ['filter' => 'auth']);
 $routes->get('/edittagihanmedis/(:any)', 'TagihanController::editTagihanMedis/$1', ['filter' => 'auth']);
 $routes->post('/submitedittagihanmedis', 'TagihanController::submitEditTagihanMedis', ['filter' => 'auth']);

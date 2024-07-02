@@ -27,11 +27,11 @@
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Pengajuan</label>
                 <input type="hidden" name="idpemesanan" value="<?= $penerimaan_data['id_pemesanan'] ?>">
-                <input type="text" name="idpemesanan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?php foreach ($pemesanan_data as $pemesanan) {
-                                                                                                                                                                                                                                    if ($penerimaan_data['id_pemesanan'] === $pemesanan['id']) {
-                                                                                                                                                                                                                                        echo $pemesanan['no_pemesanan'];
-                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                } ?>">
+                <input type="text" name="" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?php foreach ($pemesanan_data as $pemesanan) {
+                                                                                                                                                                                                                            if ($penerimaan_data['id_pemesanan'] === $pemesanan['id']) {
+                                                                                                                                                                                                                                echo $pemesanan['no_pemesanan'];
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                        } ?>">
 
             </div>
             <div class="mb-5 sm:block md:flex items-center">
@@ -89,123 +89,7 @@
                     ?>
                 </select>
             </div>
-            <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Tanggal Penerimaan
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <input name="tgldatang" value="<?= $penerimaan_data['tanggal_datang'] ?>" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Paracetamol">
-                </div>
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Tanggal Faktur
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <input name="tglfaktur" value="<?= $penerimaan_data['tanggal_faktur'] ?>" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Paracetamol">
-                </div>
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Tanggal Jatuh Tempo
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <input name="tgljatuhtempo" value="<?= $penerimaan_data['tanggal_jthtempo'] ?>" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Paracetamol">
-                </div>
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Nomor Faktur
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <input name="nofaktur" value="<?= $penerimaan_data['no_faktur'] ?>" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" value="">
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-3">
-                    <div class="inline-block">
-                        <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                            Nomor Pemesanan
-                        </label>
-                    </div>
-                </div>
-                <div class="sm:col-span-9">
-                    <div class="sm:flex">
-                        <input type="hidden" name="idpemesanan" value="<?= $penerimaan_data['id_pemesanan'] ?>">
-                        <input type="text" name="" value="<?php foreach ($pemesanan_data as $pemesanan) {
-                                                                if ($penerimaan_data['id_pemesanan'] === $pemesanan['id']) {
-                                                                    echo $pemesanan['no_pemesanan'];
-                                                                }
-                                                            } ?>" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" value="">
-                    </div>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Pegawai
-                    </label>
-                </div>
-                <!-- End Col -->
-
-                <div class="sm:col-span-9">
-                    <div class="sm:flex">
-                        <select name="pegawaipenerimaan" class="py-2 px-3 pe-9 block w-full sm:w-auto border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600">
-                            <?php
-                            foreach ($pegawai_data as $pegawai) {
-                                $optionpegawai = [$pegawai['id'] => $pegawai['nama']];
-                                foreach ($optionpegawai as $pegawaiid => $pegawainama) {
-                                    if ($pegawaiid === $penerimaan_data['id_pegawai']) {
-                                        echo '<option value="' . $pegawai['id'] . '" selected>' . $pegawai['nama'] . '</option>';
-                                    } else {
-                                        echo '<option value="' . $pegawai['id'] . '">' . $pegawai['nama'] . '</option>';
-                                    }
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="sm:col-span-3">
-                    <label class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200">
-                        Ruangan
-                    </label>
-                </div>
-                <!-- End Col -->
-                <div class="sm:col-span-9">
-                    <select name="idruangan" class="py-2 px-3 pe-9 block w-full sm:w-auto border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600">
-                        <?php
-                        $optionsruangan = [
-                            "1000" => "VIP 1",
-                            "2000" => "VIP 2",
-                            "3000" => "VVIP 1",
-                            "4000" => "VVIP 2",
-                            "5000" => "Gudang Farmasi"
-                        ];
-
-                        foreach ($optionsruangan as $valueruangan => $textruangan) {
-                            if ($valueruangan === $penerimaan_data['id_ruangan']) {
-                                echo '<option value="' . $valueruangan . '" selected>' . $textruangan . '</option>';
-                            } else {
-                                echo '<option value="' . $valueruangan . '">' . $textruangan . '</option>';
-                            }
-                        }
-                        ?>
-                    </select>
-                </div>
-
-            </div>
+            <!--  -->
             <!-- End Grid -->
             <div class="mt-5 flex flex-col">
                 <div class="-m-1.5 overflow-x-auto">
@@ -222,11 +106,11 @@
                                     <col width="20%">
                                     <col width="25%">
                                 </colgroup>
-                                <thead>
+                                <thead class="bg-[#DCDCDC]">
                                     <tr class="bg-navy disabled">
                                         <th class="px-1 py-1 text-center">Qty</th>
                                         <th class="px-1 py-1 text-center">Satuan</th>
-                                        <th class="px-1 py-1">Item</th>
+                                        <th class="px-1 py-1">Barang</th>
                                         <th class="px-1 py-1 text-center">Jumlah Diterima</th>
                                         <th class="px-1 py-1 text-center">Kadaluwarsa</th>
                                         <th class="px-1 py-1 text-center">No Batch</th>
@@ -240,7 +124,7 @@
                                             <input type="hidden" value="<?= $pesanan['harga_satuan_pemesanan'] ?>" class="text-center w-full border" name="harga_satuan_pemesanan[]" />
 
                                             <td class="align-middle p-1 text-center">
-                                                <input type="number" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full" step="any" name="jumlah_pesanan[]" readonly />
+                                                <input type="number" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" step="any" name="jumlah_pesanan[]" readonly />
                                             </td>
                                             <td class="align-middle p-1">
                                                 <input name="satuan[]" value="<?= $pesanan['satuan'] ?>" type="hidden">
@@ -248,7 +132,7 @@
                                                                             if ($pesanan['satuan'] === $satuan['id']) {
                                                                                 echo $satuan['nama'];
                                                                             }
-                                                                        } ?>" type="text" class="text-center w-full">
+                                                                        } ?>" type="text" class="text-center w-full rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" readonly>
                                             </td>
                                             <td class="align-middle p-1">
                                                 <input name="idbrgmedis[]" value="<?= $pesanan['id_barang_medis'] ?>" type="hidden">
@@ -256,16 +140,16 @@
                                                                             if ($pesanan['id_barang_medis'] === $barang_medis['id']) {
                                                                                 echo $barang_medis['nama'];
                                                                             }
-                                                                        } ?>" type="text" class="text-center w-full">
+                                                                        } ?>" type="text" class="text-center w-full rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" readonly>
                                             </td>
                                             <td class="align-middle p-1 text-center">
-                                                <input type="text" value="<?= $pesanan['jumlah_diterima'] ?>" class="text-center w-full border" name="jumlah_diterima[]" />
+                                                <input type="text" value="<?= $pesanan['jumlah_diterima'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="jumlah_diterima[]" />
                                             </td>
                                             <td class="align-middle p-1 text-center">
-                                                <input type="date" value="<?= $pesanan['kadaluwarsa'] ?>" class="text-center w-full border" name="kadaluwarsa[]" />
+                                                <input type="date" value="<?= $pesanan['kadaluwarsa'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="kadaluwarsa[]" />
                                             </td>
                                             <td class="align-middle p-1 text-center">
-                                                <input type="text" value="<?= $pesanan['no_batch'] ?>" class="text-center w-full border" name="no_batch[]" />
+                                                <input type="text" value="<?= $pesanan['no_batch'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="no_batch[]" />
                                             </td>
 
                                         </tr>

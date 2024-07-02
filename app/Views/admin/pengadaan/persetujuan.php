@@ -36,46 +36,46 @@
                     <table id="myTable" class="overflow-x-auto min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <colgroup>
                             <col width="13%">
-                            <col width="18%">
+                            <col width="19%">
                             <col width="22%">
                             <col width="22%">
-                            <col width="25%">
+                            <col width="24%">
                         </colgroup>
                         <thead class="bg-gray-50 dark:bg-slate-800">
                             <tr>
-                                <th scope="col" class="px-6 pe-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
+                                <th scope="col" class="px-6 pe-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                                             Tanggal
                                         </span>
                                     </div>
                                 </th>
 
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                                             Nomor Pengajuan
                                         </span>
                                     </div>
                                 </th>
 
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                                             Status Apoteker
                                         </span>
                                     </div>
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                                             Status Keuangan
                                         </span>
                                     </div>
                                 </th>
 
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                                             Aksi
                                         </span>
@@ -101,14 +101,29 @@
                                         <tr>
                                             <td>
                                                 <div class="px-6 py-3">
-                                                    <div class="flex items-center gap-x-3 text-start">
-                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $pengajuan['tanggal_pengajuan'] ?? '-' ?></span>
+                                                    <div class="flex items-center gap-x-3 justify-center">
+                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php
+                                                                                                                                    $original_date = $pengajuan['tanggal_pengajuan'];
+                                                                                                                                    $day = date("d", strtotime($original_date));
+                                                                                                                                    $month = date("m", strtotime($original_date));
+                                                                                                                                    $year = date("Y", strtotime($original_date));
+
+                                                                                                                                    // Daftar nama bulan dalam bahasa Indonesia
+                                                                                                                                    $bulan = array(
+                                                                                                                                        1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                                                        7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                                                    );
+
+                                                                                                                                    // Format tanggal sesuai dengan format yang diinginkan
+                                                                                                                                    $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+
+                                                                                                                                    echo $formatted_date; ?></span>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="px-6 py-3">
-                                                    <span class="text-start block text-sm font-semibold text-gray-800 dark:text-gray-200">
+                                                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200">
                                                         <a class="pengajuan-link cursor-pointer hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pengajuan['id'] ?>" data-id="<?= $pengajuan['id'] ?>">
                                                             <?= $pengajuan['nomor_pengajuan'] ?? 'N/A' ?>
                                                         </a>
@@ -116,7 +131,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="px-6 py-3">
+                                                <div class="px-6 py-3 text-center">
                                                     <?php
                                                     switch ($persetujuan['status_apoteker']) {
                                                         case 'Menunggu Persetujuan':
@@ -162,7 +177,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="px-6 py-3">
+                                                <div class="px-6 py-3 text-center">
                                                     <?php
                                                     switch ($persetujuan['status_keuangan']) {
                                                         case 'Menunggu Persetujuan':
@@ -333,33 +348,64 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="border">
+                                                                <div>
                                                                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Pesanan</h3>
-                                                                    <div class="px-3">
-                                                                        <p class="mt-1 text-gray-800 dark:text-neutral-400">
-                                                                            <?php foreach ($pesanan_data as $pesanan) {
-                                                                                if ($pesanan['id_pengajuan'] === $pengajuan['id']) { ?>
-                                                                                    <span class="flex justify-between">
-                                                                                        <span><?= $pesanan['id_barang_medis'] ?><br><small>Jumlah:
-                                                                                                <?= $pesanan['jumlah_pesanan'] . " kapsul" ?></small></span>
-                                                                                        <span><?= $pesanan['harga_satuan_pengajuan'] ?></span>
-                                                                                    </span>
-                                                                                    <br>
-                                                                            <?php }
-                                                                            } ?>
+                                                                    <div>
+
+                                                                        <div class="flex items-center justify-between mb-2">
+                                                                            <div class="w-1/2">
+
+
+                                                                            </div>
+                                                                            <div class="flex justify-end w-1/2">
+                                                                                <p class="font-bold mr-2 text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Harga/Item</p>
+                                                                                <p class="font-bold text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Total</p>
+                                                                            </div>
+                                                                        </div>
+
+
+
+                                                                        <?php foreach ($pesanan_data as $pesanan) {
+                                                                            if ($pesanan['id_pengajuan'] === $pengajuan['id']) { ?>
+
+                                                                                <div class="flex items-center justify-between">
+                                                                                    <div class="w-1/2">
+                                                                                        <?php foreach ($medis_data as $medis) {
+                                                                                            if ($medis['id'] === $pesanan['id_barang_medis']) {
+                                                                                                echo $medis['nama'];
+                                                                                            }
+                                                                                        } ?>
+                                                                                        <br>
+                                                                                    </div>
+                                                                                    <div class="flex justify-end w-1/2">
+                                                                                        <input type="text" name="" value="<?= number_format($pesanan['harga_satuan_pengajuan'], 0, ',', '.') ?>" class="text-center mr-2 bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                                        <input type="text" name="" value="<?= $pesanan['total_pengajuan'] ?? "Belum ada total" ?>" class="text-center bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div><small>Jumlah:
+                                                                                        <?= $pesanan['jumlah_pesanan'] ?> <?php foreach ($satuan_data as $satuan) {
+                                                                                                                                if ($satuan['id'] === $pesanan['satuan']) {
+                                                                                                                                    echo $satuan['nama'];
+                                                                                                                                }
+                                                                                                                            } ?>
+                                                                                    </small></div>
+                                                                                <br>
+
+                                                                        <?php }
+                                                                        } ?>
                                                                         <div>
                                                                             <div class="flex justify-between">
                                                                                 <p><strong>Diskon Persen (Jumlah):</strong></p>
-                                                                                <p><?= $pengajuan['diskon_persen'] ?>% (<?= $pengajuan['diskon_jumlah'] ?>)</p>
+                                                                                <p><?= $pengajuan['diskon_persen'] ?>% (<?= number_format($pengajuan['diskon_jumlah'], 0, ',', '.') ?>)</p>
                                                                             </div>
                                                                             <div class="flex justify-between">
                                                                                 <p><strong>Pajak Persen (Jumlah):</strong></p>
-                                                                                <?= $pengajuan['pajak_persen'] ?>% (<?= $pengajuan['pajak_jumlah'] ?>)
+                                                                                <?= $pengajuan['pajak_persen'] ?>% (<?= number_format($pengajuan['pajak_jumlah'], 0, ',', '.') ?>)
                                                                             </div>
                                                                             <div class="flex justify-between">
                                                                                 <p><strong>Materai:</strong>
                                                                                 </p>
-                                                                                <?= $pengajuan['materai'] ?>
+                                                                                <?= number_format($pengajuan['materai'], 0, ',', '.') ?>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -415,59 +461,62 @@
                     <!-- Footer -->
                     <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-gray-700">
                         <!-- Pagination -->
-                        <nav class="flex items-center gap-x-1">
-                            <?php if ($meta_data['page'] > 1) : ?>
-                                <a href="/datamedis?page=<?= $meta_data['page'] - 1 ?>&size=5" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10">
+                        <nav class="flex w-full justify-between items-center gap-x-1">
+                            <!-- Previous Button -->
+                            <div class="inline-flex gap-x-2">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/persetujuanpengadaan?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
                                     <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m15 18-6-6 6-6" />
+                                        <path d="m15 18-6-6 6-6"></path>
                                     </svg>
-                                    <span aria-hidden="true" class="sr-only">Previous</span>
-                                </a>
-                            <?php endif; ?>
-
-                            <div class="flex items-center gap-x-1">
-                                <span class="min-h-[38px] min-w-[38px] flex justify-center items-center border border-gray-200 text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:border-gray-700 dark:text-white dark:focus:bg-white/10"><?= $meta_data['page'] ?></span>
-                                <span class="min-h-[38px] flex justify-center items-center text-gray-500 py-2 px-1.5 text-sm dark:text-gray-500">of</span>
-                                <span class="min-h-[38px] flex justify-center items-center text-gray-500 py-2 px-1.5 text-sm dark:text-gray-500"><?= $meta_data['total'] ?></span>
+                                    <span aria-hidden="true" class="hidden sm:block">Previous</span>
+                                </button>
                             </div>
 
-                            <?php if ($meta_data['page'] < $meta_data['total']) : ?>
-                                <a href="/datamedis?page=<?= $meta_data['page'] + 1 ?>&size=5" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10">
-                                    <span aria-hidden="true" class="sr-only">Next</span>
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m9 18 6-6-6-6" />
-                                    </svg>
-                                </a>
-                            <?php endif; ?>
+                            <!-- Page Numbers -->
+                            <div class="flex items-center gap-x-1">
+                                <?php
+                                $total_pages = $meta_data['total'];
+                                $current_page = $meta_data['page'];
+                                $range = 2; // Number of pages to show before and after the current page
+                                $show_items = ($range * 2) + 1;
 
+                                if ($total_pages <= $show_items) {
+                                    for ($i = 1; $i <= $total_pages; $i++) {
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/persetujuanpengadaan?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
+                                    }
+                                } else {
+                                    if ($current_page > $range + 1) {
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/persetujuanpengadaan?page=1&size=' . $meta_data['size'] . '\'">1</button>';
+                                        if ($current_page > $range + 2) {
+                                            echo '<span class="py-2 px-3 text-sm">...</span>';
+                                        }
+                                    }
+
+                                    for ($i = max($current_page - $range, 1); $i <= min($current_page + $range, $total_pages); $i++) {
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/persetujuanpengadaan?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
+                                    }
+
+                                    if ($current_page < $total_pages - $range - 1) {
+                                        if ($current_page < $total_pages - $range - 2) {
+                                            echo '<span class="py-2 px-3 text-sm">...</span>';
+                                        }
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/persetujuanpengadaan?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
+                                    }
+                                }
+                                ?>
+                            </div>
+
+                            <!-- Next Button -->
+                            <div class="inline-flex gap-x-2">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/persetujuanpengadaan?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                    <span aria-hidden="true" class="hidden sm:block">Next</span>
+                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m9 18 6-6-6-6"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </nav>
 
-
-                        <!-- Dropdown -->
-                        <div class="hs-dropdown relative inline-flex [--placement:top-left]">
-                            <button id="dropDownButton" type="button" class="hs-dropdown-toggle min-h-[32px] py-1 px-2 inline-flex items-center gap-x-1 text-sm rounded-lg border border-gray-200 text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
-                                <?= $meta_data['size'] ?> page
-                                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="m6 9 6 6 6-6" />
-                                </svg>
-                            </button>
-                            <div id="dropdown" class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-48 hidden z-50 transition-[margin,opacity] opacity-0 duration-300 mb-2 bg-white shadow-md rounded-lg p-2 dark:bg-gray-800 dark:border dark:border-gray-700 dark:divide-gray-700" aria-labelledby="hs-small-pagination-dropdown">
-
-                                <a href="/datamedis?page=1&size=5">
-                                    <button type="button" class="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700">
-                                        5 page
-                                    </button>
-                                </a>
-
-                                <a href="/datamedis?page=1&size=10">
-                                    <button type="button" class="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700">
-                                        10 page
-                                    </button>
-                                </a>
-
-                            </div>
-                        </div>
-                        <!-- End Dropdown -->
 
 
                         <!-- End Pagination -->

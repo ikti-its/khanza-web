@@ -104,7 +104,7 @@
                                             <input type="hidden" value="" step="any" name="catatanpengajuan" class="text-center border mr-1 w-[20%]">
 
                                             <th class="p-1 text-right" colspan="4">
-                                                Discount (%)
+                                                Pajak (%)
                                                 <input type="hidden" value="" step="any" name="diskonpersenpengajuan" class="text-center border w-[20%]">
                                                 <input type="number" value="" step="any" name="diskonpersenpemesanan" class="text-center border w-[20%] rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]">
                                             </th>
@@ -114,7 +114,7 @@
                                             </th>
                                         </tr>
                                         <tr>
-                                            <th class="p-1 text-right" colspan="4">Tax Inclusive (%)
+                                            <th class="p-1 text-right" colspan="4">Pajak (%)
                                                 <input type="hidden" value="" step="any" name="pajakpersenpengajuan" class=" text-center border w-[20%]">
                                                 <input type="number" value="" step="any" name="pajakpersenpemesanan" class=" text-center border w-[20%] rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]">
                                             </th>
@@ -146,7 +146,7 @@
                     Batal
                 </button>
                 <button type="submit" value="3" name="statuspesanan" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Tambah
+                    Simpan
                 </button>
             </div>
         </form>

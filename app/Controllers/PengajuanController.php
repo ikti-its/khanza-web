@@ -267,18 +267,20 @@ class PengajuanController extends BaseController
             $supplier = intval($this->request->getPost('supplier'));
             $pegawai = $this->request->getPost('pegawai');
             $diskonpersen = intval($this->request->getPost('diskonpersen'));
-            $diskonjumlah = intval($this->request->getPost('diskonjumlah'));
+            $diskonjumlah = floatval($this->request->getPost('diskonjumlah'));
             $pajakpersen = intval($this->request->getPost('pajakpersen'));
-            $pajakjumlah = intval($this->request->getPost('pajakjumlah'));
+            $pajakjumlah = floatval($this->request->getPost('pajakjumlah'));
             $materai = intval($this->request->getPost('materai'));
             $catatan = $this->request->getPost('catatan');
             $status = $this->request->getPost('status');
+            $totalkeseluruhan = floatval($this->request->getPost('totalkeseluruhan'));
 
             $idbrgmedis = $this->request->getPost('idbrgmedis');
             $satuanbrgmedis = $this->request->getPost('satuanbrgmedis');
             $jumlah_pesanan = $this->request->getPost('jumlah_pesanan');
             $harga_satuan_pengajuan = $this->request->getPost('harga_satuan_pengajuan');
             $harga_satuan_pemesanan = $this->request->getPost('harga_satuan_pemesanan');
+            $totalperitem = $this->request->getPost('totalperitem');
 
             $pengajuan_url = $this->api_url . '/pengadaan/pengajuan';
             $pesanan_url = $this->api_url . '/pengadaan/pesanan';
@@ -293,9 +295,10 @@ class PengajuanController extends BaseController
                 'diskon_jumlah' => $diskonjumlah,
                 'pajak_persen' => $pajakpersen,
                 'pajak_jumlah' => $pajakjumlah,
+                'total_pengajuan' => 50000,
                 'materai' => $materai,
                 'catatan' => $catatan,
-                'status_pesanan' => $status
+                'status_pesanan' => $status,
             ];
             $tambah_pengajuan_JSON = json_encode($postDataPengajuan);
 
@@ -326,6 +329,7 @@ class PengajuanController extends BaseController
                                 'harga_satuan_pengajuan' => intval($harga_satuan_pengajuan[$i]),
                                 'harga_satuan_pemesanan' => 0,
                                 'jumlah_pesanan' => intval($jumlah_pesanan[$i]),
+                                'total_per_item' => 300000,
                             ];
                             $tambah_pesanan_JSON = json_encode($postDataPesanan);
                             $ch_pesanan = curl_init($pesanan_url);
@@ -370,7 +374,7 @@ class PengajuanController extends BaseController
                             return "Error sending request to the obat API.";
                         }
                     } else {
-                        return "Error Insert Medis: " . $response_pengajuan;
+                        return "Error Insert Pengajuan: " . $response_pengajuan;
                     }
                 } else {
                     return "Error sending request to the API.";
@@ -601,6 +605,7 @@ class PengajuanController extends BaseController
                     'Authorization: Bearer ' . $token,
                 ]);
                 $response_byidpesanan = curl_exec($ch_delete_pesanan);
+                $http_status_code_pesanan = curl_getinfo($ch_delete_pesanan, CURLINFO_HTTP_CODE);
             }
             $ch_delete_pengajuan = curl_init($pengajuan_url);
             curl_setopt($ch_delete_pengajuan, CURLOPT_CUSTOMREQUEST, "DELETE");
@@ -609,12 +614,11 @@ class PengajuanController extends BaseController
                 'Authorization: Bearer ' . $token,
             ]);
             $response_pengajuan = curl_exec($ch_delete_pengajuan);
-            $http_status_code_pesanan = curl_getinfo($ch_delete_pesanan, CURLINFO_HTTP_CODE);
             $http_status_code_pengajuan = curl_getinfo($ch_delete_pengajuan, CURLINFO_HTTP_CODE);
             if ($http_status_code_pesanan === 204 && $http_status_code_pengajuan === 204) {
                 return redirect()->to(base_url('pengajuanmedis'));
             } else {
-                return "Error deleting user: " . $response_byidpesanan . $response_pengajuan;
+                return "Error deleting data: " . $response_byidpesanan . $response_pengajuan;
             }
         } else {
             return "User not logged in. Please log in first.";

@@ -168,14 +168,14 @@
                                         <div class="w-[0.75rem] h-[0.75rem] bg-[#3DAFC9] rounded-[1.5rem]"></div>
                                         <p class="ml-2">Tagihan Belum Lunas</p>
                                     </div>
-                                    <p class="pl-3"><?= $countStatus5 ?></p>
+                                    <p class="pl-3"><?= $countStatus6 ?></p>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <div class="flex items-center">
                                         <div class="w-[0.75rem] h-[0.75rem] bg-[#83D9EC] rounded-[1.5rem]"></div>
                                         <p class="ml-2">Barang Telah Diterima</p>
                                     </div>
-                                    <p class="pl-3"><?= $countStatus6 ?></p>
+                                    <p class="pl-3"><?= $countStatus5 ?></p>
                                 </div>
 
                                 <div class="flex justify-between items-center">
@@ -708,7 +708,10 @@
                                                     </span>';
                                                     break;
                                                 default:
-                                                    echo 'Sorry, there was an error processing your request. Please try again later';
+                                                    echo '<span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-[#F1F1F1]">
+                                                    <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
+                                                         Tidak ada status
+                                                    </span>';
                                                     break;
                                             }
                                             ?>

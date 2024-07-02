@@ -123,7 +123,7 @@
                                                     <input type="text" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="harga_satuan_pengajuan[]" value="<?= $pesanan['harga_satuan_pengajuan'] ?>" />
                                                 </td>
                                                 <td class="align-middle p-1 text-right">
-                                                    <input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="total[]" readonly />
+                                                    <input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="total[]" value="<?= $pesanan['total_per_item'] ?>" readonly />
                                                 </td>
                                             </tr>
                                             <!-- <tr>
@@ -204,7 +204,7 @@
                                         </tr>
                                         <tr>
                                             <th class="p-1" style="text-align: right;" colspan="4">Total</th>
-                                            <th class="p-1" id="total"><input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="totalkeseluruhan" disabled></th>
+                                            <th class="p-1" id="total"><input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="totalkeseluruhan" value="<?= $pengajuan_data['total_pengajuan'] ?>" disabled></th>
                                         </tr>
 
                                     </tfoot>

@@ -9,7 +9,7 @@
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
                 Edit Data Barang Medis
             </h2>
-            
+
         </div>
 
         <form action="/submiteditmedis/<?= $medis_data['id'] ?>" method="post">
@@ -156,7 +156,10 @@
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
                     <input type="date" name="kadaluwarsaobat" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
-
+                <div class="mb-5 sm:block md:flex items-center">
+                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa</label>
+                    <input type="text" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                </div>
             <?php elseif ($medis_data['jenis'] === 'Alat Kesehatan') : ?>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
@@ -219,11 +222,18 @@
                         ?>
                     </select>
                 </div>
+                <?php if ($jenis_data['kadaluwarsa'] !== '0001-01-01') { ?>
+                    <div class="mb-5 sm:block md:flex items-center">
+                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
+                        <input type="date" name="kadaluwarsabhp" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    </div>
+                    <?php } else{?>
+                        <input type="hidden" name="kadaluwarsabhp" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">        
+                    <?php }?>
                 <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
-                    <input type="date" name="kadaluwarsabhp" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa</label>
+                    <input type="text" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
-
             <?php elseif ($medis_data['jenis'] === 'Darah') : ?>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
@@ -271,6 +281,10 @@
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
                     <input type="date" name="kadaluwarsadarah" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
+                <div class="mb-5 sm:block md:flex items-center">
+                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa</label>
+                    <input type="text" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                </div>
             <?php endif; ?>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Harga</label>
@@ -280,13 +294,10 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Stok</label>
                 <input type="text" name="stok" value="<?= $medis_data['stok'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa</label>
-                <input type="text" name="notif_kadaluwarsa" value="<?= $medis_data['stok_minimum'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-            </div>
+
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Stok minimum</label>
-                <input type="text" name="stok_minimum" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" name="stok_minimum" value="<?= $medis_data['stok_minimum'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <!-- Grid -->
 
