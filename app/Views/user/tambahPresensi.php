@@ -67,11 +67,11 @@
                         const resizedDetections = faceapi.resizeResults(detections, displaySize);
                         ctx.clearRect(0, 0, overlay.width, overlay.height);
                         faceapi.draw.drawDetections(overlay, resizedDetections);
-                        faceapi.draw.drawFaceLandmarks(overlay, resizedDetections);
+                        // faceapi.draw.drawFaceLandmarks(overlay, resizedDetections);
 
                         // Using labeled face descriptors for face matching
                         if (labeledFaceDescriptors) {
-                            const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
+                            const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.5);
                             const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor));
 
                             results.forEach((result, i) => {

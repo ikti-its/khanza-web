@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-
+use DateTime;
 
 class userPegawaiController extends BaseController
 {
@@ -12,7 +12,7 @@ class userPegawaiController extends BaseController
     public function lihatProfil()
     {
         $title = 'Data Akun';
-
+        date_default_timezone_set('Asia/Bangkok');
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
             $tanggal = date('Y-m-d');
@@ -29,8 +29,11 @@ class userPegawaiController extends BaseController
             if ($response_akun) {
                 $http_status_code_akun = curl_getinfo($ch_akun, CURLINFO_HTTP_CODE);
 
+
                 if ($http_status_code_akun === 200) {
                     $akun_data = json_decode($response_akun, true);
+
+
                     return view('/user/homeUser', ['akun_data' => $akun_data['data'], 'title' => $title]);
                 } else {
                     return $this->renderErrorView($http_status_code_akun);
@@ -73,7 +76,7 @@ class userPegawaiController extends BaseController
             ];
 
             $edit_pegawai_JSON = json_encode($postData);
-
+            date_default_timezone_set('Asia/Bangkok');
             $tanggal = date('Y-m-d');
             // URL for fetching akun data
             $pegawai_url = $this->api_url . '/m/profile/' . $pegawaiId;
@@ -108,7 +111,7 @@ class userPegawaiController extends BaseController
 
                     if ($http_status_code === 200) {
                         // Account updated successfully
-                        $title = 'Data Akun';
+                        $title = 'Data Profil';
 
                         // Pass the updated account data along with the title to the view
                         return redirect()->to(base_url('profile'));
@@ -169,7 +172,7 @@ class userPegawaiController extends BaseController
 
                     // Close the cURL session for akun data
                     curl_close($ch_akun);
-
+                    date_default_timezone_set('Asia/Bangkok');
                     // Now fetch data from ketersediaan_url
                     $tanggal = date('Y-m-d');
                     $ketersediaan_url = $this->api_url . '/m/ketersediaan?tanggal=' . $tanggal . '&page=' . $page . '&size=' . $size;
@@ -192,36 +195,74 @@ class userPegawaiController extends BaseController
                             // Ketersediaan data fetched successfully
                             $ketersediaan_data = json_decode($response_ketersediaan, true);
 
-                            // Coordinates of the origin (assuming these are fixed for demonstration)
-                            $latitudeOrg = -7.281696177416258; // User's latitude or fixed origin point
-                            $longitudeOrg = 112.79505404588785; // User's longitude or fixed origin point
+                            // Initialize cURL session to get location data
+                            $lokasi_url = $this->api_url . '/organisasi/current';
+                            $ch_lokasi = curl_init($lokasi_url);
 
-                            // Calculate distances using Haversine formula and assign to each entry
-                            foreach ($ketersediaan_data['data']['ketersediaan'] as &$item) {
-                                if (isset($item['latitude']) && isset($item['longitude'])) {
-                                    // Extract latitude and longitude from the current item
-                                    $ketersediaanLat = $item['latitude'];
-                                    $ketersediaanLng = $item['longitude'];
+                            // Set cURL options for the location request
+                            curl_setopt($ch_lokasi, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch_lokasi, CURLOPT_HTTPHEADER, [
+                                'Authorization: Bearer ' . $token,
+                            ]);
 
-                                    // Calculate distance using Haversine formula
-                                    $distance = $this->calculateDistance($latitudeOrg, $longitudeOrg, $ketersediaanLat, $ketersediaanLng);
+                            $response_lokasi = curl_exec($ch_lokasi);
 
-                                    // Assign distance to the current item
-                                    $item['distance'] = $distance;
-                                }
+                            // Check for cURL errors
+                            if ($response_lokasi === false) {
+                                $error_message = curl_error($ch_lokasi);
+                                curl_close($ch_lokasi);
+                                return $this->renderErrorView(500, 'Error fetching location data: ' . $error_message);
                             }
 
-                            // Close the cURL session for ketersediaan data
-                            curl_close($ch_ketersediaan);
 
-                            // Pass data to the view, including the distances array
-                            return view('/user/dataPegawai', [
-                                'akun_data' => $akun_data['data']['pegawai'],
-                                'meta_data' => $akun_data['data'],
-                                'ketersediaan_data' => $ketersediaan_data['data']['ketersediaan'],
-                                'meta_ketersediaan_data' => $ketersediaan_data['data'],
-                                'title' => $title,
-                            ]);
+                            // Get HTTP status code for location request
+                            $http_status_response_lokasi = curl_getinfo($ch_lokasi, CURLINFO_HTTP_CODE);
+
+                            // Close cURL session for location request
+                            curl_close($ch_lokasi);
+
+
+                            if ($http_status_response_lokasi === 200) {
+                                // Parse JSON response for location data
+                                $lokasi_data = json_decode($response_lokasi, true);
+
+                                // Extract latitude and longitude from the location data
+                                $latitudeOrg = $lokasi_data['data']['latitude'];
+                                $longitudeOrg = $lokasi_data['data']['longitude'];
+
+
+
+                                // Calculate distances using Haversine formula and assign to each entry
+                                foreach ($ketersediaan_data['data']['ketersediaan'] as &$item) {
+                                    if (isset($item['latitude']) && isset($item['longitude'])) {
+                                        // Extract latitude and longitude from the current item
+                                        $ketersediaanLat = $item['latitude'];
+                                        $ketersediaanLng = $item['longitude'];
+
+                                        // Calculate distance using Haversine formula
+                                        $distance = $this->calculateDistance($latitudeOrg, $longitudeOrg, $ketersediaanLat, $ketersediaanLng);
+
+                                        // Assign distance to the current item
+                                        $item['distance'] = $distance;
+                                    }
+                                }
+
+                                // Sort the ketersediaan_data array based on 'distance' in ascending order
+                                usort($ketersediaan_data['data']['ketersediaan'], function ($a, $b) {
+                                    return $a['distance'] <=> $b['distance'];
+                                });
+                                // Close the cURL session for ketersediaan data
+                                curl_close($ch_ketersediaan);
+
+                                // Pass data to the view, including the distances array
+                                return view('/user/dataPegawai', [
+                                    'akun_data' => $akun_data['data']['pegawai'],
+                                    'meta_data' => $akun_data['data'],
+                                    'ketersediaan_data' => $ketersediaan_data['data']['ketersediaan'],
+                                    'meta_ketersediaan_data' => $ketersediaan_data['data'],
+                                    'title' => $title,
+                                ]);
+                            }
                         } else {
                             // Error fetching ketersediaan data
                             curl_close($ch_ketersediaan);
@@ -377,7 +418,13 @@ class userPegawaiController extends BaseController
 
                     // $total_pages = $akun_data['data']['total'];
 
-                    return  view('/user/tampilCatatanKehadiran', ['kehadiran_data' => $kehadiran_data['data'], 'title' => $title]);
+                    $this->addBreadcrumb('Kehadiran', 'kehadiran');
+                    $this->addBreadcrumb('Peninjauan', 'peninjauan');
+                    $this->addBreadcrumb('Catatan Kehadiran', '');
+
+                    $breadcrumbs = $this->getBreadcrumbs();
+
+                    return  view('/user/tampilCatatanKehadiran', ['kehadiran_data' => $kehadiran_data['data'], 'title' => $title, 'breadcrumbs' => $breadcrumbs]);
                 } else {
                     // Error fetching kehadiran data
                     return $this->renderErrorView($http_status_code_kehadiran);
@@ -434,7 +481,13 @@ class userPegawaiController extends BaseController
 
                     // $total_pages = $akun_data['data']['total'];
 
-                    return  view('/user/tampilCatatanCuti', ['cuti_data' => $cuti_data['data'], 'title' => $title]);
+                    $this->addBreadcrumb('Kehadiran', 'kehadiran');
+                    $this->addBreadcrumb('Peninjauan',  'peninjauan');
+                    $this->addBreadcrumb('Daftar Pengajuan Cuti', '');
+
+                    $breadcrumbs = $this->getBreadcrumbs();
+
+                    return  view('/user/tampilCatatanCuti', ['cuti_data' => $cuti_data['data'], 'title' => $title, 'breadcrumbs' => $breadcrumbs]);
                 } else {
                     // Error fetching cuti data
                     return $this->renderErrorView($http_status_code_cuti);
@@ -492,7 +545,13 @@ class userPegawaiController extends BaseController
 
                     // $total_pages = $akun_data['data']['total'];
 
-                    return  view('/user/tampilJadwalPegawai', ['kehadiran_data' => $jadwal_data['data'], 'title' => $title]);
+                    $this->addBreadcrumb('Kehadiran', 'kehadiran');
+                    $this->addBreadcrumb('Peninjauan', 'peninjauan');
+                    $this->addBreadcrumb('Jadwal Kerja', '');
+
+                    $breadcrumbs = $this->getBreadcrumbs();
+
+                    return  view('/user/tampilJadwalPegawai', ['kehadiran_data' => $jadwal_data['data'], 'title' => $title, 'breadcrumbs' => $breadcrumbs]);
                 } else {
                     // Error fetching jadwal data
                     return $this->renderErrorView($http_status_code_jadwal);
@@ -586,11 +645,17 @@ class userPegawaiController extends BaseController
                                 }
                             }
 
+                            $this->addBreadcrumb('Kehadiran', 'kehadiran');
+                            $this->addBreadcrumb('Peninjauan', 'peninjauan');
+                            $this->addBreadcrumb('Jadwal Kerja', '');
+
+                            $breadcrumbs = $this->getBreadcrumbs();
                             // Return view with combined data
                             return view('/user/tampilJadwalPegawaiPenuh', [
                                 'kehadiran_data' => $kehadiran_data,
                                 'meta_data' => $jadwal_data['data'],
                                 'title' => $title,
+                                'breadcrumbs' => $breadcrumbs,
                             ]);
                         } else {
                             // Error fetching pegawai data
@@ -630,7 +695,12 @@ class userPegawaiController extends BaseController
         // Check if the user is logged in by checking the presence of the JWT token in the session
         if (session()->has('jwt_token')) {
             // Return the view with the title
-            return view('/user/izinCuti', ['title' => $title]);
+            $this->addBreadcrumb('Kehadiran', 'kehadiran');
+            $this->addBreadcrumb('Pengajuan', 'peninjauan');
+            $this->addBreadcrumb('Izin Cuti', '');
+
+            $breadcrumbs = $this->getBreadcrumbs();
+            return view('/user/izinCuti', ['title' => $title, 'breadcrumbs' => $breadcrumbs]);
         } else {
             // Redirect to login page or show an appropriate message
             return redirect()->to('/login')->with('error', 'User not logged in. Please log in first.');
@@ -720,137 +790,175 @@ class userPegawaiController extends BaseController
     public function lihatDashboard()
     {
         $title = 'Dashboard';
-        return view('/user/dashboard', ['title' => $title]);
+
+        date_default_timezone_set('Asia/Bangkok');
+        // Check if the user is logged in by checking the presence of the JWT token in the session
+        if (session()->has('jwt_token')) {
+
+            $token = session()->get('jwt_token');
+            $headers = [
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/json'
+            ];
+
+            $tanggal = date('Y-m-d');
+
+            $user_specific_url = $this->api_url . '/m/home?tanggal=' . $tanggal;
+
+            // Initialize cURL session for user specific data
+            $user_specific_ch = curl_init($user_specific_url);
+            curl_setopt($user_specific_ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($user_specific_ch, CURLOPT_HTTPHEADER, $headers);
+
+            // Execute the cURL request for user specific data
+            $user_specific_response = curl_exec($user_specific_ch);
+
+            if ($user_specific_response) {
+                // Decode the JSON response
+                $user_specific_data = json_decode($user_specific_response, true);
+
+                // Store the user specific data in session or handle it as needed
+                session()->set('user_specific_data', $user_specific_data['data']);
+
+
+                return view('/user/dashboard', ['title' => $title]);
+            }
+        }
     }
 
     public function tambahPresensi()
     {
         $title = 'Tambah Presensi';
-    
+
         // Retrieve session data
         $session = session()->get('user_specific_data');
         $pegawaiId = $session['pegawai'];
         $namaPegawai = $session['nama'];
         $jwtToken = session()->get('jwt_token');
         $api_url = $this->api_url . '/pegawai/foto'; // Example API URL
-    
+
         // Check if the user is logged in
         if (!$jwtToken) {
             return $this->renderErrorView(401); // Unauthorized
         }
-    
+
         // Get central latitude and longitude from POST data
         $centralLatitude = (float)$this->request->getPost('latitude');
-    $centralLongitude = (float)$this->request->getPost('longitude');
-    
+        $centralLongitude = (float)$this->request->getPost('longitude');
+
         // Convert central latitude and longitude to radians
         $centralLatitude = deg2rad($centralLatitude);
         $centralLongitude = deg2rad($centralLongitude);
-    
+
         // Initialize cURL session to get location data
         $lokasi_url = $this->api_url . '/organisasi/current';
         $ch_lokasi = curl_init($lokasi_url);
-    
+
         // Set cURL options for the location request
         curl_setopt($ch_lokasi, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch_lokasi, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $jwtToken,
         ]);
-    
+
         // Execute the cURL request for fetching location data
         $response_lokasi = curl_exec($ch_lokasi);
-    
+
         // Check for cURL errors
         if ($response_lokasi === false) {
             $error_message = curl_error($ch_lokasi);
             curl_close($ch_lokasi);
             return $this->renderErrorView(500, 'Error fetching location data: ' . $error_message);
         }
-    
+
         // Get HTTP status code for location request
         $http_status_response_lokasi = curl_getinfo($ch_lokasi, CURLINFO_HTTP_CODE);
-    
+
         // Close cURL session for location request
         curl_close($ch_lokasi);
-    
+
         // Check HTTP status for location request
         if ($http_status_response_lokasi === 200) {
             // Parse JSON response for location data
             $lokasi_data = json_decode($response_lokasi, true);
-    
+
             // Extract latitude and longitude from the location data
             $latitude = $lokasi_data['data']['latitude'];
             $longitude = $lokasi_data['data']['longitude'];
-    
+
             // Convert latitude and longitude from degrees to radians
             $latitude = deg2rad($latitude);
             $longitude = deg2rad($longitude);
-    
+
             // Radius of the Earth in kilometers
             $earthRadius = 6371;
-    
+
             // Calculate the difference between the points
             $latDifference = $latitude - $centralLatitude;
             $lonDifference = $longitude - $centralLongitude;
-    
+
             // Apply the Haversine formula
             $a = sin($latDifference / 2) ** 2 + cos($centralLatitude) * cos($latitude) * sin($lonDifference / 2) ** 2;
             $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
             $distance = $earthRadius * $c;
-    
+
             // Convert distance to meters
             $distanceInMeters = $distance * 1000;
-    
+
             // Check if the distance is within 500 meters
             if ($distanceInMeters > 500) {
                 return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap berada pada area rumah sakit'); // Forbidden with custom message
             }
-    
+
             // User's IP address (local IP simulated for testing)
             $ipAddress = $_SERVER['REMOTE_ADDR'];
             if ($ipAddress === '::1' || $ipAddress === '127.0.0.1') {
                 $ipAddress = '10.183.0.1'; // Example local IP for testing
             }
-    
+
             // Check if the IP address starts with '10.183'
             if (strpos($ipAddress, '10.183') !== 0) {
                 return $this->renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap gunakan jaringan internal rumah sakit'); // Forbidden with custom message
             }
-    
+
             // Initialize cURL session to get employee photo data
             $foto_url = $this->api_url . '/pegawai/foto/' . $pegawaiId;
             $ch_foto = curl_init($foto_url);
-    
+
             // Set cURL options for the employee photo request
             curl_setopt($ch_foto, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_foto, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $jwtToken,
             ]);
-    
+
             // Execute the cURL request for fetching employee photo data
             $response_foto = curl_exec($ch_foto);
-    
+
             // Check for cURL errors
             if ($response_foto === false) {
                 $error_message = curl_error($ch_foto);
                 curl_close($ch_foto);
                 return $this->renderErrorView(500, 'Error fetching employee photo data: ' . $error_message);
             }
-    
+
             // Get HTTP status code for employee photo request
             $http_status_response_foto = curl_getinfo($ch_foto, CURLINFO_HTTP_CODE);
-    
+
             // Close cURL session for employee photo request
             curl_close($ch_foto);
-    
+
             // Check HTTP status for employee photo request
             if ($http_status_response_foto !== 200) {
                 return $this->renderErrorView($http_status_response_foto, 'Error fetching employee photo data');
             }
-    
+
             // Parse JSON response for employee photo data
             $foto_data = json_decode($response_foto, true);
-    
+
+            $this->addBreadcrumb('Kehadiran', 'kehadiran');
+            $this->addBreadcrumb('Presensi', 'presensi');
+            $this->addBreadcrumb('Masuk', '');
+
+            $breadcrumbs = $this->getBreadcrumbs();
             // Render the view with fetched data
             return view('/user/tambahPresensi', [
                 'api_url' => $api_url,
@@ -859,12 +967,13 @@ class userPegawaiController extends BaseController
                 'jwtToken' => $jwtToken,
                 'title' => $title,
                 'foto_data' => $foto_data['data']['foto'],
+                'breadcrumbs' => $breadcrumbs
             ]);
         } else {
             return $this->renderErrorView($http_status_response_lokasi, 'Error fetching location data');
         }
     }
-    
+
 
 
 
@@ -1195,7 +1304,6 @@ class userPegawaiController extends BaseController
                         return redirect()->to(base_url('dashboard'));
                     } else {
                         // Error response from the API
-                        var_dump($postData);
                         return $this->renderErrorView($http_status_code);
                     }
                 } else {

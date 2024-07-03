@@ -14,7 +14,7 @@ $routes->get('/dashboard', 'userPegawaiController::lihatDashboard', ['filter' =>
 $routes->post('/dashboard', 'authController::login', ['filter' => 'noauth']);
 $routes->get('/profile', 'userPegawaiController::lihatProfil', ['filter' => 'auth']);
 $routes->post('/submiteditprofil/(:segment)', 'userPegawaiController::submitEditProfil/$1', ['filter' => 'auth']);
-$routes->get('/datauserpegawai', 'userPegawaiController::lihatPegawai', ['filter' => 'auth']);
+$routes->get('/datauserpegawai', 'userPegawaiController::lihatPegawai', ['filter' => 'ijin']);
 $routes->get('/detailberkaspegawai/(:segment)', 'userPegawaiController::detailBerkasPegawai/$1', ['filter' => 'auth']);
 
 $routes->post('/kirimnotifikasi', 'userAdminController::submitKirimNotifikasi', ['filter' => 'noauth']);
@@ -52,15 +52,15 @@ $routes->post('/admin', 'authController::login', ['filter' => 'noauth']);
 
 // $routes->set404Override('App\Controllers\ErrorController::show404');
 
-$routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
-    $routes->get('error/400', 'ErrorHandler::show400');
-    $routes->get('error/401', 'ErrorHandler::show401');
-    $routes->get('error/403', 'ErrorHandler::show403');
-    $routes->get('error/500', 'ErrorHandler::show500');
-});
+// $routes->group('', ['namespace' => 'App\Controllers'], function ($routes) {
+//     $routes->get('error/400', 'ErrorHandler::show400');
+//     $routes->get('error/401', 'ErrorHandler::show401');
+//     $routes->get('error/403', 'ErrorHandler::show403');
+//     $routes->get('error/500', 'ErrorHandler::show500');
+// });
 
-$routes->get('test-400', 'ErrorHandler::show400');
-$routes->get('test-401', 'ErrorHandler::show401');
+// $routes->get('test-400', 'ErrorHandler::show400');
+// $routes->get('test-401', 'ErrorHandler::show401');
 $routes->get('test-403', 'ErrorHandler::show403');
-$routes->get('test-404', 'ErrorHandler::show404');
-$routes->get('test-500', 'ErrorHandler::show500');
+// $routes->get('test-404', 'ErrorHandler::show404');
+// $routes->get('test-500', 'ErrorHandler::show500');

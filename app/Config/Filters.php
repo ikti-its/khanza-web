@@ -27,6 +27,7 @@ class Filters extends BaseConfig
         'auth' => \App\Filters\Auth::class,
         'noauth' => \App\Filters\NoAuth::class,
         'noauth2' => \App\Filters\NoAuth::class,
+        'ijin' => \App\Filters\Ijin::class,
     ];
 
     /**
@@ -68,5 +69,7 @@ class Filters extends BaseConfig
      * Example:
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
-    public array $filters = [];
+    public array $filters = [
+        
+    ];
 }

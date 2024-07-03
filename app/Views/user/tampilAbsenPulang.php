@@ -65,6 +65,25 @@
                                     <input id="jam_pulang" name="jam_pulang" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:outline-teal-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Selected Date" value="<?= $kehadiran_data[0]['jam_pulang'] ?>" readonly>
                                 </div>
 
+                                <div class="sm:col-span-3">
+                                    <label for="af-account-alasan" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                        Absen Emergency
+                                    </label>
+                                </div>
+                                <!-- End Col -->
+                                <div class="sm:col-span-9">
+                                <div class="hs-tooltip flex items-center">
+  <input type="checkbox" id="hs-tooltip-example" class="hs-tooltip-toggle relative w-[3.25rem] h-7 p-px bg-gray-100 border-transparent text-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-blue-600 disabled:opacity-50 disabled:pointer-events-none checked:bg-none checked:text-blue-600 checked:border-blue-600 focus:checked:border-blue-600 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-600
+
+  before:inline-block before:size-6 before:bg-white checked:before:bg-blue-200 before:translate-x-0 checked:before:translate-x-full before:rounded-full before:shadow before:transform before:ring-0 before:transition before:ease-in-out before:duration-200 dark:before:bg-neutral-400 dark:checked:before:bg-blue-200">
+  <label for="hs-tooltip-example" class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Allow push notifications</label>
+  <div class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-neutral-700" role="tooltip">
+    Enable push notifications
+  </div>
+</div>
+                                </div>
+
+
 
                                 <!-- End Col -->
                                 <!-- Hidden input field for pegawai_id -->
