@@ -2,7 +2,9 @@
 <?= $this->section('content'); ?>
 
 
-
+<?php
+date_default_timezone_set('Asia/Bangkok'); // Set default timezone to Asia/Bangkok
+?>
 
 <!-- Table Section -->
 <div class="overflow overflow-auto px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">

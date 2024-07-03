@@ -783,15 +783,23 @@ class userPegawaiController extends BaseController
     public function lihatOpsiHadir()
     {
         $title = 'OpsiHadir';
-        return view('/user/opsiHadir', ['title' => $title]);
+        if (session()->has('jwt_token')) {
+            // Return the view with the title
+            $this->addBreadcrumb('Kehadiran', 'kehadiran');
+            $this->addBreadcrumb('Presensi', 'presensi');
+            $this->addBreadcrumb('Masuk', '');
+
+            $breadcrumbs = $this->getBreadcrumbs();
+        }
+        return view('/user/opsiHadir', ['title' => $title, 'breadcrumbs' => $breadcrumbs]);
     }
 
 
     public function lihatDashboard()
     {
         $title = 'Dashboard';
-
         date_default_timezone_set('Asia/Bangkok');
+       
         // Check if the user is logged in by checking the presence of the JWT token in the session
         if (session()->has('jwt_token')) {
 
@@ -800,7 +808,7 @@ class userPegawaiController extends BaseController
                 'Authorization: Bearer ' . $token,
                 'Content-Type: application/json'
             ];
-
+            
             $tanggal = date('Y-m-d');
 
             $user_specific_url = $this->api_url . '/m/home?tanggal=' . $tanggal;
@@ -819,8 +827,6 @@ class userPegawaiController extends BaseController
 
                 // Store the user specific data in session or handle it as needed
                 session()->set('user_specific_data', $user_specific_data['data']);
-
-
                 return view('/user/dashboard', ['title' => $title]);
             }
         }
@@ -982,7 +988,16 @@ class userPegawaiController extends BaseController
     public function tambahSwafoto()
     {
         $title = 'Detail berkas';
-        return view('/user/tambahSwafoto', ['title' => $title]);
+        if (session()->has('jwt_token')) {
+            $this->addBreadcrumb('Kehadiran', 'kehadiran');
+            $this->addBreadcrumb('Presensi', 'presensi');
+            $this->addBreadcrumb('Masuk', '');
+
+            $breadcrumbs = $this->getBreadcrumbs();
+
+            return view('/user/tambahSwafoto', ['title' => $title, 'breadcrumbs' => $breadcrumbs]);
+        }
+        
     }
 
 
@@ -1034,7 +1049,7 @@ class userPegawaiController extends BaseController
                 if ($http_status_code_jadwal === 200) {
                     // Akun data fetched successfully
                     $jadwal_data = json_decode($response_jadwal, true)['data'];
-
+                    date_default_timezone_set('Asia/Bangkok');
                     // Get the current day of the week (1 for Monday, 7 for Sunday)
                     $currentDay = date('N'); // Returns 1 (Monday) to 7 (Sunday)
 
@@ -1045,6 +1060,9 @@ class userPegawaiController extends BaseController
 
                     // Check if there is a schedule for today
                     if (!empty($jadwal_today)) {
+
+                        
+
                         return view('/user/tampilAbsenMasuk', [
                             'kehadiran_data' => $jadwal_today,
                             'foto_data' => $foto_data,
@@ -1224,9 +1242,17 @@ class userPegawaiController extends BaseController
 
                     // Check if there is a schedule for today
                     if (!empty($jadwal_today)) {
+
+                        $this->addBreadcrumb('Kehadiran', 'kehadiran');
+                        $this->addBreadcrumb('Presensi', 'presensi');
+                        $this->addBreadcrumb('Pulang', '');
+            
+                        $breadcrumbs = $this->getBreadcrumbs();
+                        
                         return view('/user/tampilAbsenPulang', [
                             'kehadiran_data' => $jadwal_today,
-                            'title' => $title
+                            'title' => $title,
+                            'breadcrumbs' => $breadcrumbs
                         ]);
                     } else {
                         // No schedule found for today
