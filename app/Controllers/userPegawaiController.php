@@ -799,7 +799,7 @@ class userPegawaiController extends BaseController
     {
         $title = 'Dashboard';
         date_default_timezone_set('Asia/Bangkok');
-       
+
         // Check if the user is logged in by checking the presence of the JWT token in the session
         if (session()->has('jwt_token')) {
 
@@ -808,7 +808,7 @@ class userPegawaiController extends BaseController
                 'Authorization: Bearer ' . $token,
                 'Content-Type: application/json'
             ];
-            
+
             $tanggal = date('Y-m-d');
 
             $user_specific_url = $this->api_url . '/m/home?tanggal=' . $tanggal;
@@ -997,7 +997,6 @@ class userPegawaiController extends BaseController
 
             return view('/user/tambahSwafoto', ['title' => $title, 'breadcrumbs' => $breadcrumbs]);
         }
-        
     }
 
 
@@ -1061,7 +1060,7 @@ class userPegawaiController extends BaseController
                     // Check if there is a schedule for today
                     if (!empty($jadwal_today)) {
 
-                        
+
 
                         return view('/user/tampilAbsenMasuk', [
                             'kehadiran_data' => $jadwal_today,
@@ -1246,9 +1245,9 @@ class userPegawaiController extends BaseController
                         $this->addBreadcrumb('Kehadiran', 'kehadiran');
                         $this->addBreadcrumb('Presensi', 'presensi');
                         $this->addBreadcrumb('Pulang', '');
-            
+
                         $breadcrumbs = $this->getBreadcrumbs();
-                        
+
                         return view('/user/tampilAbsenPulang', [
                             'kehadiran_data' => $jadwal_today,
                             'title' => $title,
@@ -1285,6 +1284,9 @@ class userPegawaiController extends BaseController
             $abseniId = session()->get('response_data');
             $pegawaiId = session()->get('user_specific_data')['pegawai'];
 
+            // Retrieve form data
+            $emergencySwitch = $this->request->getPost('emergencySwitch') ? true : false;
+
 
             // Prepare the data to be sent to the API
             $postData = [
@@ -1295,7 +1297,12 @@ class userPegawaiController extends BaseController
 
             $tambah_pulang_JSON = json_encode($postData);
 
-            $pulang_url = $this->api_url . '/kehadiran/presensi/leave';
+            // Define API URL based on emergency switch
+            if ($emergencySwitch) {
+                $pulang_url = $this->api_url . '/kehadiran/presensi/leave?emergency=true';
+            } else {
+                $pulang_url = $this->api_url . '/kehadiran/presensi/leave';
+            }
 
             // Check if required fields are provided
             if (session()->has('jwt_token')) {
