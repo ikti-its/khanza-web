@@ -71,7 +71,7 @@
 
                         // Using labeled face descriptors for face matching
                         if (labeledFaceDescriptors) {
-                            const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.8);
+                            const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4);
                             const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor));
 
                             results.forEach((result, i) => {
