@@ -38,7 +38,7 @@ date_default_timezone_set('Asia/Bangkok'); // Set default timezone to Asia/Bangk
 
                                 <div class="sm:col-span-9">
                                     <!-- Input field to display the selected date -->
-                                    <input id="id_shift" name="id_shift" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:outline-teal-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Shift Kerja" value="<?= $kehadiran_data[0]['id_shift'] ?>" readonly>
+                                    <input id="id_shift" name="id_shift" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Shift Kerja" value="<?= $kehadiran_data[0]['id_shift'] ?>" readonly>
                                 </div>
                                 <!-- End Col -->
 
@@ -51,7 +51,7 @@ date_default_timezone_set('Asia/Bangkok'); // Set default timezone to Asia/Bangk
 
                                 <div class="sm:col-span-9">
                                     <!-- Input field to display the selected date -->
-                                    <input id="jam_masuk" name="jam_masuk" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:outline-teal-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Jam Masuk" value="<?= $kehadiran_data[0]['jam_masuk'] ?>" readonly>
+                                    <input id="jam_masuk" name="jam_masuk" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Jam Masuk" value="<?= $kehadiran_data[0]['jam_masuk'] ?>" readonly>
                                 </div>
                                 <!-- End Col -->
 
@@ -63,7 +63,7 @@ date_default_timezone_set('Asia/Bangkok'); // Set default timezone to Asia/Bangk
                                 <!-- End Col -->
                                 <div class="sm:col-span-9">
                                     <!-- Input field to display the selected date -->
-                                    <input id="jam_pulang" name="jam_pulang" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:outline-teal-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Selected Date" value="<?= $kehadiran_data[0]['jam_pulang'] ?>" readonly>
+                                    <input id="jam_pulang" name="jam_pulang" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Selected Date" value="<?= $kehadiran_data[0]['jam_pulang'] ?>" readonly>
                                 </div>
 
                                 <div class="sm:col-span-3">

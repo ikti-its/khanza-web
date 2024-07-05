@@ -121,7 +121,7 @@ class HSSelect extends HSBasePlugin<ISelectOptions> implements ISelect {
 			concatOptions?.searchWrapperClasses || 'bg-white p-2 sticky top-0';
 		this.searchClasses =
 			concatOptions?.searchClasses ||
-			'block w-[calc(100%-2rem)] text-sm border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 py-2 px-3 my-2 mx-4';
+			'block w-[calc(100%-2rem)] text-sm border-gray-200 rounded-md focus:border-teal-500 focus:ring-teal-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 py-2 px-3 my-2 mx-4';
 		this.searchPlaceholder = concatOptions?.searchPlaceholder || 'Search...';
 		this.searchNoResultText =
 			concatOptions?.searchNoResultText || 'No options found...';

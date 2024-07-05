@@ -12,7 +12,7 @@
             <a href="dataakun">
                 <div class="h-36 sm:h-56 flex flex-col justify-center border border-gray-200 rounded-xl text-center p-4 md:p-5 dark:border-gray-700">
                     <!-- Icon -->
-                    <div class="flex justify-center items-center size-12 bg-gradient-to-br from-blue-600 to-violet-600 rounded-lg mx-auto">
+                    <div class="flex justify-center items-center size-12 bg-gradient-to-br from-teal-600 to-violet-600 rounded-lg mx-auto">
                         <svg class="flex-shrink-0 size-7 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="18" height="10" x="3" y="11" rx="2" />
                             <circle cx="12" cy="5" r="2" />
@@ -45,7 +45,7 @@
             <a href="/datapegawai">
                 <div class="h-36 sm:h-56 flex flex-col justify-center border border-gray-200 rounded-xl text-center p-4 md:p-5 dark:border-gray-700">
                     <!-- Icon -->
-                    <div class="flex justify-center items-center size-12 bg-gradient-to-br from-blue-600 to-violet-600 rounded-lg mx-auto">
+                    <div class="flex justify-center items-center size-12 bg-gradient-to-br from-teal-600 to-violet-600 rounded-lg mx-auto">
                         <svg class="flex-shrink-0 size-7 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m7.5 4.27 9 5.15" />
                             <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
@@ -69,7 +69,7 @@
         <button class="hover:bg-gray-100 transition-colors duration-300 disabled:opacity-50 rounded-xl">
             <div class="h-36 sm:h-56 flex flex-col justify-center border border-gray-200 rounded-xl text-center p-4 md:p-5 dark:border-gray-700">
                 <!-- Icon -->
-                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-blue-600 to-violet-600 rounded-lg mx-auto">
+                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-teal-600 to-violet-600 rounded-lg mx-auto">
                     <svg class="flex-shrink-0 size-7 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                     </svg>
@@ -92,7 +92,7 @@
         <button class="hover:bg-gray-100 transition-colors duration-300 disabled:opacity-50 rounded-xl">
             <div class="h-36 sm:h-56 flex flex-col justify-center border border-gray-200 rounded-xl text-center p-4 md:p-5 dark:border-gray-700">
                 <!-- Icon -->
-                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-blue-600 to-violet-600 rounded-lg mx-auto">
+                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-teal-600 to-violet-600 rounded-lg mx-auto">
                     <svg class="flex-shrink-0 size-7 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
                         <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
@@ -120,7 +120,7 @@
         <button class="hover:bg-gray-100 transition-colors duration-300 disabled:opacity-50 rounded-xl">
             <div class="h-36 sm:h-56 flex flex-col justify-center border border-gray-200 rounded-xl text-center p-4 md:p-5 dark:border-gray-700">
                 <!-- Icon -->
-                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-blue-600 to-violet-600 rounded-lg mx-auto">
+                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-teal-600 to-violet-600 rounded-lg mx-auto">
                     <svg class="flex-shrink-0 size-7 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                         <circle cx="9" cy="7" r="4" />
@@ -146,7 +146,7 @@
         <button class="hover:bg-gray-100 transition-colors duration-300 disabled:opacity-50 rounded-xl">
             <div class="h-36 sm:h-56 flex flex-col justify-center border border-gray-200 rounded-xl text-center p-4 md:p-5 dark:border-gray-700">
                 <!-- Icon -->
-                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-blue-600 to-violet-600 rounded-lg mx-auto">
+                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-teal-600 to-violet-600 rounded-lg mx-auto">
                     <svg class="flex-shrink-0 size-7 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M7 10v12" />
                         <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z" />
@@ -167,7 +167,7 @@
         <button class="hover:bg-gray-100 transition-colors duration-300 disabled:opacity-50 rounded-xl">
             <div class="h-36 sm:h-56 flex flex-col justify-center border border-gray-200 rounded-xl text-center p-4 md:p-5 dark:border-gray-700">
                 <!-- Icon -->
-                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-blue-600 to-violet-600 rounded-lg mx-auto">
+                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-teal-600 to-violet-600 rounded-lg mx-auto">
                     <svg class="flex-shrink-0 size-7 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M2 3h20" />
                         <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" />
@@ -189,7 +189,7 @@
         <button class="hover:bg-gray-100 transition-colors duration-300 disabled:opacity-50 rounded-xl">
             <div class="h-36 sm:h-56 flex flex-col justify-center border border-gray-200 rounded-xl text-center p-4 md:p-5 dark:border-gray-700">
                 <!-- Icon -->
-                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-blue-600 to-violet-600 rounded-lg mx-auto">
+                <div class="flex justify-center items-center size-12 bg-gradient-to-br from-teal-600 to-violet-600 rounded-lg mx-auto">
                     <svg class="flex-shrink-0 size-7 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" />
                         <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />

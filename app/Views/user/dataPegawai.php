@@ -50,7 +50,7 @@
                             <div class="sm:col-span-1">
                                 <label for="hs-as-table-product-review-search" class="sr-only">Search</label>
                                 <div class="relative">
-                                    <input type="text" id="myInput" onkeyup="myFunction()" class="py-2 px-4 ps-11 block border w-full xl:w-96 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
+                                    <input type="text" id="myInput" onkeyup="myFunction()" class="py-2 px-4 ps-11 block border w-full xl:w-96 border-gray-200 rounded-lg text-sm focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
                                     <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
                                         <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
@@ -185,7 +185,7 @@
                                                     $whatsappLink = "https://wa.me/$phoneNumber?text=" . urlencode($message);
                                                     ?>
                                                     <a class="flex items-center gap-x-2" href="<?= $whatsappLink ?>" target="_blank">
-                                                        <span class="font-semibold text-teal-500 decoration-2 hover:underline dark:text-blue-500">Hubungi</span>
+                                                        <span class="font-semibold text-teal-500 decoration-2 hover:underline dark:text-teal-500">Hubungi</span>
                                                     </a>
                                                 </div>
                                             </td>
@@ -202,7 +202,7 @@
                             <div class="sm:col-span-1">
                                 <label for="hs-as-table-product-review-search" class="sr-only">Search</label>
                                 <div class="relative">
-                                    <input type="text" id="myInput" onkeyup="myFunction()" class="py-2 px-4 ps-11 block border w-full xl:w-96 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
+                                    <input type="text" id="myInput" onkeyup="myFunction()" class="py-2 px-4 ps-11 block border w-full xl:w-96 border-gray-200 rounded-lg text-sm focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
                                     <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
                                         <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
@@ -344,7 +344,7 @@
                                                     $message2 = "Hello, I would like to inquire about your availability.";
                                                     $whatsappLink2 = "https://wa.me/$phoneNumber2?text=" . urlencode($message);
                                                     ?>
-                                                    <a id="hubungiLink" class="py-2 px-12 md:px-14 lg:px-16 xl:px-20 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="<?= $whatsappLink2 ?>" onclick="sendWhatsAppAndRedirect(event)">
+                                                    <a id="hubungiLink" class="py-2 px-12 md:px-14 lg:px-16 xl:px-20 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="<?= $whatsappLink2 ?>" onclick="sendWhatsAppAndRedirect(event)">
                                                         Hubungi
                                                     </a>
 
