@@ -16,7 +16,7 @@
     <title><?= $title ?></title>
 </head>
 
-<body class="font-gilroy">
+<body>
     <?= $this->include('components/header') ?>
     <div class="container mx-auto">
         <div class="w-full h-full lg:pl-72 z-[1] overflow-clip">

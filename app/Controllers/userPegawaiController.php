@@ -32,8 +32,7 @@ class userPegawaiController extends BaseController
 
                 if ($http_status_code_akun === 200) {
                     $akun_data = json_decode($response_akun, true);
-
-
+                    session()->set('user_specific_data', $akun_data['data']);
                     return view('/user/homeUser', ['akun_data' => $akun_data['data'], 'title' => $title]);
                 } else {
                     return $this->renderErrorView($http_status_code_akun);
@@ -55,7 +54,7 @@ class userPegawaiController extends BaseController
 
 
             $akun = $this->request->getPost('akun');
-            $foto = $this->request->getPost('foto');
+            $foto = $this->request->getPost('profil');
             $email = $this->request->getPost('email');
             $password = $this->request->getPost('password');
             $alamat = $this->request->getPost('alamat');

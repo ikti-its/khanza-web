@@ -444,6 +444,10 @@ video {
   display: none;
 }
 
+html {
+  font-family: Gilroy-Regular, sans-serif;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -543,38 +547,6 @@ video {
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
 }
-
-@font-face {
-  font-family: "Gilroy";
-
-  src: url("../fonts/Gilroy\ Regular.ttf") format("truetype");
-
-  font-weight: 400;
-
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Gilroy";
-
-  src: url("../fonts/Gilroy\ Bold.ttf") format("truetype");
-
-  font-weight: 700;
-
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Gilroy";
-
-  src: url("../fonts/Gilroy\ Light.ttf") format("truetype");
-
-  font-weight: 600;
-
-  font-style: normal;
-}
-
-/* Add more font-face declarations as needed */
 
 .container {
   width: 100%;
@@ -2079,6 +2051,16 @@ video {
   --placement: bottom-right;
 }
 
+@font-face {
+  font-family: 'Gilroy-Regular';
+
+  src: url('../fonts/gilroy/Gilroy-Regular.woff') format('woff');
+
+  font-weight: normal;
+
+  font-style: normal;
+}
+
 .after\:absolute::after {
   content: var(--tw-content);
   position: absolute;
@@ -3172,4 +3154,3 @@ video {
 .\[\&\:\:-webkit-scrollbar\]\:w-2::-webkit-scrollbar {
   width: 0.5rem;
 }
-  

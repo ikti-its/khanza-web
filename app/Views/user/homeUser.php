@@ -64,7 +64,7 @@
 
                         <div class="sm:col-span-3">
                             <label for="af-account-email" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
-                                Email 
+                                Email
                             </label>
                         </div>
                         <!-- End Col -->
@@ -133,6 +133,8 @@
                 <form action="/submiteditprofil/<?= $akun_data['akun'] ?>" method="post">
                     <!-- Grid -->
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
+
+
 
                         <div class="sm:col-span-3">
                             <label for="af-account-email" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
@@ -332,6 +334,8 @@
                                 .catch(error => {
                                     console.error('Error fetching address:', error);
                                 });
+
+                                
 
                         }, function() {
                             alert('Error: The Geolocation service failed.');
