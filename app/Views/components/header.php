@@ -61,8 +61,40 @@
                         const searchInput = document.getElementById('search');
                         const suggestionsContainer = document.getElementById('suggestions');
 
-                        // Example data for suggestions
-                        const suggestions = ['Akun', 'Presensi Masuk', 'Presensi Pulang', 'date', 'fig', 'grape', 'kiwi'];
+                        // Example data for suggestions and their corresponding URLs
+                        const suggestions = [{
+                                name: 'Akun',
+                                url: '/profile'
+                            },
+                            <?php if (session('user_specific_data')['status'] === false) : ?> {
+                                    name: 'Presensi Masuk',
+                                    url: '/menukehadiran'
+                                },
+                            <?php else : ?> {
+                                    name: 'Presensi Pulang',
+                                    url: '/absenpulang/<?php echo session('user_specific_data')['pegawai'] ?>'
+                                },
+                            <?php endif; ?> {
+                                name: 'Pengajuan Izin Cuti',
+                                url: '/izincuti'
+                            },
+                            {
+                                name: 'Peninjauan Catatan Kehadiran',
+                                url: '/catatankehadiran/<?php echo session('user_specific_data')['pegawai'] ?>'
+                            },
+                            {
+                                name: 'Peninjauan Jadwal Kerja',
+                                url: '/lihatjadwal/<?php echo session('user_specific_data')['pegawai'] ?>'
+                            },
+                            {
+                                name: 'Peninjauan Daftar Pengajuan Cuti',
+                                url: '/lihatizincuti/<?php echo session('user_specific_data')['pegawai'] ?>'
+                            },
+                            {
+                                name: 'Data Pegawai',
+                                url: '/detailberkaspegawai/<?php echo session('user_specific_data')['pegawai'] ?>'
+                            }
+                        ];
 
                         searchInput.addEventListener('input', function() {
                             const query = searchInput.value.toLowerCase();
@@ -71,17 +103,18 @@
                             suggestionsContainer.innerHTML = '';
 
                             if (query.length > 1) {
-                                const filteredSuggestions = suggestions.filter(suggestion => suggestion.toLowerCase().includes(query));
+                                const filteredSuggestions = suggestions.filter(suggestion => suggestion.name.toLowerCase().includes(query));
 
                                 if (filteredSuggestions.length > 0) {
                                     filteredSuggestions.forEach(suggestion => {
                                         const suggestionElement = document.createElement('div');
                                         suggestionElement.className = 'px-4 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800';
-                                        suggestionElement.textContent = suggestion;
+                                        suggestionElement.textContent = suggestion.name;
 
                                         suggestionElement.addEventListener('click', function() {
-                                            searchInput.value = suggestion;
+                                            searchInput.value = suggestion.name;
                                             suggestionsContainer.classList.add('hidden');
+                                            window.location.href = suggestion.url; // Redirect to the corresponding URL
                                         });
 
                                         suggestionsContainer.appendChild(suggestionElement);
@@ -338,7 +371,7 @@
                                     <ul class="pt-2 ps-2">
                                         <?php if (session('user_specific_data')['status'] === false) : ?>
                                             <li>
-                                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/tesmenukehadiran">
+                                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/menukehadiran">
                                                     Masuk
                                                 </a>
                                             </li>
@@ -350,7 +383,7 @@
 
                                         <?php else : ?>
                                             <li>
-                                                <div class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg" href="/tesmenukehadiran">
+                                                <div class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg" href="/menukehadiran">
                                                     Masuk
                                                 </div>
                                             </li>

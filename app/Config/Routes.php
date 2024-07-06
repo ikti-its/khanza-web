@@ -31,7 +31,7 @@ $routes->get('/catatankehadiran/(:segment)', 'userPegawaiController::tampilCatat
 $routes->get('/statusizin', 'userPegawaiController::tampilStatusIzin', ['filter' => 'auth']);
 $routes->add('/presensi', 'userPegawaiController::tambahPresensi', ['filter' => 'auth']);
 $routes->get('/swafoto', 'userPegawaiController::tambahSwafoto', ['filter' => 'auth']);
-$routes->get('/tesmenukehadiran', 'userPegawaiController::lihatOpsiHadir', ['filter' => 'auth']);
+$routes->get('/menukehadiran', 'userPegawaiController::lihatOpsiHadir', ['filter' => 'auth']);
 
 $routes->get('/lihatstatuscuti', 'userAdminController::lihatStatusCuti', ['filter' => 'auth']);
 $routes->post('/submiteditstatuscuti/(:segment)', 'userAdminController::submitEditStatusCuti/$1', ['filter' => 'auth']);
