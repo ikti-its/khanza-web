@@ -49,9 +49,60 @@
                                 <path d="m21 21-4.3-4.3" />
                             </svg>
                         </div>
-                        <input type="text" id="icon" name="icon" class="py-2 px-4 ps-11 block w-full xl:w-96 border border-gray-200 rounded-lg text-sm focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
+                        <input type="text" id="search" name="search" class="py-2 px-4 ps-11 block w-full xl:w-96 border border-gray-200 rounded-lg text-sm focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
+                        <div id="suggestions" class="absolute z-10 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 w-full max-h-60 overflow-y-auto hidden dark:bg-slate-900 dark:border-gray-700">
+                            <!-- Suggestions will be injected here -->
+                        </div>
                     </div>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const searchInput = document.getElementById('search');
+                        const suggestionsContainer = document.getElementById('suggestions');
+
+                        // Example data for suggestions
+                        const suggestions = ['Akun', 'Presensi Masuk', 'Presensi Pulang', 'date', 'fig', 'grape', 'kiwi'];
+
+                        searchInput.addEventListener('input', function() {
+                            const query = searchInput.value.toLowerCase();
+
+                            // Clear previous suggestions
+                            suggestionsContainer.innerHTML = '';
+
+                            if (query.length > 1) {
+                                const filteredSuggestions = suggestions.filter(suggestion => suggestion.toLowerCase().includes(query));
+
+                                if (filteredSuggestions.length > 0) {
+                                    filteredSuggestions.forEach(suggestion => {
+                                        const suggestionElement = document.createElement('div');
+                                        suggestionElement.className = 'px-4 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800';
+                                        suggestionElement.textContent = suggestion;
+
+                                        suggestionElement.addEventListener('click', function() {
+                                            searchInput.value = suggestion;
+                                            suggestionsContainer.classList.add('hidden');
+                                        });
+
+                                        suggestionsContainer.appendChild(suggestionElement);
+                                    });
+
+                                    suggestionsContainer.classList.remove('hidden');
+                                } else {
+                                    suggestionsContainer.classList.add('hidden');
+                                }
+                            } else {
+                                suggestionsContainer.classList.add('hidden');
+                            }
+                        });
+
+                        document.addEventListener('click', function(event) {
+                            if (!suggestionsContainer.contains(event.target) && event.target !== searchInput) {
+                                suggestionsContainer.classList.add('hidden');
+                            }
+                        });
+                    });
+                </script>
 
                 <div class="flex flex-row items-center justify-end gap-2">
 
@@ -458,7 +509,7 @@
                         </a>
                     <?php else : ?>
                         <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/datauserpegawai">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M15.8334 5H13.3334V4.16667C13.3334 3.25 12.5834 2.5 11.6667 2.5H8.33341C7.41675 2.5 6.66675 3.25 6.66675 4.16667V5H4.16675C2.75008 5 1.66675 6.08333 1.66675 7.5V15C1.66675 16.4167 2.75008 17.5 4.16675 17.5H15.8334C17.2501 17.5 18.3334 16.4167 18.3334 15V7.5C18.3334 6.08333 17.2501 5 15.8334 5ZM8.33341 4.16667H11.6667V5H8.33341V4.16667ZM16.6667 15C16.6667 15.5 16.3334 15.8333 15.8334 15.8333H4.16675C3.66675 15.8333 3.33341 15.5 3.33341 15V10.3333H7.00024C7.00024 10.3333 7.00024 10.3333 7.00024 10.3333C7.00024 10.3333 12.4169 10.3333 12.5002 10.3333C12.5836 10.3333 13.4246 10.3333 13.4246 10.3333L16.6667 10.25V15Z" fill="#272727" />
                                 <path d="M15.8332 5H4.1665C3.50346 5 2.86758 5.26339 2.39874 5.73223C1.9299 6.20107 1.6665 6.83696 1.6665 7.5V9.76667L6.74797 11.4612C7.15599 11.5973 7.58328 11.6667 8.01338 11.6667H11.9863C12.4164 11.6667 12.8437 11.5973 13.2517 11.4612L18.3332 9.76667V7.5C18.3332 6.83696 18.0698 6.20107 17.6009 5.73223C17.1321 5.26339 16.4962 5 15.8332 5Z" fill="#272727" />
                             </svg>

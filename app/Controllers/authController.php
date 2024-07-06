@@ -47,18 +47,18 @@ class authController extends BaseController
             // Define validation rules
             $validationRules = [
                 'email' => 'required|valid_email',
-                'password' => 'required|min_length[6]'
+                'password' => 'required|min_length[5]'
             ];
 
             // Set validation messages
             $validationMessages = [
                 'email' => [
-                    'required' => 'E-mail is required',
-                    'valid_email' => 'Please provide a valid E-mail address'
+                    'required' => 'E-mail dibutuhkan',
+                    'valid_email' => 'Tolong masukkan alamat email yang benar'
                 ],
                 'password' => [
-                    'required' => 'Password is required',
-                    'min_length' => 'Password must be at least 6 characters long'
+                    'required' => 'Password dibutuhkan',
+                    'min_length' => 'Password minimal harus 6 digit'
                 ]
             ];
 

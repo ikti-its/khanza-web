@@ -73,7 +73,7 @@
 
             <div class="mt-2 pt-5 flex justify-center items-center border-t border-gray-200 dark:border-neutral-700">
                 <div class="gap-x-2 inline-flex justify-center w-full">
-                    <a class="py-2 px-14 sm:px-24 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" href="#">
+                    <a href="javascript:history.back()" class="py-2 px-14 sm:px-24 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
                         Batal
                     </a>
                     <button class="py-2 px-14 sm:px-24 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-white hover:bg-[#839592] disabled:opacity-50 disabled:pointer-events-none">

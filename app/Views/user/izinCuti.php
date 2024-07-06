@@ -1,15 +1,12 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 
-
-
-
 <!-- Table Section -->
 <div class="overflow overflow-auto px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <!-- Card -->
     <div class="flex flex-col">
         <div class="-m-3.5 overflow-x-auto">
-            <div class="p-1.5 w-full inline-block align-midd    le">
+            <div class="p-1.5 w-full inline-block align-middle">
 
                 <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
 
@@ -24,7 +21,7 @@
 
                         </div>
 
-                        <div class=" py-4 mx-6 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
+                        <div class="py-4 mx-6 flex justify-between items-center border-b border-gray-200 dark:border-neutral-700">
 
                             <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
 
@@ -81,28 +78,21 @@
                                 <!-- Hidden input field for pegawai_id -->
                                 <input type="hidden" name="id_pegawai" id="id_pegawai" value="<?php echo session('user_specific_data')['pegawai'] ?>">
                             </div>
-
-
                         </div>
 
-                        <div class=" py-2 mb-2 mx-6 flex justify-end items-center">
+                        <div class="py-2 mb-2 mx-6 flex justify-end items-center">
                             <!-- Buttons -->
                             <div class="mt-6 flex justify-end gap-x-3">
-                                <button class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
+                                <a href="javascript:history.back()" class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
                                     Batal
-                                </button>
-                                <button class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
-
+                                </a>
+                                <button id="ajukan-button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none " disabled>
                                     Ajukan
                                 </button>
                             </div>
                             <!-- End Buttons -->
                         </div>
-
-
-
                     </form>
-
                 </div>
             </div>
         </div>
@@ -112,29 +102,38 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            var ajukanButton = document.getElementById('ajukan-button');
             var tanggalMulaiFlatpickr = flatpickr('#selected-date-mulai', {
-                altInput: true, // Enable to use an alternative input field
-                altFormat: 'Y-m-d', // Format of the alternative input field
-                dateFormat: 'Y-m-d', // Date format
+                altInput: true,
+                altFormat: 'Y-m-d',
+                dateFormat: 'Y-m-d',
                 onClose: function(selectedDates, dateStr, instance) {
-                    // Update the hidden input field with the selected date value
                     document.getElementById('tanggal_mulai').value = dateStr;
-                    // Update the minimum date for tanggal_selesai
                     tanggalSelesaiFlatpickr.set('minDate', dateStr);
+                    toggleAjukanButton();
                 }
             });
 
             var tanggalSelesaiFlatpickr = flatpickr('#selected-date-selesai', {
-                altInput: true, // Enable to use an alternative input field
-                altFormat: 'Y-m-d', // Format of the alternative input field
-                dateFormat: 'Y-m-d', // Date format
+                altInput: true,
+                altFormat: 'Y-m-d',
+                dateFormat: 'Y-m-d',
                 onClose: function(selectedDates, dateStr, instance) {
-                    // Update the hidden input field with the selected date value
                     document.getElementById('tanggal_selesai').value = dateStr;
+                    toggleAjukanButton();
                 }
             });
+
+            function toggleAjukanButton() {
+                var tanggalMulai = document.getElementById('tanggal_mulai').value;
+                var tanggalSelesai = document.getElementById('tanggal_selesai').value;
+                if (tanggalMulai && tanggalSelesai) {
+                    ajukanButton.disabled = false;
+                } else {
+                    ajukanButton.disabled = true;
+                }
+            }
         });
     </script>
 
-
-    <?= $this->endSection(); ?>
+<?= $this->endSection(); ?>
