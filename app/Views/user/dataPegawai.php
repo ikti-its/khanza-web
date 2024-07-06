@@ -10,7 +10,7 @@
     <div class="flex flex-col">
         <div class="-m-3.5 overflow-y-auto">
             <div class="p-1.5 w-full inline-block align-middle">
-                <div class="border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
+                <div class="border bg-white border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
                     <!-- Header -->
                     <div class="px-6 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                         <div class="border-b border-gray-200 dark:border-neutral-700">

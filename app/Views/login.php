@@ -8,13 +8,13 @@
     <title>Halaman Login</title>
 
     <style>
-    .bg-svg {
-        background-image: url('/svg/background.svg'); /* Adjust the path based on your directory structure */
-        background-size: cover; /* Adjust as necessary */
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-</style>
+        .bg-svg {
+            background-image: url('/svg/background.svg'); /* Adjust the path based on your directory structure */
+            background-size: cover; /* Adjust as necessary */
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
 </head>
 
 <body class="bg-svg">
@@ -23,8 +23,17 @@
         <form action="dashboard" method="post" class="w-full max-w-md">
             <div class="px-8 py-10 bg-white shadow-lg rounded-xl">
                 <h2 class="text-3xl font-bold text-center mb-6">Masuk ke akun Anda</h2>
+
+                <?php if (isset($validation)): ?>
+                    <div class="mb-4">
+                        <div class="text-red-600">
+                            <?= $validation->listErrors() ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
                 <div class="mb-6">
-                    <label for="nip" class="block text-gray-600 mb-1">E-mail</label>
+                    <label for="email" class="block text-gray-600 mb-1">E-mail</label>
                     <input id="email" name="email" type="text" placeholder="E-mail" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-black "required>
                 </div>
                 <div class="mb-6">
@@ -36,11 +45,7 @@
                 </div>
             </div>
         </form>
-    
     </div>
-
-
-
 
 </body>
 

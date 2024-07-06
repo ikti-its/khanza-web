@@ -19,7 +19,7 @@ class authController extends BaseController
         return view('login');
     }
 
-    
+
     public function dashboard()
     {
 
@@ -41,26 +41,51 @@ class authController extends BaseController
 
     public function login()
     {
-
-        //Check if the form is submitted
+        // Check if the form is submitted
         if ($this->request->getPost()) {
 
+            // Define validation rules
+            $validationRules = [
+                'email' => 'required|valid_email',
+                'password' => 'required|min_length[6]'
+            ];
+
+            // Set validation messages
+            $validationMessages = [
+                'email' => [
+                    'required' => 'E-mail is required',
+                    'valid_email' => 'Please provide a valid E-mail address'
+                ],
+                'password' => [
+                    'required' => 'Password is required',
+                    'min_length' => 'Password must be at least 6 characters long'
+                ]
+            ];
+
+            // Validate the input data
+            if (!$this->validate($validationRules, $validationMessages)) {
+                // Validation failed, return to the login form with errors
+                return view('login', [
+                    'validation' => $this->validator
+                ]);
+            }
+
             $title = 'Dashboard';
-            //Get the username and password from the form
+            // Get the email and password from the form
             $email = $this->request->getPost('email');
             $password = $this->request->getPost('password');
 
-            //Create an array with the login data
+            // Create an array with the login data
             $login_data = [
                 'email' => $email,
                 'password' => $password
             ];
 
-            //Convert the data to JSON
+            // Convert the data to JSON
             $login_data_json = json_encode($login_data);
 
-            //Define the API endpoint URL
-            $api_url = $this->api_url .  '/auth/login';
+            // Define the API endpoint URL
+            $api_url = $this->api_url . '/auth/login';
 
             $ch = curl_init($api_url);
 
@@ -72,15 +97,12 @@ class authController extends BaseController
                 'Content-Length: ' . strlen($login_data_json)
             ]);
 
-            //Execute the cURL request
+            // Execute the cURL request
             $response = curl_exec($ch);
 
             // Check the API response
             if ($response) {
                 // The API returned a response
-                // $response contains the API response in JSON format
-
-                // Check if the HTTP status code in the response
                 $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
                 if ($http_status_code === 200) {
@@ -90,7 +112,6 @@ class authController extends BaseController
 
                     // Store the token securely (in a session variable)
                     session()->set('jwt_token', $token);
-
 
                     // URL for fetching akun data
                     $user_details_url = $this->api_url . '/auth';
@@ -120,11 +141,9 @@ class authController extends BaseController
                         // Close the cURL session for user details
                         curl_close($user_details_ch);
 
-
-                        // Check if the user role is 2
+                        // Check if the user role is 2 or 1
                         if ($user_details['data']['role'] == 2 || $user_details['data']['role'] == 1) {
-                            // If the user role is 2, make another API request
-
+                            // If the user role is 2 or 1, make another API request
                             $tanggal = date('Y-m-d');
                             $user_specific_url = $this->api_url . '/m/home?tanggal=' . $tanggal;
 
@@ -144,7 +163,7 @@ class authController extends BaseController
                                 session()->set('user_specific_data', $user_specific_data['data']);
                             } else {
                                 // Failed to get user specific data
-                                echo "Failed to retrieve user specific data.";
+                                return $this->renderErrorView(500, "Failed to retrieve user specific data.");
                             }
                         }
 
@@ -152,24 +171,20 @@ class authController extends BaseController
                         return redirect()->to('/dashboard')->with('title', $title, 'user_details', $user_details);
                     } else {
                         // Failed to get user details
-                        echo "Failed to retrieve user details.";
+                        return $this->renderErrorView(500, "Tidak ada respons dari server");
                     }
-                } elseif ($http_status_code === 401) {
-                    // Wrong password
-                    echo "Wrong password. Please check your password and try again";
-                } elseif ($http_status_code === 404) {
-                    // User not found
-                    echo "User not found. Please check your username and try again";
                 } else {
-                    // Login failed
-                    echo "Login failed, please try again.";
+                    // Wrong password
+                    return $this->renderErrorView(401, "Email atau password anda salah");
                 }
+            } else {
+                // No response from API
+                return $this->renderErrorView(500, "Tidak ada respons dari Server");
             }
+
             // Close the cURL session
             curl_close($ch);
-        } else {
-            // The form was not submitted
-            echo "Please submit the login form.";
-        }
+        }  // If the form was not submitted or any other case where it doesn't validate or process login
+        return view('login'); // Return the login view by default
     }
 }

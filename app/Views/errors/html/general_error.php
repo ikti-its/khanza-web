@@ -22,6 +22,7 @@
         <div class="w-screen h-screen">
         <div class="min-h-screen bg-gradient-to-b from-white via-[#D6F9F3] to-[#24A793] flex flex-col justify-center items-center relative">
         <div class="text-center z-10 pb-16">
+        <h1 class="text-6xl font-bold text-black mb-4"><?=esc($kode)?></h1>
             <h1 class="text-6xl font-bold text-black mb-4"><?= esc($errorTitle) ?></h1>
             <p class="text-2xl text-black"><?= esc($message) ?></p>
         </div>
