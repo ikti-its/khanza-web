@@ -56,6 +56,7 @@ class userPegawaiController extends BaseController
             $akun = $this->request->getPost('akun');
             $foto = $this->request->getPost('profil');
             $email = $this->request->getPost('email');
+            $telepon = $this->request->getPost('telepon');
             $password = $this->request->getPost('password');
             $alamat = $this->request->getPost('alamat');
             $alamat_lat = floatval($this->request->getPost('alamat_lat'));
@@ -67,6 +68,7 @@ class userPegawaiController extends BaseController
                 'akun' => $akun,
                 'foto' => $foto,
                 'email' => $email,
+                'telepon' => $telepon,
                 'password' => $password,
                 'alamat' => $alamat,
                 'alamat_lat' => $alamat_lat,

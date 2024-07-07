@@ -176,6 +176,7 @@ class userAdminController extends BaseController
                         return redirect()->to(base_url('lihatstatuscuti'));
                     } else {
                         // Error response from the API
+                        var_dump($postData);
                         return $this->renderErrorView($http_status_code);
                     }
                 } else {
