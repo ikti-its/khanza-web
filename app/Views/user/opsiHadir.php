@@ -46,7 +46,7 @@
                             <!-- Hidden input fields for latitude and longitude -->
                             <input type="hidden" id="latitude" name="latitude">
                             <input type="hidden" id="longitude" name="longitude">
-                            <button type="button" id="authButton" class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800" onclick="getLocation()">
+                            <button data-hs-overlay="#hs-cuti-tolak-alert" type="button" onclick="requestLocation()" id="authButton" class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm" onclick="getLocation()">
                                 Mulai Autentikasi Dengan Wajah
                             </button>
                         </form>
@@ -92,7 +92,7 @@
 
                 <div class="flex justify-center items-center z-10">
                     <div class="w-full md:w-auto sm:w-auto lg:w-auto">
-                        <a class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm" href="/swafoto">
+                        <a class="py-2 px-12 sm:px-6 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-[#0A2D27] text-[#ACF2E7] shadow-sm align-middle hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm" href="/swafoto">
                             Mulai Pengambilan Wajah
                         </a>
                     </div>
@@ -144,6 +144,61 @@
             // Handle the case where geolocation is not supported by the browser
         }
     }
+
+
+    function requestLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    // Location access granted
+                    document.getElementById('latitude').value = position.coords.latitude;
+                    document.getElementById('longitude').value = position.coords.longitude;
+                    document.getElementById('locationForm').submit();
+                },
+                function(error) {
+                    handleLocationError(error);
+                }
+            );
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function handleLocationError(error) {
+        // Location access denied
+        if (error.code === error.PERMISSION_DENIED) {
+            // Create the custom alert element
+            var alertDiv = document.createElement('div');
+            alertDiv.className = 'z-20 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 lg:pl-72';
+
+            alertDiv.innerHTML = `
+                    <div id="locationDeniedModal" class="bg-white shadow-lg rounded-lg overflow-hidden max-w-sm mx-auto">
+                        <div class="px-6 py-4">
+                            <div class="text-center mb-4">
+                                <span class="text-red-500 text-4xl">&#x26D4;</span>
+                                <h2 class="text-xl font-bold text-gray-800">Akses Lokasi Ditolak</h2>
+                            </div>
+                            <p class="text-gray-700 text-center">Anda telah menolak akses ke lokasi Anda. Harap aktifkan akses lokasi untuk menggunakan fitur ini.</p>
+                        </div>
+                        <div class="px-6 py-4 bg-gray-100 text-right">
+                            <a href="/dashboard" type="button" class="py-2 px-4 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">Batal
+                            </a>
+
+                        </div>
+                    </div>
+                `;
+
+            // Insert the alert element into the DOM
+            document.body.appendChild(alertDiv);
+
+            // Optionally, scroll to the alert
+            alertDiv.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    }
+
+ 
 </script>
 
 
