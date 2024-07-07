@@ -62,7 +62,9 @@ class userPegawaiController extends BaseController
             $alamat_lat = floatval($this->request->getPost('alamat_lat'));
             $alamat_lon = floatval($this->request->getPost('alamat_lon'));
 
+            $telepon = '0' . $telepon;
 
+            
             // Prepare the data to be sent to the API
             $postData = [
                 'akun' => $akun,
