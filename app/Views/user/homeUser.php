@@ -173,15 +173,34 @@
 
                         <div class="sm:col-span-9">
                             <?php
+                            // Retrieve the telepon value from akun_data
                             $telepon = $akun_data['telepon'] ?? '';
-                            $telepon_formatted = '(+62) ' . substr($telepon, 1); // Assuming $telepon starts with '0'
+
+                            // Check if the telepon value starts with '0' and remove it
+                            if (substr($telepon, 0, 1) === '0') {
+                                $telepon = substr($telepon, 1);
+                            }
+
+                            // Format the telepon value for display
+                            $telepon_formatted = '(+62) ' . $telepon;
                             ?>
                             <div class="relative">
                                 <span class="text-sm absolute inset-y-0 left-0 pl-3 flex items-center text-gray-600 dark:text-neutral-400">
                                     (+62)
                                 </span>
-                                <input id="af-account-telepon" type="tel" pattern="[0-9]{10,15}" name="telepon" class="py-2 px-3 pl-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="895616749987" value="<?= $telepon?>" required>
+                                <input id="af-account-telepon" type="tel" pattern="[0-9]{10,15}" name="telepon" class="py-2 px-3 pl-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="895616749987" value="<?= $telepon ?>" oninput="removeLeadingZero(this)" required>
                             </div>
+
+                            <script>
+                                function removeLeadingZero(input) {
+                                    var teleponValue = input.value;
+
+                                    // Check if the input starts with '0' and remove it
+                                    if (teleponValue.startsWith('0')) {
+                                        input.value = teleponValue.substring(1);
+                                    }
+                                }
+                            </script>
                         </div>
                         <!-- End Col -->
 
