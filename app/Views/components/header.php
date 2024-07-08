@@ -90,10 +90,15 @@
                                 name: 'Peninjauan Daftar Pengajuan Cuti',
                                 url: '/lihatizincuti/<?php echo session('user_specific_data')['pegawai'] ?>'
                             },
-                            {
-                                name: 'Data Pegawai',
-                                url: '/detailberkaspegawai/<?php echo session('user_specific_data')['pegawai'] ?>'
-                            }
+                            <?php if (session('user_details')['role'] === 1) : ?> {
+                                    name: 'Data Pegawai',
+                                    url: '/datauserpegawai'
+                                }
+                            <?php else : ?> {
+                                    name: 'Data Pegawai',
+                                    url: '/detailberkaspegawai/<?php echo session('user_specific_data')['pegawai'] ?>'
+                                }
+                            <?php endif; ?>
                         ];
 
                         searchInput.addEventListener('input', function() {

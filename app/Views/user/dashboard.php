@@ -15,7 +15,11 @@
             <span class="text-black">Selamat Datang, </span>
         </div>
         <h1 class="font-bold text-3xl md:text-4xl">
-            <span class="text-black"><?php echo session('user_specific_data')['nama'] ?></span>
+            <span class="text-black"><?php
+                                        $nama = session('user_specific_data')['nama'];
+                                        $firstWord = explode(' ', trim($nama))[0];
+                                        echo $firstWord;
+                                        ?></span>
         </h1>
         <div class="max-w-4xl flex justify-between">
 

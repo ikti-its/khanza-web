@@ -8,7 +8,7 @@
                 Face Recognition
             </h2>
             <p class="text-sm text-gray-600 dark:text-neutral-400">
-                Ensure your face is centered in the frame.
+                Pastikan wajah Anda berada di tengah frame
             </p>
         </div>
 

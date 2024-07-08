@@ -63,6 +63,18 @@
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
 
                         <div class="sm:col-span-3">
+                            <label for="af-account-nama" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Nama
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+                            <input id="af-account-nama" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Nama" value="<?= $akun_data['nama'] ?? '' ?>" readonly>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-3">
                             <label for="af-account-email" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
                                 Email
                             </label>
@@ -149,8 +161,6 @@
                 <form action="/submiteditprofil/<?= $akun_data['akun'] ?>" method="post">
                     <!-- Grid -->
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
-
-
 
                         <div class="sm:col-span-3">
                             <label for="af-account-email" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
