@@ -199,7 +199,7 @@ class userPegawaiController extends BaseController
                             $ketersediaan_data = json_decode($response_ketersediaan, true);
 
                             // Initialize cURL session to get location data
-                            $lokasi_url = $this->api_url . '/organisasi/current';
+                            $lokasi_url = $this->api_url . '/organisasi';
                             $ch_lokasi = curl_init($lokasi_url);
 
                             // Set cURL options for the location request
@@ -860,7 +860,7 @@ class userPegawaiController extends BaseController
         $centralLongitude = deg2rad($centralLongitude);
 
         // Initialize cURL session to get location data
-        $lokasi_url = $this->api_url . '/organisasi/current';
+        $lokasi_url = $this->api_url . '/organisasi';
         $ch_lokasi = curl_init($lokasi_url);
 
         // Set cURL options for the location request
