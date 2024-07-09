@@ -24,10 +24,10 @@
         <div class="py-2 mb-2 mx-6 flex justify-center items-center">
             <!-- Buttons -->
             <div class="mt-6 flex justify-center gap-x-3 w-full">
-                <button class="flex-1 py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle text-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
+                <a href="javascript:history.back()" class="flex-1 py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle text-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
                     Batal
-                </button>
-                <button id="capture-btn" data-hs-overlay="#hs-basic-modal" class=" flex-1 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] text-center hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
+                </a>
+                <button disabled id="capture-btn" data-hs-overlay="#hs-basic-modal" class=" flex-1 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] text-center hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
                     Gunakan Foto
                 </button>
 
@@ -68,11 +68,15 @@
 
     </div>
 </div>
-
+<script src="<?= base_url('/models/face-api.min.js') ?>"></script>
 <script>
+    const pegawaiId = '<?= session()->get('user_specific_data')['pegawai']; ?>';
+    const namaPegawai = '<?= session()->get('user_specific_data')['nama']; ?>';
+
     document.addEventListener("DOMContentLoaded", function() {
         const video = document.getElementById('video');
         const canvas = document.getElementById('overlay');
+        const ctx = canvas.getContext('2d');
         const photoPreview = document.getElementById('photo-preview');
         const captureButton = document.getElementById('capture-btn');
         const saveChangesButton = document.getElementById('save-changes-btn');
@@ -85,6 +89,7 @@
 
         let stream = null;
         let photo = null;
+        let labeledFaceDescriptors;
 
         // Access webcam
         navigator.mediaDevices.getUserMedia({
@@ -93,6 +98,48 @@
             .then(function(mediaStream) {
                 video.srcObject = mediaStream;
                 stream = mediaStream;
+                video.addEventListener('play', () => {
+                    const displaySize = {
+                        width: video.videoWidth,
+                        height: video.videoHeight
+                    };
+                    canvas.width = displaySize.width;
+                    canvas.height = displaySize.height;
+                    faceapi.matchDimensions(canvas, displaySize);
+
+                    // Interval to continuously detect faces and draw results
+                    setInterval(async () => {
+                        const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors();
+                        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        faceapi.draw.drawDetections(canvas, resizedDetections);
+
+                        if (labeledFaceDescriptors) {
+                            const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4);
+                            const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor));
+
+                            // Assuming `results` is your array of face recognition results
+                            results.forEach(async (result, index) => {
+                                const box = resizedDetections[index].detection.box;
+                                const text = result.toString();
+                                const drawBox = new faceapi.draw.DrawBox(box, {
+                                    label: text
+                                });
+                                drawBox.draw(canvas);
+
+                                // Check if recognized face matches namaPegawai
+                                if (result.label === namaPegawai) {
+                                    captureButton.disabled = false; // Enable the capture button
+                                    console.log('Recognized face matches namaPegawai');
+                                } else {
+                                    captureButton.disabled = true; // Disable the capture button
+                                    console.log('Recognized face does not match namaPegawai');
+                                }
+                            });
+
+                        }
+                    }, 100);
+                });
             })
             .catch(function(err) {
                 console.log("Unable to access webcam: " + err);
@@ -128,6 +175,42 @@
                 console.log("No photo captured yet.");
             }
         });
+
+        async function loadLabeledImages() {
+            const foto_data = <?= json_encode($foto_data); ?>;
+            const pegawaiId = '<?= $pegawaiId ?>';
+            const namaPegawai = '<?= $namaPegawai ?>';
+
+            try {
+                const fotoUrl = foto_data;
+
+                const imgResponse = await fetch(fotoUrl);
+                if (!imgResponse.ok) {
+                    throw new Error(`Failed to fetch image. Status: ${imgResponse.status}`);
+                }
+
+                const blob = await imgResponse.blob();
+                const img = await faceapi.bufferToImage(blob);
+
+                const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+                const descriptions = detections ? [detections.descriptor] : [];
+
+                return new faceapi.LabeledFaceDescriptors(namaPegawai, descriptions);
+            } catch (error) {
+                console.error(`Failed to load image for ${namaPegawai}:`, error);
+                throw error;
+            }
+        }
+
+        Promise.all([
+            faceapi.nets.ssdMobilenetv1.loadFromUri('<?= base_url('/models') ?>'),
+            faceapi.nets.faceRecognitionNet.loadFromUri('<?= base_url('/models') ?>'),
+            faceapi.nets.faceLandmark68Net.loadFromUri('<?= base_url('/models') ?>')
+        ]).then(() => {
+            loadLabeledImages().then(descriptors => {
+                labeledFaceDescriptors = descriptors;
+            }).catch(err => console.error('Error loading labeled face descriptors:', err));
+        }).catch(err => console.error('Error loading face detection models:', err));
     });
 </script>
 
