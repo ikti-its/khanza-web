@@ -102,7 +102,8 @@
 
                                 foreach ($cuti_data as $cutiEntry) : ?>
 
-                                    <form action="/submiteditstatuscuti/<?= $cutiEntry['id'] ?>" method="POST">
+                                    <form action="/submiteditstatuscuti/<?= $cutiEntry['id'] ?>" method="POST" onsubmit="return validateForm()">
+                                    <input type="hidden" id="status_input" name="status" value="">
                                         <tr>
                                             <td class="h-px w-auto whitespace-nowrap">
                                                 <div class="px-6 py-2 flex items-center gap-x-3">
@@ -206,7 +207,7 @@
                                                                             <button type="button" data-hs-overlay="#hs-cuti-alert-<?= $cutiEntry['id'] ?>" href="javascript:history.back()" class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
                                                                                 Batal
                                                                             </button>
-                                                                            <button type="submit" name="status" value="Diterima" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none ">
+                                                                            <button type="submit" name="status" id="submitButton" value="Diterima" onclick="updateStatus('Diterima')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none ">
                                                                                 Setuju
                                                                             </button>
 
@@ -255,10 +256,10 @@
                                                                         </p>
 
                                                                         <div class="mt-6 flex justify-center gap-x-4">
-                                                                            <button type="submit" name="status" value="Ditolak" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#DA4141] text-[#FDFDFD] hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none ">
+                                                                            <button type="submit" name="status" value="Ditolak" id="submitButton2" onclick="updateStatus('Ditolak')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#DA4141] text-[#FDFDFD] hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none ">
                                                                                 Tolak
                                                                             </button>
-                                                                            <button type="button" data-hs-overlay="#hs-cuti-tolak-alert-<?= $cutiEntry['id'] ?>" href="javascript:history.back()" class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
+                                                                            <button type="button"  data-hs-overlay="#hs-cuti-tolak-alert-<?= $cutiEntry['id'] ?>" href="javascript:history.back()" class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
                                                                                 Batal
                                                                             </button>
 
@@ -298,6 +299,11 @@
 <!-- End Table Section -->
 
 <script>
+
+function updateStatus(status) {
+        document.getElementById('status_input').value = status;
+    }
+
     function myFunction() {
         var input, filter, table, tr, td, i, j, txtValue, found;
         input = document.getElementById("myInput");
@@ -323,6 +329,14 @@
             }
         }
     }
+
+    function validateForm() {
+    var submitButton = document.getElementById('submitButton');
+    submitButton.disabled = true; // Disable the button
+    submitButton.textContent = 'Mengajukan...'; // Change the text content
+
+    return true; // Return true to allow form submission
+}
 </script>
 
 

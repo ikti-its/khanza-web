@@ -10,7 +10,8 @@
 
                 <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
 
-                    <form method="post" action="/submittambahcuti">
+                    <form method="post" action="/submittambahcuti" onsubmit="return validateForm()">
+                        
 
                         <div class="px-6 py-5 grid gap-3 md:flex md:justify-between md:items-center">
                             <div class="sm:col-span-12">
@@ -130,7 +131,7 @@
                                                     <button type="button" data-hs-overlay="#hs-cuti-alert" href="javascript:history.back()" class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
                                                         Batal
                                                     </button>
-                                                    <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none ">
+                                                    <button type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none ">
                                                         Setuju
                                                     </button>
 
@@ -153,39 +154,56 @@
     <!-- End Table Section -->
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var ajukanButton = document.getElementById('ajukan-button');
-            var tanggalMulaiFlatpickr = flatpickr('#selected-date-mulai', {
-                altInput: true,
-                altFormat: 'Y-m-d',
-                dateFormat: 'Y-m-d',
-                onClose: function(selectedDates, dateStr, instance) {
-                    document.getElementById('tanggal_mulai').value = dateStr;
-                    tanggalSelesaiFlatpickr.set('minDate', dateStr);
-                    toggleAjukanButton();
-                }
-            });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the current date in GMT+7 timezone
+        var currentDate = new Date();
+        var currentDateGMT7 = new Date(currentDate.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }));
 
-            var tanggalSelesaiFlatpickr = flatpickr('#selected-date-selesai', {
-                altInput: true,
-                altFormat: 'Y-m-d',
-                dateFormat: 'Y-m-d',
-                onClose: function(selectedDates, dateStr, instance) {
-                    document.getElementById('tanggal_selesai').value = dateStr;
-                    toggleAjukanButton();
-                }
-            });
+        // Format the date to YYYY-MM-DD
+        var year = currentDateGMT7.getFullYear();
+        var month = ("0" + (currentDateGMT7.getMonth() + 1)).slice(-2);
+        var day = ("0" + currentDateGMT7.getDate()).slice(-2);
+        var minDate = `${year}-${month}-${day}`;
 
-            function toggleAjukanButton() {
-                var tanggalMulai = document.getElementById('tanggal_mulai').value;
-                var tanggalSelesai = document.getElementById('tanggal_selesai').value;
-                if (tanggalMulai && tanggalSelesai) {
-                    ajukanButton.disabled = false;
-                } else {
-                    ajukanButton.disabled = true;
-                }
+        var ajukanButton = document.getElementById('ajukan-button');
+        var tanggalMulaiFlatpickr = flatpickr('#selected-date-mulai', {
+            altInput: true,
+            altFormat: 'Y-m-d',
+            dateFormat: 'Y-m-d',
+            minDate: minDate,  // Set the minimum date to today in GMT+7 timezone
+            onClose: function(selectedDates, dateStr, instance) {
+                document.getElementById('tanggal_mulai').value = dateStr;
+                tanggalSelesaiFlatpickr.set('minDate', dateStr);
+                toggleAjukanButton();
             }
         });
-    </script>
+
+        var tanggalSelesaiFlatpickr = flatpickr('#selected-date-selesai', {
+            altInput: true,
+            altFormat: 'Y-m-d',
+            dateFormat: 'Y-m-d',
+            onClose: function(selectedDates, dateStr, instance) {
+                document.getElementById('tanggal_selesai').value = dateStr;
+                toggleAjukanButton();
+            }
+        });
+
+        function toggleAjukanButton() {
+            var tanggalMulai = document.getElementById('tanggal_mulai').value;
+            var tanggalSelesai = document.getElementById('tanggal_selesai').value;
+            if (tanggalMulai && tanggalSelesai) {
+                ajukanButton.disabled = false;
+            } else {
+                ajukanButton.disabled = true;
+            }
+        }
+    });
+
+    function validateForm() {
+        var submitButton = document.getElementById('submitButton');
+        submitButton.setAttribute('disabled', true);
+        submitButton.innerHTML = 'Mengajukan...';
+    }
+</script>
 
     <?= $this->endSection(); ?>
