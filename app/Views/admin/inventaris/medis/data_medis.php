@@ -2,10 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Table Section -->
-<div class="max-w-[85rem] py-6 mx-auto">
-    <div class="px-4 mb-4">
-        Ini breadcrumbs <!-- breadcrumbs -->
-    </div>
+<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
     <!-- Card -->
     <div class="flex flex-col">
         <div class="-m-1.5 overflow-y-hidden">
@@ -15,137 +12,20 @@
                     <!-- Header -->
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
-                            <h2 class="mb-2 text-xl font-semibold text-gray-800 dark:text-gray-200">
+                            <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
                                 Barang Medis
                             </h2>
 
                         </div>
-                        <div class="flex gap-x-2 md:items-start">
-                            <?php
-
-                            // Count notifications
-                            $today = new DateTime();
-                            $today->setTime(0, 0, 0);
-                            $notification_count = 0;
-                            //belum default 30 di db
-                            foreach ($medis_tanpa_params_data as $medis_tanpa_params) {
-                                $notification_period = $medis_tanpa_params['notifikasi_kadaluwarsa_hari'] !== 0 ? $medis_tanpa_params['notifikasi_kadaluwarsa_hari'] : 30;
-                                $combined_data = array_combine(['obat', 'bhp', 'alkes', 'darah'], [$obat_data, $bhp_data, $alkes_data, $darah_data]);
-                                foreach ($combined_data as $jenis => $data) {
-                                    foreach ($data as $item) {
-                                        if ($medis_tanpa_params['id'] === $item['id_barang_medis']) {
-                                            if ($jenis !== 'alkes') {
-                                                // Check item expiration
-                                                $item_kadaluwarsa = new DateTime($item['kadaluwarsa']);
-                                                $interval = $today->diff($item_kadaluwarsa);
-                                                $days_left_item = (int)$interval->format('%r%a');
-
-                                                if ($days_left_item <= $notification_period && $days_left_item >= 0) {
-                                                    $notification_count++;
-                                                }
-
-                                                // Check pesanan expiration
-                                                foreach ($penerimaan_data as $penerimaan) {
-                                                    foreach ($pesanan_data as $pesanan) {
-                                                        if ($penerimaan['id_pengajuan'] === $pesanan['id_pengajuan']) {
-                                                            $pesanan_kadaluwarsa = new DateTime($pesanan['kadaluwarsa']);
-                                                            $interval_pesanan = $today->diff($pesanan_kadaluwarsa);
-                                                            $days_left_pesanan = (int)$interval_pesanan->format('%r%a');
-
-                                                            if ($days_left_pesanan <= $notification_period && $days_left_pesanan >= 0) {
-                                                                $notification_count++;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            ?>
-
-                            <div class="px-2 hs-dropdown relative inline-flex [--placement:bottom-right]">
-
-                                <button id="reset-notification" id="hs-dropdown-with-header" type="button" class="w-[2.375rem] h-[2.375rem] inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 relative">
-                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-                                    </svg>
-                                    <span id="notification-count" class="absolute top-[-8px] right-[-8px] bg-red-500 rounded-full w-5 h-5 flex items-center justify-center text-white text-xs"><?= $notification_count ?></span>
-                                </button>
-
-                                <div class="border z-20 hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg p-2 dark:bg-gray-800 dark:border dark:border-gray-700" aria-labelledby="hs-dropdown-with-header">
-                                    <div class="first:pt-0 last:pb-0">
-                                        <?php
-                                        foreach ($medis_tanpa_params_data as $medis_tanpa_params) {
-                                            $combined_data = array_combine(['obat', 'bhp', 'alkes', 'darah'], [$obat_data, $bhp_data, $alkes_data, $darah_data]);
-                                            foreach ($combined_data as $jenis => $data) {
-                                                foreach ($data as $item) {
-                                                    if ($medis_tanpa_params['id'] === $item['id_barang_medis']) {
-                                                        if ($jenis !== 'alkes') {
-                                                            // Check item expiration
-                                                            $item_kadaluwarsa = new DateTime($item['kadaluwarsa']);
-                                                            $interval = $today->diff($item_kadaluwarsa);
-                                                            $days_left_item = (int)$interval->format('%r%a');
-
-                                                            if ($days_left_item <= $notification_period && $days_left_item >= 0) {
-                                        ?>
-                                                                <a class="notification-item flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300" href="#">
-                                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                                                                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-                                                                    </svg>
-                                                                    <?= $medis_tanpa_params['nama'] ?> kadaluwarsa <?= $item['kadaluwarsa'] ?>
-                                                                </a>
-                                                                <?php
-                                                            }
-
-                                                            // Check pesanan expiration
-                                                            foreach ($penerimaan_data as $penerimaan) {
-                                                                foreach ($pesanan_data as $pesanan) {
-                                                                    if ($penerimaan['id_pengajuan'] === $pesanan['id_pengajuan']) {
-                                                                        $pesanan_kadaluwarsa = new DateTime($pesanan['kadaluwarsa']);
-                                                                        $interval_pesanan = $today->diff($pesanan_kadaluwarsa);
-                                                                        $days_left_pesanan = (int)$interval_pesanan->format('%r%a');
-
-                                                                        if ($days_left_pesanan <= $notification_period && $days_left_pesanan >= 0) {
-                                                                ?>
-                                                                            <a class="notification-item flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300" href="#">
-                                                                                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                                                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                                                                                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-                                                                                </svg>
-                                                                                <?php if ($medis_tanpa_params['id'] === $pesanan['id_barang_medis']) {
-                                                                                    echo $medis_tanpa_params['nama'];
-                                                                                } ?> kadaluwarsa <?php echo $pesanan['kadaluwarsa'] ?> dengan no faktur <?php echo $penerimaan['no_faktur'] ?>
-                                                                            </a>
-                                        <?php
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
-                            </div>
-
-
+                        <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <button id="notif-icon" class="relative p-2 bg-white rounded-full shadow-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405M18 13V7a6 6 0 00-9.33-5.293M4 7v6l1.405 1.405M9 17h6m-6 4h6" />
+                                <button id="notif-icon" class="relative flex justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M19 8C20.6569 8 22 6.65685 22 5C22 3.34315 20.6569 2 19 2C17.3431 2 16 3.34315 16 5C16 6.65685 17.3431 8 19 8Z" fill="#DA4141" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7 13H12" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7 17H16" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M14 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V10" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
-                                    <span class="absolute top-0 right-0 flex h-3 w-3">
-                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                        <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                                    </span>
                                 </button>
 
                                 <!-- Notification Pop-up -->
@@ -164,7 +44,7 @@
                                                     <span class="ml-1"> <!-- Add margin-left for spacing -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
                                                             <circle cx="7.75" cy="7.5" r="7" fill="#EF4444" />
-                                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="central" fill="#FFF" font-size="10px">2</text>
+                                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="central" fill="#FFF" font-size="10px"></text>
                                                         </svg>
                                                     </span>
                                                 </button>
@@ -174,7 +54,7 @@
                                                     <span class="ml-1">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
                                                             <circle cx="7.75" cy="7.5" r="7" fill="#EF4444" />
-                                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="central" fill="#FFF" font-size="10px">2</text>
+                                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="central" fill="#FFF" font-size="10px"></text>
                                                         </svg>
                                                     </span>
                                                 </button>
@@ -183,40 +63,47 @@
                                     </div>
                                     <div>
                                         <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
-                                            <?php foreach ($medis_tanpa_params_data as $medis_stok) {
-                                                $total_stok = $medis_stok['stok']; // Menggunakan stok awal dari $medis_stok
+                                            <?php
+                                            $count_notif_stok = 0;
+                                            $today = new DateTime();
+                                            $today->setTime(0, 0, 0);
+                                            foreach ($medis_tanpa_params_data as $medis_stok) {
+                                                // $total_stok = $medis_stok['stok']; // Menggunakan stok awal dari $medis_stok
 
-                                                // Loop through each transaksi keluar
-                                                foreach ($transaksi_keluar_data as $transaksi_keluar) {
-                                                    if ($medis_stok['id'] === $transaksi_keluar['id_barang_medis']) {
-                                                        $total_stok -= $transaksi_keluar['jumlah_keluar']; // Mengurangi jumlah keluar dari total stok
-                                                    }
-                                                }
+                                                // // Loop through each transaksi keluar
+                                                // foreach ($transaksi_keluar_data as $transaksi_keluar) {
+                                                //     if ($medis_stok['id'] === $transaksi_keluar['id_barang_medis']) {
+                                                //         $total_stok -= $transaksi_keluar['jumlah_keluar']; // Mengurangi jumlah keluar dari total stok
+                                                //     }
+                                                // }
 
-                                                // Loop through each pesanan to find matching id_barang_medis
-                                                foreach ($pesanan_data as $pesanan) {
-                                                    if ($medis_stok['id'] === $pesanan['id_barang_medis']) {
-                                                        $total_stok += $pesanan['jumlah_diterima']; // Menambah jumlah diterima ke total stok
-                                                    }
-                                                }
+                                                // // Loop through each pesanan to find matching id_barang_medis
+                                                // foreach ($pesanan_data as $pesanan) {
+                                                //     if ($medis_stok['id'] === $pesanan['id_barang_medis']) {
+                                                //         $total_stok += $pesanan['jumlah_diterima']; // Menambah jumlah diterima ke total stok
+                                                //     }
+                                                // }
 
                                                 // Check if total stok is less than or equal to stok_minimum
-                                                if ($total_stok <= $medis_stok['stok_minimum']) { ?>
+                                                if ($medis_stok['stok'] <= $medis_stok['stok_minimum']) {
+                                                    $count_notif_stok++; ?>
                                                     <div class="p-4 flex items-center border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141]">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                                                             <path d="M12.5358 6.667C14.0754 4.00033 17.9244 4.00033 19.464 6.66699L27.8356 21.167C29.3752 23.8337 27.4507 27.167 24.3715 27.167H7.62834C4.54914 27.167 2.62464 23.8337 4.16424 21.167L12.5358 6.667Z" fill="#DA4141" />
                                                             <path d="M16 18.333C15.4533 18.333 15 17.8797 15 17.333V10.333C15 9.78634 15.4533 9.33301 16 9.33301C16.5467 9.33301 17 9.78634 17 10.333V17.333C17 17.8797 16.5467 18.333 16 18.333Z" fill="#FEE2E2" />
                                                             <path d="M15.9998 23.0001C15.8265 23.0001 15.6532 22.9601 15.4932 22.8934C15.3198 22.8268 15.1865 22.7335 15.0531 22.6135C14.9331 22.4802 14.8398 22.3335 14.7598 22.1735C14.6932 22.0135 14.6665 21.8401 14.6665 21.6668C14.6665 21.3201 14.7998 20.9734 15.0531 20.7201C15.1865 20.6001 15.3198 20.5068 15.4932 20.4402C15.9865 20.2268 16.5732 20.3468 16.9465 20.7201C17.0665 20.8534 17.1598 20.9868 17.2265 21.1601C17.2931 21.3201 17.3332 21.4935 17.3332 21.6668C17.3332 21.8401 17.2931 22.0135 17.2265 22.1735C17.1598 22.3335 17.0665 22.4802 16.9465 22.6135C16.6932 22.8668 16.3598 23.0001 15.9998 23.0001Z" fill="#FEE2E2" />
                                                         </svg>
-                                                        <span class="ml-2">Stok <?= $medis_stok['nama'] ?> telah mencapai jumlah minimum</span>
-
-                                                        <span class="ml-auto text-red-600 font-bold">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-                                                                <circle cx="18" cy="18" r="18" fill="#FEE2E2" />
-                                                                <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="#A71E1E" font-weight="bold" font-size="16"><?= $total_stok ?></text>
-                                                            </svg>
-                                                        </span>
+                                                        <div class="mx-2">
+                                                            <span>Stok <span class="font-semibold"><?= $medis_stok['nama'] ?></span> telah mencapai jumlah minimum</span>
+                                                            <div class="font-semibold text-[#DA4141]">Sisa stok: <?= $medis_stok['stok'] ?></div>
+                                                        </div>
                                                     </div>
+                                                    <!-- <span class="ml-auto text-red-600 font-bold">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                                                            <circle cx="18" cy="18" r="18" fill="#FEE2E2" />
+                                                            <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="#A71E1E" font-weight="bold" font-size="16"></text>
+                                                        </svg>
+                                                    </span> -->
                                             <?php }
                                             } ?>
 
@@ -231,78 +118,160 @@
                                                             if ($jenis !== 'alkes') {
                                                                 // Check item expiration
                                                                 $item_kadaluwarsa = new DateTime($item['kadaluwarsa']);
+                                                                $tanggalnull = new DateTime('0001-01-01');
                                                                 $interval = $today->diff($item_kadaluwarsa);
                                                                 $days_left_item = (int)$interval->format('%r%a');
 
-
+                                                                if ($today < $item_kadaluwarsa && $days_left_item <= $medis_tanpa_params['notifikasi_kadaluwarsa_hari'] && $medis_tanpa_params['id'] === $item['id_barang_medis'] && $item_kadaluwarsa->format('Y-m-d') !== $tanggalnull->format('Y-m-d')) {
                                             ?>
+                                                                    <a href="editmedis/<?= $medis_tanpa_params['id'] ?>" class="kadaluwarsabaris p-4 flex items-center justify-between border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#F49A35] hover:bg-gray-100">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="33" height="32" viewBox="0 0 33 32" fill="none">
+                                                                            <path d="M13.0359 6.667C14.5755 4.00033 18.4245 4.00033 19.9641 6.66699L28.3357 21.167C29.8753 23.8337 27.9508 27.167 24.8716 27.167H8.12846C5.04926 27.167 3.12476 23.8337 4.66436 21.167L13.0359 6.667Z" fill="#F09834" />
+                                                                            <path d="M16.5 18.333C15.9533 18.333 15.5 17.8797 15.5 17.333V10.333C15.5 9.78634 15.9533 9.33301 16.5 9.33301C17.0467 9.33301 17.5 9.78634 17.5 10.333V17.333C17.5 17.8797 17.0467 18.333 16.5 18.333Z" fill="#FEF9C3" />
+                                                                            <path d="M16.5001 23.0001C16.3267 23.0001 16.1534 22.9601 15.9934 22.8934C15.8201 22.8268 15.6867 22.7335 15.5534 22.6135C15.4334 22.4802 15.3401 22.3335 15.2601 22.1735C15.1934 22.0135 15.1667 21.8401 15.1667 21.6668C15.1667 21.3201 15.3001 20.9734 15.5534 20.7201C15.6867 20.6001 15.8201 20.5068 15.9934 20.4402C16.4867 20.2268 17.0734 20.3468 17.4468 20.7201C17.5668 20.8534 17.6601 20.9868 17.7267 21.1601C17.7934 21.3201 17.8334 21.4935 17.8334 21.6668C17.8334 21.8401 17.7934 22.0135 17.7267 22.1735C17.6601 22.3335 17.5668 22.4802 17.4468 22.6135C17.1934 22.8668 16.8601 23.0001 16.5001 23.0001Z" fill="#FEF9C3" />
+                                                                        </svg>
+                                                                        <div class="w-[70%] ml-2">
+                                                                            <p class="font-bold">-</p>
+                                                                            <p class="w-[80%]">Barang <span class="font-semibold"><?= $medis_tanpa_params['nama'] ?></span> telah mendekati kadaluwarsa</p>
+                                                                            <p class="pt-1 font-semibold text-[#F49A35]"><?php $original_date = $item['kadaluwarsa'];
+                                                                                                                            $day = date("d", strtotime($original_date));
+                                                                                                                            $month = date("m", strtotime($original_date));
+                                                                                                                            $year = date("Y", strtotime($original_date));
+
+                                                                                                                            $bulan = array(
+                                                                                                                                1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                                                7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                                            );
+
+                                                                                                                            $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+
+                                                                                                                            echo $formatted_date; ?></p>
+                                                                        </div>
+                                                                        <div class="flex justify-end w-1/3">
+                                                                            <div class="flex items-center p-[0.375rem] bg-[#FEF9C3] rounded-[62.4375rem]">
+                                                                                <p class="font-semibold px-1 text-[#F49A35]"><?= $days_left_item ?> hari</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </a>
+
 
                                                                 <?php
 
 
-                                                                // Check pesanan expiration
-                                                                foreach ($penerimaan_data as $penerimaan) {
-                                                                    foreach ($pesanan_data as $pesanan) {
-                                                                        if ($penerimaan['id_pengajuan'] === $pesanan['id_pengajuan']) {
-                                                                            $pesanan_kadaluwarsa = new DateTime($pesanan['kadaluwarsa']);
-                                                                            $interval_pesanan = $today->diff($pesanan_kadaluwarsa);
-                                                                            $days_left_pesanan = ceil($interval_pesanan->days);
+                                                                } elseif ($today >= $item_kadaluwarsa && $days_left_item <= $medis_tanpa_params['notifikasi_kadaluwarsa_hari'] && $medis_tanpa_params['id'] === $item['id_barang_medis'] && $item_kadaluwarsa->format('Y-m-d') !== $tanggalnull->format('Y-m-d')) { ?>
+                                                                    <a href="editmedis/<?= $medis_tanpa_params['id'] ?>" class="kadaluwarsabaris p-4 flex items-center justify-between border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141] hover:bg-gray-100">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                                                            <path d="M12.5358 6.667C14.0754 4.00033 17.9244 4.00033 19.464 6.66699L27.8356 21.167C29.3752 23.8337 27.4507 27.167 24.3715 27.167H7.62834C4.54914 27.167 2.62464 23.8337 4.16424 21.167L12.5358 6.667Z" fill="#DA4141" />
+                                                                            <path d="M16 18.333C15.4533 18.333 15 17.8797 15 17.333V10.333C15 9.78634 15.4533 9.33301 16 9.33301C16.5467 9.33301 17 9.78634 17 10.333V17.333C17 17.8797 16.5467 18.333 16 18.333Z" fill="#FEE2E2" />
+                                                                            <path d="M15.9998 23.0001C15.8265 23.0001 15.6532 22.9601 15.4932 22.8934C15.3198 22.8268 15.1865 22.7335 15.0531 22.6135C14.9331 22.4802 14.8398 22.3335 14.7598 22.1735C14.6932 22.0135 14.6665 21.8401 14.6665 21.6668C14.6665 21.3201 14.7998 20.9734 15.0531 20.7201C15.1865 20.6001 15.3198 20.5068 15.4932 20.4402C15.9865 20.2268 16.5732 20.3468 16.9465 20.7201C17.0665 20.8534 17.1598 20.9868 17.2265 21.1601C17.2931 21.3201 17.3332 21.4935 17.3332 21.6668C17.3332 21.8401 17.2931 22.0135 17.2265 22.1735C17.1598 22.3335 17.0665 22.4802 16.9465 22.6135C16.6932 22.8668 16.3598 23.0001 15.9998 23.0001Z" fill="#FEE2E2" />
+                                                                        </svg>
+                                                                        <div class="w-[70%] ml-2">
+                                                                            <p class="font-bold">-</p>
+                                                                            <p class="w-[80%]">Barang <span class="font-semibold"><?= $medis_tanpa_params['nama'] ?></span> telah mendekati kadaluwarsa</p>
+                                                                            <p class="pt-1 font-semibold text-[#A71E1E]"><?php $original_date = $item['kadaluwarsa'];
+                                                                                                                            $day = date("d", strtotime($original_date));
+                                                                                                                            $month = date("m", strtotime($original_date));
+                                                                                                                            $year = date("Y", strtotime($original_date));
 
-                                                                            if ($today < $pesanan_kadaluwarsa && $item['id_barang_medis'] === $pesanan['id_barang_medis']) {
-                                                                ?>
-                                                                                <!-- butuh penyesuaian jumlah_diterima === jumlah_keluar(transaksi) -->
+                                                                                                                            $bulan = array(
+                                                                                                                                1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                                                7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                                            );
 
-                                                                                <div class="p-4 flex items-center justify-between border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#F49A35]">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="32" viewBox="0 0 33 32" fill="none">
-                                                                                        <path d="M13.0359 6.667C14.5755 4.00033 18.4245 4.00033 19.9641 6.66699L28.3357 21.167C29.8753 23.8337 27.9508 27.167 24.8716 27.167H8.12846C5.04926 27.167 3.12476 23.8337 4.66436 21.167L13.0359 6.667Z" fill="#F09834" />
-                                                                                        <path d="M16.5 18.333C15.9533 18.333 15.5 17.8797 15.5 17.333V10.333C15.5 9.78634 15.9533 9.33301 16.5 9.33301C17.0467 9.33301 17.5 9.78634 17.5 10.333V17.333C17.5 17.8797 17.0467 18.333 16.5 18.333Z" fill="#FEF9C3" />
-                                                                                        <path d="M16.5001 23.0001C16.3267 23.0001 16.1534 22.9601 15.9934 22.8934C15.8201 22.8268 15.6867 22.7335 15.5534 22.6135C15.4334 22.4802 15.3401 22.3335 15.2601 22.1735C15.1934 22.0135 15.1667 21.8401 15.1667 21.6668C15.1667 21.3201 15.3001 20.9734 15.5534 20.7201C15.6867 20.6001 15.8201 20.5068 15.9934 20.4402C16.4867 20.2268 17.0734 20.3468 17.4468 20.7201C17.5668 20.8534 17.6601 20.9868 17.7267 21.1601C17.7934 21.3201 17.8334 21.4935 17.8334 21.6668C17.8334 21.8401 17.7934 22.0135 17.7267 22.1735C17.6601 22.3335 17.5668 22.4802 17.4468 22.6135C17.1934 22.8668 16.8601 23.0001 16.5001 23.0001Z" fill="#FEF9C3" />
-                                                                                    </svg>
-                                                                                    <div class="w-[70%] ml-2">
-                                                                                        <p class="font-bold"><?= $penerimaan['no_faktur'] ?></p>
-                                                                                        <p class="w-[80%]">Barang <?= $medis_tanpa_params['nama'] ?> telah mendekati kadaluwarsa</p>
-                                                                                        <p class="pt-1 text-[#F49A35]"><?php $original_date = $pesanan['kadaluwarsa'];
-                                                                                                                        $day = date("d", strtotime($original_date));
-                                                                                                                        $month = date("m", strtotime($original_date));
-                                                                                                                        $year = date("Y", strtotime($original_date));
+                                                                                                                            $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
 
-                                                                                                                        $bulan = array(
-                                                                                                                            1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
-                                                                                                                            7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
-                                                                                                                        );
+                                                                                                                            echo $formatted_date; ?></p>
+                                                                        </div>
+                                                                        <div class="flex justify-end w-1/3">
+                                                                            <div class="flex items-center p-[0.375rem] bg-[#FEE2E2] rounded-[62.4375rem]">
+                                                                                <p class="font-semibold px-1 text-[#DA4141]">Lewat <?= $days_left_item ?> hari</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        </acos>
+                                                                        <?php }
 
-                                                                                                                        $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
 
-                                                                                                                        echo $formatted_date; ?></p>
-                                                                                    </div>
-                                                                                    <div class="flex justify-end w-1/3">
-                                                                                        <div class="flex items-center p-[0.375rem] bg-[#FEF9C3] rounded-[62.4375rem]">
-                                                                                            <p class="text-[#F49A35]"><?= $days_left_pesanan ?> hari</p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
+                                                                    // Check pesanan expiration
+                                                                    foreach ($penerimaan_data as $penerimaan) {
+                                                                        foreach ($pesanan_data as $pesanan) {
+                                                                            if ($penerimaan['id_pengajuan'] === $pesanan['id_pengajuan']) {
+                                                                                $pesanan_kadaluwarsa = new DateTime($pesanan['kadaluwarsa']);
+                                                                                $interval_pesanan = $today->diff($pesanan_kadaluwarsa);
+                                                                                $days_left_pesanan = ceil($interval_pesanan->days);
 
-                                                                            <?php
-                                                                            } elseif ($today > $pesanan_kadaluwarsa && $item['id_barang_medis'] === $pesanan['id_barang_medis']) {
-                                                                            ?>
-                                                                                <div class="p-4 flex items-center justify-between border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141]">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                                                                        <path d="M12.5358 6.667C14.0754 4.00033 17.9244 4.00033 19.464 6.66699L27.8356 21.167C29.3752 23.8337 27.4507 27.167 24.3715 27.167H7.62834C4.54914 27.167 2.62464 23.8337 4.16424 21.167L12.5358 6.667Z" fill="#DA4141" />
-                                                                                        <path d="M16 18.333C15.4533 18.333 15 17.8797 15 17.333V10.333C15 9.78634 15.4533 9.33301 16 9.33301C16.5467 9.33301 17 9.78634 17 10.333V17.333C17 17.8797 16.5467 18.333 16 18.333Z" fill="#FEE2E2" />
-                                                                                        <path d="M15.9998 23.0001C15.8265 23.0001 15.6532 22.9601 15.4932 22.8934C15.3198 22.8268 15.1865 22.7335 15.0531 22.6135C14.9331 22.4802 14.8398 22.3335 14.7598 22.1735C14.6932 22.0135 14.6665 21.8401 14.6665 21.6668C14.6665 21.3201 14.7998 20.9734 15.0531 20.7201C15.1865 20.6001 15.3198 20.5068 15.4932 20.4402C15.9865 20.2268 16.5732 20.3468 16.9465 20.7201C17.0665 20.8534 17.1598 20.9868 17.2265 21.1601C17.2931 21.3201 17.3332 21.4935 17.3332 21.6668C17.3332 21.8401 17.2931 22.0135 17.2265 22.1735C17.1598 22.3335 17.0665 22.4802 16.9465 22.6135C16.6932 22.8668 16.3598 23.0001 15.9998 23.0001Z" fill="#FEE2E2" />
-                                                                                    </svg>
-                                                                                    <div class="w-[70%] ml-2">
-                                                                                        <p class="font-bold"><?= $penerimaan['no_faktur'] ?></p>
-                                                                                        <p class="w-[80%]">Barang <?= $medis_tanpa_params['nama'] ?> telah mendekati kadaluwarsa</p>
-                                                                                        <p class="pt-1 text-[#A71E1E]"><?= $pesanan['kadaluwarsa'] ?></p>
-                                                                                    </div>
-                                                                                    <div class="flex justify-end w-1/3">
-                                                                                        <div class="flex items-center p-[0.375rem] bg-[#FEE2E2] rounded-[62.4375rem]">
-                                                                                            <p class="text-[#DA4141]">Lewat <?= $days_left_pesanan ?> hari</p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                            <?php   }
+                                                                                if ($today < $pesanan_kadaluwarsa && $item['id_barang_medis'] === $pesanan['id_barang_medis'] && $pesanan_kadaluwarsa->format('Y-m-d') !== $tanggalnull->format('Y-m-d')) {
+
+                                                                                    foreach ($transaksi_keluar_data as $transaksi_keluar) {
+                                                                                        if ($transaksi_keluar['no_faktur'] !== $penerimaan['no_faktur'] && $pesanan['jumlah_diterima'] === $transaksi_keluar['jumlah']) {
+                                                                        ?>
+                                                                                            <!-- butuh penyesuaian jumlah_diterima === jumlah_keluar(transaksi) -->
+
+                                                                                            <div class="kadaluwarsabaris p-4 flex items-center justify-between border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#F49A35]">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="33" height="32" viewBox="0 0 33 32" fill="none">
+                                                                                                    <path d="M13.0359 6.667C14.5755 4.00033 18.4245 4.00033 19.9641 6.66699L28.3357 21.167C29.8753 23.8337 27.9508 27.167 24.8716 27.167H8.12846C5.04926 27.167 3.12476 23.8337 4.66436 21.167L13.0359 6.667Z" fill="#F09834" />
+                                                                                                    <path d="M16.5 18.333C15.9533 18.333 15.5 17.8797 15.5 17.333V10.333C15.5 9.78634 15.9533 9.33301 16.5 9.33301C17.0467 9.33301 17.5 9.78634 17.5 10.333V17.333C17.5 17.8797 17.0467 18.333 16.5 18.333Z" fill="#FEF9C3" />
+                                                                                                    <path d="M16.5001 23.0001C16.3267 23.0001 16.1534 22.9601 15.9934 22.8934C15.8201 22.8268 15.6867 22.7335 15.5534 22.6135C15.4334 22.4802 15.3401 22.3335 15.2601 22.1735C15.1934 22.0135 15.1667 21.8401 15.1667 21.6668C15.1667 21.3201 15.3001 20.9734 15.5534 20.7201C15.6867 20.6001 15.8201 20.5068 15.9934 20.4402C16.4867 20.2268 17.0734 20.3468 17.4468 20.7201C17.5668 20.8534 17.6601 20.9868 17.7267 21.1601C17.7934 21.3201 17.8334 21.4935 17.8334 21.6668C17.8334 21.8401 17.7934 22.0135 17.7267 22.1735C17.6601 22.3335 17.5668 22.4802 17.4468 22.6135C17.1934 22.8668 16.8601 23.0001 16.5001 23.0001Z" fill="#FEF9C3" />
+                                                                                                </svg>
+                                                                                                <div class="w-[70%] ml-2">
+                                                                                                    <p class="font-bold"><?= $penerimaan['no_faktur'] ?></p>
+                                                                                                    <p class="w-[80%]">Barang <span class="font-semibold"><?= $medis_tanpa_params['nama'] ?></span> telah mendekati kadaluwarsa</p>
+                                                                                                    <p class="pt-1 font-semibold text-[#F49A35]"><?php $original_date = $pesanan['kadaluwarsa'];
+                                                                                                                                                    $day = date("d", strtotime($original_date));
+                                                                                                                                                    $month = date("m", strtotime($original_date));
+                                                                                                                                                    $year = date("Y", strtotime($original_date));
+
+                                                                                                                                                    $bulan = array(
+                                                                                                                                                        1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                                                                        7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                                                                    );
+
+                                                                                                                                                    $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+
+                                                                                                                                                    echo $formatted_date; ?></p>
+                                                                                                </div>
+                                                                                                <div class="flex justify-end w-1/3">
+                                                                                                    <div class="flex items-center p-[0.375rem] bg-[#FEF9C3] rounded-[62.4375rem]">
+                                                                                                        <p class="font-semibold px-1 text-[#F49A35]"><?= $days_left_pesanan ?> hari</p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                        <?php
+                                                                                        } elseif ($today > $pesanan_kadaluwarsa && $item['id_barang_medis'] === $pesanan['id_barang_medis'] && $pesanan_kadaluwarsa->format('Y-m-d') !== $tanggalnull->format('Y-m-d')) {
+                                                                                        ?>
+                                                                                            <div class="kadaluwarsabaris p-4 flex items-center justify-between border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141]">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                                                                                    <path d="M12.5358 6.667C14.0754 4.00033 17.9244 4.00033 19.464 6.66699L27.8356 21.167C29.3752 23.8337 27.4507 27.167 24.3715 27.167H7.62834C4.54914 27.167 2.62464 23.8337 4.16424 21.167L12.5358 6.667Z" fill="#DA4141" />
+                                                                                                    <path d="M16 18.333C15.4533 18.333 15 17.8797 15 17.333V10.333C15 9.78634 15.4533 9.33301 16 9.33301C16.5467 9.33301 17 9.78634 17 10.333V17.333C17 17.8797 16.5467 18.333 16 18.333Z" fill="#FEE2E2" />
+                                                                                                    <path d="M15.9998 23.0001C15.8265 23.0001 15.6532 22.9601 15.4932 22.8934C15.3198 22.8268 15.1865 22.7335 15.0531 22.6135C14.9331 22.4802 14.8398 22.3335 14.7598 22.1735C14.6932 22.0135 14.6665 21.8401 14.6665 21.6668C14.6665 21.3201 14.7998 20.9734 15.0531 20.7201C15.1865 20.6001 15.3198 20.5068 15.4932 20.4402C15.9865 20.2268 16.5732 20.3468 16.9465 20.7201C17.0665 20.8534 17.1598 20.9868 17.2265 21.1601C17.2931 21.3201 17.3332 21.4935 17.3332 21.6668C17.3332 21.8401 17.2931 22.0135 17.2265 22.1735C17.1598 22.3335 17.0665 22.4802 16.9465 22.6135C16.6932 22.8668 16.3598 23.0001 15.9998 23.0001Z" fill="#FEE2E2" />
+                                                                                                </svg>
+                                                                                                <div class="w-[70%] ml-2">
+                                                                                                    <p class="font-bold"><?= $penerimaan['no_faktur'] ?></p>
+                                                                                                    <p class="w-[80%]">Barang <span class="font-semibold"><?= $medis_tanpa_params['nama'] ?></span> telah mendekati kadaluwarsa</p>
+                                                                                                    <p class="pt-1 font-semibold text-[#A71E1E]"><?php $original_date = $pesanan['kadaluwarsa'];
+                                                                                                                                                    $day = date("d", strtotime($original_date));
+                                                                                                                                                    $month = date("m", strtotime($original_date));
+                                                                                                                                                    $year = date("Y", strtotime($original_date));
+
+                                                                                                                                                    $bulan = array(
+                                                                                                                                                        1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                                                                        7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                                                                    );
+
+                                                                                                                                                    $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+
+                                                                                                                                                    echo $formatted_date; ?></p>
+                                                                                                </div>
+                                                                                                <div class="flex justify-end w-1/3">
+                                                                                                    <div class="flex items-center p-[0.375rem] bg-[#FEE2E2] rounded-[62.4375rem]">
+                                                                                                        <p class="font-semibold px-1 text-[#DA4141]">Lewat <?= $days_left_pesanan ?> hari</p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                <?php   }
+                                                                                    }
+                                                                                }
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
@@ -310,13 +279,13 @@
                                                         }
                                                     }
                                                 }
-                                            }
-                                            ?>
+                                                ?>
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
                             <div>
                                 <a href='/tambahmedis' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                     <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
@@ -366,7 +335,7 @@
 
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Nama
                                         </span>
                                     </div>
@@ -374,14 +343,14 @@
 
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Jenis Barang Medis
                                         </span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Stok
                                         </span>
                                     </div>
@@ -389,7 +358,7 @@
 
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Aksi
                                         </span>
                                     </div>
@@ -706,7 +675,7 @@
                                     </td>
                                     <td class="size-px w-48 whitespace-nowrap">
                                         <div class="px-6 py-3 text-center">
-                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-[#F1F1F1]">
+                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
                                                 <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
                                                 <?= $medis['jenis'] ?? 'N/A' ?>
                                             </span>
@@ -720,17 +689,17 @@
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
-                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $medis['id'] ?>">
+                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $medis['id'] ?>">
                                                     Lihat Detail
                                                 </button>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <a href="/editmedis/<?= $medis['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                                    Edit
+                                                <a href="/editmedis/<?= $medis['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                    Ubah
                                                 </a>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $medis['id'] ?>')" href="#">
+                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $medis['id'] ?>')" href="#">
                                                     Hapus
                                                 </button>
                                                 <div id="modelConfirm-<?= $medis['id'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
@@ -756,16 +725,20 @@
                                                                 </svg>
                                                             </div>
                                                             Hapus data
-                                                            <h3 class="text-xl font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
+                                                            <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                            <div class="w-full sm:flex justify-center">
-                                                                <a href="/hapusmedis/<?= $medis['id'] ?>" onclick="closeModal('modelConfirm-<?= $medis['id'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
-                                                                    Hapus
-                                                                </a>
-                                                                <a href="#" onclick="closeModal('modelConfirm-<?= $medis['id'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-                                                                    Batal
-                                                                </a>
-                                                            </div>
+                                                            <form action="/hapusmedis/<?= $medis['id'] ?>" method="POST">
+                                                                <?= csrf_field() ?>
+                                                                <div class="w-full sm:flex justify-center">
+                                                                    <input type="hidden" name="_method" value="DELETE">
+                                                                    <button onclick="closeModal('modelConfirm-<?= $medis['id'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                        Hapus
+                                                                    </button>
+                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $medis['id'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                        Batal
+                                                                    </a>
+                                                                </div>
+                                                            </form>
                                                         </div>
 
                                                     </div>
@@ -922,7 +895,20 @@
         event.stopPropagation(); // Menghentikan penyebaran event ke elemen lain
         closeNotificationPopup();
     });
+    document.addEventListener('DOMContentLoaded', function() {
+        var count_notif_stok = <?= $count_notif_stok ?>;
+        document.querySelector('#stok-tab svg text').textContent = count_notif_stok;
+    });
 
+    document.addEventListener('DOMContentLoaded', function() {
+        // Menghitung jumlah div elemen di dalam kadaluwarsa-content
+        var kadaluwarsaContent = document.getElementById('kadaluwarsa-content');
+        var divCount = kadaluwarsaContent.querySelectorAll('div.kadaluwarsabaris, a.kadaluwarsabaris').length;
+
+        // Memperbarui teks dalam SVG
+        var svgText = document.querySelector('#kadaluwarsa-tab svg text');
+        svgText.textContent = divCount.toString();
+    });
     // JavaScript to toggle between tabs
     document.getElementById('stok-tab').addEventListener('click', function() {
         document.getElementById('stok-content').classList.remove('hidden');

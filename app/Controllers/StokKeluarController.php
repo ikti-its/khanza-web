@@ -11,70 +11,109 @@ class StokKeluarController extends BaseController
     {
         $title = 'Stok Keluar Medis';
 
-        // Retrieve the value of the 'page' parameter from the request, default to 1 if not present
         $page = $this->request->getGet('page') ?? 1;
+        $size = $this->request->getGet('size') ?? 10;
 
-        // Retrieve the value of the 'size' parameter from the request, default to 5 if not present
-        $size = $this->request->getGet('size') ?? 5;
-
-        // Check if the user is logged in
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
 
-            // URL for fetching stok keluar data
             $stok_keluar_url = $this->api_url . '/inventaris/stok?page=' . $page . '&size=' . $size;
+            $transaksi_keluar_url = $this->api_url . '/inventaris/transaksi';
+            $medis_url = $this->api_url . '/inventaris/medis';
+            $satuan_url = $this->api_url . '/inventaris/satuan';
+            $pegawai_url = $this->api_url . '/pegawai'; // URL pegawai
 
-            // URL for fetching pegawai data
-            $pegawai_url = $this->api_url . '/pegawai';
-
-            // Initialize cURL for stok keluar data
+            // Inisialisasi cURL untuk setiap endpoint
             $ch_stok_keluar = curl_init($stok_keluar_url);
             curl_setopt($ch_stok_keluar, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_stok_keluar, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
 
-            // Initialize cURL for pegawai data
-            $ch_pegawai = curl_init($pegawai_url);
+            $ch_transaksi_keluar = curl_init($transaksi_keluar_url);
+            curl_setopt($ch_transaksi_keluar, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_transaksi_keluar, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            $ch_medis = curl_init($medis_url);
+            curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            $ch_satuan = curl_init($satuan_url); // Inisialisasi cURL untuk satuan
+            curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            $ch_pegawai = curl_init($pegawai_url); // Inisialisasi cURL untuk pegawai
             curl_setopt($ch_pegawai, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_pegawai, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
 
-            // Execute cURL requests
+            // Eksekusi permintaan cURL untuk masing-masing endpoint
             $response_stok_keluar = curl_exec($ch_stok_keluar);
-            $response_pegawai = curl_exec($ch_pegawai);
+            $response_transaksi_keluar = curl_exec($ch_transaksi_keluar);
+            $response_medis = curl_exec($ch_medis);
+            $response_satuan = curl_exec($ch_satuan); // Eksekusi permintaan cURL untuk satuan
+            $response_pegawai = curl_exec($ch_pegawai); // Eksekusi permintaan cURL untuk pegawai
 
-            // Check if responses are successful
-            if ($response_stok_keluar && $response_pegawai) {
+            // Cek apakah semua permintaan berhasil (status code 200)
+            if ($response_stok_keluar && $response_transaksi_keluar && $response_medis && $response_satuan && $response_pegawai) {
                 $http_status_code_stok_keluar = curl_getinfo($ch_stok_keluar, CURLINFO_HTTP_CODE);
-                $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
+                $http_status_code_transaksi_keluar = curl_getinfo($ch_transaksi_keluar, CURLINFO_HTTP_CODE);
+                $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
+                $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
+                $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE); // Mendapatkan kode status HTTP untuk pegawai
 
-                // Check if both requests are successful (status code 200)
-                if ($http_status_code_stok_keluar === 200 && $http_status_code_pegawai === 200) {
+                // Cek apakah semua kode status HTTP adalah 200
+                if ($http_status_code_stok_keluar === 200 && $http_status_code_transaksi_keluar === 200 && $http_status_code_medis === 200 && $http_status_code_satuan === 200 && $http_status_code_pegawai === 200) {
+                    // Decode data JSON untuk masing-masing respons
                     $stok_keluar_medis_data = json_decode($response_stok_keluar, true);
-                    $pegawai_data = json_decode($response_pegawai, true);
+                    $transaksi_keluar_data = json_decode($response_transaksi_keluar, true);
+                    $medis_data = json_decode($response_medis, true);
+                    $satuan_data = json_decode($response_satuan, true);
+                    $pegawai_data = json_decode($response_pegawai, true); // Decode data JSON untuk pegawai
 
+                    // Tambahkan breadcrumb
+                    $this->addBreadcrumb('Inventaris', 'inventarismedis');
+                    $this->addBreadcrumb('Barang Medis', 'medis');
+                    $this->addBreadcrumb('Stok Keluar', 'stokkeluarmedis');
+                    $breadcrumbs = $this->getBreadcrumbs();
+
+                    // Kembalikan tampilan dengan data yang diperlukan
                     return view('/admin/inventaris/medis/stok_keluar/data_stok_keluar', [
                         'stok_keluar_medis_data' => $stok_keluar_medis_data['data']['stok_keluar_barang_medis'],
+                        'transaksi_keluar_data' => $transaksi_keluar_data['data'],
+                        'medis_data' => $medis_data['data'],
+                        'satuan_data' => $satuan_data['data'],
+                        'pegawai_data' => $pegawai_data['data'], // Tambahkan data pegawai ke dalam tampilan
                         'meta_data' => $stok_keluar_medis_data['data'],
-                        'pegawai_data' => $pegawai_data['data'],
-                        'title' => $title
+                        'title' => $title,
+                        'breadcrumbs' => $breadcrumbs
                     ]);
                 } else {
-                    return "Error fetching data. HTTP Status Code stok keluar: $http_status_code_stok_keluar, HTTP Status Code Pegawai: $http_status_code_pegawai";
+                    return "Error fetching data. HTTP Status Codes: Stok Keluar ($http_status_code_stok_keluar), Transaksi Keluar ($http_status_code_transaksi_keluar), Medis ($http_status_code_medis), Satuan ($http_status_code_satuan), Pegawai ($http_status_code_pegawai)";
                 }
             } else {
                 return "Error fetching data.";
             }
 
-            // Close cURL sessions
+            // Tutup sesi cURL
             curl_close($ch_stok_keluar);
-            curl_close($ch_pegawai);
+            curl_close($ch_transaksi_keluar);
+            curl_close($ch_medis);
+            curl_close($ch_satuan);
+            curl_close($ch_pegawai); // Tutup sesi cURL untuk pegawai
         } else {
             return "User not logged in. Please log in first.";
         }
     }
+
+
 
     public function tambahStokKeluarMedis()
     {
@@ -130,13 +169,20 @@ class StokKeluarController extends BaseController
                 $pegawai_data = json_decode($response_pegawai, true);
 
                 // Render the view with the fetched data
+                $this->addBreadcrumb('Inventaris', 'inventarismedis');
+                $this->addBreadcrumb('Barang Medis', 'medis');
+                $this->addBreadcrumb('Stok Keluar', 'stokkeluarmedis');
+                $this->addBreadcrumb('Tambah', 'tambahstokkeluarmedis');
+
+                $breadcrumbs = $this->getBreadcrumbs();
                 return view('/admin/inventaris/medis/stok_keluar/tambah_stok_keluar', [
                     'medis_data' => $medis_data['data'],
                     'pesanan_data' => $pesanan_data['data'],
                     'penerimaan_data' => $penerimaan_data['data'],
                     'pegawai_data' => $pegawai_data['data'],
                     'token' => $token,
-                    'title' => $title
+                    'title' => $title,
+                    'breadcrumbs' => $breadcrumbs
                 ]);
             } else {
                 return "Error fetching data. Response medis: $response_medis, Response pesanan: $response_pesanan, Response penerimaan: $response_penerimaan, Response pegawai: $response_pegawai";
@@ -167,6 +213,9 @@ class StokKeluarController extends BaseController
             $pegawaistokkeluar = $this->request->getPost('pegawaistokkeluar');
             $tglkeluar = $this->request->getPost('tglkeluar');
             $keteranganstokkeluar = $this->request->getPost('keteranganstokkeluar');
+            $asalruangan = $this->request->getPost('asalruangan');
+            $tujuanruangan = $this->request->getPost('tujuanruangan');
+
 
             //Transaksi keluar
             $idbrgmedis = $this->request->getPost('idbrgmedis');
@@ -174,17 +223,6 @@ class StokKeluarController extends BaseController
             $nofaktur = $this->request->getPost('nofaktur');
             $jlhkeluar = $this->request->getPost('jlhkeluar');
 
-            // $tglpengajuan = $this->request->getPost('tglpengajuan');
-            // $nopengajuan = $this->request->getPost('nopengajuan');
-            // $supplier = intval($this->request->getPost('supplier'));
-            // $pegawaipengajuan = $this->request->getPost('pegawaipengajuan');
-            // $diskonpersen = intval($this->request->getPost('diskonpersen'));
-            // $diskonjumlah = intval($this->request->getPost('diskonjumlah'));
-            // $pajakpersen = intval($this->request->getPost('pajakpersen'));
-            // $pajakjumlah = intval($this->request->getPost('pajakjumlah'));
-            // $materai = intval($this->request->getPost('materai'));
-            // $catatanpengajuan = $this->request->getPost('catatanpengajuan');
-            // $statuspesanan = $this->request->getPost('statuspesanan');
 
             $stok_keluar_url = $this->api_url . '/inventaris/stok';
             $transaksi_brgmedis_url = $this->api_url . '/inventaris/transaksi';
@@ -193,6 +231,8 @@ class StokKeluarController extends BaseController
                 'no_keluar' => $nokeluar,
                 'id_pegawai' => $pegawaistokkeluar,
                 'tanggal_stok_keluar' => $tglkeluar,
+                'asal_ruangan' => intval($asalruangan),
+                'tujuan_ruangan' => intval($tujuanruangan),
                 'keterangan' => $keteranganstokkeluar,
             ];
 
@@ -357,6 +397,12 @@ class StokKeluarController extends BaseController
 
                 // Pastikan respons sukses (status code 200)
                 if ($http_status_code_stok_keluar === 200 && $http_status_code_barang_stok_keluar === 200 && $http_status_code_medis === 200 && $http_status_code_pesanan === 200 && $http_status_code_penerimaan === 200 && $http_status_code_pegawai === 200) {
+                    $this->addBreadcrumb('Inventaris', 'inventarismedis');
+                    $this->addBreadcrumb('Barang Medis', 'medis');
+                    $this->addBreadcrumb('Stok Keluar', 'stokkeluarmedis');
+                    $this->addBreadcrumb('Edit', 'editstokkeluarmedis');
+
+                    $breadcrumbs = $this->getBreadcrumbs();
                     return view('/admin/inventaris/medis/stok_keluar/edit_stok_keluar', [
                         'stok_keluar_data' => $stok_keluar_data['data'],
                         'barang_stok_keluar_data' => $barang_stok_keluar_data['data'],
@@ -366,7 +412,8 @@ class StokKeluarController extends BaseController
                         'pegawai_data' => $pegawai_data['data'],
                         'stok_keluarId' => $stokKeluarId,
                         'token' => $token,
-                        'title' => 'Edit stok_keluar Medis'
+                        'title' => 'Edit Stok Keluar Medis',
+                        'breadcrumbs' => $breadcrumbs
                     ]);
                 } else {
                     // Handle jika ada error dalam mendapatkan data dari API
@@ -403,6 +450,8 @@ class StokKeluarController extends BaseController
             $nokeluar = $this->request->getPost('nokeluar');
             $pegawaitagihan = $this->request->getPost('pegawaistokkeluar');
             $tglkeluar = $this->request->getPost('tglkeluar');
+            $asalruangan = $this->request->getPost('asalruangan');
+            $tujuanruangan = $this->request->getPost('tujuanruangan');
             $keteranganstokkeluar = $this->request->getPost('keteranganstokkeluar');
 
             //Transaksi keluar
@@ -418,6 +467,8 @@ class StokKeluarController extends BaseController
                 'no_keluar' => $nokeluar,
                 'id_pegawai' => $pegawaitagihan,
                 'tanggal_stok_keluar' => $tglkeluar,
+                'asal_ruangan' => intval($asalruangan),
+                'tujuan_ruangan' => intval($tujuanruangan),
                 'keterangan' => $keteranganstokkeluar,
             ];
             $edit_stok_keluar_JSON = json_encode($postDataStokKkeluar);

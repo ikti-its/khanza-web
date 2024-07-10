@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -12,20 +12,31 @@
 
         </div>
 
-        <form action="/submiteditpengajuanmedis/<?= $pengajuanId ?>" method="post">
+        <form action="/submiteditpengajuanmedis/<?= $pengajuanId ?>" method="post" onsubmit="return validateForm()">
+        <?= csrf_field() ?>    
             <!-- Grid -->
-            <div class="mb-5 sm:block md:flex items-center">
+            <div class="sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Pengajuan</label>
-                <input type="text" name="nopengajuan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $pengajuan_data['nomor_pengajuan'] ?>">
+                <input type="text" name="nopengajuan" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $pengajuan_data['nomor_pengajuan'] ?>" readonly>
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Pengajuan</label>
-                <input type="date" name="tglpengajuan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $pengajuan_data['tanggal_pengajuan'] ?>">
+                <input type="hidden" id="tglpengajuantetap" value="<?= $pengajuan_data['tanggal_pengajuan'] ?>">
+                <input type="date" id="tglpengajuan" name="tglpengajuan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $pengajuan_data['tanggal_pengajuan'] ?>" required> 
             </div>
-
-            <div class="mb-5 sm:block md:flex items-center">
+            <div id="dateError" class="mt-2 hidden">
+                <label class="text-sm text-gray-900 dark:text-white md:w-1/4"></label>
+                <div class="flex items-center text-red-500 text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M7 5.25V8.16667" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M7 12.4891H3.465C1.44083 12.4891 0.595001 11.0424 1.575 9.27492L3.395 5.99658L5.11 2.91658C6.14834 1.04408 7.85167 1.04408 8.89 2.91658L10.605 6.00242L12.425 9.28075C13.405 11.0482 12.5533 12.4949 10.535 12.4949H7V12.4891Z" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M6.99707 9.91675H7.00231" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg> Tanggal pengajuan harus dari tanggal pengajuan yang dilakukan atau setelahnya.
+                </div>
+            </div>
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pegawai</label>
-                <select name="pegawai" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <select name="pegawai" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="">-</option>
                     <?php
                     foreach ($pegawai_data as $pegawai) {
@@ -41,11 +52,11 @@
                     ?>
                 </select>
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Catatan</label>
-                <input type="text" name="catatan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $pengajuan_data['catatan'] ?>">
+                <input type="text" name="catatan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $pengajuan_data['catatan'] ?>">
             </div>
-           
+
 
             <!-- End Grid -->
             <div class="mt-5 flex flex-col">
@@ -67,12 +78,12 @@
                                         <col width="22%">
                                         <col width="22%">
                                     </colgroup>
-                                    <thead class="border-b">
+                                    <thead class="border-b bg-[#DCDCDC]">
                                         <tr class="bg-navy disabled">
-                                            <th class="px-1 py-1 text-center">Qty</th>
+                                            <th class="px-1 py-1 text-center">Jumlah</th>
                                             <th class="px-1 py-1 text-center">Barang</th>
                                             <th class="px-1 py-1 text-center">Satuan</th>
-                                            <th class="px-1 py-1 text-center">Harga</th>
+                                            <th class="px-1 py-1 text-center">Harga Pengajuan</th>
                                             <th class="px-1 py-1 text-center">Total</th>
                                         </tr>
                                     </thead>
@@ -83,10 +94,10 @@
                                                 <input type="hidden" value="<?= $pesanan['kadaluwarsa'] ?>" class="text-center w-full border" name="kadaluwarsa[]" />
 
                                                 <td class="align-middle p-1 text-center">
-                                                    <input type="number" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" step="any" name="jumlah_pesanan[]" value="<?= $pesanan['jumlah_pesanan'] ?>" />
+                                                    <input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" step="any" name="jumlah_pesanan[]" value="<?= $pesanan['jumlah_pesanan'] ?>" required/>
                                                 </td>
                                                 <td class="align-middle p-1">
-                                                    <select name="idbrgmedis[]" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center">
+                                                    <select name="idbrgmedis[]" class="py-[0.5px] w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" required>
                                                         <option value="" selected></option>
                                                         <?php
                                                         foreach ($medis_data as $barang_medis) {
@@ -103,7 +114,7 @@
                                                     </select>
                                                 </td>
                                                 <td class="align-middle p-1">
-                                                    <select name="satuanbrgmedis[]" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center">
+                                                    <select name="satuanbrgmedis[]" class="py-[0.5px] w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" required>
                                                         <option value="" selected></option>
                                                         <?php
                                                         foreach ($satuan_data as $satuan) {
@@ -120,16 +131,16 @@
                                                     </select>
                                                 </td>
                                                 <td class="align-middle p-1">
-                                                    <input type="text" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="harga_satuan_pengajuan[]" value="<?= $pesanan['harga_satuan_pengajuan'] ?>" />
+                                                    <input type="number" min="0" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" name="harga_satuan_pengajuan[]" value="<?= $pesanan['harga_satuan_pengajuan'] ?>" required/>
                                                 </td>
                                                 <td class="align-middle p-1 text-right">
-                                                    <input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="total[]" value="<?= $pesanan['total_per_item'] ?>" readonly />
+                                                    <input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center w-full border" name="subtotalperitem[]" value="<?= $pesanan['total_per_item'] ?>" readonly />
                                                 </td>
                                             </tr>
                                             <!-- <tr>
 
                                                 <td class="align-middle p-1 text-center">
-                                                    <input type="number" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full border" step="any" name="jumlah_pesanan[]" />
+                                                    <input type="number" min="0" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full border" step="any" name="jumlah_pesanan[]" />
                                                 </td>
                                                 <td class="align-middle p-1">
                                                     <select name="idbrgmedis[]" class="w-full border text-center" onchange="updateHarga(this)">
@@ -175,36 +186,36 @@
                                         <?php endforeach; ?>
                                     </tbody>
                                     <tfoot class="border-t">
-                                        <tr class="pt-5">
+                                        <!-- <tr class="pt-5">
                                             <th class="p-1 pt-2" style="text-align: right;" colspan="4">
 
-                                                Discount (%)
-                                                <input type="number" step="any" name="diskonpersen" class="border w-[20%] rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" value="<?= $pengajuan_data['diskon_persen'] ?>">
+                                                Diskon (%)
+                                                <input type="number" min="0" step="any" name="diskonpersen" class="border w-[20%] rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" value="">
                                             </th>
 
                                             <th class="p-1 pt-2 text-right">
-                                                <input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="diskonjumlah" value="<?= $pengajuan_data['diskon_jumlah'] ?>">
+                                                <input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center" name="diskonjumlah" value="">
                                             </th>
                                         </tr>
 
                                         <tr>
-                                            <th class="p-1" style="text-align: right;" colspan="4">Tax Inclusive (%)
-                                                <input type="number" step="any" name="pajakpersen" class="border w-[20%] rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" value="<?= $pengajuan_data['pajak_persen'] ?>">
+                                            <th class="p-1" style="text-align: right;" colspan="4">Pajak (%)
+                                                <input type="number" min="0" step="any" name="pajakpersen" class="border w-[20%] rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" value="">
                                             </th>
 
                                             <th class="p-1 text-right">
-                                                <input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="pajakjumlah" value="<?= $pengajuan_data['pajak_jumlah'] ?>">
+                                                <input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center" name="pajakjumlah" value="">
                                             </th>
                                         </tr>
                                         <tr>
                                             <th class="p-1" style="text-align: right;" colspan="4">Materai</th>
                                             <th class="p-1 text-right">
-                                                <input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="materai" value="<?= $pengajuan_data['materai'] ?>">
+                                                <input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" name="materai" value="">
                                             </th>
-                                        </tr>
+                                        </tr> -->
                                         <tr>
-                                            <th class="p-1" style="text-align: right;" colspan="4">Total</th>
-                                            <th class="p-1" id="total"><input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="totalkeseluruhan" value="<?= $pengajuan_data['total_pengajuan'] ?>" disabled></th>
+                                            <th class="p-1" style="text-align: right;" colspan="4">Total Keseluruhan</th>
+                                            <th class="p-1" id="total"><input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center" name="totalkeseluruhan" value="<?= $pengajuan_data['total_pengajuan'] ?>" required> </th>
                                         </tr>
 
                                     </tfoot>
@@ -217,11 +228,11 @@
 
             </div>
             <div class="mt-5 flex justify-end gap-x-2">
-                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Batal
-                </button>
-                <button type="submit" value="0" name="status" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Tambah
+                <a href="javascript:history.back()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    Kembali
+                </a>
+                <button type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    Simpan
                 </button>
             </div>
         </form>
@@ -234,105 +245,97 @@
 <!-- End Card Section -->
 <script>
     var jumlahPesananInputs = document.querySelectorAll('input[name="jumlah_pesanan[]"]');
-    var hargaSatuanInputs = document.querySelectorAll('input[name="harga_satuan[]"]');
-    var totalInputs = document.querySelectorAll('input[name="total[]"]');
-    window.addEventListener('DOMContentLoaded', function() {
-        // Tambahkan event listener untuk setiap input jumlah_pesanan[]
-        jumlahPesananInputs.forEach(function(input, index) {
-            input.addEventListener('input', function() {
-                hitungTotal(index);
-            });
-        });
+    var hargaSatuanPengajuanInputs = document.querySelectorAll('input[name="harga_satuan_pengajuan[]"]');
+    var totalInputs = document.querySelectorAll('input[name="subtotalperitem[]"]');
+    var totalKeseluruhanInputs = document.querySelector('input[name="totalkeseluruhan"]');
+    var diskonPersenInput = document.querySelector('input[name="diskonpersen"]');
+    var diskonJumlahInput = document.querySelector('input[name="diskonjumlah"]');
+    var pajakPersenInput = document.querySelector('input[name="pajakpersen"]');
+    var pajakJumlahInput = document.querySelector('input[name="pajakjumlah"]');
+    var materaiInput = document.querySelector('input[name="materai"]');
 
-        // Tambahkan event listener untuk setiap input harga_satuan[]
-        hargaSatuanInputs.forEach(function(input, index) {
-            input.addEventListener('input', function() {
-                hitungTotal(index);
-            });
-        });
+    function hitungTotal(index) {
+        var jumlahPesanan = jumlahPesananInputs[index].value || 0;
+        var hargaSatuanPengajuan = hargaSatuanPengajuanInputs[index].value || 0;
+        var total = jumlahPesanan * hargaSatuanPengajuan;
+        totalInputs[index].value = total.toFixed(0); // Atur jumlah desimal yang diinginkan
 
-        // Fungsi untuk menghitung total dan mengisi ke dalam input total[]
-        function hitungTotal(index) {
-            var jumlahPesanan = jumlahPesananInputs[index].value || 0;
-            var hargaSatuan = hargaSatuanInputs[index].value || 0;
-            var total = jumlahPesanan * hargaSatuan;
-            totalInputs[index].value = total; // Atur jumlah desimal yang diinginkan
-        }
 
-        // Panggil fungsi hitungTotal() untuk setiap baris saat dokumen dimuat
-        jumlahPesananInputs.forEach(function(input, index) {
+        hitungTotalKeseluruhan();
+    }
+
+
+
+    jumlahPesananInputs.forEach(function(input, index) {
+        input.addEventListener('input', function() {
             hitungTotal(index);
         });
     });
 
-    // Fungsi untuk mengupdate harga saat pilihan produk diubah
-    function updateHarga(select) {
-        var hargaSatuanInput = select.parentNode.nextElementSibling.querySelector('input');
-        var selectedOption = select.options[select.selectedIndex];
-        var harga = selectedOption.getAttribute('data-harga') || 0;
-        hargaSatuanInput.value = harga;
-        // Panggil fungsi hitungTotal() untuk menghitung ulang total setelah harga diubah
-        var index = Array.from(select.parentNode.parentNode.children).indexOf(select.parentNode);
-        hitungTotal(index);
-    }
+    hargaSatuanPengajuanInputs.forEach(function(input, index) {
+        input.addEventListener('input', function() {
+            hitungTotal(index);
+        });
+    });
 
-    function addRow() {
-        var newRow = '<tr>' +
-            '<td class="align-middle p-1 text-center">' +
-            '<button type="button" class="bg-red-500 text-white py-1 px-2 rounded-lg hover:bg-red-600" onclick="removeRow(this)">' +
-            '<i class="fas fa-trash-alt"></i>' +
-            '</button>' +
-            '</td>' +
-            '<td class="align-middle p-1 text-center">' +
-            '<input type="number" class="text-center w-full border" step="any" name="jumlah_pesanan[]" />' +
-            '</td>' +
-            '<td class="align-middle p-1">' +
-            '<select name="idbrgmedis[]" class="w-full border">' +
-            '<option value="" selected></option>' +
-            '<?php foreach ($medis_data as $brgmedis) : ?>' +
-            '<option value="<?= $brgmedis['id'] ?>" data-harga="<?= $brgmedis['harga'] ?>"><?= $brgmedis['nama'] ?></option>' +
-            '<?php endforeach; ?>' +
-            '</select>' +
-            '</td>' +
-            '<td class="align-middle p-1">' +
-            '<input type="text" step="any" class="text-center w-full border" name="harga_satuan[]" />' +
-            '</td>' +
-            '<td class="align-middle p-1 text-right">' +
-            '<input type="text" class="text-center w-full border" name="total[]" readonly />' +
-            '</td>' +
-            '</tr>';
-        document.getElementById('item-list').getElementsByTagName('tbody')[0].insertAdjacentHTML('beforeend', newRow);
 
-        // Setel ulang variabel jumlahPesananInputs, hargaSatuanInputs, dan totalInputs setelah menambahkan baris baru
-        jumlahPesananInputs = document.querySelectorAll('input[name="jumlah_pesanan[]"]');
-        hargaSatuanInputs = document.querySelectorAll('input[name="harga_satuan[]"]');
-        totalInputs = document.querySelectorAll('input[name="total[]"]');
-
-        // Tambahkan event listener untuk setiap input jumlah_pesanan[] dan harga_satuan[] yang baru
-        jumlahPesananInputs.forEach(function(input, index) {
-            input.addEventListener('input', function() {
-                hitungTotal(index);
-            });
+    function hitungTotalKeseluruhan() {
+        var totalSemua = 0;
+        totalInputs.forEach(function(input) {
+            totalSemua += parseFloat(input.value) || 0;
         });
 
-        hargaSatuanInputs.forEach(function(input, index) {
-            input.addEventListener('input', function() {
-                hitungTotal(index);
-            });
-        });
 
-        // Fungsi untuk menghitung total dan mengisi ke dalam input total[] untuk baris baru
-        function hitungTotal(index) {
-            var jumlahPesanan = jumlahPesananInputs[index].value || 0;
-            var hargaSatuan = hargaSatuanInputs[index].value || 0;
-            var total = jumlahPesanan * hargaSatuan;
-            totalInputs[index].value = total; // Atur jumlah desimal yang diinginkan
-        }
+        var totalKeseluruhan = totalSemua;
+        totalKeseluruhanInputs.value = totalKeseluruhan.toFixed(0);
     }
 
     function removeRow(btn) {
         var row = btn.parentNode.parentNode;
         row.parentNode.removeChild(row);
+    }
+
+    document.getElementById('tglpengajuan').addEventListener('input', function() {
+        var tglpengajuanInput = document.getElementById('tglpengajuan');
+        var tglpengajuantetapInput = document.getElementById('tglpengajuantetap');
+        var dateError = document.getElementById('dateError');
+        var selectedDate = new Date(tglpengajuanInput.value);
+        var selectedDatetetap = new Date(tglpengajuantetapInput.value);
+
+        selectedDatetetap.setHours(0, 0, 0, 0); // Clear the time part
+
+        if (selectedDate <= selectedDatetetap) {
+            tglpengajuanInput.classList.add('border-red-500');
+            dateError.classList.remove('hidden');
+            dateError.classList.add('flex', 'items-center');
+        } else {
+            tglpengajuanInput.classList.remove('border-red-500');
+            dateError.classList.add('hidden');
+            dateError.classList.remove('block');
+        }
+    });
+
+    function validateForm() {
+        var tglpengajuanInput = document.getElementById('tglpengajuan');
+        var tglpengajuantetapInput = document.getElementById('tglpengajuantetap');
+        var dateError = document.getElementById('dateError');
+        var selectedDate = new Date(tglpengajuanInput.value);
+        var selectedDatetetap = new Date(tglpengajuantetapInput.value);
+
+        selectedDatetetap.setHours(0, 0, 0, 0); // Clear the time part
+
+        if (selectedDate <= selectedDatetetap) {
+            tglpengajuanInput.classList.add('border-red-500');
+            dateError.classList.remove('hidden');
+            dateError.classList.add('block');
+            alert("Tanggal pengajuan harus dari tanggal pengajuan yang dilakukan atau setelahnya.");
+            return false;
+        }
+        var submitButton = document.getElementById('submitButton');
+        submitButton.setAttribute('disabled', true);
+        // Ubah teks tombol menjadi sesuatu yang menunjukkan proses sedang berlangsung, misalnya "Menyimpan..."
+        submitButton.innerHTML = 'Menyimpan...';
+        return true;
     }
 </script>
 <?= $this->endSection(); ?>

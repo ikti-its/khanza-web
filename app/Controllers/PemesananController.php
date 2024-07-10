@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class PemesananController extends BaseController
 {
@@ -21,8 +22,11 @@ class PemesananController extends BaseController
             // URLs
             $pemesanan_url = $this->api_url . '/pengadaan/pemesanan?page=' . $page . '&size=' . $size;
             $pengajuan_url = $this->api_url . '/pengadaan/pengajuan';
+            $pesanan_url = $this->api_url . '/pengadaan/pesanan';
             $pegawai_url = $this->api_url . '/pegawai';
             $supplier_url = $this->api_url . '/inventaris/supplier';
+            $medis_url = $this->api_url . '/inventaris/medis';
+            $satuan_url = $this->api_url . '/inventaris/satuan';
 
             // Initialize cURL for each endpoint
             $ch_pemesanan = curl_init($pemesanan_url);
@@ -34,6 +38,24 @@ class PemesananController extends BaseController
             $ch_pengajuan = curl_init($pengajuan_url);
             curl_setopt($ch_pengajuan, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_pengajuan, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            $ch_pesanan = curl_init($pesanan_url);
+            curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            $ch_medis = curl_init($medis_url);
+            curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            $ch_satuan = curl_init($satuan_url);
+            curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
 
@@ -52,35 +74,60 @@ class PemesananController extends BaseController
             // Execute cURL requests
             $response_pemesanan = curl_exec($ch_pemesanan);
             $response_pengajuan = curl_exec($ch_pengajuan);
+            $response_pesanan = curl_exec($ch_pesanan);
+            $response_medis = curl_exec($ch_medis);
+            $response_satuan = curl_exec($ch_satuan);
             $response_pegawai = curl_exec($ch_pegawai);
             $response_supplier = curl_exec($ch_supplier);
 
             // Check for successful responses
-            if ($response_pemesanan && $response_pengajuan && $response_pegawai && $response_supplier) {
+            if (
+                $response_pemesanan && $response_pengajuan && $response_pegawai && $response_supplier &&
+                $response_pesanan && $response_medis && $response_satuan
+            ) {
+
+                // Cek kode status HTTP untuk masing-masing tanggapan
                 $http_status_code_pemesanan = curl_getinfo($ch_pemesanan, CURLINFO_HTTP_CODE);
                 $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
                 $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
                 $http_status_code_supplier = curl_getinfo($ch_supplier, CURLINFO_HTTP_CODE);
+                $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
+                $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
+                $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
 
                 if (
                     $http_status_code_pemesanan === 200 && $http_status_code_pengajuan === 200 &&
-                    $http_status_code_pegawai === 200 && $http_status_code_supplier === 200
+                    $http_status_code_pegawai === 200 && $http_status_code_supplier === 200 &&
+                    $http_status_code_pesanan === 200 && $http_status_code_medis === 200 &&
+                    $http_status_code_satuan === 200
                 ) {
-
-                    // Decode JSON responses
+                    // Dekode tanggapan JSON
                     $pemesanan_medis_data = json_decode($response_pemesanan, true);
                     $pengajuan_medis_data = json_decode($response_pengajuan, true);
                     $pegawai_data = json_decode($response_pegawai, true);
                     $supplier_data = json_decode($response_supplier, true);
+                    $pesanan_data = json_decode($response_pesanan, true);
+                    $medis_data = json_decode($response_medis, true);
+                    $satuan_data = json_decode($response_satuan, true);
 
-                    // Return view with data
+                    // Lanjutkan dengan menambahkan breadcrumb dan mengembalikan view dengan data
+                    $this->addBreadcrumb('Pengadaan', 'pengadaanmedis');
+                    $this->addBreadcrumb('Barang Medis', 'medis');
+                    $this->addBreadcrumb('Pemesanan', 'pemesananmedis');
+
+                    $breadcrumbs = $this->getBreadcrumbs();
+
                     return view('/admin/pengadaan/medis/pemesanan/data_pemesanan', [
                         'pemesanan_medis_data' => $pemesanan_medis_data['data']['pemesanan_barang_medis'],
                         'pengajuan_medis_data' => $pengajuan_medis_data['data'],
                         'pegawai_data' => $pegawai_data['data'],
                         'supplier_data' => $supplier_data['data'],
+                        'pesanan_data' => $pesanan_data['data'],
+                        'medis_data' => $medis_data['data'], // Tambahkan data medis ke dalam array
+                        'satuan_data' => $satuan_data['data'], // Tambahkan data satuan ke dalam array
                         'meta_data' => $pemesanan_medis_data['data'],
-                        'title' => $title
+                        'title' => $title,
+                        'breadcrumbs' => $breadcrumbs
                     ]);
                 } else {
                     return "Failed to fetch data.";
@@ -113,6 +160,7 @@ class PemesananController extends BaseController
             $ch_supplier = curl_init($supplier_url);
             $ch_pegawai = curl_init($pegawai_url);
             $ch_persetujuan = curl_init($persetujuan_url);
+
 
             // Set cURL options for Pemesanan endpoint
             curl_setopt($ch_pemesanan, CURLOPT_RETURNTRANSFER, true);
@@ -200,6 +248,7 @@ class PemesananController extends BaseController
                                 'supplier_data' => $supplier_data['data'],
                                 'pegawai_data' => $pegawai_data['data'],
                                 'persetujuan_data' => $persetujuan_data['data'],
+
                                 'title' => 'Data Pemesanan Medis'
                             ]);
 
@@ -234,11 +283,21 @@ class PemesananController extends BaseController
 
     private function generatePDF($html)
     {
-        $dompdf = new Dompdf();
+
+        $options = new Options();
+
+        
+        $options->set('isRemoteEnabled', true);
+        $options->set('debugPng', true);
+        $options->set('debugKeepTemp', true);
+        $options->set('isHtml5ParserEnabled', true);
+
+        $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
-        $dompdf->stream("data_pemesanan_medis.pdf", array("Attachment" => 0));
+        $dompdf->stream("Surat Pemesanan.pdf", array("Attachment" => false));
+        exit;
     }
 
 
@@ -407,6 +466,12 @@ class PemesananController extends BaseController
                     "<br><br>Response Satuan:" . $response_satuan .
                     "<br><br>Response Pesanan:" . $response_pesanan; // Tambahkan response satuan dan pesanan di sini
             }
+            $this->addBreadcrumb('Pengadaan', 'pengadaanmedis');
+            $this->addBreadcrumb('Barang Medis', 'medis');
+            $this->addBreadcrumb('Pemesanan', 'pemesananmedis');
+            $this->addBreadcrumb('Tambah', 'tambahpemesananmedis');
+
+            $breadcrumbs = $this->getBreadcrumbs();
 
             // Tampilkan view dengan data yang sudah diambil
             echo view('/admin/pengadaan/medis/pemesanan/pemesanan', [
@@ -418,7 +483,8 @@ class PemesananController extends BaseController
                 'pesanan_data' => $pesanan_data['data'], // Tambahkan pesanan_data ke dalam array
                 'api_url' => $api_url,
                 'token' => $token,
-                'title' => $title
+                'title' => $title,
+                'breadcrumbs' => $breadcrumbs
             ]);
         } else {
             return "User not logged in. Please log in first.";
@@ -434,22 +500,11 @@ class PemesananController extends BaseController
             $idpengajuan = $this->request->getPost('idpengajuan');
             $pegawaipemesanan = $this->request->getPost('pegawaipemesanan');
             $supplier = intval($this->request->getPost('supplier'));
-            $diskonpersenpemesanan = intval($this->request->getPost('diskonpersenpemesanan'));
-            $diskonpersenpemesanan = intval($this->request->getPost('diskonpersenpemesanan'));
-            $diskonjumlahpemesanan = intval($this->request->getPost('diskonjumlahpemesanan'));
             $pajakpersenpemesanan = intval($this->request->getPost('pajakpersenpemesanan'));
             $pajakjumlahpemesanan = intval($this->request->getPost('pajakjumlahpemesanan'));
             $materaipemesanan = intval($this->request->getPost('materaipemesanan'));
+            $totalpemesanan = intval($this->request->getPost('totalpemesanan'));
 
-            $tglpengajuan = $this->request->getPost('tglpengajuan');
-            $nopengajuan = $this->request->getPost('nopengajuan');
-            $pegawaipengajuan = $this->request->getPost('pegawaipengajuan');
-            $diskonpersenpengajuan = intval($this->request->getPost('diskonpersenpengajuan'));
-            $diskonjumlahpengajuan = intval($this->request->getPost('diskonjumlahpengajuan'));
-            $pajakpersenpengajuan = intval($this->request->getPost('pajakpersenpengajuan'));
-            $pajakjumlahpengajuan = intval($this->request->getPost('pajakjumlahpengajuan'));
-            $materaipengajuan = intval($this->request->getPost('materaipengajuan'));
-            $catatanpengajuan = $this->request->getPost('catatanpengajuan');
             $statuspesanan = $this->request->getPost('statuspesanan');
 
             $idpesanan = $this->request->getPost('idpesanan');
@@ -459,6 +514,10 @@ class PemesananController extends BaseController
             $jumlah_diterima = $this->request->getPost('jumlah_diterima');
             $harga_satuan_pengajuan = $this->request->getPost('harga_satuan_pengajuan');
             $harga_satuan_pemesanan = $this->request->getPost('harga_satuan_pemesanan');
+            $totalperitem = $this->request->getPost('totalperitem');
+            $subtotalperitem = $this->request->getPost('subtotalperitem');
+            $diskonpersenperitem = $this->request->getPost('diskonpersenperitem');
+            $diskonjumlahperitem = $this->request->getPost('diskonjumlahperitem');
             $kadaluwarsa = $this->request->getPost('kadaluwarsa');
             $no_batch = $this->request->getPost('no_batch');
 
@@ -470,11 +529,9 @@ class PemesananController extends BaseController
                 'id_pengajuan' => $idpengajuan,
                 'id_supplier' => $supplier,
                 'id_pegawai' => $pegawaipemesanan,
-                'diskon_persen' => $diskonpersenpemesanan,
-                'diskon_jumlah' => $diskonjumlahpemesanan,
                 'pajak_persen' => $pajakpersenpemesanan,
                 'pajak_jumlah' => $pajakjumlahpemesanan,
-                'total_pemesanan' => 310000,
+                'total_pemesanan' => $totalpemesanan,
                 'materai' => $materaipemesanan,
             ];
             $tambah_pemesanan_JSON = json_encode($postDataPemesanan);
@@ -499,18 +556,20 @@ class PemesananController extends BaseController
                     $http_status_code_pemesanan = curl_getinfo($ch_pemesanan, CURLINFO_HTTP_CODE);
                     if ($http_status_code_pemesanan === 201) {
                         $pengajuan_url = $this->api_url . '/pengadaan/pengajuan/' . $idpengajuan;
+                        $ch_pengajuan = curl_init($pengajuan_url);
+                        curl_setopt($ch_pengajuan, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch_pengajuan, CURLOPT_HTTPHEADER, [
+                            'Authorization: Bearer ' . $token,
+                        ]);
+                        $response_pengajuan = curl_exec($ch_pengajuan);
+                        $pengajuan_data = json_decode($response_pengajuan, true);
                         $putDataPengajuan = [
-                            'tanggal_pengajuan' => $tglpengajuan,
-                            'nomor_pengajuan' => $nopengajuan,
-                            'id_pegawai' => $pegawaipengajuan,
-                            'diskon_persen' => $diskonpersenpengajuan,
-                            'diskon_jumlah' => $diskonjumlahpengajuan,
-                            'pajak_persen' => $pajakpersenpengajuan,
-                            'pajak_jumlah' => $pajakjumlahpengajuan,
-                            'total_pengajuan' => 50000,
-                            'materai' => $materaipengajuan,
+                            'tanggal_pengajuan' => $pengajuan_data['data']['tanggal_pengajuan'],
+                            'nomor_pengajuan' => $pengajuan_data['data']['nomor_pengajuan'],
+                            'id_pegawai' => $pengajuan_data['data']['id_pegawai'],
+                            'total_pengajuan' => $pengajuan_data['data']['total_pengajuan'],
+                            'catatan' => $pengajuan_data['data']['catatan'],
                             'status_pesanan' => $statuspesanan,
-                            'catatan' => $catatanpengajuan,
                         ];
 
                         $update_pengajuan_JSON = json_encode($putDataPengajuan);
@@ -538,7 +597,10 @@ class PemesananController extends BaseController
                                         'harga_satuan_pemesanan' => intval($harga_satuan_pemesanan[$i]),
                                         'jumlah_pesanan' => intval($jumlah_pesanan[$i]),
                                         'jumlah_diterima' => intval($jumlah_diterima[$i]),
-                                        'total_per_item' => 30000,
+                                        'total_per_item' => intval($totalperitem[$i]),
+                                        'subtotal_per_item' => intval($subtotalperitem[$i]),
+                                        'diskon_persen' => intval($diskonpersenperitem[$i]),
+                                        'diskon_jumlah' => intval($diskonjumlahperitem[$i]),
                                         'kadaluwarsa' => $kadaluwarsa[$i],
                                         'no_batch' => $no_batch[$i],
                                     ];
@@ -594,6 +656,7 @@ class PemesananController extends BaseController
             $barang_medis_url = $this->api_url . '/inventaris/medis';
             $pegawai_url = $this->api_url . '/pegawai';
             $supplier_url = $this->api_url . '/inventaris/supplier';
+            $satuan_url = $this->api_url . '/inventaris/satuan';
             $pemesanan_url = $this->api_url . '/pengadaan/pemesanan/' . $pemesananId;
 
             // Initialize cURL for each endpoint
@@ -645,21 +708,36 @@ class PemesananController extends BaseController
             ]);
             $response_supplier = curl_exec($ch_supplier);
 
-            if ($response_pemesanan && $response_pesanan && $response_pengajuan && $response_barang_medis && $response_pegawai && $response_supplier) {
+            $ch_satuan = curl_init($satuan_url);
+            curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_satuan = curl_exec($ch_satuan);
+
+            if ($response_pemesanan && $response_pesanan && $response_pengajuan && $response_barang_medis && $response_pegawai && $response_supplier && $response_satuan) {
                 $http_status_code_pemesanan = curl_getinfo($ch_pemesanan, CURLINFO_HTTP_CODE);
-                $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
                 $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
+                $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
                 $http_status_code_barang_medis = curl_getinfo($ch_barang_medis, CURLINFO_HTTP_CODE);
                 $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
                 $http_status_code_supplier = curl_getinfo($ch_supplier, CURLINFO_HTTP_CODE);
+                $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
 
                 $medis_data = json_decode($response_barang_medis, true);
                 $pengajuan_data = json_decode($response_pengajuan, true);
                 $pesanan_data = json_decode($response_pesanan, true);
                 $pegawai_data = json_decode($response_pegawai, true);
                 $supplier_data = json_decode($response_supplier, true);
+                $satuan_data = json_decode($response_satuan, true);
 
-                if ($http_status_code_pemesanan === 200 && $http_status_code_pesanan === 200 && $http_status_code_pengajuan === 200 && $http_status_code_supplier === 200) {
+                if ($http_status_code_pemesanan === 200 && $http_status_code_pesanan === 200 && $http_status_code_pengajuan === 200 && $http_status_code_supplier === 200 && $http_status_code_satuan === 200) {
+                    $this->addBreadcrumb('Pengadaan', 'pengadaanmedis');
+                    $this->addBreadcrumb('Barang Medis', 'medis');
+                    $this->addBreadcrumb('Pemesanan', 'pemesananmedis');
+                    $this->addBreadcrumb('Edit', 'editpemesananmedis');
+
+                    $breadcrumbs = $this->getBreadcrumbs();
                     return view('/admin/pengadaan/medis/pemesanan/edit_pemesanan', [
                         'pemesanan_data' => $pemesanan_data['data'],
                         'pesanan_data' => $pesanan_data['data'],
@@ -667,12 +745,14 @@ class PemesananController extends BaseController
                         'medis_data' => $medis_data['data'],
                         'pegawai_data' => $pegawai_data['data'],
                         'supplier_data' => $supplier_data['data'],
+                        'satuan_data' => $satuan_data['data'], // Menyertakan data satuan
                         'pemesananId' => $pemesananId,
-                        'title' => 'Edit pemesanan Medis'
+                        'title' => 'Edit pemesanan Medis',
+                        'breadcrumbs' => $breadcrumbs
                     ]);
                 } else {
                     // Error: Gagal mengambil data medis
-                    return "Error fetching data. HTTP Status Code pemesanan: $http_status_code_pemesanan, HTTP Status Code Pesanan: $http_status_code_pesanan, HTTP Status Code Pengajuan: $http_status_code_pengajuan, HTTP Status Code Supplier: $http_status_code_supplier";
+                    return "Error fetching data. HTTP Status Code pemesanan: $http_status_code_pemesanan, HTTP Status Code Pesanan: $http_status_code_pesanan, HTTP Status Code Pengajuan: $http_status_code_pengajuan, HTTP Status Code Supplier: $http_status_code_supplier, HTTP Status Code Satuan: $http_status_code_satuan";
                 }
             } else {
                 // Error: Gagal mengambil respons dari API untuk data medis
@@ -686,6 +766,7 @@ class PemesananController extends BaseController
             curl_close($ch_barang_medis);
             curl_close($ch_pegawai);
             curl_close($ch_supplier);
+            curl_close($ch_satuan);
         } else {
             // User belum login
             return "User not logged in. Please log in first.";
@@ -699,13 +780,24 @@ class PemesananController extends BaseController
             $idpengajuan = $this->request->getPost('idpengajuan');
             $pegawaipemesanan = $this->request->getPost('pegawaipemesanan');
             $supplier = intval($this->request->getPost('supplier'));
-            $diskonpersenpemesanan = intval($this->request->getPost('diskonpersenpemesanan'));
-            $diskonpersenpemesanan = intval($this->request->getPost('diskonpersenpemesanan'));
-            $diskonjumlahpemesanan = intval($this->request->getPost('diskonjumlahpemesanan'));
             $pajakpersenpemesanan = intval($this->request->getPost('pajakpersenpemesanan'));
             $pajakjumlahpemesanan = intval($this->request->getPost('pajakjumlahpemesanan'));
             $materaipemesanan = intval($this->request->getPost('materaipemesanan'));
+            $totalpemesanan = intval($this->request->getPost('totalpemesanan'));
 
+            $idpesanan = $this->request->getPost('idpesanan');
+            $idbrgmedis = $this->request->getPost('idbrgmedis');
+            $satuanbrgmedis = $this->request->getPost('satuanbrgmedis');
+            $jumlah_pesanan = $this->request->getPost('jumlah_pesanan');
+            $jumlah_diterima = $this->request->getPost('jumlah_diterima');
+            $harga_satuan_pengajuan = $this->request->getPost('harga_satuan_pengajuan');
+            $harga_satuan_pemesanan = $this->request->getPost('harga_satuan_pemesanan');
+            $diskonpersenperitem = $this->request->getPost('diskonpersenperitem');
+            $diskonjumlahperitem = $this->request->getPost('diskonjumlahperitem');
+            $subtotalperitem = $this->request->getPost('subtotalperitem');
+            $totalperitem = $this->request->getPost('totalperitem');
+            $kadaluwarsa = $this->request->getPost('kadaluwarsa');
+            $no_batch = $this->request->getPost('no_batch');
 
             $pemesanan_url = $this->api_url . '/pengadaan/pemesanan/' . $pemesananId;
 
@@ -715,11 +807,10 @@ class PemesananController extends BaseController
                 'id_pengajuan' => $idpengajuan,
                 'id_supplier' => $supplier,
                 'id_pegawai' => $pegawaipemesanan,
-                'diskon_persen' => $diskonpersenpemesanan,
-                'diskon_jumlah' => $diskonjumlahpemesanan,
                 'pajak_persen' => $pajakpersenpemesanan,
                 'pajak_jumlah' => $pajakjumlahpemesanan,
                 'materai' => $materaipemesanan,
+                'total_pemesanan' => $totalpemesanan,
             ];
             $edit_pemesanan_JSON = json_encode($postDatapemesanan);
 
@@ -741,8 +832,47 @@ class PemesananController extends BaseController
                 if ($response_pemesanan) {
                     $http_status_code_pemesanan = curl_getinfo($ch_pemesanan, CURLINFO_HTTP_CODE);
                     if ($http_status_code_pemesanan === 200) {
+                        for ($i = 0; $i < count($idbrgmedis); $i++) {
+                            $pesanan_url = $this->api_url . '/pengadaan/pesanan/' . $idpesanan[$i];
+                            $postDataPesanan = [
+                                'id_pengajuan' => $idpengajuan,
+                                'id_barang_medis' => $idbrgmedis[$i],
+                                'satuan' => intval($satuanbrgmedis[$i]),
+                                'harga_satuan_pengajuan' => intval($harga_satuan_pengajuan[$i]),
+                                'harga_satuan_pemesanan' => intval($harga_satuan_pemesanan[$i]),
+                                'diskon_persen' => intval($diskonpersenperitem[$i]),
+                                'diskon_jumlah' => intval($diskonjumlahperitem[$i]),
+                                'jumlah_pesanan' => intval($jumlah_pesanan[$i]),
+                                'jumlah_diterima' => intval($jumlah_diterima[$i]),
+                                'subtotal_per_item' => intval($subtotalperitem[$i]),
+                                'total_per_item' => intval($totalperitem[$i]),
+                                'kadaluwarsa' => $kadaluwarsa[$i],
+                                'no_batch' => $no_batch[$i],
+                            ];
+                            $edit_pesanan_JSON = json_encode($postDataPesanan);
+                            $ch_pesanan = curl_init($pesanan_url);
+                            curl_setopt($ch_pesanan, CURLOPT_CUSTOMREQUEST, 'PUT');
+                            curl_setopt($ch_pesanan, CURLOPT_POSTFIELDS, ($edit_pesanan_JSON));
+                            curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
+                                'Content-Type: application/json',
+                                'Content-Length: ' . strlen($edit_pesanan_JSON),
+                                'Authorization: Bearer ' . $token,
+                            ]);
+                            $response_pesanan = curl_exec($ch_pesanan);
+                        }
+                        if ($response_pesanan) {
+                            $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
+                            if ($http_status_code_pesanan === 200) {
+                                return redirect()->to(base_url('pemesananmedis'));
+                            } else {
+                                return "Error Update Pesanan: " . $response_pesanan;
+                            }
+                        } else {
+                            return "Error sending request to the obat API.";
+                        }
+                        curl_close($ch_pesanan);
 
-                        return redirect()->to(base_url('pemesananmedis'));
 
                         curl_close($ch_pemesanan);
                     } else {
@@ -795,11 +925,7 @@ class PemesananController extends BaseController
                         'tanggal_pengajuan' => $pengajuan_data['data']['tanggal_pengajuan'],
                         'nomor_pengajuan' => $pengajuan_data['data']['nomor_pengajuan'],
                         'id_pegawai' => $pengajuan_data['data']['id_pegawai'],
-                        'diskon_persen' => $pengajuan_data['data']['diskon_persen'],
-                        'diskon_jumlah' => $pengajuan_data['data']['diskon_jumlah'],
-                        'pajak_persen' => $pengajuan_data['data']['pajak_persen'],
-                        'pajak_jumlah' => $pengajuan_data['data']['pajak_jumlah'],
-                        'materai' => $pengajuan_data['data']['materai'],
+                        'total_pengajuan' => $pengajuan_data['data']['total_pengajuan'],
                         'status_pesanan' => '2',
                         'catatan' => $pengajuan_data['data']['catatan'],
                     ];

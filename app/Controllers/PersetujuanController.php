@@ -116,6 +116,11 @@ class PersetujuanController extends BaseController
                     $satuan_data = json_decode($response_satuan, true);
 
                     // Render the view with the fetched data
+                    $this->addBreadcrumb('Pengadaan', 'pengadaanmedis');
+                    $this->addBreadcrumb('Barang Medis', 'medis');
+                    $this->addBreadcrumb('Persetujuan', 'persetujuanpengadaan');
+
+                    $breadcrumbs = $this->getBreadcrumbs();
                     return view('/admin/pengadaan/persetujuan', [
                         'pengajuan_medis_data' => $pengajuan_medis_data['data']['pengajuan_barang_medis'],
                         'pesanan_data' => $pesanan_data['data'],
@@ -127,7 +132,8 @@ class PersetujuanController extends BaseController
                         'meta_data' => $pengajuan_medis_data['data'],
                         'api_url' => $api_url,
                         'token' => $token,
-                        'title' => $title
+                        'title' => $title,
+                        'breadcrumbs' => $breadcrumbs
                     ]);
                 } else {
                     // Error handling for unsuccessful HTTP status codes

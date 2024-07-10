@@ -114,6 +114,13 @@ class MedisController extends BaseController
                     if ($response_jenis) {
                         $http_status_code_jenis = curl_getinfo($ch_jenis, CURLINFO_HTTP_CODE);
                         if ($http_status_code_jenis === 200) {
+
+                            $this->addBreadcrumb('Inventaris', 'inventarismedis');
+                            $this->addBreadcrumb('Barang Medis', 'medis');
+                            $this->addBreadcrumb('Data', 'data');
+
+                            $breadcrumbs = $this->getBreadcrumbs();
+
                             return view('/admin/inventaris/medis/data_medis', [
                                 'medis_data' => $medis_data['data']['barang_medis'],
                                 'medis_tanpa_params_data' => $medis_tanpa_params_data['data'],
@@ -126,7 +133,8 @@ class MedisController extends BaseController
                                 'pesanan_data' => $pesanan_data['data'],
                                 'transaksi_keluar_data' => $transaksi_data['data'],
                                 'meta_data' => $medis_data['data'],
-                                'title' => $title
+                                'title' => $title,
+                                'breadcrumbs' => $breadcrumbs
                             ]);
                         } else {
                             return "Response jenis data:" . $response_jenis;
@@ -165,10 +173,17 @@ class MedisController extends BaseController
             if ($response_satuan) {
                 $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
                 if ($http_status_code_satuan === 200) {
+                    $this->addBreadcrumb('Inventaris', 'inventarismedis');
+                    $this->addBreadcrumb('Barang Medis', 'medis');
+                    $this->addBreadcrumb('Data', 'data');
+
+                    $breadcrumbs = $this->getBreadcrumbs();
+                    
                     $satuan_data = json_decode($response_satuan, true);
                     return view('/admin/inventaris/medis/tambah_medis', [
                         'satuan_data' => $satuan_data['data'],
-                        'title' => $title
+                        'title' => $title,
+                        'breadcrumbs' => $breadcrumbs
                     ]);
                 } else {
                     return "Response satuan data:" . $response_satuan;
@@ -211,7 +226,7 @@ class MedisController extends BaseController
             if (($jenisbrgmedis === 'Obat' || $jenisbrgmedis === 'Bahan Habis Pakai' || $jenisbrgmedis === 'Darah') && $notifkadaluwarsa === null || $notifkadaluwarsa === '') {
                 $notifkadaluwarsa = 30; // Atur default menjadi 30 jika tidak ada input atau null
             } else {
-                $notifkadaluwarsa = intval($notifkadaluwarsa); // Konversi ke integer jika ada input
+                $notifkadaluwarsa = intval($notifkadaluwarsa);
             }
             $stokminimum = intval($this->request->getPost('stokminimum'));
 
@@ -224,7 +239,7 @@ class MedisController extends BaseController
             if ($kadaluwarsabhp === '' || $kadaluwarsabhp === null) {
                 $kadaluwarsabhp = '0001-01-01';
             } else {
-                $kadaluwarsabhp = $kadaluwarsabhp; // Konversi ke integer jika ada input
+                $kadaluwarsabhp = $kadaluwarsabhp;
             }
 
             //Darah
@@ -411,12 +426,19 @@ class MedisController extends BaseController
                             $jenis_data = json_decode($response_jenis, true);
                             $satuan_data = json_decode($response_satuan, true);
 
+                            $this->addBreadcrumb('Inventaris', 'inventarismedis');
+                            $this->addBreadcrumb('Barang Medis', 'medis');
+                            $this->addBreadcrumb('Data', 'data');
+                            $this->addBreadcrumb('Edit', 'edit');
+
+                            $breadcrumbs = $this->getBreadcrumbs();
                             return view('/admin/inventaris/medis/edit_medis', [
                                 'medis_data' => $medis_data['data'],
                                 'jenis_data' => $jenis_data['data'], // Masukkan data obat ke dalam view
                                 'satuan_data' => $satuan_data['data'], // Masukkan data obat ke dalam view
                                 'medisId' => $medisId,
-                                'title' => 'Edit Medis'
+                                'title' => 'Edit Medis',
+                                'breadcrumbs' => $breadcrumbs
                             ]);
                         } else {
                             return "Response jenis:" . $response_jenis . "<br><br>Response Satuan:" . $response_satuan;

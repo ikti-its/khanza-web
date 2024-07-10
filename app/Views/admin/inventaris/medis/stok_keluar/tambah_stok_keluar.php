@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div class="max-w-[85rem] py-6 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -16,15 +16,37 @@
             <!-- Grid -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Stok Keluar</label>
-                <input type="date" name="tglkeluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="date" name="tglkeluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">No Keluar</label>
-                <input type="text" name="nokeluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" name="nokeluar" value="<?php function generateUniqueNumber($length = 16)
+                                                                {
+                                                                    $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                                                                    $charactersLength = strlen($characters);
+                                                                    $randomString = '';
+
+                                                                    $uniqueLength = $length - 11; 
+
+                                                                    if ($uniqueLength > 0) {
+                                                                        for ($i = 0; $i < $uniqueLength; $i++) {
+                                                                            $randomString .= $characters[rand(0, $charactersLength - 1)];
+                                                                        }
+                                                                    } else {
+                                                                        return "Panjang maksimal terlalu pendek.";
+                                                                    }
+
+                                                                    return $randomString;
+                                                                }
+
+                                                                $tanggalHariIni = date('Ymd');
+
+                                                                $nomorKeluar = "PO" . $tanggalHariIni . generateUniqueNumber();
+                                                                echo $nomorKeluar; ?>" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required readonly>
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pegawai</label>
-                <select name="pegawaistokkeluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <select name="pegawaistokkeluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="">-</option>
                     <?php foreach ($pegawai_data as $pegawai) : ?>
                         <option value="<?= $pegawai['id'] ?>"><?= $pegawai['nama'] ?></option>
@@ -32,8 +54,30 @@
                 </select>
             </div>
             <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Asal Ruangan</label>
+                <select name="asalruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option selected>-</option>
+                    <option value="1000">VIP 1</option>
+                    <option value="2000">VIP 2</option>
+                    <option value="3000">VVIP 1</option>
+                    <option value="4000">VVIP 2</option>
+                    <option value="5000">Gudang</option>
+                </select>
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tujuan Ruangan</label>
+                <select name="tujuanruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option selected>-</option>
+                    <option value="1000">VIP 1</option>
+                    <option value="2000">VIP 2</option>
+                    <option value="3000">VVIP 1</option>
+                    <option value="4000">VVIP 2</option>
+                    <option value="5000">Gudang</option>
+                </select>
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Keterangan</label>
-                <input type="text" name="keteranganstokkeluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" name="keteranganstokkeluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <!-- End Grid -->
@@ -52,7 +96,6 @@
                                 </colgroup>
                                 <thead class="bg-[#DCDCDC]">
                                     <tr class="bg-navy disabled">
-
                                         <th class="text-center"></th>
                                         <th class="text-center">Barang</th>
                                         <th class="text-center">Stok saat ini</th>
@@ -72,18 +115,10 @@
                                             </button>
                                         </td>
                                         <td class="align-middle px-1">
-                                            <select name="idbrgmedis[]" class="w-full border text-center rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" onchange="updateStok(this)">
+                                            <select name="idbrgmedis[]" class="py-[1.5px] w-full border text-center rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" onchange="updateStok(this)" required>
                                                 <option value="" selected></option>
                                                 <?php foreach ($medis_data as $brgmedis) { ?>
-                                                    <?php
-                                                    $stok_pesanan = 0;
-                                                    foreach ($pesanan_data as $pesanan) {
-                                                        if ($brgmedis['id'] === $pesanan['id_barang_medis']) {
-                                                            $stok_pesanan += $pesanan['jumlah_diterima'];
-                                                        }
-                                                    }
-                                                    ?>
-                                                    <option value="<?= $brgmedis['id'] ?>" data-stok="<?= $brgmedis['stok'] ?>" data-stok-pesanan="<?= $stok_pesanan ?>">
+                                                    <option value="<?= $brgmedis['id'] ?>" data-stok="<?= $brgmedis['stok'] ?>">
                                                         <?= $brgmedis['nama'] ?>
                                                     </option>
                                                 <?php } ?>
@@ -91,10 +126,10 @@
                                             </select>
                                         </td>
                                         <td class="align-middle px-1 text-center">
-                                            <input type="text" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="stoksaatini[]" readonly />
+                                            <input type="number" class="text-center w-full border bg-[#F6F6F6] cursor-default rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="stoksaatini[]" readonly />
                                         </td>
                                         <td class="align-middle px-1 text-center">
-                                            <input type="text" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="jlhkeluar[]" onchange="updateStok(this)" />
+                                            <input type="number" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="jlhkeluar[]" onchange="updateStok(this)" required/>
                                         </td>
                                         <td class="align-middle px-1 text-center">
                                             <input type="text" list="nofaktur" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="nofaktur[]" />
@@ -142,10 +177,10 @@
 
             </div>
             <div class="mt-5 flex justify-end gap-x-2">
-                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Batal
-                </button>
-                <button type="submit" name="" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                <a href="javascript:history.back()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    Kembali
+                </a>
+                <button type="submit" name="" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     Simpan
                 </button>
             </div>
@@ -158,6 +193,19 @@
 
 <!-- End Card Section -->
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('select[name="idbrgmedis[]"]').forEach(function(select) {
+            select.addEventListener('change', function() {
+                if (isDuplicate(select)) {
+                    alert('Barang medis ini sudah dipilih. Pilih barang medis lain.');
+                    select.value = "";
+                } else {
+                    updateStok(select);
+                }
+            });
+        });
+    });
+
     function addRow() {
         var newRow = '<tr>' +
             '<td class="align-middle px-1 text-center">' +
@@ -169,71 +217,53 @@
             '</button>' +
             '</td>' +
             '<td class="align-middle px-1">' +
-            '<select name="idbrgmedis[]" class="w-full border text-center rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" onchange="updateStok(this)">' +
-            '<option value="" selected></option>';
-
-        <?php foreach ($medis_data as $brgmedis) : ?>
-            <?php
-            $stok_pesanan = 0;
-            foreach ($pesanan_data as $pesanan) {
-                if ($brgmedis['id'] === $pesanan['id_barang_medis']) {
-                    $stok_pesanan += $pesanan['jumlah_diterima'];
-                }
-            }
-            ?>
-            newRow += '<option value="<?= $brgmedis['id'] ?>" data-stok="<?= $brgmedis['stok'] ?>" data-stok-pesanan="<?= $stok_pesanan ?>">' +
-                '<?= $brgmedis['nama'] ?>' +
-                '</option>';
-        <?php endforeach; ?>
-
-        newRow += '</select>' +
+            '<select name="idbrgmedis[]" class="py-[1.5px] w-full border text-center rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" onchange="updateStok(this)" required>' +
+            '<option value="" selected></option>' +
+            '<?php foreach ($medis_data as $brgmedis) : ?>' +
+            '<option value="<?= $brgmedis['id'] ?>" data-stok="<?= $brgmedis['stok'] ?>"><?= $brgmedis['nama'] ?></option>' +
+            '<?php endforeach; ?>' +
+            '</select>' +
             '</td>' +
             '<td class="align-middle px-1 text-center">' +
-            '<input type="text" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="stoksaatini[]" />' +
+            '<input type="number" class="text-center w-full border bg-[#F6F6F6] cursor-default rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="stoksaatini[]" readonly/>' +
             '</td>' +
             '<td class="align-middle px-1 text-center">' +
-            '<input type="text" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="jlhkeluar[]" />' +
+            '<input type="number" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="jlhkeluar[]" required/>' +
             '</td>' +
             '<td class="align-middle px-1 text-center">' +
             '<input type="text" list="nofaktur" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="nofaktur[]" />' +
-            '<datalist id="nofaktur">';
-
-        // Menambahkan option dari PHP data
-        <?php foreach ($penerimaan_data as $penerimaan) : ?>
-            newRow += '<option value="<?= $penerimaan['no_faktur'] ?>"></option>';
-        <?php endforeach; ?>
-
-        newRow += '</datalist>' +
+            '<datalist id="nofaktur">' +
+            '<?php foreach ($penerimaan_data as $penerimaan) : ?>' +
+            '<option value="<?= $penerimaan['no_faktur'] ?>"></option>' +
+            '<?php endforeach; ?>' +
+            '</datalist>' +
             '</td>' +
             '<td class="align-middle px-1 text-center">' +
             '<input type="text" list="nobatch" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="nobatch[]" />' +
-            '<datalist id="nobatch">';
-
-        // Menambahkan option dari PHP data
-        <?php foreach ($pesanan_data as $pesanan) : ?>
-            newRow += '<option value="<?= $pesanan['no_batch'] ?>"></option>';
-        <?php endforeach; ?>
-
-        newRow += '</datalist>' +
+            '<datalist id="nobatch">' +
+            '<?php foreach ($pesanan_data as $pesanan) : ?>' +
+            '<option value="<?= $pesanan['no_batch'] ?>"></option>' +
+            '<?php endforeach; ?>' +
+            '</datalist>' +
             '</td>' +
             '</tr>';
         document.getElementById('item-list').getElementsByTagName('tbody')[0].insertAdjacentHTML('beforeend', newRow);
-        jumlahPesananInputs = document.querySelectorAll('input[name="jumlah_pesanan[]"]');
-        hargaSatuanInputs = document.querySelectorAll('input[name="harga_satuan[]"]');
-        totalInputs = document.querySelectorAll('input[name="total[]"]');
+        var newSelectInputs = document.querySelectorAll('select[name="idbrgmedis[]"]');
 
-        // Tambahkan event listener untuk setiap input jumlah_pesanan[] dan harga_satuan[] yang baru
-        jumlahPesananInputs.forEach(function(input, index) {
-            input.addEventListener('input', function() {
-                hitungTotal(index);
-            });
+        newSelectInputs[newSelectInputs.length - 1].addEventListener('change', function() {
+            if (isDuplicate(this)) {
+                alert('Barang medis ini sudah dipilih. Pilih barang medis lain.');
+                this.value = "";
+            } else {
+                updateStok(this);
+            }
         });
+    }
 
-        hargaSatuanInputs.forEach(function(input, index) {
-            input.addEventListener('input', function() {
-                hitungTotal(index);
-            });
-        });
+    function isDuplicate(select) {
+        var selectedValues = Array.from(document.querySelectorAll('select[name="idbrgmedis[]"]')).map(s => s.value);
+        var currentValue = select.value;
+        return selectedValues.filter(value => value === currentValue).length > 1;
     }
 
     function removeRow(btn) {
@@ -242,21 +272,19 @@
     }
 
     function updateStok(select) {
+        if (isDuplicate(select)) {
+            return;
+        }
+
         // Get the selected option
         var selectedOption = select.options[select.selectedIndex];
 
         // Get the value of the 'data-stok' attribute
         var stok = parseInt(selectedOption.getAttribute('data-stok')) || 0; // Default to 0 if attribute is missing or not valid
 
-        // Get the value of the 'data-stok-pesanan' attribute
-        var stokPesanan = parseInt(selectedOption.getAttribute('data-stok-pesanan')) || 0; // Default to 0 if attribute is missing or not valid
-
-        // Calculate the total stock
-        var totalStok = stok + stokPesanan;
-
         // Find the input field and set its value to the total stock
         var stokInput = select.closest('tr').querySelector('input[name="stoksaatini[]"]');
-        stokInput.value = totalStok;
+        stokInput.value = stok;
 
         // Optional: Validate the input of 'jlhkeluar[]'
         validateJumlahKeluar(select);
@@ -286,7 +314,7 @@
         // Dapatkan semua input jumlah keluar
         var inputsJumlahKeluar = document.getElementsByName('jlhkeluar[]');
 
-        // Flag untuk menentukan apakah form bisa di-submit atau tidak
+
         var canSubmit = true;
 
         // Iterasi semua input jumlah keluar untuk melakukan validasi
@@ -309,7 +337,11 @@
                 break;
             }
         }
-
+        if (canSubmit) {
+            var submitButton = document.getElementById('submitButton');
+            submitButton.setAttribute('disabled', true);
+            submitButton.innerHTML = 'Menyimpan...';
+        }
 
     });
 </script>

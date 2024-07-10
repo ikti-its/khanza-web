@@ -4,7 +4,7 @@
         <nav class="flex basis-full items-center w-full mx-auto px-4 sm:px-6 md:px-8" aria-label="Global">
             <div class="me-5 lg:me-0 lg:hidden">
                 <a class="flex-none text-xl font-semibold dark:text-white" href="#" aria-label="Brand">
-                    <img src="/img/logo-union.png" class="h-4">
+                    <img src="/img/logo-omnia.png" class="h-4">
                 </a>
             </div>
 
@@ -95,34 +95,7 @@
 
     <!-- ========== MAIN CONTENT ========== -->
     <!-- Sidebar Toggle -->
-    <div class="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 md:px-8 lg:hidden dark:bg-gray-800 dark:border-gray-700">
-        <div class="flex items-center py-4">
-            <!-- Navigation Toggle -->
-            <button type="button" class="text-gray-500 hover:text-gray-600" data-hs-overlay="#application-sidebar" aria-controls="application-sidebar" aria-label="Toggle navigation">
-                <span class="sr-only">Toggle Navigation</span>
-                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" x2="21" y1="6" y2="6" />
-                    <line x1="3" x2="21" y1="12" y2="12" />
-                    <line x1="3" x2="21" y1="18" y2="18" />
-                </svg>
-            </button>
-            <!-- End Navigation Toggle -->
-
-            <!-- Breadcrumb -->
-            <ol class="ms-3 flex items-center whitespace-nowrap" aria-label="Breadcrumb">
-                <li class="flex items-center text-sm text-gray-800 dark:text-gray-400">
-                    Union
-                    <svg class="flex-shrink-0 mx-3 overflow-visible size-2.5 text-gray-400 dark:text-gray-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 1L10.6869 7.16086C10.8637 7.35239 10.8637 7.64761 10.6869 7.83914L5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                </li>
-                <li class="text-sm font-semibold text-gray-800 truncate dark:text-gray-400" aria-current="page">
-                    Dashboard
-                </li>
-            </ol>
-            <!-- End Breadcrumb -->
-        </div>
-    </div>
+    
     <!-- End Sidebar Toggle -->
 
     <!-- Sidebar -->
@@ -130,7 +103,7 @@
         <div class="px-6">
             <a class="flex-none text-xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
 
-                <img src="/img/logo-union.png" class=" h-12">
+                <img src="/img/logo-omnia.png" class=" h-12">
 
             </a>
         </div>

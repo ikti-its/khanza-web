@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Table Section -->
-<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
     <!-- Card -->
     <div class="flex flex-col ">
         <div class="-m-1.5">
@@ -45,7 +45,7 @@
                             <tr>
                                 <th scope="col" class="px-6 pe-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs font-semibold tracking-wide text-[#666] dark:text-gray-200">
                                             Tanggal
                                         </span>
                                     </div>
@@ -53,7 +53,7 @@
 
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs font-semibold tracking-wide text-[#666] dark:text-gray-200">
                                             Nomor Pengajuan
                                         </span>
                                     </div>
@@ -61,14 +61,14 @@
 
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs font-semibold tracking-wide text-[#666] dark:text-gray-200">
                                             Status Apoteker
                                         </span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs font-semibold tracking-wide text-[#666] dark:text-gray-200">
                                             Status Keuangan
                                         </span>
                                     </div>
@@ -76,7 +76,7 @@
 
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs font-semibold tracking-wide text-[#666] dark:text-gray-200">
                                             Aksi
                                         </span>
                                     </div>
@@ -135,7 +135,7 @@
                                                     <?php
                                                     switch ($persetujuan['status_apoteker']) {
                                                         case 'Menunggu Persetujuan':
-                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEF9C3] text-[#A46319] rounded-full">
+                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-semibold bg-[#FEF9C3] text-[#F49A35] rounded-full">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                             <path d="M8.00004 14.6673C11.6819 14.6673 14.6667 11.6825 14.6667 8.00065C14.6667 4.31875 11.6819 1.33398 8.00004 1.33398C4.31814 1.33398 1.33337 4.31875 1.33337 8.00065C1.33337 11.6825 4.31814 14.6673 8.00004 14.6673Z" fill="#A46319" />
                                                             <path d="M10.4733 10.6192C10.3867 10.6192 10.3 10.5992 10.22 10.5459L8.15334 9.31253C7.64001 9.00586 7.26001 8.33253 7.26001 7.73919V5.00586C7.26001 4.73253 7.48668 4.50586 7.76001 4.50586C8.03334 4.50586 8.26001 4.73253 8.26001 5.00586V7.73919C8.26001 7.97919 8.46001 8.33253 8.66668 8.45253L10.7333 9.68586C10.9733 9.82586 11.0467 10.1325 10.9067 10.3725C10.8067 10.5325 10.64 10.6192 10.4733 10.6192Z" fill="#FEF9C3" />
@@ -144,7 +144,7 @@
                                                         </span>';
                                                             break;
                                                         case 'Disetujui':
-                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#D6F9F3] text-[#13594E] rounded-full">
+                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-semibold bg-[#D6F9F3] text-[#13594E] rounded-full">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                         <path d="M8.00004 14.6673C11.6819 14.6673 14.6667 11.6825 14.6667 8.00065C14.6667 4.31875 11.6819 1.33398 8.00004 1.33398C4.31814 1.33398 1.33337 4.31875 1.33337 8.00065C1.33337 11.6825 4.31814 14.6673 8.00004 14.6673Z" fill="#13594E"/>
                                                         <path d="M7.05334 10.3858C6.92 10.3858 6.79334 10.3324 6.7 10.2391L4.81333 8.35242C4.62 8.15909 4.62 7.83909 4.81333 7.64576C5.00667 7.45242 5.32667 7.45242 5.52 7.64576L7.05334 9.17909L10.48 5.75242C10.6733 5.55909 10.9933 5.55909 11.1867 5.75242C11.38 5.94576 11.38 6.26575 11.1867 6.45909L7.40667 10.2391C7.31334 10.3324 7.18667 10.3858 7.05334 10.3858Z" fill="#D6F9F3"/>
@@ -153,7 +153,7 @@
                                                         </span>';
                                                             break;
                                                         case 'Ditolak':
-                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEE2E2] text-[#991B1B] rounded-full">
+                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-semibold bg-[#FEE2E2] text-[#991B1B] rounded-full">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                         <path d="M8.00004 14.6673C11.6819 14.6673 14.6667 11.6825 14.6667 8.00065C14.6667 4.31875 11.6819 1.33398 8.00004 1.33398C4.31814 1.33398 1.33337 4.31875 1.33337 8.00065C1.33337 11.6825 4.31814 14.6673 8.00004 14.6673Z" fill="#991B1B"/>
                                                         <path d="M8.70666 8.00023L10.24 6.4669C10.4333 6.27357 10.4333 5.95357 10.24 5.76023C10.0467 5.5669 9.72666 5.5669 9.53332 5.76023L7.99999 7.29357L6.46666 5.76023C6.27332 5.5669 5.95332 5.5669 5.75999 5.76023C5.56666 5.95357 5.56666 6.27357 5.75999 6.4669L7.29332 8.00023L5.75999 9.53357C5.56666 9.7269 5.56666 10.0469 5.75999 10.2402C5.85999 10.3402 5.98666 10.3869 6.11332 10.3869C6.23999 10.3869 6.36666 10.3402 6.46666 10.2402L7.99999 8.7069L9.53332 10.2402C9.63332 10.3402 9.75999 10.3869 9.88666 10.3869C10.0133 10.3869 10.14 10.3402 10.24 10.2402C10.4333 10.0469 10.4333 9.7269 10.24 9.53357L8.70666 8.00023Z" fill="#FEE2E2"/>
@@ -163,7 +163,7 @@
                                                             break;
 
                                                         default:
-                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEF9C3] text-[#A46319] rounded-full">
+                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-semibold bg-[#FEF9C3] text-[#F49A35] rounded-full">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                             <path d="M8.00004 14.6673C11.6819 14.6673 14.6667 11.6825 14.6667 8.00065C14.6667 4.31875 11.6819 1.33398 8.00004 1.33398C4.31814 1.33398 1.33337 4.31875 1.33337 8.00065C1.33337 11.6825 4.31814 14.6673 8.00004 14.6673Z" fill="#A46319" />
                                                             <path d="M10.4733 10.6192C10.3867 10.6192 10.3 10.5992 10.22 10.5459L8.15334 9.31253C7.64001 9.00586 7.26001 8.33253 7.26001 7.73919V5.00586C7.26001 4.73253 7.48668 4.50586 7.76001 4.50586C8.03334 4.50586 8.26001 4.73253 8.26001 5.00586V7.73919C8.26001 7.97919 8.46001 8.33253 8.66668 8.45253L10.7333 9.68586C10.9733 9.82586 11.0467 10.1325 10.9067 10.3725C10.8067 10.5325 10.64 10.6192 10.4733 10.6192Z" fill="#FEF9C3" />
@@ -181,7 +181,7 @@
                                                     <?php
                                                     switch ($persetujuan['status_keuangan']) {
                                                         case 'Menunggu Persetujuan':
-                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEF9C3] text-[#A46319] rounded-full">
+                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-semibold bg-[#FEF9C3] text-[#F49A35] rounded-full">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                             <path d="M8.00004 14.6673C11.6819 14.6673 14.6667 11.6825 14.6667 8.00065C14.6667 4.31875 11.6819 1.33398 8.00004 1.33398C4.31814 1.33398 1.33337 4.31875 1.33337 8.00065C1.33337 11.6825 4.31814 14.6673 8.00004 14.6673Z" fill="#A46319" />
                                                             <path d="M10.4733 10.6192C10.3867 10.6192 10.3 10.5992 10.22 10.5459L8.15334 9.31253C7.64001 9.00586 7.26001 8.33253 7.26001 7.73919V5.00586C7.26001 4.73253 7.48668 4.50586 7.76001 4.50586C8.03334 4.50586 8.26001 4.73253 8.26001 5.00586V7.73919C8.26001 7.97919 8.46001 8.33253 8.66668 8.45253L10.7333 9.68586C10.9733 9.82586 11.0467 10.1325 10.9067 10.3725C10.8067 10.5325 10.64 10.6192 10.4733 10.6192Z" fill="#FEF9C3" />
@@ -190,7 +190,7 @@
                                                     </span>';
                                                             break;
                                                         case 'Disetujui':
-                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#D6F9F3] text-[#13594E] rounded-full">
+                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-semibold bg-[#D6F9F3] text-[#13594E] rounded-full">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                         <path d="M8.00004 14.6673C11.6819 14.6673 14.6667 11.6825 14.6667 8.00065C14.6667 4.31875 11.6819 1.33398 8.00004 1.33398C4.31814 1.33398 1.33337 4.31875 1.33337 8.00065C1.33337 11.6825 4.31814 14.6673 8.00004 14.6673Z" fill="#13594E"/>
                                                         <path d="M7.05334 10.3858C6.92 10.3858 6.79334 10.3324 6.7 10.2391L4.81333 8.35242C4.62 8.15909 4.62 7.83909 4.81333 7.64576C5.00667 7.45242 5.32667 7.45242 5.52 7.64576L7.05334 9.17909L10.48 5.75242C10.6733 5.55909 10.9933 5.55909 11.1867 5.75242C11.38 5.94576 11.38 6.26575 11.1867 6.45909L7.40667 10.2391C7.31334 10.3324 7.18667 10.3858 7.05334 10.3858Z" fill="#D6F9F3"/>
@@ -199,14 +199,14 @@
                                                     </span>';
                                                             break;
                                                         case 'Ditolak':
-                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEE2E2] text-[#991B1B] rounded-full">
+                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-semibold bg-[#FEE2E2] text-[#991B1B] rounded-full">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8.00004 14.6673C11.6819 14.6673 14.6667 11.6825 14.6667 8.00065C14.6667 4.31875 11.6819 1.33398 8.00004 1.33398C4.31814 1.33398 1.33337 4.31875 1.33337 8.00065C1.33337 11.6825 4.31814 14.6673 8.00004 14.6673Z" fill="#991B1B"/><path d="M8.70666 8.00023L10.24 6.4669C10.4333 6.27357 10.4333 5.95357 10.24 5.76023C10.0467 5.5669 9.72666 5.5669 9.53332 5.76023L7.99999 7.29357L6.46666 5.76023C6.27332 5.5669 5.95332 5.5669 5.75999 5.76023C5.56666 5.95357 5.56666 6.27357 5.75999 6.4669L7.29332 8.00023L5.75999 9.53357C5.56666 9.7269 5.56666 10.0469 5.75999 10.2402C5.85999 10.3402 5.98666 10.3869 6.11332 10.3869C6.23999 10.3869 6.36666 10.3402 6.46666 10.2402L7.99999 8.7069L9.53332 10.2402C9.63332 10.3402 9.75999 10.3869 9.88666 10.3869C10.0133 10.3869 10.14 10.3402 10.24 10.2402C10.4333 10.0469 10.4333 9.7269 10.24 9.53357L8.70666 8.00023Z" fill="#FEE2E2"/></svg>
                                                       Pengajuan Ditolak
                                                     </span>';
                                                             break;
 
                                                         default:
-                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEF9C3] text-[#A46319] rounded-full">
+                                                            echo '<span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-semibold bg-[#FEF9C3] text-[#F49A35] rounded-full">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                             <path d="M8.00004 14.6673C11.6819 14.6673 14.6667 11.6825 14.6667 8.00065C14.6667 4.31875 11.6819 1.33398 8.00004 1.33398C4.31814 1.33398 1.33337 4.31875 1.33337 8.00065C1.33337 11.6825 4.31814 14.6673 8.00004 14.6673Z" fill="#A46319" />
                                                             <path d="M10.4733 10.6192C10.3867 10.6192 10.3 10.5992 10.22 10.5459L8.15334 9.31253C7.64001 9.00586 7.26001 8.33253 7.26001 7.73919V5.00586C7.26001 4.73253 7.48668 4.50586 7.76001 4.50586C8.03334 4.50586 8.26001 4.73253 8.26001 5.00586V7.73919C8.26001 7.97919 8.46001 8.33253 8.66668 8.45253L10.7333 9.68586C10.9733 9.82586 11.0467 10.1325 10.9067 10.3725C10.8067 10.5325 10.64 10.6192 10.4733 10.6192Z" fill="#FEF9C3" />
@@ -224,7 +224,7 @@
                                                 <form action="/submitpersetujuan/<?= $persetujuan['id_pengajuan'] ?>" method="POST">
                                                     <div class="pl-6 py-1.5 inline-flex">
                                                         <div class="pr-3 py-1.5">
-                                                            <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-">
+                                                            <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-">
                                                                 Lihat Detail
                                                             </button>
                                                         </div>
@@ -249,24 +249,24 @@
                                                             }
                                                             ?>
                                                             <div class="px-3 py-1.5">
-                                                                <button type="submit" value="Disetujui" name="<?php echo ($user_data['role'] === 1 ? 'statusapoteker' : 'statuskeuangan'); ?>" class="gap-x-1 text-sm text-[#24A793] decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                                <button type="submit" value="Disetujui" name="<?php echo ($user_data['role'] === 1 ? 'statusapoteker' : 'statuskeuangan'); ?>" class="gap-x-1 text-sm text-[#24A793] decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                                                     Setuju
                                                                 </button>
                                                             </div>
                                                             <div class="px-3 py-1.5">
-                                                                <button type="submit" value="Ditolak" name="<?php echo ($user_data['role'] === 1 ? 'statusapoteker' : 'statuskeuangan'); ?>" class="gap-x-1 text-sm text-[#CF5454] decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                                <button type="submit" value="Ditolak" name="<?php echo ($user_data['role'] === 1 ? 'statusapoteker' : 'statuskeuangan'); ?>" class="gap-x-1 text-sm text-[#CF5454] decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                                                     Tolak
                                                                 </button>
                                                             </div>
                                                 </form>
                                             <?php else : ?>
                                                 <div class="px-3 py-1.5">
-                                                    <a href="#" class="gap-x-1 text-sm text-[#C4C4C4] decoration-2 font-medium cursor-default dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                    <a href="#" class="gap-x-1 text-sm text-[#C4C4C4] decoration-2 font-semibold cursor-default dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                         Setuju
                                                     </a>
                                                 </div>
                                                 <div class="px-3 py-1.5">
-                                                    <a href="#" class="gap-x-1 text-sm text-[#C4C4C4] decoration-2 font-medium cursor-default dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                    <a href="#" class="gap-x-1 text-sm text-[#C4C4C4] decoration-2 font-semibold cursor-default dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                         Tolak
                                                     </a>
                                                 </div>
@@ -290,7 +290,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="p-4 overflow-y-auto">
-                                                            <div class="space-y-4">
+                                                            <div class="space-y-12">
                                                                 <div>
                                                                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white"></h3>
                                                                     <div class="mb-3 sm:block md:flex items-center">
@@ -321,7 +321,12 @@
 
                                                                                                                 echo $formatted_date;
                                                                                                             }
-                                                                                                            ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                                                            ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                    </div>
+                                                                    <div class="mb-3 sm:block md:flex items-center">
+                                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor
+                                                                            Pengajuan</label>
+                                                                        <input type="text" name="" value="<?= $pengajuan['nomor_pengajuan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                                     </div>
                                                                     <div class="mb-3 sm:block md:flex items-center">
                                                                         <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Pegawai</label>
@@ -329,26 +334,22 @@
                                                                                                                 if ($pegawai['id'] === $pengajuan['id_pegawai']) {
                                                                                                                     echo $pegawai['nama'];
                                                                                                                 }
-                                                                                                            } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                                                            } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                                     </div>
-                                                                    <div class="mb-3 sm:block md:flex items-center">
-                                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor
-                                                                            Pengajuan</label>
-                                                                        <input type="text" name="" value="<?= $pengajuan['nomor_pengajuan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                                    </div>
+
                                                                     <div class="mb-3 sm:block md:flex items-center">
                                                                         <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Status
                                                                             Apoteker</label>
-                                                                        <input type="text" name="" value="<?= $persetujuan['status_apoteker'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                        <input type="text" name="" value="<?= $persetujuan['status_apoteker'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                                     </div>
                                                                     <div class="mb-3 sm:block md:flex items-center">
                                                                         <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Status
                                                                             Keuangan</label>
-                                                                        <input type="text" name="" value="<?= $persetujuan['status_keuangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                        <input type="text" name="" value="<?= $persetujuan['status_keuangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                                     </div>
                                                                 </div>
 
-                                                                <div>
+                                                                <div class="pt-2 border-t border-[#F1F1F1]">
                                                                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Pesanan</h3>
                                                                     <div>
 
@@ -358,18 +359,20 @@
 
                                                                             </div>
                                                                             <div class="flex justify-end w-1/2">
-                                                                                <p class="font-bold mr-2 text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Harga/Item</p>
-                                                                                <p class="font-bold text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Total</p>
+                                                                                <p class="font-bold mr-2 text-center text-gray-900 text-sm rounded-lg w-full">Harga/Item</p>
+                                                                                <p class="font-bold text-center text-gray-900 text-sm rounded-lg w-full">Total/Item</p>
                                                                             </div>
                                                                         </div>
 
 
 
-                                                                        <?php foreach ($pesanan_data as $pesanan) {
-                                                                            if ($pesanan['id_pengajuan'] === $pengajuan['id']) { ?>
+                                                                        <?php $subtotal = 0;
+                                                                        foreach ($pesanan_data as $pesanan) {
+                                                                            if ($pesanan['id_pengajuan'] === $pengajuan['id']) { 
+                                                                                $subtotal += $pesanan['total_per_item']?>
 
                                                                                 <div class="flex items-center justify-between">
-                                                                                    <div class="w-1/2">
+                                                                                    <div class="w-1/2 font-medium">
                                                                                         <?php foreach ($medis_data as $medis) {
                                                                                             if ($medis['id'] === $pesanan['id_barang_medis']) {
                                                                                                 echo $medis['nama'];
@@ -378,8 +381,8 @@
                                                                                         <br>
                                                                                     </div>
                                                                                     <div class="flex justify-end w-1/2">
-                                                                                        <input type="text" name="" value="<?= number_format($pesanan['harga_satuan_pengajuan'], 0, ',', '.') ?>" class="text-center mr-2 bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                                                        <input type="text" name="" value="<?= $pesanan['total_pengajuan'] ?? "Belum ada total" ?>" class="text-center bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                                        <input type="text" name="" value="<?= "Rp " . number_format($pesanan['harga_satuan_pengajuan'], 0, ',', '.') ?>" class="text-center mr-2 bg-gray-100 text-gray-900 text-sm rounded-lg px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                                        <input type="text" name="" value="<?= "Rp " . number_format($pesanan['subtotal_per_item'], 0, ',', '.') ?? "Belum ada total" ?>" class="text-center bg-gray-100 font-[600] text-gray-900 text-sm rounded-lg px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div><small>Jumlah:
@@ -393,19 +396,11 @@
 
                                                                         <?php }
                                                                         } ?>
-                                                                        <div>
-                                                                            <div class="flex justify-between">
-                                                                                <p><strong>Diskon Persen (Jumlah):</strong></p>
-                                                                                <p><?= $pengajuan['diskon_persen'] ?>% (<?= number_format($pengajuan['diskon_jumlah'], 0, ',', '.') ?>)</p>
-                                                                            </div>
-                                                                            <div class="flex justify-between">
-                                                                                <p><strong>Pajak Persen (Jumlah):</strong></p>
-                                                                                <?= $pengajuan['pajak_persen'] ?>% (<?= number_format($pengajuan['pajak_jumlah'], 0, ',', '.') ?>)
-                                                                            </div>
-                                                                            <div class="flex justify-between">
-                                                                                <p><strong>Materai:</strong>
-                                                                                </p>
-                                                                                <?= number_format($pengajuan['materai'], 0, ',', '.') ?>
+                                                                        
+                                                                        <div class="border-t border-[#F1F1F1] mt-2">
+                                                                            <div class="flex justify-between pt-1">
+                                                                                <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white md:w-1/2">Total</label>
+                                                                                <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white">Rp <?= number_format($pengajuan['total_pengajuan'], 0, ',', '.') ?></label>
                                                                             </div>
                                                                         </div>
                                                                     </div>

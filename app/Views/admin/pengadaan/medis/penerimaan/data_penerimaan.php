@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Table Section -->
-<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
     <!-- Card -->
     <div class="flex flex-col">
         <div class="-m-1.5 overflow-y-auto">
@@ -17,16 +17,6 @@
 
                         </div>
 
-                        <div>
-                            <div class="inline-flex gap-x-2">
-                                <a href='/tambahpenerimaanmedis' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                    <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
-                                        <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                    </svg>
-                                    Tambah
-                                </a>
-                            </div>
-                        </div>
                     </div>
                     <!-- End Header -->
                     <div class="py-4 grid gap-3 md:items-start">
@@ -50,8 +40,8 @@
                             <col width="17%">
                             <col width="19%">
                             <col width="19%">
-                            <col width="22%">
-                            <col width="23%">
+                            <col width="21%">
+                            <col width="24%">
                         </colgroup>
                         <thead class="bg-gray-50 dark:bg-slate-800">
                             <tr>
@@ -64,7 +54,7 @@
 
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666666]">
                                             Tanggal Datang
                                         </span>
                                     </div>
@@ -72,14 +62,14 @@
 
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666666]">
                                             Tanggal Jatuh Tempo
                                         </span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666666]">
                                             Nomor Faktur
                                         </span>
                                     </div>
@@ -93,7 +83,7 @@
                                 </th> -->
                                 <th scope="col" class="px-6 py-3 text-start">
                                     <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666666]">
                                             Status
                                         </span>
                                     </div>
@@ -101,7 +91,7 @@
 
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666666]">
                                             Aksi
                                         </span>
                                     </div>
@@ -115,171 +105,235 @@
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($pengajuan_data as $pengajuan) : ?>
-                                <?php foreach ($penerimaan_data as $penerimaan) : ?>
-                                    <?php if ($penerimaan['id_pengajuan'] === $pengajuan['id']) : ?>
-                                        <div id="hs-vertically-centered-scrollable-modal-<?= $penerimaan['id'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
-                                            <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
-                                                <div class="w-full max-h-full overflow-hidden flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
-                                                    <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
-                                                        <h3 class="font-bold text-gray-800 dark:text-white">
-                                                            <?= $penerimaan['no_faktur'] ?>
-                                                        </h3>
-                                                        <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $penerimaan['id'] ?>">
-                                                            <span class="sr-only">Close</span>
-                                                            <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                                <path d="M18 6 6 18"></path>
-                                                                <path d="m6 6 12 12"></path>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                    <div class="p-4 overflow-y-auto">
-                                                        <div class="space-y-4">
-
-                                                            <div class="mb-5 sm:block md:flex items-center">
-                                                                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor Pemesanan</label>
-                                                                <input type="text" name="" value="<?= $penerimaan['id_pegawai'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                <?php if ($pengajuan['status_pesanan'] === '4' || $pengajuan['status_pesanan'] === '5') { ?>
+                                    <?php foreach ($penerimaan_data as $penerimaan) : ?>
+                                        <?php foreach ($pemesanan_data as $pemesanan) : ?>
+                                            <?php if ($penerimaan['id_pengajuan'] === $pengajuan['id'] && $pemesanan['id_pengajuan'] === $penerimaan['id_pengajuan']) : ?>
+                                                <div id="hs-vertically-centered-scrollable-modal-<?= $penerimaan['id'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
+                                                    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
+                                                        <div class="w-full max-h-full overflow-hidden flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
+                                                            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
+                                                                <h3 class="font-bold text-gray-800 dark:text-white">
+                                                                    <?= $penerimaan['no_faktur'] ?>
+                                                                </h3>
+                                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $penerimaan['id'] ?>">
+                                                                    <span class="sr-only">Close</span>
+                                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <path d="M18 6 6 18"></path>
+                                                                        <path d="m6 6 12 12"></path>
+                                                                    </svg>
+                                                                </button>
                                                             </div>
+                                                            <div class="p-4 overflow-y-auto">
+                                                                <div class="space-y-12">
+                                                                    <div>
+                                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor Pemesanan</label>
+                                                                            <input type="text" name="" value="<?= $pemesanan['no_pemesanan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                        </div>
 
-                                                            <div class="mb-5 sm:block md:flex items-center">
-                                                                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Penerimaan</label>
-                                                                <input type="text" name="" value="<?php
-                                                                                                    // Tanggal asli dari data
-                                                                                                    $original_date = $penerimaan['tanggal_datang'];
+                                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Penerimaan</label>
+                                                                            <input type="text" name="" value="<?php
+                                                                                                                // Tanggal asli dari data
+                                                                                                                $original_date = $penerimaan['tanggal_datang'];
 
-                                                                                                    // Jika tanggal adalah "0001-01-01", tampilkan tanda hubung "-"
-                                                                                                    if ($original_date === "0001-01-01") {
-                                                                                                        echo "-";
-                                                                                                    } else {
-                                                                                                        // Format tanggal sebagai dd-Bulan-yyyy (misal: 27 Juni 2024)
+                                                                                                                // Jika tanggal adalah "0001-01-01", tampilkan tanda hubung "-"
+                                                                                                                if ($original_date === "0001-01-01") {
+                                                                                                                    echo "-";
+                                                                                                                } else {
+                                                                                                                    // Format tanggal sebagai dd-Bulan-yyyy (misal: 27 Juni 2024)
 
-                                                                                                        // Pisahkan tanggal, bulan, dan tahun dari tanggal asli
-                                                                                                        $day = date("d", strtotime($original_date));
-                                                                                                        $month = date("m", strtotime($original_date));
-                                                                                                        $year = date("Y", strtotime($original_date));
+                                                                                                                    // Pisahkan tanggal, bulan, dan tahun dari tanggal asli
+                                                                                                                    $day = date("d", strtotime($original_date));
+                                                                                                                    $month = date("m", strtotime($original_date));
+                                                                                                                    $year = date("Y", strtotime($original_date));
 
-                                                                                                        // Daftar nama bulan dalam bahasa Indonesia
-                                                                                                        $bulan = array(
-                                                                                                            1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
-                                                                                                            7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
-                                                                                                        );
+                                                                                                                    // Daftar nama bulan dalam bahasa Indonesia
+                                                                                                                    $bulan = array(
+                                                                                                                        1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                                        7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                                    );
 
-                                                                                                        // Format tanggal sesuai dengan format yang diinginkan
-                                                                                                        $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+                                                                                                                    // Format tanggal sesuai dengan format yang diinginkan
+                                                                                                                    $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
 
-                                                                                                        echo $formatted_date;
-                                                                                                    }
-                                                                                                    ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                                                                    echo $formatted_date;
+                                                                                                                }
+                                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                        </div>
+                                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Faktur</label>
+                                                                            <input type="text" name="" value="<?php
+                                                                                                                // Tanggal asli dari data
+                                                                                                                $original_date = $penerimaan['tanggal_faktur'];
+
+
+                                                                                                                // Format tanggal sebagai dd-Bulan-yyyy (misal: 27 Juni 2024)
+
+                                                                                                                // Pisahkan tanggal, bulan, dan tahun dari tanggal asli
+                                                                                                                $day = date("d", strtotime($original_date));
+                                                                                                                $month = date("m", strtotime($original_date));
+                                                                                                                $year = date("Y", strtotime($original_date));
+
+                                                                                                                // Daftar nama bulan dalam bahasa Indonesia
+                                                                                                                $bulan = array(
+                                                                                                                    1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                                    7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                                );
+
+                                                                                                                // Format tanggal sesuai dengan format yang diinginkan
+                                                                                                                $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+
+                                                                                                                echo $formatted_date;
+
+                                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                        </div>
+                                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Jatuh Tempo</label>
+                                                                            <input type="text" name="" value="<?php
+                                                                                                                // Tanggal asli dari data
+                                                                                                                $original_date = $penerimaan['tanggal_jthtempo'];
+
+
+                                                                                                                // Format tanggal sebagai dd-Bulan-yyyy (misal: 27 Juni 2024)
+
+                                                                                                                // Pisahkan tanggal, bulan, dan tahun dari tanggal asli
+                                                                                                                $day = date("d", strtotime($original_date));
+                                                                                                                $month = date("m", strtotime($original_date));
+                                                                                                                $year = date("Y", strtotime($original_date));
+
+                                                                                                                // Daftar nama bulan dalam bahasa Indonesia
+                                                                                                                $bulan = array(
+                                                                                                                    1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                                    7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                                );
+
+                                                                                                                // Format tanggal sesuai dengan format yang diinginkan
+                                                                                                                $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+
+                                                                                                                echo $formatted_date;
+
+                                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                        </div>
+                                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor Faktur</label>
+                                                                            <input type="text" name="" value="<?= $penerimaan['no_faktur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                        </div>
+
+                                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Pegawai</label>
+                                                                            <input type="text" name="" value="<?php foreach ($pegawai_data as $pegawai) {
+                                                                                                                    if ($pegawai['id'] === $penerimaan['id_pegawai']) {
+                                                                                                                        echo $pegawai['nama'];
+                                                                                                                    }
+                                                                                                                } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                        </div>
+                                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Ruangan</label>
+                                                                            <input type="text" name="" value="<?= $penerimaan['id_ruangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="pt-2 border-t border-[#F1F1F1]">
+                                                                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Pesanan</h3>
+                                                                        <div>
+
+                                                                            <div class="flex items-center justify-between mb-2">
+                                                                                <div class="w-1/2">
+
+
+                                                                                </div>
+                                                                                <div class="flex justify-end w-1/2">
+                                                                                    <p class="font-bold mr-2 text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Harga/Item</p>
+                                                                                    <p class="font-bold text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Subtotal/Item</p>
+                                                                                </div>
+                                                                            </div>
+
+
+
+                                                                            <?php $subtotal = 0;
+                                                                            foreach ($pesanan_data as $pesanan) {
+
+                                                                                if ($pesanan['id_pengajuan'] === $penerimaan['id_pengajuan']) {
+                                                                                    $subtotal += $pesanan['total_per_item'] ?>
+
+                                                                                    <div class="flex items-center justify-between">
+                                                                                        <div class="w-1/2 font-medium">
+                                                                                            <?php foreach ($medis_data as $medis) {
+                                                                                                if ($medis['id'] === $pesanan['id_barang_medis']) {
+                                                                                                    echo $medis['nama'];
+                                                                                                }
+                                                                                            } ?>
+                                                                                            <br>
+                                                                                        </div>
+                                                                                        <div class="flex justify-end w-1/2">
+                                                                                            <input type="text" name="" value="<?= "Rp " . number_format($pesanan['harga_satuan_pemesanan'], 0, ',', '.') ?>" class="text-center mr-2 bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                                            <input type="text" name="" value="<?= "Rp " . number_format($pesanan['subtotal_per_item'], 0, ',', '.') ?? "Belum ada total" ?>" class="text-center bg-gray-100 font-[600] text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div><small>Diterima (Total):
+                                                                                            <?= $pesanan['jumlah_diterima'] . " (" . $pesanan['jumlah_pesanan'] . ")" ?> <?php foreach ($satuan_data as $satuan) {
+                                                                                                                                                                                if ($satuan['id'] === $pesanan['satuan'] && $pesanan['satuan'] !== 1) {
+                                                                                                                                                                                    echo $satuan['nama'];
+                                                                                                                                                                                } else {
+                                                                                                                                                                                    echo '';
+                                                                                                                                                                                }
+                                                                                                                                                                            } ?>
+                                                                                        </small></div>
+                                                                                    <div class="flex justify-between py-1">
+                                                                                        <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white md:w-1/2">Diskon Persen (Jumlah)</label>
+                                                                                        <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white"><?= number_format($pesanan['diskon_persen'], 0, ',', '.') . "% (Rp" . number_format($pesanan['diskon_jumlah'], 0, ',', '.') . ")" ?></label>
+                                                                                    </div>
+                                                                                    <div class="flex justify-between py-1">
+                                                                                        <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white md:w-1/2">Total/Item</label>
+                                                                                        <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white">Rp <?= number_format($pesanan['total_per_item'], 0, ',', '.'); ?></label>
+                                                                                    </div>
+                                                                                    <br>
+
+                                                                            <?php }
+                                                                            } ?>
+                                                                            <div>
+                                                                                <div class="flex justify-between py-1">
+                                                                                    <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white md:w-1/2">Subtotal</label>
+                                                                                    <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white">Rp <?= number_format($subtotal, 0, ',', '.') ?> </label>
+                                                                                </div>
+                                                                                <div class="flex justify-between py-1">
+                                                                                    <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white md:w-1/2">Pajak Persen (Jumlah)</label>
+                                                                                    <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white"> <?= $pemesanan['pajak_persen'] ?>% (<?= number_format($pemesanan['pajak_jumlah'], 0, ',', '.') ?>)</label>
+                                                                                </div>
+                                                                                <div class="flex justify-between py-1">
+                                                                                    <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white md:w-1/2">Materai</label>
+                                                                                    <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white">Rp <?= number_format($pemesanan['materai'], 0, ',', '.') ?></label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="border-t border-[#F1F1F1] my-2">
+                                                                                <div class="flex justify-between pt-1">
+                                                                                    <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white md:w-1/2">Total</label>
+                                                                                    <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white">Rp <?= number_format($pemesanan['total_pemesanan'], 0, ',', '.') ?></label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="mb-5 sm:block md:flex items-center">
-                                                                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Faktur</label>
-                                                                <input type="text" name="" value="<?php
-                                                                                                    // Tanggal asli dari data
-                                                                                                    $original_date = $penerimaan['tanggal_faktur'];
+                                                            <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
+                                                                <a href="/tambahtagihanmedis/<?= $penerimaan['id'] ?>" class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#0A2D27] text-[#ACF2E7] shadow-sm hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                                                    Lanjutkan Pembayaran
+                                                                </a>
 
 
-                                                                                                    // Format tanggal sebagai dd-Bulan-yyyy (misal: 27 Juni 2024)
-
-                                                                                                    // Pisahkan tanggal, bulan, dan tahun dari tanggal asli
-                                                                                                    $day = date("d", strtotime($original_date));
-                                                                                                    $month = date("m", strtotime($original_date));
-                                                                                                    $year = date("Y", strtotime($original_date));
-
-                                                                                                    // Daftar nama bulan dalam bahasa Indonesia
-                                                                                                    $bulan = array(
-                                                                                                        1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
-                                                                                                        7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
-                                                                                                    );
-
-                                                                                                    // Format tanggal sesuai dengan format yang diinginkan
-                                                                                                    $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
-
-                                                                                                    echo $formatted_date;
-
-                                                                                                    ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                             </div>
-                                                            <div class="mb-5 sm:block md:flex items-center">
-                                                                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Jatuh Tempo</label>
-                                                                <input type="text" name="" value="<?php
-                                                                                                    // Tanggal asli dari data
-                                                                                                    $original_date = $penerimaan['tanggal_jthtempo'];
-
-
-                                                                                                    // Format tanggal sebagai dd-Bulan-yyyy (misal: 27 Juni 2024)
-
-                                                                                                    // Pisahkan tanggal, bulan, dan tahun dari tanggal asli
-                                                                                                    $day = date("d", strtotime($original_date));
-                                                                                                    $month = date("m", strtotime($original_date));
-                                                                                                    $year = date("Y", strtotime($original_date));
-
-                                                                                                    // Daftar nama bulan dalam bahasa Indonesia
-                                                                                                    $bulan = array(
-                                                                                                        1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
-                                                                                                        7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
-                                                                                                    );
-
-                                                                                                    // Format tanggal sesuai dengan format yang diinginkan
-                                                                                                    $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
-
-                                                                                                    echo $formatted_date;
-
-                                                                                                    ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                            </div>
-                                                            <div class="mb-5 sm:block md:flex items-center">
-                                                                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Pegawai</label>
-                                                                <input type="text" name="" value="<?php foreach ($pegawai_data as $pegawai) {
-                                                                                                        if ($pegawai['id'] === $penerimaan['id_pegawai']) {
-                                                                                                            echo $pegawai['nama'];
-                                                                                                        }
-                                                                                                    } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                            </div>
-                                                            <div class="mb-5 sm:block md:flex items-center">
-                                                                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Ruangan</label>
-                                                                <input type="text" name="" value="<?= $penerimaan['id_ruangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                            </div>
-
-
                                                         </div>
                                                     </div>
-                                                    <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                        <a href="/tambahtagihanmedis/<?= $penerimaan['id'] ?>" class="w-1/5 py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#DA4141] text-white shadow-sm hover:bg-[#E06060] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                                                            Bayar
-                                                        </a>
-
-                                                        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $penerimaan['id'] ?>">
-                                                            Tutup
-                                                        </button>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <tr>
-                                            <td>
-                                                <div class="px-6 py-3">
-                                                    <div class="flex items-center justify-center gap-x-3">
-                                                        <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php $original_date = $penerimaan['tanggal_datang'];
-                                                                                                                                    $day = date("d", strtotime($original_date));
-                                                                                                                                    $month = date("m", strtotime($original_date));
-                                                                                                                                    $year = date("Y", strtotime($original_date));
-
-                                                                                                                                    // Daftar nama bulan dalam bahasa Indonesia
-                                                                                                                                    $bulan = array(
-                                                                                                                                        1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
-                                                                                                                                        7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
-                                                                                                                                    );
-
-                                                                                                                                    // Format tanggal sesuai dengan format yang diinginkan
-                                                                                                                                    $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
-
-                                                                                                                                    echo $formatted_date; ?></span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="px-6 py-3">
-                                                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php $original_jthtempo_date = $penerimaan['tanggal_jthtempo'];
-                                                                                                                                            $day = date("d", strtotime($original_jthtempo_date));
-                                                                                                                                            $month = date("m", strtotime($original_jthtempo_date));
-                                                                                                                                            $year = date("Y", strtotime($original_jthtempo_date));
+                                                <tr>
+                                                    <td>
+                                                        <div class="px-6 py-3">
+                                                            <div class="flex items-center justify-center gap-x-3">
+                                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php $original_date = $penerimaan['tanggal_datang'];
+                                                                                                                                            $day = date("d", strtotime($original_date));
+                                                                                                                                            $month = date("m", strtotime($original_date));
+                                                                                                                                            $year = date("Y", strtotime($original_date));
 
                                                                                                                                             // Daftar nama bulan dalam bahasa Indonesia
                                                                                                                                             $bulan = array(
@@ -288,50 +342,70 @@
                                                                                                                                             );
 
                                                                                                                                             // Format tanggal sesuai dengan format yang diinginkan
-                                                                                                                                            $formatted_jthtempo_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+                                                                                                                                            $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
 
-                                                                                                                                            echo $formatted_jthtempo_date; ?></span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="px-6 py-3">
-                                                    <span class="text-center block text-sm font-semibold cursor-pointer hover:underline text-gray-800 dark:text-gray-200" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $penerimaan['id'] ?>"><?= $penerimaan['no_faktur'] ?? '-' ?></span>
-                                                </div>
-                                            </td>
+                                                                                                                                            echo $formatted_date; ?></span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="px-6 py-3">
+                                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php $original_jthtempo_date = $penerimaan['tanggal_jthtempo'];
+                                                                                                                                                    $day = date("d", strtotime($original_jthtempo_date));
+                                                                                                                                                    $month = date("m", strtotime($original_jthtempo_date));
+                                                                                                                                                    $year = date("Y", strtotime($original_jthtempo_date));
 
-                                            <td>
-                                                <div class="px-6 py-3 text-center">
-                                                    <?php
-                                                    switch ($pengajuan['status_pesanan']) {
-                                                        case '0':
-                                                            echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEF9C3] text-[#A46319] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                                                                                                                    // Daftar nama bulan dalam bahasa Indonesia
+                                                                                                                                                    $bulan = array(
+                                                                                                                                                        1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                                                                        7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                                                                    );
+
+                                                                                                                                                    // Format tanggal sesuai dengan format yang diinginkan
+                                                                                                                                                    $formatted_jthtempo_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+
+                                                                                                                                                    echo $formatted_jthtempo_date; ?></span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="px-6 py-3">
+                                                            <span class="text-center block text-sm font-semibold cursor-pointer hover:underline text-gray-800 dark:text-gray-200" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $penerimaan['id'] ?>"><?= $penerimaan['no_faktur'] ?? '-' ?></span>
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="px-6 py-3 text-center">
+                                                            <?php
+                                                            switch ($pengajuan['status_pesanan']) {
+                                                                case '0':
+                                                                    echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEF9C3] text-[#A46319] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                         <path d="M8.00004 14.6663C11.6819 14.6663 14.6667 11.6816 14.6667 7.99967C14.6667 4.31778 11.6819 1.33301 8.00004 1.33301C4.31814 1.33301 1.33337 4.31778 1.33337 7.99967C1.33337 11.6816 4.31814 14.6663 8.00004 14.6663Z" fill="#A46319"/>
                                                         <path d="M10.4733 10.6202C10.3867 10.6202 10.3 10.6002 10.22 10.5468L8.15334 9.3135C7.64001 9.00684 7.26001 8.3335 7.26001 7.74017V5.00684C7.26001 4.7335 7.48668 4.50684 7.76001 4.50684C8.03334 4.50684 8.26001 4.7335 8.26001 5.00684V7.74017C8.26001 7.98017 8.46001 8.3335 8.66668 8.4535L10.7333 9.68684C10.9733 9.82684 11.0467 10.1335 10.9067 10.3735C10.8067 10.5335 10.64 10.6202 10.4733 10.6202Z" fill="#FEF9C3"/>
                                                         </svg>
                                                             Menunggu Persetujuan
                                                         </span>';
-                                                            break;
-                                                        case '1':
-                                                            echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEE2E2] text-[#991B1B] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                                    break;
+                                                                case '1':
+                                                                    echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEE2E2] text-[#991B1B] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                         <path d="M8.00004 14.6663C11.6819 14.6663 14.6667 11.6816 14.6667 7.99967C14.6667 4.31778 11.6819 1.33301 8.00004 1.33301C4.31814 1.33301 1.33337 4.31778 1.33337 7.99967C1.33337 11.6816 4.31814 14.6663 8.00004 14.6663Z" fill="#991B1B"/>
                                                         <path d="M8.70666 8.00023L10.24 6.4669C10.4333 6.27357 10.4333 5.95357 10.24 5.76023C10.0467 5.5669 9.72666 5.5669 9.53332 5.76023L7.99999 7.29357L6.46666 5.76023C6.27332 5.5669 5.95332 5.5669 5.75999 5.76023C5.56666 5.95357 5.56666 6.27357 5.75999 6.4669L7.29332 8.00023L5.75999 9.53357C5.56666 9.7269 5.56666 10.0469 5.75999 10.2402C5.85999 10.3402 5.98666 10.3869 6.11332 10.3869C6.23999 10.3869 6.36666 10.3402 6.46666 10.2402L7.99999 8.7069L9.53332 10.2402C9.63332 10.3402 9.75999 10.3869 9.88666 10.3869C10.0133 10.3869 10.14 10.3402 10.24 10.2402C10.4333 10.0469 10.4333 9.7269 10.24 9.53357L8.70666 8.00023Z" fill="#FEE2E2"/>
                                                         </svg>
                                                             Pengajuan Ditolak
                                                         </span>';
-                                                            break;
-                                                        case '2':
-                                                            echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#D6F9F3] text-[#13594E] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                                    break;
+                                                                case '2':
+                                                                    echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#D6F9F3] text-[#13594E] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                         <path d="M8.00004 14.6663C11.6819 14.6663 14.6667 11.6816 14.6667 7.99967C14.6667 4.31778 11.6819 1.33301 8.00004 1.33301C4.31814 1.33301 1.33337 4.31778 1.33337 7.99967C1.33337 11.6816 4.31814 14.6663 8.00004 14.6663Z" fill="#13594E"/>
                                                         <path d="M7.05334 10.3867C6.92 10.3867 6.79334 10.3334 6.7 10.2401L4.81333 8.3534C4.62 8.16006 4.62 7.84007 4.81333 7.64673C5.00667 7.4534 5.32667 7.4534 5.52 7.64673L7.05334 9.18007L10.48 5.7534C10.6733 5.56007 10.9933 5.56007 11.1867 5.7534C11.38 5.94673 11.38 6.26673 11.1867 6.46006L7.40667 10.2401C7.31334 10.3334 7.18667 10.3867 7.05334 10.3867Z" fill="#D6F9F3"/>
                                                         </svg>
                                                             Pengajuan Disetujui
                                                         </span>';
-                                                            break;
-                                                        case '3':
-                                                            echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#D4DEFA] text-[#17358B] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                                    break;
+                                                                case '3':
+                                                                    echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#D4DEFA] text-[#17358B] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                         <path d="M14.3334 10.333C14.52 10.333 14.6667 10.4797 14.6667 10.6663V11.333C14.6667 12.4397 13.7734 13.333 12.6667 13.333C12.6667 12.233 11.7667 11.333 10.6667 11.333C9.56671 11.333 8.66671 12.233 8.66671 13.333H7.33337C7.33337 12.233 6.43337 11.333 5.33337 11.333C4.23337 11.333 3.33337 12.233 3.33337 13.333C2.22671 13.333 1.33337 12.4397 1.33337 11.333V9.99967C1.33337 9.63301 1.63337 9.33301 2.00004 9.33301H8.33337C9.25337 9.33301 10 8.58634 10 7.66634V3.99967C10 3.63301 10.3 3.33301 10.6667 3.33301H11.2267C11.7067 3.33301 12.1467 3.59301 12.3867 4.00634L12.8134 4.75301C12.8734 4.85967 12.7934 4.99967 12.6667 4.99967C11.7467 4.99967 11 5.74634 11 6.66634V8.66634C11 9.58634 11.7467 10.333 12.6667 10.333H14.3334Z" fill="#17358B"/>
                                                         <path d="M5.33333 14.6667C6.06971 14.6667 6.66667 14.0697 6.66667 13.3333C6.66667 12.597 6.06971 12 5.33333 12C4.59695 12 4 12.597 4 13.3333C4 14.0697 4.59695 14.6667 5.33333 14.6667Z" fill="#17358B"/>
@@ -344,9 +418,9 @@
                                                         </svg>
                                                     Dalam Pemesanan
                                                 </span>';
-                                                            break;
-                                                        case '4':
-                                                            echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEE2E2] text-[#991B1B] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                                    break;
+                                                                case '4':
+                                                                    echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-semibold bg-[#FEE2E2] text-[#991B1B] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                         <path d="M11.7334 3.54018L7.96669 1.51352C7.56669 1.30018 7.09336 1.30018 6.69336 1.51352L2.93336 3.54018C2.66003 3.69352 2.48669 3.98685 2.48669 4.30685C2.48669 4.63352 2.65336 4.92685 2.93336 5.07352L6.70003 7.10018C6.90003 7.20685 7.12003 7.26018 7.33336 7.26018C7.54669 7.26018 7.77336 7.20685 7.96669 7.10018L11.7334 5.07352C12.0067 4.92685 12.18 4.63352 12.18 4.30685C12.18 3.98685 12.0067 3.69352 11.7334 3.54018Z" fill="#991B1B"/>
                                                         <path d="M6.08004 7.8077L2.58004 6.06104C2.30671 5.92104 2.00004 5.94104 1.74004 6.09437C1.48671 6.25437 1.33337 6.5277 1.33337 6.8277V10.1344C1.33337 10.7077 1.65337 11.221 2.16671 11.481L5.66671 13.2277C5.78671 13.2877 5.92004 13.321 6.05337 13.321C6.20671 13.321 6.36671 13.2744 6.50671 13.1944C6.76004 13.0344 6.91337 12.761 6.91337 12.461V9.15437C6.90671 8.58104 6.58671 8.0677 6.08004 7.8077Z" fill="#991B1B"/>
@@ -356,9 +430,9 @@
                                                         </svg>
                                                     Barang Belum Diterima
                                                 </span>';
-                                                            break;
-                                                        case '5':
-                                                            echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#E9EEFD] text-[#1F46B9] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                                    break;
+                                                                case '5':
+                                                                    echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-semibold bg-[#E9EEFD] text-[#1F46B9] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                         <path d="M13.4734 5.21427L8.34002 8.1876C8.13335 8.3076 7.87335 8.3076 7.66002 8.1876L2.52669 5.21427C2.16002 5.00094 2.06669 4.50094 2.34669 4.1876C2.54002 3.9676 2.76002 3.7876 2.99335 3.66094L6.60669 1.66094C7.38002 1.2276 8.63335 1.2276 9.40669 1.66094L13.02 3.66094C13.2534 3.7876 13.4734 3.97427 13.6667 4.1876C13.9334 4.50094 13.84 5.00094 13.4734 5.21427Z" fill="#1F46B9"/>
                                                         <path d="M7.62003 9.42724V13.9739C7.62003 14.4806 7.10669 14.8139 6.65336 14.5939C5.28003 13.9206 2.96669 12.6606 2.96669 12.6606C2.15336 12.2006 1.48669 11.0406 1.48669 10.0872V6.64724C1.48669 6.12057 2.04003 5.78724 2.49336 6.04724L7.28669 8.82724C7.48669 8.9539 7.62003 9.18057 7.62003 9.42724Z" fill="#1F46B9"/>
@@ -366,91 +440,97 @@
                                                         </svg>
                                                     Barang telah Diterima
                                                 </span>';
-                                                            break;
-                                                        case '6':
-                                                            echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEF9C3] text-[#A46319] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                                    break;
+                                                                case '6':
+                                                                    echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#FEF9C3] text-[#A46319] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                         <path d="M2 2V14.6667L4 13.3333L6 14.6667L8 13.3333L8.86667 13.9067C8.73333 13.52 8.66667 13.1 8.66667 12.6667C8.66708 12.0268 8.82086 11.3964 9.1151 10.8282C9.40935 10.2601 9.83549 9.77073 10.3578 9.40118C10.8801 9.03163 11.4834 8.79267 12.1171 8.70431C12.7509 8.61594 13.3965 8.68077 14 8.89333V2H2ZM11.3333 4.66667V6H4.66667V4.66667H11.3333ZM10 7.33333V8.66667H4.66667V7.33333H10ZM10.3333 12.6667L12.1667 14.6667L15.3333 11.4867L14.56 10.5467L12.1667 12.94L11.1067 11.88L10.3333 12.6667Z" fill="#A46319"/>
                                                         </svg>
                                                     Tagihan belum lunas
                                                 </span>';
-                                                            break;
-                                                        case '7':
-                                                            echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#D6F9F3] text-[#13594E] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                                    break;
+                                                                case '7':
+                                                                    echo '<span class="px-2 py-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-[#D6F9F3] text-[#13594E] rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                         <path d="M10 11.1267V8.66667H11V10.5467L12.6267 11.4867L12.1267 12.3533L10 11.1267ZM2 14.6667V2H14V7.4C14.8267 8.24 15.3333 9.39333 15.3333 10.6667C15.3333 13.2467 13.2467 15.3333 10.6667 15.3333C10.0242 15.3351 9.38844 15.2033 8.79967 14.9462C8.21091 14.6891 7.68205 14.3124 7.24667 13.84L6 14.6667L4 13.3333L2 14.6667ZM6.44667 8.66667C6.68667 8.16667 7 7.71333 7.4 7.33333H4.66667V8.66667H6.44667ZM11.3333 6V4.66667H4.66667V6H11.3333ZM10.6667 14C12.5067 14 14 12.5067 14 10.6667C14 8.82667 12.5067 7.33333 10.6667 7.33333C8.82667 7.33333 7.33333 8.82667 7.33333 10.6667C7.33333 12.5067 8.82667 14 10.6667 14Z" fill="#13594E"/>
                                                         </svg>
                                                         Tagihan telah Dibayar
                                                     </span>';
-                                                            break;
-                                                        default:
-                                                            echo '<span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-[#F1F1F1]">
+                                                                    break;
+                                                                default:
+                                                                    echo '<span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-[#F1F1F1]">
                                                     <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
                                                          Tidak ada status
                                                     </span>';
-                                                            break;
-                                                    }
-                                                    ?>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="pl-6 py-1.5 inline-flex">
-                                                    <div class="pr-3 py-1.5">
-                                                        <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-">
-                                                            Lihat Detail
-                                                        </button>
-                                                    </div>
-                                                    <div class="px-3 py-1.5">
-                                                        <a href="/editpenerimaanmedis/<?= $penerimaan['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                                            Edit
-                                                        </a>
-                                                    </div>
-                                                    <div class="px-3 py-1.5">
-                                                        <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?=$penerimaan['id']?>')" href="#">
-                                                            Hapus
-                                                        </button>
-                                                        <div id="modelConfirm-<?=$penerimaan['id']?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
-                                                            <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
+                                                                    break;
+                                                            }
+                                                            ?>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="pl-6 py-1.5 inline-flex">
+                                                            <div class="pr-3 py-1.5">
+                                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $penerimaan['id'] ?>">
+                                                                    Lihat Detail
+                                                                </button>
+                                                            </div>
+                                                            <div class="px-3 py-1.5">
+                                                                <a href="/editpenerimaanmedis/<?= $penerimaan['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                                    Ubah
+                                                                </a>
+                                                            </div>
+                                                            <div class="px-3 py-1.5">
+                                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $penerimaan['id'] ?>')" href="#">
+                                                                    Hapus
+                                                                </button>
+                                                                <div id="modelConfirm-<?= $penerimaan['id'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                                    <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 
-                                                                <div class="flex justify-end p-2">
-                                                                    <button onclick="closeModal('modelConfirm-<?=$penerimaan['id']?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
-                                                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                                                        </svg>
-                                                                    </button>
-                                                                </div>
+                                                                        <div class="flex justify-end p-2">
+                                                                            <button onclick="closeModal('modelConfirm-<?= $penerimaan['id'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                                                                </svg>
+                                                                            </button>
+                                                                        </div>
 
-                                                                <div class="p-6 pt-0 text-center">
-                                                                    <div class="flex justify-center mb-6"> <!-- Container for SVG, centered -->
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none">
-                                                                            <path d="M8.5 11H40.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                            <path d="M18.5 5H30.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                            <path d="M12.5 17H36.5V40C36.5 41.6569 35.1569 43 33.5 43H15.5C13.8431 43 12.5 41.6569 12.5 40V17Z" fill="#FEE2E2" stroke="#DA4141" stroke-width="4" stroke-linejoin="round" />
-                                                                            <path d="M20.5 25L28.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                            <path d="M28.5 25L20.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                        </svg>
+                                                                        <div class="p-6 pt-0 text-center">
+                                                                            <div class="flex justify-center mb-6"> <!-- Container for SVG, centered -->
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none">
+                                                                                    <path d="M8.5 11H40.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                                    <path d="M18.5 5H30.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                                    <path d="M12.5 17H36.5V40C36.5 41.6569 35.1569 43 33.5 43H15.5C13.8431 43 12.5 41.6569 12.5 40V17Z" fill="#FEE2E2" stroke="#DA4141" stroke-width="4" stroke-linejoin="round" />
+                                                                                    <path d="M20.5 25L28.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                                    <path d="M28.5 25L20.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                                </svg>
+                                                                            </div>
+                                                                            Hapus data
+                                                                            <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin untuk menghapus data ini?</h3>
+                                                                            <form action="/hapuspenerimaanmedis/<?= $penerimaan['id'] ?>" method="POST">
+                                                                                <?= csrf_field() ?>
+                                                                                <div class="w-full sm:flex justify-center">
+                                                                                    <input type="hidden" name="_method" value="DELETE">
+                                                                                    <button onclick="closeModal('modelConfirm-<?= $penerimaan['id'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                                        Hapus
+                                                                                    </button>
+                                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $penerimaan['id'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                                        Batal
+                                                                                    </a>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+
                                                                     </div>
-                                                                    Hapus data
-                                                                    <h3 class="text-xl font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin untuk menghapus data ini?</h3>
-                                                                    <div class="w-full sm:flex justify-center">
-                                                                        <a href="/hapuspenerimaanmedis/<?= $penerimaan['id'] ?>" onclick="closeModal('modelConfirm-<?=$penerimaan['id']?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
-                                                                            Hapus
-                                                                        </a>
-                                                                        <a href="#" onclick="closeModal('modelConfirm-<?=$penerimaan['id']?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-                                                                            Batal
-                                                                        </a>
-                                                                    </div>
                                                                 </div>
-
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </td>
+                                                    </td>
 
-                                        </tr>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
+                                                </tr>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                <?php } ?>
                             <?php endforeach; ?>
 
 

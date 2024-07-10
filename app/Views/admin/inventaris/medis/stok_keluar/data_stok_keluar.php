@@ -66,7 +66,7 @@
 
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Tanggal
                                         </span>
                                     </div>
@@ -74,14 +74,14 @@
 
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             No Keluar
                                         </span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Pegawai
                                         </span>
                                     </div>
@@ -89,7 +89,7 @@
 
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Aksi
                                         </span>
                                     </div>
@@ -117,53 +117,104 @@
                                             </div>
                                             <div class="p-4 overflow-y-auto">
                                                 <div class="space-y-4">
+                                                    <div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor Keluar</label>
+                                                            <input type="text" name="" value="<?= $stok['no_keluar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
 
-                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor Keluar</label>
-                                                        <input type="text" name="" value="<?= $stok['id_pegawai'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Stok Keluar</label>
+                                                            <input type="text" name="" value="<?php
+                                                                                                // Tanggal asli dari data
+                                                                                                $original_date = $stok['tanggal_stok_keluar'];
+
+
+                                                                                                // Format tanggal sebagai dd-Bulan-yyyy (misal: 27 Juni 2024)
+
+                                                                                                // Pisahkan tanggal, bulan, dan tahun dari tanggal asli
+                                                                                                $day = date("d", strtotime($original_date));
+                                                                                                $month = date("m", strtotime($original_date));
+                                                                                                $year = date("Y", strtotime($original_date));
+
+                                                                                                // Daftar nama bulan dalam bahasa Indonesia
+                                                                                                $bulan = array(
+                                                                                                    1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                    7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                );
+
+                                                                                                // Format tanggal sesuai dengan format yang diinginkan
+                                                                                                $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+
+                                                                                                echo $formatted_date;
+
+                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+
+
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Pegawai</label>
+                                                            <input type="text" name="" value="<?php foreach ($pegawai_data as $pegawai) {
+                                                                                                    if ($pegawai['id'] === $stok['id_pegawai']) {
+                                                                                                        echo $pegawai['nama'];
+                                                                                                    }
+                                                                                                } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Keterangan</label>
+                                                            <input type="text" name="" value="<?= $stok['keterangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
                                                     </div>
+                                                    <div class="pt-2 border-t border-[#F1F1F1]">
+                                                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Barang Medis</h3>
+                                                        <div>
 
-                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Stok Keluar</label>
-                                                        <input type="text" name="" value="<?php
-                                                                                            // Tanggal asli dari data
-                                                                                            $original_date = $stok['tanggal_stok_keluar'];
+                                                            <div class="flex items-center justify-between mb-2">
+                                                                <div class="w-1/2">
 
 
-                                                                                            // Format tanggal sebagai dd-Bulan-yyyy (misal: 27 Juni 2024)
+                                                                </div>
+                                                                <div class="flex justify-end w-1/2">
+                                                                    <p class="font-bold mr-2 text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Jumlah keluar</p>
+                                                                </div>
+                                                            </div>
 
-                                                                                            // Pisahkan tanggal, bulan, dan tahun dari tanggal asli
-                                                                                            $day = date("d", strtotime($original_date));
-                                                                                            $month = date("m", strtotime($original_date));
-                                                                                            $year = date("Y", strtotime($original_date));
 
-                                                                                            // Daftar nama bulan dalam bahasa Indonesia
-                                                                                            $bulan = array(
-                                                                                                1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
-                                                                                                7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
-                                                                                            );
 
-                                                                                            // Format tanggal sesuai dengan format yang diinginkan
-                                                                                            $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+                                                            <?php
+                                                            foreach ($transaksi_keluar_data as $transaksi) {
+                                                                if ($transaksi['id_stok_keluar'] === $stok['id']) {
+                                                            ?>
 
-                                                                                            echo $formatted_date;
+                                                                    <div class="flex items-center justify-between">
+                                                                        <div class="w-1/2 font-medium">
+                                                                            <?php foreach ($medis_data as $medis) {
+                                                                                if ($medis['id'] === $transaksi['id_barang_medis']) {
+                                                                                    echo $medis['nama'];
+                                                                                }
+                                                                            } ?>
+                                                                            <br>
+                                                                        </div>
+                                                                        <div class="flex justify-end w-1/2">
+                                                                            <input type="text" name="" value="<?php foreach ($medis_data as $medis) {
+                                                                                                                    if ($medis['id'] === $transaksi['id_barang_medis']) {
+                                                                                                                        foreach ($satuan_data as $satuan) {
+                                                                                                                            if ($medis['satuan'] === $satuan['id']) {
+                                                                                                                                echo $transaksi['jumlah_keluar'] . " " . $satuan['nama'];
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } ?>" class="text-center bg-gray-100 font-[600] text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                        </div>
+                                                                    </div>
 
-                                                                                            ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                    <br>
+
+                                                            <?php }
+                                                            } ?>
+
+                                                        </div>
                                                     </div>
-                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor Keluar</label>
-                                                        <input type="text" name="" value="<?= $stok['no_keluar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Pegawai</label>
-                                                        <input type="text" name="" value="<?php foreach ($pegawai_data as $pegawai) {
-                                                                                                if ($pegawai['id'] === $stok['id_pegawai']) {
-                                                                                                    echo $pegawai['nama'];
-                                                                                                }
-                                                                                            } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
 
 
 
@@ -214,24 +265,24 @@
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
-                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stok['id'] ?>">
+                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stok['id'] ?>">
                                                     Lihat Detail
                                                 </button>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <a href="/editstokkeluarmedis/<?= $stok['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                                    Edit
+                                                <a href="/editstokkeluarmedis/<?= $stok['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                    Ubah
                                                 </a>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?=$stok['id']?>')" href="#">
+                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $stok['id'] ?>')" href="#">
                                                     Hapus
                                                 </button>
-                                                <div id="modelConfirm-<?=$stok['id']?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                <div id="modelConfirm-<?= $stok['id'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
                                                     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 
                                                         <div class="flex justify-end p-2">
-                                                            <button onclick="closeModal('modelConfirm-<?=$stok['id']?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                            <button onclick="closeModal('modelConfirm-<?= $stok['id'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                                                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                                                 </svg>
@@ -249,15 +300,19 @@
                                                                 </svg>
                                                             </div>
                                                             Hapus data
-                                                            <h3 class="text-xl font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin untuk menghapus data ini?</h3>
-                                                            <div class="w-full sm:flex justify-center">
-                                                                <a href="/hapusstokkeluarmedis/<?= $stok['id'] ?>" onclick="closeModal('modelConfirm-<?=$stok['id']?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
-                                                                    Hapus
-                                                                </a>
-                                                                <a href="#" onclick="closeModal('modelConfirm-<?=$stok['id']?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-                                                                    Batal
-                                                                </a>
-                                                            </div>
+                                                            <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin untuk menghapus data ini?</h3>
+                                                            <form action="/hapusstokkeluarmedis/<?= $stok['id'] ?>" method="POST">
+                                                                <?= csrf_field() ?>
+                                                                <div class="w-full sm:flex justify-center">
+                                                                    <input type="hidden" name="_method" value="DELETE">
+                                                                    <button onclick="closeModal('modelConfirm-<?= $stok['id'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                        Hapus
+                                                                    </button>
+                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $stok['id'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                        Batal
+                                                                    </a>
+                                                                </div>
+                                                            </form>
                                                         </div>
 
                                                     </div>

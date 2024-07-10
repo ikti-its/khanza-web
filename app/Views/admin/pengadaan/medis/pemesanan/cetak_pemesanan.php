@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="en">
 
 <head>
@@ -35,7 +34,12 @@
 
     <table class="custom-table">
         <tr>
-            <td valign="top"><img src="resources/150x150.png" /></td>
+            <td valign="top">
+
+
+
+                <img src="<?= base_url('img/logo-omnia-jpg.jpg') ?>" alt="logo">
+            </td>
             <td align="right">
                 <h3>Rumah Sakit</h3>
                 <pre style="margin: 0; white-space: pre-wrap;">
@@ -74,13 +78,16 @@
                 <th>Nama</th>
                 <th>Jumlah</th>
                 <th>Harga Satuan</th>
-                <th>Total</th>
+                <th>Diskon Persen (Jumlah)</th>
+                <th>Subtotal</th>
             </tr>
         </thead>
         <tbody>
             <?php
             $counter = 1;
+            $subtotal = 0;
             foreach ($pesanan_data as $pesanan) {
+                $subtotal += $pesanan['total_per_item'];
                 foreach ($medis_data as $medis) {
                     foreach ($satuan_data as $satuan) {
                         if ($pesanan['id_barang_medis'] === $medis['id'] && $pesanan['satuan'] === $satuan['id']) {
@@ -88,10 +95,11 @@
                             <tr>
 
                                 <th scope="row"><?php echo $counter; ?></th>
-                                <td><?php echo $medis['nama']; ?></td>
-                                <td align="right"><?php echo $pesanan['jumlah_pesanan'] . " " . $satuan['nama'];  ?></td>
-                                <td align="right"><?php echo number_format($pesanan['harga_satuan_pemesanan'], 2); ?></td>
-                                <td align="right"><?php echo number_format($pesanan['total_per_item'], 2); ?></td>
+                                <td align="center"><?php echo $medis['nama']; ?></td>
+                                <td align="center"><?php echo $pesanan['jumlah_pesanan'] . " " . $satuan['nama'];  ?></td>
+                                <td align="center"><?php echo "Rp " . $pesanan['harga_satuan_pemesanan']; ?></td>
+                                <td align="center"><?php echo $pesanan['diskon_persen'] . "(Rp " . $pesanan['diskon_jumlah'] . ")"; ?></td>
+                                <td align="right"><?php echo "Rp " . $pesanan['total_per_item']; ?></td>
 
                             </tr>
             <?php
@@ -101,55 +109,36 @@
                 }
             }
             ?>
-            <!-- <tr>
-                <th scope="row">1</th>
-                <td>Playstation IV - Black</td>
-                <td align="right">1</td>
-                <td align="right">1400.00</td>
-                <td align="right">1400.00</td>
-            </tr>
-            <tr>
-                <th scope="row">1</th>
-                <td>Metal Gear Solid - Phantom</td>
-                <td align="right">1</td>
-                <td align="right">105.00</td>
-                <td align="right">105.00</td>
-            </tr>
-            <tr>
-                <th scope="row">1</th>
-                <td>Final Fantasy XV - Game</td>
-                <td align="right">1</td>
-                <td align="right">130.00</td>
-                <td align="right">130.00</td>
-            </tr> -->
+
         </tbody>
 
         <tfoot>
             <tr>
-                <td colspan="3"></td>
-                <td align="right">Subtotal</td>
-                <td align="right"></td>
-            </tr>
-            <tr>
-                <td colspan="3"></td>
-                <td align="right">Diskon</td>
-                <td align="right"><?= $pemesanan_medis_data['diskon_jumlah'] ?></td>
-            </tr>
-            <tr>
-                <td colspan="3"></td>
-                <td align="right">Pajak</td>
-                <td align="right"><?= $pemesanan_medis_data['pajak_jumlah'] ?></td>
-            </tr>
-            <tr>
-                <td colspan="3"></td>
+                <td colspan="4"></td>
                 <td align="right">Total</td>
+                <td align="right"><?= "Rp" . $subtotal ?></td>
+            </tr>
+
+            <tr>
+                <td colspan="4"></td>
+                <td align="right">Pajak Persen (Jumlah)</td>
+                <td align="right"><?= $pemesanan_medis_data['pajak_persen'] ?>% (<?= $pemesanan_medis_data['pajak_jumlah'] ?>)</td>
+            </tr>
+            <tr>
+                <td colspan="4"></td>
+                <td align="right">Materai</td>
+                <td align="right"><?= "Rp " . $pemesanan_medis_data['materai'] ?></td>
+            </tr>
+            <tr>
+                <td colspan="4"></td>
+                <td align="right">Total Keseluruhan</td>
                 <td align="right" class="gray"><?= $pemesanan_medis_data['total_pemesanan'] ?></td>
             </tr>
 
         </tfoot>
     </table>
 
-    <table>
+    <table style="margin-top:20px;">
         <tr>
             <td>
                 <strong>Catatan:</strong>
@@ -165,7 +154,7 @@
 
     </table>
 
-    <table style="margin-top:5px; width: 100%; ">
+    <table style="margin-top:100px; width: 100%; ">
         <tr>
             <td><strong>Tanggal Cetak:</strong> <?php echo date("d-m-Y"); ?></td>
             <td align="right"><strong>Surabaya, <?php

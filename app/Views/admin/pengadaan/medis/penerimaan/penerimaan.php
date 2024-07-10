@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -12,60 +12,106 @@
 
         </div>
 
-        <form action="/submittambahpenerimaanmedis" id="penerimaanform" method="post">
-            <!-- Grid -->
+        <form action="/submittambahpenerimaanmedis" id="penerimaanform" method="post" onsubmit="return validateForm()">
+        <?= csrf_field() ?>    
+        <!-- Grid -->
             <input type="hidden" value="<?= $pengajuan_data['id'] ?>" name="idpengajuan" class="text-center border mr-1">
-            <input type="hidden" value="<?= $pengajuan_data['tanggal_pengajuan'] ?>" name="tglpengajuan" class="text-center border mr-1">
-            <input type="hidden" value="<?= $pengajuan_data['nomor_pengajuan'] ?>" name="nopengajuan" class="text-center border mr-1">
-            <input type="hidden" value="<?= $pengajuan_data['id_pegawai'] ?>" name="pegawaipengajuan" class="text-center border mr-1">
-            <input type="hidden" value="<?= $pengajuan_data['catatan'] ?>" name="catatanpengajuan" class="text-center border mr-1">
-            <input type="hidden" value="<?= $pengajuan_data['diskon_persen'] ?>" name="diskonpersen" class="text-center border" readonly>
-            <input type="hidden" value="<?= $pengajuan_data['diskon_jumlah'] ?>" name="diskonjumlah" class="w-full border border-gray-300 text-center" readonly>
-            <input type="hidden" value="<?= $pengajuan_data['pajak_persen'] ?>" name="pajakpersen" class=" text-center border" readonly>
-            <input type="hidden" value="<?= $pengajuan_data['pajak_jumlah'] ?>" name="pajakjumlah" class="w-full border border-gray-300 text-center" readonly>
-            <input type="hidden" value="<?= $pengajuan_data['total_pengajuan'] ?>" name="totalpengajuan" class="w-full border border-gray-300 text-center" readonly>
-            <input type="hidden" value="<?= $pengajuan_data['materai'] ?>" name="materai" class="w-full border border-gray-300 text-center" readonly>
 
-            <div class="mb-5 sm:block md:flex items-center">
+            <input type="hidden" name="statuspesanan">
+
+            <div class="sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Pemesanan</label>
                 <input type="hidden" name="idpemesanan" value="<?= $pemesanan_data['id'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                <input type="text" name="" value="<?= $pemesanan_data['no_pemesanan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" name="" value="<?= $pemesanan_data['no_pemesanan'] ?>" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required readonly>
 
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Penerimaan</label>
-                <input type="date" name="tgldatang" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="date" id="tglpenerimaan" name="tglpenerimaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
+            <div id="dateError1" class="mt-2 hidden">
+                <label class="text-sm text-gray-900 dark:text-white md:w-1/4"></label>
+                <div class="flex items-center text-red-500 text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M7 5.25V8.16667" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M7 12.4891H3.465C1.44083 12.4891 0.595001 11.0424 1.575 9.27492L3.395 5.99658L5.11 2.91658C6.14834 1.04408 7.85167 1.04408 8.89 2.91658L10.605 6.00242L12.425 9.28075C13.405 11.0482 12.5533 12.4949 10.535 12.4949H7V12.4891Z" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M6.99707 9.91675H7.00231" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg> Tanggal penerimaan hanya boleh maksimal 1 bulan dari hari ini.
+                </div>
+            </div>
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Faktur</label>
-                <input type="date" name="tglfaktur" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="date" id="tglfaktur" name="tglfaktur" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
+            <div id="dateError2" class="mt-2 hidden">
+                <label class="text-sm text-gray-900 dark:text-white md:w-1/4"></label>
+                <div class="flex items-center text-red-500 text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M7 5.25V8.16667" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M7 12.4891H3.465C1.44083 12.4891 0.595001 11.0424 1.575 9.27492L3.395 5.99658L5.11 2.91658C6.14834 1.04408 7.85167 1.04408 8.89 2.91658L10.605 6.00242L12.425 9.28075C13.405 11.0482 12.5533 12.4949 10.535 12.4949H7V12.4891Z" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M6.99707 9.91675H7.00231" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg> Tanggal faktur hanya boleh maksimal 1 bulan dari hari ini.
+                </div>
+            </div>
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Jatuh Tempo</label>
-                <input type="date" name="tgljatuhtempo" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="date" id="tgljatuhtempo" name="tgljatuhtempo" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
+            <div id="dateError3" class="mt-2 hidden">
+                <label class="text-sm text-gray-900 dark:text-white md:w-1/4"></label>
+                <div class="flex items-center text-red-500 text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M7 5.25V8.16667" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M7 12.4891H3.465C1.44083 12.4891 0.595001 11.0424 1.575 9.27492L3.395 5.99658L5.11 2.91658C6.14834 1.04408 7.85167 1.04408 8.89 2.91658L10.605 6.00242L12.425 9.28075C13.405 11.0482 12.5533 12.4949 10.535 12.4949H7V12.4891Z" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M6.99707 9.91675H7.00231" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg> Tanggal jatuh tempo hanya boleh maksimal 1 bulan dari hari ini.
+                </div>
+            </div>
+
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Faktur</label>
-                <input type="text" name="nofaktur" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" name="nofaktur" value="<?php function generateUniqueNumber($length = 16)
+                                                                {
+                                                                    $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                                                                    $charactersLength = strlen($characters);
+                                                                    $randomString = '';
+
+                                                                    $uniqueLength = $length - 11; 
+
+                                                                    if ($uniqueLength > 0) {
+                                                                        for ($i = 0; $i < $uniqueLength; $i++) {
+                                                                            $randomString .= $characters[rand(0, $charactersLength - 1)];
+                                                                        }
+                                                                    } else {
+                                                                        return "Panjang maksimal terlalu pendek.";
+                                                                    }
+
+                                                                    return $randomString;
+                                                                }
+
+                                                                $tanggalHariIni = date('Ymd');
+
+                                                                $nomorFaktur = "INV" . $tanggalHariIni . generateUniqueNumber();
+                                                                echo $nomorFaktur; ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pegawai</label>
-                <select name="pegawaipenerimaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <select name="pegawaipenerimaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="" selected>-</option>
                     <?php foreach ($pegawai_data as $pegawai) : ?>
                         <option value="<?= $pegawai['id'] ?>"><?= $pegawai['nama'] ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Ruangan</label>
-                <select name="idruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <select name="idruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option selected>-</option>
                     <option value="1000">VIP 1</option>
                     <option value="2000">VIP 2</option>
                     <option value="3000">VVIP 1</option>
                     <option value="4000">VVIP 2</option>
-                    <option value="5000">Gudang</option>
+                    <option value="5000" selected>Gudang</option>
                 </select>
             </div>
 
@@ -80,7 +126,7 @@
 
                                     <col width="10%">
                                     <!-- 38% -->
-                                    <col width="25%">
+                                    <col width="21%">
                                     <col width="15%">
                                     <col width="18%">
                                     <col width="18%">
@@ -104,13 +150,16 @@
                                             <input type="hidden" value="<?= $pesanan['id'] ?>" class="text-center w-full" step="any" name="idpesanan[]" readonly />
                                             <input type="hidden" value="<?= $pesanan['harga_satuan_pengajuan'] ?>" class="text-center w-full" step="any" name="harga_satuan_pengajuan[]" readonly />
                                             <input type="hidden" value="<?= $pesanan['harga_satuan_pemesanan'] ?>" class="text-center w-full" step="any" name="harga_satuan_pemesanan[]" readonly />
+                                            <input type="hidden" value="<?= $pesanan['subtotal_per_item'] ?>" class="text-center w-full" step="any" name="subtotalperitem[]" readonly />
                                             <input type="hidden" value="<?= $pesanan['total_per_item'] ?>" class="text-center w-full" step="any" name="totalperitem[]" readonly />
+                                            <input type="hidden" value="<?= $pesanan['diskon_persen'] ?>" class="text-center w-full" step="any" name="diskonpersenperitem[]" readonly />
+                                            <input type="hidden" value="<?= $pesanan['diskon_jumlah'] ?>" class="text-center w-full" step="any" name="diskonjumlahperitem[]" readonly />
 
                                             <td class="align-middle p-1 text-center">
-                                                <input type="text" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full" step="any" name="jumlah_pesanan[]" readonly />
+                                                <input type="number" min="0" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full" step="any" name="jumlah_pesanan[]" readonly required/>
                                             </td>
                                             <td class="align-middle p-1">
-                                                <input type="hidden" step="any" value="<?= $pesanan['id_barang_medis'] ?>" class="text-center w-full" name="idbrgmedis[]" readonly />
+                                                <input type="hidden" step="any" value="<?= $pesanan['id_barang_medis'] ?>" class="text-center w-full" name="idbrgmedis[]" readonly required/>
                                                 <input type="text" step="any" value="<?php foreach ($medis_data as $medis) {
                                                                                             if ($medis['id'] === $pesanan['id_barang_medis']) {
                                                                                                 echo $medis['nama'];
@@ -119,7 +168,7 @@
 
                                             </td>
                                             <td class="align-middle p-1">
-                                                <input type="hidden" step="any" value="<?= $pesanan['satuan'] ?>" class="text-center w-full" name="satuan[]" readonly />
+                                                <input type="hidden" step="any" value="<?= $pesanan['satuan'] ?>" class="text-center w-full" name="satuan[]" readonly required/>
                                                 <input type="text" step="any" value="<?php foreach ($satuan_data as $satuan) {
                                                                                             if ($satuan['id'] === $pesanan['satuan']) {
                                                                                                 echo $satuan['nama'];
@@ -129,10 +178,10 @@
                                             </td>
 
                                             <td class="align-middle p-1 text-center">
-                                                <input type="text" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="jumlah_diterima[]" />
+                                                <input type="number" min="1" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="jumlah_diterima[]" required />
                                             </td>
                                             <td class="align-middle p-1 text-center">
-                                                <input type="date" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="kadaluwarsa[]" />
+                                                <input type="date" value="0001-01-01" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="kadaluwarsa[]" />
                                             </td>
                                             <td class="align-middle p-1 text-center">
                                                 <input type="text" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="no_batch[]" />
@@ -153,10 +202,10 @@
 
             </div>
             <div class="mt-5 flex justify-end gap-x-2">
-                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Batal
-                </button>
-                <button type="submit" name="statuspesanan" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                <a href="javascript:history.back()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    Kembali
+                </a>
+                <button type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     Simpan
                 </button>
             </div>
@@ -173,11 +222,7 @@
         const jumlahPesananInputs = document.querySelectorAll('.tabelbodypesanan input[name="jumlah_pesanan[]"]');
         const jumlahDiterimaInputs = document.querySelectorAll('.tabelbodypesanan input[name="jumlah_diterima[]"]');
 
-        // Check if both arrays have the same length
-        // if (jumlahPesananInputs.length !== jumlahDiterimaInputs.length) {
-        //     console.error("Number of 'jumlah_pesanan[]' inputs doesn't match number of 'jumlah_diterima[]' inputs.");
-        //     return; // Exit the function
-        // }
+
 
         let allMatch = true;
 
@@ -190,8 +235,88 @@
             }
         });
 
-        const submitButton = document.querySelector('button[name="statuspesanan"]');
-        submitButton.value = allMatch ? '5' : '4';
+        const statuspesanan = document.querySelector('input[name="statuspesanan"]');
+        statuspesanan.value = allMatch ? '5' : '4';
     });
+
+    // Function to validate each date input
+    document.getElementById('tglpenerimaan').addEventListener('input', function() {
+        validateDate('tglpenerimaan', 'dateError1');
+    });
+
+    document.getElementById('tglfaktur').addEventListener('input', function() {
+        validateDate('tglfaktur', 'dateError2');
+    });
+
+    document.getElementById('tgljatuhtempo').addEventListener('input', function() {
+        validateDate('tgljatuhtempo', 'dateError3');
+    });
+
+    function validateDate(inputId, errorId) {
+        var inputElement = document.getElementById(inputId);
+        var errorElement = document.getElementById(errorId);
+        var selectedDate = new Date(inputElement.value);
+        var maxDate = new Date();
+        maxDate.setDate(maxDate.getDate() - 30);
+        maxDate.setHours(0, 0, 0, 0);
+
+        if (selectedDate <= maxDate) {
+            inputElement.classList.add('border-red-500');
+            errorElement.classList.remove('hidden');
+            errorElement.classList.add('flex', 'items-center');
+        } else {
+            inputElement.classList.remove('border-red-500');
+            errorElement.classList.add('hidden');
+            errorElement.classList.remove('flex', 'items-center');
+        }
+    }
+
+    function validateForm() {
+        var isValid = true;
+
+        var inputs = [{
+                id: 'tglpenerimaan',
+                errorId: 'dateError1',
+                namaTanggal: 'Penerimaan',
+            },
+            {
+                id: 'tglfaktur',
+                errorId: 'dateError2',
+                namaTanggal: 'Faktur',
+            },
+            {
+                id: 'tgljatuhtempo',
+                errorId: 'dateError3',
+                namaTanggal: 'Jatuh Tempo',
+            }
+        ];
+
+        inputs.forEach(function(input) {
+            var inputElement = document.getElementById(input.id);
+            var errorElement = document.getElementById(input.errorId);
+            var selectedDate = new Date(inputElement.value);
+            var maxDate = new Date();
+            maxDate.setDate(maxDate.getDate() - 30);
+            maxDate.setHours(0, 0, 0, 0);
+
+            if (selectedDate <= maxDate) {
+                inputElement.classList.add('border-red-500');
+                errorElement.classList.remove('hidden');
+                errorElement.classList.add('flex', 'items-center');
+                alert("Tanggal " + input.namaTanggal + " maksimal 1 bulan sebelum dari hari ini.");
+                isValid = false;
+            } else {
+                inputElement.classList.remove('border-red-500');
+                errorElement.classList.add('hidden');
+                errorElement.classList.remove('flex', 'items-center');
+            }
+        });
+        if (isValid) {
+            var submitButton = document.getElementById('submitButton');
+            submitButton.setAttribute('disabled', true);
+            submitButton.innerHTML = 'Menyimpan...';
+        }
+        return isValid;
+    }
 </script>
 <?= $this->endSection(); ?>

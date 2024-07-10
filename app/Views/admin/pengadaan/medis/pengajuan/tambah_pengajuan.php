@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -13,28 +13,62 @@
         </div>
 
         <form action="/submittambahpengajuanmedis" id="myForm" method="post" onsubmit="return validateForm()">
-            <div class="mb-5 sm:block md:flex items-center">
+            <?= csrf_field() ?>
+            <input type="hidden" value="0" name="status">
+            <div class="sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Pengajuan</label>
-                <input type="text" name="nopengajuan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" name="nopengajuan" value="<?php function generateUniqueNumber($length = 16)
+                                                                {
+                                                                    $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                                                                    $charactersLength = strlen($characters);
+                                                                    $randomString = '';
+
+                                                                    $uniqueLength = $length - 11; 
+
+                                                                    if ($uniqueLength > 0) {
+                                                                        for ($i = 0; $i < $uniqueLength; $i++) {
+                                                                            $randomString .= $characters[rand(0, $charactersLength - 1)];
+                                                                        }
+                                                                    } else {
+                                                                        return "Panjang maksimal terlalu pendek.";
+                                                                    }
+
+                                                                    return $randomString;
+                                                                }
+
+                                                                $tanggalHariIni = date('Ymd');
+
+                                                                $nomorPengajuan = "PBM" . $tanggalHariIni . generateUniqueNumber();
+                                                                echo $nomorPengajuan; ?>" class="border bg-[#F6F6F6] text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" readonly>
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Pengajuan</label>
-                <input type="date" id="tglpengajuan" name="tglpengajuan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                <span id="dateError" class="text-red-500 text-sm hidden">Tanggal pengajuan harus hari ini atau setelah hari ini.</span>
+                <input type="date" id="tglpengajuan" name="tglpengajuan" class="border border-gray-300 text-gray-900 text-sm rounded-lg  p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+            </div>
+            <div id="dateError" class="mt-2 hidden">
+                <label class="text-sm text-gray-900 dark:text-white md:w-1/4"></label>
+                <div class="flex items-center text-red-500 text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M7 5.25V8.16667" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M7 12.4891H3.465C1.44083 12.4891 0.595001 11.0424 1.575 9.27492L3.395 5.99658L5.11 2.91658C6.14834 1.04408 7.85167 1.04408 8.89 2.91658L10.605 6.00242L12.425 9.28075C13.405 11.0482 12.5533 12.4949 10.535 12.4949H7V12.4891Z" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M6.99707 9.91675H7.00231" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg> Tanggal pengajuan harus hari ini atau setelah hari ini.
+                </div>
             </div>
 
-            <div class="mb-5 sm:block md:flex items-center">
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pegawai</label>
-                <select name="pegawai" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <select name="pegawai" class="border border-gray-300 text-gray-900 text-sm rounded-lg  p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="">-</option>
                     <?php foreach ($pegawai_data as $pegawai) : ?>
                         <option value="<?= $pegawai['id'] ?>"><?= $pegawai['nama'] ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
+            <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Catatan</label>
-                <input type="text" name="catatan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" name="catatan" class="border border-gray-300 text-gray-900 text-sm rounded-lg  p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <!-- Grid -->
             <!-- <input name="statusapoteker" type="hidden" value="Ditolak">
@@ -72,13 +106,13 @@
                                         <col width="20%">
                                     </colgroup>
                                     <thead class="bg-[#DCDCDC]">
-                                        <tr class="bg-navy disabled">
+                                        <tr>
                                             <th class="px-1 py-1 text-center"></th>
-                                            <th class="px-1 py-1 font-gilroy-regular text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Jumlah</th>
-                                            <th class="px-1 py-1 font-gilroy-regular text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Barang</th>
-                                            <th class="px-1 py-1 font-gilroy-regular text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Satuan</th>
-                                            <th class="px-1 py-1 font-gilroy-regular text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Harga Pengajuan</th>
-                                            <th class="px-1 py-1 font-gilroy-regular text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Total</th>
+                                            <th class="px-1 py-1 text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Jumlah</th>
+                                            <th class="px-1 py-1 text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Barang</th>
+                                            <th class="px-1 py-1 text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Satuan</th>
+                                            <th class="px-1 py-1 text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Harga Pengajuan</th>
+                                            <th class="px-1 py-1 text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
@@ -92,10 +126,10 @@
                                                 </button>
                                             </td>
                                             <td class="align-middle p-1 text-center">
-                                                <input type="number" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" step="any" name="jumlah_pesanan[]" />
+                                                <input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" step="any" name="jumlah_pesanan[]" />
                                             </td>
                                             <td class="align-middle p-1">
-                                                <select name="idbrgmedis[]" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center">
+                                                <select name="idbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" required>
                                                     <option value="" selected></option>
                                                     <?php foreach ($barang_medis as $brgmedis) : ?>
                                                         <option value="<?= $brgmedis['id'] ?>" data-harga="<?= $brgmedis['harga'] ?>"><?= $brgmedis['nama'] ?></option>
@@ -103,7 +137,7 @@
                                                 </select>
                                             </td>
                                             <td class="align-middle p-1">
-                                                <select name="satuanbrgmedis[]" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center">
+                                                <select name="satuanbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center">
                                                     <option value="" selected></option>
                                                     <?php foreach ($satuan_data as $satuan) : ?>
                                                         <option value="<?= $satuan['id'] ?>"><?= $satuan['nama'] ?></option>
@@ -111,45 +145,45 @@
                                                 </select>
                                             </td>
                                             <td class="align-middle p-1">
-                                                <input type="text" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="harga_satuan_pengajuan[]" />
+                                                <input type="number" min="0" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" name="harga_satuan_pengajuan[]" />
                                             </td>
                                             <td class="align-middle p-1 text-right">
-                                                <input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="totalperitem[]" readonly />
+                                                <input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center w-full border" name="subtotalperitem[]" readonly />
                                             </td>
                                         </tr>
 
                                     </tbody>
                                     <tfoot>
-                                        <tr class="pt-5">
+                                        <!-- <tr class="pt-5">
                                             <th class="p-1 pt-2" style="text-align: right;" colspan="5">
 
                                                 Diskon (%)
-                                                <input type="number" step="any" name="diskonpersen" class="border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" style="width: 20%;">
+                                                <input type="number" min="0" step="any" name="diskonpersen" class="border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" style="width: 20%;">
                                             </th>
 
                                             <th class="p-1 pt-2 text-right">
-                                                <input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="diskonjumlah">
+                                                <input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center" name="diskonjumlah" readonly>
                                             </th>
                                         </tr>
 
                                         <tr>
                                             <th class="p-1" style="text-align: right;" colspan="5">Pajak (%)
-                                                <input type="number" step="any" name="pajakpersen" class="border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" style="width: 20%;">
+                                                <input type="number" min="0" step="any" name="pajakpersen" class="border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" style="width: 20%;">
                                             </th>
 
                                             <th class="p-1 text-right">
-                                                <input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="pajakjumlah">
+                                                <input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center" name="pajakjumlah" readonly>
                                             </th>
                                         </tr>
                                         <tr>
                                             <th class="p-1" style="text-align: right;" colspan="5">Materai</th>
                                             <th class="p-1 text-right">
-                                                <input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="materai">
+                                                <input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" name="materai">
                                             </th>
-                                        </tr>
+                                        </tr> -->
                                         <tr>
-                                            <th class="p-1" style="text-align: right;" colspan="5">Total</th>
-                                            <th class="p-1"><input type="text" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center" name="totalkeseluruhan" disabled></th>
+                                            <th class="p-1" style="text-align: right;" colspan="5">Total Keseluruhan</th>
+                                            <th class="p-1"><input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center" name="totalkeseluruhan" readonly></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -161,10 +195,10 @@
 
             </div>
             <div class="mt-5 flex justify-end gap-x-2">
-                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                    Batal
-                </button>
-                <button type="submit" value="0" name="status" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                <a href="javascript:history.back()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    Kembali
+                </a>
+                <button type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     Simpan
                 </button>
             </div>
@@ -179,7 +213,7 @@
 <script>
     var jumlahPesananInputs = document.querySelectorAll('input[name="jumlah_pesanan[]"]');
     var hargaSatuanPengajuanInputs = document.querySelectorAll('input[name="harga_satuan_pengajuan[]"]');
-    var totalInputs = document.querySelectorAll('input[name="totalperitem[]"]');
+    var totalInputs = document.querySelectorAll('input[name="subtotalperitem[]"]');
     var totalKeseluruhanInputs = document.querySelector('input[name="totalkeseluruhan"]');
     var diskonPersenInput = document.querySelector('input[name="diskonpersen"]');
     var diskonJumlahInput = document.querySelector('input[name="diskonjumlah"]');
@@ -191,35 +225,7 @@
         var jumlahPesanan = jumlahPesananInputs[index].value || 0;
         var hargaSatuanPengajuan = hargaSatuanPengajuanInputs[index].value || 0;
         var total = jumlahPesanan * hargaSatuanPengajuan;
-        totalInputs[index].value = total.toFixed(1); // Atur jumlah desimal yang diinginkan
-
-        hitungDiskon();
-        hitungPajak();
-        hitungTotalKeseluruhan();
-    }
-
-    function hitungDiskon() {
-        var totalSemua = 0;
-        totalInputs.forEach(function(input) {
-            totalSemua += parseFloat(input.value) || 0;
-        });
-
-        var diskonPersen = parseFloat(diskonPersenInput.value) || 0;
-        var diskonJumlah = totalSemua * (diskonPersen / 100);
-        diskonJumlahInput.value = diskonJumlah.toFixed(1);
-
-        hitungTotalKeseluruhan();
-    }
-
-    function hitungPajak() {
-        var totalSemua = 0;
-        totalInputs.forEach(function(input) {
-            totalSemua += parseFloat(input.value) || 0;
-        });
-
-        var pajakPersen = parseFloat(pajakPersenInput.value) || 0;
-        var pajakJumlah = totalSemua * (pajakPersen / 100);
-        pajakJumlahInput.value = pajakJumlah.toFixed(1);
+        totalInputs[index].value = total.toFixed(0); // Atur jumlah desimal yang diinginkan
 
         hitungTotalKeseluruhan();
     }
@@ -236,17 +242,6 @@
         });
     });
 
-    diskonPersenInput.addEventListener('input', function() {
-        hitungDiskon();
-    });
-
-    pajakPersenInput.addEventListener('input', function() {
-        hitungPajak();
-    });
-
-    materaiInput.addEventListener('input', function() {
-        hitungTotalKeseluruhan();
-    });
 
     function hitungTotalKeseluruhan() {
         var totalSemua = 0;
@@ -254,15 +249,8 @@
             totalSemua += parseFloat(input.value) || 0;
         });
 
-        var diskonPersen = parseFloat(diskonPersenInput.value) || 0;
-        var diskonJumlah = totalSemua * (diskonPersen / 100);
-
-        var pajakPersen = parseFloat(pajakPersenInput.value) || 0;
-        var pajakJumlah = totalSemua * (pajakPersen / 100);
-
-        var materai = parseFloat(materaiInput.value) || 0;
-        var totalKeseluruhan = totalSemua - diskonJumlah + pajakJumlah + materai;
-        totalKeseluruhanInputs.value = totalKeseluruhan.toFixed(1);
+        var totalKeseluruhan = totalSemua;
+        totalKeseluruhanInputs.value = totalKeseluruhan.toFixed(0);
     }
 
     // Fungsi untuk mengecek duplikat saat perubahan
@@ -289,10 +277,10 @@
             '</button>' +
             '</td>' +
             '<td class="align-middle p-1 text-center">' +
-            '<input type="number" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" step="any" name="jumlah_pesanan[]" />' +
+            '<input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" step="any" name="jumlah_pesanan[]" />' +
             '</td>' +
             '<td class="align-middle p-1">' +
-            '<select name="idbrgmedis[]" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center">' +
+            '<select name="idbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" required>' +
             '<option value="" selected></option>' +
             '<?php foreach ($barang_medis as $brgmedis) : ?>' +
             '<option value="<?= $brgmedis['id'] ?>" data-harga="<?= $brgmedis['harga'] ?>"><?= $brgmedis['nama'] ?></option>' +
@@ -300,7 +288,7 @@
             '</select>' +
             '</td>' +
             '<td class="align-middle p-1">' +
-            '<select name="satuanbrgmedis[]" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center">' +
+            '<select name="satuanbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center">' +
             '<option value="" selected></option>' +
             '<?php foreach ($satuan_data as $satuan) : ?>' +
             '<option value="<?= $satuan['id'] ?>"><?= $satuan['nama'] ?></option>' +
@@ -308,10 +296,10 @@
             '</select>' +
             '</td>' +
             '<td class="align-middle p-1">' +
-            '<input type="text" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="harga_satuan_pengajuan[]" />' +
+            '<input type="text" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" name="harga_satuan_pengajuan[]" />' +
             '</td>' +
             '<td class="align-middle p-1 text-right">' +
-            '<input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-center w-full border" name="totalperitem[]" readonly />' +
+            '<input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center w-full border" name="subtotalperitem[]" readonly />' +
             '</td>' +
             '</tr>';
         document.getElementById('item-list').getElementsByTagName('tbody')[0].insertAdjacentHTML('beforeend', newRow);
@@ -319,7 +307,7 @@
         // Perbarui variabel setelah menambah baris baru
         jumlahPesananInputs = document.querySelectorAll('input[name="jumlah_pesanan[]"]');
         hargaSatuanPengajuanInputs = document.querySelectorAll('input[name="harga_satuan_pengajuan[]"]');
-        totalInputs = document.querySelectorAll('input[name="totalperitem[]"]');
+        totalInputs = document.querySelectorAll('input[name="subtotalperitem[]"]');
 
         // Tambahkan event listener untuk setiap input jumlah_pesanan[] dan harga_satuan_pengajuan[] yang baru
         jumlahPesananInputs.forEach(function(input, index) {
@@ -371,10 +359,10 @@
         var today = new Date();
         today.setHours(0, 0, 0, 0); // Clear the time part
 
-        if (selectedDate < today) {
+        if (selectedDate <= today) {
             tglpengajuanInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
-            dateError.classList.add('block');
+            dateError.classList.add('flex', 'items-center');
         } else {
             tglpengajuanInput.classList.remove('border-red-500');
             dateError.classList.add('hidden');
@@ -389,14 +377,17 @@
         var today = new Date();
         today.setHours(0, 0, 0, 0); // Clear the time part
 
-        if (selectedDate < today) {
+        if (selectedDate <= today) {
             tglpengajuanInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('block');
             alert("Tanggal pengajuan harus hari ini atau setelah hari ini.");
             return false;
         }
-
+        var submitButton = document.getElementById('submitButton');
+        submitButton.setAttribute('disabled', true);
+        // Ubah teks tombol menjadi sesuatu yang menunjukkan proses sedang berlangsung, misalnya "Menyimpan..."
+        submitButton.innerHTML = 'Menyimpan...';
         return true;
     }
 </script>
