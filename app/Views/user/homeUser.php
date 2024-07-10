@@ -58,7 +58,7 @@
                     </h2>
                 </div>
 
-                <form>
+                <form >
                     <!-- Grid -->
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
 
@@ -158,7 +158,7 @@
                 </div>
 
 
-                <form action="/submiteditprofil/<?= $akun_data['akun'] ?>" method="post">
+                <form action="/submiteditprofil/<?= $akun_data['akun'] ?>" method="post" onsubmit="return validateForm()">
                     <!-- Grid -->
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
 
@@ -270,7 +270,7 @@
                         <a href="javascript:history.back()" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
                             Batal
                         </a>
-                        <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-teal-900 text-teal-100 hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
+                        <button type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-teal-900 text-teal-100 hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
                             Simpan
                         </button>
                     </div>
@@ -429,6 +429,12 @@
 }
 
 
+    }
+
+    function validateForm() {
+        var submitButton = document.getElementById('submitButton');
+        submitButton.setAttribute('disabled', true);
+        submitButton.innerHTML = 'Menyimpan...';
     }
 </script>
 

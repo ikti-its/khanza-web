@@ -37,12 +37,12 @@
                 </div>
                 <p class="text-gray-700 text-center">Wajah Anda berhasil dikenali. Silakan lanjutkan.</p>
             </div>
-            <form action="/submittambahabsenmasuk" method="POST">
+            <form action="/submittambahabsenmasuk" method="POST" onsubmit="return validateForm()">
                 <div class="px-6 py-4 bg-gray-100 text-right">
                     <a href="javascript:history.back()" class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
                         Batal
                     </a>
-                    <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
+                    <button type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
 
                         Lanjutkan
                     </button>
@@ -211,6 +211,13 @@
             startWebcam(); // Start webcam after loading descriptors
         }).catch(err => console.error('Error loading labeled face descriptors:', err));
     }).catch(err => console.error('Error loading face detection models:', err));
+
+
+    function validateForm() {
+        var submitButton = document.getElementById('submitButton');
+        submitButton.setAttribute('disabled', true);
+        submitButton.innerHTML = 'Mengajukan...';
+    }
 </script>
 
 <?= $this->endSection(); ?>

@@ -53,7 +53,7 @@
                                 <a href="javascript:history.back()" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-basic-modal">
                                     Batal
                                 </a>
-                                <form id="photo-form" action="/submittambahabsenswafoto" method="post" enctype="multipart/form-data">
+                                <form id="photo-form" action="/submittambahabsenswafoto" method="post" enctype="multipart/form-data" onsubmit="return validateForm()" >
                                     <button id="save-changes-btn" type="submit" class="flex-1 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
                                         Simpan
                                     </button>
@@ -212,6 +212,12 @@
             }).catch(err => console.error('Error loading labeled face descriptors:', err));
         }).catch(err => console.error('Error loading face detection models:', err));
     });
+
+    function validateForm() {
+        var submitButton = document.getElementById('save-changes-btn');
+        submitButton.setAttribute('disabled', true);
+        submitButton.innerHTML = 'Mengajukan...';
+    }
 </script>
 
 <?= $this->endSection(); ?>
