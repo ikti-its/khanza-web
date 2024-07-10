@@ -317,7 +317,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                                <a href="/tambahtagihanmedis/<?= $penerimaan['id'] ?>" class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#0A2D27] text-[#ACF2E7] shadow-sm hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                                                <a href="/tagihanmedis/tambah/<?= $penerimaan['id'] ?>" class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#0A2D27] text-[#ACF2E7] shadow-sm hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
                                                                     Lanjutkan Pembayaran
                                                                 </a>
 
@@ -475,7 +475,7 @@
                                                                 </button>
                                                             </div>
                                                             <div class="px-3 py-1.5">
-                                                                <a href="/editpenerimaanmedis/<?= $penerimaan['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                                <a href="/penerimaanmedis/edit/<?= $penerimaan['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                                     Ubah
                                                                 </a>
                                                             </div>
@@ -506,7 +506,7 @@
                                                                             </div>
                                                                             Hapus data
                                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin untuk menghapus data ini?</h3>
-                                                                            <form action="/hapuspenerimaanmedis/<?= $penerimaan['id'] ?>" method="POST">
+                                                                            <form action="/penerimaanmedis/hapus/<?= $penerimaan['id'] ?>" method="POST">
                                                                                 <?= csrf_field() ?>
                                                                                 <div class="w-full sm:flex justify-center">
                                                                                     <input type="hidden" name="_method" value="DELETE">

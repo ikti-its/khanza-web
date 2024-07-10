@@ -7,13 +7,14 @@
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Edit Pengajuan Barang Medis
+                Ubah Pengajuan Barang Medis
             </h2>
 
         </div>
 
-        <form action="/submiteditpengajuanmedis/<?= $pengajuanId ?>" method="post" onsubmit="return validateForm()">
-        <?= csrf_field() ?>    
+        <form action="/pengajuanmedis/submitedit/<?= $pengajuanId ?>" method="post" onsubmit="return validateForm()">
+        <?= csrf_field() ?> 
+        <input type="hidden" name="status" value="<?= $pengajuan_data['status_pesanan'] ?>">   
             <!-- Grid -->
             <div class="sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Pengajuan</label>

@@ -190,7 +190,7 @@ class PersetujuanController extends BaseController
                 if ($response_persetujuan) {
                     $http_status_code_persetujuan = curl_getinfo($ch_persetujuan, CURLINFO_HTTP_CODE);
                     if ($http_status_code_persetujuan === 200) {
-                        return redirect()->to(base_url('persetujuanpengadaan'));
+                        return redirect()->to(base_url('persetujuanpengajuan'));
                         // $ch_pengajuan = curl_init($pengajuan_url);
 
                         // curl_setopt($ch_pengajuan, CURLOPT_RETURNTRANSFER, true);

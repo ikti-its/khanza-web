@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use DateTime;
 
 class PenerimaanController extends BaseController
 {
@@ -373,9 +374,7 @@ class PenerimaanController extends BaseController
             $jumlah_pesanan = $this->request->getPost('jumlah_pesanan');
             $jumlah_diterima = $this->request->getPost('jumlah_diterima');
             $kadaluwarsa = $this->request->getPost('kadaluwarsa');
-            if ($kadaluwarsa === null) {
-                $kadaluwarsaformat = 0001 - 01 - 01;
-            }
+
             $no_batch = $this->request->getPost('no_batch');
 
             $idpemesanan = $this->request->getPost('idpemesanan');
@@ -408,6 +407,11 @@ class PenerimaanController extends BaseController
 
                 for ($i = 0; $i < count($idbrgmedis); $i++) {
                     $pesanan_url = $this->api_url . '/pengadaan/pesanan/' . $idpesanan[$i];
+                    if ($kadaluwarsa[$i] === "") {
+                        $kadaluwarsaformat[$i] = '0001-01-01';
+                    } else {
+                        $kadaluwarsaformat[$i] = $kadaluwarsa[$i]; // Gunakan nilai $kadaluwarsa yang sudah ada
+                    }
                     $postDataPesanan = [
                         'id_pengajuan' => $idpengajuan,
                         'id_barang_medis' => $idbrgmedis[$i],
@@ -512,7 +516,7 @@ class PenerimaanController extends BaseController
                         }
                     } else {
                         curl_close($ch_pesanan); // Tutup session cURL untuk pesanan_url di sini
-                        return "Error Update Pesanan: " . $response;
+                        return "Error Update Pesanan: " . $response . $tambah_pesanan_JSON;
                     }
                 } else {
                     curl_close($ch_pesanan); // Tutup session cURL untuk pesanan_url di sini
@@ -716,7 +720,11 @@ class PenerimaanController extends BaseController
                     $http_status_code_penerimaan = curl_getinfo($ch_penerimaan, CURLINFO_HTTP_CODE);
                     if ($http_status_code_penerimaan === 200) {
                         for ($i = 0; $i < count($idbrgmedis); $i++) {
-
+                            if ($kadaluwarsa[$i] === "") {
+                                $kadaluwarsaformat[$i] = '0001-01-01';
+                            } else {
+                                $kadaluwarsaformat[$i] = $kadaluwarsa[$i]; // Gunakan nilai $kadaluwarsa yang sudah ada
+                            }
                             $pesanan_url = $this->api_url . '/pengadaan/pesanan/' . $idpesanan[$i];
                             $postDataPesanan = [
                                 'id_pengajuan' => $idpengajuan,
@@ -730,7 +738,7 @@ class PenerimaanController extends BaseController
                                 'jumlah_pesanan' => intval($jumlah_pesanan[$i]),
                                 'jumlah_diterima' => intval($jumlah_diterima[$i]),
                                 'subtotal_per_item' => intval($subtotalperitem[$i]),
-                                'kadaluwarsa' => $kadaluwarsa[$i],
+                                'kadaluwarsa' => $kadaluwarsaformat[$i],
                                 'no_batch' => $no_batch[$i]
                             ];
                             $tambah_pesanan_JSON = json_encode($postDataPesanan);

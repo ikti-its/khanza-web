@@ -1217,6 +1217,14 @@ input[type="number"]::-webkit-inner-spin-button,
   width: 100%;
 }
 
+.w-\[90\%\] {
+  width: 90%;
+}
+
+.w-1\/4 {
+  width: 25%;
+}
+
 .min-w-60 {
   min-width: 15rem;
 }

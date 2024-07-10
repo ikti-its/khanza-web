@@ -12,7 +12,7 @@
 
         </div>
 
-        <form action="/submittambahpengajuanmedis" id="myForm" method="post" onsubmit="return validateForm()">
+        <form action="/pengajuanmedis/submittambah" id="myForm" method="post" onsubmit="return validateForm()">
             <?= csrf_field() ?>
             <input type="hidden" value="0" name="status">
             <div class="sm:block md:flex items-center">

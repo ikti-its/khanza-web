@@ -12,7 +12,7 @@
 
         </div>
 
-        <form action="/submittambahpemesananmedis" method="post" onsubmit="return validateForm()">
+        <form action="/pemesananmedis/submittambah" method="post" onsubmit="return validateForm()">
         <?= csrf_field() ?>   
         <input type="hidden" value="3" name="statuspesanan">
             <!-- Grid -->

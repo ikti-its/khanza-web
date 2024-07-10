@@ -528,20 +528,13 @@ class PengajuanController extends BaseController
             if (session()->has('jwt_token')) {
                 $token = session()->get('jwt_token');
 
-                $ch_pengajuan = curl_init($pengajuan_url);
-                curl_setopt($ch_pengajuan, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch_pengajuan, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer ' . $token,
-                ]);
-                $response_pengajuan = curl_exec($ch_pengajuan);
-                $pengajuan_data = json_decode($response_pengajuan, true);
                 $putDataPengajuan = [
-                    'tanggal_pengajuan' => $pengajuan_data['data']['tanggal_pengajuan'],
-                    'nomor_pengajuan' => $pengajuan_data['data']['nomor_pengajuan'],
-                    'id_pegawai' => $pengajuan_data['data']['id_pegawai'],
-                    'total_pengajuan' => $pengajuan_data['data']['total_pengajuan'],
-                    'catatan' => $pengajuan_data['data']['catatan'],
-                    'status_pesanan' => $pengajuan_data['data']['status_pesanan'],
+                    'tanggal_pengajuan' => $tglpengajuan,
+                    'nomor_pengajuan' => $nopengajuan,
+                    'id_pegawai' => $pegawai,
+                    'total_pengajuan' => $totalkeseluruhan,
+                    'catatan' => $catatan,
+                    'status_pesanan' => $status,
                 ];
 
                 $update_pengajuan_JSON = json_encode($putDataPengajuan);

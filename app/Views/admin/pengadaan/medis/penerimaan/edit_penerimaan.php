@@ -7,11 +7,11 @@
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Edit Penerimaan Barang Medis
+                Ubah Penerimaan Barang Medis
             </h2>
         </div>
 
-        <form action="/submiteditpenerimaanmedis/<?= $penerimaan_data['id'] ?>" id="penerimaanform" method="post" onsubmit="return validateForm()">
+        <form action="/penerimaanmedis/submitedit/<?= $penerimaan_data['id'] ?>" id="penerimaanform" method="post" onsubmit="return validateForm()">
         <?= csrf_field() ?>  
         <!-- Grid -->
             <input type="hidden" value="<?= $penerimaan_data['id_pengajuan'] ?>" name="idpengajuan" class="w-full border border-gray-300 text-center" readonly>
@@ -173,7 +173,7 @@
                                                 <input type="number" min="0" value="<?= $pesanan['jumlah_diterima'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="jumlah_diterima[]" required/>
                                             </td>
                                             <td class="align-middle p-1 text-center">
-                                                <input type="date" value="<?= $pesanan['kadaluwarsa'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="kadaluwarsa[]" />
+                                                <input type="date" value="" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="kadaluwarsa[]" />
                                             </td>
                                             <td class="align-middle p-1 text-center">
                                                 <input type="text" value="<?= $pesanan['no_batch'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="no_batch[]" />

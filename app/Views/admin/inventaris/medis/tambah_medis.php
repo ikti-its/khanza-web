@@ -12,11 +12,11 @@
 
         </div>
 
-        <form action="/submittambahmedis" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="/datamedis/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
         <?= csrf_field() ?>   
         <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis</label>
-                <select id="jenis" name="jenisbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <select id="jenis" name="jenisbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="" selected>-</option>
                     <option value="Obat">Obat</option>
                     <option value="Alat Kesehatan">Alat Kesehatan</option>
@@ -26,7 +26,7 @@
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama</label>
-                <input type="text" name="nama" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="text" name="nama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="50" required>
             </div>
 
 
@@ -34,21 +34,21 @@
             <div class="additionalInputObat hidden">
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Industri Farmasi</label>
-                    <select name="industrifarmasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <option selected>-</option>
+                    <select name="industrifarmasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                        <option value=""selected>-</option>
                         <option value="1000">Kalbe Farma</option>
                     </select>
                 </div>
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kandungan</label>
-                    <input type="text" name="kandungan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <input type="text" name="kandungan" value="-" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="100" required>
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Isi</label>
-                    <input type="text" name="" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="text" name="isi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" maxlength="3" >
                     <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Satuan Besar</label>
-                    <select name="satuanobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="satuanobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php foreach ($satuan_data as $satuan) : ?>
                             <option value="<?= $satuan['id'] ?>"><?= $satuan['nama'] ?></option>
                         <?php endforeach; ?>
@@ -57,9 +57,9 @@
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kapasitas</label>
-                    <input type="text" name="" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="text" name="kapasitas" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" maxlength="3" >
                     <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Satuan Kecil</label>
-                    <select name="satkecil" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="satkecil" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php foreach ($satuan_data as $satuan) : ?>
                             <option value="<?= $satuan['id'] ?>"><?= $satuan['nama'] ?></option>
                         <?php endforeach; ?>
@@ -67,8 +67,8 @@
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis</label>
-                    <select name="jenisobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <option selected>-</option>
+                    <select name="jenisobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                        <option value="1" selected>-</option>
                         <option value="1000">Obat Oral</option>
                         <option value="2000">Obat Topikal</option>
                         <option value="3000">Obat Injeksi</option>
@@ -77,8 +77,8 @@
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kategori</label>
-                    <select name="kategoriobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <option selected>-</option>
+                    <select name="kategoriobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                        <option value="1" selected>-</option>
                         <option value="1000">Obat Paten</option>
                         <option value="2000">Obat Generik</option>
                         <option value="3000">Obat Merek</option>
@@ -88,8 +88,8 @@
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Golongan</label>
-                    <select name="golonganobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <option selected>-</option>
+                    <select name="golonganobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                        <option value="1" selected>-</option>
                         <option value="1000">Analgesik</option>
                         <option value="2000">Antibiotik</option>
                         <option value="3000">Antijamur</option>
@@ -98,14 +98,14 @@
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
-                    <input type="date" name="kadaluwarsaobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="date" name="kadaluwarsaobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
             </div>
 
             <div class="additionalInputAlkes hidden">
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
-                    <select name="satuanalkes" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="satuanalkes" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php foreach ($satuan_data as $satuan) : ?>
                             <option value="<?= $satuan['id'] ?>"><?= $satuan['nama'] ?></option>
                         <?php endforeach; ?>
@@ -114,7 +114,7 @@
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Merek</label>
-                    <select name="merekalkes" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="merekalkes" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <option value="" selected>-</option>
                         <?php
                         $companies = array('Omron', 'Philips', 'GE Healthcare', 'Siemens Healthineers', 'Medtronic', 'Johnson & Johnson', 'Becton', 'Dickinson and Company (BD)', 'Stryker', 'Boston Scientific', 'Olympus Corporation', 'Roche Diagnostics');
@@ -127,12 +127,12 @@
             <div class="additionalInputBHP hidden">
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah</label>
-                    <input type="text" name="jumlahbhp" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="text" name="jumlahbhp" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="3">
                 </div>
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
-                    <select name="satuanbhp" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="satuanbhp" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php foreach ($satuan_data as $satuan) : ?>
                             <option value="<?= $satuan['id'] ?>"><?= $satuan['nama'] ?></option>
                         <?php endforeach; ?>
@@ -140,14 +140,14 @@
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
-                    <input type="date" name="kadaluwarsabhp" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="date" name="kadaluwarsabhp" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
             </div>
 
             <div class="additionalInputDarah hidden">
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
-                    <select name="satuandarah" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="satuandarah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php foreach ($satuan_data as $satuan) : ?>
                             <option value="<?= $satuan['id'] ?>"><?= $satuan['nama'] ?></option>
                         <?php endforeach; ?>
@@ -155,7 +155,7 @@
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Darah</label>
-                    <select name="jenisdarah" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    <select name="jenisdarah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
                         <option value="" selected>-</option>
                         <option value="Whole Blood (WB)">Whole Blood (WB)</option>
                         <option value="Packed Red Cell (PRC)">Packed Red Cell (PRC)</option>
@@ -165,25 +165,25 @@
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Keterangan</label>
-                    <input type="text" name="keterangandarah" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="text" name="keterangandarah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="100">
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
-                    <input type="date" name="kadaluwarsadarah" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="date" name="kadaluwarsadarah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Harga</label>
-                <input type="number" name="harga" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="number" name="harga" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Stok</label>
-                <input type="number" name="stok" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="number" name="stok" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="4">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa (hari)</label>
-                <input type="number" name="notifkadaluwarsa" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="number" name="notifkadaluwarsa" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 <div class="hs-tooltip [--trigger:hover] [--placement:right] inline-block">
                     <button type="button" class="hs-tooltip-toggle flex justify-center items-center size-10 text-sm font-semibold rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
                         <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -197,13 +197,13 @@
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Stok minimum</label>
-                <input type="number" name="stokminimum" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="number" name="stokminimum" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <div class="mt-5 pt-5 border-t flex justify-end gap-x-2">
                 <a href="javascript:history.back()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     Kembali
                 </a>
-                <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                <button type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     Simpan
                 </button>
             </div>
@@ -283,10 +283,14 @@
         var requiredFields = document.querySelectorAll('select[required], input[required]');
         for (var i = 0; i < requiredFields.length; i++) {
             if (!requiredFields[i].value) {
-                alert("Please fill all required fields.");
+                alert("Isi semua field.");
                 return false;
             }
         }
+        var submitButton = document.getElementById('submitButton');
+        submitButton.setAttribute('disabled', true);
+        // Ubah teks tombol menjadi sesuatu yang menunjukkan proses sedang berlangsung, misalnya "Menyimpan..."
+        submitButton.innerHTML = 'Menyimpan...';
         return true;
     }
 </script>

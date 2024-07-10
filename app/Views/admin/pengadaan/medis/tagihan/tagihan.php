@@ -11,7 +11,7 @@
             </h2>
         </div>
 
-        <form action="/submittambahtagihanmedis" method="post" onsubmit="return validateForm()">
+        <form action="/tagihanmedis/submittambah" method="post" onsubmit="return validateForm()">
             <!-- Grid -->
             <input type="hidden" value="<?= $penerimaan_data['id_pengajuan'] ?>" name="idpengajuan" class="text-center border mr-1 w-[20%]">
             <input type="hidden" value="<?= $penerimaan_data['id_pemesanan'] ?>" name="idpemesanan" class="text-center border mr-1 w-[20%]">

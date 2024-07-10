@@ -7,12 +7,12 @@
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Edit Stok Keluar Barang Medis
+                Ubah Stok Keluar Barang Medis
             </h2>
 
         </div>
 
-        <form action="/submiteditstokkeluarmedis/<?= $stok_keluar_data['id'] ?>" id="formId" method="post">
+        <form action="/stokkeluarmedis/submitedit/<?= $stok_keluar_data['id'] ?>" id="formId" method="post">
             <input type="hidden" name="idstokkeluar" value="<?= $stok_keluar_data['id'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             <!-- Grid -->
             <div class="mb-5 sm:block md:flex items-center">

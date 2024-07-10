@@ -17,7 +17,7 @@
 
                         </div>
                         <div>
-                            <a href='/tambahpengajuanmedis' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                            <a href='/pengajuanmedis/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                 <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
                                     <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                 </svg>
@@ -26,7 +26,7 @@
                         </div>
                     </div>
 
-                    <form href="/pengajuanmedis" class="max-w-md" method="POST">
+                    <!-- <form href="/pengajuanmedis" class="max-w-md" method="POST">
                         <label for="hs-as-table-product-review-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -39,7 +39,7 @@
                                                                         } ?>" name="search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search..." />
                             <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
                         </div>
-                    </form>
+                    </form> -->
 
                     <div class="py-4 grid gap-3 md:items-start">
                         <div class="sm:col-span-1">
@@ -232,7 +232,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex justify-end items-center gap-x-2 py-3 px-4 w-full border-t dark:border-neutral-700">
-                                                    <a href="/tambahpemesananmedis/<?= $pengajuan['id'] ?>" class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#0A2D27] text-[#ACF2E7] shadow-sm hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                                    <a href="/pemesananmedis/tambah/<?= $pengajuan['id'] ?>" class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#0A2D27] text-[#ACF2E7] shadow-sm hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
                                                         Lanjutkan Pemesanan
                                                     </a>
 
@@ -303,7 +303,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="px-3 py-1.5">
-                                                    <a href="/editpengajuanmedis/<?= $pengajuan['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                    <a href="/pengajuanmedis/edit/<?= $pengajuan['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                         Ubah
                                                     </a>
                                                 </div>
@@ -337,7 +337,7 @@
                                                                 Hapus data
                                                                 <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                     untuk menghapus data ini?</h3>
-                                                                <form action="/hapuspengajuanmedis/<?= $pengajuan['id'] ?>" method="POST">
+                                                                <form action="/pengajuanmedis/hapus/<?= $pengajuan['id'] ?>" method="POST">
                                                                     <?= csrf_field() ?>
                                                                     <div class="w-full sm:flex justify-center">
                                                                         <input type="hidden" name="_method" value="DELETE">

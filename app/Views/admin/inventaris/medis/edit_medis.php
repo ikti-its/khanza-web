@@ -7,14 +7,14 @@
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Edit Data Barang Medis
+                Ubah Data Barang Medis
             </h2>
 
         </div>
 
-        <form action="/submiteditmedis/<?= $medis_data['id'] ?>" method="post">
-        <?= csrf_field() ?>   
-        <input name="idbrgmedis" value="<?= $medis_data['id'] ?>" type="hidden">
+        <form action="/datamedis/submitedit/<?= $medis_data['id'] ?>" onsubmit="return validateForm()" method="post">
+            <?= csrf_field() ?>
+            <input name="idbrgmedis" value="<?= $medis_data['id'] ?>" type="hidden">
             <input name="idjenisbrgmedis" value="<?= $jenis_data['id'] ?>" type="hidden">
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -59,7 +59,7 @@
                         foreach ($satuan_data as $satuan) {
                             $optionsatuan = [$satuan['id'] => $satuan['nama']];
                             foreach ($optionsatuan as $satuanid => $satuannama) {
-                                if ($satuanid === $jenis_data['satuan']) {
+                                if ($satuanid === $medis_data['satuan']) {
                                     echo '<option value="' . $satuan['id'] . '" selected>' . $satuan['nama'] . '</option>';
                                 } else {
                                     echo '<option value="' . $satuan['id'] . '">' . $satuan['nama'] . '</option>';
@@ -94,6 +94,7 @@
                     <select name="jenisobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         $optionsjenis = [
+                            "1" => "-",
                             "1000" => "Obat Oral",
                             "2000" => "Obat Topikal",
                             "3000" => "Obat Injeksi",
@@ -115,6 +116,7 @@
                     <select name="kategoriobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         $optionskategori = [
+                            "1" => "-",
                             "1000" => "Obat Paten",
                             "2000" => "Obat Generik",
                             "3000" => "Obat Merek",
@@ -137,6 +139,7 @@
                     <select name="golonganobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         $optionsgolongan = [
+                            "1" => "-",
                             "1000" => "Analgesik",
                             "2000" => "Antibiotik",
                             "3000" => "Antijamur",
@@ -162,6 +165,8 @@
                     <input type="number" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
             <?php elseif ($medis_data['jenis'] === 'Alat Kesehatan') : ?>
+                <input type="hidden" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
                     <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
@@ -200,10 +205,9 @@
                         ?>
                     </select>
                 </div>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa</label>
-                    <input type="number" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                </div>
+
+
+
             <?php elseif ($medis_data['jenis'] === 'Bahan Habis Pakai') : ?>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah</label>
@@ -312,7 +316,7 @@
                 <a href="javascript:history.back()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     Kembali
                 </a>
-                <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                <button type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     Simpan
                 </button>
             </div>
@@ -321,5 +325,13 @@
     <!-- End Card -->
 </div>
 <!-- End Card Section -->
-
+<script>
+    function validateForm() {
+        var submitButton = document.getElementById('submitButton');
+        submitButton.setAttribute('disabled', true);
+        // Ubah teks tombol menjadi sesuatu yang menunjukkan proses sedang berlangsung, misalnya "Menyimpan..."
+        submitButton.innerHTML = 'Menyimpan...';
+        return true;
+    }
+</script>
 <?= $this->endSection(); ?>

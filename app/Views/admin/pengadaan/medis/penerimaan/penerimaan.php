@@ -12,7 +12,7 @@
 
         </div>
 
-        <form action="/submittambahpenerimaanmedis" id="penerimaanform" method="post" onsubmit="return validateForm()">
+        <form action="/penerimaanmedis/submittambah" id="penerimaanform" method="post" onsubmit="return validateForm()">
         <?= csrf_field() ?>    
         <!-- Grid -->
             <input type="hidden" value="<?= $pengajuan_data['id'] ?>" name="idpengajuan" class="text-center border mr-1">
@@ -181,7 +181,7 @@
                                                 <input type="number" min="1" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="jumlah_diterima[]" required />
                                             </td>
                                             <td class="align-middle p-1 text-center">
-                                                <input type="date" value="0001-01-01" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="kadaluwarsa[]" />
+                                                <input type="date" value="" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="kadaluwarsa[]" />
                                             </td>
                                             <td class="align-middle p-1 text-center">
                                                 <input type="text" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="no_batch[]" />

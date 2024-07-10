@@ -7,11 +7,11 @@
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Edit Pemesanan Barang Medis
+                Ubah Pemesanan Barang Medis
             </h2>
         </div>
 
-        <form action="/submiteditpemesananmedis/<?= $pemesanan_data['id'] ?>" method="post" onsubmit="return validateForm()">
+        <form action="/pemesananmedis/submitedit/<?= $pemesanan_data['id'] ?>" method="post" onsubmit="return validateForm()">
         <?= csrf_field() ?>   
         <input type="hidden" value="3" name="status">
             <!-- Grid -->

@@ -113,7 +113,7 @@
 
                             // Data awal untuk chart doughnut
                             $dataBaru = [
-                                'labels' => ["Barang Belum Diterima Sepenuhnya", "Barang Telah Diterima", "Tagihan Belum Lunas", "Tagihan Telah Dibayar"],
+                                'labels' => ["Barang Belum Diterima Sepenuhnya", "Barang Telah Diterima", "Tagihan Belum Lunas", "Tagihan Telah Dibayar", "Tidak ada data"],
                                 'datasets' => [
                                     [
                                         'label' => "Total",

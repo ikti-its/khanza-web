@@ -221,7 +221,7 @@
 
 
                                             <td>
-                                                <form action="/submitpersetujuan/<?= $persetujuan['id_pengajuan'] ?>" method="POST">
+                                                <form action="/persetujuanpengajuan/submit/<?= $persetujuan['id_pengajuan'] ?>" method="POST">
                                                     <div class="pl-6 py-1.5 inline-flex">
                                                         <div class="pr-3 py-1.5">
                                                             <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-">
@@ -409,7 +409,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="flex justify-center items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                            <form action="/submitpersetujuan/<?= $pengajuan['id'] ?>" method="POST">
+                                                            <form action="/persetujuanpengajuan/submit/<?= $pengajuan['id'] ?>" method="POST">
                                                                 <?php
                                                                 foreach ($persetujuan_data as $p) {
                                                                     if ($p['id_pengajuan'] === $pengajuan['id']) {
@@ -459,7 +459,7 @@
                         <nav class="flex w-full justify-between items-center gap-x-1">
                             <!-- Previous Button -->
                             <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/persetujuanpengadaan?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/persetujuanpengajuan?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
                                     <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="m15 18-6-6 6-6"></path>
                                     </svg>
@@ -477,25 +477,25 @@
 
                                 if ($total_pages <= $show_items) {
                                     for ($i = 1; $i <= $total_pages; $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/persetujuanpengadaan?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/persetujuanpengajuan?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
                                     }
                                 } else {
                                     if ($current_page > $range + 1) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/persetujuanpengadaan?page=1&size=' . $meta_data['size'] . '\'">1</button>';
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/persetujuanpengajuan?page=1&size=' . $meta_data['size'] . '\'">1</button>';
                                         if ($current_page > $range + 2) {
                                             echo '<span class="py-2 px-3 text-sm">...</span>';
                                         }
                                     }
 
                                     for ($i = max($current_page - $range, 1); $i <= min($current_page + $range, $total_pages); $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/persetujuanpengadaan?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/persetujuanpengajuan?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
                                     }
 
                                     if ($current_page < $total_pages - $range - 1) {
                                         if ($current_page < $total_pages - $range - 2) {
                                             echo '<span class="py-2 px-3 text-sm">...</span>';
                                         }
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/persetujuanpengadaan?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/persetujuanpengajuan?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
                                     }
                                 }
                                 ?>
@@ -503,7 +503,7 @@
 
                             <!-- Next Button -->
                             <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/persetujuanpengadaan?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/persetujuanpengajuan?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
                                     <span aria-hidden="true" class="hidden sm:block">Next</span>
                                     <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="m9 18 6-6-6-6"></path>
