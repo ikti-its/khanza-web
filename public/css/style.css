@@ -1550,6 +1550,11 @@ html {
   background-color: rgb(254 249 195 / var(--tw-bg-opacity));
 }
 
+.bg-blue-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
@@ -2013,6 +2018,11 @@ html {
   color: rgb(234 179 8 / var(--tw-text-opacity));
 }
 
+.text-green-500 {
+  --tw-text-opacity: 1;
+  color: rgb(34 197 94 / var(--tw-text-opacity));
+}
+
 .decoration-2 {
   text-decoration-thickness: 2px;
 }
@@ -2321,6 +2331,11 @@ html {
 .hover\:bg-teal-900:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(19 78 74 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-blue-600:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
 }
 
 .hover\:text-black:hover {
@@ -2990,8 +3005,8 @@ html {
     height: 14rem;
   }
 
-  .sm\:h-96 {
-    height: 24rem;
+  .sm\:h-72 {
+    height: 18rem;
   }
 
   .sm\:w-auto {
@@ -3099,8 +3114,8 @@ html {
     height: 3rem;
   }
 
-  .md\:h-96 {
-    height: 24rem;
+  .md\:h-72 {
+    height: 18rem;
   }
 
   .md\:w-auto {

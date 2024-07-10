@@ -28,6 +28,8 @@ class Filters extends BaseConfig
         'noauth' => \App\Filters\NoAuth::class,
         'noauth2' => \App\Filters\NoAuth::class,
         'ijin' => \App\Filters\Ijin::class,
+        'checkFotoData' => \App\Filters\CheckFotoData::class,
+      
     ];
 
     /**

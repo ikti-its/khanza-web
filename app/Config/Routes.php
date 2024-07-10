@@ -37,7 +37,7 @@ $routes->get('/lihatstatuscuti', 'userAdminController::lihatStatusCuti', ['filte
 $routes->post('/submiteditstatuscuti/(:segment)', 'userAdminController::submitEditStatusCuti/$1', ['filter' => 'auth']);
 
 $routes->get('/kehadiranmanual', 'userPegawaiController::LihatAbsen', ['filter' => 'auth']);
-$routes->get('/absenmasuk/(:segment)', 'userPegawaiController::LihatAbsenMasuk/$1', ['filter' => 'auth']);
+$routes->get('/absenmasuk/(:segment)', 'userPegawaiController::LihatAbsenMasuk/$1', ['filter' => 'checkFotoData']);
 $routes->post('/submittambahabsenmasuk', 'userPegawaiController::submitTambahAbsenMasuk', ['filter' => 'auth']);
 
 $routes->post('/submittambahabsenswafoto', 'userPegawaiController::submitPresensiSwafoto', ['filter' => 'auth']);
@@ -49,6 +49,8 @@ $routes->post('/submittambahabsenpulang', 'userPegawaiController::submitTambahAb
 $routes->get('/admin', 'authController::dashboard', ['filter' => 'auth']);
 $routes->post('/admin', 'authController::login', ['filter' => 'noauth']);
 
+
+$routes->post('/setFaceRecognized', 'FaceRecognition::setFaceRecognized');
 
 // $routes->set404Override('App\Controllers\ErrorController::show404');
 

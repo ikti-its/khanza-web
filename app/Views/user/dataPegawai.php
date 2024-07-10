@@ -67,7 +67,7 @@
                                     <!-- End Grid -->
 
                                     <!-- Grid -->
-                                    <div class="grid md:grid-cols-2 gap-2 lg:h-60 sm:h-96 md:h-96"> <!-- Adjusted height here -->
+                                    <div class="grid md:grid-cols-2 gap-2 lg:h-60 sm:h-72 md:h-72"> <!-- Adjusted height here -->
                                         <div>
                                             <div class="grid space-y-2">
                                                 <div class="grid sm:flex gap-x-2 text-xs">
@@ -100,8 +100,14 @@
                                                             Alamat
                                                         </label>
 
+                                                        <?php
+                                                        $alamat = $ketersediaanEntry['alamat'] ?? 'N/A';
+                                                        $parts = explode(',', $alamat);
+                                                        $shortenedAlamat = count($parts) > 1 ? $parts[0] . ', ' . $parts[1] : $alamat;
+                                                        ?>
+
                                                         <div class="mt-2 space-y-3">
-                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $ketersediaanEntry['alamat'] ?? 'N/A' ?></div>
+                                                            <div id="af-payment-billing-contact" class="py-1 pe-11 block w-full font-medium border-gray-200 rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name"><?= $shortenedAlamat ?></div>
                                                         </div>
                                                     </div>
                                                 </div>

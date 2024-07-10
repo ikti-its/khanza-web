@@ -327,93 +327,107 @@
         }
 
         if (!map2Initialized) {
-            // Get latitude and longitude from PHP variable
-            var latLng = '<?= ($akun_data['alamat_lat'] ?? '') . ', ' . ($akun_data['alamat_lon'] ?? '') ?>';
-            var latLngArray = latLng.split(',').map(function(item) {
-                return parseFloat(item);
-            });
+    // Get latitude and longitude from PHP variable
+    var latLng = '<?= ($akun_data['alamat_lat'] ?? '') . ', ' . ($akun_data['alamat_lon'] ?? '') ?>';
+    var latLngArray = latLng.split(',').map(function(item) {
+        return parseFloat(item);
+    });
 
-            // If latitude and longitude are valid
-            if (!isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
-                // Create a LatLng object
-                var myLatLng = {
-                    lat: latLngArray[0],
-                    lng: latLngArray[1]
-                };
+    // If latitude and longitude are valid
+    if (!isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
+        // Create a LatLng object
+        var myLatLng = {
+            lat: latLngArray[0],
+            lng: latLngArray[1]
+        };
 
-                // Create a new map object
-                var map = new google.maps.Map(document.getElementById('map2'), {
-                    zoom: 12, // Set the initial zoom level
-                    center: myLatLng // Center the map on the specified location
-                });
+        // Create a new map object
+        var map = new google.maps.Map(document.getElementById('map2'), {
+            zoom: 12, // Set the initial zoom level
+            center: myLatLng // Center the map on the specified location
+        });
 
-                // Add a marker to the map
-                var marker = new google.maps.Marker({
-                    position: myLatLng,
-                    map: map,
-                    title: 'Your Location'
-                });
+        // Add a marker to the map
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Your Location',
+            draggable: true // Make the marker draggable
+        });
 
-                // Add click event listener to the "Edit Location" button
-                document.getElementById('edit-location-btn').addEventListener('click', function() {
-                    // Request the user's current location
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function(position) {
-                            var userLatLng = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude
-                            };
+        // Add click event listener to the "Edit Location" button
+        document.getElementById('edit-location-btn').addEventListener('click', function() {
+            // Request the user's current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLatLng = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
 
-                            // Center the map to the user's current location
-                            map.setCenter(userLatLng);
-                            map.setZoom(15);
+                    // Center the map to the user's current location
+                    map.setCenter(userLatLng);
+                    map.setZoom(15);
 
-                            // Remove previous marker
-                            if (marker) {
-                                marker.setMap(null);
+                    // Update the marker position
+                    marker.setPosition(userLatLng);
+
+                    // Update the input field with the new coordinates
+                    document.getElementById('af-account-alamat-lat').value = userLatLng.lat;
+                    document.getElementById('af-account-alamat-lon').value = userLatLng.lng;
+
+                    // Reverse geocode using OpenStreetMap Nominatim API
+                    var apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLatLng.lat}&lon=${userLatLng.lng}`;
+
+                    fetch(apiUrl)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.display_name) {
+                                // Set the location name to the input field
+                                document.getElementById('af-account-alamat-edit').value = data.display_name;
+                            } else {
+                                console.error('Error: No address found.');
                             }
-
-                            // Add a new marker to the map
-                            marker = new google.maps.Marker({
-                                position: userLatLng,
-                                map: map,
-                                title: 'Your Location'
-                            });
-
-                            // Update the input field with the new coordinates
-                            document.getElementById('af-account-alamat-lat').value = userLatLng.lat;
-                            document.getElementById('af-account-alamat-lon').value = userLatLng.lng;
-
-                            // Reverse geocode using OpenStreetMap Nominatim API
-                            var apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLatLng.lat}&lon=${userLatLng.lng}`;
-
-                            fetch(apiUrl)
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.display_name) {
-                                        // Set the location name to the input field
-                                        document.getElementById('af-account-alamat-edit').value = data.display_name;
-                                    } else {
-                                        console.error('Error: No address found.');
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error fetching address:', error);
-                                });
-
-
-
-                        }, function() {
-                            alert('Error: The Geolocation service failed.');
+                        })
+                        .catch(error => {
+                            console.error('Error fetching address:', error);
                         });
-                    } else {
-                        alert('Error: Your browser doesn\'t support Geolocation.');
-                    }
+                }, function() {
+                    alert('Error: The Geolocation service failed.');
                 });
+            } else {
+                alert('Error: Your browser doesn\'t support Geolocation.');
             }
+        });
 
-            map2Initialized = true;
-        }
+        // Event listener for when marker position changes
+        google.maps.event.addListener(marker, 'dragend', function(event) {
+            // Update the input fields with new coordinates
+            document.getElementById('af-account-alamat-lat').value = event.latLng.lat();
+            document.getElementById('af-account-alamat-lon').value = event.latLng.lng();
+
+            // Reverse geocode using OpenStreetMap Nominatim API for new marker position
+            var apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${event.latLng.lat()}&lon=${event.latLng.lng()}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        // Set the location name to the input field
+                        document.getElementById('af-account-alamat-edit').value = data.display_name;
+                    } else {
+                        console.error('Error: No address found.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching address:', error);
+                });
+        });
+    }
+
+    map2Initialized = true;
+}
+
 
     }
 </script>
