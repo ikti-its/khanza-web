@@ -167,7 +167,6 @@ class authController extends BaseController
                             }
                         }
 
-                        // Redirect to user dashboard
                         return redirect()->to('/dashboard')->with('title', $title, 'user_details', $user_details);
                     } else {
                         // Failed to get user details

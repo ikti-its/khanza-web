@@ -53,7 +53,7 @@
                                 <a href="javascript:history.back()" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-basic-modal">
                                     Batal
                                 </a>
-                                <form id="photo-form" action="/submittambahabsenswafoto" method="post" enctype="multipart/form-data" onsubmit="return validateForm()" >
+                                <form id="photo-form" action="/submittambahabsenswafoto" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                                     <button id="save-changes-btn" type="submit" class="flex-1 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
                                         Simpan
                                     </button>
@@ -107,18 +107,16 @@
                     canvas.height = displaySize.height;
                     faceapi.matchDimensions(canvas, displaySize);
 
-                    // Interval to continuously detect faces and draw results
                     setInterval(async () => {
                         const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors();
                         const resizedDetections = faceapi.resizeResults(detections, displaySize);
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
                         faceapi.draw.drawDetections(canvas, resizedDetections);
 
-                        if (labeledFaceDescriptors) {
+                        if (resizedDetections.length > 0) {
                             const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4);
                             const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor));
 
-                            // Assuming `results` is your array of face recognition results
                             results.forEach(async (result, index) => {
                                 const box = resizedDetections[index].detection.box;
                                 const text = result.toString();
@@ -127,7 +125,6 @@
                                 });
                                 drawBox.draw(canvas);
 
-                                // Check if recognized face matches namaPegawai
                                 if (result.label === namaPegawai) {
                                     captureButton.disabled = false; // Enable the capture button
                                     console.log('Recognized face matches namaPegawai');
@@ -136,9 +133,12 @@
                                     console.log('Recognized face does not match namaPegawai');
                                 }
                             });
-
+                        } else {
+                            captureButton.disabled = true; // Disable if no faces detected
+                            console.log('No faces detected');
                         }
                     }, 100);
+
                 });
             })
             .catch(function(err) {
