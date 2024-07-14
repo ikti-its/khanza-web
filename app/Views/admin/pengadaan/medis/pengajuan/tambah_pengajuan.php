@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -23,7 +23,7 @@
                                                                     $charactersLength = strlen($characters);
                                                                     $randomString = '';
 
-                                                                    $uniqueLength = $length - 11; 
+                                                                    $uniqueLength = $length - 11;
 
                                                                     if ($uniqueLength > 0) {
                                                                         for ($i = 0; $i < $uniqueLength; $i++) {
@@ -53,7 +53,7 @@
                         <path d="M7 5.25V8.16667" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M7 12.4891H3.465C1.44083 12.4891 0.595001 11.0424 1.575 9.27492L3.395 5.99658L5.11 2.91658C6.14834 1.04408 7.85167 1.04408 8.89 2.91658L10.605 6.00242L12.425 9.28075C13.405 11.0482 12.5533 12.4949 10.535 12.4949H7V12.4891Z" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M6.99707 9.91675H7.00231" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg> Tanggal pengajuan harus hari ini atau setelah hari ini.
+                    </svg> Tanggal pengajuan hanya diperbolehkan tanggal hari ini.
                 </div>
             </div>
 
@@ -126,7 +126,7 @@
                                                 </button>
                                             </td>
                                             <td class="align-middle p-1 text-center">
-                                                <input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" step="any" name="jumlah_pesanan[]" />
+                                                <input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" step="any" name="jumlah_pesanan[]" required/>
                                             </td>
                                             <td class="align-middle p-1">
                                                 <select name="idbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" required>
@@ -137,7 +137,7 @@
                                                 </select>
                                             </td>
                                             <td class="align-middle p-1">
-                                                <select name="satuanbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center">
+                                                <select name="satuanbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" required>
                                                     <option value="" selected></option>
                                                     <?php foreach ($satuan_data as $satuan) : ?>
                                                         <option value="<?= $satuan['id'] ?>"><?= $satuan['nama'] ?></option>
@@ -145,45 +145,19 @@
                                                 </select>
                                             </td>
                                             <td class="align-middle p-1">
-                                                <input type="number" min="0" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" name="harga_satuan_pengajuan[]" />
+                                                <input type="number" min="0" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" name="harga_satuan_pengajuan[]" required/>
                                             </td>
                                             <td class="align-middle p-1 text-right">
-                                                <input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center w-full border" name="subtotalperitem[]" readonly />
+                                                <input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center w-full border" name="subtotalperitem[]" readonly required/>
                                             </td>
                                         </tr>
 
                                     </tbody>
                                     <tfoot>
-                                        <!-- <tr class="pt-5">
-                                            <th class="p-1 pt-2" style="text-align: right;" colspan="5">
 
-                                                Diskon (%)
-                                                <input type="number" min="0" step="any" name="diskonpersen" class="border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" style="width: 20%;">
-                                            </th>
-
-                                            <th class="p-1 pt-2 text-right">
-                                                <input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center" name="diskonjumlah" readonly>
-                                            </th>
-                                        </tr>
-
-                                        <tr>
-                                            <th class="p-1" style="text-align: right;" colspan="5">Pajak (%)
-                                                <input type="number" min="0" step="any" name="pajakpersen" class="border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" style="width: 20%;">
-                                            </th>
-
-                                            <th class="p-1 text-right">
-                                                <input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center" name="pajakjumlah" readonly>
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th class="p-1" style="text-align: right;" colspan="5">Materai</th>
-                                            <th class="p-1 text-right">
-                                                <input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" name="materai">
-                                            </th>
-                                        </tr> -->
                                         <tr>
                                             <th class="p-1" style="text-align: right;" colspan="5">Total Keseluruhan</th>
-                                            <th class="p-1"><input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center" name="totalkeseluruhan" readonly></th>
+                                            <th class="p-1"><input type="number" min="0" class="w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center" name="totalkeseluruhan" readonly required></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -277,7 +251,7 @@
             '</button>' +
             '</td>' +
             '<td class="align-middle p-1 text-center">' +
-            '<input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" step="any" name="jumlah_pesanan[]" />' +
+            '<input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" step="any" name="jumlah_pesanan[]" required/>' +
             '</td>' +
             '<td class="align-middle p-1">' +
             '<select name="idbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" required>' +
@@ -288,7 +262,7 @@
             '</select>' +
             '</td>' +
             '<td class="align-middle p-1">' +
-            '<select name="satuanbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center">' +
+            '<select name="satuanbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center"required>' +
             '<option value="" selected></option>' +
             '<?php foreach ($satuan_data as $satuan) : ?>' +
             '<option value="<?= $satuan['id'] ?>"><?= $satuan['nama'] ?></option>' +
@@ -296,10 +270,10 @@
             '</select>' +
             '</td>' +
             '<td class="align-middle p-1">' +
-            '<input type="text" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" name="harga_satuan_pengajuan[]" />' +
+            '<input type="text" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" name="harga_satuan_pengajuan[]" required/>' +
             '</td>' +
             '<td class="align-middle p-1 text-right">' +
-            '<input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center w-full border" name="subtotalperitem[]" readonly />' +
+            '<input type="text" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center w-full border" name="subtotalperitem[]" readonly required/>' +
             '</td>' +
             '</tr>';
         document.getElementById('item-list').getElementsByTagName('tbody')[0].insertAdjacentHTML('beforeend', newRow);
@@ -357,9 +331,10 @@
         var dateError = document.getElementById('dateError');
         var selectedDate = new Date(tglpengajuanInput.value);
         var today = new Date();
-        today.setHours(0, 0, 0, 0); // Clear the time part
+        selectedDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
 
-        if (selectedDate <= today) {
+        if (selectedDate.getTime() !== today.getTime()) {
             tglpengajuanInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('flex', 'items-center');
@@ -375,13 +350,14 @@
         var dateError = document.getElementById('dateError');
         var selectedDate = new Date(tglpengajuanInput.value);
         var today = new Date();
-        today.setHours(0, 0, 0, 0); // Clear the time part
+        selectedDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
 
-        if (selectedDate <= today) {
+        if (selectedDate.getTime() !== today.getTime()) {
             tglpengajuanInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('block');
-            alert("Tanggal pengajuan harus hari ini atau setelah hari ini.");
+            alert("Tanggal pengajuan hanya diperbolehkan tanggal hari ini.");
             return false;
         }
         var submitButton = document.getElementById('submitButton');

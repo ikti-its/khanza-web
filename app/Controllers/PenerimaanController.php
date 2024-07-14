@@ -233,6 +233,9 @@ class PenerimaanController extends BaseController
                 $pegawai_data = json_decode($response_pegawai, true);
                 $pemesanan_data = json_decode($response_pemesanan, true);
                 $pengajuan_data = json_decode($response_pengajuan, true);
+                if ($pengajuan_data['data']['status_pesanan'] !== '3') {
+                    return redirect('pemesananmedis')->with('warning', 'Status harus dalam pemesanan!');
+                }
                 $pesanan_data = json_decode($response_pesanan, true);
                 $medis_data = json_decode($response_barang_medis, true);
                 $supplier_data = json_decode($response_supplier, true);
@@ -620,7 +623,7 @@ class PenerimaanController extends BaseController
                     $this->addBreadcrumb('Pengadaan', 'pengadaanmedis');
                     $this->addBreadcrumb('Barang Medis', 'medis');
                     $this->addBreadcrumb('Penerimaan', 'penerimaanmedis');
-                    $this->addBreadcrumb('Edit', 'editpenerimaanmedis');
+                    $this->addBreadcrumb('Ubah', 'editpenerimaanmedis');
 
                     $breadcrumbs = $this->getBreadcrumbs();
                     return view('/admin/pengadaan/medis/penerimaan/edit_penerimaan', [
@@ -885,6 +888,50 @@ class PenerimaanController extends BaseController
                     if ($response_pengajuan) {
                         $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
                         if ($http_status_code_pengajuan === 200) {
+                            $pesanan_url =  $this->api_url . '/pengadaan/pesanan/pengajuan/' . $pengajuanId;
+
+                            $ch_pesanan = curl_init($pesanan_url);
+                            curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
+                                'Authorization: Bearer ' . $token,
+                            ]);
+                            $response_pesanan = curl_exec($ch_pesanan);
+                            $pesanan_data = json_decode($response_pesanan, true);
+                            $jumlah_pesanan = $pesanan_data['data'];
+                            foreach ($jumlah_pesanan as $pesanan) {
+                                $pesanan_id = $pesanan['id'];
+                                $put_byidpesanan_url = $this->api_url . '/pengadaan/pesanan/' . $pesanan_id;
+                                $putDataPesanan = [
+                                    'id_pengajuan' => $pesanan['id_pengajuan'],
+                                    'id_barang_medis' => $pesanan['id_barang_medis'],
+                                    'satuan' => $pesanan['satuan'],
+                                    'harga_satuan_pengajuan' => $pesanan['harga_satuan_pengajuan'],
+                                    'harga_satuan_pemesanan' => $pesanan['harga_satuan_pemesanan'],
+                                    'jumlah_pesanan' => $pesanan['jumlah_pesanan'],
+                                    'jumlah_diterima' => 0,
+                                    'total_per_item' => $pesanan['subtotal_per_item'],
+                                    'subtotal_per_item' => $pesanan['subtotal_per_item'],
+                                    'diskon_persen' => $pesanan['diskon_persen'],
+                                    'diskon_jumlah' => $pesanan['diskon_jumlah'],
+                                    'kadaluwarsa' => '0001-01-01',
+                                    'no_batch' => '',
+                                ];
+                                $update_pesanan_JSON = json_encode($putDataPesanan);
+                                $ch_put_pesanan = curl_init($put_byidpesanan_url);
+                                curl_setopt($ch_put_pesanan, CURLOPT_CUSTOMREQUEST, "PUT");
+                                curl_setopt($ch_put_pesanan, CURLOPT_POSTFIELDS, $update_pesanan_JSON);
+                                curl_setopt($ch_put_pesanan, CURLOPT_RETURNTRANSFER, true);
+                                curl_setopt($ch_put_pesanan, CURLOPT_HTTPHEADER, [
+                                    'Content-Type: application/json',
+                                    'Content-Length: ' . strlen($update_pesanan_JSON),
+                                    'Authorization: Bearer ' . $token,
+                                ]);
+                                $response_put_pesanan = curl_exec($ch_put_pesanan);
+                                $http_status_code_pesanan = curl_getinfo($ch_put_pesanan, CURLINFO_HTTP_CODE);
+                            }
+                            if ($http_status_code_pesanan !== 200) {
+                                return $this->renderErrorView($http_status_code_pesanan);
+                            }
                             // Data berhasil ditambahkan ke obat_url
                             $ch_delete_penerimaan = curl_init($penerimaan_url);
                             curl_setopt($ch_delete_penerimaan, CURLOPT_CUSTOMREQUEST, "DELETE");

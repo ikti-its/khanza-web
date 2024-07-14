@@ -2,10 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Table Section -->
-<div class="max-w-[85rem] py-6 mx-auto">
-    <div class="px-4 mb-4">
-        <!-- breadcrumbs -->
-    </div>
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="flex flex-col">
         <div class="-m-1.5 overflow-y-auto">
@@ -46,7 +43,7 @@
                     <!-- End Header -->
 
                     <!-- Table -->
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <colgroup>
                             <!-- <col width="5%"> -->
                             <col width="20%">
@@ -120,7 +117,7 @@
                                                     <div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor Keluar</label>
-                                                            <input type="text" name="" value="<?= $stok['no_keluar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?= $stok['no_keluar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
 
                                                         <div class="mb-5 sm:block md:flex items-center">
@@ -148,7 +145,7 @@
 
                                                                                                 echo $formatted_date;
 
-                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
 
 
@@ -158,11 +155,47 @@
                                                                                                     if ($pegawai['id'] === $stok['id_pegawai']) {
                                                                                                         echo $pegawai['nama'];
                                                                                                     }
-                                                                                                } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                                                } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Asal Ruangan</label>
+                                                            <input type="text" name="" value="<?php
+                                                                                                $optionsruangan = [
+                                                                                                    "1000" => "VIP 1",
+                                                                                                    "2000" => "VIP 2",
+                                                                                                    "3000" => "VVIP 1",
+                                                                                                    "4000" => "VVIP 2",
+                                                                                                    "5000" => "Gudang"
+                                                                                                ];
+
+                                                                                                foreach ($optionsruangan as $valueruangan => $textruangan) {
+                                                                                                    if ($valueruangan === $stok['asal_ruangan']) {
+                                                                                                        echo $textruangan;
+                                                                                                    }
+                                                                                                }
+                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tujuan Ruangan</label>
+                                                            <input type="text" name="" value="<?php
+                                                                                                $optionsruangan = [
+                                                                                                    "1000" => "VIP 1",
+                                                                                                    "2000" => "VIP 2",
+                                                                                                    "3000" => "VVIP 1",
+                                                                                                    "4000" => "VVIP 2",
+                                                                                                    "5000" => "Gudang"
+                                                                                                ];
+
+                                                                                                foreach ($optionsruangan as $valueruangan => $textruangan) {
+                                                                                                    if ($valueruangan === $stok['tujuan_ruangan']) {
+                                                                                                        echo $textruangan;
+                                                                                                    }
+                                                                                                }
+                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Keterangan</label>
-                                                            <input type="text" name="" value="<?= $stok['keterangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?= $stok['keterangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                     </div>
                                                     <div class="pt-2 border-t border-[#F1F1F1]">
@@ -175,7 +208,7 @@
 
                                                                 </div>
                                                                 <div class="flex justify-end w-1/2">
-                                                                    <p class="font-bold mr-2 text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Jumlah keluar</p>
+                                                                    <p class="font-bold mr-2 text-center text-gray-900 text-sm rounded-lg w-full">Jumlah keluar</p>
                                                                 </div>
                                                             </div>
 
@@ -200,11 +233,15 @@
                                                                                                                     if ($medis['id'] === $transaksi['id_barang_medis']) {
                                                                                                                         foreach ($satuan_data as $satuan) {
                                                                                                                             if ($medis['satuan'] === $satuan['id']) {
-                                                                                                                                echo $transaksi['jumlah_keluar'] . " " . $satuan['nama'];
+                                                                                                                                if ($satuan['id'] === 1) {
+                                                                                                                                    echo $transaksi['jumlah_keluar'];
+                                                                                                                                } else {
+                                                                                                                                    echo $transaksi['jumlah_keluar'] . " " . $satuan['nama'];
+                                                                                                                                }
                                                                                                                             }
                                                                                                                         }
                                                                                                                     }
-                                                                                                                } ?>" class="text-center bg-gray-100 font-[600] text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                                                                } ?>" class="text-center bg-gray-100 font-[600] text-gray-900 text-sm rounded-lg px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
                                                                         </div>
                                                                     </div>
 
@@ -407,6 +444,45 @@
     window.closeModal = function(modalId) {
         document.getElementById(modalId).style.display = 'none'
         document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
+    }
+
+    function myFunction() {
+        var input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable"); // Pastikan ini mengacu pada ID tabel yang benar
+
+        if (!table) return; // Pastikan tabel ada sebelum melanjutkan
+
+        tr = table.getElementsByTagName("tr");
+        var dataFound = false;
+
+        // Iterate over all table rows (including header row)
+        for (i = 0; i < tr.length; i++) {
+            var found = false;
+
+            // Check if it's a regular row (skip header row)
+            if (i > 0) {
+                td = tr[i].getElementsByTagName("td");
+
+                // Iterate over all td elements in the row
+                for (j = 0; j < td.length; j++) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break; // Break out of inner loop if match found
+                    }
+                }
+
+                // Show or hide row based on search result
+                if (found) {
+                    tr[i].style.display = "";
+                    dataFound = true;
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
     }
 </script>
 <?= $this->endSection(); ?>

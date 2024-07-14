@@ -34,8 +34,6 @@ class PengajuanController extends BaseController
                 'Authorization: Bearer ' . $token,
             ]);
 
-            // Execute the cURL request to fetch data
-
 
             // Initialize cURL for fetching pemesanan data
             $ch_pemesanan = curl_init($pemesanan_url);
@@ -57,10 +55,25 @@ class PengajuanController extends BaseController
             $response_pemesanan = curl_exec($ch_pemesanan);
             $response_penerimaan = curl_exec($ch_penerimaan);
 
-            // Check if the responses are successful
-            // Check if the responses are successful
             if ($response_pengajuan && $response_pemesanan && $response_penerimaan && $response_pengajuan_tanpa_params) {
-                // Decode the JSON responses
+                $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
+                $http_status_code_pemesanan = curl_getinfo($ch_pemesanan, CURLINFO_HTTP_CODE);
+                $http_status_code_penerimaan = curl_getinfo($ch_penerimaan, CURLINFO_HTTP_CODE);
+                $http_status_code_pengajuan_tanpa_params = curl_getinfo($ch_pengajuan_tanpa_params, CURLINFO_HTTP_CODE);
+
+                // Check if any response has a non-200 status code and call renderErrorView
+                if ($http_status_code_pengajuan !== 200) {
+                    return $this->renderErrorView($http_status_code_pengajuan);
+                }
+                if ($http_status_code_pemesanan !== 200) {
+                    return $this->renderErrorView($http_status_code_pemesanan);
+                }
+                if ($http_status_code_penerimaan !== 200) {
+                    return $this->renderErrorView($http_status_code_penerimaan);
+                }
+                if ($http_status_code_pengajuan_tanpa_params !== 200) {
+                    return $this->renderErrorView($http_status_code_pengajuan_tanpa_params);
+                }
                 $pengajuan_data = json_decode($response_pengajuan, true);
                 $pemesanan_data = json_decode($response_pemesanan, true);
                 $penerimaan_data = json_decode($response_penerimaan, true);
@@ -82,10 +95,10 @@ class PengajuanController extends BaseController
                 ]);
             } else {
                 // Error handling for failed cURL requests
-                return "Error fetching data.";
+                return $this->renderErrorView(500);
             }
         } else {
-            return "User not logged in. Please log in first.";
+            return $this->renderErrorView(401);
         }
     }
     public function dataPengajuanMedis()
@@ -98,10 +111,11 @@ class PengajuanController extends BaseController
         if (session()->has('jwt_token')) {
 
             $token = session()->get('jwt_token');
-            $search = $this->request->getGet('search')??'';
+            $search = $this->request->getGet('search') ?? '';
             $api_url = $this->api_url;
-            
+
             $pengajuan_url = $this->api_url . '/pengadaan/pengajuan?page=' . $page . '&size=' . $size;
+            $pengajuan_tanpa_params_url = $this->api_url . '/pengadaan/pengajuan';
             $pesanan_url = $this->api_url . '/pengadaan/pesanan';
             $persetujuan_url = $this->api_url . '/pengadaan/persetujuan';
             $barang_medis_url = $this->api_url . '/inventaris/medis';
@@ -117,6 +131,13 @@ class PengajuanController extends BaseController
 
             // Execute the cURL request to fetch pengajuan data
             $response_pengajuan = curl_exec($ch_pengajuan);
+
+            $ch_pengajuan_tanpa_params = curl_init($pengajuan_tanpa_params_url);
+            curl_setopt($ch_pengajuan_tanpa_params, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_pengajuan_tanpa_params, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_pengajuan_tanpa_params = curl_exec($ch_pengajuan_tanpa_params);
 
             // Initialize cURL for fetching pesanan data
             $ch_pesanan = curl_init($pesanan_url);
@@ -167,12 +188,41 @@ class PengajuanController extends BaseController
 
             // Execute the cURL request to fetch pegawai data
             $response_pegawai = curl_exec($ch_pegawai);
-
-            if ($response_pengajuan && $response_pesanan && $response_persetujuan && $response_barang_medis && $response_satuan && $response_pegawai) {
+            if ($response_pengajuan && $response_pesanan && $response_persetujuan && $response_barang_medis && $response_satuan && $response_pegawai && $response_pengajuan_tanpa_params) {
                 // Check if the responses are successful
+                $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
+                $http_status_code_pengajuan_tanpa_params = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
+                $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
+                $http_status_code_persetujuan = curl_getinfo($ch_persetujuan, CURLINFO_HTTP_CODE);
+                $http_status_code_barang_medis = curl_getinfo($ch_barang_medis, CURLINFO_HTTP_CODE);
+                $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
+                $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
 
-                // Decode the JSON responses
+                // Check if any response has a non-200 status code and call renderErrorView
+                if ($http_status_code_pengajuan !== 200) {
+                    return $this->renderErrorView($http_status_code_pengajuan);
+                }
+                if ($http_status_code_pengajuan_tanpa_params !== 200) {
+                    return $this->renderErrorView($http_status_code_pengajuan_tanpa_params);
+                }
+                if ($http_status_code_pesanan !== 200) {
+                    return $this->renderErrorView($http_status_code_pesanan);
+                }
+                if ($http_status_code_persetujuan !== 200) {
+                    return $this->renderErrorView($http_status_code_persetujuan);
+                }
+                if ($http_status_code_barang_medis !== 200) {
+                    return $this->renderErrorView($http_status_code_barang_medis);
+                }
+                if ($http_status_code_satuan !== 200) {
+                    return $this->renderErrorView($http_status_code_satuan);
+                }
+                if ($http_status_code_pegawai !== 200) {
+                    return $this->renderErrorView($http_status_code_pegawai);
+                }
+                // Decode the JSON response
                 $pengajuan_medis_data = json_decode($response_pengajuan, true);
+                $pengajuan_tanpa_params_medis_data = json_decode($response_pengajuan_tanpa_params, true);
                 $pesanan_data = json_decode($response_pesanan, true);
                 $persetujuan_data = json_decode($response_persetujuan, true);
                 $medis_data = json_decode($response_barang_medis, true);
@@ -184,7 +234,7 @@ class PengajuanController extends BaseController
                 $this->addBreadcrumb('Pengajuan', 'data');
 
                 $breadcrumbs = $this->getBreadcrumbs();
-
+                session()->set('status_pesanan', $pengajuan_tanpa_params_medis_data['data']);
                 return view('/admin/pengadaan/medis/pengajuan/data_pengajuan', [
                     'pengajuan_medis_data' => $pengajuan_medis_data['data']['pengajuan_barang_medis'],
                     'pesanan_data' => $pesanan_data['data'],
@@ -201,10 +251,16 @@ class PengajuanController extends BaseController
                 ]);
             } else {
                 // Error handling for failed cURL requests
-                return "Error fetching data.";
+                return $this->renderErrorView(500);
             }
+            curl_close($ch_pengajuan);
+            curl_close($ch_pesanan);
+            curl_close($ch_persetujuan);
+            curl_close($ch_barang_medis);
+            curl_close($ch_satuan);
+            curl_close($ch_pegawai);
         } else {
-            return "User not logged in. Please log in first.";
+            return $this->renderErrorView(401);
         }
     }
 
@@ -257,29 +313,31 @@ class PengajuanController extends BaseController
             $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
             $http_status_code_barang_medis = curl_getinfo($ch_barang_medis, CURLINFO_HTTP_CODE);
             $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
-            if (
-                $http_status_code_pengajuan === 200 &&
-                $http_status_code_pegawai === 200 &&
-                $http_status_code_barang_medis === 200 &&
-                $http_status_code_satuan === 200
 
-            ) {
-                $pengajuan_data = json_decode($response_pengajuan, true);
-                $pegawai_data = json_decode($response_pegawai, true);
-                $medis_data = json_decode($response_barang_medis, true);
-                $satuan_data = json_decode($response_satuan, true);
-            } else {
-                return "Pengajuan Response: " . $response_pengajuan . "
-                , Pegawai Data Response: " . $response_pegawai . "
-                , Barang Medis Response: " . $response_barang_medis . "
-                , Satuan Response: " . $response_satuan;
+            if ($http_status_code_pengajuan !== 200) {
+                return $this->renderErrorView($http_status_code_pengajuan);
             }
+            if ($http_status_code_pegawai !== 200) {
+                return $this->renderErrorView($http_status_code_pegawai);
+            }
+            if ($http_status_code_barang_medis !== 200) {
+                return $this->renderErrorView($http_status_code_barang_medis);
+            }
+            if ($http_status_code_satuan !== 200) {
+                return $this->renderErrorView($http_status_code_satuan);
+            }
+            $pengajuan_data = json_decode($response_pengajuan, true);
+            $pegawai_data = json_decode($response_pegawai, true);
+            $medis_data = json_decode($response_barang_medis, true);
+            $satuan_data = json_decode($response_satuan, true);
+
             $this->addBreadcrumb('Pengadaan', 'pengadaanmedis');
             $this->addBreadcrumb('Barang Medis', 'medis');
             $this->addBreadcrumb('Pengajuan', 'data');
             $this->addBreadcrumb('Tambah', '');
 
             $breadcrumbs = $this->getBreadcrumbs();
+
 
             return view('/admin/pengadaan/medis/pengajuan/tambah_pengajuan', [
                 'pengajuan_data' => $pengajuan_data['data'],
@@ -290,7 +348,7 @@ class PengajuanController extends BaseController
                 'breadcrumbs' => $breadcrumbs
             ]);
         } else {
-            return "User not logged in. Please log in first.";
+            return $this->renderErrorView(401);
         }
     }
 
@@ -343,69 +401,71 @@ class PengajuanController extends BaseController
 
                 if ($response_pengajuan) {
                     $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
-                    if ($http_status_code_pengajuan === 201) {
-                        $id_pengajuan = $decode_response_pengajuan['data']['id'];
-                        for ($i = 0; $i < count($idbrgmedis); $i++) {
-                            $postDataPesanan = [
-                                'id_pengajuan' => $id_pengajuan,
-                                'id_barang_medis' => $idbrgmedis[$i],
-                                'satuan' => intval($satuanbrgmedis[$i]),
-                                'harga_satuan_pengajuan' => intval($harga_satuan_pengajuan[$i]),
-                                'harga_satuan_pemesanan' => 0,
-                                'total_per_item' => intval($subtotalperitem[$i]),
-                                'subtotal_per_item' => intval($subtotalperitem[$i]),
-                                'jumlah_pesanan' => intval($jumlah_pesanan[$i]),
-                            ];
-                            $tambah_pesanan_JSON = json_encode($postDataPesanan);
-                            $ch_pesanan = curl_init($pesanan_url);
-                            curl_setopt($ch_pesanan, CURLOPT_POST, 1);
-                            curl_setopt($ch_pesanan, CURLOPT_POSTFIELDS, ($tambah_pesanan_JSON));
-                            curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
-                            curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
-                                'Content-Type: application/json',
-                                'Content-Length: ' . strlen($tambah_pesanan_JSON),
-                                'Authorization: Bearer ' . $token,
-                            ]);
-                            $response_pesanan = curl_exec($ch_pesanan);
-                        }
-                        $postDatapersetujuan = [
+                    if ($http_status_code_pengajuan !== 201) {
+                        return $this->renderErrorView($http_status_code_pengajuan);
+                    }
+                    $id_pengajuan = $decode_response_pengajuan['data']['id'];
+                    for ($i = 0; $i < count($idbrgmedis); $i++) {
+                        $postDataPesanan = [
                             'id_pengajuan' => $id_pengajuan,
+                            'id_barang_medis' => $idbrgmedis[$i],
+                            'satuan' => intval($satuanbrgmedis[$i]),
+                            'harga_satuan_pengajuan' => intval($harga_satuan_pengajuan[$i]),
+                            'harga_satuan_pemesanan' => 0,
+                            'total_per_item' => intval($subtotalperitem[$i]),
+                            'subtotal_per_item' => intval($subtotalperitem[$i]),
+                            'jumlah_pesanan' => intval($jumlah_pesanan[$i]),
                         ];
-                        $tambah_persetujuan_JSON = json_encode($postDatapersetujuan);
-                        $ch_persetujuan = curl_init($persetujuan_url);
-                        curl_setopt($ch_persetujuan, CURLOPT_POST, 1);
-                        curl_setopt($ch_persetujuan, CURLOPT_POSTFIELDS, ($tambah_persetujuan_JSON));
-                        curl_setopt($ch_persetujuan, CURLOPT_RETURNTRANSFER, true);
-                        curl_setopt($ch_persetujuan, CURLOPT_HTTPHEADER, [
+                        $tambah_pesanan_JSON = json_encode($postDataPesanan);
+                        $ch_pesanan = curl_init($pesanan_url);
+                        curl_setopt($ch_pesanan, CURLOPT_POST, 1);
+                        curl_setopt($ch_pesanan, CURLOPT_POSTFIELDS, ($tambah_pesanan_JSON));
+                        curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
                             'Content-Type: application/json',
-                            'Content-Length: ' . strlen($tambah_persetujuan_JSON),
+                            'Content-Length: ' . strlen($tambah_pesanan_JSON),
                             'Authorization: Bearer ' . $token,
                         ]);
-                        $response_persetujuan = curl_exec($ch_persetujuan);
+                        $response_pesanan = curl_exec($ch_pesanan);
+                    }
+                    $postDatapersetujuan = [
+                        'id_pengajuan' => $id_pengajuan,
+                    ];
+                    $tambah_persetujuan_JSON = json_encode($postDatapersetujuan);
+                    $ch_persetujuan = curl_init($persetujuan_url);
+                    curl_setopt($ch_persetujuan, CURLOPT_POST, 1);
+                    curl_setopt($ch_persetujuan, CURLOPT_POSTFIELDS, ($tambah_persetujuan_JSON));
+                    curl_setopt($ch_persetujuan, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch_persetujuan, CURLOPT_HTTPHEADER, [
+                        'Content-Type: application/json',
+                        'Content-Length: ' . strlen($tambah_persetujuan_JSON),
+                        'Authorization: Bearer ' . $token,
+                    ]);
+                    $response_persetujuan = curl_exec($ch_persetujuan);
+
+                    if ($response_pesanan && $response_persetujuan) {
+                        $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
                         $http_status_code_persetujuan = curl_getinfo($ch_persetujuan, CURLINFO_HTTP_CODE);
-
-                        if ($response_pesanan && $response_persetujuan) {
-                            $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
-                            if ($http_status_code_pesanan === 201 && $http_status_code_persetujuan === 201) {
-
-                                return redirect()->to(base_url('pengajuanmedis'));
-                            } else {
-                                return "Status Insert Pesanan: " . $response_pesanan . "</br>" . $tambah_pesanan_JSON . "</br> Status Insert Persetujuan" . $response_persetujuan;
-                            }
-                            curl_close($ch_persetujuan);
-                            curl_close($ch_pengajuan); // Tutup session cURL untuk obat_url di sini
-                            curl_close($ch_pesanan);
-                        } else {
-                            return "Error sending request to the obat API.";
+                        if ($http_status_code_pesanan !== 201) {
+                            return $this->renderErrorView($http_status_code_pesanan);
                         }
+                        if ($http_status_code_persetujuan !== 201) {
+                            return $this->renderErrorView($http_status_code_persetujuan);
+                        }
+
+                        return redirect()->to(base_url('pengajuanmedis'));
+
+                        curl_close($ch_persetujuan);
+                        curl_close($ch_pengajuan); // Tutup session cURL untuk obat_url di sini
+                        curl_close($ch_pesanan);
                     } else {
-                        return "Error Insert Pengajuan: " . $response_pengajuan . $tambah_pengajuan_JSON;
+                        return $this->renderErrorView(500);
                     }
                 } else {
-                    return "Error sending request to the API.";
+                    return $this->renderErrorView(500);
                 }
             } else {
-                return "User not logged in. Please log in first.";
+                return $this->renderErrorView(401);
             }
         } else {
             return "Data is required.";
@@ -464,7 +524,29 @@ class PengajuanController extends BaseController
                 $http_status_code_barang_medis = curl_getinfo($ch_barang_medis, CURLINFO_HTTP_CODE);
                 $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
                 $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
+
+                if ($http_status_code_pengajuan !== 200) {
+                    return $this->renderErrorView($http_status_code_pengajuan);
+                }
+                if ($http_status_code_pesanan !== 200) {
+                    return $this->renderErrorView($http_status_code_pesanan);
+                }
+                if ($http_status_code_barang_medis !== 200) {
+                    return $this->renderErrorView($http_status_code_barang_medis);
+                }
+                if ($http_status_code_pegawai !== 200) {
+                    return $this->renderErrorView($http_status_code_pegawai);
+                }
+                if ($http_status_code_satuan !== 200) {
+                    return $this->renderErrorView($http_status_code_satuan);
+                }
+
                 $pengajuan_data = json_decode($response_pengajuan, true);
+                if (
+                    $pengajuan_data['data']['status_pesanan'] !== '1' || $pengajuan_data['data']['status_pesanan'] !== '2'
+                ) {
+                    return redirect('pengajuanmedis')->with('warning', 'Pengajuan telah ditolak atau disetujui sehingga tidak bisa diubah');
+                }
                 $pesanan_data = json_decode($response_pesanan, true);
                 $medis_data = json_decode($response_barang_medis, true);
                 $pegawai_data = json_decode($response_pegawai, true);
@@ -473,139 +555,129 @@ class PengajuanController extends BaseController
                 $this->addBreadcrumb('Pengadaan', 'pengadaanmedis');
                 $this->addBreadcrumb('Barang Medis', 'medis');
                 $this->addBreadcrumb('Pengajuan', 'pengajuanmedis');
-                $this->addBreadcrumb('Edit', 'editpengajuanmedis');
+                $this->addBreadcrumb('Ubah', 'editpengajuanmedis');
 
                 $breadcrumbs = $this->getBreadcrumbs();
 
-                if ($http_status_code_pengajuan === 200 && $http_status_code_pesanan === 200 && $http_status_code_barang_medis === 200 && $http_status_code_pegawai === 200 && $http_status_code_satuan === 200) {
-                    return view('/admin/pengadaan/medis/pengajuan/edit_pengajuan', [
-                        'pengajuan_data' => $pengajuan_data['data'],
-                        'pesanan_data' => $pesanan_data['data'],
-                        'medis_data' => $medis_data['data'],
-                        'pegawai_data' => $pegawai_data['data'],
-                        'satuan_data' => $satuan_data['data'],
-                        'pengajuanId' => $pengajuanId,
-                        'title' => 'Edit Pengajuan Medis',
-                        'breadcrumbs' => $breadcrumbs
-                    ]);
-                } else {
-                    return "Error fetching data. HTTP Status Code Pengajuan: $http_status_code_pengajuan, HTTP Status Code Pesanan: $http_status_code_pesanan";
-                }
+
+                return view('/admin/pengadaan/medis/pengajuan/edit_pengajuan', [
+                    'pengajuan_data' => $pengajuan_data['data'],
+                    'pesanan_data' => $pesanan_data['data'],
+                    'medis_data' => $medis_data['data'],
+                    'pegawai_data' => $pegawai_data['data'],
+                    'satuan_data' => $satuan_data['data'],
+                    'pengajuanId' => $pengajuanId,
+                    'title' => 'Edit Pengajuan Medis',
+                    'breadcrumbs' => $breadcrumbs
+                ]);
             } else {
-                return "Error fetching data.";
+                return $this->renderErrorView(500);
             }
             curl_close($ch_pengajuan);
             curl_close($ch_pesanan);
         } else {
-            return "User not logged in. Please log in first.";
+            return $this->renderErrorView(401);
         }
     }
 
     public function submitEditPengajuanMedis($pengajuanId)
     {
-        if ($this->request->getPost()) {
-            $tglpengajuan = $this->request->getPost('tglpengajuan');
-            $nopengajuan = $this->request->getPost('nopengajuan');
-            $pegawai = $this->request->getPost('pegawai');
-            $totalkeseluruhan = intval($this->request->getPost('totalkeseluruhan'));
-            $catatan = $this->request->getPost('catatan');
-            $status = $this->request->getPost('status');
 
-            $idpesanan = $this->request->getPost('idpesanan');
-            $idbrgmedis = $this->request->getPost('idbrgmedis');
-            $satuanbrgmedis = $this->request->getPost('satuanbrgmedis');
-            $jumlah_pesanan = $this->request->getPost('jumlah_pesanan');
-            $harga_satuan_pengajuan = $this->request->getPost('harga_satuan_pengajuan');
-            $subtotalperitem = $this->request->getPost('subtotalperitem');
-            $totalperitem = $this->request->getPost('totalperitem');
-            $kadaluwarsa = $this->request->getPost('kadaluwarsa');
+        $tglpengajuan = $this->request->getPost('tglpengajuan');
+        $nopengajuan = $this->request->getPost('nopengajuan');
+        $pegawai = $this->request->getPost('pegawai');
+        $totalkeseluruhan = intval($this->request->getPost('totalkeseluruhan'));
+        $catatan = $this->request->getPost('catatan');
+        $status = $this->request->getPost('status');
 
-            $pengajuan_url = $this->api_url . '/pengadaan/pengajuan/' . $pengajuanId;
+        $idpesanan = $this->request->getPost('idpesanan');
+        $idbrgmedis = $this->request->getPost('idbrgmedis');
+        $satuanbrgmedis = $this->request->getPost('satuanbrgmedis');
+        $jumlah_pesanan = $this->request->getPost('jumlah_pesanan');
+        $harga_satuan_pengajuan = $this->request->getPost('harga_satuan_pengajuan');
+        $subtotalperitem = $this->request->getPost('subtotalperitem');
+        $totalperitem = $this->request->getPost('totalperitem');
+        $kadaluwarsa = $this->request->getPost('kadaluwarsa');
 
-
+        $pengajuan_url = $this->api_url . '/pengadaan/pengajuan/' . $pengajuanId;
 
 
-            if (session()->has('jwt_token')) {
-                $token = session()->get('jwt_token');
 
-                $putDataPengajuan = [
-                    'tanggal_pengajuan' => $tglpengajuan,
-                    'nomor_pengajuan' => $nopengajuan,
-                    'id_pegawai' => $pegawai,
-                    'total_pengajuan' => $totalkeseluruhan,
-                    'catatan' => $catatan,
-                    'status_pesanan' => $status,
-                ];
 
-                $update_pengajuan_JSON = json_encode($putDataPengajuan);
-                $ch_pengajuan = curl_init($pengajuan_url);
-                curl_setopt($ch_pengajuan, CURLOPT_CUSTOMREQUEST, "PUT");
-                curl_setopt($ch_pengajuan, CURLOPT_POSTFIELDS, $update_pengajuan_JSON);
-                curl_setopt($ch_pengajuan, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch_pengajuan, CURLOPT_HTTPHEADER, [
-                    'Content-Type: application/json',
-                    'Authorization: Bearer ' . $token,
-                ]);
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
 
-                $response_pengajuan = curl_exec($ch_pengajuan);
+            $putDataPengajuan = [
+                'tanggal_pengajuan' => $tglpengajuan,
+                'nomor_pengajuan' => $nopengajuan,
+                'id_pegawai' => $pegawai,
+                'total_pengajuan' => $totalkeseluruhan,
+                'catatan' => $catatan,
+                'status_pesanan' => $status,
+            ];
 
-                if ($response_pengajuan) {
-                    $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
-                    if ($http_status_code_pengajuan === 200) {
+            $update_pengajuan_JSON = json_encode($putDataPengajuan);
+            $ch_pengajuan = curl_init($pengajuan_url);
+            curl_setopt($ch_pengajuan, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch_pengajuan, CURLOPT_POSTFIELDS, $update_pengajuan_JSON);
+            curl_setopt($ch_pengajuan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_pengajuan, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $token,
+            ]);
 
-                        for ($i = 0; $i < count($idbrgmedis); $i++) {
-                            $pesanan_url = $this->api_url . '/pengadaan/pesanan/' . $idpesanan[$i];
-                            $postDataPesanan = [
-                                'id_pengajuan' => $pengajuanId,
-                                'id_barang_medis' => $idbrgmedis[$i],
-                                'satuan' => intval($satuanbrgmedis[$i]),
-                                'harga_satuan_pengajuan' => intval($harga_satuan_pengajuan[$i]),
-                                'harga_satuan_pemesanan' => 0,
-                                'jumlah_pesanan' => intval($jumlah_pesanan[$i]),
-                                'total_per_item' => intval($subtotalperitem[$i]),
-                                'subtotal_per_item' => intval($subtotalperitem[$i]),
-                                'kadaluwarsa' => $kadaluwarsa[$i],
-                            ];
-                            $edit_pesanan_JSON = json_encode($postDataPesanan);
-                            $ch_pesanan = curl_init($pesanan_url);
-                            curl_setopt($ch_pesanan, CURLOPT_CUSTOMREQUEST, "PUT");
-                            curl_setopt($ch_pesanan, CURLOPT_POSTFIELDS, $edit_pesanan_JSON);
-                            curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
-                            curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
-                                'Content-Type: application/json',
-                                'Content-Length: ' . strlen($edit_pesanan_JSON),
-                                'Authorization: Bearer ' . $token,
-                            ]);
+            $response_pengajuan = curl_exec($ch_pengajuan);
 
-                            $response = curl_exec($ch_pesanan);
-                        }
-
-                        if ($response) {
-                            $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
-                            if ($http_status_code_pesanan === 200) {
-                                return redirect()->to(base_url('pengajuanmedis'));
-                            } else {
-                                curl_close($ch_pesanan);
-                                return "Error Update Pesanan: " . $response . $edit_pesanan_JSON;
-                            }
-                        } else {
-                            curl_close($ch_pesanan);
-                            return "Error sending request to the pesanan API.";
-                        }
-                        curl_close($ch_pengajuan);
-                        curl_close($ch_pesanan);
-                    } else {
-                        curl_close($ch_pengajuan);
-                        return "Error Update Pengajuan: " . $response_pengajuan . $update_pengajuan_JSON;
-                    }
-                } else {
-                    return "Error sending request to the API.";
+            if ($response_pengajuan) {
+                $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
+                if ($http_status_code_pengajuan !== 200) {
+                    return $this->renderErrorView($http_status_code_pengajuan);
                 }
+
+                for ($i = 0; $i < count($idbrgmedis); $i++) {
+                    $pesanan_url = $this->api_url . '/pengadaan/pesanan/' . $idpesanan[$i];
+                    $postDataPesanan = [
+                        'id_pengajuan' => $pengajuanId,
+                        'id_barang_medis' => $idbrgmedis[$i],
+                        'satuan' => intval($satuanbrgmedis[$i]),
+                        'harga_satuan_pengajuan' => intval($harga_satuan_pengajuan[$i]),
+                        'harga_satuan_pemesanan' => 0,
+                        'jumlah_pesanan' => intval($jumlah_pesanan[$i]),
+                        'total_per_item' => intval($subtotalperitem[$i]),
+                        'subtotal_per_item' => intval($subtotalperitem[$i]),
+                        'kadaluwarsa' => $kadaluwarsa[$i],
+                    ];
+                    $edit_pesanan_JSON = json_encode($postDataPesanan);
+                    $ch_pesanan = curl_init($pesanan_url);
+                    curl_setopt($ch_pesanan, CURLOPT_CUSTOMREQUEST, "PUT");
+                    curl_setopt($ch_pesanan, CURLOPT_POSTFIELDS, $edit_pesanan_JSON);
+                    curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
+                        'Content-Type: application/json',
+                        'Content-Length: ' . strlen($edit_pesanan_JSON),
+                        'Authorization: Bearer ' . $token,
+                    ]);
+
+                    $response = curl_exec($ch_pesanan);
+                }
+
+                if ($response) {
+                    $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
+                    if ($http_status_code_pesanan !== 200) {
+                        return $this->renderErrorView($http_status_code_pesanan);
+                    }
+                    return redirect()->to(base_url('pengajuanmedis'));
+                } else {
+                    curl_close($ch_pesanan);
+                    return $this->renderErrorView(500);
+                }
+                curl_close($ch_pengajuan);
+                curl_close($ch_pesanan);
             } else {
-                return "User not logged in. Please log in first.";
+                return $this->renderErrorView(500);
             }
         } else {
-            return "Data is required.";
+            return $this->renderErrorView(401);
         }
     }
 
@@ -635,7 +707,7 @@ class PengajuanController extends BaseController
                 curl_setopt($ch_delete_pesanan, CURLOPT_HTTPHEADER, [
                     'Authorization: Bearer ' . $token,
                 ]);
-                $response_byidpesanan = curl_exec($ch_delete_pesanan);
+                $response_pesanan = curl_exec($ch_delete_pesanan);
                 $http_status_code_pesanan = curl_getinfo($ch_delete_pesanan, CURLINFO_HTTP_CODE);
             }
             $ch_delete_pengajuan = curl_init($pengajuan_url);
@@ -644,15 +716,20 @@ class PengajuanController extends BaseController
             curl_setopt($ch_delete_pengajuan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
+
             $response_pengajuan = curl_exec($ch_delete_pengajuan);
             $http_status_code_pengajuan = curl_getinfo($ch_delete_pengajuan, CURLINFO_HTTP_CODE);
-            if ($http_status_code_pesanan === 204 && $http_status_code_pengajuan === 204) {
-                return redirect()->to(base_url('pengajuanmedis'));
-            } else {
-                return "Error deleting data: " . $response_byidpesanan . $response_pengajuan;
+
+            if ($http_status_code_pesanan !== 204) {
+                return $this->renderErrorView($http_status_code_pesanan);
             }
+            if ($http_status_code_pengajuan !== 204) {
+                return $this->renderErrorView($http_status_code_pengajuan);
+            }
+
+            return redirect()->to(base_url('pengajuanmedis'));
         } else {
-            return "User not logged in. Please log in first.";
+            return $this->renderErrorView(401);
         }
     }
 }

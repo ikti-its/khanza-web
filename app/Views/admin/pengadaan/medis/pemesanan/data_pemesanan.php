@@ -2,11 +2,21 @@
 <?= $this->section('content'); ?>
 
 <!-- Table Section -->
-<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="flex flex-col">
         <div class="-m-1.5 overflow-y-auto">
             <div class="sm:px-6 min-w-full inline-block align-middle">
+                <?php if (session()->getFlashdata('warning')) : ?>
+                    <div id="warningMessage" class="flex items-center mt-2 bg-[#FFF5CF] text-sm font-semibold text-[#D97706] rounded-lg p-4" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 7.5V11.6667" stroke="#D97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M9.99986 17.8414H4.94986C2.0582 17.8414 0.849863 15.7747 2.24986 13.2497L4.84986 8.56641L7.29986 4.16641C8.7832 1.49141 11.2165 1.49141 12.6999 4.16641L15.1499 8.57474L17.7499 13.2581C19.1499 15.7831 17.9332 17.8497 15.0499 17.8497H9.99986V17.8414Z" stroke="#D97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M9.99561 14.166H10.0031" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span class="mx-1 font-semibold"></span><?= session()->getFlashdata('warning') ?>
+                    </div>
+                <?php endif; ?>
                 <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700">
                     <!-- Header -->
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
@@ -126,7 +136,7 @@
                                                                 <div>
                                                                     <div class="mb-5 sm:block md:flex items-center">
                                                                         <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor Pengajuan</label>
-                                                                        <input type="text" name="" value="<?= $pengajuan['nomor_pengajuan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                        <input type="text" name="" value="<?= $pengajuan['nomor_pengajuan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                                     </div>
 
                                                                     <div class="mb-5 sm:block md:flex items-center">
@@ -154,19 +164,19 @@
 
                                                                                                             echo $formatted_date;
 
-                                                                                                            ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                                                            ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                                     </div>
                                                                     <div class="mb-5 sm:block md:flex items-center">
                                                                         <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor Pemesanan</label>
-                                                                        <input type="text" name="" value="<?= $pemesanan['no_pemesanan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                        <input type="text" name="" value="<?= $pemesanan['no_pemesanan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                                     </div>
                                                                     <div class="mb-5 sm:block md:flex items-center">
                                                                         <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Supplier</label>
-                                                                        <input type="text" name="" value="<?php foreach ($satuan_data as $satuan) {
-                                                                                                                if ($satuan['id'] === $pemesanan['id_supplier']) {
-                                                                                                                    echo $satuan['nama'];
+                                                                        <input type="text" name="" value="<?php foreach ($supplier_data as $supplier) {
+                                                                                                                if ($supplier['id'] === $pemesanan['id_supplier']) {
+                                                                                                                    echo $supplier['nama'];
                                                                                                                 }
-                                                                                                            } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                                                            } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                                     </div>
                                                                     <div class="mb-5 sm:block md:flex items-center">
                                                                         <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Pegawai</label>
@@ -174,7 +184,7 @@
                                                                                                                 if ($pegawai['id'] === $pemesanan['id_pegawai']) {
                                                                                                                     echo $pegawai['nama'];
                                                                                                                 }
-                                                                                                            } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                                                            } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                                     </div>
                                                                 </div>
 
@@ -188,8 +198,8 @@
 
                                                                             </div>
                                                                             <div class="flex justify-end w-1/2">
-                                                                                <p class="font-bold mr-2 text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Harga/Item</p>
-                                                                                <p class="font-bold text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Subtotal/Item</p>
+                                                                                <p class="font-bold mr-2 text-center text-gray-900 text-sm rounded-lg w-full">Harga/Item</p>
+                                                                                <p class="font-bold text-center text-gray-900 text-sm rounded-lg w-full">Subtotal/Item</p>
                                                                             </div>
                                                                         </div>
 
@@ -211,8 +221,8 @@
                                                                                         <br>
                                                                                     </div>
                                                                                     <div class="flex justify-end w-1/2">
-                                                                                        <input type="text" name="" value="<?= "Rp " . number_format($pesanan['harga_satuan_pemesanan'], 0, ',', '.') ?>" class="text-center mr-2 bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                                                        <input type="text" name="" value="<?= "Rp " . number_format($pesanan['subtotal_per_item'], 0, ',', '.') ?? "Belum ada total" ?>" class="text-center bg-gray-100 font-[600] text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                                        <input type="text" name="" value="<?= "Rp " . number_format($pesanan['harga_satuan_pemesanan'], 0, ',', '.') ?>" class="text-center mr-2 bg-gray-100 text-gray-900 text-sm rounded-lg px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                                        <input type="text" name="" value="<?= "Rp " . number_format($pesanan['subtotal_per_item'], 0, ',', '.') ?? "Belum ada total" ?>" class="text-center bg-gray-100 font-[600] text-gray-900 text-sm rounded-lg px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div><small>Jumlah:
@@ -543,51 +553,38 @@
         var input, filter, table, tr, td, i, j, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-        th = table.getElementsByTagName("th"); // Get all th elements
+        table = document.getElementById("myTable"); // Pastikan ini mengacu pada ID tabel yang benar
 
+        if (!table) return; // Pastikan tabel ada sebelum melanjutkan
+
+        tr = table.getElementsByTagName("tr");
         var dataFound = false;
 
-        // Iterate over table rows (including header row)
+        // Iterate over all table rows (including header row)
         for (i = 0; i < tr.length; i++) {
             var found = false;
 
-            // Check if it's a header row (th elements)
-            if (i === 0) {
-                // Iterate over th elements
-                for (j = 0; j < th.length; j++) {
-                    txtValue = th[j].textContent || th[j].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        found = true;
-                        break;
-                    }
-                }
-            } else {
-                // Iterate over td elements in regular rows
+            // Check if it's a regular row (skip header row)
+            if (i > 0) {
                 td = tr[i].getElementsByTagName("td");
+
+                // Iterate over all td elements in the row
                 for (j = 0; j < td.length; j++) {
                     txtValue = td[j].textContent || td[j].innerText;
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
                         found = true;
-                        break;
+                        break; // Break out of inner loop if match found
                     }
                 }
-            }
 
-            if (found) {
-                tr[i].style.display = "";
-                dataFound = true;
-            } else {
-                tr[i].style.display = "none";
+                // Show or hide row based on search result
+                if (found) {
+                    tr[i].style.display = "";
+                    dataFound = true;
+                } else {
+                    tr[i].style.display = "none";
+                }
             }
-        }
-
-        // Show/hide message if no data found
-        if (!dataFound) {
-            document.getElementById("noDataFound").style.display = "block";
-        } else {
-            document.getElementById("noDataFound").style.display = "none";
         }
     }
 
@@ -600,5 +597,22 @@
         document.getElementById(modalId).style.display = 'none'
         document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Select the warning message element
+        var warningMessage = document.getElementById('warningMessage');
+
+        // Check if the warning message exists
+        if (warningMessage) {
+            // Fade out the warning message after 5 seconds (5000 milliseconds)
+            setTimeout(function() {
+                warningMessage.style.opacity = '0';
+                // Optionally, remove the element from the DOM after fading out
+                setTimeout(function() {
+                    warningMessage.remove();
+                }, 1000); // 1 second delay after fading out
+            }, 5000); // 5 seconds delay before fading out
+        }
+    });
 </script>
 <?= $this->endSection(); ?>

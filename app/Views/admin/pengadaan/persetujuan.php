@@ -2,13 +2,13 @@
 <?= $this->section('content'); ?>
 
 <!-- Table Section -->
-<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="flex flex-col ">
         <div class="-m-1.5">
             <div class="sm:px-6 min-w-full inline-block align-middle">
 
-                <div class="mt-5 p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
+                <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
                     <!-- Header -->
 
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
@@ -224,21 +224,21 @@
                                                 <form action="/persetujuanpengajuan/submit/<?= $persetujuan['id_pengajuan'] ?>" method="POST">
                                                     <div class="pl-6 py-1.5 inline-flex">
                                                         <div class="pr-3 py-1.5">
-                                                            <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-">
+                                                            <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $persetujuan['id_pengajuan'] ?>">
                                                                 Lihat Detail
                                                             </button>
                                                         </div>
-                                                        <?php if ($user_data['role'] === 1 && $persetujuan['status_apoteker'] === 'Menunggu Persetujuan' || $user_data['role'] === 2 && $persetujuan['status_keuangan'] === 'Menunggu Persetujuan') : ?>
+                                                        <?php if ($user_data['role'] === 4001 && $persetujuan['status_apoteker'] === 'Menunggu Persetujuan' || $user_data['role'] === 5001 && $persetujuan['status_keuangan'] === 'Menunggu Persetujuan') : ?>
                                                             <?php
                                                             if ($persetujuan['id_pengajuan'] === $pengajuan['id']) {
-                                                                if ($user_data['role'] === 1 || $user_data['role'] === 2) {
+                                                                if ($user_data['role'] === 4001 || $user_data['role'] === 5001) {
                                                                     echo '<input type="hidden" value="' . $persetujuan['status'] . '" name="statuspersetujuan">';
                                                                     echo '<input type="hidden" value="' . $pengajuan['id'] . '" name="idpengajuan">';
-                                                                    if ($user_data['role'] === 1) {
+                                                                    if ($user_data['role'] === 4001) {
                                                                         echo '<input type="hidden" value="' . $user_data['id'] . '" name="idapoteker">';
                                                                         echo '<input type="hidden" value="' . $persetujuan['status_keuangan'] . '" name="statuskeuangan">';
                                                                         echo '<input type="hidden" value="' . $persetujuan['id_keuangan'] . '" name="idkeuangan">';
-                                                                    } elseif ($user_data['role'] === 2) {
+                                                                    } elseif ($user_data['role'] === 5001) {
                                                                         echo '<input type="hidden" value="' . $user_data['id'] . '" name="idkeuangan">';
                                                                         echo '<input type="hidden" value="' . $persetujuan['status_apoteker'] . '" name="statusapoteker">';
                                                                         echo '<input type="hidden" value="' . $persetujuan['id_apoteker'] . '" name="idapoteker">';
@@ -249,14 +249,93 @@
                                                             }
                                                             ?>
                                                             <div class="px-3 py-1.5">
-                                                                <button type="submit" value="Disetujui" name="<?php echo ($user_data['role'] === 1 ? 'statusapoteker' : 'statuskeuangan'); ?>" class="gap-x-1 text-sm text-[#24A793] decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                                <button type="button" onclick="event.preventDefault(); openModal('modelSetuju-<?= $pengajuan['id'] ?>')" class="gap-x-1 text-sm text-[#24A793] decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                                                     Setuju
                                                                 </button>
+                                                                <div id="modelSetuju-<?= $pengajuan['id'] ?>" class="fixed hidden z-[100] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                                    <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
+
+                                                                        <div class="flex justify-end p-2">
+                                                                            <button onclick="closeModal('modelSetuju-<?= $pengajuan['id'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                                                                </svg>
+                                                                            </button>
+                                                                        </div>
+
+                                                                        <div class="p-6 pt-0 text-center">
+                                                                            <div class="flex justify-center mb-6">
+                                                                                <!-- Container for SVG, centered -->
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="43" height="42" viewBox="0 0 43 42" fill="none">
+                                                                                    <path d="M23.9062 38.1938L12.75 35.0438V19.25H15.55C15.7542 19.25 15.9583 19.2722 16.1625 19.3165C16.3667 19.3608 16.5708 19.4116 16.775 19.4688L28.8937 23.975C29.3021 24.1208 29.6305 24.3833 29.879 24.7625C30.1275 25.1417 30.2512 25.5354 30.25 25.9438C30.25 26.5563 30.0382 27.0521 29.6147 27.4313C29.1912 27.8104 28.703 28 28.15 28H23.5562C23.4104 28 23.3013 27.993 23.229 27.979C23.1567 27.965 23.0616 27.9283 22.9437 27.8688L20.975 27.125C20.7417 27.0375 20.5083 27.0521 20.275 27.1688C20.0417 27.2854 19.8958 27.4458 19.8375 27.65C19.7792 27.8833 19.7937 28.1021 19.8812 28.3063C19.9687 28.5104 20.1292 28.6563 20.3625 28.7438L22.9437 29.6625C23.0021 29.6917 23.0896 29.7138 23.2062 29.729C23.3229 29.7442 23.425 29.7512 23.5125 29.75H35.5C36.4333 29.75 37.25 30.0854 37.95 30.7563C38.65 31.4271 39 32.2583 39 33.25L26.0937 38.1063C25.8021 38.2229 25.4451 38.2888 25.0227 38.304C24.6004 38.3192 24.2282 38.2824 23.9062 38.1938ZM2.25 35V22.75C2.25 21.7875 2.593 20.9638 3.279 20.279C3.965 19.5942 4.78867 19.2512 5.75 19.25C6.71133 19.2488 7.53558 19.5918 8.22275 20.279C8.90992 20.9662 9.25233 21.7898 9.25 22.75V35C9.25 35.9625 8.90758 36.7868 8.22275 37.4728C7.53792 38.1588 6.71367 38.5012 5.75 38.5C4.78633 38.4988 3.96267 38.1564 3.279 37.4728C2.59533 36.7891 2.25233 35.9648 2.25 35Z" fill="#0A2D27" />
+                                                                                    <path d="M31.8248 5.72955L23.1186 14.3921L19.3998 10.6733C19.0498 10.3221 18.6415 10.1541 18.1748 10.1693C17.7081 10.1845 17.2998 10.3525 16.9498 10.6733C16.5986 11.0233 16.4161 11.4316 16.4021 11.8983C16.3881 12.365 16.5561 12.7733 16.9061 13.1233L21.8936 18.1108C22.2436 18.4608 22.6519 18.6358 23.1186 18.6358C23.5852 18.6358 23.9936 18.4608 24.3436 18.1108L34.2748 8.17955C34.5956 7.85872 34.7561 7.45038 34.7561 6.95455C34.7561 6.45872 34.5956 6.05038 34.2748 5.72955C33.926 5.37838 33.5106 5.21038 33.0288 5.22555C32.547 5.24072 32.1456 5.40872 31.8248 5.72955Z" fill="#26B29D" />
+                                                                                </svg>
+                                                                            </div>
+                                                                            <h3 class="font-semibold">Menyetujui Pengajuan Barang Medis</h3>
+                                                                            <p class="text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
+                                                                                untuk menyetujui pengajuan barang medis?</p>
+
+
+                                                                            <div class="w-full sm:flex justify-center">
+
+                                                                                <a href="#" onclick="closeModal('modelSetuju-<?= $pengajuan['id'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center mr-2" data-modal-toggle="delete-user-modal">
+                                                                                    Batal
+                                                                                </a>
+                                                                                <button onclick="closeModal('modelSetuju-<?= $pengajuan['id'] ?>')" value="Disetujui" name="<?php echo ($user_data['role'] === 4001 ? 'statusapoteker' : 'statuskeuangan'); ?>" class="w-full text-[#ACF2E7] bg-[#0A2D27] hover:bg-[#13594E] focus:ring-4 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center ">
+                                                                                    Setuju
+                                                                                </button>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div class="px-3 py-1.5">
-                                                                <button type="submit" value="Ditolak" name="<?php echo ($user_data['role'] === 1 ? 'statusapoteker' : 'statuskeuangan'); ?>" class="gap-x-1 text-sm text-[#CF5454] decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                                <button href="#" onclick="event.preventDefault(); openModal('modelTolak-<?= $pengajuan['id'] ?>')" class="gap-x-1 text-sm text-[#CF5454] decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                                                     Tolak
                                                                 </button>
+                                                                <div id="modelTolak-<?= $pengajuan['id'] ?>" class="fixed hidden z-[100] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                                    <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
+
+                                                                        <div class="flex justify-end p-2">
+                                                                            <button onclick="closeModal('modelTolak-<?= $pengajuan['id'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                                                                </svg>
+                                                                            </button>
+                                                                        </div>
+
+                                                                        <div class="p-6 pt-0 text-center">
+                                                                            <div class="flex justify-center mb-6">
+                                                                                <!-- Container for SVG, centered -->
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42" fill="none">
+                                                                                    <path d="M21 17.5C24.866 17.5 28 14.366 28 10.5C28 6.63401 24.866 3.5 21 3.5C17.134 3.5 14 6.63401 14 10.5C14 14.366 17.134 17.5 21 17.5Z" fill="#DA4141" />
+                                                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M28.875 38.5C25.9875 38.5 24.5437 38.5 23.6477 37.6022C22.75 36.7062 22.75 35.2625 22.75 32.375C22.75 29.4875 22.75 28.0437 23.6477 27.1477C24.5437 26.25 25.9875 26.25 28.875 26.25C31.7625 26.25 33.2062 26.25 34.1022 27.1477C35 28.0437 35 29.4875 35 32.375C35 35.2625 35 36.7062 34.1022 37.6022C33.2062 38.5 31.7625 38.5 28.875 38.5ZM26.8748 28.931C26.6833 28.7395 26.4236 28.632 26.1529 28.632C25.8821 28.632 25.6225 28.7395 25.431 28.931C25.2395 29.1225 25.132 29.3821 25.132 29.6529C25.132 29.9236 25.2395 30.1833 25.431 30.3748L27.4313 32.375L25.431 34.3752C25.3362 34.47 25.261 34.5826 25.2097 34.7064C25.1584 34.8303 25.132 34.9631 25.132 35.0971C25.132 35.2312 25.1584 35.3639 25.2097 35.4878C25.261 35.6117 25.3362 35.7242 25.431 35.819C25.5258 35.9138 25.6383 35.989 25.7622 36.0403C25.8861 36.0916 26.0188 36.118 26.1529 36.118C26.2869 36.118 26.4197 36.0916 26.5436 36.0403C26.6674 35.989 26.78 35.9138 26.8748 35.819L28.875 33.8188L30.8752 35.819C30.97 35.9138 31.0826 35.989 31.2064 36.0403C31.3303 36.0916 31.4631 36.118 31.5971 36.118C31.7312 36.118 31.8639 36.0916 31.9878 36.0403C32.1117 35.989 32.2242 35.9138 32.319 35.819C32.4138 35.7242 32.489 35.6117 32.5403 35.4878C32.5916 35.3639 32.618 35.2312 32.618 35.0971C32.618 34.9631 32.5916 34.8303 32.5403 34.7064C32.489 34.5826 32.4138 34.47 32.319 34.3752L30.3188 32.375L32.319 30.3748C32.5105 30.1833 32.618 29.9236 32.618 29.6529C32.618 29.3821 32.5105 29.1225 32.319 28.931C32.1275 28.7395 31.8679 28.632 31.5971 28.632C31.3264 28.632 31.0667 28.7395 30.8752 28.931L28.875 30.9312L26.8748 28.931Z" fill="#DA4141" />
+                                                                                    <path d="M31.6662 26.3043C30.9225 26.25 30.0107 26.25 28.875 26.25C25.9875 26.25 24.5437 26.25 23.6477 27.1477C22.75 28.0437 22.75 29.4875 22.75 32.375C22.75 34.4155 22.75 35.735 23.0667 36.6503C22.3947 36.7168 21.7052 36.75 21 36.75C14.2345 36.75 8.75 33.6175 8.75 29.75C8.75 25.8825 14.2345 22.75 21 22.75C25.5728 22.75 29.561 24.1815 31.6662 26.3043Z" fill="#FF9797" />
+                                                                                </svg>
+                                                                            </div>
+                                                                            <h3 class="font-semibold">Menolak Pengajuan Barang Medis</h3>
+                                                                            <p class="text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
+                                                                                untuk menolak pengajuan barang medis?</p>
+
+
+                                                                            <div class="w-full sm:flex justify-center">
+
+                                                                                <button onclick="closeModal('modelTolak-<?= $pengajuan['id'] ?>')" value="Ditolak" name="<?php echo ($user_data['role'] === 4001 ? 'statusapoteker' : 'statuskeuangan'); ?>" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                                    Tolak
+                                                                                </button>
+
+                                                                                <a href="#" onclick="closeModal('modelTolak-<?= $pengajuan['id'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                                    Batal
+                                                                                </a>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                 </form>
                                             <?php else : ?>
@@ -347,6 +426,7 @@
                                                                             Keuangan</label>
                                                                         <input type="text" name="" value="<?= $persetujuan['status_keuangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                                     </div>
+                                                                    
                                                                 </div>
 
                                                                 <div class="pt-2 border-t border-[#F1F1F1]">
@@ -368,8 +448,8 @@
 
                                                                         <?php $subtotal = 0;
                                                                         foreach ($pesanan_data as $pesanan) {
-                                                                            if ($pesanan['id_pengajuan'] === $pengajuan['id']) { 
-                                                                                $subtotal += $pesanan['total_per_item']?>
+                                                                            if ($pesanan['id_pengajuan'] === $pengajuan['id']) {
+                                                                                $subtotal += $pesanan['total_per_item'] ?>
 
                                                                                 <div class="flex items-center justify-between">
                                                                                     <div class="w-1/2 font-medium">
@@ -396,7 +476,7 @@
 
                                                                         <?php }
                                                                         } ?>
-                                                                        
+
                                                                         <div class="border-t border-[#F1F1F1] mt-2">
                                                                             <div class="flex justify-between pt-1">
                                                                                 <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white md:w-1/2">Total</label>
@@ -410,33 +490,43 @@
                                                         </div>
                                                         <div class="flex justify-center items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
                                                             <form action="/persetujuanpengajuan/submit/<?= $pengajuan['id'] ?>" method="POST">
-                                                                <?php
-                                                                foreach ($persetujuan_data as $p) {
-                                                                    if ($p['id_pengajuan'] === $pengajuan['id']) {
-                                                                        if ($user_data['role'] === 1 || $user_data['role'] === 2) {
-                                                                            echo '<input type="hidden" value="' . $p['status'] . '" name="statuspersetujuan">';
-                                                                            echo '<input type="hidden" value="' . $pengajuan['id'] . '" name="idpengajuan">';
-                                                                            if ($user_data['role'] === 1) {
-                                                                                echo '<input type="hidden" value="' . $user_data['id'] . '" name="idapoteker">';
-                                                                                echo '<input type="hidden" value="' . $p['status_keuangan'] . '" name="statuskeuangan">';
-                                                                                echo '<input type="hidden" value="' . $p['id_keuangan'] . '" name="idkeuangan">';
-                                                                            } elseif ($user_data['role'] === 2) {
-                                                                                echo '<input type="hidden" value="' . $user_data['id'] . '" name="idkeuangan">';
-                                                                                echo '<input type="hidden" value="' . $p['status_apoteker'] . '" name="statusapoteker">';
-                                                                                echo '<input type="hidden" value="' . $p['id_apoteker'] . '" name="idapoteker">';
-                                                                            } else {
-                                                                                echo '<p>Hanya apoteker atau keuangan yang bisa melakukan persetujuan.</p>';
+                                                                <?php if ($user_data['role'] === 4001 && $persetujuan['status_apoteker'] === 'Menunggu Persetujuan' || $user_data['role'] === 5001 && $persetujuan['status_keuangan'] === 'Menunggu Persetujuan') {
+                                                                    foreach ($persetujuan_data as $p) {
+                                                                        if ($p['id_pengajuan'] === $pengajuan['id']) {
+                                                                            if ($user_data['role'] === 4001 || $user_data['role'] === 5001) {
+                                                                                echo '<input type="hidden" value="' . $p['status'] . '" name="statuspersetujuan">';
+                                                                                echo '<input type="hidden" value="' . $pengajuan['id'] . '" name="idpengajuan">';
+                                                                                if ($user_data['role'] === 4001) {
+                                                                                    echo '<input type="hidden" value="' . $user_data['id'] . '" name="idapoteker">';
+                                                                                    echo '<input type="hidden" value="' . $p['status_keuangan'] . '" name="statuskeuangan">';
+                                                                                    echo '<input type="hidden" value="' . $p['id_keuangan'] . '" name="idkeuangan">';
+                                                                                } elseif ($user_data['role'] === 5001) {
+                                                                                    echo '<input type="hidden" value="' . $user_data['id'] . '" name="idkeuangan">';
+                                                                                    echo '<input type="hidden" value="' . $p['status_apoteker'] . '" name="statusapoteker">';
+                                                                                    echo '<input type="hidden" value="' . $p['id_apoteker'] . '" name="idapoteker">';
+                                                                                } else {
+                                                                                    echo '<p>Hanya apoteker atau keuangan yang bisa melakukan persetujuan.</p>';
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
-                                                                } ?>
-                                                                <button type="submit" value="Ditolak" name="<?php echo ($user_data['role'] === 1 ? 'statusapoteker' : 'statuskeuangan'); ?>" class="w-1/5 py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#DA4141] text-white shadow-sm hover:bg-[#E06060] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                                                                    Tolak
-                                                                </button>
-                                                                <button type="submit" value="Disetujui" name="<?php echo ($user_data['role'] === 1 ? 'statusapoteker' : 'statuskeuangan'); ?>" class="w-1/5 py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#0A2D27] text-[#ACF2E7] shadow-sm hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                                                                    Setuju
-                                                                </button>
+                                                                ?>
+                                                                    <button type="button" onclick="event.preventDefault(); openModal('modelTolak-<?= $pengajuan['id'] ?>')" class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-[#DA4141] bg-[#FDFDFD] text-[#DA4141] shadow-sm hover:bg-[#FFC7C7] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                                                        Tolak
+                                                                    </button>
+                                                                    <button type="button" onclick="openModal('modelSetuju-<?= $pengajuan['id'] ?>')" value="Disetujui" name="<?php echo ($user_data['role'] === 4001 ? 'statusapoteker' : 'statuskeuangan'); ?>" class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-[#0A2D27] bg-[#0A2D27] text-[#ACF2E7] shadow-sm hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                                                        Setuju
+                                                                    </button>
                                                             </form>
+                                                        <?php } else { ?>
+                                                            <button type="button" class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border cursor-default border-[#F6D7D7] bg-[#FDFDFD] text-[#F6D7D7] shadow-sm disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" disabled>
+                                                                Tolak
+                                                            </button>
+                                                            <button type="button" class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border cursor-default border-[#CCD3D2] bg-[#CCD3D2] text-[#EDFBF9] shadow-sm disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" disabled>
+                                                                Setuju
+                                                            </button>
+                                                        <?php }
+                                                        ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -531,52 +621,48 @@
         var input, filter, table, tr, td, i, j, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-        th = table.getElementsByTagName("th"); // Get all th elements
+        table = document.getElementById("myTable"); // Pastikan ini mengacu pada ID tabel yang benar
 
+        if (!table) return; // Pastikan tabel ada sebelum melanjutkan
+
+        tr = table.getElementsByTagName("tr");
         var dataFound = false;
 
-        // Iterate over table rows (including header row)
+        // Iterate over all table rows (including header row)
         for (i = 0; i < tr.length; i++) {
             var found = false;
 
-            // Check if it's a header row (th elements)
-            if (i === 0) {
-                // Iterate over th elements
-                for (j = 0; j < th.length; j++) {
-                    txtValue = th[j].textContent || th[j].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        found = true;
-                        break;
-                    }
-                }
-            } else {
-                // Iterate over td elements in regular rows
+            // Check if it's a regular row (skip header row)
+            if (i > 0) {
                 td = tr[i].getElementsByTagName("td");
+
+                // Iterate over all td elements in the row
                 for (j = 0; j < td.length; j++) {
                     txtValue = td[j].textContent || td[j].innerText;
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
                         found = true;
-                        break;
+                        break; // Break out of inner loop if match found
                     }
                 }
-            }
 
-            if (found) {
-                tr[i].style.display = "";
-                dataFound = true;
-            } else {
-                tr[i].style.display = "none";
+                // Show or hide row based on search result
+                if (found) {
+                    tr[i].style.display = "";
+                    dataFound = true;
+                } else {
+                    tr[i].style.display = "none";
+                }
             }
         }
+    }
+    window.openModal = function(modalId) {
+        document.getElementById(modalId).style.display = 'block'
+        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
+    }
 
-        // Show/hide message if no data found
-        if (!dataFound) {
-            document.getElementById("noDataFound").style.display = "block";
-        } else {
-            document.getElementById("noDataFound").style.display = "none";
-        }
+    window.closeModal = function(modalId) {
+        document.getElementById(modalId).style.display = 'none'
+        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
     }
 </script>
 <?= $this->endSection(); ?>

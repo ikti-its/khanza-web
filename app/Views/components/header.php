@@ -1,4 +1,6 @@
 <body class="bg-gray-50 dark:bg-slate-900">
+    <?php $role = session()->get('user_details')['role'];
+    $persetujuanrole = [1337, 1, 4001, 5001]; ?>
     <!-- ========== HEADER ========== -->
     <header class="sticky top-0 inset-x-0 flex flex-wrap sm:justify-start sm:flex-nowrap z-[48] w-full bg-white border-b text-sm py-2.5 sm:py-4 lg:ps-64 dark:bg-gray-800 dark:border-gray-700">
         <nav class="flex basis-full items-center w-full mx-auto px-4 sm:px-6 md:px-8" aria-label="Global">
@@ -95,77 +97,26 @@
 
     <!-- ========== MAIN CONTENT ========== -->
     <!-- Sidebar Toggle -->
-    
+
     <!-- End Sidebar Toggle -->
 
     <!-- Sidebar -->
     <div id="application-sidebar" class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 start-0 bottom-0 z-[60] w-64 bg-white border-e border-gray-200 pt-7 pb-10 overflow-y-auto lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-slate-700 dark:[&::-webkit-scrollbar-thumb]:bg-slate-500 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-6">
-            <a class="flex-none text-xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-
+            <a class="flex-none text-xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/dashboard">
                 <img src="/img/logo-omnia.png" class=" h-12">
-
             </a>
         </div>
 
         <nav class="hs-accordion-group p-6 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
             <ul class="space-y-1.5">
-                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                    <svg class="flex-shrink-0 size-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path d="M2 12.2039C2 9.91549 2 8.77128 2.5192 7.82274C3.0384 6.87421 3.98695 6.28551 5.88403 5.10813L7.88403 3.86687C9.88939 2.62229 10.8921 2 12 2C13.1079 2 14.1106 2.62229 16.116 3.86687L18.116 5.10812C20.0131 6.28551 20.9616 6.87421 21.4808 7.82274C22 8.77128 22 9.91549 22 12.2039V13.725C22 17.6258 22 19.5763 20.8284 20.7881C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.7881C2 19.5763 2 17.6258 2 13.725V12.2039Z" stroke="#1C274C" stroke-width="1.5"></path>
-                            <path d="M12 15L12 18" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"></path>
-                        </g>
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M7.51675 2.36664L3.02508 5.86664C2.27508 6.44997 1.66675 7.69164 1.66675 8.63331V14.8083C1.66675 16.7416 3.24175 18.325 5.17508 18.325H14.8251C16.7584 18.325 18.3334 16.7416 18.3334 14.8166V8.74997C18.3334 7.74164 17.6584 6.44997 16.8334 5.87497L11.6834 2.26664C10.5167 1.44997 8.64175 1.49164 7.51675 2.36664Z" stroke="#272727" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M10 14.9917V12.4917" stroke="#272727" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    Dashboard
+                    Beranda
                 </a>
-                </li>
-
-                <li>
-                    <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                        <svg class="flex-shrink-0 size-4" fill="#00000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <title>Account Settings</title>
-
-                                <path d="M9.6,3.32a3.86,3.86,0,1,0,3.86,3.85A3.85,3.85,0,0,0,9.6,3.32M16.35,11a.26.26,0,0,0-.25.21l-.18,1.27a4.63,4.63,0,0,0-.82.45l-1.2-.48a.3.3,0,0,0-.3.13l-1,1.66a.24.24,0,0,0,.06.31l1,.79a3.94,3.94,0,0,0,0,1l-1,.79a.23.23,0,0,0-.06.3l1,1.67c.06.13.19.13.3.13l1.2-.49a3.85,3.85,0,0,0,.82.46l.18,1.27a.24.24,0,0,0,.25.2h1.93a.24.24,0,0,0,.23-.2l.18-1.27a5,5,0,0,0,.81-.46l1.19.49c.12,0,.25,0,.32-.13l1-1.67a.23.23,0,0,0-.06-.3l-1-.79a4,4,0,0,0,0-.49,2.67,2.67,0,0,0,0-.48l1-.79a.25.25,0,0,0,.06-.31l-1-1.66c-.06-.13-.19-.13-.31-.13L19.5,13a4.07,4.07,0,0,0-.82-.45l-.18-1.27a.23.23,0,0,0-.22-.21H16.46M9.71,13C5.45,13,2,14.7,2,16.83v1.92h9.33a6.65,6.65,0,0,1,0-5.69A13.56,13.56,0,0,0,9.71,13m7.6,1.43a1.45,1.45,0,1,1,0,2.89,1.45,1.45,0,0,1,0-2.89Z"></path>
-                            </g>
-                        </svg>
-                        Akun
-                    </a>
-
-                </li>
-
-                <li>
-                    <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                        <svg class="flex-shrink-0 size-4" fill="#000000" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <path d="M68.00586,128.0094a130.696,130.696,0,0,1-13.73438,58.69433,4.00047,4.00047,0,1,1-7.16406-3.5625A122.75147,122.75147,0,0,0,60.00586,128.0094a67.71834,67.71834,0,0,1,25.49805-53.084,4.00012,4.00012,0,0,1,5.0039,6.24219A59.75391,59.75391,0,0,0,68.00586,128.0094Zm60-4a4.00019,4.00019,0,0,0-4,4,188.14011,188.14011,0,0,1-23.47363,91.04,4,4,0,1,0,6.99609,3.87988,196.15115,196.15115,0,0,0,24.47754-94.91992A4.0002,4.0002,0,0,0,128.00586,124.0094Zm0-32a36.04061,36.04061,0,0,0-36,36,4,4,0,0,0,8,0,28,28,0,0,1,56,0,218.07144,218.07144,0,0,1-20.89258,93.70019,4.00022,4.00022,0,1,0,7.23633,3.41211,226.01563,226.01563,0,0,0,21.65625-97.1123A36.04061,36.04061,0,0,0,128.00586,92.0094Zm0-64.001a100.11269,100.11269,0,0,0-100,100,91.75393,91.75393,0,0,1-5.23438,30.667,4.00013,4.00013,0,1,0,7.543,2.666,99.75234,99.75234,0,0,0,5.69141-33.333,92,92,0,0,1,184,0,286.23362,286.23362,0,0,1-5.36621,55.22656,4.00093,4.00093,0,0,0,3.15137,4.69825,4.071,4.071,0,0,0,.77734.07617,4.00267,4.00267,0,0,0,3.9209-3.22754,294.305,294.305,0,0,0,5.5166-56.77344A100.1127,100.1127,0,0,0,128.00586,28.00842ZM93.60156,156.0885a3.99683,3.99683,0,0,0-4.71582,3.124,154.73465,154.73465,0,0,1-17.65918,46.64161,4.00015,4.00015,0,1,0,6.92969,3.998,162.72659,162.72659,0,0,0,18.56934-49.04785A3.99978,3.99978,0,0,0,93.60156,156.0885Zm34.4043-96.0791a68.7229,68.7229,0,0,0-8.49512.52637,3.99952,3.99952,0,0,0,.99024,7.9375,60.92544,60.92544,0,0,1,7.50488-.46387,60.06812,60.06812,0,0,1,60,60,255.60237,255.60237,0,0,1-1.94922,31.5039,3.99966,3.99966,0,0,0,3.47363,4.46485,4.1247,4.1247,0,0,0,.5.03027,3.9994,3.9994,0,0,0,3.96387-3.50488,263.39955,263.39955,0,0,0,2.01172-32.49414A68.07728,68.07728,0,0,0,128.00586,60.0094Zm56.93262,128.125a4.00027,4.00027,0,0,0-4.8711,2.87695c-1.4873,5.78125-3.20312,11.57617-5.09961,17.22363a4.00011,4.00011,0,1,0,7.584,2.54688c1.957-5.83008,3.72754-11.81055,5.26367-17.77637A4.00014,4.00014,0,0,0,184.93848,188.1344Z"></path>
-                            </g>
-                        </svg>
-                        Kehadiran
-                    </a>
-
-                </li>
-
-                <li>
-                    <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/datauserpegawai">
-                        <svg class="flex-shrink-0 size-4" fill="#000000" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <title>suitcase1</title>
-                                <path d="M27 29h-23c-1.105 0-2-0.896-2-2v-12c0 0 5.221 2.685 10 3.784v1.216c0 0.553 0.447 1 1 1h5c0.552 0 1-0.447 1-1v-1.216c4.778-1.099 10-3.784 10-3.784v12c0 1.104-0.896 2-2 2zM17 17c0.552 0 1 0.447 1 1v1c0 0.553-0.448 1-1 1h-3c-0.553 0-1-0.447-1-1v-1c0-0.553 0.447-1 1-1h3zM19 17c0-0.553-0.448-1-1-1h-5c-0.553 0-1 0.447-1 1v0.896c-4.779-1.132-10-3.896-10-3.896v-4c0-1.104 0.895-2 2-2h6v-2c0-1.104 0.896-2 2-2h7c1.104 0 2 0.896 2 2v2h6c1.104 0 2 0.896 2 2v4c0 0-5.222 2.764-10 3.896v-0.896zM19 7c0-0.553-0.448-1-1-1h-5c-0.553 0-1 0.447-1 1 0 0.552 0 1 0 1h7c0 0 0-0.448 0-1z"></path>
-                            </g>
-                        </svg>
-                        Pegawai
-                    </a>
-
                 </li>
                 <li class="hs-accordion" id="users-accordion">
                     <button type="button" class="hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
@@ -299,33 +250,40 @@
                         </ul>
                     </div>
                 </li>
+                <?php if (in_array($role, $persetujuanrole)) { ?>
+                    <li>
+                        <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/persetujuanpengajuan">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M11.1458 18.1869L5.83325 16.6869V9.16602H7.16659C7.26381 9.16602 7.36103 9.17657 7.45825 9.19768C7.55547 9.21879 7.6527 9.24296 7.74992 9.27018L13.5208 11.416C13.7152 11.4855 13.8716 11.6105 13.9899 11.791C14.1083 11.9716 14.1671 12.1591 14.1666 12.3535C14.1666 12.6452 14.0658 12.8813 13.8641 13.0619C13.6624 13.2424 13.4299 13.3327 13.1666 13.3327H10.9791C10.9096 13.3327 10.8577 13.3294 10.8233 13.3227C10.7888 13.316 10.7435 13.2985 10.6874 13.2702L9.74992 12.916C9.63881 12.8744 9.5277 12.8813 9.41658 12.9369C9.30547 12.9924 9.23603 13.0688 9.20825 13.166C9.18047 13.2771 9.18742 13.3813 9.22908 13.4785C9.27075 13.5757 9.34714 13.6452 9.45825 13.6869L10.6874 14.1244C10.7152 14.1382 10.7569 14.1488 10.8124 14.156C10.868 14.1632 10.9166 14.1666 10.9583 14.166H16.6666C17.111 14.166 17.4999 14.3257 17.8333 14.6452C18.1666 14.9646 18.3333 15.3605 18.3333 15.8327L12.1874 18.1452C12.0485 18.2007 11.8785 18.2321 11.6774 18.2394C11.4763 18.2466 11.2991 18.2291 11.1458 18.1869ZM0.833252 16.666V10.8327C0.833252 10.3744 0.996585 9.98213 1.32325 9.65602C1.64992 9.32991 2.04214 9.16657 2.49992 9.16602C2.9577 9.16546 3.3502 9.3288 3.67742 9.65602C4.00464 9.98324 4.1677 10.3755 4.16659 10.8327V16.666C4.16659 17.1244 4.00353 17.5169 3.67742 17.8435C3.35131 18.1702 2.95881 18.3332 2.49992 18.3327C2.04103 18.3321 1.64881 18.1691 1.32325 17.8435C0.997696 17.518 0.834363 17.1255 0.833252 16.666Z" fill="#0A2D27" />
+                                <path d="M14.9166 2.72873L10.7707 6.85373L8.99991 5.0829C8.83324 4.91567 8.6388 4.83567 8.41657 4.8429C8.19435 4.85012 7.99991 4.93012 7.83324 5.0829C7.66602 5.24956 7.57907 5.44401 7.57241 5.66623C7.56574 5.88845 7.64574 6.0829 7.81241 6.24956L10.1874 8.62456C10.3541 8.79123 10.5485 8.87456 10.7707 8.87456C10.993 8.87456 11.1874 8.79123 11.3541 8.62456L16.0832 3.8954C16.236 3.74262 16.3124 3.54817 16.3124 3.31206C16.3124 3.07595 16.236 2.88151 16.0832 2.72873C15.9171 2.56151 15.7193 2.48151 15.4899 2.48873C15.2605 2.49595 15.0694 2.57595 14.9166 2.72873Z" fill="#26B29D" />
+                            </svg>
+                            Persetujuan
+                        </a>
+
+                    </li>
+                <?php } ?>
+                </li>
+
+
                 <li>
-                    <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/persetujuanpengajuan">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M11.1458 18.1869L5.83325 16.6869V9.16602H7.16659C7.26381 9.16602 7.36103 9.17657 7.45825 9.19768C7.55547 9.21879 7.6527 9.24296 7.74992 9.27018L13.5208 11.416C13.7152 11.4855 13.8716 11.6105 13.9899 11.791C14.1083 11.9716 14.1671 12.1591 14.1666 12.3535C14.1666 12.6452 14.0658 12.8813 13.8641 13.0619C13.6624 13.2424 13.4299 13.3327 13.1666 13.3327H10.9791C10.9096 13.3327 10.8577 13.3294 10.8233 13.3227C10.7888 13.316 10.7435 13.2985 10.6874 13.2702L9.74992 12.916C9.63881 12.8744 9.5277 12.8813 9.41658 12.9369C9.30547 12.9924 9.23603 13.0688 9.20825 13.166C9.18047 13.2771 9.18742 13.3813 9.22908 13.4785C9.27075 13.5757 9.34714 13.6452 9.45825 13.6869L10.6874 14.1244C10.7152 14.1382 10.7569 14.1488 10.8124 14.156C10.868 14.1632 10.9166 14.1666 10.9583 14.166H16.6666C17.111 14.166 17.4999 14.3257 17.8333 14.6452C18.1666 14.9646 18.3333 15.3605 18.3333 15.8327L12.1874 18.1452C12.0485 18.2007 11.8785 18.2321 11.6774 18.2394C11.4763 18.2466 11.2991 18.2291 11.1458 18.1869ZM0.833252 16.666V10.8327C0.833252 10.3744 0.996585 9.98213 1.32325 9.65602C1.64992 9.32991 2.04214 9.16657 2.49992 9.16602C2.9577 9.16546 3.3502 9.3288 3.67742 9.65602C4.00464 9.98324 4.1677 10.3755 4.16659 10.8327V16.666C4.16659 17.1244 4.00353 17.5169 3.67742 17.8435C3.35131 18.1702 2.95881 18.3332 2.49992 18.3327C2.04103 18.3321 1.64881 18.1691 1.32325 17.8435C0.997696 17.518 0.834363 17.1255 0.833252 16.666Z" fill="#0A2D27" />
-                            <path d="M14.9166 2.72873L10.7707 6.85373L8.99991 5.0829C8.83324 4.91567 8.6388 4.83567 8.41657 4.8429C8.19435 4.85012 7.99991 4.93012 7.83324 5.0829C7.66602 5.24956 7.57907 5.44401 7.57241 5.66623C7.56574 5.88845 7.64574 6.0829 7.81241 6.24956L10.1874 8.62456C10.3541 8.79123 10.5485 8.87456 10.7707 8.87456C10.993 8.87456 11.1874 8.79123 11.3541 8.62456L16.0832 3.8954C16.236 3.74262 16.3124 3.54817 16.3124 3.31206C16.3124 3.07595 16.236 2.88151 16.0832 2.72873C15.9171 2.56151 15.7193 2.48151 15.4899 2.48873C15.2605 2.49595 15.0694 2.57595 14.9166 2.72873Z" fill="#26B29D" />
-                        </svg>
-                        Persetujuan
-                    </a>
-
-                </li>
-                </li>
-
-
-                <li><a href="<?= base_url('/logout') ?>" class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                        </svg>
-                        Logout
-                    </a>
+                    
+                        <button onclick="event.preventDefault(); openModal('modelLogout')" class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+                                <path d="M11.26 2C10.79 2 10.4 2.38 10.4 2.86V21.15C10.4 21.62 10.78 22.01 11.26 22.01C17.15 22.01 21.26 17.9 21.26 12.01C21.26 6.12 17.14 2 11.26 2Z" fill="#FEE2E2" />
+                                <path d="M3.96012 11.5399L6.80012 8.68991C7.09012 8.39991 7.57012 8.39991 7.86012 8.68991C8.15012 8.97991 8.15012 9.45991 7.86012 9.74991L6.30012 11.3099H15.8701C16.2801 11.3099 16.6201 11.6499 16.6201 12.0599C16.6201 12.4699 16.2801 12.8099 15.8701 12.8099H6.30012L7.86012 14.3699C8.15012 14.6599 8.15012 15.1399 7.86012 15.4299C7.71012 15.5799 7.52012 15.6499 7.33012 15.6499C7.14012 15.6499 6.95012 15.5799 6.80012 15.4299L3.96012 12.5799C3.67012 12.2999 3.67012 11.8299 3.96012 11.5399Z" fill="#DA4141" />
+                            </svg>
+                            Keluar akun
+                        </button>
+                        
+                 
                 </li>
             </ul>
+
         </nav>
     </div>
     <!-- End Sidebar -->
 
-
+    
     <!-- End Content -->
     <!-- ========== END MAIN CONTENT ========== -->
 </body>

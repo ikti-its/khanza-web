@@ -323,13 +323,19 @@ class TagihanController extends BaseController
                 if ($http_status_code_pengajuan === 200 && $http_status_code_pemesanan === 200 && $http_status_code_penerimaan === 200 && $http_status_code_pegawai === 200 && $http_status_code_medis === 200 && $http_status_code_satuan === 200 && $http_status_code_pesanan === 200) {
                     // Decode responses
                     $pengajuan_data = json_decode($response_pengajuan, true);
+                    foreach ($pengajuan_data['data'] as $pengajuan) {
+                        if ($pengajuan['id']===$idpengajuan && $pengajuan['status_pesanan'] !== '5') {
+                            return redirect('penerimaanmedis')->with('warning', 'Barang harus diterima terlebih dahulu agar bisa melakukan pembayaran');
+                        }
+                    }
+
                     $pemesanan_data = json_decode($response_pemesanan, true);
                     $pegawai_data = json_decode($response_pegawai, true);
                     $medis_data = json_decode($response_medis, true);
                     $satuan_data = json_decode($response_satuan, true);
                     $pesanan_data = json_decode($response_pesanan, true);
 
-                    $this->addBreadcrumb('Pengadaan', 'pengadaanbrgmedis');
+                    $this->addBreadcrumb('Pengadaan', 'pengadaanmedis');
                     $this->addBreadcrumb('Barang Medis', 'medis');
                     $this->addBreadcrumb('Tagihan', 'tagihanmedis');
                     $this->addBreadcrumb('Tambah', 'tambahtagihanmedis');
@@ -596,10 +602,10 @@ class TagihanController extends BaseController
                 $medis_data = json_decode($response_medis, true);
 
                 if ($http_status_code_tagihan === 200 && $http_status_code_pesanan === 200 && $http_status_code_pengajuan === 200 && $http_status_code_pemesanan === 200 && $http_status_code_penerimaan === 200 && $http_status_code_pegawai === 200 && $http_status_code_satuan === 200 && $http_status_code_medis === 200) {
-                    $this->addBreadcrumb('Pengadaan', 'pengadaanbrgmedis');
+                    $this->addBreadcrumb('Pengadaan', 'pengadaanmedis');
                     $this->addBreadcrumb('Barang Medis', 'medis');
                     $this->addBreadcrumb('Tagihan', 'tagihanmedis');
-                    $this->addBreadcrumb('Edit', 'edittagihanmedis');
+                    $this->addBreadcrumb('Ubah', 'edittagihanmedis');
 
                     $breadcrumbs = $this->getBreadcrumbs();
                     return view('/admin/pengadaan/medis/tagihan/edit_tagihan', [

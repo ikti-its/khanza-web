@@ -400,7 +400,7 @@ class StokKeluarController extends BaseController
                     $this->addBreadcrumb('Inventaris', 'inventarismedis');
                     $this->addBreadcrumb('Barang Medis', 'medis');
                     $this->addBreadcrumb('Stok Keluar', 'stokkeluarmedis');
-                    $this->addBreadcrumb('Edit', 'editstokkeluarmedis');
+                    $this->addBreadcrumb('Ubah', 'editstokkeluarmedis');
 
                     $breadcrumbs = $this->getBreadcrumbs();
                     return view('/admin/inventaris/medis/stok_keluar/edit_stok_keluar', [
@@ -491,7 +491,7 @@ class StokKeluarController extends BaseController
                 if ($response_stok_keluar) {
                     $http_status_code_stok_keluar = curl_getinfo($ch_stok_keluar, CURLINFO_HTTP_CODE);
                     if ($http_status_code_stok_keluar === 200) {
-                        for ($i = 0; $i < count($idbrgmedis); $i++) {
+                        for ($i = 0; $i < count($idtransaksibrgmedis); $i++) {
                             $transaksi_brgmedis_url = $this->api_url . '/inventaris/transaksi/' . $idtransaksibrgmedis[$i];
                             $postDataTransaksiBrgmedis = [
                                 'id_stok_keluar' => $idstokkeluar,
@@ -513,7 +513,7 @@ class StokKeluarController extends BaseController
 
                             $response = curl_exec($ch_transaksi_brgmedis);
                         }
-
+                        
                         if ($response) {
                             $http_status_code_transaksi_brgmedis = curl_getinfo($ch_transaksi_brgmedis, CURLINFO_HTTP_CODE);
                             if ($http_status_code_transaksi_brgmedis === 200) {

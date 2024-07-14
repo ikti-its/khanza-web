@@ -2,9 +2,9 @@
 <?= $this->section('content'); ?>
 
 <!-- Table Section -->
-<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
-    <div class="flex flex-col ">
+    <div class="flex flex-col">
         <div class="-m-1.5 overflow-y-auto">
             <div class="sm:px-6 min-w-full inline-block align-middle">
                 <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700">

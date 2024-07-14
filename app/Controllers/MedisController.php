@@ -429,7 +429,7 @@ class MedisController extends BaseController
                             $this->addBreadcrumb('Inventaris', 'inventarismedis');
                             $this->addBreadcrumb('Barang Medis', 'medis');
                             $this->addBreadcrumb('Data', 'data');
-                            $this->addBreadcrumb('Edit', 'edit');
+                            $this->addBreadcrumb('Ubah', 'edit');
 
                             $breadcrumbs = $this->getBreadcrumbs();
                             return view('/admin/inventaris/medis/edit_medis', [

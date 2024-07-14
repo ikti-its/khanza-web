@@ -1,19 +1,30 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
-
 <!-- Table Section -->
-<div class="max-w-[85rem] py-6 lg:py-0 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="flex flex-col">
-        <div class="overflow-x-auto">
+
+        <div class="-m-1.5 overflow-y-auto">
             <div class="sm:px-6 min-w-full inline-block align-middle">
-                <div class="mt-5 p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
+                <?php if (session()->getFlashdata('warning')) : ?>
+                    <div id="warningMessage" class="flex items-center my-2 bg-[#FFF5CF] text-sm font-semibold text-[#D97706] rounded-lg p-4" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 7.5V11.6667" stroke="#D97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M9.99986 17.8414H4.94986C2.0582 17.8414 0.849863 15.7747 2.24986 13.2497L4.84986 8.56641L7.29986 4.16641C8.7832 1.49141 11.2165 1.49141 12.6999 4.16641L15.1499 8.57474L17.7499 13.2581C19.1499 15.7831 17.9332 17.8497 15.0499 17.8497H9.99986V17.8414Z" stroke="#D97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M9.99561 14.166H10.0031" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span class="mx-1 font-semibold"></span><?= session()->getFlashdata('warning') ?>
+                    </div>
+                <?php endif; ?>
+                <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
                     <!-- Header -->
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
                             <h2 class="mb-2 text-xl font-extrabold text-gray-800 dark:text-gray-200">
                                 Pengajuan Barang Medis
                             </h2>
+
 
                         </div>
                         <div>
@@ -150,12 +161,12 @@
                                                                                                     // Format tanggal sesuai dengan format yang diinginkan
                                                                                                     $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
 
-                                                                                                    echo $formatted_date; ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                                                    echo $formatted_date; ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                             </div>
                                                             <div class="mb-5 sm:block md:flex items-center">
                                                                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor
                                                                     Pengajuan</label>
-                                                                <input type="text" name="" value="<?= $pengajuan['nomor_pengajuan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                <input type="text" name="" value="<?= $pengajuan['nomor_pengajuan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                             </div>
                                                             <div class="mb-5 sm:block md:flex items-center">
                                                                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Pegawai</label>
@@ -163,11 +174,29 @@
                                                                                                         if ($pegawai['id'] === $pengajuan['id_pegawai']) {
                                                                                                             echo $pegawai['nama'];
                                                                                                         }
-                                                                                                    } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                                                    } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            </div>
+                                                            <div class="mb-5 sm:block md:flex items-center">
+                                                                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Status Apoteker</label>
+                                                                <input type="text" name="" value="<?php foreach ($persetujuan_data as $persetujuan) {
+                                                                                                        if ($persetujuan['id_pengajuan'] === $pengajuan['id']) {
+                                                                                                            echo $persetujuan['status_apoteker'];
+                                                                                                        }
+                                                                                                    }
+                                                                                                    ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            </div>
+                                                            <div class="mb-5 sm:block md:flex items-center">
+                                                                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Status Keuangan</label>
+                                                                <input type="text" name="" value="<?php foreach ($persetujuan_data as $persetujuan) {
+                                                                                                        if ($persetujuan['id_pengajuan'] === $pengajuan['id']) {
+                                                                                                            echo $persetujuan['status_keuangan'];
+                                                                                                        }
+                                                                                                    }
+                                                                                                    ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                             </div>
                                                             <div class="mb-5 sm:block md:flex items-center">
                                                                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Catatan</label>
-                                                                <input type="text" name="" value="<?= $pengajuan['catatan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                <input type="text" name="" value="<?= $pengajuan['catatan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                             </div>
                                                         </div>
 
@@ -181,8 +210,8 @@
 
                                                                     </div>
                                                                     <div class="flex justify-end w-1/2">
-                                                                        <p class="font-bold mr-2 text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Harga/Item</p>
-                                                                        <p class="font-bold text-center text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full">Total/Item</p>
+                                                                        <p class="font-bold mr-2 text-center text-gray-900 text-sm rounded-lg w-full">Harga/Item</p>
+                                                                        <p class="font-bold text-center text-gray-900 text-sm rounded-lg w-full">Total/Item</p>
                                                                     </div>
                                                                 </div>
 
@@ -203,8 +232,8 @@
                                                                                 <br>
                                                                             </div>
                                                                             <div class="flex justify-end w-1/2">
-                                                                                <input type="text" name="" value="<?= "Rp " . number_format($pesanan['harga_satuan_pengajuan'], 0, ',', '.') ?>" class="text-center mr-2 bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                                                <input type="text" name="" value="<?= "Rp " . number_format($pesanan['subtotal_per_item'], 0, ',', '.') ?? "Belum ada total" ?>" class="text-center bg-gray-100 font-[600] text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                                <input type="text" name="" value="<?= "Rp " . number_format($pesanan['harga_satuan_pengajuan'], 0, ',', '.') ?>" class="text-center mr-2 bg-gray-100 text-gray-900 text-sm rounded-lg px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                                <input type="text" name="" value="<?= "Rp " . number_format($pesanan['subtotal_per_item'], 0, ',', '.') ?? "Belum ada total" ?>" class="text-center bg-gray-100 font-[600] text-gray-900 text-sm rounded-lg px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
                                                                             </div>
                                                                         </div>
                                                                         <div><small>Jumlah:
@@ -220,7 +249,7 @@
 
                                                                 <?php }
                                                                 } ?>
-                                                                
+
                                                                 <div class="border-t border-[#F1F1F1] my-2">
                                                                     <div class="flex justify-between pt-1">
                                                                         <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white md:w-1/2">Total</label>
@@ -232,10 +261,15 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex justify-end items-center gap-x-2 py-3 px-4 w-full border-t dark:border-neutral-700">
-                                                    <a href="/pemesananmedis/tambah/<?= $pengajuan['id'] ?>" class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#0A2D27] text-[#ACF2E7] shadow-sm hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                                                        Lanjutkan Pemesanan
-                                                    </a>
-
+                                                    <?php if ($pengajuan['status_pesanan'] === '2') { ?>
+                                                        <a href="/pemesananmedis/tambah/<?= $pengajuan['id'] ?>" class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#0A2D27] text-[#ACF2E7] shadow-sm hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                                            Lanjutkan Pemesanan
+                                                        </a>
+                                                    <?php } else { ?>
+                                                        <button class="w-full py-2 px-3 flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-[#CCD3D2] text-[#EDFBF9] shadow-sm cursor-default">
+                                                            Lanjutkan Pemesanan
+                                                        </button>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -302,60 +336,78 @@
                                                         Lihat Detail
                                                     </button>
                                                 </div>
-                                                <div class="px-3 py-1.5">
-                                                    <a href="/pengajuanmedis/edit/<?= $pengajuan['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                                        Ubah
-                                                    </a>
-                                                </div>
-
-                                                <div class="px-3 py-1.5">
-                                                    <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $pengajuan['id'] ?>')" href="#">
-                                                        Hapus
-                                                    </button>
-                                                    <div id="modelConfirm-<?= $pengajuan['id'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
-                                                        <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
-
-                                                            <div class="flex justify-end p-2">
-                                                                <button onclick="closeModal('modelConfirm-<?= $pengajuan['id'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
-                                                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                                                    </svg>
-                                                                </button>
-                                                            </div>
-
-                                                            <div class="p-6 pt-0 text-center">
-                                                                <div class="flex justify-center mb-6">
-                                                                    <!-- Container for SVG, centered -->
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none">
-                                                                        <path d="M8.5 11H40.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                        <path d="M18.5 5H30.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                        <path d="M12.5 17H36.5V40C36.5 41.6569 35.1569 43 33.5 43H15.5C13.8431 43 12.5 41.6569 12.5 40V17Z" fill="#FEE2E2" stroke="#DA4141" stroke-width="4" stroke-linejoin="round" />
-                                                                        <path d="M20.5 25L28.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                        <path d="M28.5 25L20.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                    </svg>
-                                                                </div>
-                                                                Hapus data
-                                                                <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
-                                                                    untuk menghapus data ini?</h3>
-                                                                <form action="/pengajuanmedis/hapus/<?= $pengajuan['id'] ?>" method="POST">
-                                                                    <?= csrf_field() ?>
-                                                                    <div class="w-full sm:flex justify-center">
-                                                                        <input type="hidden" name="_method" value="DELETE">
-                                                                        <button onclick="closeModal('modelConfirm-<?= $pengajuan['id'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
-                                                                            Hapus
-                                                                        </button>
-
-                                                                        <a href="#" onclick="closeModal('modelConfirm-<?= $pengajuan['id'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-                                                                            Batal
-                                                                        </a>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-
-                                                        </div>
+                                                <?php if (
+                                                    $pengajuan['status_pesanan'] === '0' &&
+                                                    ($persetujuan['status_apoteker'] === 'Menunggu Persetujuan' &&
+                                                        $persetujuan['status_keuangan'] === 'Menunggu Persetujuan')
+                                                ) {  ?>
+                                                    <div class="px-3 py-1.5">
+                                                        <a href="/pengajuanmedis/edit/<?= $pengajuan['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                            Ubah
+                                                        </a>
                                                     </div>
 
-                                                </div>
+                                                    <div class="px-3 py-1.5">
+                                                        <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $pengajuan['id'] ?>')" href="#">
+                                                            Hapus
+                                                        </button>
+                                                        <div id="modelConfirm-<?= $pengajuan['id'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                            <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
+
+                                                                <div class="flex justify-end p-2">
+                                                                    <button onclick="closeModal('modelConfirm-<?= $pengajuan['id'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                                                        </svg>
+                                                                    </button>
+                                                                </div>
+
+                                                                <div class="p-6 pt-0 text-center">
+                                                                    <div class="flex justify-center mb-6">
+                                                                        <!-- Container for SVG, centered -->
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none">
+                                                                            <path d="M8.5 11H40.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                            <path d="M18.5 5H30.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                            <path d="M12.5 17H36.5V40C36.5 41.6569 35.1569 43 33.5 43H15.5C13.8431 43 12.5 41.6569 12.5 40V17Z" fill="#FEE2E2" stroke="#DA4141" stroke-width="4" stroke-linejoin="round" />
+                                                                            <path d="M20.5 25L28.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                            <path d="M28.5 25L20.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                        </svg>
+                                                                    </div>
+                                                                    Hapus data
+                                                                    <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
+                                                                        untuk menghapus data ini?</h3>
+                                                                    <form action="/pengajuanmedis/hapus/<?= $pengajuan['id'] ?>" method="POST">
+                                                                        <?= csrf_field() ?>
+                                                                        <div class="w-full sm:flex justify-center">
+                                                                            <input type="hidden" name="_method" value="DELETE">
+                                                                            <button onclick="closeModal('modelConfirm-<?= $pengajuan['id'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                                Hapus
+                                                                            </button>
+
+                                                                            <a href="#" onclick="closeModal('modelConfirm-<?= $pengajuan['id'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                                Batal
+                                                                            </a>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php } else { ?>
+                                                    <div class="px-3 py-1.5">
+                                                        <button class="cursor-default gap-x-1 text-sm text-[#C4C4C4] decoration-2 font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                            Ubah
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="px-3 py-1.5">
+                                                        <button class="cursor-default gap-x-1 text-sm text-[#C4C4C4] decoration-2 font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                            Hapus
+                                                        </button>
+
+                                                    </div>
+                                                <?php } ?>
                                             </div>
                                         </td>
 
@@ -370,63 +422,63 @@
                     <!-- Footer -->
                     <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
                         <!-- Pagination -->
-                        
-                            <nav class="flex w-full justify-between items-center gap-x-1">
-                                <!-- Previous Button -->
-                                <div class="inline-flex gap-x-2">
-                                    <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/pengajuanmedis?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                        <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="m15 18-6-6 6-6"></path>
-                                        </svg>
-                                        <span aria-hidden="true" class="hidden sm:block">Previous</span>
-                                    </button>
-                                </div>
 
-                                <!-- Page Numbers -->
-                                <div class="flex items-center gap-x-1">
-                                    <?php
-                                    $total_pages = $meta_data['total'];
-                                    $current_page = $meta_data['page'];
-                                    $range = 2; // Number of pages to show before and after the current page
-                                    $show_items = ($range * 2) + 1;
+                        <nav class="flex w-full justify-between items-center gap-x-1">
+                            <!-- Previous Button -->
+                            <div class="inline-flex gap-x-2">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/pengajuanmedis?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m15 18-6-6 6-6"></path>
+                                    </svg>
+                                    <span aria-hidden="true" class="hidden sm:block">Previous</span>
+                                </button>
+                            </div>
 
-                                    if ($total_pages <= $show_items) {
-                                        for ($i = 1; $i <= $total_pages; $i++) {
-                                            echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/pengajuanmedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                        }
-                                    } else {
-                                        if ($current_page > $range + 1) {
-                                            echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/pengajuanmedis?page=1&size=' . $meta_data['size'] . '\'">1</button>';
-                                            if ($current_page > $range + 2) {
-                                                echo '<span class="py-2 px-3 text-sm">...</span>';
-                                            }
-                                        }
+                            <!-- Page Numbers -->
+                            <div class="flex items-center gap-x-1">
+                                <?php
+                                $total_pages = $meta_data['total'];
+                                $current_page = $meta_data['page'];
+                                $range = 2; // Number of pages to show before and after the current page
+                                $show_items = ($range * 2) + 1;
 
-                                        for ($i = max($current_page - $range, 1); $i <= min($current_page + $range, $total_pages); $i++) {
-                                            echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/pengajuanmedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                        }
-
-                                        if ($current_page < $total_pages - $range - 1) {
-                                            if ($current_page < $total_pages - $range - 2) {
-                                                echo '<span class="py-2 px-3 text-sm">...</span>';
-                                            }
-                                            echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/pengajuanmedis?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
+                                if ($total_pages <= $show_items) {
+                                    for ($i = 1; $i <= $total_pages; $i++) {
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/pengajuanmedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
+                                    }
+                                } else {
+                                    if ($current_page > $range + 1) {
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/pengajuanmedis?page=1&size=' . $meta_data['size'] . '\'">1</button>';
+                                        if ($current_page > $range + 2) {
+                                            echo '<span class="py-2 px-3 text-sm">...</span>';
                                         }
                                     }
-                                    ?>
-                                </div>
 
-                                <!-- Next Button -->
-                                <div class="inline-flex gap-x-2">
-                                    <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/pengajuanmedis?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                        <span aria-hidden="true" class="hidden sm:block">Next</span>
-                                        <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="m9 18 6-6-6-6"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </nav>
-                
+                                    for ($i = max($current_page - $range, 1); $i <= min($current_page + $range, $total_pages); $i++) {
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/pengajuanmedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
+                                    }
+
+                                    if ($current_page < $total_pages - $range - 1) {
+                                        if ($current_page < $total_pages - $range - 2) {
+                                            echo '<span class="py-2 px-3 text-sm">...</span>';
+                                        }
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/pengajuanmedis?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
+                                    }
+                                }
+                                ?>
+                            </div>
+
+                            <!-- Next Button -->
+                            <div class="inline-flex gap-x-2">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/pengajuanmedis?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                    <span aria-hidden="true" class="hidden sm:block">Next</span>
+                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m9 18 6-6-6-6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </nav>
+
                     </div>
 
 
@@ -488,51 +540,38 @@
         var input, filter, table, tr, td, i, j, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-        th = table.getElementsByTagName("th"); // Get all th elements
+        table = document.getElementById("myTable"); // Pastikan ini mengacu pada ID tabel yang benar
 
+        if (!table) return; // Pastikan tabel ada sebelum melanjutkan
+
+        tr = table.getElementsByTagName("tr");
         var dataFound = false;
 
-        // Iterate over table rows (including header row)
+        // Iterate over all table rows (including header row)
         for (i = 0; i < tr.length; i++) {
             var found = false;
 
-            // Check if it's a header row (th elements)
-            if (i === 0) {
-                // Iterate over th elements
-                for (j = 0; j < th.length; j++) {
-                    txtValue = th[j].textContent || th[j].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        found = true;
-                        break;
-                    }
-                }
-            } else {
-                // Iterate over td elements in regular rows
+            // Check if it's a regular row (skip header row)
+            if (i > 0) {
                 td = tr[i].getElementsByTagName("td");
+
+                // Iterate over all td elements in the row
                 for (j = 0; j < td.length; j++) {
                     txtValue = td[j].textContent || td[j].innerText;
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
                         found = true;
-                        break;
+                        break; // Break out of inner loop if match found
                     }
                 }
-            }
 
-            if (found) {
-                tr[i].style.display = "";
-                dataFound = true;
-            } else {
-                tr[i].style.display = "none";
+                // Show or hide row based on search result
+                if (found) {
+                    tr[i].style.display = "";
+                    dataFound = true;
+                } else {
+                    tr[i].style.display = "none";
+                }
             }
-        }
-
-        // Show/hide message if no data found
-        if (!dataFound) {
-            document.getElementById("noDataFound").style.display = "block";
-        } else {
-            document.getElementById("noDataFound").style.display = "none";
         }
     }
 
@@ -558,5 +597,22 @@
             })
         }
     };
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Select the warning message element
+        var warningMessage = document.getElementById('warningMessage');
+
+        // Check if the warning message exists
+        if (warningMessage) {
+            // Fade out the warning message after 5 seconds (5000 milliseconds)
+            setTimeout(function() {
+                warningMessage.style.opacity = '0';
+                // Optionally, remove the element from the DOM after fading out
+                setTimeout(function() {
+                    warningMessage.remove();
+                }, 1000); // 1 second delay after fading out
+            }, 5000); // 5 seconds delay before fading out
+        }
+    });
 </script>
 <?= $this->endSection(); ?>

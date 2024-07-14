@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -13,8 +13,8 @@
         </div>
 
         <form action="/pemesananmedis/submittambah" method="post" onsubmit="return validateForm()">
-        <?= csrf_field() ?>   
-        <input type="hidden" value="3" name="statuspesanan">
+            <?= csrf_field() ?>
+            <input type="hidden" value="3" name="statuspesanan">
             <!-- Grid -->
             <input type="hidden" name="idpengajuan" value="<?= $pengajuan_data['id'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             <div class="sm:block md:flex items-center">
@@ -23,6 +23,7 @@
             </div>
             <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Pemesanan</label>
+                <input type="hidden" id="tglpengajuan" value="<?= $pengajuan_data['tanggal_pengajuan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                 <input type="date" id="tglpemesanan" name="tglpemesanan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
             <div id="dateError" class="mt-2 hidden">
@@ -32,7 +33,7 @@
                         <path d="M7 5.25V8.16667" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M7 12.4891H3.465C1.44083 12.4891 0.595001 11.0424 1.575 9.27492L3.395 5.99658L5.11 2.91658C6.14834 1.04408 7.85167 1.04408 8.89 2.91658L10.605 6.00242L12.425 9.28075C13.405 11.0482 12.5533 12.4949 10.535 12.4949H7V12.4891Z" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M6.99707 9.91675H7.00231" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg> Tanggal pemesanan maksimal 7 hari sebelum hari ini.
+                    </svg> Tanggal pemesanan harus setelah tanggal pengajuan dan maksimal 10 hari dari pengajuan.
                 </div>
             </div>
             <div class="mt-5 sm:block md:flex items-center">
@@ -43,7 +44,7 @@
                                                                     $charactersLength = strlen($characters);
                                                                     $randomString = '';
 
-                                                                    $uniqueLength = $length - 10; 
+                                                                    $uniqueLength = $length - 10;
 
                                                                     if ($uniqueLength > 0) {
                                                                         for ($i = 0; $i < $uniqueLength; $i++) {
@@ -106,14 +107,14 @@
                                             <th class="px-1 py-1 text-center">Subtotal</th>
                                             <th class="px-1 py-1 text-center">Diskon (%)</th>
                                             <th class="px-1 py-1 text-center">Diskon (Jumlah)</th>
-                                            <th class="px-1 py-1 text-center">Total</th>
+                                            <th class="px-1 py-1 text-center">Total per item</th>
                                         </tr>
                                     </thead>
                                     <tbody class="tabelbodypesanan divide-y divide-gray-200 dark:divide-neutral-700">
                                         <?php foreach ($pesanan_data as $pesanan) { ?>
                                             <tr>
                                                 <td class="align-middle p-1 text-center">
-                                                    <input type="number" min="0" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="jumlah_pesanan[]" />
+                                                    <input type="number" min="0" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6]" name="jumlah_pesanan[]" readonly/>
                                                 </td>
                                                 <td class="align-middle p-1">
                                                     <input type="hidden" value="<?= $pesanan['id'] ?>" name="idpesanan[]" class="text-center border mr-1 w-[20%]">
@@ -145,16 +146,16 @@
                                                     </select>
                                                 </td>
                                                 <td class="align-middle p-1">
-                                                    <input type="number" min="0" value="<?= $pesanan['harga_satuan_pengajuan'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="harga_satuan_pemesanan[]"  required/>
+                                                    <input type="number" min="0" value="<?= $pesanan['harga_satuan_pengajuan'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="harga_satuan_pemesanan[]" required />
                                                 </td>
                                                 <td class="align-middle p-1">
-                                                    <input type="number" min="0" value="<?= $pesanan['subtotal_per_item'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6]" name="subtotalperitem[]" readonly required/>
+                                                    <input type="number" min="0" value="<?= $pesanan['subtotal_per_item'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6]" name="subtotalperitem[]" readonly required />
                                                 </td>
                                                 <td class="align-middle p-1">
-                                                    <input type="number" min="0" max="100" value="<?= $pesanan['diskon_persen'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="diskonpersenperitem[]" required/>
+                                                    <input type="number" min="0" max="100" value="<?= $pesanan['diskon_persen'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="diskonpersenperitem[]" required />
                                                 </td>
                                                 <td class="align-middle p-1">
-                                                    <input type="number" min="0" value="<?= $pesanan['diskon_jumlah'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6]" name="diskonjumlahperitem[]" readonly required/>
+                                                    <input type="number" min="0" value="<?= $pesanan['diskon_jumlah'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6]" name="diskonjumlahperitem[]" readonly required />
                                                 </td>
                                                 <td class="align-middle p-1 text-right">
                                                     <input type="number" min="0" value="<?= $pesanan['total_per_item'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="totalperitem[]" readonly required>
@@ -194,7 +195,7 @@
                                             </th>
                                         </tr>
                                         <tr>
-                                            <th class="p-1 text-right" colspan="7">Total Keseluruhan</th>
+                                            <th class="p-1 text-right" colspan="7">Total</th>
                                             <th class="p-1" id="total">
                                                 <input type="hidden" value="<?= $pengajuan_data['total_pengajuan'] ?>" class="w-full border text-center rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="totalpengajuan" readonly>
                                                 <input type="number" min="0" value="<?= $pengajuan_data['total_pengajuan'] ?>" class="w-full border text-center rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="totalpemesanan" readonly required>
@@ -338,15 +339,19 @@
         totalKeseluruhanInputs.value = totalKeseluruhan.toFixed(0);
     }
 
+
+    var tglpengajuan = new Date('<?= $pengajuan_data['tanggal_pengajuan'] ?>');
+    tglpengajuan.setHours(0, 0, 0, 0);
+    var minDate = new Date(tglpengajuan);
+    var maxDate = new Date(tglpengajuan);
+    maxDate.setDate(maxDate.getDate() + 10);
     document.getElementById('tglpemesanan').addEventListener('input', function() {
         var tglpemesananInput = document.getElementById('tglpemesanan');
         var dateError = document.getElementById('dateError');
         var selectedDate = new Date(tglpemesananInput.value);
-        var maxDate = new Date();
-        maxDate.setDate(maxDate.getDate() - 7);
-        maxDate.setHours(0, 0, 0, 0);
+        selectedDate.setHours(0, 0, 0, 0);
 
-        if (selectedDate <= maxDate) {
+        if (selectedDate < minDate || selectedDate > maxDate) {
             tglpemesananInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('flex', 'items-center');
@@ -362,14 +367,12 @@
         var dateError = document.getElementById('dateError');
         var selectedDate = new Date(tglpemesananInput.value);
         var maxDate = new Date();
-        maxDate.setDate(maxDate.getDate() - 7);
-        maxDate.setHours(0, 0, 0, 0);
-
-        if (selectedDate <= maxDate) {
+        selectedDate.setHours(0, 0, 0, 0);
+        if (selectedDate < minDate || selectedDate > maxDate) {
             tglpemesananInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('block');
-            alert("Tanggal pemesanan maksimal 7 hari sebelum hari ini.");
+            alert("Tanggal pemesanan harus setelah tanggal pengajuan dan maksimal 10 hari dari pengajuan.");
             return false;
         }
         var submitButton = document.getElementById('submitButton');

@@ -15,8 +15,11 @@
             <span class="text-black">Selamat Datang, </span>
         </div>
         <h1 class="font-bold text-3xl md:text-4xl">
-            <span class="text-black"><?php echo session('user_specific_data')['nama'] ?></span>
-                    
+            <span class="text-black"><?php
+                                        $nama = session()->get('user_specific_data')['nama'];
+                                        $firstWord = explode(' ', trim($nama))[0];
+                                        echo $firstWord;
+                                        ?></span>
         </h1>
         <div class="max-w-4xl flex justify-between">
 
@@ -40,7 +43,7 @@
 
             <div class="group mt-28 pt-10 items-center py-2 px-2 text-lg font-medium text-white">
                 <span>Shift</span>
-                <p class="text-white mt-1"><?php echo session('user_specific_data')['jam_masuk'] ?> - <?php echo session('user_specific_data')['jam_pulang'] ?></p>
+                <p class="text-white mt-1"><?php echo session('user_specific_data')['jam_masuk'] ?> - <?php echo session('user_specific_data')['jam_pulang'] ?> </p>
             </div>
 
         </div>

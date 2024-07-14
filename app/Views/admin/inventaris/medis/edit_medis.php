@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -19,18 +19,18 @@
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis</label>
-                <input type="text" name="jenisbrgmedis" value="<?= $medis_data['jenis'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" readonly>
+                <input type="text" name="jenisbrgmedis" value="<?= $medis_data['jenis'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" readonly>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama</label>
-                <input type="text" name="nama" value="<?= $medis_data['nama'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" name="nama" value="<?= $medis_data['nama'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <?php if ($medis_data['jenis'] === 'Obat') : ?>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Industri Farmasi</label>
-                    <select name="industrifarmasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="industrifarmasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         $optionsIF = ["1000" => "Kalbe Farma"];
                         foreach ($optionsIF as $valueIF => $textIF) {
@@ -48,13 +48,13 @@
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kandungan</label>
-                    <input type="text" name="kandungan" value="<?= $jenis_data['kandungan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="text" name="kandungan" value="<?= $jenis_data['kandungan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Isi</label>
-                    <input type="text" name="isi" value="<?= $jenis_data['isi'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="text" name="isi" value="<?= $jenis_data['isi'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
                     <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Satuan Besar</label>
-                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         foreach ($satuan_data as $satuan) {
                             $optionsatuan = [$satuan['id'] => $satuan['nama']];
@@ -72,9 +72,9 @@
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kapasitas</label>
-                    <input type="text" name="kapasitas" value="<?= $jenis_data['kapasitas'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="text" name="kapasitas" value="<?= $jenis_data['kapasitas'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
                     <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Satuan Kecil</label>
-                    <select name="satuanobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="satuanobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         foreach ($satuan_data as $satuan) {
                             $optionsatuan = [$satuan['id'] => $satuan['nama']];
@@ -91,7 +91,7 @@
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis</label>
-                    <select name="jenisobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="jenisobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         $optionsjenis = [
                             "1" => "-",
@@ -113,7 +113,7 @@
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kategori</label>
-                    <select name="kategoriobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="kategoriobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         $optionskategori = [
                             "1" => "-",
@@ -136,7 +136,7 @@
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Golongan</label>
-                    <select name="golonganobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="golonganobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         $optionsgolongan = [
                             "1" => "-",
@@ -158,18 +158,18 @@
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
-                    <input type="date" name="kadaluwarsaobat" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="date" name="kadaluwarsaobat" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa</label>
-                    <input type="number" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="number" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
             <?php elseif ($medis_data['jenis'] === 'Alat Kesehatan') : ?>
-                <input type="hidden" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="hidden" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
-                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         foreach ($satuan_data as $satuan) {
                             $optionsatuan = [$satuan['id'] => $satuan['nama']];
@@ -188,7 +188,7 @@
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Merek</label>
-                    <select name="merekalkes" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="merekalkes" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         $companies = array(
                             'Omron', 'Philips', 'GE Healthcare', 'Siemens Healthineers', 'Medtronic',
@@ -211,12 +211,12 @@
             <?php elseif ($medis_data['jenis'] === 'Bahan Habis Pakai') : ?>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah</label>
-                    <input type="text" name="jumlahbhp" value="<?= $jenis_data['jumlah'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="text" name="jumlahbhp" value="<?= $jenis_data['jumlah'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
 
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
-                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         foreach ($satuan_data as $satuan) {
                             $optionsatuan = [$satuan['id'] => $satuan['nama']];
@@ -234,19 +234,19 @@
                 <?php if ($jenis_data['kadaluwarsa'] !== '0001-01-01') { ?>
                     <div class="mb-5 sm:block md:flex items-center">
                         <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
-                        <input type="date" name="kadaluwarsabhp" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                        <input type="date" name="kadaluwarsabhp" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                     </div>
                 <?php } else { ?>
-                    <input type="hidden" name="kadaluwarsabhp" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="hidden" name="kadaluwarsabhp" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 <?php } ?>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa</label>
-                    <input type="number" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="number" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
             <?php elseif ($medis_data['jenis'] === 'Darah') : ?>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
-                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         foreach ($satuan_data as $satuan) {
                             $optionsatuan = [$satuan['id'] => $satuan['nama']];
@@ -263,7 +263,7 @@
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Darah</label>
-                    <select name="jenisdarah" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select name="jenisdarah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <?php
                         $options = [
                             "Whole Blood (WB)",
@@ -284,29 +284,29 @@
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Keterangan</label>
-                    <input type="text" name="keterangandarah" value="<?= $jenis_data['keterangan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="text" name="keterangandarah" value="<?= $jenis_data['keterangan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
-                    <input type="date" name="kadaluwarsadarah" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="date" name="kadaluwarsadarah" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa</label>
-                    <input type="number" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <input type="number" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 </div>
             <?php endif; ?>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Harga</label>
-                <input type="number" name="harga" value="<?= $medis_data['harga'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="number" name="harga" value="<?= $medis_data['harga'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Stok</label>
-                <input type="number" name="stok" value="<?= $medis_data['stok'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="number" name="stok" value="<?= $medis_data['stok'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Stok minimum</label>
-                <input type="number" name="stok_minimum" value="<?= $medis_data['stok_minimum'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="number" name="stok_minimum" value="<?= $medis_data['stok_minimum'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <!-- Grid -->
 

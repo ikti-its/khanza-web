@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -303,9 +303,10 @@
         var selectedDate = new Date(tglpengajuanInput.value);
         var selectedDatetetap = new Date(tglpengajuantetapInput.value);
 
+        selectedDate.setHours(0, 0, 0, 0); // Clear the time part
         selectedDatetetap.setHours(0, 0, 0, 0); // Clear the time part
 
-        if (selectedDate <= selectedDatetetap) {
+        if (selectedDate.getTime() != selectedDatetetap.getTime()) {
             tglpengajuanInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('flex', 'items-center');
@@ -323,9 +324,10 @@
         var selectedDate = new Date(tglpengajuanInput.value);
         var selectedDatetetap = new Date(tglpengajuantetapInput.value);
 
+        selectedDate.setHours(0, 0, 0, 0); // Clear the time part
         selectedDatetetap.setHours(0, 0, 0, 0); // Clear the time part
 
-        if (selectedDate <= selectedDatetetap) {
+        if (selectedDate.getTime() != selectedDatetetap.getTime()) {
             tglpengajuanInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('block');

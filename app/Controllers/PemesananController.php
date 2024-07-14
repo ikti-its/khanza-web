@@ -4,6 +4,9 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+
+require_once FCPATH . '../vendor/autoload.php';
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -285,19 +288,13 @@ class PemesananController extends BaseController
     {
 
         $options = new Options();
-
-        
         $options->set('isRemoteEnabled', true);
-        $options->set('debugPng', true);
-        $options->set('debugKeepTemp', true);
-        $options->set('isHtml5ParserEnabled', true);
 
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
         $dompdf->stream("Surat Pemesanan.pdf", array("Attachment" => false));
-        exit;
     }
 
 
@@ -453,6 +450,9 @@ class PemesananController extends BaseController
             if ($http_status_code_pegawai === 200 && $http_status_code_pengajuan === 200 && $http_status_code_barang_medis === 200 && $http_status_code_supplier === 200 && $http_status_code_satuan === 200 && $http_status_code_pesanan === 200) {
                 $pegawai_data = json_decode($response_pegawai, true);
                 $pengajuan_data = json_decode($response_pengajuan, true);
+                if ($pengajuan_data['data']['status_pesanan'] !== '2') {
+                    return redirect('pengajuanmedis')->with('warning', 'Pengajuan harus disetujui terlebih dahulu agar bisa membuat pemesanan');
+                }
                 $medis_data = json_decode($response_barang_medis, true);
                 $supplier_data = json_decode($response_supplier, true);
                 $satuan_data = json_decode($response_satuan, true); // Decode data satuan
@@ -735,7 +735,7 @@ class PemesananController extends BaseController
                     $this->addBreadcrumb('Pengadaan', 'pengadaanmedis');
                     $this->addBreadcrumb('Barang Medis', 'medis');
                     $this->addBreadcrumb('Pemesanan', 'pemesananmedis');
-                    $this->addBreadcrumb('Edit', 'editpemesananmedis');
+                    $this->addBreadcrumb('Ubah', 'editpemesananmedis');
 
                     $breadcrumbs = $this->getBreadcrumbs();
                     return view('/admin/pengadaan/medis/pemesanan/edit_pemesanan', [
@@ -945,6 +945,48 @@ class PemesananController extends BaseController
                     if ($response_pengajuan) {
                         $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
                         if ($http_status_code_pengajuan === 200) {
+                            $pesanan_url =  $this->api_url . '/pengadaan/pesanan/pengajuan/' . $pengajuanId;
+
+                            $ch_pesanan = curl_init($pesanan_url);
+                            curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
+                                'Authorization: Bearer ' . $token,
+                            ]);
+                            $response_pesanan = curl_exec($ch_pesanan);
+                            $pesanan_data = json_decode($response_pesanan, true);
+                            $jumlah_pesanan = $pesanan_data['data'];
+                            foreach ($jumlah_pesanan as $pesanan) {
+                                $pesanan_id = $pesanan['id'];
+                                $put_byidpesanan_url = $this->api_url . '/pengadaan/pesanan/' . $pesanan_id;
+                                $putDataPesanan = [
+                                    'id_pengajuan' => $pesanan['id_pengajuan'],
+                                    'id_barang_medis' => $pesanan['id_barang_medis'],
+                                    'satuan' => $pesanan['satuan'],
+                                    'harga_satuan_pengajuan' => $pesanan['harga_satuan_pengajuan'],
+                                    'harga_satuan_pemesanan' => 0,
+                                    'jumlah_pesanan' => $pesanan['jumlah_pesanan'],
+                                    'total_per_item' => $pesanan['subtotal_per_item'],
+                                    'subtotal_per_item' => $pesanan['subtotal_per_item'],
+                                    'diskon_persen' => 0,
+                                    'diskon_jumlah' => 0,
+                                    'kadaluwarsa' => $pesanan['kadaluwarsa'],
+                                ];
+                                $update_pesanan_JSON = json_encode($putDataPesanan);
+                                $ch_put_pesanan = curl_init($put_byidpesanan_url);
+                                curl_setopt($ch_put_pesanan, CURLOPT_CUSTOMREQUEST, "PUT");
+                                curl_setopt($ch_put_pesanan, CURLOPT_POSTFIELDS, $update_pesanan_JSON);
+                                curl_setopt($ch_put_pesanan, CURLOPT_RETURNTRANSFER, true);
+                                curl_setopt($ch_put_pesanan, CURLOPT_HTTPHEADER, [
+                                    'Content-Type: application/json',
+                                    'Content-Length: ' . strlen($update_pesanan_JSON),
+                                    'Authorization: Bearer ' . $token,
+                                ]);
+                                $response_put_pesanan = curl_exec($ch_put_pesanan);
+                                $http_status_code_pesanan = curl_getinfo($ch_put_pesanan, CURLINFO_HTTP_CODE);
+                            }
+                            if ($http_status_code_pesanan !== 200) {
+                                return $this->renderErrorView($http_status_code_pesanan);
+                            }
                             // Data berhasil ditambahkan ke obat_url
                             $ch_delete_pemesanan = curl_init($pemesanan_url);
                             curl_setopt($ch_delete_pemesanan, CURLOPT_CUSTOMREQUEST, "DELETE");

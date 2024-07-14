@@ -27,6 +27,7 @@ class Filters extends BaseConfig
         'auth' => \App\Filters\Auth::class,
         'noauth' => \App\Filters\NoAuth::class,
         'noauth2' => \App\Filters\NoAuth::class,
+        'checkpermission' => \App\Filters\CheckPermission::class,
     ];
 
     /**

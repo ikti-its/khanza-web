@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -18,16 +18,16 @@
             <input type="hidden" name="idpengajuan" value="<?= $tagihan_data['id_pengajuan'] ?>" class="text-center border mr-1 w-[20%]">
             <input type="hidden" name="idpemesanan" value="<?= $tagihan_data['id_pemesanan'] ?>" class="text-center border mr-1 w-[20%]">
             <input type="hidden" name="idpenerimaan" value="<?= $tagihan_data['id_penerimaan'] ?>" class="text-center border mr-1 w-[20%]">
-            <div class="sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Faktur</label>
-                <input type="text" name="" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?php foreach ($penerimaan_data as $penerimaan) {
-                                                                                                                                                                                            if ($penerimaan['id'] === $tagihan_data['id_penerimaan']) {
-                                                                                                                                                                                                echo $penerimaan['no_faktur'];
-                                                                                                                                                                                                break; // Stop looping once the value is found
-                                                                                                                                                                                            }
-                                                                                                                                                                                        } ?>" readonly>
+            <?php foreach ($penerimaan_data as $penerimaan) {
+                if ($penerimaan['id'] === $tagihan_data['id_penerimaan']) { ?>
+                    <div class="sm:block md:flex items-center">
+                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Faktur</label>
+                        <input type="hidden" name="" id="tglpenerimaan" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $penerimaan['tanggal_datang']; ?>" readonly>
+                        <input type="text" name="" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $penerimaan['no_faktur']; ?>" readonly>
 
-            </div>
+                    </div>
+            <?php }
+            } ?>
             <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Bayar</label>
                 <input type="date" id="tglbayar" name="tglbayar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $tagihan_data['tanggal_bayar'] ?>" required>
@@ -60,7 +60,7 @@
                 </select>
             </div>
             <div class="mt-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2 lg:w-1/4">Jumlah / Total Bayar</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2 lg:w-1/4">Jumlah (Sisa Bayar)</label>
                 <input type="text" name="jlhbayar" id="jlhbayar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $tagihan_data['jumlah_bayar'] ?>" required>
                 <input type="text" name="totalbayar" id="totalbayar" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" readonly>
             </div>
@@ -119,7 +119,7 @@
                                         <th class="px-1 py-1 text-center">Subtotal</th>
                                         <th class="px-1 py-1 text-center">Diskon (%)</th>
                                         <th class="px-1 py-1 text-center">Diskon (Jumlah)</th>
-                                        <th class="px-1 py-1 text-center">Total</th>
+                                        <th class="px-1 py-1 text-center">Total per item</th>
                                     </tr>
                                 </thead>
                                 <tbody class="tabelbodypesanan divide-y divide-gray-200 dark:divide-neutral-700">
@@ -263,15 +263,19 @@
         updateTotalBayar();
     });
 
+    var tglpenerimaan = new Date(document.getElementById('tglpenerimaan').value);
+    tglpenerimaan.setHours(0, 0, 0, 0);
+    var minDate = new Date(tglpenerimaan);
+    var maxDate = new Date(tglpenerimaan);
+    maxDate.setDate(maxDate.getDate() + 30);
+
     document.getElementById('tglbayar').addEventListener('input', function() {
         var tglbayarInput = document.getElementById('tglbayar');
         var dateError = document.getElementById('dateError');
         var selectedDate = new Date(tglbayarInput.value);
-        var maxDate = new Date();
-        maxDate.setDate(maxDate.getDate() - 30);
-        maxDate.setHours(0, 0, 0, 0);
 
-        if (selectedDate <= maxDate) {
+
+        if (selectedDate < minDate || selectedDate > maxDate) {
             tglbayarInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('flex', 'items-center');
@@ -286,11 +290,9 @@
         var tglbayarInput = document.getElementById('tglbayar');
         var dateError = document.getElementById('dateError');
         var selectedDate = new Date(tglbayarInput.value);
-        var maxDate = new Date();
-        maxDate.setDate(maxDate.getDate() - 30);
-        maxDate.setHours(0, 0, 0, 0);
 
-        if (selectedDate <= maxDate) {
+
+        if (selectedDate < minDate || selectedDate > maxDate) {
             tglbayarInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('block');

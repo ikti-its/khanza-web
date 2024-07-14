@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -13,21 +13,21 @@
         </div>
 
         <form action="/penerimaanmedis/submittambah" id="penerimaanform" method="post" onsubmit="return validateForm()">
-        <?= csrf_field() ?>    
-        <!-- Grid -->
+            <?= csrf_field() ?>
+            <!-- Grid -->
             <input type="hidden" value="<?= $pengajuan_data['id'] ?>" name="idpengajuan" class="text-center border mr-1">
 
             <input type="hidden" name="statuspesanan">
 
             <div class="sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Pemesanan</label>
-                <input type="hidden" name="idpemesanan" value="<?= $pemesanan_data['id'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                <input type="text" name="" value="<?= $pemesanan_data['no_pemesanan'] ?>" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required readonly>
+                <input type="hidden" name="idpemesanan" value="<?= $pemesanan_data['id'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" name="" value="<?= $pemesanan_data['no_pemesanan'] ?>" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required readonly>
 
             </div>
             <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Penerimaan</label>
-                <input type="date" id="tglpenerimaan" name="tglpenerimaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="date" id="tglpenerimaan" name="tglpenerimaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
             <div id="dateError1" class="mt-2 hidden">
                 <label class="text-sm text-gray-900 dark:text-white md:w-1/4"></label>
@@ -36,12 +36,13 @@
                         <path d="M7 5.25V8.16667" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M7 12.4891H3.465C1.44083 12.4891 0.595001 11.0424 1.575 9.27492L3.395 5.99658L5.11 2.91658C6.14834 1.04408 7.85167 1.04408 8.89 2.91658L10.605 6.00242L12.425 9.28075C13.405 11.0482 12.5533 12.4949 10.535 12.4949H7V12.4891Z" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M6.99707 9.91675H7.00231" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg> Tanggal penerimaan hanya boleh maksimal 1 bulan dari hari ini.
+                    </svg> Tanggal penerimaan harus setelah tanggal pemesanan dan maksimal 14 hari dari pemesanan.
+
                 </div>
             </div>
             <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Faktur</label>
-                <input type="date" id="tglfaktur" name="tglfaktur" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="date" id="tglfaktur" name="tglfaktur" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
             <div id="dateError2" class="mt-2 hidden">
                 <label class="text-sm text-gray-900 dark:text-white md:w-1/4"></label>
@@ -50,12 +51,12 @@
                         <path d="M7 5.25V8.16667" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M7 12.4891H3.465C1.44083 12.4891 0.595001 11.0424 1.575 9.27492L3.395 5.99658L5.11 2.91658C6.14834 1.04408 7.85167 1.04408 8.89 2.91658L10.605 6.00242L12.425 9.28075C13.405 11.0482 12.5533 12.4949 10.535 12.4949H7V12.4891Z" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M6.99707 9.91675H7.00231" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg> Tanggal faktur hanya boleh maksimal 1 bulan dari hari ini.
+                    </svg> Tanggal faktur harus setelah tanggal pemesanan dan maksimal 14 hari dari pemesanan.
                 </div>
             </div>
             <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Jatuh Tempo</label>
-                <input type="date" id="tgljatuhtempo" name="tgljatuhtempo" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="date" id="tgljatuhtempo" name="tgljatuhtempo" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
             <div id="dateError3" class="mt-2 hidden">
                 <label class="text-sm text-gray-900 dark:text-white md:w-1/4"></label>
@@ -64,39 +65,39 @@
                         <path d="M7 5.25V8.16667" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M7 12.4891H3.465C1.44083 12.4891 0.595001 11.0424 1.575 9.27492L3.395 5.99658L5.11 2.91658C6.14834 1.04408 7.85167 1.04408 8.89 2.91658L10.605 6.00242L12.425 9.28075C13.405 11.0482 12.5533 12.4949 10.535 12.4949H7V12.4891Z" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M6.99707 9.91675H7.00231" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg> Tanggal jatuh tempo hanya boleh maksimal 1 bulan dari hari ini.
+                    </svg> Tanggal jatuh tempo harus setelah tanggal pemesanan dan maksimal 14 hari dari pemesanan.
                 </div>
             </div>
 
             <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Faktur</label>
                 <input type="text" name="nofaktur" value="<?php function generateUniqueNumber($length = 16)
-                                                                {
-                                                                    $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                                                                    $charactersLength = strlen($characters);
-                                                                    $randomString = '';
+                                                            {
+                                                                $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                                                                $charactersLength = strlen($characters);
+                                                                $randomString = '';
 
-                                                                    $uniqueLength = $length - 11; 
+                                                                $uniqueLength = $length - 11;
 
-                                                                    if ($uniqueLength > 0) {
-                                                                        for ($i = 0; $i < $uniqueLength; $i++) {
-                                                                            $randomString .= $characters[rand(0, $charactersLength - 1)];
-                                                                        }
-                                                                    } else {
-                                                                        return "Panjang maksimal terlalu pendek.";
+                                                                if ($uniqueLength > 0) {
+                                                                    for ($i = 0; $i < $uniqueLength; $i++) {
+                                                                        $randomString .= $characters[rand(0, $charactersLength - 1)];
                                                                     }
-
-                                                                    return $randomString;
+                                                                } else {
+                                                                    return "Panjang maksimal terlalu pendek.";
                                                                 }
 
-                                                                $tanggalHariIni = date('Ymd');
+                                                                return $randomString;
+                                                            }
 
-                                                                $nomorFaktur = "INV" . $tanggalHariIni . generateUniqueNumber();
-                                                                echo $nomorFaktur; ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                                                            $tanggalHariIni = date('Ymd');
+
+                                                            $nomorFaktur = "INV" . $tanggalHariIni . generateUniqueNumber();
+                                                            echo $nomorFaktur; ?>" class="border bg-[#F6F6F6] text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
             </div>
             <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pegawai</label>
-                <select name="pegawaipenerimaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <select name="pegawaipenerimaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="" selected>-</option>
                     <?php foreach ($pegawai_data as $pegawai) : ?>
                         <option value="<?= $pegawai['id'] ?>"><?= $pegawai['nama'] ?></option>
@@ -105,7 +106,7 @@
             </div>
             <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Ruangan</label>
-                <select name="idruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <select name="idruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option selected>-</option>
                     <option value="1000">VIP 1</option>
                     <option value="2000">VIP 2</option>
@@ -156,10 +157,10 @@
                                             <input type="hidden" value="<?= $pesanan['diskon_jumlah'] ?>" class="text-center w-full" step="any" name="diskonjumlahperitem[]" readonly />
 
                                             <td class="align-middle p-1 text-center">
-                                                <input type="number" min="0" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full" step="any" name="jumlah_pesanan[]" readonly required/>
+                                                <input type="number" min="0" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full" step="any" name="jumlah_pesanan[]" readonly required />
                                             </td>
                                             <td class="align-middle p-1">
-                                                <input type="hidden" step="any" value="<?= $pesanan['id_barang_medis'] ?>" class="text-center w-full" name="idbrgmedis[]" readonly required/>
+                                                <input type="hidden" step="any" value="<?= $pesanan['id_barang_medis'] ?>" class="text-center w-full" name="idbrgmedis[]" readonly required />
                                                 <input type="text" step="any" value="<?php foreach ($medis_data as $medis) {
                                                                                             if ($medis['id'] === $pesanan['id_barang_medis']) {
                                                                                                 echo $medis['nama'];
@@ -168,7 +169,7 @@
 
                                             </td>
                                             <td class="align-middle p-1">
-                                                <input type="hidden" step="any" value="<?= $pesanan['satuan'] ?>" class="text-center w-full" name="satuan[]" readonly required/>
+                                                <input type="hidden" step="any" value="<?= $pesanan['satuan'] ?>" class="text-center w-full" name="satuan[]" readonly required />
                                                 <input type="text" step="any" value="<?php foreach ($satuan_data as $satuan) {
                                                                                             if ($satuan['id'] === $pesanan['satuan']) {
                                                                                                 echo $satuan['nama'];
@@ -218,28 +219,6 @@
 
 <!-- End Card Section -->
 <script>
-    document.getElementById('penerimaanform').addEventListener('submit', function(event) {
-        const jumlahPesananInputs = document.querySelectorAll('.tabelbodypesanan input[name="jumlah_pesanan[]"]');
-        const jumlahDiterimaInputs = document.querySelectorAll('.tabelbodypesanan input[name="jumlah_diterima[]"]');
-
-
-
-        let allMatch = true;
-
-        // Loop through each 'jumlah_diterima[]' input
-        jumlahDiterimaInputs.forEach((input, index) => {
-            // Compare the value with corresponding 'jumlah_pesanan[]' input
-            if (input.value !== jumlahPesananInputs[index].value) {
-                allMatch = false;
-                return; // Exit the loop early if a mismatch is found
-            }
-        });
-
-        const statuspesanan = document.querySelector('input[name="statuspesanan"]');
-        statuspesanan.value = allMatch ? '5' : '4';
-    });
-
-    // Function to validate each date input
     document.getElementById('tglpenerimaan').addEventListener('input', function() {
         validateDate('tglpenerimaan', 'dateError1');
     });
@@ -252,15 +231,19 @@
         validateDate('tgljatuhtempo', 'dateError3');
     });
 
+    var tglpemesanan = new Date(document.getElementById('tglpesan').value);
+    tglpemesanan.setHours(0, 0, 0, 0);
+    var minDate = new Date(tglpemesanan);
+    var maxDate = new Date(tglpemesanan);
+    maxDate.setDate(maxDate.getDate() + 14);
+
     function validateDate(inputId, errorId) {
         var inputElement = document.getElementById(inputId);
         var errorElement = document.getElementById(errorId);
         var selectedDate = new Date(inputElement.value);
-        var maxDate = new Date();
-        maxDate.setDate(maxDate.getDate() - 30);
-        maxDate.setHours(0, 0, 0, 0);
+        selectedDate.setHours(0, 0, 0, 0);
 
-        if (selectedDate <= maxDate) {
+        if (selectedDate < minDate || selectedDate > maxDate) {
             inputElement.classList.add('border-red-500');
             errorElement.classList.remove('hidden');
             errorElement.classList.add('flex', 'items-center');
@@ -272,7 +255,39 @@
     }
 
     function validateForm() {
-        var isValid = true;
+        const jumlahPesananInputs = document.querySelectorAll('.tabelbodypesanan input[name="jumlah_pesanan[]"]');
+        const jumlahDiterimaInputs = document.querySelectorAll('.tabelbodypesanan input[name="jumlah_diterima[]"]');
+
+        let allMatch = true;
+        let isValid = true;
+
+        // Loop through each 'jumlah_diterima[]' input
+        jumlahDiterimaInputs.forEach((input, index) => {
+            const jumlahPesananValue = parseFloat(jumlahPesananInputs[index].value);
+            const jumlahDiterimaValue = parseFloat(input.value);
+
+            // Check if 'jumlah_diterima[]' is greater than 'jumlah_pesanan[]'
+            if (jumlahDiterimaValue > jumlahPesananValue) {
+                alert("Jumlah diterima tidak boleh lebih besar dari jumlah pesanan");
+                isValid = false;
+                return;
+            }
+
+            // Compare the value with corresponding 'jumlah_pesanan[]' input
+            if (jumlahDiterimaValue !== jumlahPesananValue) {
+                allMatch = false;
+            }
+        });
+
+        if (!isValid) {
+            // Prevent form submission if validation fails
+            event.preventDefault();
+            return;
+        }
+
+        const statuspesanan = document.querySelector('input[name="statuspesanan"]');
+        statuspesanan.value = allMatch ? '5' : '4';
+
 
         var inputs = [{
                 id: 'tglpenerimaan',
@@ -295,15 +310,13 @@
             var inputElement = document.getElementById(input.id);
             var errorElement = document.getElementById(input.errorId);
             var selectedDate = new Date(inputElement.value);
-            var maxDate = new Date();
-            maxDate.setDate(maxDate.getDate() - 30);
-            maxDate.setHours(0, 0, 0, 0);
+            selectedDate.setHours(0, 0, 0, 0);
 
-            if (selectedDate <= maxDate) {
+            if (selectedDate < minDate || selectedDate > maxDate) {
                 inputElement.classList.add('border-red-500');
                 errorElement.classList.remove('hidden');
                 errorElement.classList.add('flex', 'items-center');
-                alert("Tanggal " + input.namaTanggal + " maksimal 1 bulan sebelum dari hari ini.");
+                alert("Tanggal " + input.namaTanggal + " harus setelah tanggal pemesanan dan maksimal 14 hari dari pemesanan.");
                 isValid = false;
             } else {
                 inputElement.classList.remove('border-red-500');
@@ -311,11 +324,13 @@
                 errorElement.classList.remove('flex', 'items-center');
             }
         });
+
         if (isValid) {
             var submitButton = document.getElementById('submitButton');
             submitButton.setAttribute('disabled', true);
-            submitButton.innerHTML = 'Menyimpan...';
+            submitButton.innerHTML = 'Menyimpan...'; // Adjust text as needed
         }
+
         return isValid;
     }
 </script>

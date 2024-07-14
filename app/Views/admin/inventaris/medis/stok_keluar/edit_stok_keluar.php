@@ -42,24 +42,47 @@
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Asal Ruangan</label>
-                <select name="asalruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option selected>-</option>
-                    <option value="1000">VIP 1</option>
-                    <option value="2000">VIP 2</option>
-                    <option value="3000">VVIP 1</option>
-                    <option value="4000">VVIP 2</option>
-                    <option value="5000">Gudang</option>
+                <select name="asalruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <?php
+                    $optionsruangan = [
+                        "1000" => "VIP 1",
+                        "2000" => "VIP 2",
+                        "3000" => "VVIP 1",
+                        "4000" => "VVIP 2",
+                        "5000" => "Gudang"
+                    ];
+
+                    foreach ($optionsruangan as $valueruangan => $textruangan) {
+                        if ($valueruangan === $stok_keluar_data['asal_ruangan']) {
+                            echo '<option value="' . $valueruangan . '" selected>' . $textruangan . '</option>';
+                        } else {
+                            echo '<option value="' . $valueruangan . '">' . $textruangan . '</option>';
+                        }
+                    }
+                    ?>
+
                 </select>
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tujuan Ruangan</label>
-                <select name="tujuanruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option selected>-</option>
-                    <option value="1000">VIP 1</option>
-                    <option value="2000">VIP 2</option>
-                    <option value="3000">VVIP 1</option>
-                    <option value="4000">VVIP 2</option>
-                    <option value="5000">Gudang</option>
+                <select name="tujuanruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <?php
+                    $optionsruangan = [
+                        "1000" => "VIP 1",
+                        "2000" => "VIP 2",
+                        "3000" => "VVIP 1",
+                        "4000" => "VVIP 2",
+                        "5000" => "Gudang"
+                    ];
+
+                    foreach ($optionsruangan as $valueruangan => $textruangan) {
+                        if ($valueruangan === $stok_keluar_data['tujuan_ruangan']) {
+                            echo '<option value="' . $valueruangan . '" selected>' . $textruangan . '</option>';
+                        } else {
+                            echo '<option value="' . $valueruangan . '">' . $textruangan . '</option>';
+                        }
+                    }
+                    ?>
                 </select>
             </div>
             <div class="mb-5 sm:block md:flex items-center">
@@ -94,28 +117,19 @@
                                         <input type="hidden" value="<?= $brg['id'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="idtransaksibrgmedis[]" />
                                         <tr>
                                             <td class="align-middle p-1">
-                                                <input type="hidden" value="<?= $brg['id_barang_medis'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="idbrgmedis[]" />
-                                                <input type="text" value="<?php foreach ($medis_data as $brgmedis) {
-                                                                                if ($brg['id_barang_medis'] === $brgmedis['id']) {
-                                                                                    echo $brgmedis['nama'];
-                                                                                }
-                                                                            } ?>" data-stok="<?= $brgmedis['stok'] ?>" class="text-center w-full border bg-[#F6F6F6] cursor-default rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="idbrgmedis[]" readonly />
+                                                <?php $total_stok = 0;
+                                                foreach ($medis_data as $brgmedis) {
+                                                    if ($brg['id_barang_medis'] === $brgmedis['id']) { ?>
+                                                        <input type="hidden" value="<?= $brg['id_barang_medis'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="idbrgmedis[]" />
+                                                        <input type="text" value="<?= $brgmedis['nama'] ?>" data-stok="<?= $brgmedis['stok'] ?>" class="text-center w-full border bg-[#F6F6F6] cursor-default rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="idbrgmedis[]" readonly />
+
                                             </td>
                                             <td class="align-middle p-1 text-center">
-                                                <input type="number" value="<?php
-                                                                            $total_stok = 0;
-
-                                                                            // Loop through each barang medis
-                                                                            foreach ($medis_data as $brgmedis) {
-                                                                                if ($brgmedis['id'] === $brg['id_barang_medis']) {
-                                                                                    $stok_barang_medis = $brgmedis['stok'];
-
-                                                                                    $total_stok = $stok_barang_medis;
-                                                                                }
-                                                                            }
-
+                                                <input type="number" value="<?php $stok_barang_medis = $brgmedis['stok'];
+                                                                            $total_stok = $stok_barang_medis;
                                                                             echo $total_stok;
-                                                                            ?>" class="text-center w-full border bg-[#F6F6F6] cursor-default rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="stoksaatini[]" readonly />
+                                                                        }
+                                                                    } ?>" class="text-center w-full border bg-[#F6F6F6] cursor-default rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="stoksaatini[]" readonly />
                                             </td>
                                             <td class="align-middle p-1 text-center">
                                                 <input type="number" value="<?= $brg['jumlah_keluar'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="jlhkeluar[]" required />

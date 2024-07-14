@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -12,8 +12,8 @@
         </div>
 
         <form action="/pemesananmedis/submitedit/<?= $pemesanan_data['id'] ?>" method="post" onsubmit="return validateForm()">
-        <?= csrf_field() ?>   
-        <input type="hidden" value="3" name="status">
+            <?= csrf_field() ?>
+            <input type="hidden" value="3" name="status">
             <!-- Grid -->
             <div class="sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Pengajuan</label>
@@ -23,7 +23,6 @@
             </div>
             <div class="mt-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Pemesanan</label>
-                <input type="hidden" id="tglpemesanantetap" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $pemesanan_data['tanggal_pesan'] ?>">
                 <input type="date" id="tglpemesanan" name="tglpemesanan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" value="<?= $pemesanan_data['tanggal_pesan'] ?>" required>
             </div>
             <div id="dateError" class="mt-2 hidden">
@@ -101,12 +100,13 @@
                                             <th class="px-1 py-1 text-center">Subtotal</th>
                                             <th class="px-1 py-1 text-center">Diskon (%)</th>
                                             <th class="px-1 py-1 text-center">Diskon (Jumlah)</th>
-                                            <th class="px-1 py-1 text-center">Total</th>
+                                            <th class="px-1 py-1 text-center">Total per item</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                        <?php $totalsblmpajak = 0; foreach ($pesanan_data as $pesanan) :
-                                            
+                                        <?php $totalsblmpajak = 0;
+                                        foreach ($pesanan_data as $pesanan) :
+
                                             $totalsblmpajak += $pesanan['total_per_item']; ?>
                                             <input type="hidden" value="<?= $pesanan['id'] ?>" name="idpesanan[]" class="text-center border mr-1 w-[20%]">
                                             <input type="hidden" value="<?= $pesanan['id_barang_medis'] ?>" name="idbrgmedis[]" class="text-center border mr-1 w-[20%]">
@@ -116,7 +116,7 @@
                                             <input type="hidden" value="<?= $pesanan['no_batch'] ?>" name="no_batch[]" class="text-center border mr-1 w-[20%]">
                                             <tr>
                                                 <td class="align-middle p-1 text-center">
-                                                    <input type="number" min="0" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" step="any" name="jumlah_pesanan[]" required/>
+                                                    <input type="number" min="0" value="<?= $pesanan['jumlah_pesanan'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6]" step="any" name="jumlah_pesanan[]" readonly required />
                                                 </td>
                                                 <td class="align-middle p-1">
                                                     <?php
@@ -148,19 +148,19 @@
                                                     </select>
                                                 </td>
                                                 <td class="align-middle p-1">
-                                                    <input type="number" min="0" value="<?= $pesanan['harga_satuan_pemesanan'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="harga_satuan_pemesanan[]" required/>
+                                                    <input type="number" min="0" value="<?= $pesanan['harga_satuan_pemesanan'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="harga_satuan_pemesanan[]" required />
                                                 </td>
                                                 <td class="align-middle p-1">
-                                                    <input type="number" min="0" value="<?= $pesanan['subtotal_per_item'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6]" name="subtotalperitem[]" readonly required/>
+                                                    <input type="number" min="0" value="<?= $pesanan['subtotal_per_item'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6]" name="subtotalperitem[]" readonly required />
                                                 </td>
                                                 <td class="align-middle p-1">
                                                     <input type="number" min="0" value="<?= $pesanan['diskon_persen'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="diskonpersenperitem[]" />
                                                 </td>
                                                 <td class="align-middle p-1">
-                                                    <input type="number" min="0" value="<?= $pesanan['diskon_jumlah'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6]" name="diskonjumlahperitem[]" readonly required/>
+                                                    <input type="number" min="0" value="<?= $pesanan['diskon_jumlah'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6]" name="diskonjumlahperitem[]" readonly required />
                                                 </td>
                                                 <td class="align-middle p-1 text-right">
-                                                    <input type="number" min="0" value="<?= $pesanan['total_per_item'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="totalperitem[]" readonly required/>
+                                                    <input type="number" min="0" value="<?= $pesanan['total_per_item'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="totalperitem[]" readonly required />
                                                 </td>
 
                                             </tr>
@@ -196,7 +196,7 @@
                                             </th>
                                         </tr>
                                         <tr>
-                                            <th class="p-1" style="text-align: right;" colspan="7">Total Keseluruhan</th>
+                                            <th class="p-1" style="text-align: right;" colspan="7">Total</th>
                                             <th class="p-1" id="total"><input type="number" min="0" value="<?= $pemesanan_data['total_pemesanan'] ?>" class="w-full border text-center rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="totalpemesanan" readonly required></th>
                                         </tr>
                                     </tfoot>
@@ -340,16 +340,18 @@
         totalKeseluruhanInputs.value = totalKeseluruhan.toFixed(0);
     }
 
+    var tglpengajuan = new Date('<?= $pengajuan_data['tanggal_pengajuan'] ?>');
+    tglpengajuan.setHours(0, 0, 0, 0);
+    var minDate = new Date(tglpengajuan);
+    var maxDate = new Date(tglpengajuan);
+    maxDate.setDate(maxDate.getDate() + 10);
     document.getElementById('tglpemesanan').addEventListener('input', function() {
         var tglpemesananInput = document.getElementById('tglpemesanan');
-        var tglpemesanantetapInput = document.getElementById('tglpemesanantetap');
         var dateError = document.getElementById('dateError');
         var selectedDate = new Date(tglpemesananInput.value);
-        var selectedDatetetap = new Date(tglpemesanantetapInput.value);
+        selectedDate.setHours(0, 0, 0, 0);
 
-        selectedDatetetap.setHours(0, 0, 0, 0); // Clear the time part
-
-        if (selectedDate <= selectedDatetetap) {
+        if (selectedDate < minDate || selectedDate > maxDate) {
             tglpemesananInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('flex', 'items-center');
@@ -362,18 +364,15 @@
 
     function validateForm() {
         var tglpemesananInput = document.getElementById('tglpemesanan');
-        var tglpemesanantetapInput = document.getElementById('tglpemesanantetap');
         var dateError = document.getElementById('dateError');
         var selectedDate = new Date(tglpemesananInput.value);
-        var selectedDatetetap = new Date(tglpemesanantetapInput.value);
-
-        selectedDatetetap.setHours(0, 0, 0, 0); // Clear the time part
-
-        if (selectedDate <= selectedDatetetap) {
+        var maxDate = new Date();
+        selectedDate.setHours(0, 0, 0, 0);
+        if (selectedDate < minDate || selectedDate > maxDate) {
             tglpemesananInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('block');
-            alert("Tanggal pemesanan harus dari tanggal pemesanan yang dilakukan atau setelahnya.");
+            alert("Tanggal pemesanan harus setelah tanggal pengajuan dan maksimal 10 hari dari pengajuan.");
             return false;
         }
         var submitButton = document.getElementById('submitButton');

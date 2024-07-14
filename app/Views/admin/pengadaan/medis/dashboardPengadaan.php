@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Table Section -->
-<div class="max-w-[85rem] py-6 lg:py-0 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="flex flex-col">
         <div class="-m-1.5 overflow-y-auto">
@@ -16,7 +16,7 @@
 
                     </div>
                     <div class="items-center mb-5 grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div class="h-full flex flex-col bg-white border shadow-[0px_2px_6px_0px_rgba(13,10,44,0.08)] rounded-[1.25rem] dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70">
+                        <div class="h-full flex flex-col items-center  bg-white border shadow-[0px_2px_6px_0px_rgba(13,10,44,0.08)] rounded-[1.25rem] dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70">
                             <?php
                             $countStatus0 = 0;
                             $countStatus1 = 0;
@@ -58,7 +58,8 @@
                             <div class="mx-auto p-4 w-[240px] h-[240px]">
                                 <canvas class="p-1" id="chartDoughnut"></canvas>
                             </div>
-                            <div class="mx-auto p-5 grid grid-cols-2 gap-x-14 gap-y-4">
+                            <div class="mx-auto p-5 items-center grid grid-cols-2 gap-x-14 gap-y-4">
+
                                 <div class="flex justify-between items-center">
                                     <div class="flex items-center">
                                         <div class="w-[0.75rem] h-[0.75rem] bg-[#ACF2E7] rounded-[1.5rem]"></div>
@@ -135,7 +136,7 @@
                             <div class="mx-auto p-4 w-[240px] h-[240px]">
                                 <canvas class="p-1" id="chartBaru"></canvas>
                             </div>
-                            <div class="mx-auto p-5 grid grid-cols-2 gap-x-14 gap-y-4">
+                            <div class="mx-auto p-5 grid grid-cols-2 gap-x-14 gap-y-4 items-center">
                                 <div class="flex justify-between items-center">
                                     <div class="flex items-center">
                                         <div class="w-[0.75rem] h-[0.75rem] bg-[#D6F3F9] rounded-[1.5rem]"></div>
@@ -221,7 +222,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center">
                                         <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
-                                            Tanggal
+                                            Tanggal Pengajuan
                                         </span>
                                     </div>
                                 </th>
@@ -275,7 +276,21 @@
                                     <td>
                                         <div class="px-6 py-3">
                                             <div class="flex items-center justify-center gap-x-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $pengajuan['tanggal_pengajuan'] ?? '-' ?></span>
+                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php $original_date = $pengajuan['tanggal_pengajuan'];
+                                                                                                                            $day = date("d", strtotime($original_date));
+                                                                                                                            $month = date("m", strtotime($original_date));
+                                                                                                                            $year = date("Y", strtotime($original_date));
+
+                                                                                                                            // Daftar nama bulan dalam bahasa Indonesia
+                                                                                                                            $bulan = array(
+                                                                                                                                1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April", 5 => "Mei", 6 => "Juni",
+                                                                                                                                7 => "Juli", 8 => "Agustus", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+                                                                                                                            );
+
+                                                                                                                            // Format tanggal sesuai dengan format yang diinginkan
+                                                                                                                            $formatted_date = $day . ' ' . $bulan[(int)$month] . ' ' . $year;
+
+                                                                                                                            echo $formatted_date; ?></span>
                                             </div>
                                         </div>
                                     </td>

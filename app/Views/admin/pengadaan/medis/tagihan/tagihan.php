@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -19,6 +19,7 @@
             <div class=" sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Faktur</label>
                 <input type="hidden" name="idpenerimaan" value="<?= $penerimaan_data['id'] ?>" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required readonly>
+                <input type="hidden" id="tglpenerimaan" value="<?= $penerimaan_data['tanggal_datang'] ?>" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required readonly>
                 <input type="text" name="" value="<?= $penerimaan_data['no_faktur'] ?>" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required readonly>
             </div>
             <div class="mt-5 sm:block md:flex items-center">
@@ -32,7 +33,7 @@
                         <path d="M7 5.25V8.16667" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M7 12.4891H3.465C1.44083 12.4891 0.595001 11.0424 1.575 9.27492L3.395 5.99658L5.11 2.91658C6.14834 1.04408 7.85167 1.04408 8.89 2.91658L10.605 6.00242L12.425 9.28075C13.405 11.0482 12.5533 12.4949 10.535 12.4949H7V12.4891Z" stroke="#DA4141" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M6.99707 9.91675H7.00231" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg> Tanggal bayar maksimal 1 bulan sebelum dari hari ini.
+                    </svg> Tanggal bayar harus setelah tanggal penerimaan dan maksimal 30 hari dari penerimaan.
                 </div>
             </div>
             <div class="mt-5 sm:block md:flex items-center">
@@ -45,7 +46,7 @@
                 </select>
             </div>
             <div class="mt-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah / Total Bayar</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah (Sisa Bayar)</label>
                 <input type="text" name="jlhbayar" id="jlhbayar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                 <input type="text" name="totalbayar" id="totalbayar" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" readonly>
             </div>
@@ -92,12 +93,13 @@
                                         <th class="px-1 py-1 text-center">Subtotal</th>
                                         <th class="px-1 py-1 text-center">Diskon (%)</th>
                                         <th class="px-1 py-1 text-center">Diskon (Jumlah)</th>
-                                        <th class="px-1 py-1 text-center">Total</th>
+                                        <th class="px-1 py-1 text-center">Total per item</th>
                                     </tr>
                                 </thead>
                                 <tbody class="tabelbodypesanan divide-y divide-gray-200 dark:divide-neutral-700">
-                                    <?php $totalsblmpajak = 0; foreach ($pesanan_data as $pesanan) {
-                                        
+                                    <?php $totalsblmpajak = 0;
+                                    foreach ($pesanan_data as $pesanan) {
+
                                         $totalsblmpajak += $pesanan['total_per_item']; ?>
                                         <tr>
                                             <td class="align-middle p-1 text-center">
@@ -112,7 +114,7 @@
                                             </td>
                                             <td class="align-middle p-1">
                                                 <input type="text" value="<?php foreach ($satuan_data as $satuan) {
-                                                                                if ($satuan['id'] === $pesanan['satuan']&& $pesanan['satuan'] !== 1) {
+                                                                                if ($satuan['id'] === $pesanan['satuan'] && $pesanan['satuan'] !== 1) {
                                                                                     echo $satuan['nama'];
                                                                                 } else {
                                                                                     echo '';
@@ -127,7 +129,7 @@
                                                 <input type="number" min="0" value="<?= $pesanan['subtotal_per_item'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="subtotalperitem[]" readonly />
                                             </td>
                                             <td class="align-middle p-1">
-                                                <input type="number" min="0" value="<?= $pesanan['diskon_persen'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="diskonpersenperitem[]" readonly/>
+                                                <input type="number" min="0" value="<?= $pesanan['diskon_persen'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="diskonpersenperitem[]" readonly />
                                             </td>
                                             <td class="align-middle p-1">
                                                 <input type="number" min="0" value="<?= $pesanan['diskon_jumlah'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="diskonjumlahperitem[]" readonly />
@@ -221,15 +223,18 @@
         }
     });
 
+    var tglpenerimaan = new Date(document.getElementById('tglpenerimaan').value);
+    tglpenerimaan.setHours(0, 0, 0, 0);
+    var minDate = new Date(tglpenerimaan);
+    var maxDate = new Date(tglpenerimaan);
+    maxDate.setDate(maxDate.getDate() + 30);
     document.getElementById('tglbayar').addEventListener('input', function() {
         var tglbayarInput = document.getElementById('tglbayar');
         var dateError = document.getElementById('dateError');
         var selectedDate = new Date(tglbayarInput.value);
-        var maxDate = new Date();
-        maxDate.setDate(maxDate.getDate() - 30);
-        maxDate.setHours(0, 0, 0, 0);
 
-        if (selectedDate <= maxDate) {
+
+        if (selectedDate < minDate || selectedDate > maxDate) {
             tglbayarInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('flex', 'items-center');
@@ -244,15 +249,13 @@
         var tglbayarInput = document.getElementById('tglbayar');
         var dateError = document.getElementById('dateError');
         var selectedDate = new Date(tglbayarInput.value);
-        var maxDate = new Date();
-        maxDate.setDate(maxDate.getDate() - 30);
-        maxDate.setHours(0, 0, 0, 0);
 
-        if (selectedDate <= maxDate) {
+
+        if (selectedDate < minDate || selectedDate > maxDate) {
             tglbayarInput.classList.add('border-red-500');
             dateError.classList.remove('hidden');
             dateError.classList.add('block');
-            alert("Tanggal bayar maksimal 1 bulan sebelum dari hari ini.");
+            alert("Tanggal bayar harus setelah tanggal penerimaan dan maksimal 30 hari dari penerimaan.");
             return false;
         }
 
