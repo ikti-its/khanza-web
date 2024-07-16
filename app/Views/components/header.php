@@ -31,16 +31,9 @@
             </div>
 
             <div class="w-full flex items-center justify-end ms-auto sm:justify-between sm:gap-x-3 sm:order-3">
-                <div class="sm:hidden">
-                    <button type="button" class="w-[2.375rem] h-[2.375rem] inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.3-4.3" />
-                        </svg>
-                    </button>
-                </div>
+                
 
-                <div class="hidden sm:block">
+                <div class="">
                     <label for="icon" class="sr-only">Search</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-4">
@@ -49,7 +42,7 @@
                                 <path d="m21 21-4.3-4.3" />
                             </svg>
                         </div>
-                        <input type="text" id="search" name="search" class="py-2 px-4 ps-11 block w-full xl:w-96 border border-gray-200 rounded-lg text-sm focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
+                        <input type="text" id="search" name="search" class="py-2 px-4 ps-11 block w-full xl:w-96 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Search">
                         <div id="suggestions" class="absolute z-10 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 w-full max-h-60 overflow-y-auto hidden dark:bg-slate-900 dark:border-gray-700">
                             <!-- Suggestions will be injected here -->
                         </div>
@@ -257,13 +250,13 @@
             <ol class="ms-3 flex items-center whitespace-nowrap" aria-label="Breadcrumb">
                 <li class="flex items-center text-sm text-gray-800 dark:text-gray-400">
                     Omnia
-                    <svg class="flex-shrink-0 mx-3 overflow-visible size-2.5 text-gray-400 dark:text-gray-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- <svg class="flex-shrink-0 mx-3 overflow-visible size-2.5 text-gray-400 dark:text-gray-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5 1L10.6869 7.16086C10.8637 7.35239 10.8637 7.64761 10.6869 7.83914L5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
+                    </svg> -->
                 </li>
-                <li class="text-sm font-semibold text-gray-800 truncate dark:text-gray-400" aria-current="page">
+                <!-- <li class="text-sm font-semibold text-gray-800 truncate dark:text-gray-400" aria-current="page">
                     Dashboard
-                </li>
+                </li> -->
             </ol>
             <!-- End Breadcrumb -->
         </div>
@@ -583,7 +576,7 @@
                 </li>
 
             <?php endif; ?>
-                            <li><a href=" <?= base_url('/logout') ?>" class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                            <!-- <li><a href=" <?= base_url('/logout') ?>" class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                     <svg width="20" height="20" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M11.2598 2C10.7898 2 10.3998 2.38 10.3998 2.86V21.15C10.3998 21.62 10.7798 22.01 11.2598 22.01C17.1498 22.01 21.2598 17.9 21.2598 12.01C21.2598 6.12 17.1398 2 11.2598 2Z" fill="#FEE2E2" />
                                         <path d="M3.96012 11.5402L6.80012 8.69016C7.09012 8.40016 7.57012 8.40016 7.86012 8.69016C8.15012 8.98016 8.15012 9.46016 7.86012 9.75016L6.30012 11.3102H15.8701C16.2801 11.3102 16.6201 11.6502 16.6201 12.0602C16.6201 12.4702 16.2801 12.8102 15.8701 12.8102H6.30012L7.86012 14.3702C8.15012 14.6602 8.15012 15.1402 7.86012 15.4302C7.71012 15.5802 7.52012 15.6502 7.33012 15.6502C7.14012 15.6502 6.95012 15.5802 6.80012 15.4302L3.96012 12.5802C3.67012 12.3002 3.67012 11.8302 3.96012 11.5402Z" fill="#DA4141" />
@@ -591,7 +584,7 @@
 
                                     Keluar Akun
                                 </a>
-                            </li>
+                            </li> -->
 
                             <li>
 
@@ -600,7 +593,7 @@
                                         <path d="M11.2598 2C10.7898 2 10.3998 2.38 10.3998 2.86V21.15C10.3998 21.62 10.7798 22.01 11.2598 22.01C17.1498 22.01 21.2598 17.9 21.2598 12.01C21.2598 6.12 17.1398 2 11.2598 2Z" fill="#FEE2E2" />
                                         <path d="M3.96012 11.5402L6.80012 8.69016C7.09012 8.40016 7.57012 8.40016 7.86012 8.69016C8.15012 8.98016 8.15012 9.46016 7.86012 9.75016L6.30012 11.3102H15.8701C16.2801 11.3102 16.6201 11.6502 16.6201 12.0602C16.6201 12.4702 16.2801 12.8102 15.8701 12.8102H6.30012L7.86012 14.3702C8.15012 14.6602 8.15012 15.1402 7.86012 15.4302C7.71012 15.5802 7.52012 15.6502 7.33012 15.6502C7.14012 15.6502 6.95012 15.5802 6.80012 15.4302L3.96012 12.5802C3.67012 12.3002 3.67012 11.8302 3.96012 11.5402Z" fill="#DA4141" />
                                     </svg>
-                                    Ajukan
+                                    Keluar Akun
                                 </button>
 
                                 

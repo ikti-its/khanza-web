@@ -35,7 +35,7 @@ Options -Indexes
 
 	# Ensure Authorization header is passed along
 	RewriteCond %{HTTP:Authorization} .
-	RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+	RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]	
 </IfModule>
 
 <IfModule !mod_rewrite.c>
@@ -43,6 +43,8 @@ Options -Indexes
 	# can be sent to index.php, and everything works as normal.
 	ErrorDocument 404 index.php
 </IfModule>
+
+
 
 # Disable server signature start
 	ServerSignature Off

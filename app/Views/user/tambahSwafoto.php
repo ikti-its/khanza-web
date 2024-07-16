@@ -16,7 +16,7 @@
         <div class="px-6 py-4">
             <div class="border-2 border-dashed border-gray-400 rounded-lg h-auto flex justify-center items-center relative">
                 <video id="video" class="rounded-lg" autoplay muted></video>
-                <canvas id="overlay" class="absolute"></canvas>
+                <canvas id="overlay" class="absolute z-0"></canvas>
             </div>
         </div>
         <!-- End Camera Frame -->
@@ -27,7 +27,7 @@
                 <a href="javascript:history.back()" class="flex-1 py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle text-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
                     Batal
                 </a>
-                <button disabled id="capture-btn" data-hs-overlay="#hs-basic-modal" class=" flex-1 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] text-center hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
+                <button disabled id="capture-btn" data-hs-overlay="#hs-basic-modal" class=" z-10 flex-1 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] text-center hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
                     Gunakan Foto
                 </button>
 
@@ -120,8 +120,10 @@
                             results.forEach(async (result, index) => {
                                 const box = resizedDetections[index].detection.box;
                                 const text = result.toString();
+
                                 const drawBox = new faceapi.draw.DrawBox(box, {
-                                    label: text
+                                    label: text,
+                                    
                                 });
                                 drawBox.draw(canvas);
 
@@ -141,9 +143,7 @@
 
                 });
             })
-            .catch(function(err) {
-                console.log("Unable to access webcam: " + err);
-            });
+            .catch(handleCameraError);
 
         captureButton.addEventListener('click', function() {
             const context = canvas.getContext('2d');
@@ -217,6 +217,36 @@
         var submitButton = document.getElementById('save-changes-btn');
         submitButton.setAttribute('disabled', true);
         submitButton.innerHTML = 'Mengajukan...';
+    }
+
+    function handleCameraError(error) {
+        if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+            var alertDiv = document.createElement('div');
+            alertDiv.className = 'z-20 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 lg:pl-72';
+
+            alertDiv.innerHTML = `
+            <div id="cameraDeniedModal" class="bg-white shadow-lg rounded-lg overflow-hidden max-w-sm mx-auto">
+                <div class="px-6 py-4">
+                    <div class="text-center mb-4">
+                        <span class="text-red-500 text-4xl">&#x26D4;</span>
+                        <h2 class="text-xl font-bold text-gray-800">Akses Kamera Ditolak</h2>
+                    </div>
+                    <p class="text-gray-700 text-center">Anda telah menolak akses ke kamera Anda. Harap aktifkan akses kamera untuk menggunakan fitur ini.</p>
+                </div>
+                <div class="px-6 py-4 bg-gray-100 text-right">
+                    <a href="/dashboard" type="button" class="py-2 px-4 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">Batal</a>
+                </div>
+            </div>
+        `;
+
+            document.body.appendChild(alertDiv);
+
+            alertDiv.scrollIntoView({
+                behavior: 'smooth'
+            });
+        } else {
+            console.error('Error accessing webcam:', error);
+        }
     }
 </script>
 
