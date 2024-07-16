@@ -89,6 +89,55 @@
             <!-- End Content -->
         </div>
 
+        <div id="hs-keluar-alert" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto">
+            <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+                <div class="relative flex flex-col bg-white shadow-lg rounded-xl dark:bg-neutral-900">
+                    <div class="absolute top-2 end-2">
+                        <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-neutral-700" data-hs-overlay="#hs-keluar-alert">
+                            <span class="sr-only">Close</span>
+                            <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 6 6 18" />
+                                <path d="m6 6 12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="p-4 sm:p-10 text-center overflow-y-auto">
+                        <!-- Icon -->
+                        <span class="mb-4 inline-flex justify-center items-center size-[62px] rounded-full border-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="43" height="42" viewBox="0 0 43 42" fill="none">
+                                <path d="M19.3301 3.5C18.5076 3.5 17.8251 4.165 17.8251 5.005V37.0125C17.8251 37.835 18.4901 38.5175 19.3301 38.5175C29.6376 38.5175 36.8301 31.325 36.8301 21.0175C36.8301 10.71 29.6201 3.5 19.3301 3.5Z" fill="#FEE2E2" />
+                                <path d="M6.55496 20.1943L11.525 15.2068C12.0325 14.6993 12.8725 14.6993 13.38 15.2068C13.8875 15.7143 13.8875 16.5543 13.38 17.0618L10.65 19.7918H27.3975C28.115 19.7918 28.71 20.3868 28.71 21.1043C28.71 21.8218 28.115 22.4168 27.3975 22.4168H10.65L13.38 25.1468C13.8875 25.6543 13.8875 26.4943 13.38 27.0018C13.1175 27.2643 12.785 27.3868 12.4525 27.3868C12.12 27.3868 11.7875 27.2643 11.525 27.0018L6.55496 22.0143C6.04746 21.5243 6.04746 20.7018 6.55496 20.1943Z" fill="#DA4141" />
+                            </svg>
+
+                        </span>
+                        <!-- End Icon -->
+
+                        <h3 class="mb-2 text-2xl font-bold text-gray-800 dark:text-neutral-200">
+                            Konfirmasi Keluar Akun
+                        </h3>
+                        <p class="text-gray-500 dark:text-neutral-500">
+                            Apakah Anda Yakin untuk keluar akun?
+                        </p>
+
+                        <div class="mt-6 flex justify-center gap-x-4">
+
+                            <button type="button" data-hs-overlay="#hs-keluar-alert" href="javascript:history.back()" class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-teal-600 transition-all text-sm dark:bg-neutral-800 dark:hover:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-white dark:focus:ring-offset-gray-800">
+                                Batal
+                            </button>
+                            <a href="<?= base_url('/logout') ?>" type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none ">
+                                Keluar Akun
+                            </a>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <!-- Flatpickr JS -->
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

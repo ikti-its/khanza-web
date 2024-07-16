@@ -24,13 +24,15 @@
             <div class="px-8 py-10 bg-white shadow-lg rounded-xl">
                 <h2 class="text-3xl font-bold text-center mb-6">Masuk ke akun Anda</h2>
 
-                <?php if (isset($validation)): ?>
-                    <div class="mb-4">
-                        <div class="text-red-600">
-                            <?= $validation->listErrors() ?>
+                <?php if (session()->getFlashdata('passwordsalah')) : ?>
+                        <div id="warningMessage" class="flex items-center my-2 bg-[#FEE2E2] text-sm font-semibold text-[#DA4141] rounded-lg p-4" role="alert">
+                            <span class="mx-1 font-semibold"></span><?= session()->getFlashdata('passwordsalah') ?>
                         </div>
-                    </div>
-                <?php endif; ?>
+                    <?php elseif (session()->getFlashdata('akunsalah')) : ?>
+                        <div id="warningMessage" class="flex items-center my-2 bg-[#FEE2E2] text-sm font-semibold text-[#DA4141] rounded-lg p-4" role="alert">
+                            <span class="mx-1 font-semibold"></span><?= session()->getFlashdata('akunsalah') ?>
+                        </div>
+                    <?php endif; ?>
 
                 <div class="mb-6">
                     <label for="email" class="block text-gray-600 mb-1">E-mail</label>

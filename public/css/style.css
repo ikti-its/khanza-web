@@ -724,6 +724,11 @@ html {
   margin: 0.75rem;
 }
 
+.mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
 .mx-3 {
   margin-left: 0.75rem;
   margin-right: 0.75rem;
@@ -1550,11 +1555,6 @@ html {
   background-color: rgb(254 249 195 / var(--tw-bg-opacity));
 }
 
-.bg-blue-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-}
-
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
@@ -1933,6 +1933,11 @@ html {
   color: rgb(172 242 231 / var(--tw-text-opacity));
 }
 
+.text-\[\#DA4141\] {
+  --tw-text-opacity: 1;
+  color: rgb(218 65 65 / var(--tw-text-opacity));
+}
+
 .text-\[\#FDFDFD\] {
   --tw-text-opacity: 1;
   color: rgb(253 253 253 / var(--tw-text-opacity));
@@ -1978,11 +1983,6 @@ html {
   color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
-.text-red-600 {
-  --tw-text-opacity: 1;
-  color: rgb(220 38 38 / var(--tw-text-opacity));
-}
-
 .text-red-800 {
   --tw-text-opacity: 1;
   color: rgb(153 27 27 / var(--tw-text-opacity));
@@ -2016,11 +2016,6 @@ html {
 .text-yellow-500 {
   --tw-text-opacity: 1;
   color: rgb(234 179 8 / var(--tw-text-opacity));
-}
-
-.text-green-500 {
-  --tw-text-opacity: 1;
-  color: rgb(34 197 94 / var(--tw-text-opacity));
 }
 
 .decoration-2 {
@@ -2331,11 +2326,6 @@ html {
 .hover\:bg-teal-900:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(19 78 74 / var(--tw-bg-opacity));
-}
-
-.hover\:bg-blue-600:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
 }
 
 .hover\:text-black:hover {

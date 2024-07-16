@@ -583,63 +583,29 @@
                 </li>
 
             <?php endif; ?>
-
-
-
-            </li>
-
-            <li class=" hs-accordion" id="account-accordion">
-                                    <button type="button" class="hs-accordion-toggle hs-accordion-active:text-slate-700 hs-accordion-active:hover:bg-teal-200 w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 dark:hs-accordion-active:text-white">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M16.6667 1.66675H3.33341C2.50008 1.66675 1.66675 2.41675 1.66675 3.33341V5.84175C1.66675 6.44175 2.02508 6.95841 2.50008 7.25008V16.6667C2.50008 17.5834 3.41675 18.3334 4.16675 18.3334H15.8334C16.5834 18.3334 17.5001 17.5834 17.5001 16.6667V7.25008C17.9751 6.95841 18.3334 6.44175 18.3334 5.84175V3.33341C18.3334 2.41675 17.5001 1.66675 16.6667 1.66675ZM15.8334 15.6667C15.8334 16.219 15.3857 16.6667 14.8334 16.6667H5.16675C4.61446 16.6667 4.16675 16.219 4.16675 15.6667V8.50008C4.16675 7.9478 4.61446 7.50008 5.16675 7.50008H14.8334C15.3857 7.50008 15.8334 7.9478 15.8334 8.50008V15.6667ZM16.6667 4.83342C16.6667 5.3857 16.219 5.83341 15.6667 5.83341H4.33341C3.78113 5.83341 3.33341 5.3857 3.33341 4.83341V4.33217C3.33341 3.78037 3.78037 3.33286 4.33216 3.33217L15.6655 3.318C16.2183 3.31731 16.6667 3.76523 16.6667 4.318V4.83342Z" fill="#272727" />
-                                            <path d="M7.5 10.8333C7.5 10.3731 7.8731 10 8.33333 10H11.6667C12.1269 10 12.5 10.3731 12.5 10.8333C12.5 11.2936 12.1269 11.6667 11.6667 11.6667H8.33333C7.8731 11.6667 7.5 11.2936 7.5 10.8333Z" fill="#272727" />
-                                        </svg>
-
-
-                                        Inventaris
-
-                                        <svg class="hs-accordion-active:block ms-auto hidden size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="m18 15-6-6-6 6" />
-                                        </svg>
-
-                                        <svg class="hs-accordion-active:hidden ms-auto block size-4 text-gray-600 group-hover:text-gray-500 dark:text-neutral-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="m6 9 6 6 6-6" />
-                                        </svg>
-                                    </button>
-
-                                    <div id="account-accordion" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
-                                        <ul class="pt-2 ps-2">
-                                            <li>
-                                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
-                                                    <svg class="flex-shrink-0 size-4" fill="#000000" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M144.48633,136.48438l-41.98926,42a12.0001,12.0001,0,0,1-16.97266-16.96875L107.03467,140H24a12,12,0,0,1,0-24h83.03467L85.52441,94.48438a12.0001,12.0001,0,0,1,16.97266-16.96875l41.98926,42A12.00093,12.00093,0,0,1,144.48633,136.48438ZM192,28H136a12,12,0,0,0,0,24h52V204H136a12,12,0,0,0,0,24h56a20.02229,20.02229,0,0,0,20-20V48A20.02229,20.02229,0,0,0,192,28Z" />
-                                                    </svg>
-                                                    Presensi
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
-                                                    Link 2
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="#">
-                                                    Link 3
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                            </li>
-
-                            <li><a href="<?= base_url('/logout') ?>" class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                            <li><a href=" <?= base_url('/logout') ?>" class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                    <svg width="20" height="20" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11.2598 2C10.7898 2 10.3998 2.38 10.3998 2.86V21.15C10.3998 21.62 10.7798 22.01 11.2598 22.01C17.1498 22.01 21.2598 17.9 21.2598 12.01C21.2598 6.12 17.1398 2 11.2598 2Z" fill="#FEE2E2" />
+                                        <path d="M3.96012 11.5402L6.80012 8.69016C7.09012 8.40016 7.57012 8.40016 7.86012 8.69016C8.15012 8.98016 8.15012 9.46016 7.86012 9.75016L6.30012 11.3102H15.8701C16.2801 11.3102 16.6201 11.6502 16.6201 12.0602C16.6201 12.4702 16.2801 12.8102 15.8701 12.8102H6.30012L7.86012 14.3702C8.15012 14.6602 8.15012 15.1402 7.86012 15.4302C7.71012 15.5802 7.52012 15.6502 7.33012 15.6502C7.14012 15.6502 6.95012 15.5802 6.80012 15.4302L3.96012 12.5802C3.67012 12.3002 3.67012 11.8302 3.96012 11.5402Z" fill="#DA4141" />
                                     </svg>
-                                    Logout
+
+                                    Keluar Akun
                                 </a>
                             </li>
-                        </ul>
+
+                            <li>
+
+                                <button id="keluar-button" type="button" class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-keluar-alert">
+                                    <svg width="20" height="20" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11.2598 2C10.7898 2 10.3998 2.38 10.3998 2.86V21.15C10.3998 21.62 10.7798 22.01 11.2598 22.01C17.1498 22.01 21.2598 17.9 21.2598 12.01C21.2598 6.12 17.1398 2 11.2598 2Z" fill="#FEE2E2" />
+                                        <path d="M3.96012 11.5402L6.80012 8.69016C7.09012 8.40016 7.57012 8.40016 7.86012 8.69016C8.15012 8.98016 8.15012 9.46016 7.86012 9.75016L6.30012 11.3102H15.8701C16.2801 11.3102 16.6201 11.6502 16.6201 12.0602C16.6201 12.4702 16.2801 12.8102 15.8701 12.8102H6.30012L7.86012 14.3702C8.15012 14.6602 8.15012 15.1402 7.86012 15.4302C7.71012 15.5802 7.52012 15.6502 7.33012 15.6502C7.14012 15.6502 6.95012 15.5802 6.80012 15.4302L3.96012 12.5802C3.67012 12.3002 3.67012 11.8302 3.96012 11.5402Z" fill="#DA4141" />
+                                    </svg>
+                                    Ajukan
+                                </button>
+
+                                
+                            </li>
+
         </nav>
     </div>
     <!-- End Sidebar -->
