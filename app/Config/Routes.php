@@ -144,6 +144,7 @@ $routes->group('pengajuanmedis', ['filter' => 'auth'], function ($routes) {
 $routes->group('pemesananmedis', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'PemesananController::dataPemesananMedis', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
     $routes->get('cetak/(:segment)', 'PemesananController::cetakPemesananBrgMedis/$1', ['filter' => 'checkpermission:1337,1,4001,4003']);
+    $routes->get('tambah', 'PemesananController::tambahPemesananMedis', ['filter' => 'checkpermission:1337,1,4001,4003']);
     $routes->get('tambah/(:any)', 'PemesananController::tambahPemesananMedisbyId/$1', ['filter' => 'checkpermission:1337,1,4001,4003']);
     $routes->post('submittambah', 'PemesananController::submitTambahPemesananMedis', ['filter' => 'checkpermission:1337,1,4001,4003']);
     $routes->get('edit/(:any)', 'PemesananController::editPemesananMedis/$1', ['filter' => 'checkpermission:1337,1,4001,4003']);
@@ -155,6 +156,7 @@ $routes->group('pemesananmedis', ['filter' => 'auth'], function ($routes) {
 // Grup untuk Penerimaan Medis
 $routes->group('penerimaanmedis', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'PenerimaanController::dataPenerimaanMedis', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004,5001']);
+    $routes->get('tambah', 'PenerimaanController::tambahPenerimaanMedis', ['filter' => 'checkpermission:1337,1,4001,4004']);
     $routes->get('tambah/(:any)', 'PenerimaanController::tambahPenerimaanMedisbyId/$1', ['filter' => 'checkpermission:1337,1,4001,4004']);
     $routes->post('submittambah', 'PenerimaanController::submitTambahPenerimaanMedis', ['filter' => 'checkpermission:1337,1,4001,4004']);
     $routes->get('edit/(:any)', 'PenerimaanController::editPenerimaanMedis/$1', ['filter' => 'checkpermission:1337,1,4001,4004']);
@@ -174,4 +176,11 @@ $routes->group('tagihanmedis', ['filter' => 'auth'], function ($routes) {
     $routes->delete('hapus/(:segment)', 'TagihanController::hapusTagihanMedis/$1', ['filter' => 'checkpermission:1337,1,5001']);
 });
 
+$routes->group('stokopnamemedis', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'StokOpnameController::data');
+    $routes->get('tambah', 'StokOpnameController::tambah');
+});
+$routes->group('sisastokmedis', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'StokOpnameController::sisastok');
+});
 // Grup untuk Stok Keluar Medis

@@ -22,7 +22,7 @@
 <body class="bg-svg">
 
     <?php if (session()->getFlashdata('error')) : ?>
-        <div class="mt-2 bg-yellow-500 text-sm text-white rounded-lg p-4" role="alert">
+        <div class="mt-2 bg-[#FEE2E2] text-sm text-[#DA4141] rounded-lg p-4" role="alert">
             <span class="font-bold"></span><?= session()->getFlashdata('error') ?>
         </div>
     <?php endif; ?>
@@ -32,21 +32,21 @@
                 <h2 class="text-3xl font-bold text-center mb-6">Masuk ke akun Anda</h2>
                 <div class="mb-6">
                     <?php if (session()->getFlashdata('passwordsalah')) : ?>
-                        <div id="warningMessage" class="flex items-center my-2 bg-[#FFF5CF] text-sm font-semibold text-[#DA4141] rounded-lg p-4" role="alert">
+                        <div id="warningMessage" class="flex items-center my-2 bg-[#FEE2E2] text-sm font-semibold text-[#DA4141] rounded-lg p-4" role="alert">
                             <span class="mx-1 font-semibold"></span><?= session()->getFlashdata('passwordsalah') ?>
                         </div>
                     <?php elseif (session()->getFlashdata('akunsalah')) : ?>
-                        <div id="warningMessage" class="flex items-center my-2 bg-[#FFF5CF] text-sm font-semibold text-[#DA4141] rounded-lg p-4" role="alert">
+                        <div id="warningMessage" class="flex items-center my-2 bg-[#FEE2E2] text-sm font-semibold text-[#DA4141] rounded-lg p-4" role="alert">
                             <span class="mx-1 font-semibold"></span><?= session()->getFlashdata('akunsalah') ?>
                         </div>
                     <?php endif; ?>
                     <label for="nip" class="block text-gray-600 mb-1">E-mail</label>
-                    <input id="email" name="email" type="email" placeholder="E-mail" pattern="[a-z0-9._%+\-]+@fathoor\.[a-z]{2,}$" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-black" required title="Masukkan email sesuai dengan format nama@fathoor.dev.">
+                    <input id="email" name="email" type="email" placeholder="E-mail" pattern="[a-z0-9._%+\-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-black" required title="Masukkan email sesuai dengan format nama@fathoor.dev.">
 
                 </div>
                 <div class="mb-6">
                     <label for="password" class="block text-gray-600 mb-1">Password</label>
-                    <input id="password" name="password" type="password" placeholder="Kata Sandi" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-black " minlength="6" required>
+                    <input id="password" name="password" type="password" placeholder="Kata Sandi" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-black " required>
 
                 </div>
                 <div class="text-center">

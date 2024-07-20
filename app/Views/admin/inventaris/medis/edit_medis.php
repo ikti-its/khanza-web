@@ -15,293 +15,181 @@
         <form action="/datamedis/submitedit/<?= $medis_data['id'] ?>" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
             <input name="idbrgmedis" value="<?= $medis_data['id'] ?>" type="hidden">
-            <input name="idjenisbrgmedis" value="<?= $jenis_data['id'] ?>" type="hidden">
 
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis</label>
-                <input type="text" name="jenisbrgmedis" value="<?= $medis_data['jenis'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" readonly>
-            </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama</label>
                 <input type="text" name="nama" value="<?= $medis_data['nama'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
-            <?php if ($medis_data['jenis'] === 'Obat') : ?>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Industri Farmasi</label>
-                    <select name="industrifarmasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <?php
-                        $optionsIF = ["1000" => "Kalbe Farma"];
-                        foreach ($optionsIF as $valueIF => $textIF) {
-                            // Periksa jika nilai opsi adalah sama dengan nilai medis_data
-                            if ($valueIF === $jenis_data['industri_farmasi']) {
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kandungan</label>
+                <input type="text" name="kandungan" value="<?= $medis_data['kandungan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">I.F</label>
+                <select name="satuanobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <?php
+                    $optionsIF = ["1000" => "Kalbe Farma"];
+                    foreach ($optionsIF as $valueIF => $textIF) {
+                        // Periksa jika nilai opsi adalah sama dengan nilai medis_data
+                        if ($valueIF === $medis_data['industri_farmasi']) {
 
-                                echo '<option value="' . $valueIF . '" selected>' . $textIF . '</option>';
+                            echo '<option value="' . $valueIF . '" selected>' . $textIF . '</option>';
+                        } else {
+                            echo '<option value="' . $valueIF . '">' . $textIF . '</option>';
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Isi</label>
+                <input type="text" name="isi" value="<?= $medis_data['isi'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Satuan Besar</label>
+                <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <?php
+                    foreach ($satuan_data as $satuan) {
+                        $optionsatuan = [$satuan['id'] => $satuan['nama']];
+                        foreach ($optionsatuan as $satuanid => $satuannama) {
+                            if ($satuanid === $medis_data['id_satbesar']) {
+                                echo '<option value="' . $satuan['id'] . '" selected>' . $satuan['nama'] . '</option>';
                             } else {
-                                echo '<option value="' . $valueIF . '">' . $textIF . '</option>';
+                                echo '<option value="' . $satuan['id'] . '">' . $satuan['nama'] . '</option>';
                             }
                         }
-                        ?>
-                    </select>
-                </div>
+                    }
+                    ?>
+                </select>
+            </div>
 
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kandungan</label>
-                    <input type="text" name="kandungan" value="<?= $jenis_data['kandungan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                </div>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Isi</label>
-                    <input type="text" name="isi" value="<?= $jenis_data['isi'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
-                    <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Satuan Besar</label>
-                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <?php
-                        foreach ($satuan_data as $satuan) {
-                            $optionsatuan = [$satuan['id'] => $satuan['nama']];
-                            foreach ($optionsatuan as $satuanid => $satuannama) {
-                                if ($satuanid === $medis_data['satuan']) {
-                                    echo '<option value="' . $satuan['id'] . '" selected>' . $satuan['nama'] . '</option>';
-                                } else {
-                                    echo '<option value="' . $satuan['id'] . '">' . $satuan['nama'] . '</option>';
-                                }
-                            }
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kapasitas</label>
-                    <input type="text" name="kapasitas" value="<?= $jenis_data['kapasitas'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
-                    <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Satuan Kecil</label>
-                    <select name="satuanobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <?php
-                        foreach ($satuan_data as $satuan) {
-                            $optionsatuan = [$satuan['id'] => $satuan['nama']];
-                            foreach ($optionsatuan as $satuanid => $satuannama) {
-                                if ($satuanid === $jenis_data['satuan']) {
-                                    echo '<option value="' . $satuan['id'] . '" selected>' . $satuan['nama'] . '</option>';
-                                } else {
-                                    echo '<option value="' . $satuan['id'] . '">' . $satuan['nama'] . '</option>';
-                                }
-                            }
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis</label>
-                    <select name="jenisobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <?php
-                        $optionsjenis = [
-                            "1" => "-",
-                            "1000" => "Obat Oral",
-                            "2000" => "Obat Topikal",
-                            "3000" => "Obat Injeksi",
-                            "4000" => "Obat Sublingual"
-                        ];
-
-                        foreach ($optionsjenis as $valuejenis => $textjenis) {
-                            if ($valuejenis === $jenis_data['jenis']) {
-                                echo '<option value="' . $valuejenis . '" selected>' . $textjenis . '</option>';
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kapasitas</label>
+                <input type="text" name="kapasitas" value="<?= $medis_data['kapasitas'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Satuan Kecil</label>
+                <select name="satuanobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <?php
+                    foreach ($satuan_data as $satuan) {
+                        $optionsatuan = [$satuan['id'] => $satuan['nama']];
+                        foreach ($optionsatuan as $satuanid => $satuannama) {
+                            if ($satuanid === $medis_data['id_satuan']) {
+                                echo '<option value="' . $satuan['id'] . '" selected>' . $satuan['nama'] . '</option>';
                             } else {
-                                echo '<option value="' . $valuejenis . '">' . $textjenis . '</option>';
+                                echo '<option value="' . $satuan['id'] . '">' . $satuan['nama'] . '</option>';
                             }
                         }
-                        ?>
-                    </select>
-                </div>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kategori</label>
-                    <select name="kategoriobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <?php
-                        $optionskategori = [
-                            "1" => "-",
-                            "1000" => "Obat Paten",
-                            "2000" => "Obat Generik",
-                            "3000" => "Obat Merek",
-                            "4000" => "Obat Eksklusif"
-                        ];
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis</label>
+                <select name="jenisobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <?php
+                    $optionsjenis = [
+                        "1" => "-",
+                        "1000" => "Obat Oral",
+                        "2000" => "Obat Topikal",
+                        "3000" => "Obat Injeksi",
+                        "4000" => "Obat Sublingual"
+                    ];
 
-                        foreach ($optionskategori as $valuekategori => $textkategori) {
-                            if ($valuekategori === $jenis_data['kategori']) {
-                                echo '<option value="' . $valuekategori . '" selected>' . $textkategori . '</option>';
-                            } else {
-                                echo '<option value="' . $valuekategori . '">' . $textkategori . '</option>';
-                            }
+                    foreach ($optionsjenis as $valuejenis => $textjenis) {
+                        if ($valuejenis === $medis_data['jenis']) {
+                            echo '<option value="' . $valuejenis . '" selected>' . $textjenis . '</option>';
+                        } else {
+                            echo '<option value="' . $valuejenis . '">' . $textjenis . '</option>';
                         }
-                        ?>
-                    </select>
-                </div>
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kategori</label>
+                <select name="kategoriobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <?php
+                    $optionskategori = [
+                        "1" => "-",
+                        "1000" => "Obat Paten",
+                        "2000" => "Obat Generik",
+                        "3000" => "Obat Merek",
+                        "4000" => "Obat Eksklusif"
+                    ];
 
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Golongan</label>
-                    <select name="golonganobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <?php
-                        $optionsgolongan = [
-                            "1" => "-",
-                            "1000" => "Analgesik",
-                            "2000" => "Antibiotik",
-                            "3000" => "Antijamur",
-                            "4000" => "Antivirus"
-                        ];
-
-                        foreach ($optionsgolongan as $valuegolongan => $textgolongan) {
-                            if ($valuegolongan === $jenis_data['golongan']) {
-                                echo '<option value="' . $valuegolongan . '" selected>' . $textgolongan . '</option>';
-                            } else {
-                                echo '<option value="' . $valuegolongan . '">' . $textgolongan . '</option>';
-                            }
+                    foreach ($optionskategori as $valuekategori => $textkategori) {
+                        if ($valuekategori === $medis_data['kategori']) {
+                            echo '<option value="' . $valuekategori . '" selected>' . $textkategori . '</option>';
+                        } else {
+                            echo '<option value="' . $valuekategori . '">' . $textkategori . '</option>';
                         }
-                        ?>
-                    </select>
-                </div>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
-                    <input type="date" name="kadaluwarsaobat" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                </div>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa</label>
-                    <input type="number" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                </div>
-            <?php elseif ($medis_data['jenis'] === 'Alat Kesehatan') : ?>
-                <input type="hidden" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    }
+                    ?>
+                </select>
+            </div>
 
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
-                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <?php
-                        foreach ($satuan_data as $satuan) {
-                            $optionsatuan = [$satuan['id'] => $satuan['nama']];
-                            foreach ($optionsatuan as $satuanid => $satuannama) {
-                                if ($satuanid === $medis_data['satuan']) {
-                                    echo '<option value="' . $satuan['id'] . '" selected>' . $satuan['nama'] . '</option>';
-                                } else {
-                                    echo '<option value="' . $satuan['id'] . '">' . $satuan['nama'] . '</option>';
-                                }
-                            }
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Golongan</label>
+                <select name="golonganobat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <?php
+                    $optionsgolongan = [
+                        "1" => "-",
+                        "1000" => "Analgesik",
+                        "2000" => "Antibiotik",
+                        "3000" => "Antijamur",
+                        "4000" => "Antivirus"
+                    ];
+
+                    foreach ($optionsgolongan as $valuegolongan => $textgolongan) {
+                        if ($valuegolongan === $medis_data['golongan']) {
+                            echo '<option value="' . $valuegolongan . '" selected>' . $textgolongan . '</option>';
+                        } else {
+                            echo '<option value="' . $valuegolongan . '">' . $textgolongan . '</option>';
                         }
-                        ?>
-                    </select>
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
+                <input type="date" name="kadaluwarsaobat" value="<?= $medis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Harga Dasar</label>
+                <input type="number" name="hargadasar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Harga Beli</label>
+                <input name="hargabeli" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Harga Ralan</label>
+                <input type="number" name="hargaralan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Harga Rnp Kelas 2</label>
+                <input name="hargakelas2" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Harga Rnp Kelas 3</label>
+                <input type="number" name="hargakelas3" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Harga Rnp Utama/BPJS</label>
+                <input name="hargautama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Harga Rnp Kelas VIP</label>
+                <input type="number" name="hargavip" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Harga Rnp Kelas VVIP</label>
+                <input name="hargavvip" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Harga Apotek Luar</label>
+                <input type="number" name="hargaapotekluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Harga Jual Obat Bebas</label>
+                <input name="hargaobatbebas" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
+            </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Harga Karyawan</label>
+                <input type="number" name="hargakaryawan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
 
-                </div>
+            </div>
 
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Merek</label>
-                    <select name="merekalkes" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <?php
-                        $companies = array(
-                            'Omron', 'Philips', 'GE Healthcare', 'Siemens Healthineers', 'Medtronic',
-                            'Johnson & Johnson', 'Becton', 'Dickinson and Company (BD)', 'Stryker',
-                            'Boston Scientific', 'Olympus Corporation', 'Roche Diagnostics'
-                        );
-                        foreach ($companies as $company) {
-                            if ($company === $jenis_data['merek']) {
-                                echo '<option value="' . $company . '" selected>' . $company . '</option>';
-                            } else {
-                                echo '<option value="' . $company . '">' . $company . '</option>';
-                            }
-                        }
-                        ?>
-                    </select>
-                </div>
-
-
-
-            <?php elseif ($medis_data['jenis'] === 'Bahan Habis Pakai') : ?>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah</label>
-                    <input type="text" name="jumlahbhp" value="<?= $jenis_data['jumlah'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                </div>
-
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
-                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <?php
-                        foreach ($satuan_data as $satuan) {
-                            $optionsatuan = [$satuan['id'] => $satuan['nama']];
-                            foreach ($optionsatuan as $satuanid => $satuannama) {
-                                if ($satuanid === $medis_data['satuan']) {
-                                    echo '<option value="' . $satuan['id'] . '" selected>' . $satuan['nama'] . '</option>';
-                                } else {
-                                    echo '<option value="' . $satuan['id'] . '">' . $satuan['nama'] . '</option>';
-                                }
-                            }
-                        }
-                        ?>
-                    </select>
-                </div>
-                <?php if ($jenis_data['kadaluwarsa'] !== '0001-01-01') { ?>
-                    <div class="mb-5 sm:block md:flex items-center">
-                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
-                        <input type="date" name="kadaluwarsabhp" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                    </div>
-                <?php } else { ?>
-                    <input type="hidden" name="kadaluwarsabhp" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                <?php } ?>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa</label>
-                    <input type="number" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                </div>
-            <?php elseif ($medis_data['jenis'] === 'Darah') : ?>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Satuan</label>
-                    <select name="satuanbrgmedis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <?php
-                        foreach ($satuan_data as $satuan) {
-                            $optionsatuan = [$satuan['id'] => $satuan['nama']];
-                            foreach ($optionsatuan as $satuanid => $satuannama) {
-                                if ($satuanid === $medis_data['satuan']) {
-                                    echo '<option value="' . $satuan['id'] . '" selected>' . $satuan['nama'] . '</option>';
-                                } else {
-                                    echo '<option value="' . $satuan['id'] . '">' . $satuan['nama'] . '</option>';
-                                }
-                            }
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Darah</label>
-                    <select name="jenisdarah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        <?php
-                        $options = [
-                            "Whole Blood (WB)",
-                            "Packed Red Cell (PRC)",
-                            "Thrombocyte Concentrate (TC)",
-                            "Fresh Frozen Plasma (FFP)"
-                        ];
-
-                        foreach ($options as $value) {
-                            if ($value === $jenis_data['jenis']) {
-                                echo '<option value="' . $value . '" selected>' . $value . '</option>';
-                            } else {
-                                echo '<option value="' . $value . '">' . $value . '</option>';
-                            }
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Keterangan</label>
-                    <input type="text" name="keterangandarah" value="<?= $jenis_data['keterangan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                </div>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Kadaluwarsa</label>
-                    <input type="date" name="kadaluwarsadarah" value="<?= $jenis_data['kadaluwarsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                </div>
-                <div class="mb-5 sm:block md:flex items-center">
-                    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Notifikasi kadaluwarsa</label>
-                    <input type="number" name="notif_kadaluwarsa" value="<?= $medis_data['notifikasi_kadaluwarsa_hari'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                </div>
-            <?php endif; ?>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Harga</label>
                 <input type="number" name="harga" value="<?= $medis_data['harga'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-            </div>
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Stok</label>
-                <input type="number" name="stok" value="<?= $medis_data['stok'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">

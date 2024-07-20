@@ -26,7 +26,16 @@
                             </h2>
 
                         </div>
-
+                        <div>
+                            <div class="inline-flex gap-x-2">
+                                <a href='penerimaanmedis/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                    <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
+                                        <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                    </svg>
+                                    Tambah
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <!-- End Header -->
                     <div class="py-4 grid gap-3 md:items-start">
@@ -241,7 +250,30 @@
                                                                         </div>
                                                                         <div class="mb-5 sm:block md:flex items-center">
                                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Ruangan</label>
-                                                                            <input type="text" name="" value="<?= $penerimaan['id_ruangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                            <?php
+                                                                            $optionsruangan = [
+                                                                                "1000" => "VIP 1",
+                                                                                "2000" => "VIP 2",
+                                                                                "3000" => "VVIP 1",
+                                                                                "4000" => "VVIP 2",
+                                                                                "5000" => "Gudang"
+                                                                            ];
+
+                                                                            // Flag to track if a matching ruangan is found
+                                                                            $found = false;
+
+                                                                            foreach ($optionsruangan as $valueruangan => $textruangan) {
+                                                                                if ($valueruangan === $penerimaan['id_ruangan']) {
+                                                                                    echo '<input type="text" value="' . $textruangan . '" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>';
+                                                                                    $found = true; // Set found to true if match is found
+                                                                                }
+                                                                            }
+
+                                                                            // If no match is found, output a default input field
+                                                                            if (!$found) {
+                                                                                echo '<input type="text" value="-" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>';
+                                                                            }
+                                                                            ?>
                                                                         </div>
                                                                     </div>
                                                                     <div class="pt-2 border-t border-[#F1F1F1]">

@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <!-- Card Section -->
-<div class="max-w-[85rem] py-6 mx-auto">
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
@@ -48,7 +48,7 @@
                         "1000" => "VIP 1",
                         "2000" => "VIP 2",
                         "3000" => "VVIP 1",
-                        "4000" => "VVIP 2",
+                        "4000" => "Apotek",
                         "5000" => "Gudang"
                     ];
 
@@ -63,28 +63,7 @@
 
                 </select>
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tujuan Ruangan</label>
-                <select name="tujuanruangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <?php
-                    $optionsruangan = [
-                        "1000" => "VIP 1",
-                        "2000" => "VIP 2",
-                        "3000" => "VVIP 1",
-                        "4000" => "VVIP 2",
-                        "5000" => "Gudang"
-                    ];
 
-                    foreach ($optionsruangan as $valueruangan => $textruangan) {
-                        if ($valueruangan === $stok_keluar_data['tujuan_ruangan']) {
-                            echo '<option value="' . $valueruangan . '" selected>' . $textruangan . '</option>';
-                        } else {
-                            echo '<option value="' . $valueruangan . '">' . $textruangan . '</option>';
-                        }
-                    }
-                    ?>
-                </select>
-            </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Keterangan</label>
                 <input type="text" name="keteranganstokkeluar" value="<?= $stok_keluar_data['keterangan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
@@ -132,10 +111,10 @@
                                                                     } ?>" class="text-center w-full border bg-[#F6F6F6] cursor-default rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="stoksaatini[]" readonly />
                                             </td>
                                             <td class="align-middle p-1 text-center">
-                                                <input type="number" value="<?= $brg['jumlah_keluar'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="jlhkeluar[]" required />
+                                                <input type="number" value="<?= $brg['jumlah_keluar'] ?>" class="text-center w-full border bg-[#F6F6F6] rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="jlhkeluar[]" required readonly />
                                             </td>
                                             <td class="align-middle p-1 text-center">
-                                                <input type="text" list="nofaktur" value="<?= $brg['no_faktur'] ?>" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="nofaktur[]" />
+                                                <input type="text" list="nofaktur" value="<?= $brg['no_faktur'] ?>" class="text-center w-full border bg-[#F6F6F6] rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="nofaktur[]" readonly />
                                                 <datalist id="nofaktur">
                                                     <?php foreach ($penerimaan_data as $penerimaan) : ?>
                                                         <option value="<?= $penerimaan['no_faktur'] ?>"></option>

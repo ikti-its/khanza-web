@@ -43,9 +43,9 @@
             <td align="right">
                 <h3>Rumah Sakit</h3>
                 <pre style="margin: 0; white-space: pre-wrap;">
-                alamat
-                no_telp
-                email</pre>
+                Jl. Abdurahman Saleh VI No.56
+                (0358) 213968
+                rsud@kulonprogokab.go.id</pre>
             </td>
         </tr>
     </table>

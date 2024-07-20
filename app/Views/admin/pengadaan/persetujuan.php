@@ -13,7 +13,7 @@
 
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                            Persetujuan Barang Medis
+                            Persetujuan Pengajuan Barang Medis
                         </h2>
                     </div>
                     <!-- End Header -->

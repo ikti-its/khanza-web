@@ -22,6 +22,7 @@
             <div class="sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Pemesanan</label>
                 <input type="hidden" name="idpemesanan" value="<?= $pemesanan_data['id'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="hidden" id="tglpesan" value="<?= $pemesanan_data['tanggal_pesan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
                 <input type="text" name="" value="<?= $pemesanan_data['no_pemesanan'] ?>" class="border bg-[#F6F6F6] cursor-default text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required readonly>
 
             </div>
@@ -111,7 +112,7 @@
                     <option value="1000">VIP 1</option>
                     <option value="2000">VIP 2</option>
                     <option value="3000">VVIP 1</option>
-                    <option value="4000">VVIP 2</option>
+                    <option value="4000">Apotek</option>
                     <option value="5000" selected>Gudang</option>
                 </select>
             </div>

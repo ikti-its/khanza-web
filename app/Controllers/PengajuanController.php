@@ -22,7 +22,6 @@ class PengajuanController extends BaseController
             $pemesanan_url = $this->api_url . '/pengadaan/pemesanan';
             $penerimaan_url = $this->api_url . '/pengadaan/penerimaan';
 
-            // Initialize cURL for fetching pengajuan data
             $ch_pengajuan = curl_init($pengajuan_url);
             curl_setopt($ch_pengajuan, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_pengajuan, CURLOPT_HTTPHEADER, [
@@ -34,22 +33,18 @@ class PengajuanController extends BaseController
                 'Authorization: Bearer ' . $token,
             ]);
 
-
-            // Initialize cURL for fetching pemesanan data
             $ch_pemesanan = curl_init($pemesanan_url);
             curl_setopt($ch_pemesanan, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_pemesanan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
 
-            // Initialize cURL for fetching penerimaan data
             $ch_penerimaan = curl_init($penerimaan_url);
             curl_setopt($ch_penerimaan, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_penerimaan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
 
-            // Execute the cURL requests to fetch data
             $response_pengajuan = curl_exec($ch_pengajuan);
             $response_pengajuan_tanpa_params = curl_exec($ch_pengajuan_tanpa_params);
             $response_pemesanan = curl_exec($ch_pemesanan);
@@ -61,7 +56,6 @@ class PengajuanController extends BaseController
                 $http_status_code_penerimaan = curl_getinfo($ch_penerimaan, CURLINFO_HTTP_CODE);
                 $http_status_code_pengajuan_tanpa_params = curl_getinfo($ch_pengajuan_tanpa_params, CURLINFO_HTTP_CODE);
 
-                // Check if any response has a non-200 status code and call renderErrorView
                 if ($http_status_code_pengajuan !== 200) {
                     return $this->renderErrorView($http_status_code_pengajuan);
                 }
@@ -83,7 +77,7 @@ class PengajuanController extends BaseController
                 $this->addBreadcrumb('Dashboard', 'dashboardpengadaan');
 
                 $breadcrumbs = $this->getBreadcrumbs();
-                // Render the view with the fetched data
+
                 return view("/admin/pengadaan/medis/dashboardPengadaan", [
                     'pengajuan_data' => $pengajuan_data['data']['pengajuan_barang_medis'],
                     'pengajuan_tanpa_params_data' => $pengajuan_tanpa_params_data['data'], // tambahkan data pengajuan tanpa params
@@ -94,7 +88,6 @@ class PengajuanController extends BaseController
                     'breadcrumbs' => $breadcrumbs
                 ]);
             } else {
-                // Error handling for failed cURL requests
                 return $this->renderErrorView(500);
             }
         } else {
@@ -122,14 +115,11 @@ class PengajuanController extends BaseController
             $satuan_url = $this->api_url . '/inventaris/satuan';
             $pegawai_url = $this->api_url . '/pegawai';
 
-            // Initialize cURL for fetching pengajuan data
             $ch_pengajuan = curl_init($pengajuan_url);
             curl_setopt($ch_pengajuan, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_pengajuan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-
-            // Execute the cURL request to fetch pengajuan data
             $response_pengajuan = curl_exec($ch_pengajuan);
 
             $ch_pengajuan_tanpa_params = curl_init($pengajuan_tanpa_params_url);
@@ -139,57 +129,44 @@ class PengajuanController extends BaseController
             ]);
             $response_pengajuan_tanpa_params = curl_exec($ch_pengajuan_tanpa_params);
 
-            // Initialize cURL for fetching pesanan data
             $ch_pesanan = curl_init($pesanan_url);
             curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-
-            // Execute the cURL request to fetch pesanan data
             $response_pesanan = curl_exec($ch_pesanan);
 
-            // Initialize cURL for fetching persetujuan data
+
             $ch_persetujuan = curl_init($persetujuan_url);
             curl_setopt($ch_persetujuan, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_persetujuan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-
-            // Execute the cURL request to fetch persetujuan data
             $response_persetujuan = curl_exec($ch_persetujuan);
 
-            // Initialize cURL for fetching barang medis data
             $ch_barang_medis = curl_init($barang_medis_url);
             curl_setopt($ch_barang_medis, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_barang_medis, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-
-            // Execute the cURL request to fetch barang medis data
             $response_barang_medis = curl_exec($ch_barang_medis);
 
-            // Initialize cURL for fetching satuan data
             $ch_satuan = curl_init($satuan_url);
             curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-
-            // Execute the cURL request to fetch satuan data
             $response_satuan = curl_exec($ch_satuan);
 
-            // Initialize cURL for fetching pegawai data
             $ch_pegawai = curl_init($pegawai_url);
             curl_setopt($ch_pegawai, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_pegawai, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-
-            // Execute the cURL request to fetch pegawai data
             $response_pegawai = curl_exec($ch_pegawai);
+
             if ($response_pengajuan && $response_pesanan && $response_persetujuan && $response_barang_medis && $response_satuan && $response_pegawai && $response_pengajuan_tanpa_params) {
-                // Check if the responses are successful
+
                 $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
                 $http_status_code_pengajuan_tanpa_params = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
                 $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
@@ -198,7 +175,7 @@ class PengajuanController extends BaseController
                 $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
                 $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
 
-                // Check if any response has a non-200 status code and call renderErrorView
+             
                 if ($http_status_code_pengajuan !== 200) {
                     return $this->renderErrorView($http_status_code_pengajuan);
                 }
@@ -220,7 +197,7 @@ class PengajuanController extends BaseController
                 if ($http_status_code_pegawai !== 200) {
                     return $this->renderErrorView($http_status_code_pegawai);
                 }
-                // Decode the JSON response
+               
                 $pengajuan_medis_data = json_decode($response_pengajuan, true);
                 $pengajuan_tanpa_params_medis_data = json_decode($response_pengajuan_tanpa_params, true);
                 $pesanan_data = json_decode($response_pesanan, true);
@@ -250,7 +227,7 @@ class PengajuanController extends BaseController
                     'breadcrumbs' => $breadcrumbs
                 ]);
             } else {
-                // Error handling for failed cURL requests
+              
                 return $this->renderErrorView(500);
             }
             curl_close($ch_pengajuan);
@@ -299,14 +276,11 @@ class PengajuanController extends BaseController
             ]);
             $response_barang_medis = curl_exec($ch_barang_medis);
 
-
-
             $ch_satuan = curl_init($satuan_url);
             curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-
             $response_satuan = curl_exec($ch_satuan);
 
             $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
@@ -337,7 +311,6 @@ class PengajuanController extends BaseController
             $this->addBreadcrumb('Tambah', '');
 
             $breadcrumbs = $this->getBreadcrumbs();
-
 
             return view('/admin/pengadaan/medis/pengajuan/tambah_pengajuan', [
                 'pengajuan_data' => $pengajuan_data['data'],
@@ -456,7 +429,7 @@ class PengajuanController extends BaseController
                         return redirect()->to(base_url('pengajuanmedis'));
 
                         curl_close($ch_persetujuan);
-                        curl_close($ch_pengajuan); // Tutup session cURL untuk obat_url di sini
+                        curl_close($ch_pengajuan); 
                         curl_close($ch_pesanan);
                     } else {
                         return $this->renderErrorView(500);
@@ -543,7 +516,7 @@ class PengajuanController extends BaseController
 
                 $pengajuan_data = json_decode($response_pengajuan, true);
                 if (
-                    $pengajuan_data['data']['status_pesanan'] !== '1' || $pengajuan_data['data']['status_pesanan'] !== '2'
+                    $pengajuan_data['data']['status_pesanan'] === '1' || $pengajuan_data['data']['status_pesanan'] === '2'
                 ) {
                     return redirect('pengajuanmedis')->with('warning', 'Pengajuan telah ditolak atau disetujui sehingga tidak bisa diubah');
                 }
@@ -600,9 +573,6 @@ class PengajuanController extends BaseController
         $kadaluwarsa = $this->request->getPost('kadaluwarsa');
 
         $pengajuan_url = $this->api_url . '/pengadaan/pengajuan/' . $pengajuanId;
-
-
-
 
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');

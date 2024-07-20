@@ -153,9 +153,6 @@ class MedisController extends BaseController
         }
     }
 
-
-
-
     public function tambahMedis()
     {
         if (session()->has('jwt_token')) {
@@ -178,7 +175,7 @@ class MedisController extends BaseController
                     $this->addBreadcrumb('Data', 'data');
 
                     $breadcrumbs = $this->getBreadcrumbs();
-                    
+
                     $satuan_data = json_decode($response_satuan, true);
                     return view('/admin/inventaris/medis/tambah_medis', [
                         'satuan_data' => $satuan_data['data'],
@@ -199,73 +196,60 @@ class MedisController extends BaseController
     public function submitTambahMedis()
     {
         if ($this->request->getPost()) {
-            $nama = $this->request->getPost('nama');
-            $jenisbrgmedis = $this->request->getPost('jenisbrgmedis');
-            $harga = intval($this->request->getPost('harga'));
-            $stok = intval($this->request->getPost('stok'));
-            if ($jenisbrgmedis === 'Obat') {
-                $satbrgmedis = intval($this->request->getPost('satuanobat'));
-            } elseif ($jenisbrgmedis === 'Alat Kesehatan') {
-                $satbrgmedis = intval($this->request->getPost('satuanalkes'));
-            } elseif ($jenisbrgmedis === 'Bahan Habis Pakai') {
-                $satbrgmedis = intval($this->request->getPost('satuanbhp'));
-            } elseif ($jenisbrgmedis === 'Darah') {
-                $satbrgmedis = intval($this->request->getPost('satuandarah'));
-            }
-            //Obat
-            $industrifarmasi = intval($this->request->getPost('industrifarmasi'));
-            $kandungan = $this->request->getPost('kandungan');
-            $satkecil = intval($this->request->getPost('satkecil'));
-            $isi = intval($this->request->getPost('isi'));
-            $kapasitas = intval($this->request->getPost('kapasitas'));
-            $jenisobat = intval($this->request->getPost('jenisobat'));
-            $kategori = intval($this->request->getPost('kategoriobat'));
-            $golongan = intval($this->request->getPost('golonganobat'));
-            $kadaluwarsa = $this->request->getPost('kadaluwarsaobat');
-            $notifkadaluwarsa = $this->request->getPost('notifkadaluwarsa');
-            if (($jenisbrgmedis === 'Obat' || $jenisbrgmedis === 'Bahan Habis Pakai' || $jenisbrgmedis === 'Darah') && $notifkadaluwarsa === null || $notifkadaluwarsa === '') {
-                $notifkadaluwarsa = 30; // Atur default menjadi 30 jika tidak ada input atau null
-            } else {
-                $notifkadaluwarsa = intval($notifkadaluwarsa);
-            }
-            $stokminimum = intval($this->request->getPost('stokminimum'));
-
-            //Alkes
-            $merekalkes = $this->request->getPost('merekalkes');
-
-            //BHP
-            $jumlahbhp = intval($this->request->getPost('jumlahbhp'));
-            $kadaluwarsabhp = $this->request->getPost('kadaluwarsabhp');
-            if ($kadaluwarsabhp === '' || $kadaluwarsabhp === null) {
-                $kadaluwarsabhp = '0001-01-01';
-            } else {
-                $kadaluwarsabhp = $kadaluwarsabhp;
-            }
-
-            //Darah
-            $keterangandarah = $this->request->getPost('keterangandarah');
-            $jenisdarah = $this->request->getPost('jenisdarah');
-            $kadaluwarsadarah = $this->request->getPost('kadaluwarsadarah');
-
-            $medis_url = $this->api_url . '/inventaris/medis';
-            $obat_url = $this->api_url . '/inventaris/obat';
-            $alkes_url = $this->api_url . '/inventaris/alkes';
-            $bhp_url = $this->api_url . '/inventaris/bhp';
-            $darah_url = $this->api_url . '/inventaris/darah';
-
-            // Prepare the data to be sent to the API
-            $postDataMedis = [
-                'nama' => $nama,
-                'satuan' => $satbrgmedis,
-                'jenis' => $jenisbrgmedis,
-                'harga' => $harga,
-                'stok' => $stok,
-                'stok_minimum' => $stokminimum,
-                'notifikasi_kadaluwarsa_hari' => $notifkadaluwarsa,
-            ];
-            $tambah_medis_JSON = json_encode($postDataMedis);
             if (session()->has('jwt_token')) {
                 $token = session()->get('jwt_token');
+                $kode = $this->request->getPost('kode');
+                $nama = $this->request->getPost('nama');
+                $kandungan = $this->request->getPost('kandungan');
+                $indusfarmasi = $this->request->getPost('indusfarmasi');
+                $satuan = $this->request->getPost('satuan');
+                $satkecil = $this->request->getPost('satkecil');
+                $jenis = $this->request->getPost('jenis');
+                $kategori = $this->request->getPost('kategori');
+                $golongan = $this->request->getPost('golongan');
+                $hargadasar = intval($this->request->getPost('hargadasar'));
+                $hargabeli = intval($this->request->getPost('hargabeli'));
+                $hargaralan = intval($this->request->getPost('hargaralan'));
+                $hargakelas2 = intval($this->request->getPost('hargakelas2'));
+                $hargakelas3 = intval($this->request->getPost('hargakelas3'));
+                $hargautama = intval($this->request->getPost('hargautama'));
+                $hargavip = intval($this->request->getPost('hargavip'));
+                $hargavvip = intval($this->request->getPost('hargavvip'));
+                $hargaobatbebas = intval($this->request->getPost('hargaobatbebas'));
+                $hargaobatkaryawan = intval($this->request->getPost('hargaobatkaryawan'));
+                $stokminimum = intval($this->request->getPost('stokminimum'));
+                $kadaluwarsa = $this->request->getPost('kadaluwarsa');
+                if ($kadaluwarsa === "") {
+                    $kadaluwarsaformat = '0001-01-01';
+                } else {
+                    $kadaluwarsaformat = $kadaluwarsa; // Gunakan nilai $kadaluwarsa yang sudah ada
+                }
+                $medis_url = $this->api_url . '/inventaris/medis';
+
+                $postDataMedis = [
+                    '' => $kode,
+                    'nama' => $nama,
+                    '' => $kandungan,
+                    '' => $indusfarmasi,
+                    '' => $satuan,
+                    '' => $satkecil,
+                    '' => $jenis,
+                    '' => $kategori,
+                    '' => $golongan,
+                    '' => $hargadasar,
+                    '' => $hargabeli,
+                    '' => $hargaralan,
+                    '' => $hargakelas2,
+                    '' => $hargakelas3,
+                    '' => $hargautama,
+                    '' => $hargavip,
+                    '' => $hargavvip,
+                    '' => $hargaobatbebas,
+                    '' => $hargaobatkaryawan,
+                    'stok_minimum' => $stokminimum,
+                    '' => $kadaluwarsaformat,
+                ];
+                $tambah_medis_JSON = json_encode($postDataMedis);
 
                 $ch_medis = curl_init($medis_url);
 
@@ -279,80 +263,14 @@ class MedisController extends BaseController
                 ]);
 
                 $response_medis = curl_exec($ch_medis);
-                $response_data = json_decode($response_medis, true);
 
                 if ($response_medis) {
                     $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
                     if ($http_status_code_medis === 201) {
-                        $id_barang_medis = $response_data['data']['id'];
-                        if ($jenisbrgmedis === 'Obat') {
-                            $postDataJSON = [
-                                'id_barang_medis' => $id_barang_medis,
-                                'industri_farmasi' => $industrifarmasi,
-                                'kandungan' => $kandungan,
-                                'satuan' => $satkecil,
-                                'isi' => $isi,
-                                'kapasitas' => $kapasitas,
-                                'jenis' => $jenisobat,
-                                'kategori' => $kategori,
-                                'golongan' => $golongan,
-                                'kadaluwarsa' => $kadaluwarsa
-                            ];
-                            $postURL = $obat_url;
-                            $tambah_data_JSON = json_encode($postDataJSON);
-                        } elseif ($jenisbrgmedis === 'Alat Kesehatan') {
-                            $postDataJSON = [
-                                'id_barang_medis' => $id_barang_medis,
-                                'merek' => $merekalkes
-                            ];
-                            $postURL = $alkes_url;
-                            $tambah_data_JSON = json_encode($postDataJSON);
-                        } elseif ($jenisbrgmedis === 'Bahan Habis Pakai') {
-                            $postDataJSON = [
-                                'id_barang_medis' => $id_barang_medis,
-                                'jumlah' => $jumlahbhp,
-                                'kadaluwarsa' => $kadaluwarsabhp
-                            ];
-                            $postURL = $bhp_url;
-                            $tambah_data_JSON = json_encode($postDataJSON);
-                        } elseif ($jenisbrgmedis === 'Darah') {
-                            $postDataJSON = [
-                                'id_barang_medis' => $id_barang_medis,
-                                'jenis' => $jenisdarah,
-                                'keterangan' => $keterangandarah,
-                                'kadaluwarsa' => $kadaluwarsadarah
-                            ];
-                            $postURL = $darah_url;
-                            $tambah_data_JSON = json_encode($postDataJSON);
-                        } else {
-                            return "Jenis Barang Medis Belum dipilih";
-                        }
 
-                        $ch = curl_init($postURL);
+                        return redirect()->to(base_url('datamedis'));
 
-                        curl_setopt($ch, CURLOPT_POST, 1);
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, ($tambah_data_JSON));
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                            'Content-Type: application/json',
-                            'Content-Length: ' . strlen($tambah_data_JSON),
-                            'Authorization: Bearer ' . $token,
-                        ]);
-
-                        $response = curl_exec($ch);
-
-                        if ($response) {
-                            $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                            if ($http_status_code === 201) {
-                                return redirect()->to(base_url('datamedis'));
-                            } else {
-                                return "Error Insert: " . $response;
-                            }
-                            curl_close($ch_medis);
-                            curl_close($ch);
-                        } else {
-                            return "Error sending request to the obat API.";
-                        }
+                        curl_close($ch_medis);
                     } else {
                         return "Error Insert Medis: " . $response_medis;
                     }
@@ -386,30 +304,8 @@ class MedisController extends BaseController
 
             if ($response_medis) {
                 $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
-
                 if ($http_status_code_medis === 200) {
-                    // Data medis berhasil diambil
                     $medis_data = json_decode($response_medis, true);
-                    if ($medis_data['data']['jenis'] === 'Obat') {
-                        $jenis_url = $this->api_url . '/inventaris/obat/medis/' . $medisId;
-                    } elseif ($medis_data['data']['jenis'] === 'Alat Kesehatan') {
-                        $jenis_url = $this->api_url . '/inventaris/alkes/medis/' . $medisId;
-                    } elseif ($medis_data['data']['jenis'] === 'Bahan Habis Pakai') {
-                        $jenis_url = $this->api_url . '/inventaris/bhp/medis/' . $medisId;
-                    } elseif ($medis_data['data']['jenis'] === 'Darah') {
-                        $jenis_url = $this->api_url . '/inventaris/darah/medis/' . $medisId;
-                    } else {
-                        echo "Jenis Barang tidak sesuai";
-                    }
-
-                    $ch = curl_init($jenis_url);
-
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                        'Authorization: Bearer ' . $token,
-                    ]);
-
-                    $response_jenis = curl_exec($ch);
 
                     $ch_satuan = curl_init($satuan_url);
                     curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
@@ -419,11 +315,10 @@ class MedisController extends BaseController
 
                     $response_satuan = curl_exec($ch_satuan);
 
-                    if ($response_jenis && $response_satuan) {
-                        $http_status_code_jenis = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    if ($response_satuan) {
                         $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
-                        if ($http_status_code_jenis === 200 && $http_status_code_satuan === 200) {
-                            $jenis_data = json_decode($response_jenis, true);
+                        if ($http_status_code_satuan === 200) {
+
                             $satuan_data = json_decode($response_satuan, true);
 
                             $this->addBreadcrumb('Inventaris', 'inventarismedis');
@@ -434,16 +329,15 @@ class MedisController extends BaseController
                             $breadcrumbs = $this->getBreadcrumbs();
                             return view('/admin/inventaris/medis/edit_medis', [
                                 'medis_data' => $medis_data['data'],
-                                'jenis_data' => $jenis_data['data'], // Masukkan data obat ke dalam view
                                 'satuan_data' => $satuan_data['data'], // Masukkan data obat ke dalam view
                                 'medisId' => $medisId,
                                 'title' => 'Edit Medis',
                                 'breadcrumbs' => $breadcrumbs
                             ]);
                         } else {
-                            return "Response jenis:" . $response_jenis . "<br><br>Response Satuan:" . $response_satuan;
+                            return "Response Satuan:" . $response_satuan;
                         }
-                        curl_close($ch);
+
                         curl_close($ch_satuan);
                         curl_close($ch_medis);
                     } else {
@@ -614,6 +508,160 @@ class MedisController extends BaseController
             return "Data is required.";
         }
     }
+    // public function submitEditMedis($medisId)
+    // {
+
+    //     if ($this->request->getPost()) {
+    //         $nama = $this->request->getPost('nama');
+    //         $jenisbrgmedis = $this->request->getPost('jenisbrgmedis');
+    //         $harga = intval($this->request->getPost('harga'));
+    //         $stok = intval($this->request->getPost('stok'));
+    //         $stok_minimum = intval($this->request->getPost('stok_minimum'));
+    //         $notif_kadaluwarsa = intval($this->request->getPost('notif_kadaluwarsa'));
+    //         $idjenisbrgmedis = $this->request->getPost('idjenisbrgmedis');
+    //         $satuanbrgmedis = intval($this->request->getPost('satuanbrgmedis'));
+
+    //         //Obat
+    //         $industrifarmasi = intval($this->request->getPost('industrifarmasi'));
+    //         $kandungan = $this->request->getPost('kandungan');
+    //         $satuanobat = intval($this->request->getPost('satuanobat'));
+    //         $isi = intval($this->request->getPost('isi'));
+    //         $kapasitas = intval($this->request->getPost('kapasitas'));
+    //         $jenisobat = intval($this->request->getPost('jenisobat'));
+    //         $kategori = intval($this->request->getPost('kategoriobat'));
+    //         $golongan = intval($this->request->getPost('golonganobat'));
+    //         $kadaluwarsa = $this->request->getPost('kadaluwarsaobat');
+
+
+    //         //Alkes
+    //         $merekalkes = $this->request->getPost('merekalkes');
+
+    //         //BHP
+    //         $jumlahbhp = intval($this->request->getPost('jumlahbhp'));
+    //         $kadaluwarsabhp = $this->request->getPost('kadaluwarsabhp');
+
+    //         //Darah
+    //         $jenisdarah = $this->request->getPost('jenisdarah');
+    //         $keterangandarah = $this->request->getPost('keterangandarah');
+    //         $kadaluwarsadarah = $this->request->getPost('kadaluwarsadarah');
+
+    //         $postDataMedis = [
+    //             'nama' => $nama,
+    //             'jenis' => $jenisbrgmedis,
+    //             'satuan' => $satuanbrgmedis,
+    //             'harga' => $harga,
+    //             'stok' => $stok,
+    //             'stok_minimum' => $stok_minimum,
+    //             'notifikasi_kadaluwarsa_hari' => $notif_kadaluwarsa,
+    //         ];
+    //         $edit_medis_JSON = json_encode($postDataMedis);
+
+    //         $medis_url = $this->api_url . '/inventaris/medis/' . $medisId;
+
+    //         if (session()->has('jwt_token')) {
+    //             $token = session()->get('jwt_token');
+
+    //             $ch_medis = curl_init($medis_url);
+
+    //             curl_setopt($ch_medis, CURLOPT_CUSTOMREQUEST, "PUT");
+    //             curl_setopt($ch_medis, CURLOPT_POSTFIELDS, $edit_medis_JSON);
+    //             curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
+    //             curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
+    //                 'Content-Type: application/json',
+    //                 'Content-Length: ' . strlen($edit_medis_JSON),
+    //                 'Authorization: Bearer ' . $token,
+    //             ]);
+
+    //             $response_medis = curl_exec($ch_medis);
+
+    //             if ($response_medis) {
+    //                 $http_status_code = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
+    //                 if ($http_status_code === 200) {
+    //                     $title = 'Data Medis';
+
+    //                     if ($jenisbrgmedis === 'Obat') {
+    //                         $postData = [
+    //                             'id_barang_medis' => $medisId,
+    //                             'industri_farmasi' => $industrifarmasi,
+    //                             'kandungan' => $kandungan,
+    //                             'satuan' => $satuanobat,
+    //                             'isi' => $isi,
+    //                             'kapasitas' => $kapasitas,
+    //                             'jenis' => $jenisobat,
+    //                             'kategori' => $kategori,
+    //                             'golongan' => $golongan,
+    //                             'kadaluwarsa' => $kadaluwarsa
+    //                         ];
+    //                         $postURL = $this->api_url . '/inventaris/obat/' . $idjenisbrgmedis;
+    //                     } elseif ($jenisbrgmedis === 'Alat Kesehatan') {
+    //                         $postData = [
+    //                             'id_barang_medis' => $medisId,
+    //                             'merek' => $merekalkes
+    //                         ];
+    //                         $postURL = $this->api_url . '/inventaris/alkes/' . $idjenisbrgmedis;
+    //                     } elseif ($jenisbrgmedis === 'Bahan Habis Pakai') {
+    //                         $postData = [
+    //                             'id_barang_medis' => $medisId,
+    //                             'jumlah' => $jumlahbhp,
+    //                             'kadaluwarsa' => $kadaluwarsabhp
+    //                         ];
+    //                         $postURL = $this->api_url . '/inventaris/bhp/' . $idjenisbrgmedis;
+    //                     } elseif ($jenisbrgmedis === 'Darah') {
+    //                         $postData = [
+    //                             'id_barang_medis' => $medisId,
+    //                             'jenis' => $jenisdarah,
+    //                             'keterangan' => $keterangandarah,
+    //                             'kadaluwarsa' => $kadaluwarsadarah
+    //                         ];
+    //                         $postURL = $this->api_url . '/inventaris/darah/' . $idjenisbrgmedis;
+    //                     } else {
+    //                         return "Jenis Barang Medis Belum dipilih";
+    //                     }
+
+    //                     $postDataJSON = json_encode($postData);
+
+    //                     $ch = curl_init($postURL);
+
+    //                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+    //                     curl_setopt($ch, CURLOPT_POSTFIELDS, $postDataJSON);
+    //                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //                     curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    //                         'Content-Type: application/json',
+    //                         'Authorization: Bearer ' . $token,
+    //                     ]);
+
+    //                     $response = curl_exec($ch);
+
+    //                     if ($response) {
+    //                         $http_status_code_jenis = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    //                         if ($http_status_code_jenis === 200) {
+
+    //                             return redirect()->to(base_url('datamedis'));
+    //                         } else {
+
+    //                             return "Error Insert Data: " . $response;
+    //                         }
+    //                         curl_close($ch);
+    //                         curl_close($ch_medis);
+    //                     } else {
+
+    //                         return "Error sending request to the API.";
+    //                     }
+    //                 } else {
+    //                     return "Error updating medis: " . $response_medis;
+    //                 }
+    //             } else {
+    //                 return "Error sending request to the API.";
+    //             }
+
+    //             curl_close($ch_medis);
+    //         } else {
+    //             return "Email and role are required.";
+    //         }
+    //     } else {
+    //         return "Data is required.";
+    //     }
+    // }
     public function hapusMedis($medisId)
     {
         if (session()->has('jwt_token')) {

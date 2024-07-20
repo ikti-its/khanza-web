@@ -12,7 +12,7 @@
 
         </div>
 
-        <form action="/submitedittagihanmedis/<?= $tagihan_data['id'] ?>" method="post" onsubmit="return validateForm()">
+        <form action="/tagihanmedis/submitedit/<?= $tagihan_data['id'] ?>" method="post" onsubmit="return validateForm()">
             <!-- Grid -->
             <input type="hidden" id="statuspesanan" name="statuspesanan">
             <input type="hidden" name="idpengajuan" value="<?= $tagihan_data['id_pengajuan'] ?>" class="text-center border mr-1 w-[20%]">

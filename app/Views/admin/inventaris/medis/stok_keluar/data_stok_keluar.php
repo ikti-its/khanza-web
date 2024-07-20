@@ -164,7 +164,7 @@
                                                                                                     "1000" => "VIP 1",
                                                                                                     "2000" => "VIP 2",
                                                                                                     "3000" => "VVIP 1",
-                                                                                                    "4000" => "VVIP 2",
+                                                                                                    "4000" => "Apotek",
                                                                                                     "5000" => "Gudang"
                                                                                                 ];
 
@@ -175,24 +175,7 @@
                                                                                                 }
                                                                                                 ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
-                                                        <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tujuan Ruangan</label>
-                                                            <input type="text" name="" value="<?php
-                                                                                                $optionsruangan = [
-                                                                                                    "1000" => "VIP 1",
-                                                                                                    "2000" => "VIP 2",
-                                                                                                    "3000" => "VVIP 1",
-                                                                                                    "4000" => "VVIP 2",
-                                                                                                    "5000" => "Gudang"
-                                                                                                ];
 
-                                                                                                foreach ($optionsruangan as $valueruangan => $textruangan) {
-                                                                                                    if ($valueruangan === $stok['tujuan_ruangan']) {
-                                                                                                        echo $textruangan;
-                                                                                                    }
-                                                                                                }
-                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                        </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Keterangan</label>
                                                             <input type="text" name="" value="<?= $stok['keterangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
@@ -231,6 +214,7 @@
                                                                         <div class="flex justify-end w-1/2">
                                                                             <input type="text" name="" value="<?php foreach ($medis_data as $medis) {
                                                                                                                     if ($medis['id'] === $transaksi['id_barang_medis']) {
+
                                                                                                                         foreach ($satuan_data as $satuan) {
                                                                                                                             if ($medis['satuan'] === $satuan['id']) {
                                                                                                                                 if ($satuan['id'] === 1) {
