@@ -47,10 +47,11 @@
                         <colgroup>
                             <!-- <col width="5%"> -->
                             <col width="20%">
-                            <col width="27%">
+                            <col width="20%">
                             <!-- <col width="20%"> -->
-                            <col width="27%">
-                            <col width="26%">
+                            <col width="20%">
+                            <col width="20%">
+                            <col width="20%">
                         </colgroup>
                         <thead class="bg-gray-50 dark:bg-slate-800">
                             <tr>
@@ -73,6 +74,13 @@
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             No Keluar
+                                        </span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Asal Lokasi
                                         </span>
                                     </div>
                                 </th>
@@ -159,21 +167,11 @@
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Asal Ruangan</label>
-                                                            <input type="text" name="" value="<?php
-                                                                                                $optionsruangan = [
-                                                                                                    "1000" => "VIP 1",
-                                                                                                    "2000" => "VIP 2",
-                                                                                                    "3000" => "VVIP 1",
-                                                                                                    "4000" => "Apotek",
-                                                                                                    "5000" => "Gudang"
-                                                                                                ];
-
-                                                                                                foreach ($optionsruangan as $valueruangan => $textruangan) {
-                                                                                                    if ($valueruangan === $stok['asal_ruangan']) {
-                                                                                                        echo $textruangan;
+                                                            <input type="text" name="" value="<?php foreach ($ruangan_data as $ruangan) {
+                                                                                                    if ($ruangan['id'] === $stok['id_ruangan']) {
+                                                                                                        echo $ruangan['nama'];
                                                                                                     }
-                                                                                                }
-                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                                                                } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
 
                                                         <div class="mb-5 sm:block md:flex items-center">
@@ -216,7 +214,7 @@
                                                                                                                     if ($medis['id'] === $transaksi['id_barang_medis']) {
 
                                                                                                                         foreach ($satuan_data as $satuan) {
-                                                                                                                            if ($medis['satuan'] === $satuan['id']) {
+                                                                                                                            if ($medis['id_satbesar'] === $satuan['id']) {
                                                                                                                                 if ($satuan['id'] === 1) {
                                                                                                                                     echo $transaksi['jumlah_keluar'];
                                                                                                                                 } else {
@@ -276,6 +274,15 @@
                                     </td>
                                     <td class="h-px w-72 whitespace-nowrap">
                                         <div class="px-6 py-3 text-center">
+                                            <span class="block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?php foreach ($ruangan_data as $ruangan) {
+                                                                                                                                            if ($ruangan['id'] === $stok['id_ruangan']) {
+                                                                                                                                                echo $ruangan['nama'];
+                                                                                                                                            }
+                                                                                                                                        } ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-72 whitespace-nowrap">
+                                        <div class="px-6 py-3 text-center">
                                             <span class="block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?php foreach ($pegawai_data as $pegawai) {
                                                                                                                                             if ($pegawai['id'] === $stok['id_pegawai']) {
                                                                                                                                                 echo $pegawai['nama'];
@@ -284,17 +291,8 @@
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <div class="px-3 py-1.5">
-                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stok['id'] ?>">
-                                                    Lihat Detail
-                                                </button>
-                                            </div>
-                                            <div class="px-3 py-1.5">
-                                                <a href="/stokkeluarmedis/edit/<?= $stok['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                                    Ubah
-                                                </a>
-                                            </div>
+                                        <div class="px-3 py-1.5 text-center flex justify-center">
+                                            
                                             <div class="px-3 py-1.5">
                                                 <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $stok['id'] ?>')" href="#">
                                                     Hapus
@@ -353,61 +351,7 @@
                     <!-- Footer -->
                     <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
                         <!-- Pagination -->
-                        <nav class="flex w-full justify-between items-center gap-x-1">
-                            <!-- Previous Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/stokkeluarmedis?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m15 18-6-6 6-6"></path>
-                                    </svg>
-                                    <span aria-hidden="true" class="hidden sm:block">Previous</span>
-                                </button>
-                            </div>
 
-                            <!-- Page Numbers -->
-                            <div class="flex items-center gap-x-1">
-                                <?php
-                                $total_pages = $meta_data['total'];
-                                $current_page = $meta_data['page'];
-                                $range = 2; // Number of pages to show before and after the current page
-                                $show_items = ($range * 2) + 1;
-
-                                if ($total_pages <= $show_items) {
-                                    for ($i = 1; $i <= $total_pages; $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/stokkeluarmedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                    }
-                                } else {
-                                    if ($current_page > $range + 1) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/stokkeluarmedis?page=1&size=' . $meta_data['size'] . '\'">1</button>';
-                                        if ($current_page > $range + 2) {
-                                            echo '<span class="py-2 px-3 text-sm">...</span>';
-                                        }
-                                    }
-
-                                    for ($i = max($current_page - $range, 1); $i <= min($current_page + $range, $total_pages); $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/stokkeluarmedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                    }
-
-                                    if ($current_page < $total_pages - $range - 1) {
-                                        if ($current_page < $total_pages - $range - 2) {
-                                            echo '<span class="py-2 px-3 text-sm">...</span>';
-                                        }
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/stokkeluarmedis?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
-                                    }
-                                }
-                                ?>
-                            </div>
-
-                            <!-- Next Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/stokkeluarmedis?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <span aria-hidden="true" class="hidden sm:block">Next</span>
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m9 18 6-6-6-6"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </nav>
                     </div>
 
 

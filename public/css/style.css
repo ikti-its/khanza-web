@@ -3598,16 +3598,16 @@ input[type="number"]::-webkit-inner-spin-button,
     width: 25%;
   }
 
+  .md\:w-1\/5 {
+    width: 20%;
+  }
+
   .md\:w-\[100\%\] {
     width: 100%;
   }
 
   .md\:w-auto {
     width: auto;
-  }
-
-  .md\:w-1\/5 {
-    width: 20%;
   }
 
   .md\:grid-cols-2 {

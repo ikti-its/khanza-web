@@ -17,10 +17,11 @@ class StokKeluarController extends BaseController
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
 
-            $stok_keluar_url = $this->api_url . '/inventaris/stok?page=' . $page . '&size=' . $size;
-            $transaksi_keluar_url = $this->api_url . '/inventaris/transaksi';
-            $medis_url = $this->api_url . '/inventaris/medis';
-            $satuan_url = $this->api_url . '/inventaris/satuan';
+            $stok_keluar_url = $this->api_url . '/inventory/stok';
+            $transaksi_keluar_url = $this->api_url . '/inventory/transaksi';
+            $medis_url = $this->api_url . '/inventory/barang';
+            $satuan_url = $this->api_url . '/ref/inventory/satuan';
+            $ruangan_url = $this->api_url . '/ref/inventory/ruangan';
             $pegawai_url = $this->api_url . '/pegawai'; // URL pegawai
 
             // Inisialisasi cURL untuk setiap endpoint
@@ -47,6 +48,11 @@ class StokKeluarController extends BaseController
             curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
+            $ch_ruangan = curl_init($ruangan_url); // Inisialisasi cURL untuk satuan
+            curl_setopt($ch_ruangan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_ruangan, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
 
             $ch_pegawai = curl_init($pegawai_url); // Inisialisasi cURL untuk pegawai
             curl_setopt($ch_pegawai, CURLOPT_RETURNTRANSFER, true);
@@ -59,6 +65,7 @@ class StokKeluarController extends BaseController
             $response_transaksi_keluar = curl_exec($ch_transaksi_keluar);
             $response_medis = curl_exec($ch_medis);
             $response_satuan = curl_exec($ch_satuan); // Eksekusi permintaan cURL untuk satuan
+            $response_ruangan = curl_exec($ch_ruangan); // Eksekusi permintaan cURL untuk satuan
             $response_pegawai = curl_exec($ch_pegawai); // Eksekusi permintaan cURL untuk pegawai
 
             // Cek apakah semua permintaan berhasil (status code 200)
@@ -67,15 +74,17 @@ class StokKeluarController extends BaseController
                 $http_status_code_transaksi_keluar = curl_getinfo($ch_transaksi_keluar, CURLINFO_HTTP_CODE);
                 $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
                 $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
+                $http_status_code_ruangan = curl_getinfo($ch_ruangan, CURLINFO_HTTP_CODE);
                 $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE); // Mendapatkan kode status HTTP untuk pegawai
 
                 // Cek apakah semua kode status HTTP adalah 200
-                if ($http_status_code_stok_keluar === 200 && $http_status_code_transaksi_keluar === 200 && $http_status_code_medis === 200 && $http_status_code_satuan === 200 && $http_status_code_pegawai === 200) {
+                if ($http_status_code_stok_keluar === 200 && $http_status_code_transaksi_keluar === 200 && $http_status_code_medis === 200 && $http_status_code_satuan === 201 && $http_status_code_pegawai === 200) {
                     // Decode data JSON untuk masing-masing respons
                     $stok_keluar_medis_data = json_decode($response_stok_keluar, true);
                     $transaksi_keluar_data = json_decode($response_transaksi_keluar, true);
                     $medis_data = json_decode($response_medis, true);
                     $satuan_data = json_decode($response_satuan, true);
+                    $ruangan_data = json_decode($response_ruangan, true);
                     $pegawai_data = json_decode($response_pegawai, true); // Decode data JSON untuk pegawai
 
                     // Tambahkan breadcrumb
@@ -86,12 +95,12 @@ class StokKeluarController extends BaseController
 
                     // Kembalikan tampilan dengan data yang diperlukan
                     return view('/admin/inventaris/medis/stok_keluar/data_stok_keluar', [
-                        'stok_keluar_medis_data' => $stok_keluar_medis_data['data']['stok_keluar_barang_medis'],
+                        'stok_keluar_medis_data' => $stok_keluar_medis_data['data'],
                         'transaksi_keluar_data' => $transaksi_keluar_data['data'],
                         'medis_data' => $medis_data['data'],
                         'satuan_data' => $satuan_data['data'],
+                        'ruangan_data' => $ruangan_data['data'],
                         'pegawai_data' => $pegawai_data['data'], // Tambahkan data pegawai ke dalam tampilan
-                        'meta_data' => $stok_keluar_medis_data['data'],
                         'title' => $title,
                         'breadcrumbs' => $breadcrumbs
                     ]);
@@ -120,9 +129,11 @@ class StokKeluarController extends BaseController
         $title = 'Tambah Stok Keluar Medis';
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
-            $medis_url = $this->api_url . '/inventaris/medis';
-            $pesanan_url = $this->api_url . '/pengadaan/pesanan';
-            $penerimaan_url = $this->api_url . '/pengadaan/penerimaan';
+            $medis_url = $this->api_url . '/inventory/barang';
+            $gudang_url = $this->api_url . '/inventory/gudang';
+            $ruangan_url = $this->api_url . '/ref/inventory/ruangan';
+            $satuan_url = $this->api_url . '/ref/inventory/satuan';
+
             $pegawai_url = $this->api_url . '/pegawai';
 
 
@@ -132,18 +143,19 @@ class StokKeluarController extends BaseController
             curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-
-            // Initialize cURL for fetching pesanan data
-            $ch_pesanan = curl_init($pesanan_url);
-            curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
+            $ch_ruangan = curl_init($ruangan_url);
+            curl_setopt($ch_ruangan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_ruangan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-
-            // Initialize cURL for fetching penerimaan data
-            $ch_penerimaan = curl_init($penerimaan_url);
-            curl_setopt($ch_penerimaan, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_penerimaan, CURLOPT_HTTPHEADER, [
+            $ch_satuan = curl_init($satuan_url);
+            curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $ch_gudang = curl_init($gudang_url);
+            curl_setopt($ch_gudang, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_gudang, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
 
@@ -156,16 +168,20 @@ class StokKeluarController extends BaseController
 
             // Execute the cURL requests
             $response_medis = curl_exec($ch_medis);
-            $response_pesanan = curl_exec($ch_pesanan);
-            $response_penerimaan = curl_exec($ch_penerimaan);
+            $response_ruangan = curl_exec($ch_ruangan);
+            $response_satuan = curl_exec($ch_satuan);
+            $response_gudang = curl_exec($ch_gudang);
+
             $response_pegawai = curl_exec($ch_pegawai);
 
             // Check if the responses are successful
-            if ($response_medis && $response_pesanan && $response_penerimaan && $response_pegawai) {
+            if ($response_medis && $response_pegawai && $response_ruangan) {
                 // Decode the JSON responses
                 $medis_data = json_decode($response_medis, true);
-                $pesanan_data = json_decode($response_pesanan, true);
-                $penerimaan_data = json_decode($response_penerimaan, true);
+                $ruangan_data = json_decode($response_ruangan, true);
+                $satuan_data = json_decode($response_satuan, true);
+                $gudang_data = json_decode($response_gudang, true);
+
                 $pegawai_data = json_decode($response_pegawai, true);
 
                 // Render the view with the fetched data
@@ -177,32 +193,31 @@ class StokKeluarController extends BaseController
                 $breadcrumbs = $this->getBreadcrumbs();
                 return view('/admin/inventaris/medis/stok_keluar/tambah_stok_keluar', [
                     'medis_data' => $medis_data['data'],
-                    'pesanan_data' => $pesanan_data['data'],
-                    'penerimaan_data' => $penerimaan_data['data'],
+                    'ruangan_data' => $ruangan_data['data'],
+                    'satuan_data' => $satuan_data['data'],
+                    'gudang_data' => $gudang_data['data'],
                     'pegawai_data' => $pegawai_data['data'],
                     'token' => $token,
                     'title' => $title,
                     'breadcrumbs' => $breadcrumbs
                 ]);
             } else {
-                return "Error fetching data. Response medis: $response_medis, Response pesanan: $response_pesanan, Response penerimaan: $response_penerimaan, Response pegawai: $response_pegawai";
+                return "Error fetching data. Response medis: $response_medis, Response pegawai: $response_pegawai";
             }
 
             // Close cURL sessions
             curl_close($ch_medis);
-            curl_close($ch_pesanan);
-            curl_close($ch_penerimaan);
+            curl_close($ch_ruangan);
             curl_close($ch_pegawai);
         } else {
             // User not logged in
-            return "User not logged in. Please log in first.";
+            return $this->renderErrorView(401);
         }
     }
     public function submitTambahStokKeluarMedis()
     {
         if ($this->request->getPost()) {
             $idpengajuan = $this->request->getPost('idpengajuan');
-
 
             $idpemesanan = $this->request->getPost('idpemesanan');
             $nofaktur = $this->request->getPost('nofaktur');
@@ -213,7 +228,7 @@ class StokKeluarController extends BaseController
             $pegawaistokkeluar = $this->request->getPost('pegawaistokkeluar');
             $tglkeluar = $this->request->getPost('tglkeluar');
             $keteranganstokkeluar = $this->request->getPost('keteranganstokkeluar');
-            $asalruangan = $this->request->getPost('asalruangan');
+            $asalruangan = intval($this->request->getPost('asalruangan'));
             $tujuanruangan = $this->request->getPost('tujuanruangan');
 
 
@@ -224,15 +239,14 @@ class StokKeluarController extends BaseController
             $jlhkeluar = $this->request->getPost('jlhkeluar');
 
 
-            $stok_keluar_url = $this->api_url . '/inventaris/stok';
-            $transaksi_brgmedis_url = $this->api_url . '/inventaris/transaksi';
+            $stok_keluar_url = $this->api_url . '/inventory/stok';
+            $transaksi_brgmedis_url = $this->api_url . '/inventory/transaksi';
 
             $postDataStokKeluar = [
                 'no_keluar' => $nokeluar,
                 'id_pegawai' => $pegawaistokkeluar,
                 'tanggal_stok_keluar' => $tglkeluar,
-                'asal_ruangan' => intval($asalruangan),
-                'tujuan_ruangan' => intval($tujuanruangan),
+                'id_ruangan' => $asalruangan,
                 'keterangan' => $keteranganstokkeluar,
             ];
 
@@ -287,7 +301,49 @@ class StokKeluarController extends BaseController
                         if ($response) {
                             $http_status_code_transaksi_brgmedis = curl_getinfo($ch_transaksi_brgmedis, CURLINFO_HTTP_CODE);
                             if ($http_status_code_transaksi_brgmedis === 201) {
-                                return redirect()->to(base_url('stokkeluarmedis'));
+                                for ($j = 0; $j < count($idbrgmedis); $j++) {
+                                    $gudang_url = $this->api_url . '/inventory/gudang/' . $idbrgmedis[$j] . '/' . $asalruangan;
+                                    $ch_gudang = curl_init($gudang_url);
+                                    curl_setopt($ch_gudang, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch_gudang, CURLOPT_HTTPHEADER, [
+                                        'Authorization: Bearer ' . $token,
+                                    ]);
+                                    $response_gudang = curl_exec($ch_gudang);
+                                    $gudang_data = json_decode($response_gudang, true);
+                                    $http_status_code_gudang = curl_getinfo($ch_gudang, CURLINFO_HTTP_CODE);
+                                    curl_close($ch_gudang);
+
+                                    $postGudangMedis = [
+                                        'id_barang_medis' => $idbrgmedis[$j],
+                                        'id_ruangan' => $asalruangan,
+                                        'stok' => $gudang_data['data']['stok'] - intval($jlhkeluar[$j]),
+                                        'no_batch' => $nobatch[$j],
+                                        'no_faktur' => $nofaktur[$j],
+                                    ];
+
+                                    $tambah_gudang_JSON = json_encode($postGudangMedis);
+
+                                    // Perform the update
+                                    $ch_gudang = curl_init($gudang_url);
+                                    curl_setopt($ch_gudang, CURLOPT_CUSTOMREQUEST, "PUT");
+                                    curl_setopt($ch_gudang, CURLOPT_POSTFIELDS, $tambah_gudang_JSON);
+                                    curl_setopt($ch_gudang, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch_gudang, CURLOPT_HTTPHEADER, [
+                                        'Content-Type: application/json',
+                                        'Content-Length: ' . strlen($tambah_gudang_JSON),
+                                        'Authorization: Bearer ' . $token,
+                                    ]);
+
+                                    $response_gudang = curl_exec($ch_gudang);
+                                    $http_status_code_gudang = curl_getinfo($ch_gudang, CURLINFO_HTTP_CODE);
+
+                                    curl_close($ch_gudang);
+                                }
+                                if ($http_status_code_gudang === 200) {
+                                    return redirect()->to(base_url('stokkeluarmedis'));
+                                } else {
+                                    return $response_gudang . $tambah_gudang_JSON;
+                                }
                             } else {
                                 // Error response dari transaksi_brgmedis_url
                                 curl_close($ch_transaksi_brgmedis); // Tutup session cURL untuk transaksi_brgmedis_url di sini
@@ -322,118 +378,89 @@ class StokKeluarController extends BaseController
     public function editStokKeluarMedis($stokKeluarId)
     {
         if (session()->has('jwt_token')) {
+            $title = "Edit Stok Keluar Medis";
             // Ambil token dari session
             $token = session()->get('jwt_token');
+            $medis_url = $this->api_url . '/inventory/barang';
+            $gudang_url = $this->api_url . '/inventory/gudang';
+            $ruangan_url = $this->api_url . '/ref/inventory/ruangan';
+            $satuan_url = $this->api_url . '/ref/inventory/satuan';
 
-            $stok_keluar_url = $this->api_url . '/inventaris/stok/' . $stokKeluarId;
-            $barang_stok_keluar_url = $this->api_url . '/inventaris/transaksi/stok/' . $stokKeluarId;
-            $medis_url = $this->api_url . '/inventaris/medis';
-            $pesanan_url = $this->api_url . '/pengadaan/pesanan';
-            $penerimaan_url = $this->api_url . '/pengadaan/penerimaan';
             $pegawai_url = $this->api_url . '/pegawai';
 
-            // Inisialisasi curl untuk stok keluar
-            $ch_stok_keluar = curl_init($stok_keluar_url);
-            curl_setopt($ch_stok_keluar, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_stok_keluar, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-            ]);
-            $response_stok_keluar = curl_exec($ch_stok_keluar);
-            $stok_keluar_data = json_decode($response_stok_keluar, true);
-
-            // Inisialisasi curl untuk barang stok keluar
-            $ch_barang_stok_keluar = curl_init($barang_stok_keluar_url);
-            curl_setopt($ch_barang_stok_keluar, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_barang_stok_keluar, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-            ]);
-            $response_barang_stok_keluar = curl_exec($ch_barang_stok_keluar);
-            $barang_stok_keluar_data = json_decode($response_barang_stok_keluar, true);
-
-            // Inisialisasi curl untuk data medis
             $ch_medis = curl_init($medis_url);
             curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-            $response_medis = curl_exec($ch_medis);
-            $medis_data = json_decode($response_medis, true);
-
-            // Inisialisasi curl untuk data pesanan
-            $ch_pesanan = curl_init($pesanan_url);
-            curl_setopt($ch_pesanan, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_pesanan, CURLOPT_HTTPHEADER, [
+            $ch_ruangan = curl_init($ruangan_url);
+            curl_setopt($ch_ruangan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_ruangan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-            $response_pesanan = curl_exec($ch_pesanan);
-            $pesanan_data = json_decode($response_pesanan, true);
-
-            // Inisialisasi curl untuk data penerimaan
-            $ch_penerimaan = curl_init($penerimaan_url);
-            curl_setopt($ch_penerimaan, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_penerimaan, CURLOPT_HTTPHEADER, [
+            $ch_satuan = curl_init($satuan_url);
+            curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-            $response_penerimaan = curl_exec($ch_penerimaan);
-            $penerimaan_data = json_decode($response_penerimaan, true);
+            $ch_gudang = curl_init($gudang_url);
+            curl_setopt($ch_gudang, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_gudang, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
 
-            // Inisialisasi curl untuk data pegawai
             $ch_pegawai = curl_init($pegawai_url);
             curl_setopt($ch_pegawai, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_pegawai, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
+
+            // Execute the cURL requests
+            $response_medis = curl_exec($ch_medis);
+            $response_ruangan = curl_exec($ch_ruangan);
+            $response_satuan = curl_exec($ch_satuan);
+            $response_gudang = curl_exec($ch_gudang);
+
             $response_pegawai = curl_exec($ch_pegawai);
-            $pegawai_data = json_decode($response_pegawai, true);
 
-            // Proses jika request berhasil
-            if ($response_stok_keluar && $response_barang_stok_keluar && $response_medis && $response_pesanan && $response_penerimaan && $response_pegawai) {
-                $http_status_code_stok_keluar = curl_getinfo($ch_stok_keluar, CURLINFO_HTTP_CODE);
-                $http_status_code_barang_stok_keluar = curl_getinfo($ch_barang_stok_keluar, CURLINFO_HTTP_CODE);
-                $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
-                $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
-                $http_status_code_penerimaan = curl_getinfo($ch_penerimaan, CURLINFO_HTTP_CODE);
-                $http_status_code_pegawai = curl_getinfo($ch_pegawai, CURLINFO_HTTP_CODE);
+            // Check if the responses are successful
+            if ($response_medis && $response_pegawai && $response_ruangan) {
+                // Decode the JSON responses
+                $medis_data = json_decode($response_medis, true);
+                $ruangan_data = json_decode($response_ruangan, true);
+                $satuan_data = json_decode($response_satuan, true);
+                $gudang_data = json_decode($response_gudang, true);
 
-                // Pastikan respons sukses (status code 200)
-                if ($http_status_code_stok_keluar === 200 && $http_status_code_barang_stok_keluar === 200 && $http_status_code_medis === 200 && $http_status_code_pesanan === 200 && $http_status_code_penerimaan === 200 && $http_status_code_pegawai === 200) {
-                    $this->addBreadcrumb('Inventaris', 'inventarismedis');
-                    $this->addBreadcrumb('Barang Medis', 'medis');
-                    $this->addBreadcrumb('Stok Keluar', 'stokkeluarmedis');
-                    $this->addBreadcrumb('Ubah', 'editstokkeluarmedis');
+                $pegawai_data = json_decode($response_pegawai, true);
 
-                    $breadcrumbs = $this->getBreadcrumbs();
-                    return view('/admin/inventaris/medis/stok_keluar/edit_stok_keluar', [
-                        'stok_keluar_data' => $stok_keluar_data['data'],
-                        'barang_stok_keluar_data' => $barang_stok_keluar_data['data'],
-                        'medis_data' => $medis_data['data'],
-                        'pesanan_data' => $pesanan_data['data'],
-                        'penerimaan_data' => $penerimaan_data['data'],
-                        'pegawai_data' => $pegawai_data['data'],
-                        'stok_keluarId' => $stokKeluarId,
-                        'token' => $token,
-                        'title' => 'Edit Stok Keluar Medis',
-                        'breadcrumbs' => $breadcrumbs
-                    ]);
-                } else {
-                    // Handle jika ada error dalam mendapatkan data dari API
-                    return "Error fetching data. HTTP Status Code stok_keluar: $http_status_code_stok_keluar, HTTP Status Code Barang Stok Keluar: $http_status_code_barang_stok_keluar, HTTP Status Code Medis: $http_status_code_medis, HTTP Status Code Pesanan: $http_status_code_pesanan, HTTP Status Code Penerimaan: $http_status_code_penerimaan, HTTP Status Code Pegawai: $http_status_code_pegawai";
-                }
+                // Render the view with the fetched data
+                $this->addBreadcrumb('Inventaris', 'inventarismedis');
+                $this->addBreadcrumb('Barang Medis', 'medis');
+                $this->addBreadcrumb('Stok Keluar', 'stokkeluarmedis');
+                $this->addBreadcrumb('Tambah', 'tambahstokkeluarmedis');
+
+                $breadcrumbs = $this->getBreadcrumbs();
+                return view('/admin/inventaris/medis/stok_keluar/edit_stok_keluar', [
+                    'medis_data' => $medis_data['data'],
+                    'ruangan_data' => $ruangan_data['data'],
+                    'satuan_data' => $satuan_data['data'],
+                    'gudang_data' => $gudang_data['data'],
+                    'pegawai_data' => $pegawai_data['data'],
+                    'token' => $token,
+                    'title' => $title,
+                    'breadcrumbs' => $breadcrumbs
+                ]);
             } else {
-                // Handle jika ada error dalam mengambil respons dari API
-                return "Error fetching data.";
+                return "Error fetching data. Response medis: $response_medis, Response pegawai: $response_pegawai";
             }
 
-            // Tutup curl untuk semua request
-            curl_close($ch_stok_keluar);
-            curl_close($ch_barang_stok_keluar);
+            // Close cURL sessions
             curl_close($ch_medis);
-            curl_close($ch_pesanan);
-            curl_close($ch_penerimaan);
+            curl_close($ch_ruangan);
             curl_close($ch_pegawai);
         } else {
-            // Handle jika user belum login
-            return "User not logged in. Please log in first.";
+            // User not logged in
+            return $this->renderErrorView(401);
         }
     }
 
@@ -513,7 +540,7 @@ class StokKeluarController extends BaseController
 
                             $response = curl_exec($ch_transaksi_brgmedis);
                         }
-                        
+
                         if ($response) {
                             $http_status_code_transaksi_brgmedis = curl_getinfo($ch_transaksi_brgmedis, CURLINFO_HTTP_CODE);
                             if ($http_status_code_transaksi_brgmedis === 200) {
@@ -542,52 +569,251 @@ class StokKeluarController extends BaseController
             return "Data is required.";
         }
     }
-    public function hapusStokKeluarMedis($stok_keluarId)
+    public function hapusStokKeluarMedis($stokKeluarId)
     {
-        // Check if the user is logged in
         if (session()->has('jwt_token')) {
-            // Retrieve the stored JWT token
             $token = session()->get('jwt_token');
-            $stok_keluar_url = $this->api_url . '/inventaris/stok/' . $stok_keluarId;
-            $transaksi_url = $this->api_url . '/inventaris/transaksi/stok/' . $stok_keluarId;
-            $ch_transaksi = curl_init($transaksi_url);
-            curl_setopt($ch_transaksi, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_transaksi, CURLOPT_HTTPHEADER, [
+
+            $stokUrl = $this->api_url . '/inventory/stok/' . $stokKeluarId;
+            $transaksiUrl = $this->api_url . '/inventory/transaksi/stok/' . $stokKeluarId;
+
+            // Fetch the transaksi data
+            $chTransaksi = curl_init($transaksiUrl);
+            curl_setopt($chTransaksi, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($chTransaksi, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-            $response_transaksi = curl_exec($ch_transaksi);
-            $transaksi_data = json_decode($response_transaksi, true);
-            $jumlah_transaksi = $transaksi_data['data'];
-            foreach ($jumlah_transaksi as $transaksi) {
-                $transaksi_id = $transaksi['id'];
-                $delete_byidtransaksi_url = $this->api_url . '/inventaris/transaksi/' . $transaksi_id;
+            $responseTransaksi = curl_exec($chTransaksi);
+            $httpStatusCodeTransaksi = curl_getinfo($chTransaksi, CURLINFO_HTTP_CODE);
+            curl_close($chTransaksi);
 
-                $ch_delete_transaksi = curl_init($delete_byidtransaksi_url);
-                curl_setopt($ch_delete_transaksi, CURLOPT_CUSTOMREQUEST, "DELETE");
-                curl_setopt($ch_delete_transaksi, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch_delete_transaksi, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer ' . $token,
-                ]);
-                $response_byidtransaksi = curl_exec($ch_delete_transaksi);
+            if ($httpStatusCodeTransaksi !== 200) {
+                return "Error fetching transaksi data: " . $responseTransaksi;
             }
-            $ch_stok_keluar = curl_init($stok_keluar_url);
-            curl_setopt($ch_stok_keluar, CURLOPT_CUSTOMREQUEST, "DELETE");
-            curl_setopt($ch_stok_keluar, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_stok_keluar, CURLOPT_HTTPHEADER, [
+            $transaksiData = json_decode($responseTransaksi, true);
+
+            $chStok = curl_init($stokUrl);
+            curl_setopt($chStok, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($chStok, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
-            $response_stok_keluar = curl_exec($ch_stok_keluar);
-            $http_status_code_stok_keluar = curl_getinfo($ch_stok_keluar, CURLINFO_HTTP_CODE);
+            $responseStok = curl_exec($chStok);
+            $httpStatusCodeStok = curl_getinfo($chStok, CURLINFO_HTTP_CODE);
+            curl_close($chStok);
 
-            if ($http_status_code_stok_keluar === 204) {
+            if ($httpStatusCodeStok !== 200) {
+                return "Error fetching stok data: " . $responseStok;
+            }
+            $stokData = json_decode($responseStok, true);
+
+
+            $gudangUrl = $this->api_url . '/inventory/gudang/' . $transaksiData['data']['id_barang_medis'] . '/' . $stokData['data']['id_ruangan'];
+            $chGudang = curl_init($gudangUrl);
+            curl_setopt($chGudang, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($chGudang, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $responseGudang = curl_exec($chGudang);
+            $gudangData = json_decode($responseGudang, true);
+            $httpStatusCodeGudang = curl_getinfo($chGudang, CURLINFO_HTTP_CODE);
+            curl_close($chGudang);
+
+            if ($httpStatusCodeGudang !== 200) {
+                return "Error fetching gudang data: " . $responseGudang;
+            }
+
+            $postGudangMedis = [
+                'id_barang_medis' => $transaksiData['data']['id_barang_medis'],
+                'id_ruangan' => $stokData['data']['id_ruangan'],
+                'stok' => $gudangData['data']['stok'] + $transaksiData['data']['jumlah_keluar'],
+                'no_batch' => $gudangData['data']['no_batch'],
+                'no_faktur' => $gudangData['data']['no_faktur'],
+            ];
+
+            $tambahGudangJSON = json_encode($postGudangMedis);
+
+            // Perform the update
+            $chGudangUpdate = curl_init($gudangUrl);
+            curl_setopt($chGudangUpdate, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($chGudangUpdate, CURLOPT_POSTFIELDS, $tambahGudangJSON);
+            curl_setopt($chGudangUpdate, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($chGudangUpdate, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($tambahGudangJSON),
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            $responseGudangUpdate = curl_exec($chGudangUpdate);
+            $httpStatusCodeGudangUpdate = curl_getinfo($chGudangUpdate, CURLINFO_HTTP_CODE);
+            curl_close($chGudangUpdate);
+
+            if ($httpStatusCodeGudangUpdate !== 200) {
+                return "Error updating gudang: " . $responseGudangUpdate;
+            }
+
+
+            // Delete transaksi data
+            $deleteTransaksiUrl = $this->api_url . '/inventory/transaksi/' . $transaksiData['data']['id'];
+            $chTransaksiDelete = curl_init($deleteTransaksiUrl);
+            curl_setopt($chTransaksiDelete, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($chTransaksiDelete, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($chTransaksiDelete, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            $responseDeleteTransaksi = curl_exec($chTransaksiDelete);
+            $httpStatusCodeDeleteTransaksi = curl_getinfo($chTransaksiDelete, CURLINFO_HTTP_CODE);
+            curl_close($chTransaksiDelete);
+
+            if ($httpStatusCodeDeleteTransaksi !== 204) {
+                return "Error deleting transaksi: " . $responseDeleteTransaksi;
+            }
+
+            // Delete stok data
+            $chStokDelete = curl_init($stokUrl);
+            curl_setopt($chStokDelete, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($chStokDelete, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($chStokDelete, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            $responseStokDelete = curl_exec($chStokDelete);
+            $httpStatusCodeStokDelete = curl_getinfo($chStokDelete, CURLINFO_HTTP_CODE);
+            curl_close($chStokDelete);
+
+            if ($httpStatusCodeStokDelete === 204) {
                 return redirect()->to(base_url('stokkeluarmedis'));
             } else {
-                // Error response from the API
-                return "Error deleting stok_keluar." . $response_byidtransaksi . $response_stok_keluar;
+                return "Error deleting stok_keluar: " . $responseStokDelete;
             }
-        } else {
-            // User not logged in
-            return "User not logged in. Please log in first.";
         }
+
+        return "JWT token not found in session.";
     }
+
+
+
+    // $gudang_url = $this->api_url . '/inventory/gudang/' . $medisId;
+
+    // $ch_gudang = curl_init($gudang_url);
+    // curl_setopt($ch_gudang, CURLOPT_RETURNTRANSFER, true);
+    // curl_setopt($ch_gudang, CURLOPT_HTTPHEADER, [
+    //     'Authorization: Bearer ' . $token,
+    // ]);
+    // $response_gudang = curl_exec($ch_gudang);
+    // $http_status_code_gudang = curl_getinfo($ch_gudang, CURLINFO_HTTP_CODE);
+    // curl_close($ch_gudang);
+    // $gudang_data=json_decode($response_gudang, true);
+    // foreach($gudang_data as $gudang){
+
+    // }
+    // $ch_gudang = curl_init($gudang_url);
+    // curl_setopt($ch_gudang, CURLOPT_CUSTOMREQUEST, "DELETE");
+    // curl_setopt($ch_gudang, CURLOPT_RETURNTRANSFER, true);
+    // curl_setopt($ch_gudang, CURLOPT_HTTPHEADER, [
+    //     'Authorization: Bearer ' . $token,
+    // ]);
+
+    // $response_gudang = curl_exec($ch_gudang);
+    // $http_status_code_gudang = curl_getinfo($ch_gudang, CURLINFO_HTTP_CODE);
+    // curl_close($ch_gudang);
+
+
+
 }
+//     {
+//         // Check if the user is logged in
+//         if (session()->has('jwt_token')) {
+//             // Retrieve the stored JWT token
+//             $token = session()->get('jwt_token');
+//             $stok_keluar_url = $this->api_url . '/inventory/stok/' . $stok_keluarId;
+//             $transaksi_url = $this->api_url . '/inventory/transaksi/stok/' . $stok_keluarId;
+
+//             $ch_stok = curl_init($stok_keluar_url);
+//             curl_setopt($ch_stok, CURLOPT_RETURNTRANSFER, true);
+//             curl_setopt($ch_stok, CURLOPT_HTTPHEADER, [
+//                 'Authorization: Bearer ' . $token,
+//             ]);
+//             $response_stok = curl_exec($ch_stok);
+//             $stok_data = json_decode($response_stok, true);
+//             $ch_transaksi = curl_init($transaksi_url);
+//             curl_setopt($ch_transaksi, CURLOPT_RETURNTRANSFER, true);
+//             curl_setopt($ch_transaksi, CURLOPT_HTTPHEADER, [
+//                 'Authorization: Bearer ' . $token,
+//             ]);
+//             $response_transaksi = curl_exec($ch_transaksi);
+//             $transaksi_data = json_decode($response_transaksi, true);
+//             foreach ($transaksi_data as $transaksi) {
+//                 foreach ($stok_data as $stok) {
+//                     if ($transaksi['data']['id_stok_keluar'] === $stok['data']['id']) {
+//                         $transaksi_id = $transaksi['data']['id'];
+//                         $delete_byidtransaksi_url = $this->api_url . '/inventory/transaksi/' . $transaksi_id;
+
+//                         $ch_delete_transaksi = curl_init($delete_byidtransaksi_url);
+//                         curl_setopt($ch_delete_transaksi, CURLOPT_CUSTOMREQUEST, "DELETE");
+//                         curl_setopt($ch_delete_transaksi, CURLOPT_RETURNTRANSFER, true);
+//                         curl_setopt($ch_delete_transaksi, CURLOPT_HTTPHEADER, [
+//                             'Authorization: Bearer ' . $token,
+//                         ]);
+//                         $response_byidtransaksi = curl_exec($ch_delete_transaksi);
+//                     }
+//                 }
+//             }
+//             $ch_stok_keluar = curl_init($stok_keluar_url);
+//             curl_setopt($ch_stok_keluar, CURLOPT_CUSTOMREQUEST, "DELETE");
+//             curl_setopt($ch_stok_keluar, CURLOPT_RETURNTRANSFER, true);
+//             curl_setopt($ch_stok_keluar, CURLOPT_HTTPHEADER, [
+//                 'Authorization: Bearer ' . $token,
+//             ]);
+//             $response_stok_keluar = curl_exec($ch_stok_keluar);
+//             $http_status_code_stok_keluar = curl_getinfo($ch_stok_keluar, CURLINFO_HTTP_CODE);
+
+//             if ($http_status_code_stok_keluar === 204) {
+//                 return redirect()->to(base_url('stokkeluarmedis'));
+//             } else {
+
+//                 return "Error deleting stok_keluar." . $response_byidtransaksi . $response_stok_keluar;
+//             }
+//         } else {
+//             // User not logged in
+//             return "User not logged in. Please log in first.";
+//         }
+//     }
+// }
+    //     $gudang_url = $this->api_url . '/inventory/gudang/' . $transaksi['data']['id_barang_medis'] . '/' . $jumlah_stok['id_ruangan'];
+            //     $ch_gudang = curl_init($gudang_url);
+            //     curl_setopt($ch_gudang, CURLOPT_RETURNTRANSFER, true);
+            //     curl_setopt($ch_gudang, CURLOPT_HTTPHEADER, [
+            //         'Authorization: Bearer ' . $token,
+            //     ]);
+            //     $response_gudang = curl_exec($ch_gudang);
+            //     $gudang_data = json_decode($response_gudang, true);
+            //     $http_status_code_gudang = curl_getinfo($ch_gudang, CURLINFO_HTTP_CODE);
+            //     curl_close($ch_gudang);
+
+            //     $postGudangMedis = [
+            //         'id_barang_medis' => $transaksi['data']['id_barang_medis'],
+            //         'id_ruangan' => $jumlah_stok['id_ruangan'],
+            //         'stok' => $gudang_data['data']['stok'] + $transaksi['data']['jumlah_keluar'],
+            //         'no_batch' => $transaksi['data']['no_batch'],
+            //         'no_faktur' => $transaksi['data']['no_faktur'],
+            //     ];
+
+            //     $tambah_gudang_JSON = json_encode($postGudangMedis);
+
+            //     // Perform the update
+            //     $ch_gudang = curl_init($gudang_url);
+            //     curl_setopt($ch_gudang, CURLOPT_CUSTOMREQUEST, "PUT");
+            //     curl_setopt($ch_gudang, CURLOPT_POSTFIELDS, $tambah_gudang_JSON);
+            //     curl_setopt($ch_gudang, CURLOPT_RETURNTRANSFER, true);
+            //     curl_setopt($ch_gudang, CURLOPT_HTTPHEADER, [
+            //         'Content-Type: application/json',
+            //         'Content-Length: ' . strlen($tambah_gudang_JSON),
+            //         'Authorization: Bearer ' . $token,
+            //     ]);
+
+            //     $response_gudang = curl_exec($ch_gudang);
+            //     $http_status_code_gudang = curl_getinfo($ch_gudang, CURLINFO_HTTP_CODE);
+
+            //     curl_close($ch_gudang);
+            // }

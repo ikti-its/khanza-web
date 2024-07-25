@@ -14,13 +14,13 @@
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
                             <h2 class="mb-2 text-xl font-extrabold text-gray-800 dark:text-gray-200">
-                                Stok Opname
+                                Data Batch Barang Medis
                             </h2>
 
 
                         </div>
                         <div>
-                            <a href='/stokopnamemedis/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                            <a href='/batchmedis/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                 <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
                                     <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                 </svg>
@@ -53,20 +53,20 @@
                     <table id="myTable" class="overflow-x-auto min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <colgroup>
                             <col width="14%">
+                            <col width="20%">
                             <col width="16%">
+                            <col width="14%">
                             <col width="11%">
                             <col width="11%">
-                            <col width="11%">
-                            <col width="11%">
-                            <col width="12%">
                             <col width="14%">
                         </colgroup>
                         <thead class="bg-gray-50 dark:bg-slate-800">
                             <tr>
+
                                 <th scope="col" class="px-6 py-3 text-center">
                                     <div class="flex items-center justify-center">
                                         <span class="text-xs tracking-wide text-[#666]">
-                                            Tanggal
+                                            No Batch
                                         </span>
                                     </div>
                                 </th>
@@ -82,38 +82,32 @@
                                 <th scope="col" class="px-6 py-3 text-center">
                                     <div class="flex items-center justify-center">
                                         <span class="text-xs tracking-wide text-[#666]">
-                                            Real
+                                            Tanggal Kadaluwarsa
                                         </span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-center">
                                     <div class="flex items-center justify-center">
                                         <span class="text-xs tracking-wide text-[#666]">
-                                            Stok
+                                            No Faktur
                                         </span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-center">
                                     <div class="flex items-center justify-center">
                                         <span class="text-xs tracking-wide text-[#666]">
-                                            Selisih
+                                            Jumlah
                                         </span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-center">
                                     <div class="flex items-center justify-center">
                                         <span class="text-xs tracking-wide text-[#666]">
-                                            Lebih
+                                            Sisa
                                         </span>
                                     </div>
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Lokasi
-                                        </span>
-                                    </div>
-                                </th>
+
 
                                 <th scope="col" class="px-6 py-3 text-center">
                                     <div class="flex items-center justify-center">
@@ -127,15 +121,15 @@
                         </thead>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <?php foreach ($opname_data as $opname) { ?>
-                                <div id="hs-vertically-centered-scrollable-modal-<?= $opname['id_barang_medis'] . $opname['id_ruangan'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
+                            <?php foreach ($batch_data as $batch) { ?>
+                                <div id="hs-vertically-centered-scrollable-modal-<?= $batch['no_batch'] . $batch['no_faktur'] . $batch['id_barang_medis'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
                                         <div class="w-full max-h-full overflow-hidden flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
                                             <div class="flex justify-between items-center py-3 px-4  dark:border-neutral-700">
                                                 <h3 class="font-bold text-gray-800 dark:text-white">
-
+                                                    <?= $batch['no_batch'] ?>
                                                 </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $opname['id_barang_medis'] . $opname['id_ruangan'] ?>">
+                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $batch['no_batch'] . $batch['no_faktur'] . $batch['id_barang_medis'] ?>">
                                                     <span class="sr-only">Close</span>
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                         <path d="M18 6 6 18"></path>
@@ -147,67 +141,88 @@
                                                 <div class="space-y-12">
                                                     <div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor Batch</label>
+                                                            <input type="text" name="" value="<?= $batch['no_batch'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nomor Faktur</label>
+                                                            <input type="text" name="" value="<?= $batch['no_faktur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Datang</label>
+                                                            <input type="text" name="" value="<?= $batch['tanggal_datang'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nama</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?php foreach ($barang_data as $barang) {
+                                                                                                    if ($barang['id'] === $batch['id_barang_medis']) {
+                                                                                                        echo $barang['nama'];
+                                                                                                    }
+                                                                                                } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Kadaluwarsa</label>
+                                                            <input type="text" name="" value="<?= $batch['kadaluwarsa'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Dasar</label>
+                                                            <input type="text" name="" value="<?= $batch['h_dasar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Beli</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?= $batch['h_beli'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Satuan</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Ralan</label>
+                                                            <input type="text" name="" value="<?= $batch['h_ralan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Stok</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Kelas 1</label>
+                                                            <input type="text" name="" value="<?= $batch['h_kelas1'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Real</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Kelas 2</label>
+                                                            <input type="text" name="" value="<?= $batch['h_kelas2'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Selisih</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Kelas 3</label>
+                                                            <input type="text" name="" value="<?= $batch['h_kelas3'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Lebih</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Utama</label>
+                                                            <input type="text" name="" value="<?= $batch['h_utama'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nominal Hebih</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga VIP</label>
+                                                            <input type="text" name="" value="<?= $batch['h_vip'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nominal Hilang</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga VVIP</label>
+                                                            <input type="text" name="" value="<?= $batch['h_vvip'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Lokasi</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Beli Luar</label>
+                                                            <input type="text" name="" value="<?= $batch['h_beliluar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Catatan</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Jual Bebas</label>
+                                                            <input type="text" name="" value="<?= $batch['h_jualbebas'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">No Batch</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Karyawan</label>
+                                                            <input type="text" name="" value="<?= $batch['h_karyawan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">No Faktur</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Jumlah Beli</label>
+                                                            <input type="text" name="" value="<?= $batch['jumlahbeli'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Sisa</label>
+                                                            <input type="text" name="" value="<?= $batch['sisa'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
 
 
                                                     </div>
-
-
-
 
                                                 </div>
                                             </div>
@@ -215,79 +230,67 @@
 
                                     </div>
                                 </div>
-
                                 <tr>
+
                                     <td>
                                         <div class="px-6 py-3">
                                             <div class="flex items-center justify-center gap-x-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $opname['tanggal'] ?></span>
+                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $batch['no_batch'] ?></span>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="px-6 py-3">
                                             <div class="flex items-center justify-center gap-x-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $opname['id_barang_medis'] . $opname['id_ruangan'] ?>"><?php foreach ($barang_data as $barang) {
-                                                                                                                                                                                                                                                                    if ($opname['id_barang_medis'] === $barang['id']) {
-                                                                                                                                                                                                                                                                        echo $barang['nama'];
-                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                }  ?></span>
+                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $batch['no_batch'] . $batch['no_faktur'] . $batch['id_barang_medis'] ?>"><?php foreach ($barang_data as $barang) {
+                                                                                                                                                                                                                                                                        if ($barang['id'] === $batch['id_barang_medis']) {
+                                                                                                                                                                                                                                                                            echo $barang['nama'];
+                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                    } ?></span>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="px-6 py-3">
                                             <div class="flex items-center justify-center gap-x-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $opname['real'] ?></span>
+                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $batch['kadaluwarsa'] ?></span>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="px-6 py-3">
                                             <div class="flex items-center justify-center gap-x-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $opname['stok'] ?></span>
+                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $batch['no_faktur'] ?></span>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="px-6 py-3">
                                             <div class="flex items-center justify-center gap-x-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php $selisih = 0;
-                                                                                                                            if ($opname['real'] < $opname['stok']) {
-                                                                                                                                $selisih = $opname['real'] - $opname['stok'];
-                                                                                                                                echo $selisih;
-                                                                                                                            } else {
-                                                                                                                                echo $selisih;
-                                                                                                                            } ?></span>
+                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $batch['jumlahbeli'] ?></span>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="px-6 py-3">
                                             <div class="flex items-center justify-center gap-x-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php $lebih = 0;
-                                                                                                                            if ($opname['real'] > $opname['stok']) {
-                                                                                                                                $lebih = $opname['real'] - $opname['stok'];
-                                                                                                                                echo $lebih;
-                                                                                                                            } else {
-                                                                                                                                echo $lebih;
-                                                                                                                            } ?></span>
+                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $batch['sisa'] ?></span>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
-                                        <div class="px-6 py-3">
-                                            <div class="flex items-center justify-center gap-x-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php foreach ($ruangan_data as $ruangan) {
-                                                                                                                                if ($opname['id_ruangan'] === $ruangan['id']) {
-                                                                                                                                    echo $ruangan['nama'];
-                                                                                                                                }
-                                                                                                                            }  ?></span>
+
+                                    <td class="size-px whitespace-nowrap">
+                                        <div class="px-3 py-1.5 text-center inline-flex">
+                                            <div class="px-3 py-1.5">
+                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $batch['no_batch'] . $batch['no_faktur'] . $batch['id_barang_medis'] ?>">
+                                                    Lihat Detail
+                                                </button>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="py-1.5 text-center">
+                                            <div class="px-3 py-1.5">
+                                                <a href="/batchmedis/edit/<?= $batch['no_batch'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                    Ubah
+                                                </a>
+                                            </div>
                                             <div class="px-3 py-1.5">
                                                 <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-')" href="#">
                                                     Hapus
@@ -317,7 +320,7 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                            <form action="/pengajuanmedis/hapus/" method="POST">
+                                                            <form action="/batchmedis/hapus/" method="POST">
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">

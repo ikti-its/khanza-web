@@ -53,11 +53,13 @@
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <colgroup>
                             <!-- <col width="5%"> -->
-                            <col width="30%">
-                            <col width="25%">
-                            <!-- <col width="20%"> -->
                             <col width="20%">
-                            <col width="25%">
+                            <col width="20%">
+                            <col width="10%">
+                            <!-- <col width="20%"> -->
+                            <col width="15%">
+                            <col width="15%">
+                            <col width="20%">
                         </colgroup>
                         <thead class="bg-gray-50 dark:bg-slate-800">
                             <tr>
@@ -79,17 +81,32 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Jenis Barang Medis
+                                            Jenis
                                         </span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Stok
+                                            Isi
                                         </span>
                                     </div>
                                 </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Harga Dasar
+                                        </span>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Harga Beli
+                                        </span>
+                                    </div>
+                                </th>
+
 
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
@@ -129,124 +146,144 @@
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nama</label>
                                                             <input type="text" name="kandungan" value="<?= $medis['nama'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
-                                                        <?php foreach ($obat_data as $jenis) {
-                                                            if ($medis['id'] === $jenis['id_barang_medis']) {
-                                                                if ($medis['jenis'] === 'Obat') { ?>
-                                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Industri Farmasi</label>
-                                                                        <input type="text" name="" value="<?php
-                                                                                                            $optionsIF = [
-                                                                                                                "1000" => "Kalbe Farma"
-                                                                                                            ];
-                                                                                                            foreach ($optionsIF as $valueIF => $textIF) {
-                                                                                                                if ($valueIF === $jenis['industri_farmasi']) {
-                                                                                                                    echo $textIF;
-                                                                                                                    break; // Stop the loop once a match is found
-                                                                                                                }
-                                                                                                            }
-                                                                                                            ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                                    </div>
-
-                                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Kandungan</label>
-                                                                        <input type="text" name="kandungan" value="<?= $jenis['kandungan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                                    </div>
-                                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Isi</label>
-                                                                        <input type="text" name="" value="<?= $jenis['isi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-
-                                                                    </div>
-
-
-                                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                                        <label class="block mt-5 md:my-0 text-sm text-gray-900 dark:text-white md:w-1/2">Satuan Besar</label>
-                                                                        <input type="text" name="" value="<?php
-                                                                                                            foreach ($satuan_data as $satuan) {
-                                                                                                                if ($satuan['id'] === $medis['satuan']) {
-                                                                                                                    echo $satuan['nama'];
-                                                                                                                }
-                                                                                                            }
-                                                                                                            ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                                    </div>
-                                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Kapasitas</label>
-                                                                        <input type="text" name="" value="<?= $jenis['kapasitas'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-
-                                                                    </div>
-                                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                                        <label class="block mt-5 md:my-0 text-sm text-gray-900 dark:text-white md:w-1/2">Satuan Kecil</label>
-                                                                        <input type="text" name="" value="<?php
-                                                                                                            foreach ($satuan_data as $satuan) {
-                                                                                                                if ($satuan['id'] === $jenis['satuan']) {
-                                                                                                                    echo $satuan['nama'];
-                                                                                                                }
-                                                                                                            }
-                                                                                                            ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                                    </div>
-                                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Jenis</label>
-                                                                        <input type="text" name="" value="<?php
-                                                                                                            $optionsjenis = [
-                                                                                                                "1000" => "Obat Oral",
-                                                                                                                "2000" => "Obat Topikal",
-                                                                                                                "3000" => "Obat Injeksi",
-                                                                                                                "4000" => "Obat Sublingual"
-                                                                                                            ];
-                                                                                                            foreach ($optionsjenis as $valuejenis => $textjenis) {
-                                                                                                                if ($valuejenis === $jenis['jenis']) {
-                                                                                                                    echo $textjenis;
-                                                                                                                }
-                                                                                                            }
-                                                                                                            ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                                    </div>
-                                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Kategori</label>
-                                                                        <input type="text" name="" value="<?php
-                                                                                                            $optionskategori = [
-                                                                                                                "1000" => "Obat Paten",
-                                                                                                                "2000" => "Obat Generik",
-                                                                                                                "3000" => "Obat Merek",
-                                                                                                                "4000" => "Obat Eksklusif"
-                                                                                                            ];
-                                                                                                            foreach ($optionskategori as $valuekategori => $textkategori) {
-                                                                                                                if ($valuekategori === $jenis['kategori']) {
-                                                                                                                    echo $textkategori;
-                                                                                                                    break; // Stop the loop once a match is found
-                                                                                                                }
-                                                                                                            }
-                                                                                                            ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                                    </div>
-
-                                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Golongan</label>
-                                                                        <input type="text" name="" value="<?php
-                                                                                                            $optionsgolongan = [
-                                                                                                                "1000" => "Analgesik",
-                                                                                                                "2000" => "Antibiotik",
-                                                                                                                "3000" => "Antijamur",
-                                                                                                                "4000" => "Antivirus"
-                                                                                                            ];
-                                                                                                            foreach ($optionsgolongan as $valuegolongan => $textgolongan) {
-                                                                                                                if ($valuegolongan === $jenis['golongan']) {
-                                                                                                                    echo $textgolongan;
-                                                                                                                    break; // Stop the loop once a match is found
-                                                                                                                }
-                                                                                                            }
-                                                                                                            ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                                    </div>
-                                                                    <div class="mb-5 sm:block md:flex items-center">
-                                                                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Kadaluwarsa</label>
-                                                                        <input type="date" name="" value="<?= $jenis['kadaluwarsa'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                                    </div>
-
-
-                                                        <?php }
-                                                            }
-                                                        } ?>
 
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga</label>
-                                                            <input type="text" name="" value="<?= $medis['harga'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Industri Farmasi</label>
+                                                            <input type="text" name="" value="<?php
+
+                                                                                                foreach ($industri_data as $industri) {
+                                                                                                    if ($industri['id'] === $medis['id_industri']) {
+                                                                                                        echo $industri['nama'];
+                                                                                                        break; // Stop the loop once a match is found
+                                                                                                    }
+                                                                                                }
+                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Kandungan</label>
+                                                            <input type="text" name="kandungan" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Isi</label>
+                                                            <input type="text" name="" value="<?= $medis['isi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+
+                                                        </div>
+
+
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mt-5 md:my-0 text-sm text-gray-900 dark:text-white md:w-1/2">Satuan Besar</label>
+                                                            <input type="text" name="" value="<?php
+                                                                                                foreach ($satuan_data as $satuan) {
+                                                                                                    if ($satuan['id'] === $medis['id_satbesar']) {
+                                                                                                        echo $satuan['nama'];
+                                                                                                    }
+                                                                                                }
+                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Kapasitas</label>
+                                                            <input type="text" name="" value="<?= $medis['kapasitas'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mt-5 md:my-0 text-sm text-gray-900 dark:text-white md:w-1/2">Satuan Kecil</label>
+                                                            <input type="text" name="" value="<?php
+                                                                                                foreach ($satuan_data as $satuan) {
+                                                                                                    if ($satuan['id'] === $medis['id_satuan']) {
+                                                                                                        echo $satuan['nama'];
+                                                                                                    }
+                                                                                                }
+                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Jenis</label>
+                                                            <input type="text" name="" value="<?php
+                                                                                                foreach ($jenis_data as $jenis) {
+                                                                                                    if ($jenis['id'] === $medis['id_jenis']) {
+                                                                                                        echo $jenis['nama'];
+                                                                                                        break; // Stop the loop once a match is found
+                                                                                                    }
+                                                                                                }
+                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Kategori</label>
+                                                            <input type="text" name="" value="<?php
+                                                                                                foreach ($kategori_data as $kategori) {
+                                                                                                    if ($kategori['id'] === $medis['id_kategori']) {
+                                                                                                        echo $kategori['nama'];
+                                                                                                        break; // Stop the loop once a match is found
+                                                                                                    }
+                                                                                                }
+                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Golongan</label>
+                                                            <input type="text" name="" value="<?php
+                                                                                                foreach ($golongan_data as $golongan) {
+                                                                                                    if ($golongan['id'] === $medis['id_golongan']) {
+                                                                                                        echo $golongan['nama'];
+                                                                                                        break; // Stop the loop once a match is found
+                                                                                                    }
+                                                                                                }
+                                                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal Kadaluwarsa</label>
+                                                            <input type="text" name="" value="<?= $medis['kadaluwarsa'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+
+
+
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Dasar</label>
+                                                            <input type="text" name="" value="<?= $medis['h_dasar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Beli</label>
+                                                            <input type="text" name="" value="<?= $medis['h_beli'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Ralan</label>
+                                                            <input type="text" name="" value="<?= $medis['h_ralan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Rnp Kelas 1</label>
+                                                            <input type="text" name="" value="<?= $medis['h_kelas1'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Rnp Kelas 2</label>
+                                                            <input type="text" name="" value="<?= $medis['h_kelas2'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Rnp Kelas 3</label>
+                                                            <input type="text" name="" value="<?= $medis['h_kelas3'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Rnp Utama/BPJS</label>
+                                                            <input type="text" name="" value="<?= $medis['h_utama'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Rnp Kelas VIP</label>
+                                                            <input type="text" name="" value="<?= $medis['h_vip'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Rnp Kelas VVIP</label>
+                                                            <input type="text" name="" value="<?= $medis['h_vvip'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Apotek Luar</label>
+                                                            <input type="text" name="" value="<?= $medis['h_beliluar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Jual Obat Bebas</label>
+                                                            <input type="text" name="" value="<?= $medis['h_jualbebas'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                        </div>
+                                                        <div class="mb-5 sm:block md:flex items-center">
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Karyawan</label>
+                                                            <input type="text" name="" value="<?= $medis['h_karyawan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
 
                                                         <div class="mb-5 sm:block md:flex items-center">
@@ -271,17 +308,28 @@
                                             <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $medis['id'] ?>" data-id="<?= $medis['id'] ?>"><?= $medis['nama'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
-                                    <td class="size-px w-48 whitespace-nowrap">
-                                        <div class="px-6 py-3 text-center">
-                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
-                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
-                                                <?= $medis['jenis'] ?? 'N/A' ?>
-                                            </span>
+                                    <td class="h-px w-72 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class=" text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?php foreach ($jenis_data as $jenis) {
+                                                                                                                                                        if ($jenis['id'] === $medis['id_jenis']) {
+                                                                                                                                                            echo $jenis['nama'];
+                                                                                                                                                        }
+                                                                                                                                                    } ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-72 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $medis['stok'] ?? 'N/A' ?></span>
+                                            <span class=" text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $medis['isi'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-72 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $medis['h_dasar'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-72 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $medis['h_beli'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
@@ -357,61 +405,7 @@
                     <!-- Footer -->
                     <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
                         <!-- Pagination -->
-                        <nav class="flex w-full justify-between items-center gap-x-1">
-                            <!-- Previous Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m15 18-6-6 6-6"></path>
-                                    </svg>
-                                    <span aria-hidden="true" class="hidden sm:block">Previous</span>
-                                </button>
-                            </div>
 
-                            <!-- Page Numbers -->
-                            <div class="flex items-center gap-x-1">
-                                <?php
-                                $total_pages = $meta_data['total'];
-                                $current_page = $meta_data['page'];
-                                $range = 2; // Number of pages to show before and after the current page
-                                $show_items = ($range * 2) + 1;
-
-                                if ($total_pages <= $show_items) {
-                                    for ($i = 1; $i <= $total_pages; $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                    }
-                                } else {
-                                    if ($current_page > $range + 1) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=1&size=' . $meta_data['size'] . '\'">1</button>';
-                                        if ($current_page > $range + 2) {
-                                            echo '<span class="py-2 px-3 text-sm">...</span>';
-                                        }
-                                    }
-
-                                    for ($i = max($current_page - $range, 1); $i <= min($current_page + $range, $total_pages); $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                    }
-
-                                    if ($current_page < $total_pages - $range - 1) {
-                                        if ($current_page < $total_pages - $range - 2) {
-                                            echo '<span class="py-2 px-3 text-sm">...</span>';
-                                        }
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
-                                    }
-                                }
-                                ?>
-                            </div>
-
-                            <!-- Next Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <span aria-hidden="true" class="hidden sm:block">Next</span>
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m9 18 6-6-6-6"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </nav>
                     </div>
 
                 </div>
