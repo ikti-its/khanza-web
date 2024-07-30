@@ -121,7 +121,6 @@ class MedisController extends BaseController
         }
     }
 
-
     public function tambahMedis()
     {
         if (session()->has('jwt_token')) {
@@ -133,7 +132,6 @@ class MedisController extends BaseController
             $kategori_url = $this->api_url . '/ref/inventory/kategori';
             $golongan_url = $this->api_url . '/ref/inventory/golongan';
 
-            // Initialize cURL for $satuan_url
             $ch_satuan = curl_init($satuan_url);
             curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
@@ -143,7 +141,6 @@ class MedisController extends BaseController
             $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
             curl_close($ch_satuan);
 
-            // Initialize cURL for $industri_url
             $ch_industri = curl_init($industri_url);
             curl_setopt($ch_industri, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_industri, CURLOPT_HTTPHEADER, [
@@ -153,7 +150,6 @@ class MedisController extends BaseController
             $http_status_code_industri = curl_getinfo($ch_industri, CURLINFO_HTTP_CODE);
             curl_close($ch_industri);
 
-            // Initialize cURL for $jenis_url
             $ch_jenis = curl_init($jenis_url);
             curl_setopt($ch_jenis, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_jenis, CURLOPT_HTTPHEADER, [
@@ -163,7 +159,6 @@ class MedisController extends BaseController
             $http_status_code_jenis = curl_getinfo($ch_jenis, CURLINFO_HTTP_CODE);
             curl_close($ch_jenis);
 
-            // Initialize cURL for $kategori_url
             $ch_kategori = curl_init($kategori_url);
             curl_setopt($ch_kategori, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_kategori, CURLOPT_HTTPHEADER, [
@@ -173,7 +168,6 @@ class MedisController extends BaseController
             $http_status_code_kategori = curl_getinfo($ch_kategori, CURLINFO_HTTP_CODE);
             curl_close($ch_kategori);
 
-            // Initialize cURL for $golongan_url
             $ch_golongan = curl_init($golongan_url);
             curl_setopt($ch_golongan, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch_golongan, CURLOPT_HTTPHEADER, [
@@ -183,7 +177,6 @@ class MedisController extends BaseController
             $http_status_code_golongan = curl_getinfo($ch_golongan, CURLINFO_HTTP_CODE);
             curl_close($ch_golongan);
 
-            // Check HTTP status codes and handle errors if necessary
             if ($http_status_code_satuan !== 201) {
                 return $this->renderErrorView($http_status_code_satuan);
             }
@@ -200,21 +193,18 @@ class MedisController extends BaseController
                 return $this->renderErrorView($http_status_code_golongan);
             }
 
-            // Decode JSON responses
             $satuan_data = json_decode($response_satuan, true);
             $industri_data = json_decode($response_industri, true);
             $jenis_data = json_decode($response_jenis, true);
             $kategori_data = json_decode($response_kategori, true);
             $golongan_data = json_decode($response_golongan, true);
 
-            // Breadcrumb navigation
             $this->addBreadcrumb('Inventaris', 'inventarismedis');
             $this->addBreadcrumb('Barang Medis', 'medis');
             $this->addBreadcrumb('Tambah', 'tambah');
 
             $breadcrumbs = $this->getBreadcrumbs();
 
-            // Pass data to view
             return view('/admin/inventaris/medis/tambah_medis', [
                 'satuan_data' => $satuan_data['data'],
                 'industri_data' => $industri_data['data'],
@@ -225,11 +215,9 @@ class MedisController extends BaseController
                 'breadcrumbs' => $breadcrumbs
             ]);
         } else {
-            // Unauthorized access
             return $this->renderErrorView(401);
         }
     }
-
 
     public function submitTambahMedis()
     {
@@ -257,7 +245,7 @@ class MedisController extends BaseController
             $hargavvip = intval($this->request->getPost('hargavvip'));
             $hargaapotekluar = intval($this->request->getPost('hargaapotekluar'));
             $hargaobatbebas = intval($this->request->getPost('hargaobatbebas'));
-            $hargaobatkaryawan = intval($this->request->getPost('hargaobatkaryawan'));
+            $hargaobatkaryawan = intval($this->request->getPost('hargakaryawan'));
             $stokminimum = intval($this->request->getPost('stokminimum'));
             $kadaluwarsa = $this->request->getPost('kadaluwarsa');
             if ($kadaluwarsa === "") {
@@ -353,7 +341,6 @@ class MedisController extends BaseController
                 } else {
                     return $response_medis;
                 }
-                // $this->renderErrorView($http_status_code_medis);
             } else {
                 return $response_medis;
             }
@@ -365,126 +352,115 @@ class MedisController extends BaseController
     }
 
     public function editMedis($medisId)
-    { {
-            if (session()->has('jwt_token')) {
-                $token = session()->get('jwt_token');
-                $title = 'Tambah medis';
-                $medis_url = $this->api_url . '/inventory/barang/' . $medisId;
-                $satuan_url = $this->api_url . '/ref/inventory/satuan';
-                $industri_url = $this->api_url . '/ref/inventory/industri';
-                $jenis_url = $this->api_url . '/ref/inventory/jenis';
-                $kategori_url = $this->api_url . '/ref/inventory/kategori';
-                $golongan_url = $this->api_url . '/ref/inventory/golongan';
+    {
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+            $title = 'Tambah medis';
+            $medis_url = $this->api_url . '/inventory/barang/' . $medisId;
+            $satuan_url = $this->api_url . '/ref/inventory/satuan';
+            $industri_url = $this->api_url . '/ref/inventory/industri';
+            $jenis_url = $this->api_url . '/ref/inventory/jenis';
+            $kategori_url = $this->api_url . '/ref/inventory/kategori';
+            $golongan_url = $this->api_url . '/ref/inventory/golongan';
 
-                // Initialize cURL for $satuan_url
-                $ch_medis = curl_init($medis_url);
-                curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer ' . $token,
-                ]);
-                $response_medis = curl_exec($ch_medis);
-                $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
-                curl_close($ch_medis);
+            $ch_medis = curl_init($medis_url);
+            curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_medis = curl_exec($ch_medis);
+            $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
+            curl_close($ch_medis);
 
-                $ch_satuan = curl_init($satuan_url);
-                curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer ' . $token,
-                ]);
-                $response_satuan = curl_exec($ch_satuan);
-                $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
-                curl_close($ch_satuan);
+            $ch_satuan = curl_init($satuan_url);
+            curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_satuan = curl_exec($ch_satuan);
+            $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
+            curl_close($ch_satuan);
 
-                // Initialize cURL for $industri_url
-                $ch_industri = curl_init($industri_url);
-                curl_setopt($ch_industri, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch_industri, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer ' . $token,
-                ]);
-                $response_industri = curl_exec($ch_industri);
-                $http_status_code_industri = curl_getinfo($ch_industri, CURLINFO_HTTP_CODE);
-                curl_close($ch_industri);
+            $ch_industri = curl_init($industri_url);
+            curl_setopt($ch_industri, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_industri, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_industri = curl_exec($ch_industri);
+            $http_status_code_industri = curl_getinfo($ch_industri, CURLINFO_HTTP_CODE);
+            curl_close($ch_industri);
 
-                // Initialize cURL for $jenis_url
-                $ch_jenis = curl_init($jenis_url);
-                curl_setopt($ch_jenis, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch_jenis, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer ' . $token,
-                ]);
-                $response_jenis = curl_exec($ch_jenis);
-                $http_status_code_jenis = curl_getinfo($ch_jenis, CURLINFO_HTTP_CODE);
-                curl_close($ch_jenis);
+            $ch_jenis = curl_init($jenis_url);
+            curl_setopt($ch_jenis, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_jenis, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_jenis = curl_exec($ch_jenis);
+            $http_status_code_jenis = curl_getinfo($ch_jenis, CURLINFO_HTTP_CODE);
+            curl_close($ch_jenis);
 
-                // Initialize cURL for $kategori_url
-                $ch_kategori = curl_init($kategori_url);
-                curl_setopt($ch_kategori, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch_kategori, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer ' . $token,
-                ]);
-                $response_kategori = curl_exec($ch_kategori);
-                $http_status_code_kategori = curl_getinfo($ch_kategori, CURLINFO_HTTP_CODE);
-                curl_close($ch_kategori);
+            $ch_kategori = curl_init($kategori_url);
+            curl_setopt($ch_kategori, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_kategori, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_kategori = curl_exec($ch_kategori);
+            $http_status_code_kategori = curl_getinfo($ch_kategori, CURLINFO_HTTP_CODE);
+            curl_close($ch_kategori);
 
-                // Initialize cURL for $golongan_url
-                $ch_golongan = curl_init($golongan_url);
-                curl_setopt($ch_golongan, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch_golongan, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer ' . $token,
-                ]);
-                $response_golongan = curl_exec($ch_golongan);
-                $http_status_code_golongan = curl_getinfo($ch_golongan, CURLINFO_HTTP_CODE);
-                curl_close($ch_golongan);
+            $ch_golongan = curl_init($golongan_url);
+            curl_setopt($ch_golongan, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_golongan, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_golongan = curl_exec($ch_golongan);
+            $http_status_code_golongan = curl_getinfo($ch_golongan, CURLINFO_HTTP_CODE);
+            curl_close($ch_golongan);
 
-                // Check HTTP status codes and handle errors if necessary
-                if ($http_status_code_medis !== 200) {
-                    return $this->renderErrorView($http_status_code_medis);
-                }
-                if ($http_status_code_satuan !== 201) {
-                    return $this->renderErrorView($http_status_code_satuan);
-                }
-                if ($http_status_code_industri !== 201) {
-                    return $this->renderErrorView($http_status_code_industri);
-                }
-                if ($http_status_code_jenis !== 201) {
-                    return $this->renderErrorView($http_status_code_jenis);
-                }
-                if ($http_status_code_kategori !== 201) {
-                    return $this->renderErrorView($http_status_code_kategori);
-                }
-                if ($http_status_code_golongan !== 201) {
-                    return $this->renderErrorView($http_status_code_golongan);
-                }
-
-                // Decode JSON responses
-                $medis_data = json_decode($response_medis, true);
-                $satuan_data = json_decode($response_satuan, true);
-                $industri_data = json_decode($response_industri, true);
-                $jenis_data = json_decode($response_jenis, true);
-                $kategori_data = json_decode($response_kategori, true);
-                $golongan_data = json_decode($response_golongan, true);
-
-                // Breadcrumb navigation
-                $this->addBreadcrumb('Inventaris', 'inventarismedis');
-                $this->addBreadcrumb('Barang Medis', 'medis');
-                $this->addBreadcrumb('Tambah', 'tambah');
-
-                $breadcrumbs = $this->getBreadcrumbs();
-
-                // Pass data to view
-                return view('/admin/inventaris/medis/edit_medis', [
-                    'medis_data' => $medis_data['data'],
-                    'satuan_data' => $satuan_data['data'],
-                    'industri_data' => $industri_data['data'],
-                    'jenis_data' => $jenis_data['data'],
-                    'kategori_data' => $kategori_data['data'],
-                    'golongan_data' => $golongan_data['data'],
-                    'title' => $title,
-                    'breadcrumbs' => $breadcrumbs
-                ]);
-            } else {
-                // Unauthorized access
-                return $this->renderErrorView(401);
+            if ($http_status_code_medis !== 200) {
+                return $this->renderErrorView($http_status_code_medis);
             }
+            if ($http_status_code_satuan !== 201) {
+                return $this->renderErrorView($http_status_code_satuan);
+            }
+            if ($http_status_code_industri !== 201) {
+                return $this->renderErrorView($http_status_code_industri);
+            }
+            if ($http_status_code_jenis !== 201) {
+                return $this->renderErrorView($http_status_code_jenis);
+            }
+            if ($http_status_code_kategori !== 201) {
+                return $this->renderErrorView($http_status_code_kategori);
+            }
+            if ($http_status_code_golongan !== 201) {
+                return $this->renderErrorView($http_status_code_golongan);
+            }
+
+            $medis_data = json_decode($response_medis, true);
+            $satuan_data = json_decode($response_satuan, true);
+            $industri_data = json_decode($response_industri, true);
+            $jenis_data = json_decode($response_jenis, true);
+            $kategori_data = json_decode($response_kategori, true);
+            $golongan_data = json_decode($response_golongan, true);
+
+            $this->addBreadcrumb('Inventaris', 'inventarismedis');
+            $this->addBreadcrumb('Barang Medis', 'medis');
+            $this->addBreadcrumb('Tambah', 'tambah');
+
+            $breadcrumbs = $this->getBreadcrumbs();
+
+            return view('/admin/inventaris/medis/edit_medis', [
+                'medis_data' => $medis_data['data'],
+                'satuan_data' => $satuan_data['data'],
+                'industri_data' => $industri_data['data'],
+                'jenis_data' => $jenis_data['data'],
+                'kategori_data' => $kategori_data['data'],
+                'golongan_data' => $golongan_data['data'],
+                'title' => $title,
+                'breadcrumbs' => $breadcrumbs
+            ]);
+        } else {
+            return $this->renderErrorView(401);
         }
     }
 
@@ -514,7 +490,7 @@ class MedisController extends BaseController
             $hargavvip = intval($this->request->getPost('hargavvip'));
             $hargaapotekluar = intval($this->request->getPost('hargaapotekluar'));
             $hargaobatbebas = intval($this->request->getPost('hargaobatbebas'));
-            $hargaobatkaryawan = intval($this->request->getPost('hargaobatkaryawan'));
+            $hargaobatkaryawan = intval($this->request->getPost('hargakaryawan'));
             $stokminimum = intval($this->request->getPost('stokminimum'));
             $kadaluwarsa = $this->request->getPost('kadaluwarsa');
             if ($kadaluwarsa === "") {
@@ -567,7 +543,6 @@ class MedisController extends BaseController
             curl_close($ch_medis);
             if ($http_status_code_medis === 200) {
                 return redirect()->to(base_url('datamedis'));
-                // $this->renderErrorView($http_status_code_medis);
             } else {
                 return $this->renderErrorView(500);
             }
@@ -575,6 +550,7 @@ class MedisController extends BaseController
             return $this->renderErrorView(401);
         }
     }
+}
     // public function submitEditMedis($medisId)
     // {
 
@@ -729,56 +705,95 @@ class MedisController extends BaseController
     //         return "Data is required.";
     //     }
     // }
-    public function hapusMedis($medisId)
-    {
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
+    // public function hapusMedis($medisId)
+    // {
+    //     if (!session()->has('jwt_token')) {
+    //         return $this->renderErrorView(401);
+    //     }
 
-            $medis_url = $this->api_url . '/inventory/barang/' . $medisId;
-            $gudang_url = $this->api_url . '/inventory/gudang/' . $medisId;
+    //     $token = session()->get('jwt_token');
+    //     $medis_url = $this->api_url . '/inventory/barang/' . $medisId;
+    //     $ruangan_url = $this->api_url . '/ref/inventory/ruangan';
 
-            // $ch_gudang = curl_init($gudang_url);
-            // curl_setopt($ch_gudang, CURLOPT_RETURNTRANSFER, true);
-            // curl_setopt($ch_gudang, CURLOPT_HTTPHEADER, [
-            //     'Authorization: Bearer ' . $token,
-            // ]);
-            // $response_gudang = curl_exec($ch_gudang);
-            // $http_status_code_gudang = curl_getinfo($ch_gudang, CURLINFO_HTTP_CODE);
-            // curl_close($ch_gudang);
-            // $gudang_data=json_decode($response_gudang, true);
-            // foreach($gudang_data as $gudang){
+    //     // Function to initialize cURL
+    //     function initCurl($url, $token, $customRequest = null)
+    //     {
+    //         $ch = curl_init($url);
+    //         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $token]);
+    //         if ($customRequest) {
+    //             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $customRequest);
+    //         }
+    //         return $ch;
+    //     }
 
-            // }
-            $ch_gudang = curl_init($gudang_url);
-            curl_setopt($ch_gudang, CURLOPT_CUSTOMREQUEST, "DELETE");
-            curl_setopt($ch_gudang, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_gudang, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-            ]);
+    //     // Retrieve medis data
+    //     $ch_medis = initCurl($medis_url, $token);
+    //     $response_medis = curl_exec($ch_medis);
+    //     $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
+    //     curl_close($ch_medis);
 
-            $response_gudang = curl_exec($ch_gudang);
-            $http_status_code_gudang = curl_getinfo($ch_gudang, CURLINFO_HTTP_CODE);
-            curl_close($ch_gudang);
+    //     if ($http_status_code_medis !== 200) {
+    //         return "Error fetching medis data: " . $response_medis;
+    //     }
 
-            $ch_medis = curl_init($medis_url);
-            curl_setopt($ch_medis, CURLOPT_CUSTOMREQUEST, "DELETE");
-            curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-            ]);
+    //     $medis_data = json_decode($response_medis, true);
+    //     $medis = $medis_data['data'] ?? null;
 
-            $response = curl_exec($ch_medis);
+    //     // Retrieve gudang data
+    //     $gudang_url = $this->api_url . '/inventory/gudang/barang/' . $medisId;
+    //     $ch_gudang = initCurl($gudang_url, $token);
+    //     $response_gudang = curl_exec($ch_gudang);
+    //     $http_status_code_gudang = curl_getinfo($ch_gudang, CURLINFO_HTTP_CODE);
+    //     curl_close($ch_gudang);
 
-            $http_status_code = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
-            curl_close($ch_medis);
+    //     if ($http_status_code_gudang !== 200) {
+    //         return "Error fetching gudang data: " . $response_gudang;
+    //     }
 
-            if ($http_status_code === 204 && $http_status_code_gudang === 204) {
-                return redirect()->to(base_url('datamedis'));
-            } else {
-                return "Error delete data: " . $response . $response_gudang;
-            }
-        } else {
-            return $this->renderErrorView(401);
-        }
-    }
-}
+    //     $gudang_data = json_decode($response_gudang, true);
+    //     $gudang = $gudang_data['data'] ?? null;
+
+    //     // Retrieve ruangan data
+    //     $ch_ruangan = initCurl($ruangan_url, $token);
+    //     $response_ruangan = curl_exec($ch_ruangan);
+    //     $http_status_code_ruangan = curl_getinfo($ch_ruangan, CURLINFO_HTTP_CODE);
+    //     curl_close($ch_ruangan);
+
+    //     if ($http_status_code_ruangan !== 201) {
+    //         return "Error fetching ruangan data: " . $response_ruangan;
+    //     }
+
+    //     $ruangan_data = json_decode($response_ruangan, true);
+    //     $ruangan = $ruangan_data['data'] ?? null;
+
+    //     // Delete gudang data
+    //     $http_status_code_gudang_final = 204;
+    //     foreach ($ruangan as $rgn) {
+    //         foreach ($gudang as $gdg) {
+    //             if ($gdg['id_ruangan'] === $rgn['id']) {
+    //                 $gudang_delete_url = $this->api_url . '/inventory/gudang/' . $gdg['id'];
+    //                 $ch_gudang_delete = initCurl($gudang_delete_url, $token, 'DELETE');
+    //                 $response_gudang_delete = curl_exec($ch_gudang_delete);
+    //                 $http_status_code_gudang_final = curl_getinfo($ch_gudang_delete, CURLINFO_HTTP_CODE);
+    //                 curl_close($ch_gudang_delete);
+
+    //                 if ($http_status_code_gudang_final !== 204) {
+    //                     return "Error deleting gudang data: " . $response_gudang_delete;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     // Delete medis data
+    //     $ch_medis_delete = initCurl($medis_url, $token, 'DELETE');
+    //     $response_medis_delete = curl_exec($ch_medis_delete);
+    //     $http_status_code_medis_delete = curl_getinfo($ch_medis_delete, CURLINFO_HTTP_CODE);
+    //     curl_close($ch_medis_delete);
+
+    //     if ($http_status_code_medis_delete === 204) {
+    //         return redirect()->to(base_url('datamedis'));
+    //     } else {
+    //         return "Error deleting medis data: " . $response_medis_delete;
+    //     }
+    // }

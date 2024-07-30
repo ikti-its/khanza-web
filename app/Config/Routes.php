@@ -180,19 +180,21 @@ $routes->group('stokopnamemedis', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'StokOpnameController::data');
     $routes->get('tambah', 'StokOpnameController::tambah');
     $routes->post('submittambah', 'StokOpnameController::submitTambah');
+    $routes->delete('hapus/(:segment)', 'StokOpnameController::hapusOpname/$1');
 });
 $routes->group('mutasimedis', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'MutasiGudangController::data');
     $routes->get('tambah', 'MutasiGudangController::tambah');
     $routes->post('submittambah', 'MutasiGudangController::submitTambah');
+    $routes->delete('hapus/(:segment)', 'MutasiGudangController::hapusMutasi/$1');
 });
 $routes->group('batchmedis', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'DataBatchController::data');
     $routes->get('tambah', 'DataBatchController::tambah');
     $routes->post('submittambah', 'DataBatchController::submitTambah');
-    $routes->get('edit/(:any)', 'DataBatchController::editDataBatch/$1');
-    $routes->post('submitedit', 'DataBatchController::submitEdit');
-    $routes->delete('hapus/(:segment)', 'DataBatchController::hapus/$1', ['filter' => 'checkpermission:1337,1,4001']);
+    $routes->get('edit/(:any)/(:any)/(:any)', 'DataBatchController::editDataBatch/$1/$2/$3');
+    $routes->post('submitedit/(:any)/(:any)/(:any)', 'DataBatchController::submitEdit/$1/$2/$3');
+    $routes->delete('hapus/(:any)/(:any)/(:any)', 'DataBatchController::hapus/$1/$2/$3');
 });
 $routes->group('sisastokmedis', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'StokOpnameController::sisastok');

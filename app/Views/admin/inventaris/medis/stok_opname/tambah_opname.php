@@ -292,6 +292,7 @@
             if (lokasiId && idbrgmedis) {
                 var stokValue = getStokValue(lokasiId, idbrgmedis);
                 stokInput.value = stokValue;
+                updateCalculations(stokInput);
             } else {
                 stokInput.value = '';
             }
@@ -333,6 +334,11 @@
             nominallebihInput.value = (realValue - stokValue) * hargaValue;
         }
     }
+
+    // Add an event listener to the lokasi select element
+    document.querySelector('select[name="lokasi"]').addEventListener('change', function() {
+        updateStok();
+    });
 </script>
 
 <?= $this->endSection(); ?>

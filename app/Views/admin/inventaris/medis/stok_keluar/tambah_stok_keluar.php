@@ -195,7 +195,58 @@
     //         });
     //     });
     // });
+    function addRow() {
+        var table = document.querySelector('table tbody'); // Adjust this selector to target your table body
+        var newRow = document.createElement('tr');
 
+        newRow.innerHTML = `
+             
+                                        <td class="align-middle px-1 text-center">
+                                            <button type="button" class="flex justify-center p-2" onclick="removeRow(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                    <path d="M16 0H4C1.79086 0 0 1.79086 0 4V16C0 18.2091 1.79086 20 4 20H16C18.2091 20 20 18.2091 20 16V4C20 1.79086 18.2091 0 16 0Z" fill="#0A2D27" />
+                                                    <path d="M15 10.625H5C4.65833 10.625 4.375 10.3417 4.375 10C4.375 9.65833 4.65833 9.375 5 9.375H15C15.3417 9.375 15.625 9.65833 15.625 10C15.625 10.3417 15.3417 10.625 15 10.625Z" fill="#ACF2E7" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                        <td class="align-middle px-1 text-center">
+                                            <input type="number" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="jlhkeluar[]" required />
+                                        </td>
+                                        <td class="align-middle px-1">
+                                            <select name="idbrgmedis[]" class="py-[1.5px] w-full border text-center rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" onchange="updateFields(this)" required>
+                                                <option value="" selected></option>
+                                                <?php foreach ($medis_data as $brgmedis) { ?>
+                                                    <option value="<?= $brgmedis['id'] ?>" data-satuan="<?= $brgmedis['id_satbesar'] ?>" data-harga="<?= $brgmedis['h_beli'] ?>">
+                                                        <?= $brgmedis['nama'] ?>
+                                                    </option>
+                                                <?php } ?>
+
+                                            </select>
+                                        </td>
+                                        <td class="align-middle px-1 text-center">
+                                            <input type="number" class="text-center w-full border bg-[#F6F6F6] cursor-default rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" step="any" name="stoksaatini[]" readonly />
+                                        </td>
+                                        <td class="align-middle px-1 text-center">
+                                            <input type="text" class="satuan-input text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="satuan[]" required />
+                                        </td>
+                                        <td class="align-middle px-1 text-center">
+                                            <input type="text" class="harga-input text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="harga[]" required />
+                                        </td>
+                                        <td class="align-middle px-1 text-center">
+                                            <input type="text" list="nofaktur" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="nofaktur[]" />
+
+
+                                        </td>
+                                        <td class="align-middle px-1 text-center">
+                                            <input type="text" list="nobatch" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" name="nobatch[]" />
+
+                                        </td>
+
+                                   
+        `;
+
+        table.appendChild(newRow);
+    }
     var gudangData = <?= json_encode($gudang_data); ?>;
     var satuanData = <?= json_encode($satuan_data); ?>;
 

@@ -68,6 +68,7 @@
                                 <table class="min-w-full divide-y divide-gray-200  dark:divide-neutral-700" id="item-list">
 
                                     <colgroup>
+                                        <col width="3%">
                                         <col width="5%">
                                         <col width="15%">
                                         <col width="8%">
@@ -81,6 +82,7 @@
                                     </colgroup>
                                     <thead class="bg-[#DCDCDC]">
                                         <tr>
+                                            <th class="px-1 py-1 text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center"></th>
                                             <th class="px-1 py-1 text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Jml</th>
                                             <th class="px-1 py-1 text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Barang</th>
                                             <th class="px-1 py-1 text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center">Satuan</th>
@@ -94,7 +96,14 @@
                                     </thead>
                                     <tbody class="max-h-[0.1px] overflow-y-auto divide-y divide-gray-200 dark:divide-neutral-700">
                                         <tr>
-
+                                            <td>
+                                                <button type="button" class="flex justify-center p-2" onclick="removeRow(this)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                        <path d="M16 0H4C1.79086 0 0 1.79086 0 4V16C0 18.2091 1.79086 20 4 20H16C18.2091 20 20 18.2091 20 16V4C20 1.79086 18.2091 0 16 0Z" fill="#0A2D27" />
+                                                        <path d="M15 10.625H5C4.65833 10.625 4.375 10.3417 4.375 10C4.375 9.65833 4.65833 9.375 5 9.375H15C15.3417 9.375 15.625 9.65833 15.625 10C15.625 10.3417 15.3417 10.625 15 10.625Z" fill="#ACF2E7" />
+                                                    </svg>
+                                                </button>
+                                            </td>
                                             <td class="align-middle p-1 text-center">
                                                 <input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" step="any" name="jumlah[]" required />
                                             </td>
@@ -156,7 +165,61 @@
 </div>
 
 <script>
+    function addRow() {
+        var table = document.querySelector('table tbody'); // Adjust this selector to target your table body
+        var newRow = document.createElement('tr');
 
+        newRow.innerHTML = `
+        <td>
+                                            <button type="button" class="flex justify-center p-2" onclick="removeRow(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                    <path d="M16 0H4C1.79086 0 0 1.79086 0 4V16C0 18.2091 1.79086 20 4 20H16C18.2091 20 20 18.2091 20 16V4C20 1.79086 18.2091 0 16 0Z" fill="#0A2D27" />
+                                                    <path d="M15 10.625H5C4.65833 10.625 4.375 10.3417 4.375 10C4.375 9.65833 4.65833 9.375 5 9.375H15C15.3417 9.375 15.625 9.65833 15.625 10C15.625 10.3417 15.3417 10.625 15 10.625Z" fill="#ACF2E7" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                        <td class="align-middle p-1 text-center">
+                                                <input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" step="any" name="jumlah[]" required />
+                                            </td>
+                                            <td class="align-middle p-1">
+                                                <select name="idbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" onchange="updateFields(this)" required>
+                                                    <option value="" selected></option>
+                                                    <?php foreach ($barang_data as $barang) { ?>
+                                                        <option value="<?= $barang['id'] ?>" data-satuan="<?= $barang['id_satbesar'] ?>" data-harga="<?= $barang['h_beli'] ?>" data-kadaluwarsa="<?= $barang['kadaluwarsa'] ?>"><?= $barang['nama'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </td>
+                                            <td class="align-middle p-1">
+                                                <input type="text" step="any" class="satuan-input rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] text-center w-full border" name="satuan[]" readonly required />
+                                            </td>
+                                            <td class="align-middle p-1">
+                                                <input type="number" min="0" step="any" class="harga-input rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] text-center w-full border" name="harga[]" readonly required />
+                                            </td>
+                                            <td class="align-middle p-1 text-right">
+                                                <input type="number" min="0" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default text-center w-full border" name="stokasal[]" readonly required />
+                                            </td>
+                                            <td class="align-middle p-1">
+                                                <input type="number" min="0" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] text-center w-full border" name="stoktujuan[]" readonly required />
+                                            </td>
+
+                                            <td class="align-middle p-1">
+                                                <input type="date" step="any" class="kadaluwarsa-input rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" name="kadaluwarsa[]" />
+                                            </td>
+                                            <td class="align-middle p-1">
+                                                <input type="text" min="0" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" name="nobatch[]" />
+                                            </td>
+                                            <td class="align-middle p-1">
+                                                <input type="text" step="any" class="rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center w-full border" name="nofaktur[]" />
+                                            </td>
+        `;
+
+        table.appendChild(newRow);
+    }
+
+    function removeRow(btn) {
+        var row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
     var gudangData = <?= json_encode($gudang_data); ?>;
     var satuanData = <?= json_encode($satuan_data); ?>;
 

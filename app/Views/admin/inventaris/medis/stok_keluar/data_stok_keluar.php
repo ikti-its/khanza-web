@@ -166,7 +166,7 @@
                                                                                                 } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Asal Ruangan</label>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Asal Lokasi</label>
                                                             <input type="text" name="" value="<?php foreach ($ruangan_data as $ruangan) {
                                                                                                     if ($ruangan['id'] === $stok['id_ruangan']) {
                                                                                                         echo $ruangan['nama'];

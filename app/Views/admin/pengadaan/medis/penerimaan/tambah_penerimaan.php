@@ -12,7 +12,7 @@
 
         </div>
 
-        <form action="/penerimaanmedis/submittambah" id="penerimaanform" method="post" onsubmit="return validateForm()">
+        <form action="/penerimaanmedis/submittambah" id="formContainer" method="post" onsubmit="return validateForm()">
             <?= csrf_field() ?>
             <!-- Grid -->
 
@@ -133,8 +133,8 @@
                                 <thead class="bg-[#DCDCDC]">
                                     <tr class="bg-navy disabled">
                                         <th class="px-1 py-1 text-center"></th>
+                                        <th class="px-1 py-1 text-center">Jlh</th>
                                         <th class="px-1 py-1 text-center">Sat Beli</th>
-                                        <th class="px-1 py-1 text-center">Jumlah</th>
                                         <th class="px-1 py-1">Nama Barang</th>
                                         <th class="px-1 py-1 text-center">Satuan</th>
                                         <th class="px-1 py-1 text-center">G</th>
@@ -163,7 +163,7 @@
                                             <input type="number" min="0" value="" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" step="any" name="jumlah_pesanan[]" required />
                                         </td>
                                         <td class="align-middle p-1">
-                                            <select name="satuanbeli[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" onchange="updateFields(this)" required>
+                                            <select name="satuanbeli[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" required>
                                                 <option value="" selected></option>
                                                 <?php foreach ($satuan_data as $satuan) : ?>
                                                     <option value="<?= $satuan['id'] ?>"><?= $satuan['nama'] ?></option>
@@ -186,25 +186,25 @@
                                         </td>
 
                                         <td class="align-middle p-1 text-center">
-                                            <input type="checkbox" name="ubahmaster" value="1" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
+                                            <input type="checkbox" name="ubahmaster[]" value="1" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
                                         </td>
                                         <td class="align-middle p-1 text-center">
                                             <input type="date" value="" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="kadaluwarsa[]" />
                                         </td>
                                         <td class="align-middle p-1 text-center">
-                                            <input type="number" min="0" class="harga-input text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="harga_satuan_pemesanan[]" required />
+                                            <input type="number" min="0" step="0.01" step="0.01" class="harga-input text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="harga_satuan_pemesanan[]" required />
                                         </td>
                                         <td class="align-middle p-1 text-center">
-                                            <input type="number" min="0" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="subtotalperitem[]" required />
+                                            <input type="number" min="0" step="0.01" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="subtotalperitem[]" required />
                                         </td>
                                         <td class="align-middle p-1 text-center">
-                                            <input type="number" min="0" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="diskonpersenperitem[]" required />
+                                            <input type="number" min="0" step="0.01" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="diskonpersenperitem[]" required />
                                         </td>
                                         <td class="align-middle p-1 text-center">
-                                            <input type="number" min="0" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="diskonjumlahperitem[]" required />
+                                            <input type="number" min="0" step="0.01" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="diskonjumlahperitem[]" required />
                                         </td>
                                         <td class="align-middle p-1 text-center">
-                                            <input type="number" min="0" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="totalperitem[]" required />
+                                            <input type="number" min="0" step="0.01" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="totalperitem[]" required />
                                         </td>
                                         <td class="align-middle p-1 text-center">
                                             <input type="text" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="no_batch[]" />
@@ -220,13 +220,13 @@
 
                                     </tr>
                                     <tr>
-                                        <th class="p-1 text-right" colspan="11">Total (Sebelum Pajak)</th>
+                                        <th class="p-1 text-right" colspan="12">Total (Sebelum Pajak)</th>
                                         <th class="p-1 text-right">
                                             <input type="number" min="0" value="" step="any" name="totalsblmpajak" class="w-full text-center border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6]" required>
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th class="p-1 text-right" colspan="11">Pajak (%)
+                                        <th class="p-1 text-right" colspan="12">Pajak (%)
                                             <input type="number" min="0" max="100" value="0" step="any" name="pajakpersenpemesanan" class="text-center border w-[5%] rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" required>
                                         </th>
                                         <th class="p-1 text-right">
@@ -235,13 +235,13 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th class="p-1 text-right" colspan="11">Materai</th>
+                                        <th class="p-1 text-right" colspan="12">Materai</th>
                                         <th class="p-1 text-right">
                                             <input type="number" min="0" value="0" class="w-full text-center border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="materaipemesanan" required>
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th class="p-1 text-right" colspan="11">Total</th>
+                                        <th class="p-1 text-right" colspan="12">Total</th>
                                         <th class="p-1" id="total">
                                             <input type="hidden" value="" class=" border text-center rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="totalpengajuan" readonly>
                                             <input type="number" min="0" value="" class="w-full border text-center rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#F6F6F6] cursor-default" name="totalpemesanan" readonly required>
@@ -275,6 +275,135 @@
 
 <!-- End Card Section -->
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listener to the submit button
+        document.getElementById('submitButton').addEventListener('click', function(event) {
+            if (hasDuplicateSelections()) {
+                alert('Duplicate items selected in idbrgmedis. Please select unique items.');
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+
+        function hasDuplicateSelections() {
+            var idbrgmedisElements = document.querySelectorAll('select[name="idbrgmedis[]"]');
+            var values = [];
+            for (var i = 0; i < idbrgmedisElements.length; i++) {
+                var value = idbrgmedisElements[i].value;
+                if (values.includes(value) && value !== '') {
+                    return true; // Duplicate found
+                }
+                values.push(value);
+            }
+            return false; // No duplicates
+        }
+    });
+
+    function addRow() {
+        var table = document.querySelector('table tbody'); // Adjust this selector to target your table body
+        var newRow = document.createElement('tr');
+
+        newRow.innerHTML = `
+                                        <td>
+                                            <button type="button" class="flex justify-center p-2" onclick="removeRow(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                    <path d="M16 0H4C1.79086 0 0 1.79086 0 4V16C0 18.2091 1.79086 20 4 20H16C18.2091 20 20 18.2091 20 16V4C20 1.79086 18.2091 0 16 0Z" fill="#0A2D27" />
+                                                    <path d="M15 10.625H5C4.65833 10.625 4.375 10.3417 4.375 10C4.375 9.65833 4.65833 9.375 5 9.375H15C15.3417 9.375 15.625 9.65833 15.625 10C15.625 10.3417 15.3417 10.625 15 10.625Z" fill="#ACF2E7" />
+                                                </svg>
+                                            </button>
+                                        </td>
+
+                                        <td class="align-middle p-1 text-center">
+                                            <input type="number" min="0" value="" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" step="any" name="jumlah_pesanan[]" required />
+                                        </td>
+                                        <td class="align-middle p-1">
+                                            <select name="satuanbeli[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" required>
+                                                <option value="" selected></option>
+                                                <?php foreach ($satuan_data as $satuan) : ?>
+                                                    <option value="<?= $satuan['id'] ?>"><?= $satuan['nama'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
+                                        <td class="align-middle p-1">
+                                            <input type="hidden" step="any" value="" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="" />
+                                            <select name="idbrgmedis[]" class="w-full py-[1.5px] border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD] text-center" onchange="updateFields(this)" required>
+                                                <option value="" selected></option>
+                                                <?php foreach ($medis_data as $brgmedis) : ?>
+                                                    <option value="<?= $brgmedis['id'] ?>" data-satuan="<?= $brgmedis['id_satbesar'] ?>" data-harga="<?= $brgmedis['h_beli'] ?>"><?= $brgmedis['nama'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+
+                                        </td>
+                                        <td class="align-middle p-1">
+                                            <input type="hidden" step="any" value="" class="satuanid-input text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="satuan[]" required />
+                                            <input type="text" step="any" value="" class="satuan-input text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="" required />
+                                        </td>
+
+                                        <td class="align-middle p-1 text-center">
+                                            <input type="checkbox" name="ubahmaster[]" value="1" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
+                                        </td>
+                                        <td class="align-middle p-1 text-center">
+                                            <input type="date" value="" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="kadaluwarsa[]" />
+                                        </td>
+                                        <td class="align-middle p-1 text-center">
+                                            <input type="number" min="0" step="0.01" step="0.01" class="harga-input text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="harga_satuan_pemesanan[]" required />
+                                        </td>
+                                        <td class="align-middle p-1 text-center">
+                                            <input type="number" min="0" step="0.01" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="subtotalperitem[]" required />
+                                        </td>
+                                        <td class="align-middle p-1 text-center">
+                                            <input type="number" min="0" step="0.01" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="diskonpersenperitem[]" required />
+                                        </td>
+                                        <td class="align-middle p-1 text-center">
+                                            <input type="number" min="0" step="0.01" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="diskonjumlahperitem[]" required />
+                                        </td>
+                                        <td class="align-middle p-1 text-center">
+                                            <input type="number" min="0" step="0.01" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="totalperitem[]" required />
+                                        </td>
+                                        <td class="align-middle p-1 text-center">
+                                            <input type="text" class="text-center w-full border rounded-[0.5rem] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] border-[#DCDCDC] bg-[#FDFDFD]" name="no_batch[]" />
+                                        </td>
+        `;
+
+        table.appendChild(newRow);
+        var newJumlahPesananInput = newRow.querySelector('input[name="jumlah_pesanan[]"]');
+        var newHargaSatuanPengajuanInput = newRow.querySelector('input[name="harga_satuan_pemesanan[]"]');
+        var newDiskonPersenInput = newRow.querySelector('input[name="diskonpersenperitem[]"]');
+
+        var newIndex = jumlahPesananInputs.length; // Get the new index
+
+        newJumlahPesananInput.addEventListener('input', function() {
+            hitungSubTotal(newIndex);
+            hitungDiskon(newIndex);
+            hitungTotalPerItem(newIndex);
+            hitungTotalSblmPajak();
+            hitungPajak();
+        });
+
+        newHargaSatuanPengajuanInput.addEventListener('input', function() {
+            hitungSubTotal(newIndex);
+            hitungDiskon(newIndex);
+            hitungTotalPerItem(newIndex);
+            hitungTotalSblmPajak();
+            hitungPajak();
+        });
+
+        newDiskonPersenInput.addEventListener('input', function() {
+            hitungDiskon(newIndex);
+            hitungTotalPerItem(newIndex);
+            hitungTotalSblmPajak();
+            hitungPajak();
+        });
+
+        // Update the input collections to include the new inputs
+        jumlahPesananInputs = document.querySelectorAll('input[name="jumlah_pesanan[]"]');
+        hargaSatuanPengajuanInputs = document.querySelectorAll('input[name="harga_satuan_pemesanan[]"]');
+        subtotalInputs = document.querySelectorAll('input[name="subtotalperitem[]"]');
+        diskonPersenInput = document.querySelectorAll('input[name="diskonpersenperitem[]"]');
+        diskonJumlahInput = document.querySelectorAll('input[name="diskonjumlahperitem[]"]');
+        totalperitemInputs = document.querySelectorAll('input[name="totalperitem[]"]');
+    }
+
+
     function removeRow(btn) {
         var row = btn.parentNode.parentNode;
         row.parentNode.removeChild(row);
@@ -300,6 +429,15 @@
         satuanInput.value = getSatuanName(satuan); // Assuming you want to display the same value in the text input
         hargaInput.value = harga;
 
+        // Get the index of the current row
+        const index = Array.from(document.querySelectorAll('select[name="idbrgmedis[]"]')).indexOf(selectElement);
+
+        // Trigger recalculation for this row
+        hitungSubTotal(index);
+        hitungDiskon(index);
+        hitungTotalPerItem(index);
+        hitungTotalSblmPajak();
+        hitungPajak();
     }
 
     function getSatuanName(id) {
@@ -327,7 +465,7 @@
         var jumlahPesanan = parseFloat(jumlahPesananInputs[index].value) || 0;
         var hargaSatuanPengajuan = parseFloat(hargaSatuanPengajuanInputs[index].value) || 0;
         var total = jumlahPesanan * hargaSatuanPengajuan;
-        subtotalInputs[index].value = total.toFixed(0); // Atur jumlah desimal yang diinginkan
+        subtotalInputs[index].value = total.toFixed(2); // Atur jumlah desimal yang diinginkan
 
         hitungDiskon(index);
     }
@@ -336,7 +474,7 @@
         var diskonPersen = parseFloat(diskonPersenInput[index].value) || 0;
         var subtotal = parseFloat(subtotalInputs[index].value) || 0;
         var diskonJumlah = subtotal * (diskonPersen / 100);
-        diskonJumlahInput[index].value = diskonJumlah.toFixed(0);
+        diskonJumlahInput[index].value = diskonJumlah.toFixed(2);
 
         hitungTotalPerItem(index);
     }
@@ -345,7 +483,7 @@
         var subtotal = parseFloat(subtotalInputs[index].value) || 0;
         var diskon = parseFloat(diskonJumlahInput[index].value) || 0;
         var totalperitem = subtotal - diskon;
-        totalperitemInputs[index].value = totalperitem.toFixed(0);
+        totalperitemInputs[index].value = totalperitem.toFixed(2);
 
         hitungTotalSblmPajak();
     }
@@ -355,7 +493,7 @@
         totalperitemInputs.forEach(function(input) {
             totalSblmPajak += parseFloat(input.value) || 0;
         });
-        totalSblmPajakInputs.value = totalSblmPajak.toFixed(0);
+        totalSblmPajakInputs.value = totalSblmPajak.toFixed(2);
         hitungPajak();
     }
 
@@ -371,7 +509,7 @@
 
         var pajakPersen = parseFloat(pajakPersenInput.value) || 0;
         var pajakJumlah = totalSblmPajak * (pajakPersen / 100);
-        pajakJumlahInput.value = pajakJumlah.toFixed(0);
+        pajakJumlahInput.value = pajakJumlah.toFixed(2);
 
         hitungTotalKeseluruhan();
     }
@@ -424,7 +562,7 @@
 
         var materai = parseFloat(materaiInput.value) || 0;
         var totalKeseluruhan = totalSblmPajak + pajakJumlah + materai;
-        totalKeseluruhanInputs.value = totalKeseluruhan.toFixed(0);
+        totalKeseluruhanInputs.value = totalKeseluruhan.toFixed(2);
     }
 </script>
 <?= $this->endSection(); ?>

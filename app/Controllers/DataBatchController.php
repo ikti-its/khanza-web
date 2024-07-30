@@ -232,7 +232,7 @@ class DataBatchController extends BaseController
                 'h_beliluar' => intval($hargaapotekluar),
                 'h_jualbebas' => intval($hargaobatbebas),
                 'h_karyawan' => intval($hargakaryawan),
-                'jumlah_beli' => intval($jumlah),
+                'jumlahbeli' => intval($jumlah),
                 'sisa' => intval($sisa),
             ];
             $tambah_batch_JSON = json_encode($postDataBatch);
@@ -257,12 +257,12 @@ class DataBatchController extends BaseController
             return $this->renderErrorView(401);
         }
     }
-    public function editDataBatch($batchid)
+    public function editDataBatch($batch, $faktur, $barang)
     {
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
             $title = 'Edit Batch Medis';
-            $batch_url = $this->api_url . '/inventory/batch/' . $batchid;
+            $batch_url = $this->api_url . '/inventory/batch/' . $batch . "/" . $faktur . "/" . $barang;
             $barang_url = $this->api_url . '/inventory/barang';
             $gudang_url = $this->api_url . '/inventory/gudang';
             $ruangan_url = $this->api_url . '/ref/inventory/ruangan';
@@ -353,27 +353,100 @@ class DataBatchController extends BaseController
             return $this->renderErrorView(401);
         }
     }
-    public function submitEdit()
+    public function submitEdit($batch, $faktur, $barang)
     {
         if (session()->has('jwt_token')) {
+
+            $batch_url = $this->api_url . '/inventory/batch/' . $batch . "/" . $faktur . "/" . $barang;
             $token = session()->get('jwt_token');
             $idbrgmedis = $this->request->getPost('idbrgmedis');
             $nobatch = $this->request->getPost('nobatch');
             $asal = $this->request->getPost('asal');
             $tgldatang = $this->request->getPost('tgldatang');
             $kadaluwarsa = $this->request->getPost('kadaluwarsa');
+            if ($kadaluwarsa === "") {
+                $kadaluwarsaformat = "0001-01-01";
+            } else {
+                $kadaluwarsaformat = $kadaluwarsa;
+            }
             $nofaktur = $this->request->getPost('nofaktur');
             $jumlah = $this->request->getPost('jumlah');
             $sisa = $this->request->getPost('sisa');
             $hargadasar = $this->request->getPost('hargadasar');
             $hargabeli = $this->request->getPost('hargabeli');
             $hargaralan = $this->request->getPost('hargaralan');
+            $hargakelas1 = $this->request->getPost('hargakelas1');
             $hargakelas2 = $this->request->getPost('hargakelas2');
             $hargakelas3 = $this->request->getPost('hargakelas3');
+            $hargavip = $this->request->getPost('hargavip');
+            $hargavvip = $this->request->getPost('hargavvip');
             $hargautama = $this->request->getPost('hargautama');
             $hargaapotekluar = $this->request->getPost('hargaapotekluar');
             $hargaobatbebas = $this->request->getPost('hargaobatbebas');
             $hargakaryawan = $this->request->getPost('hargakaryawan');
+            $postDataBatch = [
+                'no_batch' => $nobatch,
+                'no_faktur' => $nofaktur,
+                'id_barang_medis' => $idbrgmedis,
+                'tanggal_datang' => $tgldatang,
+                'kadaluwarsa' => $kadaluwarsaformat,
+                'asal' => $asal,
+                'h_dasar' => intval($hargadasar),
+                'h_beli' => intval($hargabeli),
+                'h_ralan' => intval($hargaralan),
+                'h_kelas1' => intval($hargakelas1),
+                'h_kelas2' => intval($hargakelas2),
+                'h_kelas3' => intval($hargakelas3),
+                'h_utama' => intval($hargautama),
+                'h_vip' => intval($hargavip),
+                'h_vvip' => intval($hargavvip),
+                'h_beliluar' => intval($hargaapotekluar),
+                'h_jualbebas' => intval($hargaobatbebas),
+                'h_karyawan' => intval($hargakaryawan),
+                'jumlahbeli' => intval($jumlah),
+                'sisa' => intval($sisa),
+            ];
+            $tambah_batch_JSON = json_encode($postDataBatch);
+            $ch_batch = curl_init($batch_url);
+            curl_setopt($ch_batch, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch_batch, CURLOPT_POSTFIELDS, $tambah_batch_JSON);
+            curl_setopt($ch_batch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_batch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($tambah_batch_JSON),
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_batch = curl_exec($ch_batch);
+            $http_status_code_batch = curl_getinfo($ch_batch, CURLINFO_HTTP_CODE);
+            if ($http_status_code_batch === 200) {
+                return redirect()->to(base_url('batchmedis'));
+            } else {
+                return $response_batch;
+            }
+        } else {
+            return $this->renderErrorView(401);
+        }
+    }
+    public function hapus($batch, $faktur, $barang)
+    {
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+
+            $batch_url = $this->api_url . '/inventory/batch/' . $batch . "/" . $faktur . "/" . $barang;
+
+            $ch_batch = curl_init($batch_url);
+            curl_setopt($ch_batch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($ch_batch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_batch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_batch = curl_exec($ch_batch);
+            $http_status_code_batch = curl_getinfo($ch_batch, CURLINFO_HTTP_CODE);
+            if ($http_status_code_batch === 204) {
+                return redirect()->to(base_url('batchmedis'));
+            } else {
+                return $response_batch;
+            }
         } else {
             return $this->renderErrorView(401);
         }

@@ -288,18 +288,18 @@
                                                                             <br>
                                                                         </div>
                                                                         <div class="flex justify-end w-1/2">
-                                                                            <input type="text" name="" value="" class="text-center mr-2 bg-gray-100 text-gray-900 text-sm rounded-lg px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                            <input type="text" name="" value="<?= "Rp " . number_format($detail['h_pesan'], 0, ',', '.') ?? "Belum ada total" ?>" class="text-center mr-2 bg-gray-100 text-gray-900 text-sm rounded-lg px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
                                                                             <input type="text" name="" value="<?= "Rp " . number_format($detail['subtotal_per_item'], 0, ',', '.') ?? "Belum ada total" ?>" class="text-center bg-gray-100 font-[600] text-gray-900 text-sm rounded-lg px-2 py-1 w-full dark:border-gray-600 dark:text-white" readonly>
                                                                         </div>
                                                                     </div>
                                                                     <div><small>Jumlah:
-                                                                            <?= $detail['jumlah_detail'] ?> <?php foreach ($satuan_data as $satuan) {
-                                                                                                                if ($satuan['id'] === $detail['satuan'] && $detail['satuan'] !== 1) {
-                                                                                                                    echo $satuan['nama'];
-                                                                                                                } else {
-                                                                                                                    echo '';
-                                                                                                                }
-                                                                                                            } ?>
+                                                                            <?= $detail['jumlah'] ?> <?php foreach ($satuan_data as $satuan) {
+                                                                                                            if ($satuan['id'] === $detail['id_satuan'] && $detail['id_satuan'] !== 1) {
+                                                                                                                echo $satuan['nama'];
+                                                                                                            } else {
+                                                                                                                echo '';
+                                                                                                            }
+                                                                                                        } ?>
                                                                         </small></div>
                                                                     <div class="flex justify-between py-1">
                                                                         <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white md:w-1/2">Diskon Persen (Jumlah)</label>
@@ -331,7 +331,7 @@
                                                             <div class="border-t border-[#F1F1F1] my-2">
                                                                 <div class="flex justify-between pt-1">
                                                                     <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white md:w-1/2">Total Keseluruhan</label>
-                                                                    <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white">Rp <?= number_format($penerimaan['total_penerimaan'], 0, ',', '.') ?></label>
+                                                                    <label class="block mb-2 md:mb-0 text-sm font-[600] text-gray-900 dark:text-white">Rp <?= number_format($penerimaan['tagihan'], 0, ',', '.') ?></label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -403,7 +403,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="pl-6 py-1.5 inline-flex">
+                        <div class="pl-6 py-1.5 flex justify-center">
                             <div class="pr-3 py-1.5">
                                 <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $penerimaan['id'] ?>">
                                     Lihat Detail

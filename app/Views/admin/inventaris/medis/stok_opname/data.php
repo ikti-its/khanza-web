@@ -128,14 +128,14 @@
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($opname_data as $opname) { ?>
-                                <div id="hs-vertically-centered-scrollable-modal-<?= $opname['id_barang_medis'] . $opname['id_ruangan'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
+                                <div id="hs-vertically-centered-scrollable-modal-<?= $opname['id'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
                                         <div class="w-full max-h-full overflow-hidden flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
                                             <div class="flex justify-between items-center py-3 px-4  dark:border-neutral-700">
                                                 <h3 class="font-bold text-gray-800 dark:text-white">
 
                                                 </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $opname['id_barang_medis'] . $opname['id_ruangan'] ?>">
+                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $opname['id'] ?>">
                                                     <span class="sr-only">Close</span>
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                         <path d="M18 6 6 18"></path>
@@ -148,59 +148,84 @@
                                                     <div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Tanggal</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?= $opname['tanggal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nama</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?php foreach ($barang_data as $barang) {
+                                                                                                    if ($barang['id'] === $opname['id_barang_medis']) {
+                                                                                                        echo $barang['nama'];
+                                                                                                    }
+                                                                                                } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga Beli</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?= $opname['h_beli'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
-                                                        <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Satuan</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                        </div>
+
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Stok</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?= $opname['stok'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Real</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?= $opname['real'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Selisih</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?php $selisihmodal = 0;
+                                                                                                if ($opname['real'] < $opname['stok']) {
+                                                                                                    $selisihmodal = $opname['real'] - $opname['stok'];
+                                                                                                    echo abs($selisihmodal);
+                                                                                                } else {
+                                                                                                    echo abs($selisihmodal);
+                                                                                                } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Lebih</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?php $lebihmodal = 0;
+                                                                                                if ($opname['real'] > $opname['stok']) {
+                                                                                                    $lebihmodal = $opname['real'] - $opname['stok'];
+                                                                                                    echo abs($lebihmodal);
+                                                                                                } else {
+                                                                                                    echo abs($lebihmodal);
+                                                                                                } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nominal Hebih</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nominal Lebih</label>
+                                                            <input type="text" name="" value="<?php $nominallebihmodal = 0;
+                                                                                                if ($opname['real'] < $opname['stok']) {
+                                                                                                    $nominallebihmodal = ($opname['real'] - $opname['stok']) * $opname['h_beli'];
+                                                                                                }
+                                                                                                echo abs($nominallebihmodal); ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Nominal Hilang</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?php $nominalselisihmodal = 0;
+                                                                                                if ($opname['real'] > $opname['stok']) {
+                                                                                                    $nominalselisihmodal = ($opname['real'] - $opname['stok']) * $opname['h_beli'];
+                                                                                                }
+                                                                                                echo abs($nominalselisihmodal); ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Lokasi</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?php foreach ($ruangan_data as $ruangan) {
+                                                                                                    if ($ruangan['id'] === $opname['id_ruangan']) {
+                                                                                                        echo $ruangan['nama'];
+                                                                                                    }
+                                                                                                } ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Catatan</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?= $opname['keterangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">No Batch</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?= $opname['no_batch'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
                                                         <div class="mb-5 sm:block md:flex items-center">
                                                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">No Faktur</label>
-                                                            <input type="text" name="" value="" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
+                                                            <input type="text" name="" value="<?= $opname['no_faktur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
                                                         </div>
 
 
@@ -227,11 +252,11 @@
                                     <td>
                                         <div class="px-6 py-3">
                                             <div class="flex items-center justify-center gap-x-3">
-                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $opname['id_barang_medis'] . $opname['id_ruangan'] ?>"><?php foreach ($barang_data as $barang) {
-                                                                                                                                                                                                                                                                    if ($opname['id_barang_medis'] === $barang['id']) {
-                                                                                                                                                                                                                                                                        echo $barang['nama'];
-                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                }  ?></span>
+                                                <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $opname['id'] ?>"><?php foreach ($barang_data as $barang) {
+                                                                                                                                                                                                                                if ($opname['id_barang_medis'] === $barang['id']) {
+                                                                                                                                                                                                                                    echo $barang['nama'];
+                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                            }  ?></span>
                                             </div>
                                         </div>
                                     </td>
@@ -255,9 +280,9 @@
                                                 <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php $selisih = 0;
                                                                                                                             if ($opname['real'] < $opname['stok']) {
                                                                                                                                 $selisih = $opname['real'] - $opname['stok'];
-                                                                                                                                echo $selisih;
+                                                                                                                                echo abs($selisih);
                                                                                                                             } else {
-                                                                                                                                echo $selisih;
+                                                                                                                                echo abs($selisih);
                                                                                                                             } ?></span>
                                             </div>
                                         </div>
@@ -268,9 +293,9 @@
                                                 <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php $lebih = 0;
                                                                                                                             if ($opname['real'] > $opname['stok']) {
                                                                                                                                 $lebih = $opname['real'] - $opname['stok'];
-                                                                                                                                echo $lebih;
+                                                                                                                                echo abs($lebih);
                                                                                                                             } else {
-                                                                                                                                echo $lebih;
+                                                                                                                                echo abs($lebih);
                                                                                                                             } ?></span>
                                             </div>
                                         </div>
@@ -289,14 +314,14 @@
                                     <td>
                                         <div class="py-1.5 text-center">
                                             <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-')" href="#">
+                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $opname['id'] ?>')" href="#">
                                                     Hapus
                                                 </button>
-                                                <div id="modelConfirm-" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                <div id="modelConfirm-<?= $opname['id'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
                                                     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 
                                                         <div class="flex justify-end p-2">
-                                                            <button onclick="closeModal('modelConfirm-')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                            <button onclick="closeModal('modelConfirm-<?= $opname['id'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                                                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                                                 </svg>
@@ -317,15 +342,15 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                            <form action="/pengajuanmedis/hapus/" method="POST">
+                                                            <form action="/stokopnamemedis/hapus/<?= $opname['id'] ?>" method="POST">
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">
-                                                                    <button onclick="closeModal('modelConfirm-')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                    <button type="submit" onclick="closeModal('modelConfirm-<?= $opname['id'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
                                                                         Hapus
                                                                     </button>
 
-                                                                    <a href="#" onclick="closeModal('modelConfirm-')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $opname['id'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
                                                                         Batal
                                                                     </a>
                                                                 </div>
