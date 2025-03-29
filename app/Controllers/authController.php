@@ -96,13 +96,25 @@ class authController extends BaseController
                             curl_setopt($user_specific_ch, CURLOPT_RETURNTRANSFER, true);
                             curl_setopt($user_specific_ch, CURLOPT_HTTPHEADER, $headers);
                             $user_specific_response = curl_exec($user_specific_ch);
-
+                            
                             if ($user_specific_response) {
                                 $user_specific_data = json_decode($user_specific_response, true);
-                                session()->set('user_specific_data', $user_specific_data['data']);
+                                $user_data = $user_specific_data['data'] ?? [];
+                            
+                                // Ensure all required fields exist
+                                $formatted_data = [
+                                    'nama'       => $user_data['nama'] ?? 'Guest',
+                                    'status'     => $user_data['status'] ?? false,
+                                    'jam_masuk'  => $user_data['jam_masuk'] ?? '-',
+                                    'jam_pulang' => $user_data['jam_pulang'] ?? '-'
+                                ];
+                            
+                                session()->set('user_specific_data', $formatted_data);
                             } else {
-                                echo "Failed to retrieve user specific data.";
+                                error_log("Failed to retrieve user-specific data.");
                             }
+                            
+                            
                         }
                         return redirect()->to('/dashboard')->with('title', $title, 'user_details', $user_details);
                     } else {
