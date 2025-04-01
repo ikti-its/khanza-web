@@ -174,6 +174,7 @@ class RegistrasiController extends BaseController
             
             // Get data from the form
             $nomor_reg = $this->request->getPost('nomor_reg');
+            $nomor_rawat = $this->request->getPost('nomor_rawat');
             $tanggal = $this->request->getPost('tanggal');
             $nomor_rekam_medis = $this->request->getPost('nomor_rekam_medis');
             $jenis_kelamin = $this->request->getPost('jenis_kelamin');
@@ -190,16 +191,27 @@ class RegistrasiController extends BaseController
             $nomor_telepon = $this->request->getPost('nomor_telepon');
             $status_registrasi = $this->request->getPost('status_registrasi');
             $status_poliklinik = $this->request->getPost('status_poliklinik');
+
+            // Validate that dokter is not empty
+        if (empty($dokter)) {
+            return $this->response->setJSON([
+                'code' => 400,
+                'status' => 'Bad Request',
+                'data' => 'Dokter field is required.'
+            ]);
+        }
             
             // Prepare data to be inserted into PostgreSQL or passed to another system
             $postDataRegistrasi = [
                 'nomor_reg' => $nomor_reg,
+                'nomor_rawat' => $nomor_rawat,
                 'tanggal' => $tanggal,
                 'nomor_rm' => $nomor_rekam_medis,
                 'jenis_kelamin' => $jenis_kelamin,
                 'poliklinik' => $poliklinik,
                 'dokter' => $dokter,
-                'umur' => $umur,
+                'kode_dokter' => "D001",
+                'umur' => strval($umur),
                 'penanggung_jawab' => $penanggung_jawab,
                 'alamat_pj' => $alamat_penanggung_jawab,
                 'biaya_registrasi' => $biaya_registrasi,
@@ -232,7 +244,7 @@ class RegistrasiController extends BaseController
             $http_status_code_registrasi = curl_getinfo($ch_registrasi, CURLINFO_HTTP_CODE);
     
             if ($http_status_code_registrasi === 201) {
-                return redirect()->to(base_url('registrasi/success'));
+                return redirect()->to(base_url('registrasi'));
             } else {
                 return $response_registrasi;
             }
