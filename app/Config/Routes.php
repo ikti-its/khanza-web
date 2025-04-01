@@ -200,3 +200,14 @@ $routes->group('sisastokmedis', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'StokOpnameController::sisastok');
 });
 // Grup untuk Stok Keluar Medis
+
+//Registrasi
+$routes->group('registrasi', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'RegistrasiController::dataRegistrasi', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('tambah', 'MedisController::tambahMedis', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'MedisController::submitTambahMedis', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:any)', 'MedisController::editMedis/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit', 'MedisController::submitEditMedis', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'MedisController::submitEditMedis/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'MedisController::hapusMedis/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+});
