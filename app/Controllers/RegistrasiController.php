@@ -69,7 +69,7 @@ class RegistrasiController extends BaseController
     }
     
 
-    public function tambahMedis()
+    public function tambahRegistrasi()
     {
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
@@ -153,7 +153,7 @@ class RegistrasiController extends BaseController
 
             $breadcrumbs = $this->getBreadcrumbs();
 
-            return view('/admin/inventaris/medis/tambah_medis', [
+            return view('/admin/registrasi/tambah_registrasi', [
                 'satuan_data' => $satuan_data['data'],
                 'industri_data' => $industri_data['data'],
                 'jenis_data' => $jenis_data['data'],

@@ -14,7 +14,7 @@
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
                             <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
-                                Barang Medis
+                                Registrasi Pasien
                             </h2>
 
                         </div>
@@ -294,7 +294,7 @@
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
                             <div>
-                                <a href='/datamedis/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                <a href='/registrasi/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                     <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
                                         <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                     </svg>
@@ -343,7 +343,39 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            No. Registrasi
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            No. Rawat
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            No. Rekam Medis
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Nama
+                                        </span>
+                                    </div>
+                                </th>
+                                
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Umur
                                         </span>
                                     </div>
                                 </th>
@@ -351,14 +383,23 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Jenis Barang Medis
+                                            Jenis Kelamin
                                         </span>
                                     </div>
                                 </th>
+
                                 <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
+                                    <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Stok
+                                            Poliklinik
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Dokter
                                         </span>
                                     </div>
                                 </th>
