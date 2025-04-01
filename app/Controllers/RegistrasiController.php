@@ -167,137 +167,82 @@ class RegistrasiController extends BaseController
         }
     }
 
-    public function submitTambahMedis()
+    public function submitTambahRegistrasi()
     {
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
-            $kode = $this->request->getPost('kode');
-            $nama = $this->request->getPost('nama');
-            $isi = intval($this->request->getPost('isi'));
-            $kapasitas = intval($this->request->getPost('kapasitas'));
-            $kandungan = $this->request->getPost('kandungan');
-            $indusfarmasi = intval($this->request->getPost('indusfarmasi'));
-            $satuan = intval($this->request->getPost('satuan'));
-            $satkecil = intval($this->request->getPost('satkecil'));
-            $jenis = intval($this->request->getPost('jenis'));
-            $kategori = intval($this->request->getPost('kategori'));
-            $golongan = intval($this->request->getPost('golongan'));
-            $hargadasar = intval($this->request->getPost('hargadasar'));
-            $hargabeli = intval($this->request->getPost('hargabeli'));
-            $hargaralan = intval($this->request->getPost('hargaralan'));
-            $hargakelas1 = intval($this->request->getPost('hargakelas1'));
-            $hargakelas2 = intval($this->request->getPost('hargakelas2'));
-            $hargakelas3 = intval($this->request->getPost('hargakelas3'));
-            $hargautama = intval($this->request->getPost('hargautama'));
-            $hargavip = intval($this->request->getPost('hargavip'));
-            $hargavvip = intval($this->request->getPost('hargavvip'));
-            $hargaapotekluar = intval($this->request->getPost('hargaapotekluar'));
-            $hargaobatbebas = intval($this->request->getPost('hargaobatbebas'));
-            $hargaobatkaryawan = intval($this->request->getPost('hargakaryawan'));
-            $stokminimum = intval($this->request->getPost('stokminimum'));
-            $kadaluwarsa = $this->request->getPost('kadaluwarsa');
-            if ($kadaluwarsa === "") {
-                $kadaluwarsaformat = '0001-01-01';
-            } else {
-                $kadaluwarsaformat = $kadaluwarsa;
-            }
-            $medis_url = $this->api_url . '/inventory/barang';
-            $ruangan_url = $this->api_url . '/ref/inventory/ruangan';
-            $gudang_url = $this->api_url . '/inventory/gudang';
-
-            $postDataMedis = [
-                'kode_barang' => $kode,
-                'nama' => $nama,
-                'isi' => $isi,
-                'kapasitas' => $kapasitas,
-                'kandungan' => $kandungan,
-                'id_industri' => $indusfarmasi,
-                'id_satbesar' => $satuan,
-                'id_satuan' => $satkecil,
-                'id_jenis' => $jenis,
-                'id_kategori' => $kategori,
-                'id_golongan' => $golongan,
-                'h_dasar' => $hargadasar,
-                'h_beli' => $hargabeli,
-                'h_ralan' => $hargaralan,
-                'h_kelas1' => $hargakelas1,
-                'h_kelas2' => $hargakelas2,
-                'h_kelas3' => $hargakelas3,
-                'h_utama' => $hargautama,
-                'h_vip' => $hargavip,
-                'h_vvip' => $hargavvip,
-                'h_beliluar' => $hargaapotekluar,
-                'h_jualbebas' => $hargaobatbebas,
-                'h_karyawan' => $hargaobatkaryawan,
-                'stok_minimum' => $stokminimum,
-                'kadaluwarsa' => $kadaluwarsaformat,
+            
+            // Get data from the form
+            $nomor_reg = $this->request->getPost('nomor_reg');
+            $tanggal = $this->request->getPost('tanggal');
+            $nomor_rekam_medis = $this->request->getPost('nomor_rekam_medis');
+            $jenis_kelamin = $this->request->getPost('jenis_kelamin');
+            $poliklinik = $this->request->getPost('poliklinik');
+            $dokter = $this->request->getPost('dokter');
+            $umur = intval($this->request->getPost('umur'));
+            $penanggung_jawab = $this->request->getPost('penanggung_jawab');
+            $alamat_penanggung_jawab = $this->request->getPost('alamat_penanggung_jawab');
+            $biaya_registrasi = intval($this->request->getPost('biaya_registrasi'));
+            $status_rawat = $this->request->getPost('status_rawat');
+            $status_bayar = $this->request->getPost('status_bayar');
+            $jam = $this->request->getPost('jam');
+            $hubungan_penanggung_jawab = $this->request->getPost('hubungan_penanggung_jawab');
+            $nomor_telepon = $this->request->getPost('nomor_telepon');
+            $status_registrasi = $this->request->getPost('status_registrasi');
+            $status_poliklinik = $this->request->getPost('status_poliklinik');
+            
+            // Prepare data to be inserted into PostgreSQL or passed to another system
+            $postDataRegistrasi = [
+                'nomor_reg' => $nomor_reg,
+                'tanggal' => $tanggal,
+                'nomor_rm' => $nomor_rekam_medis,
+                'jenis_kelamin' => $jenis_kelamin,
+                'poliklinik' => $poliklinik,
+                'dokter' => $dokter,
+                'umur' => $umur,
+                'penanggung_jawab' => $penanggung_jawab,
+                'alamat_pj' => $alamat_penanggung_jawab,
+                'biaya_registrasi' => $biaya_registrasi,
+                'status_rawat' => $status_rawat,
+                'status_bayar' => $status_bayar,
+                'jam' => $jam,
+                'hubungan_pj' => $hubungan_penanggung_jawab,
+                'no_telepon' => $nomor_telepon,
+                'status_registrasi' => $status_registrasi,
+                'status_poli' => $status_poliklinik,
             ];
-            $tambah_medis_JSON = json_encode($postDataMedis);
-
-            $ch_ruangan = curl_init($ruangan_url);
-            curl_setopt($ch_ruangan, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_ruangan, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-            ]);
-            $response_ruangan = curl_exec($ch_ruangan);
-            $ruangan_data = json_decode($response_ruangan, true);
-            $http_status_code_ruangan = curl_getinfo($ch_ruangan, CURLINFO_HTTP_CODE);
-            if ($http_status_code_ruangan !== 201) {
-                $this->renderErrorView($http_status_code_ruangan);
-            }
-            curl_close($ch_ruangan);
-
-            $ch_medis = curl_init($medis_url);
-            curl_setopt($ch_medis, CURLOPT_POST, 1);
-            curl_setopt($ch_medis, CURLOPT_POSTFIELDS, ($tambah_medis_JSON));
-            curl_setopt($ch_medis, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch_medis, CURLOPT_HTTPHEADER, [
+    
+            // Example cURL or database insertion logic goes here to save this data in PostgreSQL
+            // Assuming you use cURL for external APIs like you did previously:
+            
+            $medis_url = $this->api_url . '/registrasi';
+            
+            $tambah_registrasi_JSON = json_encode($postDataRegistrasi);
+    
+            $ch_registrasi = curl_init($medis_url);
+            curl_setopt($ch_registrasi, CURLOPT_POST, 1);
+            curl_setopt($ch_registrasi, CURLOPT_POSTFIELDS, ($tambah_registrasi_JSON));
+            curl_setopt($ch_registrasi, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_registrasi, CURLOPT_HTTPHEADER, [
                 'Content-Type: application/json',
-                'Content-Length: ' . strlen($tambah_medis_JSON),
+                'Content-Length: ' . strlen($tambah_registrasi_JSON),
                 'Authorization: Bearer ' . $token,
             ]);
-            $response_medis = curl_exec($ch_medis);
-            $http_status_code_medis = curl_getinfo($ch_medis, CURLINFO_HTTP_CODE);
-            if ($http_status_code_medis === 201) {
-                $medis_data = json_decode($response_medis, true);
-                $idbrgmedis = $medis_data['data']['id'];
-
-                foreach ($ruangan_data['data'] as $ruangan) {
-                    $postGudangMedis = [
-                        'id_barang_medis' => $idbrgmedis,
-                        'id_ruangan' => intval($ruangan['id']),
-                        'stok' => 0,
-                        'no_batch' => '',
-                        'no_faktur' => '',
-                    ];
-                    $tambah_gudang_JSON = json_encode($postGudangMedis);
-                    $ch_gudang = curl_init($gudang_url);
-                    curl_setopt($ch_gudang, CURLOPT_POST, 1);
-                    curl_setopt($ch_gudang, CURLOPT_POSTFIELDS, ($tambah_gudang_JSON));
-                    curl_setopt($ch_gudang, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch_gudang, CURLOPT_HTTPHEADER, [
-                        'Content-Type: application/json',
-                        'Content-Length: ' . strlen($tambah_gudang_JSON),
-                        'Authorization: Bearer ' . $token,
-                    ]);
-                    $response_gudang = curl_exec($ch_gudang);
-                    $http_status_code_gudang = curl_getinfo($ch_gudang, CURLINFO_HTTP_CODE);
-                    curl_close($ch_gudang);
-                }
-                if ($http_status_code_gudang === 201) {
-                    return redirect()->to(base_url('datamedis'));
-                } else {
-                    return $response_medis;
-                }
+            $response_registrasi = curl_exec($ch_registrasi);
+            $http_status_code_registrasi = curl_getinfo($ch_registrasi, CURLINFO_HTTP_CODE);
+    
+            if ($http_status_code_registrasi === 201) {
+                return redirect()->to(base_url('registrasi/success'));
             } else {
-                return $response_medis;
+                return $response_registrasi;
             }
-
-            curl_close($ch_medis);
+            
+            curl_close($ch_registrasi);
         } else {
             return $this->renderErrorView(401);
         }
     }
+    
 
     public function editMedis($medisId)
     {

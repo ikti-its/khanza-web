@@ -10,7 +10,7 @@
                 Tambah Registrasi Pasien 
             </h2>
         </div>
-        <form action="/datamedis/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="/registrasi/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">
