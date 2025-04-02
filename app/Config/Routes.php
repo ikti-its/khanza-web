@@ -206,8 +206,8 @@ $routes->group('registrasi', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'RegistrasiController::dataRegistrasi', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
     $routes->get('tambah', 'RegistrasiController::tambahRegistrasi', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submittambah', 'RegistrasiController::submitTambahRegistrasi', ['filter' => 'checkpermission:1337,1,4001,4002']);
-    $routes->get('edit/(:any)', 'MedisController::editMedis/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
-    $routes->post('submitedit', 'MedisController::submitEditMedis', ['filter' => 'checkpermission:1337,1,4001,4002']);
-    $routes->post('submitedit/(:segment)', 'MedisController::submitEditMedis/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
-    $routes->delete('hapus/(:segment)', 'MedisController::hapusMedis/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:any)', 'RegistrasiController::editRegistrasi/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit', 'RegistrasiController::submitEditMedis', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'RegistrasiController::submitEditMedis/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'RegistrasiController::hapusRegistrasi/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 });
