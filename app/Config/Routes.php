@@ -211,3 +211,14 @@ $routes->group('registrasi', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit/(:segment)', 'RegistrasiController::submitEditRegistrasi/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->delete('hapus/(:segment)', 'RegistrasiController::hapusRegistrasi/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 });
+
+//Kamar
+$routes->group('kamar', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'KamarController::dataKamar', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('tambah', 'KamarController::tambahKamar', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'KamarController::submitTambahKamar', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:any)', 'KamarController::editKamar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    // $routes->post('submitedit', 'KamarController::submitEditKamar', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'KamarController::submitEditKamar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'KamarController::hapusKamar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+});
