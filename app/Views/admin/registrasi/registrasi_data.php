@@ -223,26 +223,104 @@
                                             </div>
                                             <div class="p-4">
                                                 <div class="space-y-4">
-                                                    <div>
-                                                        <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Jenis Barang Medis</label>
-                                                            <input type="text" name="" value="<?= $registrasi['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                        
-                                                        <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Stok</label>
-                                                            <input type="text" name="" value="<?= $registrasi['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                        </div>
-                                                        <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Harga</label>
-                                                            <input type="text" name="" value="<?= $registrasi['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                        </div>
-
-                                                        <div class="mb-5 sm:block md:flex items-center">
-                                                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/2">Stok minimum</label>
-                                                            <input type="text" name="" value="<?= $registrasi['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/2 dark:border-gray-600 dark:text-white" readonly>
-                                                        </div>
-
+                                                <div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
+                                                        <input type="text" name="" value="<?= $registrasi['nomor_reg'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
+                                                        <input type="text" name="" value="<?= $registrasi['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal</label>
+                                                        <input type="text" name="" value="<?= $registrasi['tanggal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam</label>
+                                                        <input type="text" name="" value="<?= $registrasi['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
+                                                        <input type="text" name="" value="<?= $registrasi['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama</label>
+                                                        <input type="text" name="" value="<?= $registrasi['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Kelamin</label>
+                                                        <input type="text" name="" value="<?= $registrasi['jenis_kelamin'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Umur</label>
+                                                        <input type="text" name="" value="<?= $registrasi['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Poliklinik</label>
+                                                        <input type="text" name="" value="<?= $registrasi['poliklinik'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter</label>
+                                                        <input type="text" name="" value="<?= $registrasi['nama_dokter'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Penanggung Jawab</label>
+                                                        <input type="text" name="" value="<?= $registrasi['penanggung_jawab'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Hubungan Penanggung Jawab</label>
+                                                        <input type="text" name="" value="<?= $registrasi['hubungan_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Alamat Penanggung Jawab</label>
+                                                        <input type="text" name="" value="<?= $registrasi['alamat_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Telepon</label>
+                                                        <input type="text" name="" value="<?= $registrasi['no_telepon'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Biaya Registrasi</label>
+                                                        <input type="text" name="" value="<?= $registrasi['biaya_registrasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Registrasi</label>
+                                                        <input type="text" name="" value="<?= $registrasi['status_registrasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Rawat</label>
+                                                        <input type="text" name="" value="<?= $registrasi['status_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Poliklinik</label>
+                                                        <input type="text" name="" value="<?= $registrasi['status_poli'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Bayar</label>
+                                                        <input type="text" name="" value="<?= $registrasi['jenis_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
+                                                        <input type="text" name="" value="<?= $registrasi['status_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                </div>
+
                                                 </div>
                                                 <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
                                                     <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>">
