@@ -222,3 +222,25 @@ $routes->group('kamar', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit/(:segment)', 'KamarController::submitEditKamar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->delete('hapus/(:segment)', 'KamarController::hapusKamar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 });
+
+//Rujukan Masuk
+$routes->group('rujukanmasuk', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'RujukanMasukController::dataRujukanMasuk', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('tambah', 'RujukanMasukController::tambahRujukanMasuk', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'RujukanMasukController::submitTambahRujukanMasuk', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:segment)', 'RujukanMasukController::editRujukanMasuk/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit', 'RujukanMasukController::submitEditRujukanMasuk', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'RujukanMasukController::submitEditRujukanMasuk/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'RujukanMasukController::hapusRujukanMasuk/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+});
+
+//Rujukan Keluar
+$routes->group('rujukankeluar', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'RujukanKeluarController::dataRujukanKeluar', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('tambah', 'RujukanKeluarController::tambahRujukanKeluar', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'RujukanKeluarController::submitTambahRujukanKeluar', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:segment)', 'RujukanKeluarController::editRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit', 'RujukanKeluarController::submitEditRujukanKeluar', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'RujukanKeluarController::submitEditRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'ujukanKeluarController::hapusRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+});
