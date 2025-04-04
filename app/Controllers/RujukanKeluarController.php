@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\RujukanModel;
+
 
 class RujukanKeluarController extends BaseController
 {
@@ -229,4 +231,17 @@ class RujukanKeluarController extends BaseController
 
         return $this->renderErrorView($http_status);
     }
+
+    public function cetak($nomor_rawat)
+    {
+        $model = new RujukanModel();
+        $rujukan = $model->find($nomor_rawat);
+    
+        if (!$rujukan) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Data tidak ditemukan");
+        }
+    
+        return view('/admin/rujukan/cetak_surat', ['rujukan' => $rujukan]);
+    }
+    
 }

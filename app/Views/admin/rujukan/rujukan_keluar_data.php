@@ -289,9 +289,11 @@
 
                                                 </div>
                                                 <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                    <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>">
-                                                        Tutup
-                                                    </button>
+                                                    <a href="/rujukankeluar/cetak/<?= $rujukankeluar['nomor_rawat'] ?>" 
+                                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+                                                        data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>">
+                                                        Cetak Surat
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -327,7 +329,7 @@
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
                                                 <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>">
-                                                    Lihat Detail
+                                                    Cetak Surat
                                                 </button>
                                             </div>
                                             <div class="px-3 py-1.5">

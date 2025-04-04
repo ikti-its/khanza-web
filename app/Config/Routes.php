@@ -242,5 +242,7 @@ $routes->group('rujukankeluar', ['filter' => 'auth'], function ($routes) {
     $routes->get('edit/(:segment)', 'RujukanKeluarController::editRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submitedit', 'RujukanKeluarController::submitEditRujukanKeluar', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submitedit/(:segment)', 'RujukanKeluarController::submitEditRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
-    $routes->delete('hapus/(:segment)', 'ujukanKeluarController::hapusRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'RujukanKeluarController::hapusRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('cetak/(:segment)', 'RujukanKeluarController::cetak/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+
 });
