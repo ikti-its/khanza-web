@@ -417,6 +417,27 @@ class RegistrasiController extends BaseController
         }
     }
 
+    public function triggerNotif()
+{
+    $nomorReg = $this->request->getPost('nomor_reg');
+
+    // Optional: validate
+    if (!$nomorReg) {
+        return redirect()->back()->with('error', 'Nomor Registrasi tidak ditemukan.');
+    }
+
+    // Call the Go API to update the status_kamar
+    $client = \Config\Services::curlrequest();
+    $response = $client->request('PUT', 'http://127.0.0.1:8080/v1/registrasi/'.$nomorReg.'/assign-room-false');
+
+    if ($response->getStatusCode() === 200) {
+        return redirect()->back()->with('success', 'Status kamar berhasil diperbarui.');
+    } else {
+        return redirect()->back()->with('error', 'Gagal mengubah status kamar.');
+    }
+}
+   
+
 
 }
 

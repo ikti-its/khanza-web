@@ -14,7 +14,7 @@
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
                             <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
-                                Registrasi Pasien
+                                Pasien Rawat Inap
                             </h2>
 
                         </div>
@@ -65,23 +65,22 @@
                                     <div>
                                         <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
                                             <?php
-                                            
                                             $count_notif_stok = 0;
                                             $today = new DateTime();
                                             $today->setTime(0, 0, 0);
                                             if ($count_notif_stok !== 0) {
-                                                foreach ($registrasi_tanpa_params_data as $registrasi_stok) {
-                                                    if ($registrasi_stok['stok'] <= $registrasi_stok['stok_minimum']) {
+                                                foreach ($rawatinap_tanpa_params_data as $rawatinap_stok) {
+                                                    if ($rawatinap_stok['stok'] <= $rawatinap_stok['stok_minimum']) {
                                                         $count_notif_stok++; ?>
-                                                        <a href="/datamedis/edit/<?= $registrasi_stok['id'] ?>" class="p-4 flex items-center border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141] hover:bg-gray-100">
+                                                        <a href="/datamedis/edit/<?= $rawatinap_stok['id'] ?>" class="p-4 flex items-center border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141] hover:bg-gray-100">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                                                                 <path d="M12.5358 6.667C14.0754 4.00033 17.9244 4.00033 19.464 6.66699L27.8356 21.167C29.3752 23.8337 27.4507 27.167 24.3715 27.167H7.62834C4.54914 27.167 2.62464 23.8337 4.16424 21.167L12.5358 6.667Z" fill="#DA4141" />
                                                                 <path d="M16 18.333C15.4533 18.333 15 17.8797 15 17.333V10.333C15 9.78634 15.4533 9.33301 16 9.33301C16.5467 9.33301 17 9.78634 17 10.333V17.333C17 17.8797 16.5467 18.333 16 18.333Z" fill="#FEE2E2" />
                                                                 <path d="M15.9998 23.0001C15.8265 23.0001 15.6532 22.9601 15.4932 22.8934C15.3198 22.8268 15.1865 22.7335 15.0531 22.6135C14.9331 22.4802 14.8398 22.3335 14.7598 22.1735C14.6932 22.0135 14.6665 21.8401 14.6665 21.6668C14.6665 21.3201 14.7998 20.9734 15.0531 20.7201C15.1865 20.6001 15.3198 20.5068 15.4932 20.4402C15.9865 20.2268 16.5732 20.3468 16.9465 20.7201C17.0665 20.8534 17.1598 20.9868 17.2265 21.1601C17.2931 21.3201 17.3332 21.4935 17.3332 21.6668C17.3332 21.8401 17.2931 22.0135 17.2265 22.1735C17.1598 22.3335 17.0665 22.4802 16.9465 22.6135C16.6932 22.8668 16.3598 23.0001 15.9998 23.0001Z" fill="#FEE2E2" />
                                                             </svg>
                                                             <div class="mx-2">
-                                                                <span>Stok <span class="font-semibold"><?= $registrasi_stok['nama'] ?></span> telah mencapai jumlah minimum</span>
-                                                                <div class="py-1 font-semibold text-sm text-[#DA4141]">Sisa stok: <?= $registrasi_stok['stok'] ?></div>
+                                                                <span>Stok <span class="font-semibold"><?= $rawatinap_stok['nama'] ?></span> telah mencapai jumlah minimum</span>
+                                                                <div class="py-1 font-semibold text-sm text-[#DA4141]">Sisa stok: <?= $rawatinap_stok['stok'] ?></div>
                                                             </div>
                                                         </a>
 
@@ -154,15 +153,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            No. Registrasi
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            No. Rekam Medis
+                                            No. Rawat
                                         </span>
                                     </div>
                                 </th>
@@ -176,9 +167,17 @@
                                 </th>
 
                                 <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Kamar
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Poliklinik
+                                            Diagnosa
                                         </span>
                                     </div>
                                 </th>
@@ -206,15 +205,15 @@
 
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <?php foreach ($registrasi_data as $registrasi) : ?>
-                                <div id="hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+                            <?php foreach ($rawatinap_data as $rawatinap) : ?>
+                                <div id="hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
                                         <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
                                             <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
                                                 <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $registrasi['nama_pasien'] ?>
+                                                    <?= $rawatinap['nama_pasien'] ?>
                                                 </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>">
+                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>">
                                                     <span class="sr-only">Close</span>
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                         <path d="M18 6 6 18"></path>
@@ -227,107 +226,75 @@
                                                 <div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nomor_reg'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal</label>
-                                                        <input type="text" name="" value="<?= $registrasi['tanggal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['tanggal_masuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam</label>
-                                                        <input type="text" name="" value="<?= $registrasi['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['jam_masuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Kelamin</label>
-                                                        <input type="text" name="" value="<?= $registrasi['jenis_kelamin'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
+                                                
 
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Umur</label>
-                                                        <input type="text" name="" value="<?= $registrasi['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Poliklinik</label>
-                                                        <input type="text" name="" value="<?= $registrasi['poliklinik'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
+                                                    
+                                                    
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nama_dokter'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $registrasi['penanggung_jawab'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['penanggung_jawab'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Hubungan Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $registrasi['hubungan_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['hubungan_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Alamat Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $registrasi['alamat_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Telepon</label>
-                                                        <input type="text" name="" value="<?= $registrasi['no_telepon'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
 
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Biaya Registrasi</label>
-                                                        <input type="text" name="" value="<?= $registrasi['biaya_registrasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Registrasi</label>
-                                                        <input type="text" name="" value="<?= $registrasi['status_registrasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Rawat</label>
-                                                        <input type="text" name="" value="<?= $registrasi['status_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Poliklinik</label>
-                                                        <input type="text" name="" value="<?= $registrasi['status_poli'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Bayar</label>
-                                                        <input type="text" name="" value="<?= $registrasi['jenis_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['jenis_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
-                                                        <input type="text" name="" value="<?= $registrasi['status_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rawatinap['status_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                 </div>
 
                                                 </div>
                                                 <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                <form id="formButuhKamar" action="/registrasi/trigger-notif" method="post">
-                                                    <input type="hidden" name="nomor_reg" id="formNomorReg">
-                                                    <button type="submit" class="btn btn-warning">Tandai Butuh Kamar</button>
-                                                </form>
+                                                    <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>">
+                                                        Tutup
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -336,57 +303,51 @@
                                 <tr>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>" data-id="<?= $registrasi['nomor_reg'] ?>"><?= $registrasi['nomor_reg'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>" data-id="<?= $rawatinap['nomor_rawat'] ?>"><?= $rawatinap['nomor_rawat'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>" data-id="<?= $registrasi['nomor_reg'] ?>"><?= $registrasi['nomor_rm'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>" data-id="<?= $rawatinap['nomor_rawat'] ?>"><?= $rawatinap['nama_pasien'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>" data-id="<?= $registrasi['nomor_reg'] ?>"><?= $registrasi['nama_pasien'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>" data-id="<?= $rawatinap['nomor_rawat'] ?>"><?= $rawatinap['kamar'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
-                                    <td class="size-px w-48 whitespace-nowrap">
-                                        <div class="px-6 py-3 text-center">
-                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
-                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
-                                                <?= $registrasi['poliklinik'] ?? 'N/A' ?>
-                                            </span>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>" data-id="<?= $rawatinap['nomor_rawat'] ?>"><?= $rawatinap['diagnosa_awal'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
+                                    
                                     <td class="h-px w-72 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $registrasi['nama_dokter'] ?? 'N/A' ?></span>
+                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $rawatinap['dokter_pj'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
-                                            <button
-                                                type="button"
-                                                class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
-                                                data-nomor-reg="<?= $registrasi['nomor_reg'] ?>"
-                                                data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>">
-                                                Tindakan
-                                            </button>
+                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>">
+                                                    Lihat Detail
+                                                </button>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <a href="/registrasi/edit/<?= $registrasi['nomor_reg'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                <a href="/registrasi/edit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                     Ubah
                                                 </a>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $registrasi['nomor_reg'] ?>')" href="#">
+                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $rawatinap['nomor_rawat'] ?>')" href="#">
                                                     Hapus
                                                 </button>
-                                                <div id="modelConfirm-<?= $registrasi['nomor_reg'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                <div id="modelConfirm-<?= $rawatinap['nomor_rawat'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
                                                     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 
                                                         <div class="flex justify-end p-2">
-                                                            <button onclick="closeModal('modelConfirm-<?= $registrasi['nomor_reg'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                            <button onclick="closeModal('modelConfirm-<?= $rawatinap['nomor_rawat'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                                                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                                                 </svg>
@@ -407,14 +368,14 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                            <form action="/registrasi/hapus/<?= $registrasi['nomor_reg'] ?>" method="POST">
+                                                            <form action="/registrasi/hapus/<?= $rawatinap['nomor_rawat'] ?>" method="POST">
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">
-                                                                    <button onclick="closeModal('modelConfirm-<?= $registrasi['nomor_reg'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                    <button onclick="closeModal('modelConfirm-<?= $rawatinap['nomor_rawat'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
                                                                         Hapus
                                                                     </button>
-                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $registrasi['nomor_reg'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $rawatinap['nomor_rawat'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
                                                                         Batal
                                                                     </a>
                                                                 </div>
@@ -612,16 +573,5 @@
         document.getElementById(modalId).style.display = 'none'
         document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
     }
-
-    document.addEventListener("DOMContentLoaded", function () {
-    const tindakanButtons = document.querySelectorAll(".btn-tindakan");
-
-    tindakanButtons.forEach(button => {
-        button.addEventListener("click", function () {
-            const nomorReg = this.getAttribute("data-nomor-reg");
-            document.getElementById("formNomorReg").value = nomorReg;
-        });
-    });
-});
 </script>
 <?= $this->endSection(); ?>

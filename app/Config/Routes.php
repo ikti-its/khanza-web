@@ -210,6 +210,7 @@ $routes->group('registrasi', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit', 'RegistrasiController::submitEditRegistrasi', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submitedit/(:segment)', 'RegistrasiController::submitEditRegistrasi/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->delete('hapus/(:segment)', 'RegistrasiController::hapusRegistrasi/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('trigger-notif', 'RegistrasiController::triggerNotif');
 });
 
 //Kamar
@@ -245,4 +246,15 @@ $routes->group('rujukankeluar', ['filter' => 'auth'], function ($routes) {
     $routes->delete('hapus/(:segment)', 'RujukanKeluarController::hapusRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('cetak/(:segment)', 'RujukanKeluarController::cetak/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 
+});
+
+//Rawat Inap
+$routes->group('rawatinap', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'RawatInapController::dataRawatInap', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('tambah', 'RawatInapController::tambahRawatInap', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'RawatInapController::submitTambahRegistraRawatInap', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:any)', 'RawatInapController::editRawatInap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit', 'RawatInapController::submitEditRawatInap', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'RawatInapController::submitEditRawatInap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'RawatInapController::hapusRawatInap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 });

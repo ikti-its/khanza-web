@@ -1,0 +1,227 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Controllers\BaseController;
+use CodeIgniter\HTTP\ResponseInterface;
+
+class RawatInapController extends BaseController
+{
+    public function dataRawatInap()
+    {
+        $title = 'Data Rawat Inap';
+
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+            $url = $this->api_url . '/rawatinap';
+
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Accept: application/json'
+            ]);
+            $response = curl_exec($ch);
+            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            // 🔍 Log/Inspect raw response
+            log_message('error', 'Rawat Inap API Response: ' . $response);
+
+            if ($http_status !== 200) {
+                return $this->renderErrorView($http_status);
+            }
+
+            $data = json_decode($response, true);
+
+            if (!isset($data['data'])) {
+                return $this->renderErrorView(500);
+            }
+
+            $this->addBreadcrumb('User', 'user');
+            $this->addBreadcrumb('Rawat Inap', 'rawatinap');
+            $breadcrumbs = $this->getBreadcrumbs();
+
+            return view('/admin/rawatinap/rawatinap_data', [
+                'rawatinap_data' => $data['data'],
+                'title' => $title,
+                'breadcrumbs' => $breadcrumbs,
+                'meta_data' => $data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1]
+            ]);
+        }
+
+        return $this->renderErrorView(401);
+    }
+
+    public function tambahRawatInap()
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+
+        $title = 'Tambah Rawat Inap';
+
+        $this->addBreadcrumb('User', 'user');
+        $this->addBreadcrumb('Rawat Inap', 'rawatinap');
+        $this->addBreadcrumb('Tambah', 'tambah');
+
+        $breadcrumbs = $this->getBreadcrumbs();
+
+        return view('/admin/rawatinap/tambah_rawatinap', [
+            'title' => $title,
+            'breadcrumbs' => $breadcrumbs
+        ]);
+    }
+
+    public function submitTambahRawatInap()
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+
+        $token = session()->get('jwt_token');
+        $url = $this->api_url . '/rawatinap';
+
+        $postData = $this->getRawatInapPostData();
+        $jsonData = json_encode($postData);
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($jsonData),
+            'Authorization: Bearer ' . $token,
+        ]);
+        $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($status === 201) {
+            return redirect()->to(base_url('rawatinap'));
+        }
+
+        return $response;
+    }
+
+    public function editRawatInap($nomorRawat)
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+
+        $token = session()->get('jwt_token');
+        $url = $this->api_url . '/rawatinap/' . $nomorRawat;
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+        ]);
+        $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($status !== 200) {
+            return $this->renderErrorView($status);
+        }
+
+        $data = json_decode($response, true);
+
+        $this->addBreadcrumb('User', 'user');
+        $this->addBreadcrumb('Rawat Inap', 'rawatinap');
+        $this->addBreadcrumb('Edit', 'edit');
+
+        return view('/admin/rawatinap/edit_rawatinap', [
+            'rawatinap' => $data['data'],
+            'title' => 'Edit Rawat Inap',
+            'breadcrumbs' => $this->getBreadcrumbs()
+        ]);
+    }
+
+    public function submitEditRawatInap($nomorRawat)
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+
+        $token = session()->get('jwt_token');
+        $url = $this->api_url . '/rawatinap/' . $nomorRawat;
+
+        $postData = $this->getRawatInapPostData();
+        $jsonData = json_encode($postData);
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($jsonData),
+            'Authorization: Bearer ' . $token,
+        ]);
+        $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($status === 200) {
+            return redirect()->to(base_url('rawatinap'));
+        }
+
+        return $response;
+    }
+
+    public function hapusRawatInap($nomorRawat)
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+
+        $token = session()->get('jwt_token');
+        $url = $this->api_url . '/rawatinap/' . $nomorRawat;
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($status === 200 || $status === 204) {
+            return redirect()->to(base_url('rawatinap'))->with('success', 'Data rawat inap berhasil dihapus.');
+        }
+
+        return $this->renderErrorView($status);
+    }
+
+    private function getRawatInapPostData(): array
+    {
+        return [
+            'nomor_rawat' => $this->request->getPost('nomor_rawat'),
+            'nomor_rm' => $this->request->getPost('nomor_rm'),
+            'nama_pasien' => $this->request->getPost('nama_pasien'),
+            'alamat_pasien' => $this->request->getPost('alamat_pasien'),
+            'penanggung_jawab' => $this->request->getPost('penanggung_jawab'),
+            'hubungan_pj' => $this->request->getPost('hubungan_pj'),
+            'jenis_bayar' => $this->request->getPost('jenis_bayar'),
+            'kamar' => $this->request->getPost('kamar'),
+            'tarif_kamar' => floatval($this->request->getPost('tarif_kamar')),
+            'diagnosa_awal' => $this->request->getPost('diagnosa_awal'),
+            'diagnosa_akhir' => $this->request->getPost('diagnosa_akhir'),
+            'tanggal_masuk' => $this->request->getPost('tanggal_masuk'),
+            'jam_masuk' => $this->request->getPost('jam_masuk'),
+            'tanggal_keluar' => $this->request->getPost('tanggal_keluar'),
+            'jam_keluar' => $this->request->getPost('jam_keluar'),
+            'total_biaya' => floatval($this->request->getPost('total_biaya')),
+            'status_pulang' => $this->request->getPost('status_pulang'),
+            'lama_ranap' => floatval($this->request->getPost('lama_ranap')),
+            'dokter_pj' => $this->request->getPost('dokter_pj'),
+            'status_bayar' => $this->request->getPost('status_bayar'),
+        ];
+    }
+}

@@ -61,6 +61,7 @@ class KamarController extends BaseController
                 'title' => $title,
                 'breadcrumbs' => $breadcrumbs,
                 'meta_data' => $meta_data ?? ['page' => 1, 'size' => 10] // Ensure meta_data is always set
+                
             ]);
         } else {
             // If no JWT token, return unauthorized error
@@ -295,7 +296,20 @@ public function hapusKamar($nomorBed)
     }
 }
 
+public function index()
+{
+    $db = \Config\Database::connect();
 
+    $pendingRequests = $db->table('registrasi')
+        ->where('status_kamar', 'belum')
+        ->get()
+        ->getResultArray();
+
+    $data['count_notif_kamar'] = count($pendingRequests);
+    $data['pending_requests'] = $pendingRequests;
+
+    return view('admin/kamar/kamar_data', $data);
+}
 
 }
 

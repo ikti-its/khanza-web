@@ -5,6 +5,41 @@
 <div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
     <!-- <div class="max-w-[85rem] w-full py-6 lg:py-3"> -->
     <!-- Card -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+  function fetchPendingRooms() {
+    $.ajax({
+      url: "http://127.0.0.1:8080/v1/registrasi/pending-room",
+      method: "GET",
+      success: function (res) {
+        let notifHtml = "";
+        $("#notifCount").text(res.data.length);
+
+        if (res.data.length === 0) {
+          notifHtml = `<div class="p-4 text-sm text-gray-500">Tidak ada permintaan kamar saat ini.</div>`;
+        } else {
+          res.data.forEach(function (item) {
+            notifHtml += `
+              <a href="/registrasi/edit/${item.nomor_reg}" class="block p-4 hover:bg-gray-100 border-l-4 border-red-500">
+                <strong>${item.nama_pasien || 'Pasien Tanpa Nama'}</strong> menunggu kamar.
+              </a>`;
+          });
+        }
+
+        $("#notifList").html(notifHtml);
+      },
+      error: function () {
+        $("#notifList").html(`<div class="p-4 text-red-500">Gagal memuat data notifikasi.</div>`);
+      }
+    });
+  }
+
+  // Call once on page load
+  fetchPendingRooms();
+
+  // Then auto-refresh every 10 seconds
+  setInterval(fetchPendingRooms, 10000);
+</script>
     <div class="flex flex-col">
         <div class="-m-1.5 overflow-y-hidden">
             <div class="sm:px-20 min-w-full inline-block align-middle">
@@ -41,63 +76,41 @@
                                         <div class="flex">
                                             <div class="flex justify-center items-center w-3/4">
                                                 <button id="stok-tab" class="flex items-center justify-center text-center w-full py-2 border-b-2 border-[#272727]">
-                                                    Stok
+                                                    Butuh Kamar
                                                     <span class="ml-1"> <!-- Add margin-left for spacing -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
-                                                            <circle cx="7.75" cy="7.5" r="7" fill="#EF4444" />
-                                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="central" fill="#FFF" font-size="10px"></text>
-                                                        </svg>
+                                                        <span id="notifCount" class="text-red-500">0</span>
                                                     </span>
-                                                </button>
-                                            </div>
-                                            <div class="flex justify-center items-center w-3/4">
-                                                <button id="kadaluwarsa-tab" class="flex items-center justify-center text-center w-full py-2 border-b-2">Kadaluwarsa
-                                                    <span class="ml-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
-                                                            <circle cx="7.75" cy="7.5" r="7" fill="#EF4444" />
-                                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="central" fill="#FFF" font-size="10px"></text>
-                                                        </svg>
-                                                    </span>
+
+
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
-                                            <?php
-                                            $count_notif_stok = 0;
-                                            $today = new DateTime();
-                                            $today->setTime(0, 0, 0);
-                                            if ($count_notif_stok !== 0) {
-                                                foreach ($kamar_tanpa_params_data as $kamar_stok) {
-                                                    if ($kamar_stok['stok'] <= $kamar_stok['stok_minimum']) {
-                                                        $count_notif_stok++; ?>
-                                                        <a href="/datamedis/edit/<?= $kamar_stok['id'] ?>" class="p-4 flex items-center border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141] hover:bg-gray-100">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                                                <path d="M12.5358 6.667C14.0754 4.00033 17.9244 4.00033 19.464 6.66699L27.8356 21.167C29.3752 23.8337 27.4507 27.167 24.3715 27.167H7.62834C4.54914 27.167 2.62464 23.8337 4.16424 21.167L12.5358 6.667Z" fill="#DA4141" />
-                                                                <path d="M16 18.333C15.4533 18.333 15 17.8797 15 17.333V10.333C15 9.78634 15.4533 9.33301 16 9.33301C16.5467 9.33301 17 9.78634 17 10.333V17.333C17 17.8797 16.5467 18.333 16 18.333Z" fill="#FEE2E2" />
-                                                                <path d="M15.9998 23.0001C15.8265 23.0001 15.6532 22.9601 15.4932 22.8934C15.3198 22.8268 15.1865 22.7335 15.0531 22.6135C14.9331 22.4802 14.8398 22.3335 14.7598 22.1735C14.6932 22.0135 14.6665 21.8401 14.6665 21.6668C14.6665 21.3201 14.7998 20.9734 15.0531 20.7201C15.1865 20.6001 15.3198 20.5068 15.4932 20.4402C15.9865 20.2268 16.5732 20.3468 16.9465 20.7201C17.0665 20.8534 17.1598 20.9868 17.2265 21.1601C17.2931 21.3201 17.3332 21.4935 17.3332 21.6668C17.3332 21.8401 17.2931 22.0135 17.2265 22.1735C17.1598 22.3335 17.0665 22.4802 16.9465 22.6135C16.6932 22.8668 16.3598 23.0001 15.9998 23.0001Z" fill="#FEE2E2" />
-                                                            </svg>
-                                                            <div class="mx-2">
-                                                                <span>Stok <span class="font-semibold"><?= $kamar_stok['nama'] ?></span> telah mencapai jumlah minimum</span>
-                                                                <div class="py-1 font-semibold text-sm text-[#DA4141]">Sisa stok: <?= $kamar_stok['stok'] ?></div>
-                                                            </div>
-                                                        </a>
+                                        
+                                    <span id="notifCount">0</span>
 
-                                                <?php }
-                                                }
-                                            } else { ?>
-                                                <button class="p-4 flex items-center border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141] hover:bg-gray-100">
-
-                                                    <div class="mx-2">
-                                                        <span>Belum ada notifikasi stok</span>
-
-                                                    </div>
+                                    <!-- Notification popup content -->
+                                    <div id="notifList">
+                                        <p class="text-gray-500">Memuat data kamar...</p>
+                                    </div>
+                                    <?php if (!empty($pending_requests)): ?>
+                                        <?php foreach ($pending_requests as $req): ?>
+                                            <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-red-500">
+                                                <div>
+                                                    <strong><?= esc($req['nama_pasien']) ?></strong> menunggu kamar.
+                                                </div>
+                                                <button 
+                                                    type="button"
+                                                    class="bg-green-600 text-white text-sm px-3 py-1 rounded hover:bg-green-700 assign-room-btn"
+                                                    data-nomor-reg="<?= esc($req['nomor_reg']) ?>">
+                                                    🚪 Assign Room
                                                 </button>
-                                            <?php
-                                            } ?>
-
-                                        </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <div class="p-4 text-gray-500"></div>
+                                    <?php endif; ?>
                                         
                                     </div>
                                 </div>
@@ -555,7 +568,7 @@
         closeNotificationPopup();
     });
     document.addEventListener('DOMContentLoaded', function() {
-        var count_notif_stok = <?= $count_notif_stok ?>;
+        var count_notif_stok = <?= isset($count_notif_stok) ? $count_notif_stok : 0 ?>;
         document.querySelector('#stok-tab svg text').textContent = count_notif_stok;
     });
 
@@ -592,5 +605,70 @@
         document.getElementById(modalId).style.display = 'none'
         document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const notifText = document.querySelector('#stok-tab svg text');
+        const count = <?= $count_notif_kamar ?? 0 ?>;
+
+        if (notifText) {
+            notifText.textContent = count > 0 ? count : '';
+        }
+
+        if (count > 0) {
+            document.getElementById('notif-popup').classList.remove('hidden');
+        }
+    });
+    document.querySelectorAll('.assign-room-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+        const nomorReg = button.getAttribute('data-nomor-reg');
+        
+        try {
+            const response = await fetch(`http://127.0.0.1:8080/v1/registrasi/${nomorReg}/assign-room`, {
+                method: 'PUT',
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert('✅ ' + result.message);
+                button.closest('div').remove(); // remove the item from list
+            } else {
+                alert('❌ Failed: ' + result.message);
+            }
+        } catch (err) {
+            alert('❌ Error: ' + err.message);
+        }
+    });
+});
+
+    $(document).ready(function () {
+        $.ajax({
+        url: "http://127.0.0.1:8080/v1/registrasi/pending-room",
+        method: "GET",
+        success: function (res) {
+            if (res.code === 200 && res.data.length > 0) {
+            $("#notifCount").text(res.data.length);
+
+            let notifHtml = "";
+            res.data.forEach(function (item) {
+                notifHtml += `
+                <a href="/datamedis/edit/${item.nomor_reg}" class="block p-4 hover:bg-gray-100 border-l-4 border-red-500">
+                    <strong>${item.nama_pasien || "Pasien Tanpa Nama"}</strong> menunggu kamar.
+                </a>
+                `;
+            });
+
+            $("#notifList").html(notifHtml);
+            } else {
+            $("#notifCount").text("0");
+            $("#notifList").html(`<p class="text-gray-500 px-4">Tidak ada permintaan kamar saat ini.</p>`);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("❌ Error fetching room notifications:", error);
+            $("#notifList").html(`<p class="text-red-500 px-4">Gagal memuat notifikasi.</p>`);
+        }
+        });
+    });
 </script>
 <?= $this->endSection(); ?>
