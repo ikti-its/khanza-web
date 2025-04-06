@@ -18,12 +18,19 @@
         if (res.data.length === 0) {
           notifHtml = `<div class="p-4 text-sm text-gray-500">Tidak ada permintaan kamar saat ini.</div>`;
         } else {
-          res.data.forEach(function (item) {
-            notifHtml += `
-              <a href="/registrasi/edit/${item.nomor_reg}" class="block p-4 hover:bg-gray-100 border-l-4 border-red-500">
-                <strong>${item.nama_pasien || 'Pasien Tanpa Nama'}</strong> menunggu kamar.
-              </a>`;
-          });
+            res.data.forEach(function (item) {
+  if (item.nomor_reg) {
+    notifHtml += `
+      <a href="/kamar/terima/${item.nomor_reg}" class="block p-4 hover:bg-gray-100 border-l-4 border-red-500">
+        <strong>${item.nomor_reg || 'Unnamed Patient'}</strong> meminta kamar ${item.kelas}.
+      </a>`;
+  } else {
+    notifHtml += `
+      <div class="block p-4 text-yellow-600 bg-yellow-50 border-l-4 border-yellow-500">
+        Incomplete patient data (missing nomor_rawat).
+      </div>`;
+  }
+});
         }
 
         $("#notifList").html(notifHtml);

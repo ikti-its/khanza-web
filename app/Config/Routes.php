@@ -222,6 +222,7 @@ $routes->group('kamar', ['filter' => 'auth'], function ($routes) {
     // $routes->post('submitedit', 'KamarController::submitEditKamar', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submitedit/(:segment)', 'KamarController::submitEditKamar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->delete('hapus/(:segment)', 'KamarController::hapusKamar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('terima/(:any)', 'KamarController::terimaKamar/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 });
 
 //Rujukan Masuk

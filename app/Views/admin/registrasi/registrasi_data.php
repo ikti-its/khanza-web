@@ -320,14 +320,35 @@
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
                                                         <input type="text" name="" value="<?= $registrasi['status_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
+
+                                                    <div class="mb-5 flex items-end gap-4">
+                                                        <!-- Select input -->
+                                                        <div class="w-full">
+                                                            <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kelas Kamar</label>
+                                                            <select name="status_poliklinik"
+                                                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white"
+                                                                    required>
+                                                                <option value="Baru">Umum</option>
+                                                                <option value="Lama">VIP</option>
+                                                                <option value="Lama">VVIP</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <!-- Rawat Inap button -->
+                                                        <form id="formButuhKamar" action="/registrasi/trigger-notif" method="post" class="self-end">
+                                                            <input type="hidden" name="nomor_reg" id="formNomorReg">
+                                                            <button type="submit"
+                                                                    class="btn btn-warning whitespace-nowrap py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                                                Rawat Inap
+                                                            </button>
+                                                        </form>
+                                                    </div>
+
+
                                                 </div>
 
                                                 </div>
                                                 <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                <form id="formButuhKamar" action="/registrasi/trigger-notif" method="post">
-                                                    <input type="hidden" name="nomor_reg" id="formNomorReg">
-                                                    <button type="submit" class="btn btn-warning">Tandai Butuh Kamar</button>
-                                                </form>
                                                 </div>
                                             </div>
                                         </div>

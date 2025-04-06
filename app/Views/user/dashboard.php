@@ -37,7 +37,7 @@
                                             // Extract the first part of the email before '@'
                                             $nama = explode('@', $userData['email'])[0];
                                         } else {
-                                            $nama = 'Guest'; // Default fallback if email is also missing
+                                            $nama = 'Admin'; // Default fallback if email is also missing
                                         }
                                         
                                         // Extract the first word from the determined name

@@ -225,66 +225,58 @@
                                                 <div class="space-y-4">
                                                 <div>
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rujuk</label>
                                                         <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Perujuk</label>
+                                                        <input type="text" name="" value="<?= $rujukanmasuk['perujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Alamat Perujuk</label>
+                                                        <input type="text" name="" value="<?= $rujukanmasuk['alamat_perujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomot Rawat</label>
                                                         <input type="text" name="" value="<?= $rujukanmasuk['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal</label>
-                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam</label>
-                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
-                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama</label>
-                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Pasien</label>
+                                                        <input type="text" name="" value="<?= $rujukanmasuk['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Kelamin</label>
-                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Alamat</label>
+                                                        <input type="text" name="" value="<?= $rujukanmasuk['alamat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Umur</label>
-                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $rujukanmasuk['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Poliklinik</label>
-                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Masuk</label>
+                                                        <input type="text" name="" value="<?= $rujukanmasuk['tanggal_masuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter</label>
-                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Keluar</label>
+                                                        <input type="text" name="" value="<?= $rujukanmasuk['tanggal_keluar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Diagnosis Awal</label>
+                                                        <input type="text" name="" value="<?= $rujukanmasuk['diagnosa_awal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Registrasi</label>
-                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Rawat</label>
-                                                        <input type="text" name="" value="<?= $rujukanmasuk['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
                                                 </div>
 
                                                 </div>

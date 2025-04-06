@@ -296,6 +296,51 @@ public function hapusKamar($nomorBed)
     }
 }
 
+public function terimaKamar($nomorBed)
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
+
+    $token = session()->get('jwt_token');
+    $title = 'Edit Kamar';
+    $kamar_url = $this->api_url . '/kamar/' . $nomorBed;
+
+    // dd($kamar_url);
+
+    // Make API request to fetch kamar data
+    $ch_kamar = curl_init($kamar_url);
+    curl_setopt($ch_kamar, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch_kamar, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $response = curl_exec($ch_kamar);
+    $http_status = curl_getinfo($ch_kamar, CURLINFO_HTTP_CODE);
+    curl_close($ch_kamar);
+
+    // dd($response);
+
+    // Handle API response
+    if ($http_status !== 200) {
+        return $this->renderErrorView($http_status);
+    }
+
+    $kamar_data = json_decode($response, true);
+
+    // Breadcrumbs setup
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Kamar', 'kamar');
+    $this->addBreadcrumb('Terima', 'terima');
+    $breadcrumbs = $this->getBreadcrumbs();
+        // dd($kamar_data);
+    // Return the edit view with kamar data
+    return view('/admin/kamar/terima_kamar', [
+        'kamar' => $kamar_data['data'],
+        'title' => $title,
+        'breadcrumbs' => $breadcrumbs,
+    ]);
+}
+
 public function index()
 {
     $db = \Config\Database::connect();

@@ -104,7 +104,7 @@
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
                             <div>
-                                <a href='/registrasi/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                <a href='/rawatinap/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                     <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
                                         <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                     </svg>
@@ -335,7 +335,7 @@
                                                 </button>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <a href="/registrasi/edit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                <a href="/rawatinap/edit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                     Ubah
                                                 </a>
                                             </div>
@@ -368,7 +368,7 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                            <form action="/registrasi/hapus/<?= $rawatinap['nomor_rawat'] ?>" method="POST">
+                                                            <form action="/rawatinap/hapus/<?= $rawatinap['nomor_rawat'] ?>" method="POST">
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">
