@@ -259,3 +259,15 @@ $routes->group('rawatinap', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit/(:segment)', 'RawatInapController::submitEditRawatInap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->delete('hapus/(:segment)', 'RawatInapController::hapusRawatInap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 });
+
+//Ambulans
+$routes->group('ambulans', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'AmbulansController::dataAmbulans', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('tambah', 'AmbulansController::tambahAmbulans', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'AmbulansController::submitTambahAmbulans', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:any)', 'AmbulansController::editAmbulans/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit', 'AmbulansController::submitEditAmbulans', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'AmbulansController::submitEditAmbulans/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'AmbulansController::hapusAmbulans/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('panggil/(:any)', 'AmbulansController::panggilAmbulans/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+});

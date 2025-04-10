@@ -328,9 +328,9 @@
                                                             <select name="status_poliklinik"
                                                                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white"
                                                                     required>
-                                                                <option value="Baru">Umum</option>
-                                                                <option value="Lama">VIP</option>
-                                                                <option value="Lama">VVIP</option>
+                                                                <option value="Umum">Umum</option>
+                                                                <option value="VIP">VIP</option>
+                                                                <option value="VVIP">VVIP</option>
                                                             </select>
                                                         </div>
 

@@ -16,6 +16,23 @@ class RujukanKeluarController extends BaseController
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
             $rujukan_url = $this->api_url . '/rujukankeluar';
+            $ambulans_url = $this->api_url . '/ambulans';
+
+            $ch_ambulans = curl_init($ambulans_url);
+            curl_setopt($ch_ambulans, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_ambulans, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Accept: application/json'
+            ]);
+            $response_ambulans = curl_exec($ch_ambulans);
+            $http_status_ambulans = curl_getinfo($ch_ambulans, CURLINFO_HTTP_CODE);
+            curl_close($ch_ambulans);
+            $ambulans_data = [];
+
+            if ($http_status_ambulans === 200) {
+                $decoded_ambulans = json_decode($response_ambulans, true);
+                $ambulans_data = $decoded_ambulans['data'] ?? [];
+            }
 
             $ch = curl_init($rujukan_url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -26,6 +43,7 @@ class RujukanKeluarController extends BaseController
             $response = curl_exec($ch);
             $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
+
 
             if ($http_status !== 200) {
                 return $this->renderErrorView($http_status);
@@ -48,6 +66,7 @@ class RujukanKeluarController extends BaseController
                 'title' => $title,
                 'breadcrumbs' => $breadcrumbs,
                 'meta_data' => $meta_data,
+                'ambulans_list' => $ambulans_data,
             ]);
         }
 
@@ -243,5 +262,37 @@ class RujukanKeluarController extends BaseController
     
         return view('/admin/rujukan/cetak_surat', ['rujukan' => $rujukan]);
     }
-    
+    public function panggilAmbulans($noAmbulans)
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
+
+    $token = session()->get('jwt_token');
+    $url = $this->api_url . "/ambulans/request";
+
+    $data = [
+        'no_ambulans' => $noAmbulans,
+        'message'     => 'Permintaan ambulans untuk rujukan keluar'
+    ];
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Content-Type: application/json'
+    ]);
+    $response = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($status === 200 || $status === 201) {
+        return redirect()->to(base_url('rujukankeluar'))->with('success', 'Permintaan ambulans berhasil dikirim.');
+    } else {
+        return $this->renderErrorView($status);
+    }
 }
+}
+
