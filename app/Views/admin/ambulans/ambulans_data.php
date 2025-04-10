@@ -41,15 +41,26 @@
                                             </svg>
                                         </div>
                                         <div class="flex">
-                                            <div class="flex justify-center items-center w-3/4">
-                                                <button id="stok-tab" class="flex items-center justify-center text-center w-full py-2 border-b-2 border-[#272727]">
-                                                    Butuh Kamar
-                                                    <span class="ml-1"> <!-- Add margin-left for spacing -->
-                                                        <span id="notifCount" class="text-red-500">0</span>
-                                                    </span>
-
-
-                                                </button>
+                                            <div class="flex flex-col gap-2 w-full" id="ambulansNotifSection">
+                                                <!-- 🚑 Ambulans Notification -->
+                                                <?php if (isset($ambulans_requests) && count($ambulans_requests) > 0): ?>
+                                                    <p>Total request: <?= isset($ambulans_requests) ? count($ambulans_requests) : 0 ?></p>
+                                                    <div class="font-semibold text-black flex items-center space-x-1 px-3">
+                                                        <span class="text-red-600">🚨</span>
+                                                        <span>Permintaan Ambulans</span>
+                                                    </div>
+                                                    <?php foreach ($ambulans_requests as $req): ?>
+                                                        <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-blue-500">
+                                                            <div>
+                                                                Ambulans <strong><?= esc($req['no_ambulans']) ?></strong> sedang diminta (<?= esc($req['status']) ?>)
+                                                            </div>
+                                                            <a href="/ambulans/terima/<?= esc($req['no_ambulans']) ?>" 
+                                                            class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">
+                                                                Terima
+                                                            </a>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -57,12 +68,8 @@
                                         
                                     <span id="notifCount">0</span>
 
-                                    <div class="relative mt-4">
-                                        <h3 class="text-lg font-semibold mb-2">🚨 Permintaan Ambulans</h3>
-                                        <div id="ambulansNotifList">
-                                            <div class="p-4 text-gray-500">Memuat data ambulans...</div>
-                                        </div>
-                                    </div>
+                                    
+
 
                                         
                                     </div>
@@ -429,45 +436,39 @@
 
 <!-- End Table Section -->
 <script>
-    function fetchAmbulansRequests() {
-    $.ajax({
-        url: "http://127.0.0.1:8080/v1/ambulans/request/pending",
-        method: "GET",
-        headers: {
-            "Authorization": "Bearer <?= session()->get('jwt_token') ?>"
-        },
-        success: function(res) {
-            let html = '';
-            if (res.data.length === 0) {
-                html = `<div class="p-4 text-gray-500">Tidak ada permintaan ambulans.</div>`;
-            } else {
-                res.data.forEach(ambulans => {
-                    html += `
-                        <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-blue-500">
-                            <div>
-                                🚑 Ambulans <strong>${ambulans.no_ambulans}</strong> sedang diminta
-                            </div>
-                            <a 
-                                href="/ambulans/terima/${ambulans.no_ambulans}" 
-                                class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">
-                                Terima
-                            </a>
-                        </div>
-                    `;
-                });
-            }
+function fetchAmbulansRequests() {
+  $.ajax({
+    url: "http://127.0.0.1:8080/v1/ambulans/request/pending",
+    method: "GET",
+    success: function (res) {
+      console.log("Ambulance response:", res); // Check if this logs in browser
+      let notifHtml = "";
 
-            $('#ambulansNotifList').html(html);
-        },
-        error: function() {
-            $('#ambulansNotifList').html(`<div class="p-4 text-red-500">Gagal memuat data permintaan ambulans.</div>`);
-        }
-    });
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(function (item) {
+          notifHtml += `
+            <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-blue-500">
+              🚑 Ambulans <strong>${item.no_ambulans}</strong> sedang diminta (${item.status})
+              <a href="/ambulans/terima/${item.no_ambulans}" class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">Terima</a>
+            </div>
+          `;
+        });
+      } else {
+        notifHtml = ""; // Clear section if no data
+      }
+
+      $("#ambulansNotifSection").html(notifHtml);
+    },
+    error: function () {
+      $("#ambulansNotifSection").html(`<div class="text-red-500 p-2">Gagal memuat data permintaan ambulans.</div>`);
+    }
+  });
 }
 
-// Load immediately, and every 10 seconds
+// Call initially and every 10s
 fetchAmbulansRequests();
 setInterval(fetchAmbulansRequests, 10000);
+
 
     function myFunction() {
         var input, filter, table, tr, td, i, j, txtValue;

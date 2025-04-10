@@ -384,21 +384,15 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php if (!empty($ambulans_list)): ?>
-                                                <?php foreach ($ambulans_list as $ambulans): ?>
-                                                    <div class="px-3 py-1.5">
-                                                        <a href="javascript:void(0);" 
-                                                        class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold"
-                                                        onclick="requestAmbulance('<?= esc($ambulans['no_ambulans']) ?>')">
-                                                            Panggil Ambulans
-                                                        </a>
-                                                    </div>
-                                                <?php endforeach; ?>
-                                            <?php else: ?>
-                                                <div class="px-3 py-1.5 text-sm text-gray-500 italic">Tidak ada ambulans tersedia.</div>
-                                            <?php endif; ?>
-                                            <!-- Notification display -->
-                                                <div id="ambulanceResponse" class="mt-2 text-sm hidden"></div>
+                                            <div class="w-full">
+                                            <div class="px-3 py-1.5">
+                                            <a href="javascript:void(0);" 
+                                            class="text-sm text-blue-600 hover:underline font-semibold"
+                                            onclick="requestAmbulanceModal('<?= esc($rujukankeluar['nomor_rujuk']) ?>')">
+                                            Panggil Ambulans
+                                            </a>
+                                            </div>
+                                            </div>
                                         </div>
                                     </td>
 
@@ -481,9 +475,75 @@
 </div>
 </div>
 <!-- End Card -->
-
+<!-- 🚑 Modal Ambulans -->
+<div id="ambulansModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/40">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+        <div class="flex justify-between items-center px-4 py-3 border-b">
+            <h2 class="text-lg font-semibold">Pilih Ambulans</h2>
+            <button onclick="closeAmbulansModal()" class="text-gray-600 hover:text-red-500 text-xl">×</button>
+        </div>
+        <div class="p-4 space-y-3" id="ambulansList">
+            <p class="text-sm text-gray-500">Memuat ambulans...</p>
+        </div>
+    </div>
+</div>
 <!-- End Table Section -->
 <script>
+    function requestAmbulanceModal(nomorRujuk) {
+        // Show modal
+        document.getElementById('ambulansModal').classList.remove('hidden');
+
+        // Fetch ambulans list
+        fetch('http://127.0.0.1:8080/v1/ambulans/request/pending')
+            .then(res => res.json())
+            .then(res => {
+                const list = document.getElementById('ambulansList');
+                list.innerHTML = '';
+
+                if (!res.data || res.data.length === 0) {
+                    list.innerHTML = `<p class="text-sm text-gray-500">Tidak ada ambulans tersedia.</p>`;
+                    return;
+                }
+
+                res.data.forEach(item => {
+                    list.innerHTML += `
+                        <div class="flex justify-between items-center p-2 border rounded">
+                            <div>🚑 <strong>${item.no_ambulans}</strong> (${item.status})</div>
+                            <button onclick="confirmAmbulance('${item.no_ambulans}', '${nomorRujuk}')" 
+                                    class="text-white bg-blue-600 hover:bg-blue-700 px-2 py-1 text-sm rounded">
+                                Pilih
+                            </button>
+                        </div>`;
+                });
+            })
+            .catch(() => {
+                document.getElementById('ambulansList').innerHTML = `<p class="text-sm text-red-500">Gagal memuat data ambulans.</p>`;
+            });
+    }
+
+    function closeAmbulansModal() {
+        document.getElementById('ambulansModal').classList.add('hidden');
+    }
+
+    function confirmAmbulance(noAmbulans, nomorRujuk) {
+        fetch('http://127.0.0.1:8080/v1/ambulans/request', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + '<?= session('jwt_token') ?>'
+            },
+            body: JSON.stringify({ no_ambulans: noAmbulans })
+        })
+        .then(res => res.json())
+        .then(res => {
+            closeAmbulansModal();
+            alert("✅ Permintaan ambulans dikirim.");
+        })
+        .catch(() => {
+            alert("❌ Gagal mengirim permintaan.");
+        });
+    }
+
     function requestAmbulance(noAmbulans) {
             $.ajax({
                 url: "http://127.0.0.1:8080/v1/ambulans/request",
