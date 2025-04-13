@@ -507,16 +507,23 @@
                     return;
                 }
 
-                res.data.forEach(item => {
-                    list.innerHTML += `
-                        <div class="flex justify-between items-center p-2 border rounded">
-                            <div>🚑 <strong>${item.no_ambulans}</strong> (${item.status})</div>
-                            <button onclick="confirmAmbulance('${item.no_ambulans}', '${nomorRujuk}')" 
-                                    class="text-white bg-blue-600 hover:bg-blue-700 px-2 py-1 text-sm rounded">
-                                Pilih
-                            </button>
-                        </div>`;
-                });
+                res.data
+                    .filter(item => item.status.toLowerCase() === 'available')
+                    .forEach(item => {
+                        list.innerHTML += `
+                            <div class="flex justify-between items-center p-2 border rounded">
+                                <div>🚑 <strong>${item.no_ambulans}</strong> (${item.status})</div>
+                                <button onclick="confirmAmbulance('${item.no_ambulans}', '${nomorRujuk}')" 
+                                        class="text-white bg-blue-600 hover:bg-blue-700 px-2 py-1 text-sm rounded">
+                                    Pilih
+                                </button>
+                            </div>`;
+                    });
+
+                if (list.innerHTML === '') {
+                    list.innerHTML = `<p class="text-sm text-gray-500">Tidak ada ambulans yang tersedia.</p>`;
+                }
+
             })
             .catch(() => {
                 document.getElementById('ambulansList').innerHTML = `<p class="text-sm text-red-500">Gagal memuat data ambulans.</p>`;
@@ -528,23 +535,29 @@
     }
 
     function confirmAmbulance(noAmbulans, nomorRujuk) {
-        fetch('http://127.0.0.1:8080/v1/ambulans/request', {
-            method: 'POST',
+        fetch('http://127.0.0.1:8080/v1/ambulans/status', {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + '<?= session('jwt_token') ?>'
             },
-            body: JSON.stringify({ no_ambulans: noAmbulans })
+            body: JSON.stringify({
+                no_ambulans: noAmbulans,
+                status: 'pending',
+                nomor_rujuk: nomorRujuk // if needed for linking
+            })
         })
         .then(res => res.json())
         .then(res => {
             closeAmbulansModal();
-            alert("✅ Permintaan ambulans dikirim.");
+            alert("🚑 Ambulans berhasil dipilih.");
+            location.reload(); // refresh the table to reflect status change
         })
         .catch(() => {
-            alert("❌ Gagal mengirim permintaan.");
+            alert("❌ Gagal memperbarui status ambulans.");
         });
     }
+
 
     function requestAmbulance(noAmbulans) {
             $.ajax({
