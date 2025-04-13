@@ -272,3 +272,15 @@ $routes->group('ambulans', ['filter' => 'auth'], function ($routes) {
     $routes->get('panggil/(:any)', 'AmbulansController::panggilAmbulans/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('terima/(:any)', 'AmbulansController::terimaAmbulans/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 });
+
+//Unit Gawat Darurat
+$routes->group('ugd', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'UGDController::dataUGD', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('tambah', 'UGDController::tambahUGD', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'UGDController::submitTambahUGD', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:any)', 'UGDController::editUGD/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit', 'UGDController::submitEditUGD', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'UGDController::submitEditUGD/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'UGDController::hapusUGD/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('trigger-notif', 'UGDController::triggerNotif');
+});

@@ -193,21 +193,6 @@ class AmbulansController extends BaseController
             : $this->renderErrorView($status);
     }
 
-    public function index()
-    {
-        $db = \Config\Database::connect();
-
-        $pendingRequests = $db->table('registrasi')
-            ->where('status_kamar', 'belum')
-            ->get()
-            ->getResultArray();
-
-        $data['count_notif_kamar'] = count($pendingRequests);
-        $data['pending_requests'] = $pendingRequests;
-
-        return view('admin/ambulans/ambulans_data', $data);
-    }
-
     public function panggilAmbulans($nomorBed)
 {
     if (!session()->has('jwt_token')) {

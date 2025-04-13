@@ -14,7 +14,7 @@
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
                             <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
-                                Rujukan Keluar
+                                Pasien Unit Gawat Darurat
                             </h2>
 
                         </div>
@@ -65,22 +65,23 @@
                                     <div>
                                         <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
                                             <?php
+                                            
                                             $count_notif_stok = 0;
                                             $today = new DateTime();
                                             $today->setTime(0, 0, 0);
                                             if ($count_notif_stok !== 0) {
-                                                foreach ($rujukankeluar_tanpa_params_data as $rujukankeluar_stok) {
-                                                    if ($rujukankeluar_stok['nomor_rujuk'] <= $rujukankeluar_stok['nomor_rujuk']) {
+                                                foreach ($ugd_tanpa_params_data as $ugd_stok) {
+                                                    if ($ugd_stok['stok'] <= $ugd_stok['stok_minimum']) {
                                                         $count_notif_stok++; ?>
-                                                        <a href="/datamedis/edit/<?= $rujukankeluar_stok['nomor_rujuk'] ?>" class="p-4 flex items-center border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141] hover:bg-gray-100">
+                                                        <a href="/datamedis/edit/<?= $ugd_stok['id'] ?>" class="p-4 flex items-center border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141] hover:bg-gray-100">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                                                                 <path d="M12.5358 6.667C14.0754 4.00033 17.9244 4.00033 19.464 6.66699L27.8356 21.167C29.3752 23.8337 27.4507 27.167 24.3715 27.167H7.62834C4.54914 27.167 2.62464 23.8337 4.16424 21.167L12.5358 6.667Z" fill="#DA4141" />
                                                                 <path d="M16 18.333C15.4533 18.333 15 17.8797 15 17.333V10.333C15 9.78634 15.4533 9.33301 16 9.33301C16.5467 9.33301 17 9.78634 17 10.333V17.333C17 17.8797 16.5467 18.333 16 18.333Z" fill="#FEE2E2" />
                                                                 <path d="M15.9998 23.0001C15.8265 23.0001 15.6532 22.9601 15.4932 22.8934C15.3198 22.8268 15.1865 22.7335 15.0531 22.6135C14.9331 22.4802 14.8398 22.3335 14.7598 22.1735C14.6932 22.0135 14.6665 21.8401 14.6665 21.6668C14.6665 21.3201 14.7998 20.9734 15.0531 20.7201C15.1865 20.6001 15.3198 20.5068 15.4932 20.4402C15.9865 20.2268 16.5732 20.3468 16.9465 20.7201C17.0665 20.8534 17.1598 20.9868 17.2265 21.1601C17.2931 21.3201 17.3332 21.4935 17.3332 21.6668C17.3332 21.8401 17.2931 22.0135 17.2265 22.1735C17.1598 22.3335 17.0665 22.4802 16.9465 22.6135C16.6932 22.8668 16.3598 23.0001 15.9998 23.0001Z" fill="#FEE2E2" />
                                                             </svg>
                                                             <div class="mx-2">
-                                                                <span>Stok <span class="font-semibold"><?= $rujukankeluar_stok['nomor_rujuk'] ?></span> telah mencapai jumlah minimum</span>
-                                                                <div class="py-1 font-semibold text-sm text-[#DA4141]">Sisa stok: <?= $rujukankeluar_stok['nomor_rujuk'] ?></div>
+                                                                <span>Stok <span class="font-semibold"><?= $ugd_stok['nama'] ?></span> telah mencapai jumlah minimum</span>
+                                                                <div class="py-1 font-semibold text-sm text-[#DA4141]">Sisa stok: <?= $ugd_stok['stok'] ?></div>
                                                             </div>
                                                         </a>
 
@@ -104,7 +105,7 @@
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
                             <div>
-                                <a href='/rujukankeluar/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                <a href='/ugd/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                     <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
                                         <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                     </svg>
@@ -153,7 +154,15 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            No. Rujuk
+                                            No. Registrasi
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            No. Rekam Medis
                                         </span>
                                     </div>
                                 </th>
@@ -167,9 +176,9 @@
                                 </th>
 
                                 <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
+                                    <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Tempat Rujuk
+                                            Poliklinik
                                         </span>
                                     </div>
                                 </th>
@@ -177,15 +186,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Kategori Rujuk
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Pengantaran
+                                            Dokter
                                         </span>
                                     </div>
                                 </th>
@@ -205,15 +206,15 @@
 
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <?php foreach ($rujukankeluar_data as $rujukankeluar) : ?>
-                                <div id="hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+                            <?php foreach ($ugd_data as $ugd) : ?>
+                                <div id="hs-vertically-centered-scrollable-modal-<?= $ugd['nomor_reg'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
                                         <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
                                             <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
                                                 <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $rujukankeluar['nomor_rujuk'] ?>
+                                                    <?= $ugd['nama_pasien'] ?>
                                                 </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>">
+                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ugd['nomor_reg'] ?>">
                                                     <span class="sr-only">Close</span>
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                         <path d="M18 6 6 18"></path>
@@ -226,74 +227,112 @@
                                                 <div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['nomor_reg'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['tanggal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Kelamin</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['jenis_kelamin'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Umur</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Poliklinik</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['poliklinik'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['dokter_dituju'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['penanggung_jawab'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Registrasi</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Hubungan Penanggung Jawab</label>
+                                                        <input type="text" name="" value="<?= $ugd['hubungan_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Alamat Penanggung Jawab</label>
+                                                        <input type="text" name="" value="<?= $ugd['alamat_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Biaya Registrasi</label>
+                                                        <input type="text" name="" value="<?= $ugd['biaya_registrasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Rawat</label>
-                                                        <input type="text" name="" value="<?= $rujukankeluar['nomor_rujuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $ugd['status_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Bayar</label>
+                                                        <input type="text" name="" value="<?= $ugd['jenis_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
+                                                        <input type="text" name="" value="<?= $ugd['status_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 flex items-end gap-4">
+                                                        <!-- Select input -->
+                                                        <div class="w-full">
+                                                            <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kelas Kamar</label>
+                                                            <select name="status_poliklinik"
+                                                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white"
+                                                                    required>
+                                                                <option value="Umum">Umum</option>
+                                                                <option value="VIP">VIP</option>
+                                                                <option value="VVIP">VVIP</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <!-- Rawat Inap button -->
+                                                        <form id="formButuhKamar" action="/registrasi/trigger-notif" method="post" class="self-end">
+                                                            <input type="hidden" name="nomor_reg" id="formNomorReg">
+                                                            <button type="submit"
+                                                                    class="btn btn-warning whitespace-nowrap py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                                                Rawat Inap
+                                                            </button>
+                                                        </form>
+                                                    </div>
+
+
                                                 </div>
 
                                                 </div>
                                                 <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                    <a href="/rujukankeluar/cetak/<?= $rujukankeluar['nomor_rawat'] ?>" 
-                                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
-                                                        data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>">
-                                                        Cetak Surat
-                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -302,51 +341,57 @@
                                 <tr>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>" data-id="<?= $rujukankeluar['nomor_rujuk'] ?>"><?= $rujukankeluar['nomor_rujuk'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ugd['nomor_reg'] ?>" data-id="<?= $ugd['nomor_reg'] ?>"><?= $ugd['nomor_reg'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>" data-id="<?= $rujukankeluar['nomor_rujuk'] ?>"><?= $rujukankeluar['nama_pasien'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ugd['nomor_reg'] ?>" data-id="<?= $ugd['nomor_reg'] ?>"><?= $ugd['nomor_rm'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>" data-id="<?= $rujukankeluar['nomor_rujuk'] ?>"><?= $rujukankeluar['tempat_rujuk'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ugd['nomor_reg'] ?>" data-id="<?= $ugd['nomor_reg'] ?>"><?= $ugd['nama_pasien'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>" data-id="<?= $rujukankeluar['nomor_rujuk'] ?>"><?= $rujukankeluar['kategori_rujuk'] ?? 'N/A' ?></span>
+                                    <td class="size-px w-48 whitespace-nowrap">
+                                        <div class="px-6 py-3 text-center">
+                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
+                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
+                                                <?= $ugd['poliklinik'] ?? 'N/A' ?>
+                                            </span>
                                         </div>
                                     </td>
                                     <td class="h-px w-72 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $rujukankeluar['pengantaran'] ?? 'N/A' ?></span>
+                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $ugd['dokter_dituju'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
-                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>">
-                                                    Cetak Surat
-                                                </button>
+                                            <button
+                                                type="button"
+                                                class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
+                                                data-nomor-reg="<?= $ugd['nomor_reg'] ?>"
+                                                data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ugd['nomor_reg'] ?>">
+                                                Tindakan
+                                            </button>
                                             </div>
-                                            
                                             <div class="px-3 py-1.5">
-                                                <a href="/rujukankeluar/edit/<?= $rujukankeluar['nomor_rawat'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                <a href="/ugd/edit/<?= $ugd['nomor_reg'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                     Ubah
                                                 </a>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $rujukankeluar['nomor_rujuk'] ?>')" href="#">
+                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $ugd['nomor_reg'] ?>')" href="#">
                                                     Hapus
                                                 </button>
-                                                <div id="modelConfirm-<?= $rujukankeluar['nomor_rujuk'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                <div id="modelConfirm-<?= $ugd['nomor_reg'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
                                                     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 
                                                         <div class="flex justify-end p-2">
-                                                            <button onclick="closeModal('modelConfirm-<?= $rujukankeluar['nomor_rujuk'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                            <button onclick="closeModal('modelConfirm-<?= $ugd['nomor_reg'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                                                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                                                 </svg>
@@ -367,14 +412,14 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                            <form action="/rujukankeluar/hapus/<?= $rujukankeluar['nomor_rawat'] ?>" method="POST">
+                                                            <form action="/ugd/hapus/<?= $ugd['nomor_reg'] ?>" method="POST">
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">
-                                                                    <button onclick="closeModal('modelConfirm-<?= $rujukankeluar['nomor_rujuk'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                    <button onclick="closeModal('modelConfirm-<?= $ugd['nomor_reg'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
                                                                         Hapus
                                                                     </button>
-                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $rujukankeluar['nomor_rujuk'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $ugd['nomor_reg'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
                                                                         Batal
                                                                     </a>
                                                                 </div>
@@ -383,17 +428,6 @@
 
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="w-full">
-                                            <?php if (strtolower($rujukankeluar['pengantaran']) === 'ambulans'): ?>
-                                                <div class="px-3 py-1.5">
-                                                    <a href="javascript:void(0);" 
-                                                    class="text-sm text-blue-600 hover:underline font-semibold"
-                                                    onclick="requestAmbulanceModal('<?= esc($rujukankeluar['nomor_rujuk']) ?>')">
-                                                        Panggil Ambulans
-                                                    </a>
-                                                </div>
-                                            <?php endif; ?>
                                             </div>
                                         </div>
                                     </td>
@@ -477,100 +511,9 @@
 </div>
 </div>
 <!-- End Card -->
-<!-- 🚑 Modal Ambulans -->
-<div id="ambulansModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/40">
-    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
-        <div class="flex justify-between items-center px-4 py-3 border-b">
-            <h2 class="text-lg font-semibold">Pilih Ambulans</h2>
-            <button onclick="closeAmbulansModal()" class="text-gray-600 hover:text-red-500 text-xl">×</button>
-        </div>
-        <div class="p-4 space-y-3" id="ambulansList">
-            <p class="text-sm text-gray-500">Memuat ambulans...</p>
-        </div>
-    </div>
-</div>
+
 <!-- End Table Section -->
 <script>
-    function requestAmbulanceModal(nomorRujuk) {
-        // Show modal
-        document.getElementById('ambulansModal').classList.remove('hidden');
-
-        // Fetch ambulans list
-        fetch('http://127.0.0.1:8080/v1/ambulans/request/pending')
-            .then(res => res.json())
-            .then(res => {
-                const list = document.getElementById('ambulansList');
-                list.innerHTML = '';
-
-                if (!res.data || res.data.length === 0) {
-                    list.innerHTML = `<p class="text-sm text-gray-500">Tidak ada ambulans tersedia.</p>`;
-                    return;
-                }
-
-                res.data.forEach(item => {
-                    list.innerHTML += `
-                        <div class="flex justify-between items-center p-2 border rounded">
-                            <div>🚑 <strong>${item.no_ambulans}</strong> (${item.status})</div>
-                            <button onclick="confirmAmbulance('${item.no_ambulans}', '${nomorRujuk}')" 
-                                    class="text-white bg-blue-600 hover:bg-blue-700 px-2 py-1 text-sm rounded">
-                                Pilih
-                            </button>
-                        </div>`;
-                });
-            })
-            .catch(() => {
-                document.getElementById('ambulansList').innerHTML = `<p class="text-sm text-red-500">Gagal memuat data ambulans.</p>`;
-            });
-    }
-
-    function closeAmbulansModal() {
-        document.getElementById('ambulansModal').classList.add('hidden');
-    }
-
-    function confirmAmbulance(noAmbulans, nomorRujuk) {
-        fetch('http://127.0.0.1:8080/v1/ambulans/request', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + '<?= session('jwt_token') ?>'
-            },
-            body: JSON.stringify({ no_ambulans: noAmbulans })
-        })
-        .then(res => res.json())
-        .then(res => {
-            closeAmbulansModal();
-            alert("✅ Permintaan ambulans dikirim.");
-        })
-        .catch(() => {
-            alert("❌ Gagal mengirim permintaan.");
-        });
-    }
-
-    function requestAmbulance(noAmbulans) {
-            $.ajax({
-                url: "http://127.0.0.1:8080/v1/ambulans/request",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    no_ambulans: noAmbulans,
-                    message: "Permintaan ambulans untuk rujukan"
-                }),
-                success: function (res) {
-                    $("#ambulanceResponse")
-                        .text("🚨 Permintaan ambulans berhasil dikirim!")
-                        .removeClass("hidden text-red-600")
-                        .addClass("text-green-600");
-                },
-                error: function (xhr) {
-                    const errMsg = xhr.responseJSON?.message || "Gagal mengirim permintaan.";
-                    $("#ambulanceResponse")
-                        .text("❌ " + errMsg)
-                        .removeClass("hidden text-green-600")
-                        .addClass("text-red-600");
-                }
-            });
-        }
-
     function myFunction() {
         var input, filter, table, tr, td, i, j, txtValue;
         input = document.getElementById("myInput");
@@ -674,5 +617,16 @@
         document.getElementById(modalId).style.display = 'none'
         document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const tindakanButtons = document.querySelectorAll(".btn-tindakan");
+
+    tindakanButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const nomorReg = this.getAttribute("data-nomor-reg");
+            document.getElementById("formNomorReg").value = nomorReg;
+        });
+    });
+});
 </script>
 <?= $this->endSection(); ?>

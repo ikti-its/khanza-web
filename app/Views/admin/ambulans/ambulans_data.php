@@ -32,7 +32,8 @@
                                 </button>
 
                                 <!-- Notification Pop-up -->
-                                <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
+                                <div id="notif-popup" style="width: 600px;" class="absolute right-0 mt-2 overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
+
                                     <div class="px-4">
                                         <div class="pt-4 flex justify-between items-center">
                                             <div class="text-lg font-semibold">Notifikasi</div>
@@ -65,8 +66,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        
-                                    <span id="notifCount">0</span>
+
 
                                     
 
@@ -445,7 +445,9 @@ function fetchAmbulansRequests() {
       let notifHtml = "";
 
       if (res.data && res.data.length > 0) {
-        res.data.forEach(function (item) {
+        res.data
+        .filter(item => item.status === 'pending')
+        .forEach(function (item) {
           notifHtml += `
             <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-blue-500">
               🚑 Ambulans <strong>${item.no_ambulans}</strong> sedang diminta (${item.status})
