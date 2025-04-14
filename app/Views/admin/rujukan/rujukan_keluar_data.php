@@ -387,11 +387,13 @@
                                             <div class="w-full">
                                             <?php if (strtolower($rujukankeluar['pengantaran']) === 'ambulans'): ?>
                                                 <div class="px-3 py-1.5">
-                                                    <a href="javascript:void(0);" 
+                                                <a id="btn-panggil-<?= $rujukankeluar['nomor_rujuk'] ?>"
+                                                    href="javascript:void(0);" 
                                                     class="text-sm text-blue-600 hover:underline font-semibold"
                                                     onclick="requestAmbulanceModal('<?= esc($rujukankeluar['nomor_rujuk']) ?>')">
-                                                        Panggil Ambulans
-                                                    </a>
+                                                    Panggil Ambulans
+                                                </a>
+
                                                 </div>
                                             <?php endif; ?>
                                             </div>
@@ -535,28 +537,42 @@
     }
 
     function confirmAmbulance(noAmbulans, nomorRujuk) {
-        fetch('http://127.0.0.1:8080/v1/ambulans/status', {
-            method: 'PUT',
+        fetch('http://127.0.0.1:8080/v1/ambulans/request', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + '<?= session('jwt_token') ?>'
             },
-            body: JSON.stringify({
-                no_ambulans: noAmbulans,
-                status: 'pending',
-                nomor_rujuk: nomorRujuk // if needed for linking
-            })
+            body: JSON.stringify({ no_ambulans: noAmbulans })
         })
         .then(res => res.json())
         .then(res => {
+            // Update color of ambulance label
+            const el = document.getElementById(`ambulans-${noAmbulans}`);
+            if (el) {
+                el.querySelector('strong').classList.remove('text-red-600');
+                el.querySelector('strong').classList.add('text-green-600');
+                el.querySelector('span').classList.remove('text-red-600');
+                el.querySelector('span').classList.add('text-green-600');
+            }
+
+            // Update the "Panggil Ambulans" button
+            const panggilBtn = document.getElementById(`btn-panggil-${nomorRujuk}`);
+            if (panggilBtn) {
+                panggilBtn.innerText = "Sudah Dipanggil";
+                panggilBtn.classList.remove("text-blue-600");
+                panggilBtn.classList.add("text-green-600");
+                panggilBtn.style.pointerEvents = "none";
+            }
+
             closeAmbulansModal();
-            alert("🚑 Ambulans berhasil dipilih.");
-            location.reload(); // refresh the table to reflect status change
+            alert("✅ Permintaan ambulans dikirim.");
         })
         .catch(() => {
-            alert("❌ Gagal memperbarui status ambulans.");
+            alert("❌ Gagal mengirim permintaan.");
         });
     }
+
 
 
     function requestAmbulance(noAmbulans) {

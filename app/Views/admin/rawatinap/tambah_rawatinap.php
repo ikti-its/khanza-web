@@ -10,7 +10,7 @@
                 Tambah Pasien Rawat Inap 
             </h2>
         </div>
-        <form action="/rujukanmasuk/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="/rawatinap/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">

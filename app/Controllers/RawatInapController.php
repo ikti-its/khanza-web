@@ -201,27 +201,36 @@ class RawatInapController extends BaseController
 
     private function getRawatInapPostData(): array
     {
+        // Get raw input
+    $jamMasukInput = $this->request->getPost('jam_masuk');
+    $jamKeluarInput = $this->request->getPost('jam_keluar');
+
+    // Fallback to current time if input is empty
+    $jamMasuk = $jamMasukInput ? date('H:i:s', strtotime($jamMasukInput)) : date('H:i:s');
+    $jamKeluar = $jamKeluarInput ? date('H:i:s', strtotime($jamKeluarInput)) : date('H:i:s');
+    
         return [
-            'nomor_rawat' => $this->request->getPost('nomor_rawat'),
-            'nomor_rm' => $this->request->getPost('nomor_rm'),
-            'nama_pasien' => $this->request->getPost('nama_pasien'),
-            'alamat_pasien' => $this->request->getPost('alamat_pasien'),
-            'penanggung_jawab' => $this->request->getPost('penanggung_jawab'),
-            'hubungan_pj' => $this->request->getPost('hubungan_pj'),
-            'jenis_bayar' => $this->request->getPost('jenis_bayar'),
-            'kamar' => $this->request->getPost('kamar'),
-            'tarif_kamar' => floatval($this->request->getPost('tarif_kamar')),
-            'diagnosa_awal' => $this->request->getPost('diagnosa_awal'),
-            'diagnosa_akhir' => $this->request->getPost('diagnosa_akhir'),
-            'tanggal_masuk' => $this->request->getPost('tanggal_masuk'),
-            'jam_masuk' => $this->request->getPost('jam_masuk'),
-            'tanggal_keluar' => $this->request->getPost('tanggal_keluar'),
-            'jam_keluar' => $this->request->getPost('jam_keluar'),
-            'total_biaya' => floatval($this->request->getPost('total_biaya')),
-            'status_pulang' => $this->request->getPost('status_pulang'),
-            'lama_ranap' => floatval($this->request->getPost('lama_ranap')),
-            'dokter_pj' => $this->request->getPost('dokter_pj'),
-            'status_bayar' => $this->request->getPost('status_bayar'),
+            'nomor_rawat'       => $this->request->getPost('nomor_rawat'),
+            'nomor_rm'          => $this->request->getPost('nomor_rm'),
+            'nama_pasien'       => $this->request->getPost('nama_pasien'),
+            'alamat_pasien'     => $this->request->getPost('alamat_pasien'),
+            'penanggung_jawab'  => $this->request->getPost('penanggung_jawab'),
+            'hubungan_pj'       => $this->request->getPost('hubungan_pj'),
+            'jenis_bayar'       => $this->request->getPost('jenis_bayar'),
+            'kamar'             => $this->request->getPost('kamar'),
+            'tarif_kamar'       => floatval($this->request->getPost('tarif_kamar')),
+            'diagnosa_awal'     => $this->request->getPost('diagnosa_awal'),
+            'diagnosa_akhir'    => $this->request->getPost('diagnosa_akhir'),
+            'tanggal_masuk'     => $this->request->getPost('tanggal_masuk'),
+            'jam_masuk'         => $jamMasuk,
+            'tanggal_keluar'    => $this->request->getPost('tanggal_keluar'),
+            'jam_keluar'        => $jamKeluar,
+            'total_biaya'       => floatval($this->request->getPost('total_biaya')),
+            'status_pulang'     => $this->request->getPost('status_pulang'),
+            'lama_ranap'        => floatval($this->request->getPost('lama_ranap')),
+            'dokter_pj'         => $this->request->getPost('dokter_pj'),
+            'status_bayar'      => $this->request->getPost('status_bayar'),
         ];
     }
+    
 }

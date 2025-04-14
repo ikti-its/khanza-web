@@ -253,7 +253,7 @@ $routes->group('rujukankeluar', ['filter' => 'auth'], function ($routes) {
 $routes->group('rawatinap', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'RawatInapController::dataRawatInap', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
     $routes->get('tambah', 'RawatInapController::tambahRawatInap', ['filter' => 'checkpermission:1337,1,4001,4002']);
-    $routes->post('submittambah', 'RawatInapController::submitTambahRegistraRawatInap', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'RawatInapController::submitTambahRawatInap', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('edit/(:any)', 'RawatInapController::editRawatInap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submitedit', 'RawatInapController::submitEditRawatInap', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submitedit/(:segment)', 'RawatInapController::submitEditRawatInap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
@@ -283,4 +283,19 @@ $routes->group('ugd', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit/(:segment)', 'UGDController::submitEditUGD/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->delete('hapus/(:segment)', 'UGDController::hapusUGD/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('trigger-notif', 'UGDController::triggerNotif');
+});
+
+//Tindakan
+$routes->group('tindakan', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'TindakanController::dataTindakan', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('tambah', 'TindakanController::tambahTindakan', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('tambah/(:any)', 'TindakanController::tambahTindakan/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'TindakanController::submitTambahTindakan', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:any)', 'TindakanController::editTindakan/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit', 'TindakanController::submitEditTindakan', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'TindakanController::submitEditTindakan/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'TindakanController::hapusTindakan/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('(:segment)', 'TindakanController::tindakanData/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('submit/(:segment)', 'TindakanController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+
 });
