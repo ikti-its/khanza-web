@@ -299,3 +299,16 @@ $routes->group('tindakan', ['filter' => 'auth'], function ($routes) {
     $routes->get('submit/(:segment)', 'TindakanController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 
 });
+
+//Dokter Jaga
+$routes->group('dokterjaga', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'DokterJagaController::dataDokterJaga', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('tambah', 'DokterJagaController::tambahDokterJaga', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'DokterJagaController::submitTambahDokterJaga', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:any)', 'DokterJagaController::editDokterJaga/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit', 'DokterJagaController::submitEditDokterJaga', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'DokterJagaController::submitEditDokterJaga/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'DokterJagaController::hapusDokterJaga/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('panggil/(:any)', 'DokterJagaController::panggilDokterJaga/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('terima/(:any)', 'DokterJagaController::terimaDokterJaga/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+});

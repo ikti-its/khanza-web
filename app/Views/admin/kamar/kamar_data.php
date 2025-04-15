@@ -482,6 +482,7 @@
 
         <div class="flex justify-end gap-3">
             <button onclick="closeRoomModal()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</button>
+            <button onclick="markRoomFull()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Kamar Penuh</button>
             <button onclick="submitAssignRoom()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Assign</button>
         </div>
     </div>
@@ -530,35 +531,43 @@ function closeRoomModal() {
 
 function submitAssignRoom() {
     const nomorReg = document.getElementById("modal-nomor-reg").value;
-    const selectedRoom = document.getElementById("roomSelect").value;
+    const kamarId = document.getElementById("roomSelect").value;
 
-    if (!selectedRoom) {
-        alert("Silakan pilih kamar terlebih dahulu.");
+    if (!kamarId) {
+        alert("Pilih kamar terlebih dahulu");
         return;
     }
 
+    // Assign room to registrasi
     fetch(`http://127.0.0.1:8080/v1/registrasi/${nomorReg}/assign-kamar`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ kamar_id: selectedRoom })
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kamar_id: kamarId })
     })
     .then(res => res.json())
-    .then(data => {
-        if (data.status === 'success') {
-            alert("Kamar berhasil diassign.");
-            closeRoomModal();
-            fetchPendingRooms();
+    .then(res => {
+        if (res.status === "success") {
+            // 🔄 Update status_kamar to 'penuh'
+            return fetch(`http://127.0.0.1:8080/v1/kamar/${kamarId}/status`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status_kamar: "penuh" })
+            });
         } else {
-            alert("Gagal assign kamar.");
+            throw new Error("Gagal assign kamar");
         }
     })
+    .then(() => {
+        alert("Kamar berhasil diassign dan diupdate jadi penuh.");
+        closeRoomModal();
+        fetchPendingRooms(); // optional refresh
+    })
     .catch(err => {
-        console.error(err);
-        alert("Terjadi kesalahan.");
+        console.error("❌", err);
+        alert("Gagal assign kamar.");
     });
 }
+
 
     
 
