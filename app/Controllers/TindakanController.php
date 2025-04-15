@@ -32,7 +32,7 @@ class TindakanController extends BaseController
             if (!isset($tindakan_data['data'])) {
                 return $this->renderErrorView(500);
             }
-            dd(count($tindakan_data['data']), $tindakan_data['data']);
+            // dd(count($tindakan_data['data']), $tindakan_data['data']);
 
             $this->addBreadcrumb('User', 'user');
             $this->addBreadcrumb('Tindakan', 'tindakan');
@@ -79,7 +79,7 @@ class TindakanController extends BaseController
         $this->addBreadcrumb('Edit', 'edit');
 
         return view('/admin/tindakan/tambah_tindakan', [
-            'tindakan' => $data['data'],
+            'tindakan' => $data['data'][0] ?? [],
             'title' => $title,
             'breadcrumbs' => $this->getBreadcrumbs()
         ]);
@@ -161,7 +161,7 @@ class TindakanController extends BaseController
         $this->addBreadcrumb('Edit', 'edit');
 
         return view('/admin/tindakan/edit_tindakan', [
-            'tindakan' => $data['data'],
+            'tindakan' => $data['data'][0] ?? [],
             'title' => $title,
             'breadcrumbs' => $this->getBreadcrumbs()
         ]);
@@ -211,32 +211,35 @@ class TindakanController extends BaseController
         }
     }
 
-    public function hapusTindakan($nomorRawat)
+    public function hapusTindakan($nomor_rawat, $jam_rawat)
     {
         if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);
         }
-
+    
         $token = session()->get('jwt_token');
-        $url = $this->api_url . '/tindakan/' . $nomorRawat;
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    
+        $delete_url = $this->api_url . "/tindakan/$nomor_rawat/$jam_rawat";
+    
+        $ch = curl_init($delete_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $token,
-            'Accept: application/json',
+            'Accept: application/json'
         ]);
+    
         $response = curl_exec($ch);
         $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-
-        if ($http_status === 200 || $http_status === 204) {
-            return redirect()->to(base_url('tindakan'))->with('success', 'Data tindakan berhasil dihapus.');
-        } else {
+    
+        if ($http_status !== 200) {
             return $this->renderErrorView($http_status);
         }
+    
+        return redirect()->to('/tindakan')->with('success', 'Tindakan deleted');
     }
+    
 
     public function tindakanData($nomorRawat)
 {

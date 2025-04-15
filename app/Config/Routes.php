@@ -294,7 +294,7 @@ $routes->group('tindakan', ['filter' => 'auth'], function ($routes) {
     $routes->get('edit/(:any)', 'TindakanController::editTindakan/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submitedit', 'TindakanController::submitEditTindakan', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submitedit/(:segment)', 'TindakanController::submitEditTindakan/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
-    $routes->delete('hapus/(:segment)', 'TindakanController::hapusTindakan/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)/(:segment)', 'TindakanController::hapusTindakan/$1/$2', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('(:segment)', 'TindakanController::tindakanData/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('submit/(:segment)', 'TindakanController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 
