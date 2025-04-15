@@ -335,13 +335,13 @@
                                                         </div>
 
                                                         <!-- Rawat Inap button -->
-                                                        <form id="formButuhKamar" action="/registrasi/trigger-notif" method="post" class="self-end">
-                                                            <input type="hidden" name="nomor_reg" id="formNomorReg">
-                                                            <button type="submit"
-                                                                    class="btn btn-warning whitespace-nowrap py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                                                                Rawat Inap
-                                                            </button>
-                                                        </form>
+                                                        <button 
+                                                            type="button" 
+                                                            onclick="butuhKamar('<?= $registrasi['nomor_reg'] ?>')" 
+                                                            class="btn btn-warning"
+                                                        >
+                                                            Butuh Kamar
+                                                        </button>
                                                     </div>
 
 
@@ -530,6 +530,109 @@
 
 <!-- End Table Section -->
 <script>
+
+document.getElementById("close-popup").addEventListener("click", function () {
+    document.getElementById("notif-popup").classList.add("hidden");
+});
+
+function fetchPendingRooms() {
+    fetch("http://127.0.0.1:8080/v1/registrasi/pending-room")
+    .then(res => res.json())
+    .then(data => {
+        let notifHtml = "";
+        const pending = data.data || [];
+
+        document.getElementById("notifCount").textContent = pending.length;
+
+        if (pending.length === 0) {
+            notifHtml = `<div class="p-4 text-sm text-gray-500">Tidak ada permintaan kamar saat ini.</div>`;
+        } else {
+            pending.forEach(item => {
+                notifHtml += `
+                    <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-red-500">
+                        <div>
+                            <strong>${item.nama_pasien || item.nomor_reg}</strong> menunggu kamar.
+                        </div>
+                        <button 
+                            type="button"
+                            class="bg-green-600 text-white text-sm px-3 py-1 rounded hover:bg-green-700 assign-room-btn"
+                            data-nomor-reg="${item.nomor_reg}">
+                            🚪 Assign Room
+                        </button>
+                    </div>`;
+            });
+        }
+
+        document.getElementById("notifList").innerHTML = notifHtml;
+    })
+    .catch(error => {
+        console.error("Failed to fetch pending room requests:", error);
+        document.getElementById("notifList").innerHTML = `<div class="p-4 text-red-500">Gagal memuat notifikasi.</div>`;
+    });
+}
+
+// Optional: refresh periodically
+setInterval(fetchPendingRooms, 10000);
+
+function butuhKamar(nomorReg) {
+    fetch(`http://127.0.0.1:8080/v1/registrasi/${nomorReg}/assign-room/menunggu`, {
+        method: 'PUT'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Permintaan kamar berhasil dikirim.');
+
+            // Immediately refresh notification list
+            fetchPendingRooms();
+
+            // Show the notification popup
+            document.getElementById("notif-popup").classList.remove("hidden");
+        } else {
+            alert('Gagal mengirim permintaan kamar.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menghubungi server.');
+    });
+}
+
+function butuhKamar(nomorReg) {
+    fetch(`http://127.0.0.1:8080/v1/registrasi/${nomorReg}/assign-room/menunggu`, {
+        method: 'PUT'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Status kamar berhasil diubah ke "menunggu"');
+            // Optional: update the UI, change button text, reload, etc.
+        } else {
+            alert('Gagal memperbarui status kamar');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menghubungi server');
+    });
+}
+
+function updateStatusKamar(nomorReg) {
+  $.ajax({
+    url: `http://localhost:8080/v1/registrasi/status_kamar/${nomorReg}`,
+    method: "PUT",
+    contentType: "application/json",
+    data: JSON.stringify({ status_kamar: "menunggu" }),
+    success: function (res) {
+      alert("Status kamar diubah ke 'menunggu'");
+      // optionally refresh or update UI here
+    },
+    error: function () {
+      alert("Gagal mengubah status kamar");
+    }
+  });
+}
+
     function myFunction() {
         var input, filter, table, tr, td, i, j, txtValue;
         input = document.getElementById("myInput");

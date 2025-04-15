@@ -6,47 +6,7 @@
     <!-- <div class="max-w-[85rem] w-full py-6 lg:py-3"> -->
     <!-- Card -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-  function fetchPendingRooms() {
-    $.ajax({
-      url: "http://127.0.0.1:8080/v1/registrasi/pending-room",
-      method: "GET",
-      success: function (res) {
-        let notifHtml = "";
-        $("#notifCount").text(res.data.length);
 
-        if (res.data.length === 0) {
-          notifHtml = `<div class="p-4 text-sm text-gray-500">Tidak ada permintaan kamar saat ini.</div>`;
-        } else {
-            res.data.forEach(function (item) {
-  if (item.nomor_reg) {
-    notifHtml += `
-      <a href="/kamar/terima/${item.nomor_reg}" class="block p-4 hover:bg-gray-100 border-l-4 border-red-500">
-        <strong>${item.nomor_reg || 'Unnamed Patient'}</strong> meminta kamar ${item.kelas}.
-      </a>`;
-  } else {
-    notifHtml += `
-      <div class="block p-4 text-yellow-600 bg-yellow-50 border-l-4 border-yellow-500">
-        Incomplete patient data (missing nomor_rawat).
-      </div>`;
-  }
-});
-        }
-
-        $("#notifList").html(notifHtml);
-      },
-      error: function () {
-        $("#notifList").html(`<div class="p-4 text-red-500">Gagal memuat data notifikasi.</div>`);
-      }
-    });
-  }
-
-  // Call once on page load
-  fetchPendingRooms();
-
-  // Then auto-refresh every 10 seconds
-  setInterval(fetchPendingRooms, 10000);
-</script>
     <div class="flex flex-col">
         <div class="-m-1.5 overflow-y-hidden">
             <div class="sm:px-20 min-w-full inline-block align-middle">
@@ -507,8 +467,154 @@
 </div>
 <!-- End Card -->
 
+<!-- Modal for Assigning Room -->
+<div id="assignRoomModal" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-lg shadow-md p-6 w-full max-w-md">
+        <h2 class="text-lg font-semibold mb-4">Pilih Kamar untuk <span id="modal-pasien-nama" class="font-bold"></span></h2>
+        <input type="hidden" id="modal-nomor-reg">
+
+        <label for="roomSelect" class="block mb-2">Pilih Kamar</label>
+        <select id="roomSelect" class="w-full border rounded-lg p-2 mb-4">
+            <option value="">-- Pilih Kamar --</option>
+            <!-- Filled dynamically -->
+        </select>
+
+        <div class="flex justify-end gap-3">
+            <button onclick="closeRoomModal()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</button>
+            <button onclick="submitAssignRoom()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Assign</button>
+        </div>
+    </div>
+</div>
 <!-- End Table Section -->
+
 <script>
+
+function openRoomModal(nomorReg, namaPasien) {
+    document.getElementById("modal-nomor-reg").value = nomorReg;
+    document.getElementById("modal-pasien-nama").textContent = namaPasien;
+    document.getElementById("assignRoomModal").classList.remove("hidden");
+
+    // Fetch available rooms
+    fetch("http://127.0.0.1:8080/v1/kamar/available") // adjust to your room API
+        .then(res => res.json())
+        .then(data => {
+            const select = document.getElementById("roomSelect");
+            select.innerHTML = '<option value="">-- Pilih Kamar --</option>';
+            data.data.forEach(kamar => {
+                select.innerHTML += `<option value="${kamar.id}">${kamar.nama_kamar} (Bed ${kamar.nomor_bed})</option>`;
+            });
+        });
+}
+
+function closeRoomModal() {
+    document.getElementById("assignRoomModal").classList.add("hidden");
+}
+
+function submitAssignRoom() {
+    const nomorReg = document.getElementById("modal-nomor-reg").value;
+    const selectedRoom = document.getElementById("roomSelect").value;
+
+    if (!selectedRoom) {
+        alert("Silakan pilih kamar terlebih dahulu.");
+        return;
+    }
+
+    fetch(`http://127.0.0.1:8080/v1/registrasi/${nomorReg}/assign-kamar`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ kamar_id: selectedRoom })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert("Kamar berhasil diassign.");
+            closeRoomModal();
+            fetchPendingRooms();
+        } else {
+            alert("Gagal assign kamar.");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Terjadi kesalahan.");
+    });
+}
+
+    
+
+function butuhKamar(nomorReg) {
+    fetch(`http://127.0.0.1:8080/v1/registrasi/${nomorReg}/assign-room/menunggu`, {
+        method: 'PUT'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Refresh notifications after successful status update
+            fetchPendingRooms();
+
+            // Show the notification popup
+            document.getElementById("notif-popup").classList.remove("hidden");
+
+            // Optional: scroll to top of popup
+            document.getElementById("notif-popup").scrollTop = 0;
+
+        } else {
+            alert('Gagal mengirim permintaan kamar.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menghubungi server.');
+    });
+}
+
+// Fetch and update the notification popup
+function fetchPendingRooms() {
+    fetch("http://127.0.0.1:8080/v1/registrasi/pending-room")
+    .then(res => res.json())
+    .then(data => {
+        const pending = data.data || [];
+        const notifList = document.getElementById("notifList");
+        const notifCount = document.querySelectorAll("#notifCount");
+
+        let html = "";
+        if (pending.length === 0) {
+            html = `<div class="p-4 text-sm text-gray-500">Tidak ada permintaan kamar saat ini.</div>`;
+        } else {
+            pending.forEach(item => {
+                notifHtml += `
+                    <div 
+                        class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-red-500 cursor-pointer"
+                        onclick="openRoomModal('${item.nomor_reg}', '${item.nama_pasien}')"
+                    >
+                        <div>
+                            <strong>${item.nama_pasien}</strong> menunggu kamar.
+                        </div>
+                        <span>🚪</span>
+                    </div>
+                `;
+            });
+        }
+
+        notifList.innerHTML = html;
+        notifCount.forEach(el => el.textContent = pending.length); // update both span elements
+    })
+    .catch(err => {
+        console.error("Fetch failed:", err);
+        document.getElementById("notifList").innerHTML = `<div class="p-4 text-red-500">Gagal memuat notifikasi.</div>`;
+    });
+}
+
+// Optional: periodic refresh
+setInterval(fetchPendingRooms, 10000);
+
+// Close popup on X click
+document.getElementById("close-popup").addEventListener("click", () => {
+    document.getElementById("notif-popup").classList.add("hidden");
+});
+
     function myFunction() {
         var input, filter, table, tr, td, i, j, txtValue;
         input = document.getElementById("myInput");
