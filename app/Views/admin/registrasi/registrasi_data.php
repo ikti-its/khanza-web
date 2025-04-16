@@ -251,7 +251,7 @@
                                                     </div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Alamat Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $registrasi['alamat_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $registrasi['alamat_pj'] ?? '' ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
@@ -292,7 +292,7 @@
                                                         <!-- Select input -->
                                                         <div class="w-full">
                                                             <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kelas Kamar</label>
-                                                            <select id="kelas-select" name="kelas"
+                                                            <select id="kelas_kamar_select" name="kelas_kamar"
                                                                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white"
                                                                     required>
                                                                 <option value="">-- Pilih Kelas --</option> <!-- Optional default -->
@@ -495,6 +495,48 @@
 
 <!-- End Table Section -->
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    fetch('http://127.0.0.1:8080/v1/kamar/kelas')
+        .then(res => res.json())
+        .then(data => {
+            document.querySelectorAll("#kelas_kamar_select").forEach(select => {
+    fetch("http://127.0.0.1:8080/v1/kamar/kelas")
+        .then(res => res.json())
+        .then(data => {
+            if (!data.data || data.data.length === 0) {
+                console.warn("⚠️ No kelas data received from API");
+                return;
+            }
+
+            data.data.forEach(kelas => {
+                const option = document.createElement("option");
+                option.value = kelas;
+                option.textContent = kelas;
+                select.appendChild(option);
+            });
+        })
+        .catch(err => {
+            console.error("❌ Failed to fetch kelas list:", err);
+        });
+});
+
+            if (!data.data || data.data.length === 0) {
+                console.warn("⚠️ No kelas data received from API");
+                return;
+            }
+
+            data.data.forEach(kelas => {
+                const option = document.createElement("option");
+                option.value = kelas;
+                option.textContent = kelas;
+                select.appendChild(option);
+            });
+        })
+        .catch(err => {
+            console.error("❌ Failed to fetch kelas list:", err);
+        });
+});
+
 document.addEventListener('DOMContentLoaded', () => {
         fetch('http://127.0.0.1:8080/v1/kamar/kelas')
             .then(res => res.json())

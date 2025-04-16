@@ -77,78 +77,6 @@ class RegistrasiController extends BaseController
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
             $title = 'Tambah registrasi';
-            // $satuan_url = $this->api_url . '/ref/inventory/satuan';
-            // $industri_url = $this->api_url . '/ref/inventory/industri';
-            // $jenis_url = $this->api_url . '/ref/inventory/jenis';
-            // $kategori_url = $this->api_url . '/ref/inventory/kategori';
-            // $golongan_url = $this->api_url . '/ref/inventory/golongan';
-
-            // $ch_satuan = curl_init($satuan_url);
-            // curl_setopt($ch_satuan, CURLOPT_RETURNTRANSFER, true);
-            // curl_setopt($ch_satuan, CURLOPT_HTTPHEADER, [
-            //     'Authorization: Bearer ' . $token,
-            // ]);
-            // $response_satuan = curl_exec($ch_satuan);
-            // $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
-            // curl_close($ch_satuan);
-
-            // $ch_industri = curl_init($industri_url);
-            // curl_setopt($ch_industri, CURLOPT_RETURNTRANSFER, true);
-            // curl_setopt($ch_industri, CURLOPT_HTTPHEADER, [
-            //     'Authorization: Bearer ' . $token,
-            // ]);
-            // $response_industri = curl_exec($ch_industri);
-            // $http_status_code_industri = curl_getinfo($ch_industri, CURLINFO_HTTP_CODE);
-            // curl_close($ch_industri);
-
-            // $ch_jenis = curl_init($jenis_url);
-            // curl_setopt($ch_jenis, CURLOPT_RETURNTRANSFER, true);
-            // curl_setopt($ch_jenis, CURLOPT_HTTPHEADER, [
-            //     'Authorization: Bearer ' . $token,
-            // ]);
-            // $response_jenis = curl_exec($ch_jenis);
-            // $http_status_code_jenis = curl_getinfo($ch_jenis, CURLINFO_HTTP_CODE);
-            // curl_close($ch_jenis);
-
-            // $ch_kategori = curl_init($kategori_url);
-            // curl_setopt($ch_kategori, CURLOPT_RETURNTRANSFER, true);
-            // curl_setopt($ch_kategori, CURLOPT_HTTPHEADER, [
-            //     'Authorization: Bearer ' . $token,
-            // ]);
-            // $response_kategori = curl_exec($ch_kategori);
-            // $http_status_code_kategori = curl_getinfo($ch_kategori, CURLINFO_HTTP_CODE);
-            // curl_close($ch_kategori);
-
-            // $ch_golongan = curl_init($golongan_url);
-            // curl_setopt($ch_golongan, CURLOPT_RETURNTRANSFER, true);
-            // curl_setopt($ch_golongan, CURLOPT_HTTPHEADER, [
-            //     'Authorization: Bearer ' . $token,
-            // ]);
-            // $response_golongan = curl_exec($ch_golongan);
-            // $http_status_code_golongan = curl_getinfo($ch_golongan, CURLINFO_HTTP_CODE);
-            // curl_close($ch_golongan);
-
-            // if ($http_status_code_satuan !== 201) {
-            //     return $this->renderErrorView($http_status_code_satuan);
-            // }
-            // if ($http_status_code_industri !== 201) {
-            //     return $this->renderErrorView($http_status_code_industri);
-            // }
-            // if ($http_status_code_jenis !== 201) {
-            //     return $this->renderErrorView($http_status_code_jenis);
-            // }
-            // if ($http_status_code_kategori !== 201) {
-            //     return $this->renderErrorView($http_status_code_kategori);
-            // }
-            // if ($http_status_code_golongan !== 201) {
-            //     return $this->renderErrorView($http_status_code_golongan);
-            // }
-
-            // $satuan_data = json_decode($response_satuan, true);
-            // $industri_data = json_decode($response_industri, true);
-            // $jenis_data = json_decode($response_jenis, true);
-            // $kategori_data = json_decode($response_kategori, true);
-            // $golongan_data = json_decode($response_golongan, true);
 
             $this->addBreadcrumb('User', 'user');
             $this->addBreadcrumb('Registrasi', 'registrasi');
@@ -157,11 +85,6 @@ class RegistrasiController extends BaseController
             $breadcrumbs = $this->getBreadcrumbs();
 
             return view('/admin/registrasi/tambah_registrasi', [
-                // 'satuan_data' => $satuan_data['data'],
-                // 'industri_data' => $industri_data['data'],
-                // 'jenis_data' => $jenis_data['data'],
-                // 'kategori_data' => $kategori_data['data'],
-                // 'golongan_data' => $golongan_data['data'],
                 'title' => $title,
                 'breadcrumbs' => $breadcrumbs
             ]);
@@ -182,6 +105,7 @@ class RegistrasiController extends BaseController
             $nomor_rekam_medis = $this->request->getPost('nomor_rekam_medis');
             $jenis_kelamin = $this->request->getPost('jenis_kelamin');
             $poliklinik = $this->request->getPost('poliklinik');
+            $kode_dokter = $this->request->getPost('kode_dokter');
             $dokter = $this->request->getPost('dokter');
             $nama = $this->request->getPost('nama');
             $umur = intval($this->request->getPost('umur'));
@@ -198,13 +122,13 @@ class RegistrasiController extends BaseController
             $jenis_bayar = $this->request->getPost('jenis_bayar');
 
             // Validate that dokter is not empty
-        if (empty($dokter)) {
-            return $this->response->setJSON([
-                'code' => 400,
-                'status' => 'Bad Request',
-                'data' => 'Dokter field is required.'
-            ]);
-        }
+        // if (empty($dokter)) {
+        //     return $this->response->setJSON([
+        //         'code' => 400,
+        //         'status' => 'Bad Request',
+        //         'data' => 'Dokter field is required.'
+        //     ]);
+        // }
             
             // Prepare data to be inserted into PostgreSQL or passed to another system
             $postDataRegistrasi = [
@@ -216,7 +140,7 @@ class RegistrasiController extends BaseController
                 'poliklinik' => $poliklinik,
                 'nama_dokter' => $dokter,
                 'nama_pasien' => $nama,
-                'kode_dokter' => "D001",
+                'kode_dokter' => $this->request->getPost('kode_dokter'),
                 'umur' => strval($umur),
                 'penanggung_jawab' => $penanggung_jawab,
                 'alamat_pj' => $alamat_penanggung_jawab,

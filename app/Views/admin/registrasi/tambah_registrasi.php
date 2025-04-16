@@ -15,9 +15,31 @@
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Registrasi</label>
-                <input type="text" name="nomor_reg" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <input type="text" name="nomor_reg" value="<?php function generateUniqueNumber($length = 15)
+                                                        {
+                                                            $characters = '1234567890';
+                                                            $charactersLength = strlen($characters);
+                                                            $randomString = '';
+
+                                                            $uniqueLength = $length - 11;
+
+                                                            if ($uniqueLength > 0) {
+                                                                for ($i = 0; $i < $uniqueLength; $i++) {
+                                                                    $randomString .= $characters[rand(0, $charactersLength - 1)];
+                                                                }
+                                                            } else {
+                                                                return "Panjang maksimal terlalu pendek.";
+                                                            }
+
+                                                            return $randomString;
+                                                        }
+
+                                                        $tanggalHariIni = date('Ymd');
+
+                                                        $nomor = "REG" . $tanggalHariIni . generateUniqueNumber();
+                                                        echo $nomor; ?>"class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nomor Rawat</label>
-                <input name="nomor_rawat" value="<?php function generateUniqueNumber($length = 15)
+                <input name="nomor_rawat" value="<?php function generateUniqueNumber2($length = 15)
                                                         {
                                                             $characters = '1234567890';
                                                             $charactersLength = strlen($characters);
@@ -79,10 +101,9 @@
                 <select name="poliklinik" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="Poli Umum">Poli Umum</option>
                 </select>
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Dokter</label>
-                <select name="dokter" id="dokter" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="Dr. Ahmad">Dr. Ahmad</option>
-                    <option value="Dr. Budi">Dr. Budi</option>
+                <label for="dokter" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Dokter</label>
+                <select name="kode_dokter" id="dokter" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="">-- Pilih Dokter --</option>
                 </select>
             </div>
 
@@ -153,6 +174,39 @@
 </div>
 <!-- End Card Section -->
 <script>
+
+fetch("http://127.0.0.1:8080/v1/registrasi/dokter")
+    .then(res => res.json())
+    .then(data => {
+        const select = document.getElementById("dokter");
+
+        data.data.forEach(dokter => {
+            const option = document.createElement("option");
+            option.value = dokter.kode_dokter; // value = kode
+            option.textContent = dokter.nama_dokter; // shown = name
+            select.appendChild(option);
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('http://127.0.0.1:8080/v1/registrasi/dokter')
+            .then(res => res.json())
+            .then(data => {
+                const select = document.getElementById("dokter");
+
+                if (!data.data || data.data.length === 0) return;
+
+                data.data.forEach(dokter => {
+                    const option = document.createElement("option");
+                    option.value = dokter.kode_dokter;
+                    option.textContent = dokter.nama_dokter;
+                    select.appendChild(option);
+                });
+            })
+            .catch(err => {
+                console.error("❌ Failed to load dokter list:", err);
+            });
+    });
     const inputHargaBeli = document.querySelector('input[name="hargabeli"]');
 
     // Ambil semua input yang perlu diisi dan diubah
