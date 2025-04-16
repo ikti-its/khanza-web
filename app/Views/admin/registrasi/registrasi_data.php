@@ -38,28 +38,7 @@
                                                 <path d="M20.09 18L23.54 14.55C23.975 14.115 23.975 13.395 23.54 12.96C23.105 12.525 22.385 12.525 21.95 12.96L18.5 16.41L15.05 12.96C14.615 12.525 13.895 12.525 13.46 12.96C13.025 13.395 13.025 14.115 13.46 14.55L16.91 18L13.46 21.45C13.025 21.885 13.025 22.605 13.46 23.04C13.685 23.265 13.97 23.37 14.255 23.37C14.54 23.37 14.825 23.265 15.05 23.04L18.5 19.59L21.95 23.04C22.175 23.265 22.46 23.37 22.745 23.37C23.03 23.37 23.315 23.265 23.54 23.04C23.975 22.605 23.975 21.885 23.54 21.45L20.09 18Z" fill="#272727" />
                                             </svg>
                                         </div>
-                                        <div class="flex">
-                                            <div class="flex justify-center items-center w-3/4">
-                                                <button id="stok-tab" class="flex items-center justify-center text-center w-full py-2 border-b-2 border-[#272727]">
-                                                    Stok
-                                                    <span class="ml-1"> <!-- Add margin-left for spacing -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
-                                                            <circle cx="7.75" cy="7.5" r="7" fill="#EF4444" />
-                                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="central" fill="#FFF" font-size="10px"></text>
-                                                        </svg>
-                                                    </span>
-                                                </button>
-                                            </div>
-                                            <div class="flex justify-center items-center w-3/4">
-                                                <button id="kadaluwarsa-tab" class="flex items-center justify-center text-center w-full py-2 border-b-2">Kadaluwarsa
-                                                    <span class="ml-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
-                                                            <circle cx="7.75" cy="7.5" r="7" fill="#EF4444" />
-                                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="central" fill="#FFF" font-size="10px"></text>
-                                                        </svg>
-                                                    </span>
-                                                </button>
-                                            </div>
+                                        <div class="flex">                                    
                                         </div>
                                     </div>
                                     <div>
@@ -78,7 +57,16 @@
                                                 </span>
                                             </button>
                                         </div>
-
+                                        container.innerHTML += `
+                                        <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                                                <div>
+                                                    <p class="text-base font-semibold text-gray-800">Kamar penuh untuk ${notif.nama_pasien}</p>
+                                                    <p class="text-sm text-gray-500">Nomor Registrasi: ${notif.nomor_reg}</p>
+                                                </div>
+                                            </div>
+                                        </div>`;
                                     </div>
                                 </div>
                             </div>
@@ -304,12 +292,10 @@
                                                         <!-- Select input -->
                                                         <div class="w-full">
                                                             <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kelas Kamar</label>
-                                                            <select name="status_poliklinik"
+                                                            <select id="kelas-select" name="kelas"
                                                                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white"
                                                                     required>
-                                                                <option value="Umum">Umum</option>
-                                                                <option value="VIP">VIP</option>
-                                                                <option value="VVIP">VVIP</option>
+                                                                <option value="">-- Pilih Kelas --</option> <!-- Optional default -->
                                                             </select>
                                                         </div>
 
@@ -317,7 +303,7 @@
                                                         <button 
                                                             type="button" 
                                                             onclick="butuhKamar('<?= $registrasi['nomor_reg'] ?>')" 
-                                                            class="btn btn-warning"
+                                                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
                                                         >
                                                             Butuh Kamar
                                                         </button>
@@ -509,16 +495,63 @@
 
 <!-- End Table Section -->
 <script>
-// Tab switching
-document.getElementById("stok-tab").addEventListener("click", () => {
-        document.getElementById("stok-content").classList.remove("hidden");
-        document.getElementById("kamarpenuh-content").classList.add("hidden");
+document.addEventListener('DOMContentLoaded', () => {
+        fetch('http://127.0.0.1:8080/v1/kamar/kelas')
+            .then(res => res.json())
+            .then(res => {
+                const select = document.getElementById("kelas-select");
+                if (!select) {
+                    console.error('Select element not found');
+                    return;
+                }
+
+                res.data.forEach(kelas => {
+                    const option = document.createElement("option");
+                    option.value = kelas;
+                    option.textContent = kelas;
+                    select.appendChild(option);
+                });
+            })
+            .catch(err => console.error('Error fetching kelas:', err));
     });
 
-    document.getElementById("kamarpenuh-tab").addEventListener("click", () => {
-        document.getElementById("stok-content").classList.add("hidden");
-        document.getElementById("kamarpenuh-content").classList.remove("hidden");
+    window.addEventListener('DOMContentLoaded', () => {
+    const stored = JSON.parse(localStorage.getItem('kamarPenuhList')) || [];
+    const container = document.getElementById("kamarpenuh-content");
+
+    stored.forEach(notif => {
+        container.innerHTML += `
+            <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                    <div>
+                        <p class="text-base font-semibold text-gray-800">Kamar penuh untuk ${notif.nama_pasien}</p>
+                        <p class="text-sm text-gray-500">Nomor Registrasi: ${notif.nomor_reg}</p>
+                    </div>
+                </div>
+            </div>
+        `;
     });
+});
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const notifData = localStorage.getItem('kamarPenuhNotif');
+        if (notifData) {
+            const { nomor_reg, nama } = JSON.parse(notifData);
+            showNotification(`Kamar penuh untuk ${nama} (${nomor_reg})`);
+
+            // Clear so it doesn't show again on refresh
+            localStorage.removeItem('kamarPenuhNotif');
+        }
+    });
+
+    function showNotification(message) {
+        const notif = document.createElement('div');
+        notif.className = 'fixed top-5 right-5 z-[9999] bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg';
+        notif.innerText = message;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 4000);
+    }
 
     // Fetch kamar penuh notifications
     function fetchKamarPenuhNotifications() {
@@ -553,7 +586,7 @@ document.getElementById("stok-tab").addEventListener("click", () => {
     // Call once and refresh every 10s
     fetchKamarPenuhNotifications();
     setInterval(fetchKamarPenuhNotifications, 10000);
-    
+
 document.getElementById("close-popup").addEventListener("click", function () {
     document.getElementById("notif-popup").classList.add("hidden");
 });
@@ -722,29 +755,6 @@ function updateStatusKamar(nomorReg) {
         closeNotificationPopup();
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Menghitung jumlah div elemen di dalam kadaluwarsa-content
-        var kadaluwarsaContent = document.getElementById('kadaluwarsa-content');
-        var divCount = kadaluwarsaContent.querySelectorAll('div.kadaluwarsabaris, a.kadaluwarsabaris').length;
-
-        // Memperbarui teks dalam SVG
-        var svgText = document.querySelector('#kadaluwarsa-tab svg text');
-        svgText.textContent = divCount.toString();
-    });
-    // JavaScript to toggle between tabs
-    document.getElementById('stok-tab').addEventListener('click', function() {
-        document.getElementById('stok-content').classList.remove('hidden');
-        document.getElementById('kadaluwarsa-content').classList.add('hidden');
-        this.classList.add('border-[#272727]');
-        document.getElementById('kadaluwarsa-tab').classList.remove('border-[#272727]');
-    });
-
-    document.getElementById('kadaluwarsa-tab').addEventListener('click', function() {
-        document.getElementById('stok-content').classList.add('hidden');
-        document.getElementById('kadaluwarsa-content').classList.remove('hidden');
-        this.classList.add('border-[#272727]');
-        document.getElementById('stok-tab').classList.remove('border-[#272727]');
-    });
 
     window.openModal = function(modalId) {
         document.getElementById(modalId).style.display = 'block'

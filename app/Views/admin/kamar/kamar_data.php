@@ -65,7 +65,8 @@
                                         <?php foreach ($pending_requests as $req): ?>
                                             <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-red-500">
                                                 <div>
-                                                    <strong><?= esc($req['nama_pasien']) ?></strong> menunggu kamar.
+                                                    <strong><?= esc($req['nama_pasien']) ?></strong> is waiting for a room 
+                                                    <span class="text-red-600 font-semibold">(class: <?= esc($req['kelas']) ?>)</span>.
                                                 </div>
                                                 <button 
                                                     type="button"
@@ -76,7 +77,7 @@
                                             </div>
                                         <?php endforeach; ?>
                                     <?php else: ?>
-                                        <div class="p-4 text-gray-500"></div>
+                                        <div class="p-4 text-gray-500">No pending room requests.</div>
                                     <?php endif; ?>
                                         
                                     </div>
@@ -468,7 +469,7 @@
 <!-- End Card -->
 
 <!-- Modal for Assigning Room -->
-<div id="assignRoomModal" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center hidden z-50">
+<div id="assignRoomModal" class="fixed inset-0 bg-gray-800 bg-opacity-40 flex items-center justify-center hidden z-50">
     
     <div class="bg-white rounded-lg shadow-md p-6 w-full max-w-md">
         <h2 class="text-lg font-semibold mb-4">Pilih Kamar untuk <span id="modal-pasien-nama" class="font-bold"></span></h2>
@@ -480,16 +481,52 @@
             <!-- Filled dynamically -->
         </select>
 
-        <div class="flex justify-end gap-3">
+        <div class="flex justify-center flex-wrap gap-3">
             <button onclick="closeRoomModal()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</button>
-            <button onclick="markRoomFull()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Kamar Penuh</button>
-            <button onclick="submitAssignRoom()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Assign</button>
+            <button onclick="markRoomFull()" class="py-2.5 px-5 min-w-[120px] inline-flex items-center justify-center gap-x-2 text-base rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">Kamar Penuh</button>
+            <button onclick="submitAssignRoom()"
+                class="py-2.5 px-5 min-w-[120px] inline-flex items-center justify-center gap-x-2 text-base rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                Assign
+</button>
         </div>
     </div>
 </div>
 <!-- End Table Section -->
 
 <script>
+    function markRoomFull() {
+    const nomorReg = document.getElementById("modal-nomor-reg").value;
+    const namaPasien = document.getElementById("modal-pasien-nama").textContent;
+
+    // Create new HTML notification
+    const newNotif = `
+        <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                <div>
+                    <p class="text-base font-semibold text-gray-800">Kamar penuh untuk ${namaPasien}</p>
+                    <p class="text-sm text-gray-500">Nomor Registrasi: ${nomorReg}</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Insert into the kamar penuh notification panel
+    const container = document.getElementById("kamarpenuh-content");
+    container.innerHTML += newNotif;
+
+    // (Optional) Save to localStorage for persistence
+    let stored = JSON.parse(localStorage.getItem('kamarPenuhList')) || [];
+    stored.push({ nama_pasien: namaPasien, nomor_reg: nomorReg });
+    localStorage.setItem('kamarPenuhList', JSON.stringify(stored));
+
+    // Close modal
+    closeRoomModal();
+
+    // Show the notification popup if it's hidden
+    document.getElementById("notif-popup").classList.remove("hidden");
+}
+
 function openRoomModal(nomorReg, namaPasien) {
     // Set values into modal
     document.getElementById("modal-nomor-reg").value = nomorReg;
@@ -617,7 +654,8 @@ function fetchPendingRooms() {
                         <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-red-500 cursor-pointer"
                             onclick="openRoomModal('${item.nomor_reg}', '${item.nama_pasien}')">
                             <div>
-                                <strong>${item.nama_pasien || item.nomor_reg}</strong> menunggu kamar.
+                                <strong>${item.nama_pasien || item.nomor_reg}</strong> menunggu kamar 
+                                <span class="text-black-600 font-semibold">kelas ${item.kelas || '-'}</span>.
                             </div>
                             <span>🚪</span>
                         </div>`;
