@@ -9,11 +9,12 @@ class TindakanController extends BaseController
     public function dataTindakan()
     {
         $title = 'Data Tindakan';
-
+    
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
+    
+            // ✅ Fetch tindakan data
             $tindakan_url = $this->api_url . '/tindakan';
-
             $ch = curl_init($tindakan_url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -23,23 +24,36 @@ class TindakanController extends BaseController
             $response = curl_exec($ch);
             $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
-
+    
             if ($http_status !== 200) {
                 return $this->renderErrorView($http_status);
             }
-
+    
             $tindakan_data = json_decode($response, true);
             if (!isset($tindakan_data['data'])) {
                 return $this->renderErrorView(500);
             }
-            // dd(count($tindakan_data['data']), $tindakan_data['data']);
-
+    
+            // ✅ Fetch jenis_tindakan data (this was missing)
+            $jenis_url = $this->api_url . '/tindakan/jenis';
+            $ch2 = curl_init($jenis_url);
+            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $jenis_response = curl_exec($ch2);
+            curl_close($ch2);
+    
+            $jenis_data = json_decode($jenis_response, true);
+            $jenis_tindakan = $jenis_data['data'] ?? [];
+    
             $this->addBreadcrumb('User', 'user');
             $this->addBreadcrumb('Tindakan', 'tindakan');
             $breadcrumbs = $this->getBreadcrumbs();
-
+    
             return view('/admin/tindakan/tindakan_data', [
                 'tindakan_data' => $tindakan_data['data'],
+                'jenis_tindakan' => $jenis_tindakan,
                 'title' => $title,
                 'breadcrumbs' => $breadcrumbs,
                 'meta_data' => $tindakan_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
@@ -48,17 +62,19 @@ class TindakanController extends BaseController
             return $this->renderErrorView(401);
         }
     }
+    
 
     public function tambahTindakan($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);
         }
-
+    
         $token = session()->get('jwt_token');
         $title = 'Edit Tindakan';
+    
+        // Fetch specific tindakan data
         $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
-
         $ch = curl_init($tindakan_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -67,23 +83,38 @@ class TindakanController extends BaseController
         $response = curl_exec($ch);
         $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-
+    
         if ($http_status !== 200) {
             return $this->renderErrorView($http_status);
         }
-
-        $data = json_decode($response, true);
-
+    
+        $tindakan_data = json_decode($response, true);
+    
+        // ✅ Fetch jenis tindakan list
+        $jenis_url = $this->api_url . '/tindakan/jenis';
+        $ch2 = curl_init($jenis_url);
+        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+        ]);
+        $jenis_response = curl_exec($ch2);
+        curl_close($ch2);
+    
+        $jenis_data = json_decode($jenis_response, true);
+        $jenis_tindakan = $jenis_data['data'] ?? [];
+    
         $this->addBreadcrumb('User', 'user');
         $this->addBreadcrumb('Tindakan', 'tindakan');
         $this->addBreadcrumb('Edit', 'edit');
-
+    
         return view('/admin/tindakan/tambah_tindakan', [
-            'tindakan' => $data['data'][0] ?? [],
+            'tindakan' => $tindakan_data['data'][0] ?? [],
+            'jenis_tindakan' => $jenis_tindakan,
             'title' => $title,
             'breadcrumbs' => $this->getBreadcrumbs()
         ]);
     }
+    
 
     public function submitTambahTindakan()
     {
@@ -242,53 +273,68 @@ class TindakanController extends BaseController
     
 
     public function tindakanData($nomorRawat)
-{
-    $title = 'Detail Tindakan';
-
-    if (session()->has('jwt_token')) {
-        $token = session()->get('jwt_token');
-        $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
-
-        $ch = curl_init($tindakan_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-            'Accept: application/json'
-        ]);
-        $response = curl_exec($ch);
-        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($http_status !== 200) {
-            return $this->renderErrorView($http_status);
+    {
+        $title = 'Detail Tindakan';
+    
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+            $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
+    
+            $ch = curl_init($tindakan_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Accept: application/json'
+            ]);
+            $response = curl_exec($ch);
+            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+    
+            if ($http_status !== 200) {
+                return $this->renderErrorView($http_status);
+            }
+    
+            $tindakan_data = json_decode($response, true);
+    
+            if (!isset($tindakan_data['data'])) {
+                return $this->renderErrorView(500);
+            }
+    
+            // Ensure $tindakan_data['data'] is an array
+            $data = $tindakan_data['data'];
+            if (isset($data['nomor_rawat'])) {
+                $data = [$data]; // convert to array with one item
+            }
+    
+            // ✅ Fetch jenis_tindakan (MISSING BEFORE)
+            $jenis_url = $this->api_url . '/tindakan/jenis';
+            $ch2 = curl_init($jenis_url);
+            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $jenis_response = curl_exec($ch2);
+            curl_close($ch2);
+    
+            $jenis_data = json_decode($jenis_response, true);
+            $jenis_tindakan = $jenis_data['data'] ?? [];
+    
+            $this->addBreadcrumb('User', 'user');
+            $this->addBreadcrumb('Tindakan', 'tindakan');
+            $breadcrumbs = $this->getBreadcrumbs();
+    
+            return view('/admin/tindakan/tindakan_data', [
+                'tindakan_data' => $data,
+                'jenis_tindakan' => $jenis_tindakan, // ✅ now available in the view
+                'title' => $title,
+                'breadcrumbs' => $breadcrumbs,
+                'meta_data' => $tindakan_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
+            ]);
+        } else {
+            return $this->renderErrorView(401);
         }
-
-        $tindakan_data = json_decode($response, true);
-
-        if (!isset($tindakan_data['data'])) {
-            return $this->renderErrorView(500);
-        }
-
-        // Ensure $tindakan_data['data'] is an array
-        $data = $tindakan_data['data'];
-        if (isset($data['nomor_rawat'])) {
-            $data = [$data]; // convert to array with one item
-        }
-
-        $this->addBreadcrumb('User', 'user');
-        $this->addBreadcrumb('Tindakan', 'tindakan');
-        $breadcrumbs = $this->getBreadcrumbs();
-
-        return view('/admin/tindakan/tindakan_data', [
-            'tindakan_data' => $data,
-            'title' => $title,
-            'breadcrumbs' => $breadcrumbs,
-            'meta_data' => $tindakan_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
-        ]);
-    } else {
-        return $this->renderErrorView(401);
     }
-}
+    
 
     public function submitFromRawatinap($nomor_rawat)
     {

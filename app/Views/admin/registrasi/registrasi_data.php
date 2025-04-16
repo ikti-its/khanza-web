@@ -57,16 +57,38 @@
                                                 </span>
                                             </button>
                                         </div>
-                                        container.innerHTML += `
-                                        <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
-                                            <div class="flex items-center gap-2">
-                                                <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
-                                                <div>
-                                                    <p class="text-base font-semibold text-gray-800">Kamar penuh untuk ${notif.nama_pasien}</p>
-                                                    <p class="text-sm text-gray-500">Nomor Registrasi: ${notif.nomor_reg}</p>
-                                                </div>
-                                            </div>
-                                        </div>`;
+                                        <script>
+window.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("kamarpenuh-content");
+    const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
+
+    if (!container) return;
+
+    container.innerHTML = ""; // Clear previous content
+
+    if (notifList.length === 0) {
+        container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
+    } else {
+        notifList.forEach(notif => {
+            container.innerHTML += `
+                <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                        <div>
+                            <p class="text-base font-semibold text-gray-800">
+                                Kamar penuh untuk ${notif.nama_pasien}
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                Nomor Registrasi: ${notif.nomor_reg}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+});
+</script>
                                     </div>
                                 </div>
                             </div>
@@ -495,6 +517,60 @@
 
 <!-- End Table Section -->
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("kamarpenuh-content");
+    const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
+
+    if (!container) {
+        console.error("⚠️ #kamarpenuh-content not found in DOM");
+        return;
+    }
+
+    container.innerHTML = ""; // clear old
+
+    if (notifList.length === 0) {
+        container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
+        return;
+    }
+
+    notifList.forEach(notif => {
+        container.innerHTML += `
+            <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                    <div>
+                        <p class="text-base font-semibold text-gray-800">
+                            Kamar penuh untuk ${notif.nama_pasien}
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            Nomor Registrasi: ${notif.nomor_reg}
+                        </p>
+                    </div>
+                </div>
+            </div>`;
+    });
+});
+
+    function markRoomFull() {
+    const nomorReg = document.getElementById("modal-nomor-reg").value;
+    const namaPasien = document.getElementById("modal-pasien-nama").textContent;
+
+    const notif = {
+        nama_pasien: namaPasien,
+        nomor_reg: nomorReg,
+        waktu: new Date().toISOString()
+    };
+
+    const existing = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
+    existing.push(notif);
+    localStorage.setItem("kamarPenuhList", JSON.stringify(existing));
+
+    // Optional: Feedback
+    alert("🚨 Kamar penuh notification saved for " + namaPasien);
+
+    // Close modal if needed
+    closeRoomModal();
+}
     document.addEventListener('DOMContentLoaded', () => {
     fetch('http://127.0.0.1:8080/v1/kamar/kelas')
         .then(res => res.json())
@@ -557,23 +633,36 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error('Error fetching kelas:', err));
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
-    const stored = JSON.parse(localStorage.getItem('kamarPenuhList')) || [];
+    window.addEventListener("DOMContentLoaded", () => {
+    const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
     const container = document.getElementById("kamarpenuh-content");
 
-    stored.forEach(notif => {
-        container.innerHTML += `
-            <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
-                <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
-                    <div>
-                        <p class="text-base font-semibold text-gray-800">Kamar penuh untuk ${notif.nama_pasien}</p>
-                        <p class="text-sm text-gray-500">Nomor Registrasi: ${notif.nomor_reg}</p>
+    if (!container) return;
+
+    if (notifList.length === 0) {
+        container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
+    } else {
+        notifList.forEach(notif => {
+            container.innerHTML += `
+                <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                        <div>
+                            <p class="text-base font-semibold text-gray-800">
+                                Kamar penuh untuk ${notif.nama_pasien}
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                Nomor Registrasi: ${notif.nomor_reg}
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-    });
+            `;
+        });
+    }
+
+    // OPTIONAL: clear after rendering if you only want them to show once
+    // localStorage.removeItem("kamarPenuhList");
 });
 
     window.addEventListener('DOMContentLoaded', () => {

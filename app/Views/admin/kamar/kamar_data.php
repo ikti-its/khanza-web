@@ -494,38 +494,27 @@
 <!-- End Table Section -->
 
 <script>
-    function markRoomFull() {
+function markRoomFull() {
     const nomorReg = document.getElementById("modal-nomor-reg").value;
     const namaPasien = document.getElementById("modal-pasien-nama").textContent;
 
-    // Create new HTML notification
-    const newNotif = `
-        <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
-            <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
-                <div>
-                    <p class="text-base font-semibold text-gray-800">Kamar penuh untuk ${namaPasien}</p>
-                    <p class="text-sm text-gray-500">Nomor Registrasi: ${nomorReg}</p>
-                </div>
-            </div>
-        </div>
-    `;
+    const newNotif = {
+        nama_pasien: namaPasien,
+        nomor_reg: nomorReg,
+        waktu: new Date().toISOString()
+    };
 
-    // Insert into the kamar penuh notification panel
-    const container = document.getElementById("kamarpenuh-content");
-    container.innerHTML += newNotif;
-
-    // (Optional) Save to localStorage for persistence
+    // Retrieve existing list or create new one
     let stored = JSON.parse(localStorage.getItem('kamarPenuhList')) || [];
-    stored.push({ nama_pasien: namaPasien, nomor_reg: nomorReg });
+    stored.push(newNotif);
     localStorage.setItem('kamarPenuhList', JSON.stringify(stored));
 
-    // Close modal
     closeRoomModal();
 
-    // Show the notification popup if it's hidden
-    document.getElementById("notif-popup").classList.remove("hidden");
+    // Optional: redirect to Registrasi page
+    // window.location.href = "/registrasi";
 }
+
 
 function openRoomModal(nomorReg, namaPasien) {
     // Set values into modal

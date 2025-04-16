@@ -192,11 +192,19 @@
 
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        <?php
+                            $namaTindakanMap = [];
+                            foreach ($jenis_tindakan as $jt) {
+                                $namaTindakanMap[$jt['kode']] = $jt['nama_tindakan'];
+                            }
+                        ?>                       
     <?php foreach ($tindakan_data as $i => $tindakan) : ?>
         <tr>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>"><?= $tindakan['tindakan'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
+                        <?= $namaTindakanMap[$tindakan['tindakan']] ?? $tindakan['tindakan'] ?>
+                    </span>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
