@@ -329,6 +329,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <!-- Tindakan Modal -->
                                 <div id="modal-tindakan-<?= $rawatinap['nomor_rawat'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                 <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
@@ -345,21 +346,23 @@
                                     </div>
                                     <div class="p-4 space-y-4">
                                         <div>
-                                        <label class="block text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                        <input type="text" value="<?= $rawatinap['nomor_rawat'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
+                                            <label class="block text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
+                                            <input type="text" value="<?= $rawatinap['nomor_rawat'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
                                         </div>
                                         <div>
-                                        <label class="block text-sm text-gray-900 dark:text-white">Tindakan</label>
-                                        <textarea class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" placeholder="Isi tindakan di sini..."></textarea>
+                                            <label class="block text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
+                                            <input type="text" value="<?= $rawatinap['nomor_rm'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
                                         </div>
+                                        <div class="px-3 py-1.5">
+                                            <a href="/tindakan/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
+                                                Tindakan
+                                            </a>
+                                            </div>
                                         <!-- Add more fields if needed -->
                                     </div>
                                     <div class="flex justify-end gap-x-2 p-4 border-t dark:border-neutral-700">
                                         <button class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#modal-tindakan-<?= $rawatinap['nomor_rawat'] ?>">
                                         Tutup
-                                        </button>
-                                        <button class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-green-600 text-white hover:bg-green-700">
-                                        Simpan
                                         </button>
                                     </div>
                                     </div>
@@ -400,15 +403,10 @@
                                                     Lihat Detail
                                                 </button>
                                             </div>
-                                            <div class="px-3 py-1.5">
-                                            <a href="/tindakan/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
-                                                Tindakan
-                                            </a>
-                                            </div>
 
                                             <div class="px-3 py-1.5">
                                             <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold ..." data-hs-overlay="#modal-tindakan-<?= $rawatinap['nomor_rawat'] ?>">
-                                                Rekam Medis
+                                                Tindakan
                                             </button>
 
                                             </div>

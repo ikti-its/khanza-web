@@ -73,37 +73,46 @@ class RawatInapController extends BaseController
         ]);
     }
 
-    public function submitTambahRawatInap()
+    public function tambahRawatInapBaru($nomorReg)
     {
         if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);
         }
-
+    
         $token = session()->get('jwt_token');
-        $url = $this->api_url . '/rawatinap';
-
-        $postData = $this->getRawatInapPostData();
-        $jsonData = json_encode($postData);
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+        $registrasiUrl = $this->api_url . '/registrasi/' . $nomorReg;
+    
+        $ch = curl_init($registrasiUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($jsonData),
             'Authorization: Bearer ' . $token,
         ]);
         $response = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-
-        if ($status === 201) {
-            return redirect()->to(base_url('rawatinap'));
+    
+        if ($httpStatus !== 200) {
+            return $this->renderErrorView($httpStatus);
         }
-
-        return $response;
+    
+        $registrasi = json_decode($response, true)['data'];
+    
+        $title = 'Tambah Rawat Inap';
+        $breadcrumbs = [
+            ['title' => 'Rawat Inap', 'url' => '/rawatinap'],
+            ['title' => 'Tambah', 'url' => null]
+        ];
+    
+        return view('admin/rawatinap/tambah_rawatinapbaru', [
+            'title' => $title,
+            'breadcrumbs' => $breadcrumbs,
+            'registrasi' => $registrasi,
+            'tanggal_masuk' => date('Y-m-d'),
+            'jam_masuk' => date('H:i:s'),
+        ]);
     }
+    
+
 
     public function editRawatInap($nomorRawat)
     {

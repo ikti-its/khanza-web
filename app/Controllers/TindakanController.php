@@ -102,10 +102,11 @@ class TindakanController extends BaseController
     
         $jenis_data = json_decode($jenis_response, true);
         $jenis_tindakan = $jenis_data['data'] ?? [];
+        // dd($jenis_tindakan);
     
         $this->addBreadcrumb('User', 'user');
         $this->addBreadcrumb('Tindakan', 'tindakan');
-        $this->addBreadcrumb('Edit', 'edit');
+        $this->addBreadcrumb('Tambah', 'tambah');
     
         return view('/admin/tindakan/tambah_tindakan', [
             'tindakan' => $tindakan_data['data'][0] ?? [],
@@ -121,6 +122,7 @@ class TindakanController extends BaseController
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
             $nomor_rawat = $this->request->getPost('nomor_rawat');
+            $biaya = $this->request->getPost('biaya');
             $postData = [
                 'nomor_rawat' => $this->request->getPost('nomor_rawat'),
                 'nomor_rm' => $this->request->getPost('nomor_rm'),
@@ -132,7 +134,8 @@ class TindakanController extends BaseController
                 'nama_petugas' => $this->request->getPost('nama_petugas'),
                 'tanggal_rawat' => $rawatinap['tanggal_masuk'] ?? date('Y-m-d'),
                 'jam_rawat' => $rawatinap['tanggal_masuk'] ?? date('H:i:s'),
-                'biaya' => floatval($this->request->getPost('biaya')),
+                // 'biaya' => floatval($this->request->getPost('biaya')),
+                'biaya' => floatval($biaya),
             ];
 
             $tindakan_url = $this->api_url . '/tindakan';
@@ -162,43 +165,62 @@ class TindakanController extends BaseController
         }
     }
 
-    public function editTindakan($nomorRawat)
-    {
-        if (!session()->has('jwt_token')) {
-            return $this->renderErrorView(401);
-        }
-
-        $token = session()->get('jwt_token');
-        $title = 'Edit Tindakan';
-        $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
-
-        $ch = curl_init($tindakan_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-        ]);
-        $response = curl_exec($ch);
-        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($http_status !== 200) {
-            return $this->renderErrorView($http_status);
-        }
-
-        $data = json_decode($response, true);
-
-        $this->addBreadcrumb('User', 'user');
-        $this->addBreadcrumb('Tindakan', 'tindakan');
-        $this->addBreadcrumb('Edit', 'edit');
-
-        return view('/admin/tindakan/edit_tindakan', [
-            'tindakan' => $data['data'][0] ?? [],
-            'title' => $title,
-            'breadcrumbs' => $this->getBreadcrumbs()
-        ]);
+    public function editTindakan($nomorRawat, $jamRawat)
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
     }
 
-    public function submitEditTindakan($nomorRawat)
+    $token = session()->get('jwt_token');
+    $title = 'Edit Tindakan';
+
+    $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
+    $ch = curl_init($tindakan_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+    $selectedTindakan = [];
+
+    $jenis_url = $this->api_url . '/tindakan/jenis';
+    $ch2 = curl_init($jenis_url);
+    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $jenis_response = curl_exec($ch2);
+    curl_close($ch2);
+
+    $jenis_data = json_decode($jenis_response, true);
+    $jenis_tindakan = $jenis_data['data'] ?? [];
+
+    // ✅ Find the tindakan with the correct jam_rawat
+    if (isset($data['data']) && is_array($data['data'])) {
+        foreach ($data['data'] as $t) {
+            if ($t['jam_rawat'] === $jamRawat) {
+                $selectedTindakan = $t;
+                break;
+            }
+        }
+    }
+
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Tindakan', 'tindakan');
+    $this->addBreadcrumb('Edit', 'edit');
+
+    return view('/admin/tindakan/edit_tindakan', [
+        'tindakan' => $selectedTindakan,
+        'jenis_tindakan' => $jenis_tindakan, // ✅ this fixes the undefined variable error
+        'title' => $title,
+        'breadcrumbs' => $this->getBreadcrumbs()
+    ]);
+}
+    
+public function submitEditTindakan($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);

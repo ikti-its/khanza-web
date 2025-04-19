@@ -221,7 +221,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $registrasi['nomor_reg'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
@@ -372,12 +372,28 @@ window.addEventListener("DOMContentLoaded", function () {
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
+                                            <!-- <div class="px-3 py-1.5">
+                                            <button type="button" 
+    class="py-2 px-4 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+    data-hs-overlay="#modal-tindakan-<?= $registrasi['nomor_reg'] ?>">
+                                                Tindakan
+                                            </button>  
+                                            </div> -->
                                             <div class="px-3 py-1.5">
                                             <button
                                                 type="button"
                                                 class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
                                                 data-nomor-reg="<?= $registrasi['nomor_reg'] ?>"
                                                 data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>">
+                                                Lihat Detail
+                                            </button>
+                                            </div>
+                                            <div class="px-3 py-1.5">
+                                            <button
+                                                type="button"
+                                                class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
+                                                data-nomor-reg="<?= $registrasi['nomor_reg'] ?>"
+                                                data-hs-overlay="#modal-tindakan-<?= $registrasi['nomor_reg'] ?>">
                                                 Tindakan
                                             </button>
                                             </div>
@@ -437,13 +453,56 @@ window.addEventListener("DOMContentLoaded", function () {
 
 
                                 </tr>
-
+                                <!-- Tindakan Modal -->
+                                <div id="modal-tindakan-<?= $registrasi['nomor_reg'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+                                <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
+                                    <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
+                                    <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
+                                        <h3 class="font-bold text-gray-800 dark:text-white">
+                                        Form Tindakan - <?= $registrasi['nama_pasien'] ?>
+                                        </h3>
+                                        <button type="button" class="size-7 rounded-full text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-neutral-700" data-hs-overlay="#modal-tindakan-<?= $registrasi['nomor_reg'] ?>">
+                                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                        </button>
+                                    </div>
+                                    <div class="p-4 space-y-4">
+                                        <div>
+                                            <label class="block text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
+                                            <input type="text" value="<?= $registrasi['nomor_reg'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
+                                            <input type="text" value="<?= $registrasi['nomor_rm'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
+                                        </div>  
+                                        <div class="px-3 py-1.5">
+                                        <form method="POST" action="/rawatinap/tambah/<?= $registrasi['nomor_reg'] ?>">
+                                            <?= csrf_field() ?>
+                                            <button type="submit" class="btn btn-warning text-sm">
+                                                ⛑ Rawat Inap
+                                            </button>
+                                        </form>
+                                            </div>
+                                        <!-- Add more fields if needed -->
+                                    </div>
+                                    <div class="flex justify-end gap-x-2 p-4 border-t dark:border-neutral-700">
+                                        <button class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#modal-tindakan-<?= $registrasi['nomor_reg'] ?>">
+                                        Tutup
+                                        </button>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                     </div>
 
                     <!-- End Table -->
+
+                    
+
 
                     <!-- Footer -->
                     <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">

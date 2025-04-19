@@ -13,16 +13,16 @@
                     <!-- Header -->
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
-                        <?php if (!empty($tindakan_data)) : ?>
+                        <?php if (!empty($pemberianobat_data)) : ?>
                             <div class="mb-4 text-xl font-black text-gray-800 dark:text-gray-200 space-y-1">
                                 <div class="flex">
-                                    <span class="w-48">Nomor Rawat</span> : <?= $tindakan_data[0]['nomor_rawat'] ?>
+                                    <span class="w-48">Nomor Rawat</span> : <?= $pemberianobat_data[0]['nomor_rawat'] ?>
                                 </div>
                                 <div class="flex">
-                                    <span class="w-48">Nomor Rekam Medis</span> : <?= $tindakan_data[0]['nomor_rm'] ?>
+                                    <span class="w-48">Nomor Rekam Medis</span> : <?= $pemberianobat_data[0]['nomor_rm'] ?>
                                 </div>
                                 <div class="flex">
-                                    <span class="w-48">Nama Pasien</span> : <?= $tindakan_data[0]['nama_pasien'] ?>
+                                    <span class="w-48">Nama Pasien</span> : <?= $pemberianobat_data[0]['nama_pasien'] ?>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -81,9 +81,9 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?php if (!empty($tindakan_data)) : ?>
+                            <?php if (!empty($pemberianobat_data)) : ?>
                                 <div>
-                                    <a href='/tindakan/tambah/<?= $tindakan_data[0]['nomor_rawat'] ?>' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                    <a href='/pemberianobat/tambah/<?= $pemberianobat_data[0]['nomor_rawat'] ?>' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                         <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
                                             <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                         </svg>
@@ -132,7 +132,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Tindakan
+                                            pemberianobat
                                         </span>
                                     </div>
                                 </th>
@@ -192,67 +192,62 @@
 
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php
-                            $namaTindakanMap = [];
-                            foreach ($jenis_tindakan as $jt) {
-                                $namaTindakanMap[$jt['kode']] = $jt['nama_tindakan'];
-                            }
-                        ?>                       
-    <?php foreach ($tindakan_data as $i => $tindakan) : ?>
+                    
+    <?php foreach ($pemberianobat_data as $i => $pemberianobat) : ?>
         <tr>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
                     <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                        <?= $namaTindakanMap[$tindakan['tindakan']] ?? $tindakan['tindakan'] ?>
+                        <?= $namapemberianobatMap[$pemberianobat['pemberianobat']] ?? $pemberianobat['pemberianobat'] ?>
                     </span>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $tindakan['nama_dokter'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $pemberianobat['nama_dokter'] ?? 'N/A' ?></span>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $tindakan['nama_petugas'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $pemberianobat['nama_petugas'] ?? 'N/A' ?></span>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $tindakan['tanggal_rawat'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $pemberianobat['tanggal_rawat'] ?? 'N/A' ?></span>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $tindakan['jam_rawat'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $pemberianobat['jam_rawat'] ?? 'N/A' ?></span>
                 </div>
             </td>
             <td class="h-px w-72 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= isset($tarifTindakanMap[$tindakan['tindakan']])
-                    ? number_format($tarifTindakanMap[$tindakan['tindakan']], 0, ',', '.')
-                    : ($tindakan['biaya'] ?? 'N/A') ?></span>
+                    <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= isset($tarifpemberianobatMap[$pemberianobat['pemberianobat']])
+                    ? number_format($tarifpemberianobatMap[$pemberianobat['pemberianobat']], 0, ',', '.')
+                    : ($pemberianobat['biaya'] ?? 'N/A') ?></span>
                 </div>
             </td>
             <td class="size-px whitespace-nowrap">
                 <div class="px-3 py-1.5 text-center inline-flex">
                     <div class="px-3 py-1.5">
-                        <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>">
+                        <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemberianobat['nomor_rawat'] . '-' . $i ?>">
                             Lihat Detail
                         </button>
                     </div>
                     <div class="px-3 py-1.5">
-                        <a href="/tindakan/edit/<?= $tindakan['nomor_rawat'] ?>/<?= $tindakan['jam_rawat'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
+                        <a href="/pemberianobat/edit/<?= $pemberianobat['nomor_rawat'] ?>/<?= $pemberianobat['jam_rawat'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
                     </div>
                     <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $tindakan['nomor_rawat'] ?>')" href="#">
+                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $pemberianobat['nomor_rawat'] ?>')" href="#">
                                                     Hapus
                                                 </button>
-                                                <div id="modelConfirm-<?= $tindakan['nomor_rawat'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                <div id="modelConfirm-<?= $pemberianobat['nomor_rawat'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
                                                     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 
                                                         <div class="flex justify-end p-2">
-                                                            <button onclick="closeModal('modelConfirm-<?= $tindakan['nomor_rawat'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                            <button onclick="closeModal('modelConfirm-<?= $pemberianobat['nomor_rawat'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                                                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                                                 </svg>
@@ -273,15 +268,15 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                                <form action="/tindakan/hapus/<?= $tindakan['nomor_rawat'] ?>/<?= $tindakan['jam_rawat'] ?>" method="POST">
+                                                                <form action="/pemberianobat/hapus/<?= $pemberianobat['nomor_rawat'] ?>/<?= $pemberianobat['jam_rawat'] ?>" method="POST">
 
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">
-                                                                    <button onclick="closeModal('modelConfirm-<?= $tindakan['nomor_rawat'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                    <button onclick="closeModal('modelConfirm-<?= $pemberianobat['nomor_rawat'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
                                                                         Hapus
                                                                     </button>
-                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $tindakan['nomor_rawat'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $pemberianobat['nomor_rawat'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
                                                                         Batal
                                                                     </a>
                                                                 </div>
@@ -296,24 +291,24 @@
         </tr>
     <?php endforeach; ?>
 </tbody>
-<?php foreach ($tindakan_data as $i => $tindakan) : ?>
-    <div id="hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
+<?php foreach ($pemberianobat_data as $i => $pemberianobat) : ?>
+    <div id="hs-vertically-centered-scrollable-modal-<?= $pemberianobat['nomor_rawat'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
         <div class="mt-20 mx-auto w-full max-w-lg p-6 bg-white dark:bg-neutral-800 rounded shadow">
             <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="text-lg font-bold"><?= $tindakan['nama_pasien'] ?></h3>
-                <button data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>" class="text-gray-600 dark:text-white hover:text-red-600">
+                <h3 class="text-lg font-bold"><?= $pemberianobat['nama_pasien'] ?></h3>
+                <button data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemberianobat['nomor_rawat'] . '-' . $i ?>" class="text-gray-600 dark:text-white hover:text-red-600">
                     &times;
                 </button>
             </div>
             <div class="mt-4 space-y-3">
-                <div><strong>Nomor Rawat:</strong> <?= $tindakan['nomor_rawat'] ?></div>
-                <div><strong>Nomor RM:</strong> <?= $tindakan['nomor_rm'] ?></div>
-                <div><strong>Dokter:</strong> <?= $tindakan['nama_dokter'] ?? 'N/A' ?></div>
-                <div><strong>Tanggal:</strong> <?= $tindakan['tanggal_rawat'] ?></div>
-                <div><strong>Jam:</strong> <?= $tindakan['jam_rawat'] ?></div>
+                <div><strong>Nomor Rawat:</strong> <?= $pemberianobat['nomor_rawat'] ?></div>
+                <div><strong>Nomor RM:</strong> <?= $pemberianobat['nomor_rm'] ?></div>
+                <div><strong>Dokter:</strong> <?= $pemberianobat['nama_dokter'] ?? 'N/A' ?></div>
+                <div><strong>Tanggal:</strong> <?= $pemberianobat['tanggal_rawat'] ?></div>
+                <div><strong>Jam:</strong> <?= $pemberianobat['jam_rawat'] ?></div>
             </div>
             <div class="mt-6 text-end">
-                <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>">Tutup</button>
+                <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemberianobat['nomor_rawat'] . '-' . $i ?>">Tutup</button>
             </div>
         </div>
     </div>

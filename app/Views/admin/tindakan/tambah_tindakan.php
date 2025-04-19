@@ -30,17 +30,17 @@
                         <option disabled selected value="">Pilih Tindakan</option>
                         <?php foreach ($jenis_tindakan as $t): ?>
                             <option 
-                                value="<?= esc($t['kode']) ?>"
+                                value="<?= esc($t['kode']) ?>" 
                                 data-tarif="<?= esc($t['tarif'] ?? 0) ?>"
                             >
-                                <?= esc($t['nama_tindakan']) ?>
+                                <?= esc($t['kode']) ?> - <?= esc($t['nama_tindakan']) ?> (<?= esc($t['kode_bangsal'] ?? '-') ?>) - Rp <?= number_format($t['tarif'] ?? 0, 0, ',', '.') ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
-
                     <!-- Hidden fields to submit kode and tarif -->
                     <input type="hidden" name="kode_tindakan" id="kodeTindakan">
-                    <input type="hidden" name="tarif_tindakan" id="tarifTindakan">
+                    <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Biaya</label>
+                    <input type="number" id="biayaInput" name="biaya" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" readonly>
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Dokter</label>
@@ -76,6 +76,14 @@
 </div>
 <!-- End Card Section -->
 <script>
+document.getElementById("tindakanSelect").addEventListener("change", function () {
+    const selected = this.options[this.selectedIndex];
+    const tarif = selected.getAttribute("data-tarif") || 0;
+
+    // Set to the biaya input
+    document.getElementById("biayaInput").value = tarif;
+});
+
     document.getElementById("tindakanSelect").addEventListener("change", function() {
     const selected = this.options[this.selectedIndex];
     const kode = selected.value;
