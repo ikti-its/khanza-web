@@ -357,7 +357,12 @@
                                             <a href="/tindakan/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
                                                 Tindakan
                                             </a>
-                                            </div>
+                                        </div>
+                                        <div class="px-3 py-1.5">
+                                            <a href="/pemberianobat/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
+                                                Pemberian Obat
+                                            </a>
+                                        </div>
                                         <!-- Add more fields if needed -->
                                     </div>
                                     <div class="flex justify-end gap-x-2 p-4 border-t dark:border-neutral-700">

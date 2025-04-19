@@ -19,10 +19,13 @@
                                     <span class="w-48">Nomor Rawat</span> : <?= $pemberianobat_data[0]['nomor_rawat'] ?>
                                 </div>
                                 <div class="flex">
-                                    <span class="w-48">Nomor Rekam Medis</span> : <?= $pemberianobat_data[0]['nomor_rm'] ?>
+                                    <span class="w-48">Nomor Rekam Medis</span> : <?= $pemberianobat_data[0]['nomor_rawat'] ?>
                                 </div>
                                 <div class="flex">
                                     <span class="w-48">Nama Pasien</span> : <?= $pemberianobat_data[0]['nama_pasien'] ?>
+                                </div>
+                                <div class="flex">
+                                    <span class="w-48">Kelas</span> : <?= $pemberianobat_data[0]['kelas'] ?>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -132,7 +135,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            pemberianobat
+                                            Tanggal Beri
                                         </span>
                                     </div>
                                 </th>
@@ -140,7 +143,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Dokter
+                                            Jam Beri
                                         </span>
                                     </div>
                                 </th>
@@ -148,7 +151,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Petugas
+                                            Kode Obat
                                         </span>
                                     </div>
                                 </th>
@@ -156,7 +159,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Tanggal
+                                            Nama Obat
                                         </span>
                                     </div>
                                 </th>
@@ -164,7 +167,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Jam
+                                            Jumlah
                                         </span>
                                     </div>
                                 </th>
@@ -198,37 +201,36 @@
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
                     <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                        <?= $namapemberianobatMap[$pemberianobat['pemberianobat']] ?? $pemberianobat['pemberianobat'] ?>
+                        <?= $pemberianobat['tanggal_beri'] ?>
                     </span>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $pemberianobat['nama_dokter'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $pemberianobat['jam_beri'] ?? 'N/A' ?></span>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $pemberianobat['nama_petugas'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $pemberianobat['kode_obat'] ?? 'N/A' ?></span>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $pemberianobat['tanggal_rawat'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $pemberianobat['nama_obat'] ?? 'N/A' ?></span>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $pemberianobat['jam_rawat'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $pemberianobat['jumlah'] ?? 'N/A' ?></span>
                 </div>
             </td>
-            <td class="h-px w-72 whitespace-nowrap">
+            <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= isset($tarifpemberianobatMap[$pemberianobat['pemberianobat']])
-                    ? number_format($tarifpemberianobatMap[$pemberianobat['pemberianobat']], 0, ',', '.')
-                    : ($pemberianobat['biaya'] ?? 'N/A') ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $pemberianobat['jumlah'] ?? 'N/A' ?></span>
                 </div>
             </td>
+
             <td class="size-px whitespace-nowrap">
                 <div class="px-3 py-1.5 text-center inline-flex">
                     <div class="px-3 py-1.5">
@@ -237,7 +239,7 @@
                         </button>
                     </div>
                     <div class="px-3 py-1.5">
-                        <a href="/pemberianobat/edit/<?= $pemberianobat['nomor_rawat'] ?>/<?= $pemberianobat['jam_rawat'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
+                        <a href="/pemberianobat/edit/<?= $pemberianobat['nomor_rawat'] ?>/<?= $pemberianobat['jam_beri'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
                     </div>
                     <div class="px-3 py-1.5">
                                                 <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $pemberianobat['nomor_rawat'] ?>')" href="#">
@@ -268,7 +270,7 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                                <form action="/pemberianobat/hapus/<?= $pemberianobat['nomor_rawat'] ?>/<?= $pemberianobat['jam_rawat'] ?>" method="POST">
+                                                                <form action="/pemberianobat/hapus/<?= $pemberianobat['nomor_rawat'] ?>/<?= $pemberianobat['jam_beri'] ?>" method="POST">
 
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
@@ -302,10 +304,10 @@
             </div>
             <div class="mt-4 space-y-3">
                 <div><strong>Nomor Rawat:</strong> <?= $pemberianobat['nomor_rawat'] ?></div>
-                <div><strong>Nomor RM:</strong> <?= $pemberianobat['nomor_rm'] ?></div>
+                <!-- <div><strong>Nomor RM:</strong> <?= $pemberianobat['nomor_rawat'] ?></div> -->
                 <div><strong>Dokter:</strong> <?= $pemberianobat['nama_dokter'] ?? 'N/A' ?></div>
-                <div><strong>Tanggal:</strong> <?= $pemberianobat['tanggal_rawat'] ?></div>
-                <div><strong>Jam:</strong> <?= $pemberianobat['jam_rawat'] ?></div>
+                <div><strong>Tanggal:</strong> <?= $pemberianobat['tanggal_beri'] ?></div>
+                <div><strong>Jam:</strong> <?= $pemberianobat['jam_beri'] ?></div>
             </div>
             <div class="mt-6 text-end">
                 <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemberianobat['nomor_rawat'] . '-' . $i ?>">Tutup</button>

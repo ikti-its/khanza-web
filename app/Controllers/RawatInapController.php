@@ -53,6 +53,52 @@ class RawatInapController extends BaseController
         return $this->renderErrorView(401);
     }
 
+    public function submitTambahRawatInap()
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
+
+    $token = session()->get('jwt_token');
+
+    $postData = [
+        'nomor_rawat' => $this->request->getPost('nomor_rawat'),
+        'nomor_rm' => $this->request->getPost('nomor_rm'),
+        'nama_pasien' => $this->request->getPost('nama_pasien'),
+        'alamat_pasien' => $this->request->getPost('alamat_pasien'),
+        'penanggung_jawab' => $this->request->getPost('penanggung_jawab'),
+        'hubungan_pj' => $this->request->getPost('hubungan_pj'),
+        'jenis_bayar' => $this->request->getPost('jenis_bayar'),
+        'diagnosa_awal' => $this->request->getPost('diagnosa_awal'),
+        'kamar' => $this->request->getPost('kamar'),
+        'tarif_kamar' => floatval($this->request->getPost('tarif_kamar')),
+        'status_kamar' => $this->request->getPost('status_kamar'),
+        'tanggal_masuk' => $this->request->getPost('tanggal_masuk'),
+        'jam_masuk' => $this->request->getPost('jam_masuk') ?: date('H:i:s'),
+    ];
+
+    $ch = curl_init($this->api_url . '/rawatinap');
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Content-Type: application/json',
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+    $response = curl_exec($ch);
+    $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    // dd($response);
+
+    if ($httpStatus === 200 || $httpStatus === 201) {
+        return redirect()->to('/rawatinap')->with('success', 'Rawat Inap berhasil ditambahkan.');
+    }
+
+    return $this->renderErrorView($httpStatus);
+}
+
+
     public function tambahRawatInap()
     {
         if (!session()->has('jwt_token')) {
@@ -90,6 +136,8 @@ class RawatInapController extends BaseController
         $response = curl_exec($ch);
         $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+
+        // dd($response);
     
         if ($httpStatus !== 200) {
             return $this->renderErrorView($httpStatus);
