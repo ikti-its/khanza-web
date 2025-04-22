@@ -76,8 +76,10 @@
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
                             <?php if (!empty($resepobat_data)) : ?>
+                                <?php $nomor_rawat = $resepobat_data['nomor_rawat'] ?? ''; ?>
                                 <div>
-                                    <a href='/resepobat/tambah/' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                    <a href="<?= base_url('resepobat/tambah') . '?nomor_rawat=' . $nomor_rawat ?>"
+                                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                         <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
                                             <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                         </svg>
@@ -196,7 +198,9 @@
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepobat['no_rawat'] ?? 'N/A' ?></span>
+                    <a href="<?= base_url('resepobat/' . ($resepobat['no_rawat'] ?? 'N/A')) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
+                        <?= $resepobat['no_rawat'] ?? 'N/A' ?>
+                    </a>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
@@ -218,7 +222,7 @@
                         </button>
                     </div>
                     <div class="px-3 py-1.5">
-                        <a href="/pemberianobat/edit/<?= $resepobat['no_resep'] ?>/<?= $resepobat['no_resep'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
+                        <a href="/resepobat/edit/<?= $resepobat['no_resep'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
                     </div>
                     <div class="px-3 py-1.5">
                                                 <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $resepobat['no_resep'] . '-' . $i ?>')" href="#">Hapus</button>
@@ -248,7 +252,7 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                                <form action="/pemberianobat/hapus/<?= $resepobat['no_resep'] ?>/<?= $resepobat['no_resep'] ?>" method="POST">
+                                                                <form action="/resepobat/hapus/<?= $resepobat['no_resep'] ?>" method="POST">
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">

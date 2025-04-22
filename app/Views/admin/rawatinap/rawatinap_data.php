@@ -359,6 +359,16 @@
                                             </a>
                                         </div>
                                         <div class="px-3 py-1.5">
+                                            <a href="/resepobat/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
+                                                Buat Resep Obat
+                                            </a>
+                                        </div>
+                                        <div class="px-3 py-1.5">
+                                            <a href="/resepobat/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
+                                                Lihat Resep Obat
+                                            </a>
+                                        </div>
+                                        <div class="px-3 py-1.5">
                                             <a href="/pemberianobat/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
                                                 Pemberian Obat
                                             </a>

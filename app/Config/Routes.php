@@ -352,13 +352,10 @@ $routes->group('resepobat', ['filter' => 'auth'], function ($routes) {
     $routes->get('tambah', 'ResepObatController::tambahResepObat', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('tambah/(:any)', 'ResepObatController::tambahResepObat/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submittambah', 'ResepObatController::submitTambahResepObat', ['filter' => 'checkpermission:1337,1,4001,4002']);
-    
     $routes->get('edit/(:any)', 'ResepObatController::editResepObat/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submitedit', 'ResepObatController::submitEditResepObat', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->post('submitedit/(:segment)', 'ResepObatController::submitEditResepObat/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
-    
     $routes->delete('hapus/(:segment)', 'ResepObatController::hapusResepObat/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('(:segment)', 'ResepObatController::ResepObatData/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
-    
     $routes->get('submit/(:segment)', 'ResepObatController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 });
