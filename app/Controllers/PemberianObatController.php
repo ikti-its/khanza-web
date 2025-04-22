@@ -312,7 +312,7 @@ public function pemberianObatData($nomorRawat)
         $this->addBreadcrumb('Pemberian Obat', 'pemberianobat');
         $breadcrumbs = $this->getBreadcrumbs();
 
-        dd($data);
+        // dd($response);
 
         return view('/admin/pemberianObat/pemberianobat_data', [
             'pemberianobat_data' => $data,

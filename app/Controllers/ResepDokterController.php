@@ -292,6 +292,51 @@ public function ResepDokterData($noResep)
         }
     }
 
+    // Get resep_obat header (to fetch kd_dokter)
+    $url_header = $this->api_url . '/resep-obat/' . $noResep;
+    $ch_header = curl_init($url_header);
+    curl_setopt($ch_header, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch_header, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response_header = curl_exec($ch_header);
+    curl_close($ch_header);
+
+    $resep_header_data = json_decode($response_header, true);
+    $resepobat_header = $resep_header_data['data'] ?? [];
+
+    $dokter_nama = 'Tidak ditemukan';
+    if (!empty($resepobat_header['kd_dokter'])) {
+        $dokter_url = $this->api_url . '/dokter/' . $resepobat_header['kd_dokter'];
+        $ch_dokter = curl_init($dokter_url);
+        curl_setopt($ch_dokter, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch_dokter, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $dokter_response = curl_exec($ch_dokter);
+        curl_close($ch_dokter);
+
+        $dokter_data = json_decode($dokter_response, true);
+        if (isset($dokter_data['data']['nama_dokter'])) {
+            $dokter_nama = $dokter_data['data']['nama_dokter'];
+        } else {
+            log_message('error', 'Dokter name not found in response: ' . json_encode($dokter_data));
+        }
+    }
+
+    $barang_lookup = [];
+    $harga_lookup = [];
+
+    foreach ($barang_data['data'] ?? [] as $item) {
+        if (isset($item['kode_obat'], $item['nama_obat'])) {
+            $barang_lookup[$item['kode_obat']] = $item['nama_obat'];
+
+            // choose desired class pricing, e.g. Dasar
+            $harga_lookup[$item['kode_obat']] = $item['Dasar'] ?? 0;
+        }
+    }
 
 
     // ✅ Breadcrumbs
@@ -302,6 +347,9 @@ public function ResepDokterData($noResep)
     return view('/admin/resepdokter/resepdokter_data', [
         'resepdokter_data' => $data,
         'barang_lookup'    => $barang_lookup,
+        'harga_lookup'     => $harga_lookup,
+        'resepobat_header' => $resepobat_header,
+        'dokter_nama'      => $dokter_nama,
         'title'            => $title,
         'breadcrumbs'      => $breadcrumbs,
         'meta_data'        => $resep_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
@@ -364,6 +412,7 @@ public function submitFromRawatinap($nomor_rawat)
 
     return redirect()->back()->with('error', 'Tidak ada token sesi.');
 }
+
 
 
 }

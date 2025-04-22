@@ -53,39 +53,59 @@ class ResepObatController extends BaseController
     }
 
     public function tambahResepObat($noResep = null)
-    {
-        if (!session()->has('jwt_token')) {
-            return $this->renderErrorView(401);
-        }
-
-        $token = session()->get('jwt_token');
-        $title = 'Tambah Resep Dokter';
-        $resep = [];
-
-        if ($noResep) {
-            $url = $this->api_url . '/resep-obat/' . $noResep;
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-            ]);
-            $response = curl_exec($ch);
-            curl_close($ch);
-            $parsed = json_decode($response, true);
-            $resep = $parsed['data'][0] ?? [];
-        }
-
-        // ✅ Breadcrumbs
-        $this->addBreadcrumb('User', 'user');
-        $this->addBreadcrumb('Resep Dokter', 'ResepObat');
-        $this->addBreadcrumb('Tambah', 'tambah');
-
-        return view('/admin/ResepObat/tambah_ResepObat', [
-            'ResepObat' => $resep,
-            'title' => $title,
-            'breadcrumbs' => $this->getBreadcrumbs()
-        ]);
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
     }
+
+    $token = session()->get('jwt_token');
+    $title = 'Tambah Resep Obat';
+    $resep = [];
+
+    // ✅ Optional: Load existing resep
+    if ($noResep) {
+        $url = $this->api_url . '/resep-obat/' . $noResep;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+        ]);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $parsed = json_decode($response, true);
+        $resep = $parsed['data'] ?? [];
+    }
+
+    $obat = [];
+
+    $ch = curl_init($this->api_url . '/pemberian-obat/databarang');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+    if (isset($data['data'])) {
+        $obat = $data['data'];
+    }
+
+
+    // ✅ Breadcrumbs
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Resep Obat', 'resepobat');
+    $this->addBreadcrumb('Tambah', 'tambah');
+
+    return view('/admin/resepobat/tambah_resepobat', [
+        'resepobat' => $resep,
+        'title' => $title,
+        'obat_list' => $obat,
+        'breadcrumbs' => $this->getBreadcrumbs()
+    ]);
+}
+
 
     public function submitTambahResepObat()
     {

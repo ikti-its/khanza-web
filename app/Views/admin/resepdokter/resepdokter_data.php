@@ -21,7 +21,7 @@
                             </div>
                             <div class="mb-4 text-xl font-black text-gray-800 dark:text-gray-200 space-y-1">
                                 <div class="flex">
-                                    <span class="w-48">Dokter Peresep</span> : <?= $resepdokter_data[0]['kd_dokter'] ?>
+                                <span class="w-48">Dokter Peresep</span> : <?= $resepobat_header['kd_dokter'] ?? 'Tidak tersedia' ?> - <?= $dokter_nama ?>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -169,6 +169,14 @@
                                 </th>
 
                                 <th scope="col" class="px-6 py-3">
+                                    <div class="flex justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Biaya
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Aksi
@@ -178,11 +186,32 @@
 
                             </tr>
                         </thead>
+                        <?php 
+                        $total_biaya = 0; 
+                        $current_no_resep = $resepdokter_data[0]['no_resep'] ?? null;
 
-
-
+                        foreach ($resepdokter_data as $item) {
+                            if (($item['no_resep'] ?? '') === $current_no_resep) {
+                                $kode = $item['kode_barang'];
+                                $jumlah = intval($item['jumlah'] ?? 0);
+                                $harga = intval($harga_lookup[$kode] ?? 0);
+                                $total_biaya += $jumlah * $harga;
+                            }
+                        }
+                        ?>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        <tfoot class="bg-gray-100 dark:bg-slate-800">
+                            <tr>
+                                <td colspan="4"></td>
+                                <td class="px-6 py-4 font-bold text-right text-gray-800 dark:text-gray-200">Total Biaya</td>
+                                <td class="px-6 py-4 font-bold text-gray-800 dark:text-gray-200">
+                                    <?= 'Rp ' . number_format($total_biaya, 0, ',', '.') ?>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+
                     
     <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
         <tr>
@@ -212,6 +241,13 @@
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
                     <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['aturan_pakai'] ?? 'N/A' ?></span>
+                </div>
+            </td>
+            <td class="h-px w-64 whitespace-nowrap">
+                <div class="px-6 py-3">
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= isset($harga_lookup[$resepdokter['kode_barang']]) 
+    ? 'Rp ' . number_format($harga_lookup[$resepdokter['kode_barang']], 0, ',', '.') 
+    : 'N/A' ?></span>
                 </div>
             </td>
 
