@@ -1,6 +1,10 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 
+<?php
+$kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
+?>
+
 <!-- Card Section -->
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
@@ -10,7 +14,7 @@
                 Tambah Pemberian Obat
             </h2>
         </div>
-        <form action="/pemberianobat/submit" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="<?= base_url('pemberianobat/submittambah') ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -23,22 +27,55 @@
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kelas</label>
-                <input type="text" name="kelas" value="<?= $pemberianobat['kelas'] ?? 'd' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <select name="kelas" id="kelasSelect" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <?php
+                    $kelasOptions = ['dasar', 'kelas1', 'kelas2', 'kelas3', 'utama', 'vip', 'vvip', 'jualbebas'];
+                    foreach ($kelasOptions as $opt) {
+                        $selected = $kelas === $opt ? 'selected' : '';
+                        echo "<option value=\"$opt\" $selected>" . ucfirst($opt) . "</option>";
+                    }
+                    ?>
+                </select>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Obat</label>
-                <select id="obatSelect" name="kode_obat" class="..." required>
+                <select id="obatSelect" name="kode_obat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option disabled selected value="">Pilih Obat</option>
                     <?php foreach ($obat_data as $obat): ?>
+                        <?php
+                            // Normalize the kelas key (match Go fields like Dasar, Kelas1)
+                            $kelasKey = match ($kelas) {
+                                'dasar' => 'Dasar',
+                                'kelas1' => 'Kelas1',
+                                'kelas2' => 'Kelas2',
+                                'kelas3' => 'Kelas3',
+                                'utama' => 'Utama',
+                                'vip' => 'VIP',
+                                'vvip' => 'VVIP',
+                                'jualbebas' => 'JualBebas',
+                                default => 'Dasar'
+                            };
+
+                            $biaya = $obat[$kelasKey] ?? 0;
+                        ?>
                         <option 
-                            value="<?= esc($obat['kode_obat']) ?>" 
-                            data-nama="<?= esc($obat['nama_obat']) ?>"
-                            data-tarif="<?= esc($obat['biaya_obat']) ?>"
-                        >
-                            <?= esc($obat['nama_obat']) ?> - Rp <?= number_format($obat['biaya_obat'], 0, ',', '.') ?>
-                        </option>
+    value="<?= esc($obat['kode_obat']) ?>"
+    data-nama="<?= esc($obat['nama_obat']) ?>"
+    data-dasar="<?= esc($obat['Dasar']) ?>"
+    data-kelas1="<?= esc($obat['Kelas1']) ?>"
+    data-kelas2="<?= esc($obat['Kelas2']) ?>"
+    data-kelas3="<?= esc($obat['Kelas3']) ?>"
+    data-utama="<?= esc($obat['Utama']) ?>"
+    data-vip="<?= esc($obat['VIP']) ?>"
+    data-vvip="<?= esc($obat['VVIP']) ?>"
+    data-jualbebas="<?= esc($obat['JualBebas']) ?>"
+>
+    <?= esc($obat['nama_obat']) ?>
+</option>
+
                     <?php endforeach; ?>
+
                 </select>
 
 
@@ -83,6 +120,24 @@
 </div>
 
 <script>
+function updateHargaObat() {
+    const selectedObat = document.getElementById("obatSelect").selectedOptions[0];
+    const selectedKelas = document.getElementById("kelasSelect").value;
+
+    const tarif = selectedObat.getAttribute("data-" + selectedKelas.toLowerCase()) || 0;
+    const nama = selectedObat.getAttribute("data-nama") || "";
+    const jumlah = document.querySelector("input[name='jumlah']").value || 1;
+
+    document.getElementById("biayaObat").value = tarif;
+    document.getElementById("namaObat").value = nama;
+    document.getElementById("totalObat").value = parseInt(tarif) * parseInt(jumlah);
+}
+
+// Trigger on change
+document.getElementById("kelasSelect").addEventListener("change", updateHargaObat);
+document.getElementById("obatSelect").addEventListener("change", updateHargaObat);
+document.querySelector("input[name='jumlah']").addEventListener("input", updateHargaObat);
+
 document.getElementById("obatSelect").addEventListener("change", function () {
     const selected = this.options[this.selectedIndex];
     document.getElementById("namaObat").value = selected.getAttribute("data-nama");

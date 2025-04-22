@@ -1,0 +1,369 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Controllers\BaseController;
+
+class ResepDokterController extends BaseController
+{
+    public function dataResepDokter()
+    {
+        $title = 'Data Resep Dokter';
+
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+
+            // ✅ Fetch resep dokter data
+            $url = $this->api_url . '/resep-dokter';
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Accept: application/json'
+            ]);
+            $response = curl_exec($ch);
+            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($http_status !== 200) {
+                return $this->renderErrorView($http_status);
+            }
+
+            $resep_data = json_decode($response, true);
+            if (!isset($resep_data['data'])) {
+                return $this->renderErrorView(500);
+            }
+
+            // ✅ Breadcrumbs
+            $this->addBreadcrumb('User', 'user');
+            $this->addBreadcrumb('Resep Dokter', 'resepdokter');
+            $breadcrumbs = $this->getBreadcrumbs();
+
+            return view('/admin/resepdokter/resepdokter_data', [
+                'resepdokter_data' => $resep_data['data'],
+                'title' => $title,
+                'breadcrumbs' => $breadcrumbs,
+                'meta_data' => $resep_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
+            ]);
+        } else {
+            return $this->renderErrorView(401);
+        }
+    }
+
+    public function tambahResepDokter($noResep = null)
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+
+        $token = session()->get('jwt_token');
+        $title = 'Tambah Resep Dokter';
+        $resep = [];
+
+        if ($noResep) {
+            $url = $this->api_url . '/resep-dokter/' . $noResep;
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response = curl_exec($ch);
+            curl_close($ch);
+            $parsed = json_decode($response, true);
+            $resep = $parsed['data'][0] ?? [];
+        }
+
+        // ✅ Breadcrumbs
+        $this->addBreadcrumb('User', 'user');
+        $this->addBreadcrumb('Resep Dokter', 'resepdokter');
+        $this->addBreadcrumb('Tambah', 'tambah');
+
+        return view('/admin/resepdokter/tambah_resepdokter', [
+            'resepdokter' => $resep,
+            'title' => $title,
+            'breadcrumbs' => $this->getBreadcrumbs()
+        ]);
+    }
+
+    public function submitTambahResepDokter()
+    {
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+
+            $postData = [
+                'no_resep'      => $this->request->getPost('no_resep'),
+                'kode_barang'   => $this->request->getPost('kode_barang'),
+                'jumlah'        => floatval($this->request->getPost('jumlah')),
+                'aturan_pakai'  => $this->request->getPost('aturan_pakai'),
+            ];
+
+            $url = $this->api_url . '/resep-dokter';
+            $payload = json_encode($postData);
+
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($payload),
+                'Authorization: Bearer ' . $token,
+            ]);
+
+            $response = curl_exec($ch);
+            $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($status === 201 || $status === 200) {
+                return redirect()->to(base_url('resepdokter/' . $postData['no_resep']));
+            } else {
+                return $this->renderErrorView($status);
+            }
+        } else {
+            return $this->renderErrorView(401);
+        }
+    }
+
+    public function editResepDokter($noResep, $kodeBarang)
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+    
+        $token = session()->get('jwt_token');
+        $title = 'Edit Resep Dokter';
+    
+        $url = $this->api_url . '/resep-dokter/' . $noResep;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+        ]);
+        $response = curl_exec($ch);
+        curl_close($ch);
+    
+        $data = json_decode($response, true);
+        $selectedResep = [];
+    
+        // ✅ Find matching kode_barang entry
+        if (isset($data['data']) && is_array($data['data'])) {
+            foreach ($data['data'] as $item) {
+                if ($item['kode_barang'] === $kodeBarang) {
+                    $selectedResep = $item;
+                    break;
+                }
+            }
+        }
+    
+        $this->addBreadcrumb('User', 'user');
+        $this->addBreadcrumb('Resep Dokter', 'resepdokter');
+        $this->addBreadcrumb('Edit', 'edit');
+    
+        return view('/admin/resepdokter/edit_resepdokter', [
+            'resepdokter' => $selectedResep,
+            'title' => $title,
+            'breadcrumbs' => $this->getBreadcrumbs()
+        ]);
+    }
+    
+    public function submitEditResepDokter($noResep)
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+    
+        $token = session()->get('jwt_token');
+        $url = $this->api_url . '/resep-dokter';
+    
+        $postData = [
+            'no_resep'     => $noResep,
+            'kode_barang'  => $this->request->getPost('kode_barang'),
+            'jumlah'       => floatval($this->request->getPost('jumlah')),
+            'aturan_pakai' => $this->request->getPost('aturan_pakai'),
+        ];
+    
+        $payload = json_encode($postData);
+    
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($payload),
+            'Authorization: Bearer ' . $token,
+        ]);
+        $response = curl_exec($ch);
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+    
+        if ($http_status === 200) {
+            return redirect()->to(base_url('resepdokter/' . $noResep));
+        } else {
+            return $this->renderErrorView($http_status);
+        }
+    }
+    
+    public function hapusResepDokter($noResep, $kodeBarang)
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+    
+        $token = session()->get('jwt_token');
+    
+        $delete_url = $this->api_url . "/resep-dokter/$noResep/$kodeBarang";
+    
+        $ch = curl_init($delete_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+    
+        $response = curl_exec($ch);
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+    
+        if ($http_status !== 200) {
+            return $this->renderErrorView($http_status);
+        }
+    
+        return redirect()->to('/resepdokter')->with('success', 'Resep dokter deleted');
+    }
+
+public function ResepDokterData($noResep)
+{
+    $title = 'Detail Resep Dokter';
+
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
+
+    $token = session()->get('jwt_token');
+
+    // ✅ Step 1: Get resep dokter detail
+    $url = $this->api_url . '/resep-dokter/' . $noResep;
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($http_status !== 200) {
+        return $this->renderErrorView($http_status);
+    }
+
+    $resep_data = json_decode($response, true);
+    if (!isset($resep_data['data'])) {
+        return $this->renderErrorView(500);
+    }
+
+    $data = $resep_data['data'];
+    if (isset($data['no_resep'])) {
+        $data = [$data]; // make single object into array
+    }
+
+    // ✅ Step 2: Fetch barang lookup
+    $barang_lookup = [];
+    $barang_url = $this->api_url . '/pemberian-obat/databarang'; // adjust endpoint if needed
+    $ch2 = curl_init($barang_url);
+    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $barang_response = curl_exec($ch2);
+    curl_close($ch2);
+
+    $barang_data = json_decode($barang_response, true);
+    $barang_lookup = [];
+
+    foreach ($barang_data['data'] ?? [] as $item) {
+        if (isset($item['kode_obat'], $item['nama_obat'])) {
+            $barang_lookup[$item['kode_obat']] = $item['nama_obat'];
+        } else {
+            log_message('error', 'Missing keys in databarang item: ' . json_encode($item));
+        }
+    }
+
+
+
+    // ✅ Breadcrumbs
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Resep Dokter', 'resepdokter');
+    $breadcrumbs = $this->getBreadcrumbs();
+
+    return view('/admin/resepdokter/resepdokter_data', [
+        'resepdokter_data' => $data,
+        'barang_lookup'    => $barang_lookup,
+        'title'            => $title,
+        'breadcrumbs'      => $breadcrumbs,
+        'meta_data'        => $resep_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
+    ]);
+}
+
+
+public function submitFromRawatinap($nomor_rawat)
+{
+    if (session()->has('jwt_token')) {
+        $token = session()->get('jwt_token');
+
+        // Step 1: Get rawat inap data
+        $url_rawatinap = $this->api_url . '/rawatinap/' . $nomor_rawat;
+        $ch = curl_init($url_rawatinap);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $data = json_decode($response, true);
+
+        if ($data && isset($data['data'])) {
+            $rawatinap = $data['data'];
+
+            // Step 2: Map to resep_dokter
+            $postData = [
+                'no_resep'      => 'RSP' . date('Ymd') . rand(100, 999),
+                'kode_barang'   => '', // to be selected by user
+                'jumlah'        => 0,
+                'aturan_pakai'  => '',
+            ];
+
+            // Step 3: Submit to Go API /resep-dokter
+            $url_resep = $this->api_url . '/resep-dokter';
+            $ch2 = curl_init($url_resep);
+            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch2, CURLOPT_POST, true);
+            curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($postData));
+            curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/json'
+            ]);
+            $result = curl_exec($ch2);
+            $status = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+            curl_close($ch2);
+
+            if ($status === 201 || $status === 200) {
+                return redirect()->to('/resepdokter/' . $postData['no_resep'])->with('success', 'Data resep dokter berhasil disimpan.');
+            } else {
+                return redirect()->to('/resepdokter/' . $postData['no_resep'])->with('error', 'Gagal menyimpan resep dokter.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'Data rawat inap tidak ditemukan.');
+        }
+    }
+
+    return redirect()->back()->with('error', 'Tidak ada token sesi.');
+}
+
+
+}

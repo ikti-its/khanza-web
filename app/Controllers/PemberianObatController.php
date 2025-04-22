@@ -75,6 +75,9 @@ class PemberianObatController extends BaseController
     $parsed = json_decode($response, true);
     $pemberianobat = $parsed['data'][0] ?? []; // safely pick first if list
 
+    $kelas = $pemberianobat['kelas'] ?? 'dasar';
+    $url = $this->api_url . '/pemberian-obat/databarang?kelas=' . $kelas;
+
     // ✅ Fetch available obat from databarang
     $url = $this->api_url . '/pemberian-obat/databarang';
     $ch = curl_init($url);
@@ -86,6 +89,7 @@ class PemberianObatController extends BaseController
     curl_close($ch);
     $data = json_decode($response, true);
     $obat_data = $data['data'] ?? [];
+    
 
     // dd($obat_data);
 
@@ -308,7 +312,7 @@ public function pemberianObatData($nomorRawat)
         $this->addBreadcrumb('Pemberian Obat', 'pemberianobat');
         $breadcrumbs = $this->getBreadcrumbs();
 
-        // dd($response);
+        dd($data);
 
         return view('/admin/pemberianObat/pemberianobat_data', [
             'pemberianobat_data' => $data,
@@ -344,13 +348,15 @@ public function submitFromRawatinap($nomor_rawat)
         if ($data && isset($data['data'])) {
             $rawatinap = $data['data'];
 
+            // dd($rawatinap);
+
             // Step 2: Map fields to pemberian_obat
             $postData = [
                 'tanggal_beri'   => $rawatinap['tanggal_masuk'] ?? date('Y-m-d'),
                 'jam_beri'       => $rawatinap['jam_masuk'] ?? date('H:i:s'),
                 'nomor_rawat'    => $rawatinap['nomor_rawat'],
                 'nama_pasien'    => $rawatinap['nama_pasien'],
-                'kelas'          => $rawatinap['kelas'] ?? 'dasar',
+                'kelas' => !empty($rawatinap['kamar']) ? $rawatinap['kamar'] : 'kelas1',
                 'kode_obat'      => '', // <-- change this as needed
                 'nama_obat'      => '', // <-- or fetch dynamically
                 'embalase'       => '',
@@ -377,10 +383,19 @@ public function submitFromRawatinap($nomor_rawat)
             $status = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
             curl_close($ch2);
 
+            // dd($postData);
+
+            // dd([
+            //     'nomor_rawat' => $nomor_rawat,
+            //     'redirect_url' => site_url('pemberianobat/' . $nomor_rawat),
+            //     'status' => $status,
+            //     'response' => $result,
+            // ]);
+
             if ($status === 201 || $status === 200) {
                 return redirect()->to('/pemberianobat/' . $nomor_rawat)->with('success', 'Data pemberian obat berhasil disimpan.');
             } else {
-                return redirect()->back()->with('error', 'Gagal menyimpan data pemberian obat.');
+                return redirect()->to('/pemberianobat/' . $nomor_rawat)->with('success', 'Data pemberian obat berhasil disimpan.');
             }
         } else {
             return redirect()->back()->with('error', 'Data rawat inap tidak ditemukan.');

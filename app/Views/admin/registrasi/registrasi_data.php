@@ -479,8 +479,8 @@ window.addEventListener("DOMContentLoaded", function () {
                                         <div class="px-3 py-1.5">
                                         <form method="POST" action="/rawatinap/tambah/<?= $registrasi['nomor_reg'] ?>">
                                             <?= csrf_field() ?>
-                                            <button type="submit" class="btn btn-warning text-sm">
-                                                ⛑ Rawat Inap
+                                            <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
+                                                Rawat Inap
                                             </button>
                                         </form>
                                             </div>
