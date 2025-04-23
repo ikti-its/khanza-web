@@ -59,9 +59,12 @@
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kamar</label>
-                <input type="text" name="kamar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <select name="kamar" id="kamarSelect" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="">Pilih Kamar</option>
+                </select>
+
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tarif Kamar</label>
-                <input name="tarif_kamar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input name="tarif_kamar" id="tarifKamarInput" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly>
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Diagnosa Awal</label>
@@ -74,25 +77,34 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Tanggal Masuk</label>
                 <input type="text" name="tanggal_masuk" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tanggal Keluar</label>
-                <input type="text" name="tanggal_keluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <input type="text" name="tanggal_keluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Status Pulang</label>
-                <input type="text" name="status_pulang" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <select name="status_pulang" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="Belum">Belum</option>
+                    <option value="Sudah">Sudah</option>
+                </select>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam Keluar</label>
-                <input type="text" name="jam_keluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <input type="text" name="jam_keluar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Lama Rawat Inap</label>
-                <input type="text" name="lama_ranap" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Dokter Penanggung Jawab</label>
-                <input type="text" name="dokter_pj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <input type="text" name="lama_ranap" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80">
+                    <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Dokter Penanggung Jawab</label>
+                    <select name="dokter_pj" id="dokterSelect" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                        <option value="">Pilih Dokter</option>
+                    </select>
+
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Total Biaya</label>
-                <input type="text" name="total_biaya" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <input type="text" name="total_biaya" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80">
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Bayar</label>
-                <input type="text" name="status_bayar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <select name="status_pulang" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    <option value="Belum">Belum</option>
+                    <option value="Sudah">Sudah</option>
+                </select>
             </div>
             <div class="mt-5 pt-5 border-t flex justify-end gap-x-2">
                 <a href="javascript:history.back()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
@@ -108,6 +120,89 @@
 </div>
 <!-- End Card Section -->
 <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const dokterSelect = document.getElementById("dokterSelect");
+
+        fetch("http://127.0.0.1:8080/v1/dokter") // ✅ Replace with your actual dokter endpoint
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success" && Array.isArray(data.data)) {
+                    data.data.forEach(dokter => {
+                        const option = document.createElement("option");
+                        option.value = dokter.nama_dokter; // or dokter.nama_dokter if preferred
+                        option.text = `${dokter.nama_dokter} (${dokter.kode_dokter})`;
+                        dokterSelect.appendChild(option);
+                    });
+                } else {
+                    console.error("Dokter response format error:", data);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching dokter list:", error);
+            });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const kamarSelect = document.getElementById("kamarSelect");
+        const tarifInput = document.getElementById("tarifKamarInput");
+
+        let kamarDataMap = {}; // Store kamar data for fast lookup by nomor_bed
+
+        fetch("http://127.0.0.1:8080/v1/kamar/available")
+            .then(response => response.json())
+            .then(data => {
+                if (data.data && Array.isArray(data.data)) {
+                    data.data.forEach(kamar => {
+                        // Store data in a map
+                        kamarDataMap[kamar.nomor_bed] = kamar;
+
+                        // Create and append option
+                        const option = document.createElement("option");
+                        option.value = kamar.nomor_bed;
+                        option.text = `${kamar.nama_kamar} (${kamar.kelas}) - ${kamar.nomor_bed}`;
+                        kamarSelect.appendChild(option);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching kamar list:", error);
+            });
+
+        // When a kamar is selected, update the tarif input
+        kamarSelect.addEventListener("change", function () {
+            const selectedBed = this.value;
+            const kamar = kamarDataMap[selectedBed];
+
+            if (kamar) {
+                tarifInput.value = kamar.tarif_kamar.toLocaleString(); // Format as number
+            } else {
+                tarifInput.value = "";
+            }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("http://127.0.0.1:8080/v1/kamar/available")
+            .then(response => response.json())
+            .then(data => {
+                const kamarSelect = document.getElementById("kamarSelect");
+                if (data.data && Array.isArray(data.data)) {
+                    data.data.forEach(kamar => {
+                        const option = document.createElement("option");
+                        option.value = kamar.nomor_bed; // Used as value to send
+                        option.text = `${kamar.nama_kamar} (${kamar.kelas}) - ${kamar.nomor_bed}`;
+                        kamarSelect.appendChild(option);
+                    });
+                } else {
+                    console.error("Data not in expected format", data);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching kamar list:", error);
+            });
+    });
+
     
     function validateForm() {
         var requiredFields = document.querySelectorAll('select[required], input[required]');

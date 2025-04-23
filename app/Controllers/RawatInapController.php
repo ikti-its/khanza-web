@@ -68,6 +68,7 @@ class RawatInapController extends BaseController
         'alamat_pasien' => $this->request->getPost('alamat_pasien'),
         'penanggung_jawab' => $this->request->getPost('penanggung_jawab'),
         'hubungan_pj' => $this->request->getPost('hubungan_pj'),
+        'dokter_pj' => $this->request->getPost('dokter_pj'),
         'jenis_bayar' => $this->request->getPost('jenis_bayar'),
         'diagnosa_awal' => $this->request->getPost('diagnosa_awal'),
         'kamar' => $this->request->getPost('kamar'),

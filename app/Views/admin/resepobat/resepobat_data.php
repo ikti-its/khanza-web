@@ -182,6 +182,55 @@
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     
     <?php foreach ($resepobat_data as $i => $resepobat) : ?>
+        <div id="hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+                                    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
+                                        <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
+                                            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
+                                                <h3 class="font-bold text-gray-800 dark:text-white">
+                                                    <?= $resepobat['no_resep'] ?>
+                                                </h3>
+                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>">
+                                                    <span class="sr-only">Close</span>
+                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M18 6 6 18"></path>
+                                                        <path d="m6 6 12 12"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="p-4">
+                                                <div class="space-y-4">
+                                                <div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
+                                                        <input type="text" name="" value="<?= $resepobat['no_resep'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
+                                                        <input type="text" name="" value="<?= $resepobat['no_resep'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <?php if ($resepobat['validasi']): ?>
+                                                            <span class="text-green-600 font-semibold">sudah divalidasi</span>
+                                                        <?php else: ?>
+                                                            <button
+                                                                class="px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                                                onclick="validateResep('<?= $resepobat['no_resep'] ?>')"
+                                                            >
+                                                                Validasi
+                                                            </button>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+
+                                                </div>
+                                                <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
         <tr>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
@@ -210,16 +259,24 @@
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepobat['status'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php if ($resepobat['validasi'] === true || $resepobat['validasi'] === 1 || $resepobat['validasi'] === 'true'): ?>
+                <span class="text-green-600 font-semibold">sudah divalidasi</span>
+                    <?php else: ?>
+                        <span class="text-red-600 font-semibold">belum divalidasi</span>
+                    <?php endif; ?></span>
                 </div>
             </td>
 
             <td class="size-px whitespace-nowrap">
                 <div class="px-3 py-1.5 text-center inline-flex">
                     <div class="px-3 py-1.5">
-                        <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] . '-' . $i ?>">
-                            Lihat Detail
-                        </button>
+                    <button
+                                                type="button"
+                                                class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
+                                                data-nomor-reg="<?= $resepobat['no_resep'] ?>"
+                                                data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>">
+                                                Lihat Detail
+                                            </button>
                     </div>
                     <div class="px-3 py-1.5">
                         <a href="/resepobat/edit/<?= $resepobat['no_resep'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
@@ -369,6 +426,33 @@
 
 <!-- End Table Section -->
 <script>
+    function validateResep(noResep) {
+    if (!confirm("Yakin ingin memvalidasi resep ini?")) return;
+
+    fetch(`http://127.0.0.1:8080/v1/resep-obat/${noResep}/validasi`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer <?= session('jwt_token') ?>'
+        },
+        body: JSON.stringify({ validasi: true })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Berhasil divalidasi');
+            location.reload(); // ⏮ Refresh to see updated status
+        } else {
+            alert('Gagal memvalidasi resep');
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Terjadi kesalahan');
+    });
+}
+
+
     function myFunction() {
         var input, filter, table, tr, td, i, j, txtValue;
         input = document.getElementById("myInput");

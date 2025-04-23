@@ -559,6 +559,9 @@ function submitAssignRoom() {
     const nomorReg = document.getElementById("modal-nomor-reg").value;
     const kamarId = document.getElementById("roomSelect").value;
 
+    console.log("Nomor Reg:", nomorReg);
+    console.log("Kamar ID:", kamarId);
+
     if (!kamarId) {
         alert("Pilih kamar terlebih dahulu");
         return;

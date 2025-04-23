@@ -211,6 +211,8 @@ class RegistrasiController extends BaseController
         }
     
         $registrasi_data = json_decode($response, true);
+
+        // dd($registrasi_data);
     
         // Additional reference data if needed (optional)
         // Example: $dokter_url = $this->api_url . '/ref/dokter';

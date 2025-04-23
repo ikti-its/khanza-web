@@ -318,6 +318,7 @@ window.addEventListener("DOMContentLoaded", function () {
                                                                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white"
                                                                     required>
                                                                 <option value="">-- Pilih Kelas --</option> <!-- Optional default -->
+                                                                <input type="hidden" id="modal-nomor-reg" value="<?= $registrasi['nomor_reg'] ?>">
                                                             </select>
                                                         </div>
 

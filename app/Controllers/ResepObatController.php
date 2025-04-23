@@ -141,6 +141,7 @@ class ResepObatController extends BaseController
         'status'          => $this->request->getPost('status') ?? 'ranap',
         'tgl_penyerahan'  => $this->request->getPost('tgl_penyerahan') ?? date('Y-m-d'),
         'jam_penyerahan'  => $this->request->getPost('jam_penyerahan') ?? date('H:i:s'),
+        'validasi'        => $this->request->getPost('validasi') === '1',
     ];
 
     $urlObat = $this->api_url . '/resep-obat';
