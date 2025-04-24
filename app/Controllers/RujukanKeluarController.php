@@ -262,6 +262,7 @@ class RujukanKeluarController extends BaseController
     
         return view('/admin/rujukan/cetak_surat', ['rujukan' => $rujukan]);
     }
+    
     public function panggilAmbulans($noAmbulans)
 {
     if (!session()->has('jwt_token')) {

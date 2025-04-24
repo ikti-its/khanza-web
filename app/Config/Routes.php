@@ -358,4 +358,5 @@ $routes->group('resepobat', ['filter' => 'auth'], function ($routes) {
     $routes->delete('hapus/(:segment)', 'ResepObatController::hapusResepObat/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('(:segment)', 'ResepObatController::ResepObatData/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('submit/(:segment)', 'ResepObatController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('cetak/(:segment)', 'ResepObatController::cetak/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 });

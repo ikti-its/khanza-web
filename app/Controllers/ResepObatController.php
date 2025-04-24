@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\ResepDokterModel;
+use App\Models\RawatInapModel;
 
 class ResepObatController extends BaseController
 {
@@ -503,6 +505,38 @@ public function submitTambahResepObatDetail()
         return $this->renderErrorView($status);
     }
 }
+
+public function cetak($no_resep)
+{
+    $db = \Config\Database::connect();
+
+    $builder = $db->table('sik.resep_dokter rd');
+    $builder->select('
+        rd.*,
+        db.nama_brng AS nama_obat,
+        ro.tgl_perawatan, ro.jam, ro.no_rawat,
+        ri.nomor_rm, ri.nama_pasien, ri.alamat_pasien, ri.penanggung_jawab
+    ');
+    $builder->join('sik.databarang db', 'rd.kode_barang = db.kode_brng', 'left');
+    $builder->join('sik.resep_obat ro', 'rd.no_resep = ro.no_resep', 'left');
+    $builder->join('sik.rawat_inap ri', 'ro.no_rawat = ri.nomor_rawat', 'left');
+    $builder->where('rd.no_resep', $no_resep);
+
+    $resepDokter = $builder->get()->getResultArray();
+
+    if (empty($resepDokter)) {
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Data resep tidak ditemukan.");
+    }
+
+    return view('admin/resepobat/cetak_aturan_pakai', [
+        'resep_dokter' => $resepDokter,
+    ]);
+}
+
+
+
+
+
 
 
 }
