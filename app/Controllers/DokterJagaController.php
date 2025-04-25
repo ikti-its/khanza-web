@@ -70,14 +70,35 @@ class DokterJagaController extends BaseController
             $this->addBreadcrumb('Dokter Jaga', 'dokterjaga');
             $this->addBreadcrumb('Tambah', 'tambah');
 
+            $token = session()->get('jwt_token');
+            $url = $this->api_url . '/dokter';
+
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Accept: application/json'
+            ]);
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            $dokterData = json_decode($response, true);
+
+            $data['dokters'] = $dokterData['data'] ?? [];
+            $data['dokterjaga'] = []; // or pass existing data if it's an edit
+
             return view('/admin/dokterjaga/tambah_dokterjaga', [
                 'title' => $title,
-                'breadcrumbs' => $this->getBreadcrumbs()
+                'breadcrumbs' => $this->getBreadcrumbs(),
+                'dokter' => $data['dokters'],
+                'dokterjaga' => $data['dokterjaga']
             ]);
         } else {
             return $this->renderErrorView(401);
         }
     }
+
     public function submitTambahDokterJaga()
 {
     if (session()->has('jwt_token')) {
@@ -123,8 +144,9 @@ public function editDokterJaga($kodeDokter)
     if (!session()->has('jwt_token')) return $this->renderErrorView(401);
 
     $token = session()->get('jwt_token');
-    $url = $this->api_url . '/dokterjaga/' . $kodeDokter;
 
+    // 👉 Fetch specific dokter jaga detail
+    $url = $this->api_url . '/dokterjaga/' . $kodeDokter;
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -136,20 +158,33 @@ public function editDokterJaga($kodeDokter)
 
     if ($status !== 200) return $this->renderErrorView($status);
 
-    $dokter_data = json_decode($response, true);
+    $dokterJagaData = json_decode($response, true);
 
-    // dd($dokter_data);
+    // 👉 Fetch all dokter (for dropdown options)
+    $dokterUrl = $this->api_url . '/dokter';
+    $ch = curl_init($dokterUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $dokterResponse = curl_exec($ch);
+    curl_close($ch);
+    $dokterList = json_decode($dokterResponse, true);
 
+    // 🧭 Breadcrumbs
     $this->addBreadcrumb('User', 'user');
     $this->addBreadcrumb('Dokter Jaga', 'dokterjaga');
     $this->addBreadcrumb('Edit', 'edit');
 
     return view('/admin/dokterjaga/edit_dokterjaga', [
-        'dokterjaga' => $dokter_data['data'][0],
+        'dokterjaga' => $dokterJagaData['data'][0] ?? [],
+        'dokter' => $dokterList['data'] ?? [],
         'title' => 'Edit Dokter Jaga',
         'breadcrumbs' => $this->getBreadcrumbs()
     ]);
 }
+
 
 public function submitEditDokterJaga($kodeDokter)
 {

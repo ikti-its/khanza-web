@@ -476,7 +476,22 @@ window.addEventListener("DOMContentLoaded", function () {
                                         <div>
                                             <label class="block text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
                                             <input type="text" value="<?= $registrasi['nomor_rm'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
-                                        </div>  
+                                        </div>
+                                        <div class="px-3 py-1.5">
+                                            <a href="/tindakan/<?= $registrasi['nomor_rawat'] ?>" 
+                                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
+                                                Lihat Tindakan
+                                            </a>
+                                        </div>
+                                        <div class="px-3 py-1.5">
+                                            <form method="GET" action="/tindakan/submit-registrasi/<?= $registrasi['nomor_reg'] ?>">
+                                                <?= csrf_field() ?>
+                                                <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
+                                                    Tambah Tindakan
+                                                </button>
+                                            </form>
+                                        </div>
+
                                         <div class="px-3 py-1.5">
                                         <form method="POST" action="/rawatinap/tambah/<?= $registrasi['nomor_reg'] ?>">
                                             <?= csrf_field() ?>

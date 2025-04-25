@@ -14,8 +14,15 @@
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Ambulans</label>
-                <input type="text" name="kode_dokter" value="<?= $dokterjaga['kode_dokter'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kode Dokter</label>
+                <select name="kode_dokter" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="">-- Pilih Dokter --</option>
+                    <?php foreach ($dokter as $dokter): ?>
+                        <option value="<?= $dokter['kode_dokter'] ?>" <?= ($dokter['kode_dokter'] == $dokterjaga['kode_dokter']) ? 'selected' : '' ?>>
+                            <?= $dokter['kode_dokter'] ?> - <?= $dokter['nama_dokter'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Dokter</label>
                 <input type="text" name="nama_dokter" value="<?= $dokterjaga['nama_dokter'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
             </div>
@@ -26,10 +33,13 @@
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
+                <!-- Jam Mulai -->
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Jam Mulai</label>
-                <input type="text" name="jam_mulai" value="<?= $dokterjaga['jam_mulai'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <input type="time" name="jam_mulai" value="<?= $dokterjaga['jam_mulai'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <!-- Jam Selesai -->
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam Selesai</label>
-                <input type="text" name="jam_selesai" value="<?= $dokterjaga['jam_selesai'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <input type="time" name="jam_selesai" value="<?= $dokterjaga['jam_selesai'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -53,65 +63,7 @@
 </div>
 <!-- End Card Section -->
 <script>
-    const inputHargaBeli = document.querySelector('input[name="hargabeli"]');
-
-    // Ambil semua input yang perlu diisi dan diubah
-    const inputHargaRalan = document.querySelector('input[name="hargaralan"]');
-    const inputHargaKelas1 = document.querySelector('input[name="hargakelas1"]');
-    const inputHargaKelas2 = document.querySelector('input[name="hargakelas2"]');
-    const inputHargaKelas3 = document.querySelector('input[name="hargakelas3"]');
-    const inputHargaUtama = document.querySelector('input[name="hargautama"]');
-    const inputHargaVIP = document.querySelector('input[name="hargavip"]');
-    const inputHargaVVIP = document.querySelector('input[name="hargavvip"]');
-    const inputHargaApotekLuar = document.querySelector('input[name="hargaapotekluar"]');
-    const inputHargaObatBebas = document.querySelector('input[name="hargaobatbebas"]');
-    const inputHargaKaryawan = document.querySelector('input[name="hargakaryawan"]');
-
-    // Tambahkan event listener untuk input harga beli
-    inputHargaBeli.addEventListener('input', function() {
-        // Ambil nilai harga beli
-        const hargaBeli = parseFloat(inputHargaBeli.value);
-
-        // Pastikan nilai harga beli valid (numerik dan tidak NaN)
-        if (!isNaN(hargaBeli)) {
-            // Hitung harga ralan dan setiap harga rnp dengan tambahan 15%
-            const hargaRalan = hargaBeli * 1.15;
-            const hargaKelas1 = hargaBeli * 1.15;
-            const hargaKelas2 = hargaBeli * 1.15;
-            const hargaKelas3 = hargaBeli * 1.15;
-            const hargaUtama = hargaBeli * 1.15;
-            const hargaVIP = hargaBeli * 1.15;
-            const hargaVVIP = hargaBeli * 1.15;
-            const hargaApotekLuar = hargaBeli * 1.15;
-            const hargaObatBebas = hargaBeli * 1.15;
-            const hargaKaryawan = hargaBeli * 1.15;
-
-            // Masukkan nilai yang dihitung ke dalam masing-masing input
-            inputHargaRalan.value = hargaRalan.toFixed(0);
-            inputHargaKelas1.value = hargaKelas1.toFixed(0);
-            inputHargaKelas2.value = hargaKelas2.toFixed(0);
-            inputHargaKelas3.value = hargaKelas3.toFixed(0);
-            inputHargaUtama.value = hargaUtama.toFixed(0);
-            inputHargaVIP.value = hargaVIP.toFixed(0);
-            inputHargaVVIP.value = hargaVVIP.toFixed(0);
-            inputHargaApotekLuar.value = hargaApotekLuar.toFixed(0);
-            inputHargaObatBebas.value = hargaObatBebas.toFixed(0);
-            inputHargaKaryawan.value = hargaKaryawan.toFixed(0);
-        } else {
-            // Jika harga beli tidak valid, atur nilai input lainnya menjadi kosong
-            inputHargaRalan.value = '';
-            inputHargaKelas1.value = '';
-            inputHargaKelas2.value = '';
-            inputHargaKelas3.value = '';
-            inputHargaUtama.value = '';
-            inputHargaVIP.value = '';
-            inputHargaVVIP.value = '';
-            inputHargaApotekLuar.value = '';
-            inputHargaObatBebas.value = '';
-            inputHargaKaryawan.value = '';
-        }
-    });
-
+    
     function validateForm() {
         var requiredFields = document.querySelectorAll('select[required], input[required]');
         for (var i = 0; i < requiredFields.length; i++) {

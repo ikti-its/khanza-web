@@ -354,8 +354,14 @@
                                             <input type="text" value="<?= $rawatinap['nomor_rm'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
                                         </div>
                                         <div class="px-3 py-1.5">
+                                            <a href="/tindakan/<?= $rawatinap['nomor_rawat'] ?>" 
+                                            class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
+                                                Lihat Tindakan
+                                            </a>
+                                        </div>
+                                        <div class="px-3 py-1.5">
                                             <a href="/tindakan/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
-                                                Tindakan
+                                                Tambah Tindakan
                                             </a>
                                         </div>
                                         <div class="px-3 py-1.5">

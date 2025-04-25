@@ -16,7 +16,7 @@
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
                             <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
-                                Pengelolaan Kamar
+                                Pengelolaan Ruangan
                             </h2>
 
                         </div>

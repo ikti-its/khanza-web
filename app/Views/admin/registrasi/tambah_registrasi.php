@@ -79,22 +79,24 @@
                     echo $waktuHariIni; 
                     ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
             </div>
-            <div class="mb-5 sm:block md:flex items-center">
+            <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nomor Rekam Medis</label>
-                <input type="text" name="nomor_rekam_medis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" maxlength="3">
+                <input type="text" id="nomor_rm" name="nomor_rekam_medis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" maxlength="3">
+
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama</label>
-                <input name="nama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
-                </select>
+                <input id="nama_pasien" name="nama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin</label>
-                <select name="jenis_kelamin" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin</label>
+                <select id="jenis_kelamin" name="jenis_kelamin" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="">-- Pilih --</option>
                     <option value="L">Laki-laki</option>
                     <option value="P">Perempuan</option>
                 </select>
+
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur</label>
-                <input name="umur" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input id="umur" name="umur" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Poliklinik</label>
@@ -174,6 +176,27 @@
 </div>
 <!-- End Card Section -->
 <script>
+
+document.getElementById('nomor_rm').addEventListener('blur', function () {
+    const nomorRM = this.value;
+    if (!nomorRM) return;
+
+    fetch(`http://localhost:8080/v1/registrasi/by-nomor-rm/${nomorRM}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success' && data.data) {
+                document.getElementById('nama_pasien').value = data.data.nama_pasien || '';
+                document.getElementById('jenis_kelamin').value = data.data.jenis_kelamin || '';
+                document.getElementById('umur').value = data.data.umur || '';
+            } else {
+                alert('Pasien tidak ditemukan');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Gagal mengambil data pasien');
+        });
+});
 
 fetch("http://127.0.0.1:8080/v1/registrasi/dokter")
     .then(res => res.json())

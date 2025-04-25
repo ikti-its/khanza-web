@@ -359,62 +359,126 @@ public function submitEditTindakan($nomorRawat)
     
 
     public function submitFromRawatinap($nomor_rawat)
-    {
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
-
-            // Step 1: Get rawat inap data by nomor_rawat
-            $url_rawatinap = $this->api_url . '/rawatinap/' . $nomor_rawat;
-            $ch = curl_init($url_rawatinap);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-                'Accept: application/json'
-            ]);
-            $response = curl_exec($ch);
-            curl_close($ch);
-
-            $data = json_decode($response, true);
-
-            if ($data && isset($data['data'])) {
-                $rawatinap = $data['data'];
-                // dd($rawatinap);
-                // Step 2: Copy needed data to tindakan
-                $postData = [
-                    'nomor_rawat' => $rawatinap['nomor_rawat'],
-                    'nomor_rm'    => $rawatinap['nomor_rm'],
-                    'nama_pasien' => $rawatinap['nama_pasien'],
-                    'kode_dokter' => $rawatinap['kode_dokter'] ?? 'D001',
-                    'tanggal_rawat' => $rawatinap['tanggal_masuk'] ?? date('Y-m-d'),
-                    'jam_rawat' => $rawatinap['jam_masuk'] ?? date('H:i:s'),
-                    'biaya'       => $rawatinap['total_biaya'],
-                ];
-                
-                // Step 3: Send to Go API
-                $url_tindakan = $this->api_url . '/tindakan';
-                $ch2 = curl_init($url_tindakan);
-                curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch2, CURLOPT_POST, true);
-                curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($postData));
-                curl_setopt($ch2, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer ' . $token,
-                    'Content-Type: application/json'
-                ]);
-                $result = curl_exec($ch2);
-                $status = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-                curl_close($ch2);
-
-                if ($status === 201 || $status === 200) {
-                    return redirect()->to('/tindakan/' . $nomor_rawat);
-                } else {
-                    return redirect()->back()->with('error', 'Gagal menyimpan data tindakan.');
-                }
-            } else {
-                return redirect()->back()->with('error', 'Data rawat inap tidak ditemukan.');
-            }
-        }
-        return redirect()->back()->with('error', 'Tidak ada token sesi.');
+{
+    if (!session()->has('jwt_token')) {
+        return redirect()->back()->with('error', 'Session token missing.');
     }
+
+    $token = session()->get('jwt_token');
+
+    // Step 1: Get rawat inap data by nomor_rawat
+    $url_rawatinap = $this->api_url . '/rawatinap/' . $nomor_rawat;
+    $ch = curl_init($url_rawatinap);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    if (!isset($data['data']) || $data['data'] === null) {
+        return redirect()->back()->with('error', 'Rawat inap data not found.');
+    }
+
+    $rawatinap = is_string($data['data']) ? json_decode($data['data'], true) : $data['data'];
+
+    if (!is_array($rawatinap)) {
+        return redirect()->back()->with('error', 'Invalid rawat inap data format.');
+    }
+
+    // Step 2: Prepare data to prefill the form
+    $preFill = [
+        'nomor_rawat'    => $rawatinap['nomor_rawat'] ?? $nomor_rawat,
+        'nomor_rm'       => $rawatinap['nomor_rm'] ?? '',
+        'nama_pasien'    => $rawatinap['nama_pasien'] ?? '',
+        'kode_dokter'    => $rawatinap['kode_dokter'] ?? 'D001',
+        'tanggal_rawat'  => $rawatinap['tanggal_masuk'] ?? date('Y-m-d'),
+        'jam_rawat'      => $rawatinap['jam_masuk'] ?? date('H:i:s'),
+        'biaya'          => $rawatinap['total_biaya'] ?? 0,
+    ];
+
+    // Step 3: Fetch jenis tindakan
+    $jenis_tindakan = $this->getJenisTindakan($token);
+
+    // Step 4: Render the form view with prefilled data
+    return view('admin/tindakan/tambah_tindakan', [
+        'prefill' => $preFill,
+        'jenis_tindakan' => $jenis_tindakan
+    ]);
+}
+
+    public function submitFromRegistrasi($nomor_reg)
+{
+    if (!session()->has('jwt_token')) {
+        return redirect()->back()->with('error', 'Session token missing.');
+    }
+
+    $token = session()->get('jwt_token');
+
+    // Step 1: Fetch registrasi data
+    $url = $this->api_url . '/registrasi/' . $nomor_reg;
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    if (!isset($data['data']) || $data['data'] === null) {
+        return redirect()->back()->with('error', 'Registrasi data not found.');
+    }
+
+    $registrasi = is_string($data['data']) ? json_decode($data['data'], true) : $data['data'];
+
+    if (!is_array($registrasi)) {
+        return redirect()->back()->with('error', 'Invalid registrasi data format.');
+    }
+
+    // Prepare data for the view
+    $preFill = [
+        'nomor_rawat'    => $registrasi['nomor_rawat'] ?? '',
+        'nomor_rm'       => $registrasi['nomor_rm'] ?? '',
+        'nama_pasien'    => $registrasi['nama_pasien'] ?? '',
+        'kode_dokter'    => $registrasi['kode_dokter'] ?? 'D001',
+        'tanggal_rawat'  => !empty($registrasi['tanggal']) ? $registrasi['tanggal'] : date('Y-m-d'),
+        'jam_rawat'      => !empty($registrasi['jam']) ? $registrasi['jam'] : date('H:i:s'),
+        'biaya'          => $registrasi['biaya_registrasi'] ?? 0,
+    ];
+
+    // Step 2: Open the form (tambahTindakan view) with pre-filled data
+    return view('admin/tindakan/tambah_tindakan', [
+        'prefill' => $preFill,
+        'jenis_tindakan' => $this->getJenisTindakan($token) // 👈 helper function you create
+    ]);
+}
+
+private function getJenisTindakan($token)
+{
+    $url = $this->api_url . '/tindakan/jenis'; // ✅ correct route from Go backend
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    return $data['data'] ?? [];
+}
+
+
+
+
 
 
 

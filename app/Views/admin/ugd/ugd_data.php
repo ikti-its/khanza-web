@@ -304,6 +304,40 @@
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
                                                         <input type="text" name="" value="<?= $ugd['status_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
+                                                    <div class="p-4 space-y-4">
+                                                        <div>
+                                                            <label class="block text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
+                                                            <input type="text" value="<?= $ugd['nomor_reg'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
+                                                        </div>
+                                                        <div>
+                                                            <label class="block text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
+                                                            <input type="text" value="<?= $ugd['nomor_rm'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
+                                                        </div>
+                                                        <div class="px-3 py-1.5">
+                                                            <a href="/tindakan/<?= $ugd['nomor_rawat'] ?>" 
+                                                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
+                                                                Lihat Tindakan
+                                                            </a>
+                                                        </div>
+                                                        <div class="px-3 py-1.5">
+                                                            <form method="GET" action="/tindakan/submit-registrasi/<?= $ugd['nomor_rawat'] ?>">
+                                                                <?= csrf_field() ?>
+                                                                <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
+                                                                    Tambah Tindakan
+                                                                </button>
+                                                            </form>
+                                                        </div>
+
+                                                        <div class="px-3 py-1.5">
+                                                        <form method="POST" action="/rawatinap/tambah/<?= $ugd['nomor_rawat'] ?>">
+                                                            <?= csrf_field() ?>
+                                                            <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
+                                                                Rawat Inap
+                                                            </button>
+                                                        </form>
+                                                            </div>
+                                                        <!-- Add more fields if needed -->
+                                                    </div>
 
                                                     <div class="mb-5 flex items-end gap-4">
                                                         <!-- Select input -->

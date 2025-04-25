@@ -91,6 +91,9 @@ class ResepObatController extends BaseController
                     'nama_pasien'  => $rawatinap['nama_pasien'] ?? '',
                     'nama_dokter'  => $rawatinap['nama_dokter'] ?? '',
                     'kode_dokter'  => $rawatinap['kode_dokter'] ?? '',
+                    'no_resep'     => 'RSP' . date('Ymd') . rand(1000, 9999),
+                    'tgl_peresepan'=> date('Y-m-d'),
+                    'jam_peresepan'=> date('H:i:s')
                 ];
             }
         }
@@ -387,73 +390,53 @@ private function getObatListFromAPI($token)
 
 public function submitFromRawatinap($nomor_rawat)
 {
-    if (session()->has('jwt_token')) {
-        $token = session()->get('jwt_token');
-
-        // Step 1: Get rawat inap data
-        $url_rawatinap = $this->api_url . '/rawatinap/' . $nomor_rawat;
-        $ch = curl_init($url_rawatinap);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-            'Accept: application/json'
-        ]);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        $data = json_decode($response, true);
-
-        if ($data && isset($data['data'])) {
-            $rawatinap = $data['data'];
-            // dd($rawatinap);
-            // Step 2: Map to resep_obat
-            $postData = [
-                'no_resep'        => 'RSP' . date('Ymd') . rand(100, 999),
-                'tgl_perawatan'   => date('Y-m-d'),
-                'jam'             => date('H:i:s'),
-                'no_rawat'        => $rawatinap['nomor_rawat'],
-                'kd_dokter'       => $rawatinap['dokter_pj'] ?? '',
-                'tgl_peresepan'   => date('Y-m-d'),
-                'jam_peresepan'   => date('H:i:s'),
-                'status'          => 'ranap',
-                'tgl_penyerahan'  => date('Y-m-d'),
-                'jam_penyerahan'  => date('H:i:s'),
-            ];
-
-            // Step 3: Submit to Go API /resep-obat
-            $url_resep = $this->api_url . '/resep-obat';
-            $ch2 = curl_init($url_resep);
-            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch2, CURLOPT_POST, true);
-            curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($postData));
-            curl_setopt($ch2, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-                'Content-Type: application/json'
-            ]);
-            $result = curl_exec($ch2);
-            $status = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-            curl_close($ch2);
-
-            if ($status === 201 || $status === 200) {
-                return view('admin/resepobat/tambah_resepobat', [
-                    'title' => 'Tambah Resep Dokter',
-                    'resepobat' => [
-                        'nomor_rm' => $rawatinap['nomor_rm'] ?? '',
-                        'nomor_rawat' => $rawatinap['nomor_rawat'] ?? '',
-                        'kd_dokter' => $rawatinap['kode_dokter'] ?? '',
-                    ],
-                    'obat_list' => $this->getObatListFromAPI($token),
-                ]);
-            } else {
-                return redirect()->to('/resepobat')->with('error', 'Gagal menyimpan resep obat.');
-            }
-        } else {
-            return redirect()->back()->with('error', 'Data rawat inap tidak ditemukan.');
-        }
+    if (!session()->has('jwt_token')) {
+        return redirect()->back()->with('error', 'Session token missing.');
     }
 
-    return redirect()->back()->with('error', 'Tidak ada token sesi.');
+    $token = session()->get('jwt_token');
+
+    // Step 1: Get rawat inap data
+    $url_rawatinap = $this->api_url . '/rawatinap/' . $nomor_rawat;
+    $ch = curl_init($url_rawatinap);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    if ($data && isset($data['data'])) {
+        $rawatinap = is_string($data['data']) ? json_decode($data['data'], true) : $data['data'];
+
+        // Step 2: Prepare prefill data for the form (no API submission here)
+        $formData = [
+            'no_resep'       => 'RSP' . date('Ymd') . rand(100, 999),
+            'tgl_perawatan'  => date('Y-m-d'),
+            'jam'            => date('H:i:s'),
+            'no_rawat'       => $rawatinap['nomor_rawat'] ?? $nomor_rawat,
+            'kd_dokter'      => $rawatinap['dokter_pj'] ?? $rawatinap['kode_dokter'] ?? '',
+            'tgl_peresepan'  => date('Y-m-d'),
+            'jam_peresepan'  => date('H:i:s'),
+            'status'         => 'ranap',
+            'tgl_penyerahan' => date('Y-m-d'),
+            'jam_penyerahan' => date('H:i:s'),
+            'nomor_rm'       => $rawatinap['nomor_rm'] ?? '',
+        ];
+
+        return view('admin/resepobat/tambah_resepobat', [
+            'title'      => 'Tambah Resep Dokter',
+            'resepobat'  => $formData,
+            'obat_list'  => $this->getObatListFromAPI($token),
+        ]);
+    }
+
+    return redirect()->back()->with('error', 'Data rawat inap tidak ditemukan.');
 }
+
 
 public function submitTambahResepObatDetail()
 {
