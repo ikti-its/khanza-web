@@ -300,7 +300,7 @@ $routes->group('tindakan', ['filter' => 'auth'], function ($routes) {
     $routes->get('submit/(:segment)', 'TindakanController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('tindakan/edit/(:segment)/(:segment)', 'TindakanController::editTindakan/$1/$2');
     $routes->get('submit-registrasi/(:segment)', 'TindakanController::submitFromRegistrasi/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
-
+    $routes->get('submit-ugd/(:segment)', 'TindakanController::submitFromUGD/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 });
 
 //Dokter Jaga

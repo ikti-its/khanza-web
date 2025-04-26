@@ -320,7 +320,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="px-3 py-1.5">
-                                                            <form method="GET" action="/tindakan/submit-registrasi/<?= $ugd['nomor_rawat'] ?>">
+                                                            <form method="GET" action="/tindakan/submit-ugd/<?= $ugd['nomor_rawat'] ?>">
                                                                 <?= csrf_field() ?>
                                                                 <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
                                                                     Tambah Tindakan

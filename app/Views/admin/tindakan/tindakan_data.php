@@ -198,6 +198,7 @@
                                 $namaTindakanMap[$jt['kode']] = $jt['nama_tindakan'];
                             }
                         ?>                       
+    <?php if (!empty($tindakan_data)): ?>
     <?php foreach ($tindakan_data as $i => $tindakan) : ?>
         <tr>
             <td class="h-px w-64 whitespace-nowrap">
@@ -295,6 +296,11 @@
             </td>
         </tr>
     <?php endforeach; ?>
+    <?php else: ?>
+    <tr>
+        <td colspan="6" class="text-center">Tidak ada tindakan untuk nomor rawat ini.</td>
+    </tr>
+<?php endif; ?>
 </tbody>
 <?php foreach ($tindakan_data as $i => $tindakan) : ?>
     <div id="hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">

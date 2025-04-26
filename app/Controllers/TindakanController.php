@@ -295,67 +295,67 @@ public function submitEditTindakan($nomorRawat)
     
 
     public function tindakanData($nomorRawat)
-    {
-        $title = 'Detail Tindakan';
-    
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
-            $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
-    
-            $ch = curl_init($tindakan_url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-                'Accept: application/json'
-            ]);
-            $response = curl_exec($ch);
-            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-    
-            if ($http_status !== 200) {
-                return $this->renderErrorView($http_status);
-            }
-    
-            $tindakan_data = json_decode($response, true);
-    
-            if (!isset($tindakan_data['data'])) {
-                return $this->renderErrorView(500);
-            }
-    
-            // Ensure $tindakan_data['data'] is an array
+{
+    $title = 'Detail Tindakan';
+
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
+
+    $token = session()->get('jwt_token');
+    $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
+
+    $ch = curl_init($tindakan_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    $data = []; // ✅ default empty array
+    if ($http_status === 200) {
+        $tindakan_data = json_decode($response, true);
+
+        if (isset($tindakan_data['data'])) {
             $data = $tindakan_data['data'];
+
+            // Ensure it's an array
             if (isset($data['nomor_rawat'])) {
-                $data = [$data]; // convert to array with one item
+                $data = [$data];
             }
-    
-            // ✅ Fetch jenis_tindakan (MISSING BEFORE)
-            $jenis_url = $this->api_url . '/tindakan/jenis';
-            $ch2 = curl_init($jenis_url);
-            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch2, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-            ]);
-            $jenis_response = curl_exec($ch2);
-            curl_close($ch2);
-    
-            $jenis_data = json_decode($jenis_response, true);
-            $jenis_tindakan = $jenis_data['data'] ?? [];
-    
-            $this->addBreadcrumb('User', 'user');
-            $this->addBreadcrumb('Tindakan', 'tindakan');
-            $breadcrumbs = $this->getBreadcrumbs();
-    
-            return view('/admin/tindakan/tindakan_data', [
-                'tindakan_data' => $data,
-                'jenis_tindakan' => $jenis_tindakan, // ✅ now available in the view
-                'title' => $title,
-                'breadcrumbs' => $breadcrumbs,
-                'meta_data' => $tindakan_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
-            ]);
-        } else {
-            return $this->renderErrorView(401);
         }
     }
+    // ✅ If 404 or no data, just continue showing empty table without error
+
+    // Fetch jenis tindakan
+    $jenis_url = $this->api_url . '/tindakan/jenis';
+    $ch2 = curl_init($jenis_url);
+    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $jenis_response = curl_exec($ch2);
+    curl_close($ch2);
+
+    $jenis_data = json_decode($jenis_response, true);
+    $jenis_tindakan = $jenis_data['data'] ?? [];
+
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Tindakan', 'tindakan');
+    $breadcrumbs = $this->getBreadcrumbs();
+
+    return view('/admin/tindakan/tindakan_data', [
+        'tindakan_data' => $data,
+        'jenis_tindakan' => $jenis_tindakan,
+        'title' => $title,
+        'breadcrumbs' => $breadcrumbs,
+        'meta_data' => $tindakan_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 0],
+    ]);
+}
+
     
 
     public function submitFromRawatinap($nomor_rawat)
@@ -474,6 +474,64 @@ private function getJenisTindakan($token)
     $data = json_decode($response, true);
 
     return $data['data'] ?? [];
+}
+
+public function submitFromUGD($nomor_rawat)
+{
+    if (!session()->has('jwt_token')) {
+        return redirect()->back()->with('error', 'Session token missing.');
+    }
+
+    $token = session()->get('jwt_token');
+
+    // Step 1: Fetch ALL UGD data
+    $url = $this->api_url . '/ugd';
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    if (!isset($data['data']) || empty($data['data'])) {
+        return redirect()->back()->with('error', 'UGD data not found.');
+    }
+
+    // Step 2: Search for the matching nomor_rawat manually
+    $ugdList = $data['data'];
+    $selectedUGD = null;
+
+    foreach ($ugdList as $ugd) {
+        if (isset($ugd['nomor_rawat']) && $ugd['nomor_rawat'] == $nomor_rawat) {
+            $selectedUGD = $ugd;
+            break;
+        }
+    }
+
+    if (!$selectedUGD) {
+        return redirect()->back()->with('error', 'UGD with nomor_rawat not found.');
+    }
+
+    // Step 3: Prepare data for the view
+    $preFill = [
+        'nomor_rawat'    => $selectedUGD['nomor_rawat'] ?? '',
+        'nomor_rm'       => $selectedUGD['nomor_rm'] ?? '',
+        'nama_pasien'    => $selectedUGD['nama_pasien'] ?? '',
+        'kode_dokter'    => $selectedUGD['kode_dokter'] ?? 'D001',
+        'tanggal_rawat'  => !empty($selectedUGD['tanggal']) ? $selectedUGD['tanggal'] : date('Y-m-d'),
+        'jam_rawat'      => !empty($selectedUGD['jam']) ? $selectedUGD['jam'] : date('H:i:s'),
+        'biaya'          => $selectedUGD['biaya_registrasi'] ?? 0,
+    ];
+
+    // Step 4: Open the tambahTindakan form
+    return view('admin/tindakan/tambah_tindakan', [
+        'prefill' => $preFill,
+        'jenis_tindakan' => $this->getJenisTindakan($token) // helper to load jenis tindakan list
+    ]);
 }
 
 

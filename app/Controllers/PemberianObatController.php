@@ -100,7 +100,7 @@ class PemberianObatController extends BaseController
 
     return view('/admin/pemberianObat/tambah_pemberianobat', [
         'pemberianobat' => $pemberianobat,
-        'obat_data' => $obat_data,
+        'obat_list' => $obat_data,
         'title' => $title,
         'breadcrumbs' => $this->getBreadcrumbs()
     ]);
@@ -327,83 +327,77 @@ public function pemberianObatData($nomorRawat)
 
 public function submitFromRawatinap($nomor_rawat)
 {
-    if (session()->has('jwt_token')) {
-        $token = session()->get('jwt_token');
-
-        // Step 1: Get rawat inap data by nomor_rawat
-        $url_rawatinap = $this->api_url . '/rawatinap/' . $nomor_rawat;
-        $ch = curl_init($url_rawatinap);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-            'Accept: application/json'
-        ]);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        // dd($response);
-
-        $data = json_decode($response, true);
-
-        if ($data && isset($data['data'])) {
-            $rawatinap = $data['data'];
-
-            // dd($rawatinap);
-
-            // Step 2: Map fields to pemberian_obat
-            $postData = [
-                'tanggal_beri'   => $rawatinap['tanggal_masuk'] ?? date('Y-m-d'),
-                'jam_beri'       => $rawatinap['jam_masuk'] ?? date('H:i:s'),
-                'nomor_rawat'    => $rawatinap['nomor_rawat'],
-                'nama_pasien'    => $rawatinap['nama_pasien'],
-                'kelas' => !empty($rawatinap['kamar']) ? $rawatinap['kamar'] : 'kelas1',
-                'kode_obat'      => '', // <-- change this as needed
-                'nama_obat'      => '', // <-- or fetch dynamically
-                'embalase'       => '',
-                'tuslah'         => '',
-                'jumlah'         => '',
-                'biaya_obat'     => 0,
-                'total'          => 0,
-                'gudang'         => '',
-                'no_batch'       => '',
-                'no_faktur'      => ''
-            ];
-
-            // Step 3: Submit to Go API /pemberian-obat
-            $url_obat = $this->api_url . '/pemberian-obat';
-            $ch2 = curl_init($url_obat);
-            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch2, CURLOPT_POST, true);
-            curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($postData));
-            curl_setopt($ch2, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-                'Content-Type: application/json'
-            ]);
-            $result = curl_exec($ch2);
-            $status = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-            curl_close($ch2);
-
-            // dd($postData);
-
-            // dd([
-            //     'nomor_rawat' => $nomor_rawat,
-            //     'redirect_url' => site_url('pemberianobat/' . $nomor_rawat),
-            //     'status' => $status,
-            //     'response' => $result,
-            // ]);
-
-            if ($status === 201 || $status === 200) {
-                return redirect()->to('/pemberianobat/' . $nomor_rawat)->with('success', 'Data pemberian obat berhasil disimpan.');
-            } else {
-                return redirect()->to('/pemberianobat/' . $nomor_rawat)->with('success', 'Data pemberian obat berhasil disimpan.');
-            }
-        } else {
-            return redirect()->back()->with('error', 'Data rawat inap tidak ditemukan.');
-        }
+    if (!session()->has('jwt_token')) {
+        return redirect()->back()->with('error', 'Session token missing.');
     }
 
-    return redirect()->back()->with('error', 'Tidak ada token sesi.');
+    $token = session()->get('jwt_token');
+
+    // Step 1: Get rawat inap data
+    $url_rawatinap = $this->api_url . '/rawatinap/' . $nomor_rawat;
+    $ch = curl_init($url_rawatinap);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    if (!isset($data['data']) || $data['data'] === null) {
+        return redirect()->back()->with('error', 'Rawat inap data not found.');
+    }
+
+    $rawatinap = is_string($data['data']) ? json_decode($data['data'], true) : $data['data'];
+
+    if (!is_array($rawatinap)) {
+        return redirect()->back()->with('error', 'Invalid rawat inap data format.');
+    }
+
+    // Step 2: Prepare prefill for the form
+    $preFill = [
+        'tanggal_beri'  => $rawatinap['tanggal_masuk'] ?? date('Y-m-d'),
+        'jam_beri'      => $rawatinap['jam_masuk'] ?? date('H:i:s'),
+        'nomor_rawat'   => $rawatinap['nomor_rawat'] ?? '',
+        'nama_pasien'   => $rawatinap['nama_pasien'] ?? '',
+        'kelas'         => !empty($rawatinap['kamar']) ? $rawatinap['kamar'] : 'kelas1',
+        'kode_obat'     => '',
+        'nama_obat'     => '',
+        'embalase'      => '',
+        'tuslah'        => '',
+        'jumlah'        => '',
+        'biaya_obat'    => '',
+        'total'         => '',
+        'gudang'        => '',
+        'no_batch'      => '',
+        'no_faktur'     => ''
+    ];
+
+    // Step 3: Open the tambah pemberianobat form (without submitting yet)
+    return view('admin/pemberianobat/tambah_pemberianobat', [
+        'prefill' => $preFill,
+        'obat_list' => $this->getObatListFromAPI($token), // fetch available obat list
+        'title' => 'Tambah Pemberian Obat'
+    ]);
+}
+
+private function getObatListFromAPI($token)
+{
+    $url = $this->api_url . '/pemberian-obat/databarang';
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+    return $data['data'] ?? [];
 }
 
 
-}    
+}

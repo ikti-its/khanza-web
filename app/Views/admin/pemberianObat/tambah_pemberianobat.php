@@ -19,10 +19,10 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Rawat</label>
-                <input type="text" name="nomor_rawat" value="<?= $pemberianobat['nomor_rawat'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input name="nomor_rawat" value="<?= $prefill['nomor_rawat'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Pasien</label>
-                <input name="nama_pasien" value="<?= $pemberianobat['nama_pasien'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input name="nama_pasien" value="<?= $prefill['nama_pasien'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -42,7 +42,7 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Obat</label>
                 <select id="obatSelect" name="kode_obat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option disabled selected value="">Pilih Obat</option>
-                    <?php foreach ($obat_data as $obat): ?>
+                    <?php foreach ($obat_list as $obat): ?>
                         <?php
                             // Normalize the kelas key (match Go fields like Dasar, Kelas1)
                             $kelasKey = match ($kelas) {
