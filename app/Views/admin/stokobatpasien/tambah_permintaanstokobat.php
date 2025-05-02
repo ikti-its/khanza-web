@@ -15,7 +15,7 @@
 
             <div class="mb-5 sm:block md:flex items-center">
                 <?php
-                    $generated_no_resep = 'RSP' . date('Ymd') . rand(1000, 9999);
+                    $generated_no_resep = 'SOP' . date('Ymd') . rand(1000, 9999);
                 ?>
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Permintaan</label>
                 <input type="text" name="no_permintaan" value="<?= $generated_no_resep ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
@@ -78,129 +78,161 @@
 </div>
 <!-- End Card Section -->
 <script>
-const obatSelect = document.getElementById("obat-select");
-const container = document.getElementById("obat-input-container");
+document.addEventListener("DOMContentLoaded", function () {
+  const submitBtn = document.getElementById("submitButton");
+  if (!submitBtn) {
+    console.error("❌ submitButton not found");
+    return;
+  }
 
-obatSelect.addEventListener("change", function () {
+  submitBtn.addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    const noPermintaanEl = document.querySelector("input[name='no_permintaan']");
+    const tglPermintaanEl = document.querySelector("input[name='tgl_permintaan']");
+    const jamEl = document.querySelector("input[name='jam']");
+    const noRawatEl = document.querySelector("input[name='no_rawat']");
+    const kdDokterEl = document.querySelector("input[name='kode_dokter']");
+
+    if (!noPermintaanEl || !tglPermintaanEl || !jamEl || !noRawatEl || !kdDokterEl) {
+      console.error("❌ One or more form fields not found");
+      return;
+    }
+
+    const payload = {
+      no_permintaan: noPermintaanEl.value,
+      tgl_permintaan: tglPermintaanEl.value,
+      jam: jamEl.value,
+      no_rawat: noRawatEl.value,
+      kd_dokter: kdDokterEl.value,
+      status: "Belum",
+      stok_obat: []
+    };
+
+    document.querySelectorAll(".obat-row").forEach(row => {
+      const kode = row.querySelector("input[name^='kode_barang']")?.value;
+      const jumlah = parseInt(row.querySelector("input[name^='jumlah']")?.value || 0);
+      const aturan = row.querySelector("input[name^='aturan_pakai']")?.value;
+      const embalase = parseFloat(row.querySelector("input[name^='embalase']")?.value || 0);
+      const tuslah = parseFloat(row.querySelector("input[name^='tuslah']")?.value || 0);
+      const kdBangsal = row.querySelector("input[name^='kd_bangsal']")?.value;
+      const noBatch = row.querySelector("input[name^='no_batch']")?.value;
+      const noFaktur = row.querySelector("input[name^='no_faktur']")?.value;
+
+      const jamObat = [];
+      row.querySelectorAll("input[name^='jam_obat']:checked").forEach(cb => {
+        jamObat.push(cb.value);
+      });
+
+      payload.stok_obat.push({
+        kode_barang: kode,
+        jumlah: jumlah,
+        aturan_pakai: aturan,
+        embalase: embalase,
+        tuslah: tuslah,
+        jam_obat: jamObat,
+        kd_bangsal: kdBangsal,
+        no_batch: noBatch,
+        no_faktur: noFaktur
+      });
+    });
+
+    console.log("Stok Obat Count:", payload.stok_obat.length);
+    console.log("Stok Obat Payload:", payload.stok_obat);
+
+    try {
+        const res = await fetch("http://127.0.0.1:8080/v1/permintaan-stok-obat/detail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      console.log("✅ API Response:", data);
+      alert("✅ Data berhasil disimpan!");
+    } catch (err) {
+      console.error("❌ Fetch error:", err);
+      alert("❌ Gagal menyimpan data.");
+    }
+  });
+
+  const obatSelect = document.getElementById("obat-select");
+  const container = document.getElementById("obat-input-container");
+
+  obatSelect.addEventListener("change", function () {
     const selectedValues = Array.from(obatSelect.selectedOptions).map(opt => opt.value);
 
     Array.from(obatSelect.options).forEach(option => {
-        const kode = option.value;
-        const nama = option.getAttribute('data-nama');
-        const inputId = `input-${kode}`;
-        const existing = document.getElementById(inputId);
+      const kode = option.value;
+      const nama = option.getAttribute('data-nama');
+      const inputId = `input-${kode}`;
+      const existing = document.getElementById(inputId);
 
-        if (selectedValues.includes(kode)) {
-            if (!existing) {
-                const wrapper = document.createElement("div");
-                wrapper.id = inputId;
+      if (selectedValues.includes(kode)) {
+        if (!existing) {
+          const wrapper = document.createElement("div");
+          wrapper.id = inputId;
+          wrapper.classList.add("obat-row");
 
-                // Generate 24-hour checkboxes for this obat
-                let jamCheckboxes = `
-                    <div class="mb-5">
-                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Checklist Jam</label>
-                        <div class="flex flex-wrap gap-2">
-                `;
+          let jamCheckboxes = `
+            <div class="mb-5">
+              <label class="block mb-2 text-sm text-gray-900 dark:text-white">Checklist Jam</label>
+              <div class="flex flex-wrap gap-2">
+          `;
 
-                for (let i = 0; i < 24; i++) {
-                    const jam = i.toString().padStart(2, '0');
-                    jamCheckboxes += `
-                        <label class="inline-flex items-center space-x-1">
-                            <input
-                              type="checkbox"
-                              name="jam_obat[${kode}][]"
-                              value="${jam}"
-                              class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-                            >
-                            <span class="text-xs">${jam}</span>
-                        </label>
-                    `;
-                }
+          for (let i = 0; i < 24; i++) {
+            const jam = i.toString().padStart(2, '0');
+            jamCheckboxes += `
+              <label class="inline-flex items-center space-x-1">
+                <input
+                  type="checkbox"
+                  name="jam_obat[${kode}][]"
+                  value="${jam}"
+                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                >
+                <span class="text-xs">${jam}</span>
+              </label>
+            `;
+          }
 
-                jamCheckboxes += `
-                        </div>
-                    </div>
-                `;
+          jamCheckboxes += `</div></div>`;
 
-                wrapper.innerHTML = `
-                    <div class="mb-6 border-t pt-4 mt-4">
-                        <label class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">${nama}</label>
+          wrapper.innerHTML = `
+            <div class="mb-6 border-t pt-4 mt-4">
+              <label class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">${nama}</label>
+              <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah</label>
+                <input type="number" name="jumlah[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Aturan Pakai</label>
+                <input type="text" name="aturan_pakai[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+              </div>
+              <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Embalase</label>
+                <input type="number" step="0.01" name="embalase[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tuslah</label>
+                <input type="number" step="0.01" name="tuslah[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+              </div>
+              ${jamCheckboxes}
+              <input type="hidden" name="kode_barang[]" value="${kode}">
+              <input type="hidden" name="kd_bangsal[${kode}]" value="B001">
+              <input type="hidden" name="no_batch[${kode}]" value="BTCH001">
+              <input type="hidden" name="no_faktur[${kode}]" value="FKT20250502">
+            </div>
+          `;
 
-                        <!-- Row 1: Jumlah & Aturan Pakai -->
-                        <div class="mb-5 sm:block md:flex items-center">
-                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah</label>
-                            <input
-                              type="number"
-                              name="jumlah[${kode}]"
-                              class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white"
-                              required
-                            >
-
-                            <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Aturan Pakai</label>
-                            <input
-                              type="text"
-                              name="aturan_pakai[${kode}]"
-                              class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                              required
-                            >
-                        </div>
-
-                        <!-- Row 2: Embalase & Tuslah -->
-                        <div class="mb-5 sm:block md:flex items-center">
-                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Embalase</label>
-                            <input
-                              type="number"
-                              step="0.01"
-                              name="embalase[${kode}]"
-                              class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white"
-                            >
-
-                            <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tuslah</label>
-                            <input
-                              type="number"
-                              step="0.01"
-                              name="tuslah[${kode}]"
-                              class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                            >
-                        </div>
-
-                        ${jamCheckboxes}
-
-                        <input type="hidden" name="kode_barang[]" value="${kode}">
-                    </div>
-                `;
-
-                container.appendChild(wrapper);
-            }
-
-        } else {
-            // Only remove if the jumlah field is still empty
-            const jumlahInput = document.querySelector(`input[name="jumlah[${kode}]"]`);
-            if (jumlahInput && jumlahInput.value === '') {
-                const toRemove = document.getElementById(inputId);
-                if (toRemove) toRemove.remove();
-            }
+          container.appendChild(wrapper);
         }
+      } else {
+        const jumlahInput = document.querySelector(`input[name="jumlah[${kode}]"]`);
+        if (jumlahInput && jumlahInput.value === '') {
+          const toRemove = document.getElementById(inputId);
+          if (toRemove) toRemove.remove();
+        }
+      }
     });
-});
-
-
-document.getElementById("tindakanSelect").addEventListener("change", function () {
-    const selected = this.options[this.selectedIndex];
-    const tarif = selected.getAttribute("data-tarif") || 0;
-
-    // Set to the biaya input
-    document.getElementById("biayaInput").value = tarif;
-});
-
-    document.getElementById("tindakanSelect").addEventListener("change", function() {
-    const selected = this.options[this.selectedIndex];
-    const kode = selected.value;
-    const nama = selected.getAttribute("data-nama");
-    const tarif = selected.getAttribute("data-tarif");
-
-    document.getElementById("kodeTindakan").value = kode;
-    document.getElementById("tarifTindakan").value = tarif;
+  });
 });
 
     function validateForm() {
