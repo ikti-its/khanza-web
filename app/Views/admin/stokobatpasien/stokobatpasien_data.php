@@ -16,7 +16,7 @@
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
                             <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
-                                Pengelolaan ambulans
+                                Stok Obat Pasien
                             </h2>
 
                         </div>
@@ -44,18 +44,18 @@
                                         <div class="flex">
                                             <div class="flex flex-col gap-2 w-full" id="ambulansNotifSection">
                                                 <!-- 🚑 Ambulans Notification -->
-                                                <?php if (isset($ambulans_requests) && count($ambulans_requests) > 0): ?>
-                                                    <p>Total request: <?= isset($ambulans_requests) ? count($ambulans_requests) : 0 ?></p>
+                                                <?php if (isset($stokobatpasien_requests) && count($stokobatpasien_requests) > 0): ?>
+                                                    <p>Total request: <?= isset($stokobatpasien_requests) ? count($stokobatpasien_requests) : 0 ?></p>
                                                     <div class="font-semibold text-black flex items-center space-x-1 px-3">
                                                         <span class="text-red-600">🚨</span>
                                                         <span>Permintaan Ambulans</span>
                                                     </div>
-                                                    <?php foreach ($ambulans_requests as $req): ?>
+                                                    <?php foreach ($stokobatpasien_requests as $req): ?>
                                                         <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-blue-500">
                                                             <div>
-                                                                Ambulans <strong><?= esc($req['no_ambulans']) ?></strong> sedang diminta (<?= esc($req['status']) ?>)
+                                                                Ambulans <strong><?= esc($req['no_permintaan']) ?></strong> sedang diminta (<?= esc($req['status']) ?>)
                                                             </div>
-                                                            <a href="/ambulans/terima/<?= esc($req['no_ambulans']) ?>" 
+                                                            <a href="/ambulans/terima/<?= esc($req['no_permintaan']) ?>" 
                                                             class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">
                                                                 Terima
                                                             </a>
@@ -126,7 +126,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Nomor Ambulans
+                                            Nomor Rawat
                                         </span>
                                     </div>
                                 </th>
@@ -134,7 +134,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Supir
+                                            Tanggal
                                         </span>
                                     </div>
                                 </th>
@@ -142,7 +142,31 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Status Ambulans
+                                            Jam
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Nama
+                                        </span>
+                                    </div>
+                                </th>
+                                
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Obat
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Jumlah
                                         </span>
                                     </div>
                                 </th>
@@ -162,15 +186,15 @@
 
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <?php foreach ($ambulans_data as $ambulans) : ?>
-                                <div id="hs-vertically-centered-scrollable-modal-<?= $ambulans['no_ambulans'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+                            <?php foreach ($stokobatpasien_data as $stokobatpasien) : ?>
+                                <div id="hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
                                         <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
                                             <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
                                                 <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $ambulans['no_ambulans'] ?>
+                                                    <?= $stokobatpasien['no_permintaan'] ?>
                                                 </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ambulans['no_ambulans'] ?>">
+                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>">
                                                     <span class="sr-only">Close</span>
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                         <path d="M18 6 6 18"></path>
@@ -183,23 +207,24 @@
                                                 <div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Ambulans</label>
-                                                        <input type="text" name="" value="<?= $ambulans['no_ambulans'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['no_permintaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Supir</label>
-                                                        <input type="text" name="" value="<?= $ambulans['supir'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['no_permintaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Ambulans</label>
-                                                        <input type="text" name="" value="<?= $ambulans['status'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['no_permintaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
+                                                    
                                                 </div>
 
                                                 </div>
                                                 <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                    <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ambulans['no_ambulans'] ?>">
+                                                    <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>">
                                                         Tutup
                                                     </button>
                                                 </div>
@@ -210,43 +235,50 @@
                                 <tr>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ambulans['no_ambulans'] ?>" data-id="<?= $ambulans['no_ambulans'] ?>"><?= $ambulans['no_ambulans'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= $stokobatpasien['no_rawat'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ambulans['no_ambulans'] ?>" data-id="<?= $ambulans['no_ambulans'] ?>"><?= $ambulans['supir'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= date('Y-m-d', strtotime($stokobatpasien['tanggal'])) ?></span>
                                         </div>
                                     </td>
-                                    <td class="size-px w-48 whitespace-nowrap">
-                                        <div class="px-6 py-3 text-center">
-                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
-                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
-                                                <?= $ambulans['status'] ?? 'N/A' ?>
-                                            </span>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= date('H:i', strtotime($stokobatpasien['jam'])) ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= $stokobatpasien['nama_pasien'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= $stokobatpasien['kode_brng'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
-                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ambulans['no_ambulans'] ?>">
+                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>">
                                                     Lihat Detail
                                                 </button>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <a href="/ambulans/edit/<?= $ambulans['no_ambulans'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                <a href="/ambulans/edit/<?= $stokobatpasien['no_permintaan'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                     Ubah
                                                 </a>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $ambulans['no_ambulans'] ?>')" href="#">
+                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $stokobatpasien['no_permintaan'] ?>')" href="#">
                                                     Hapus
                                                 </button>
-                                                <div id="modelConfirm-<?= $ambulans['no_ambulans'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                <div id="modelConfirm-<?= $stokobatpasien['no_permintaan'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
                                                     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 
                                                         <div class="flex justify-end p-2">
-                                                            <button onclick="closeModal('modelConfirm-<?= $ambulans['no_ambulans'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                            <button onclick="closeModal('modelConfirm-<?= $stokobatpasien['no_permintaan'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                                                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                                                 </svg>
@@ -267,14 +299,14 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                            <form action="/ambulans/hapus/<?= $ambulans['no_ambulans'] ?>" method="POST">
+                                                            <form action="/ambulans/hapus/<?= $stokobatpasien['no_permintaan'] ?>" method="POST">
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">
-                                                                    <button onclick="closeModal('modelConfirm-<?= $ambulans['no_ambulans'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                    <button onclick="closeModal('modelConfirm-<?= $stokobatpasien['no_permintaan'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
                                                                         Hapus
                                                                     </button>
-                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $ambulans['no_ambulans'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $stokobatpasien['no_permintaan'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
                                                                         Batal
                                                                     </a>
                                                                 </div>

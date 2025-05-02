@@ -391,4 +391,32 @@ $routes->group('reseppulang', ['filter' => 'auth'], function ($routes) {
     $routes->get('cetak/(:segment)', 'ResepPulangController::cetak/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
 });
 
+// Permintaan Stok Obat
+$routes->group('permintaanstokobat', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'PermintaanStokObatController::dataPermintaanStokObat', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('tambah', 'PermintaanStokObatController::tambahPermintaanStokObat', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('tambah/(:any)', 'PermintaanStokObatController::tambahPermintaanStokObat/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'PermintaanStokObatController::submitTambahPermintaanStokObat', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:any)', 'PermintaanStokObatController::editPermintaanStokObat/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit', 'PermintaanStokObatController::submitEditPermintaanStokObat', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'PermintaanStokObatController::submitEditPermintaanStokObat/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'PermintaanStokObatController::hapusPermintaanStokObat/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('(:segment)', 'PermintaanStokObatController::permintaanStokObatData/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('submit/(:segment)', 'PermintaanStokObatController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('cetak/(:segment)', 'PermintaanStokObatController::cetak/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+});
+
+// Stok Obat Pasien
+$routes->group('stokobatpasien', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'StokObatPasienController::dataStokObatPasien', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('tambah', 'StokObatPasienController::tambahStokObatPasien', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('tambah/(:any)', 'StokObatPasienController::tambahStokObatPasien/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submittambah', 'StokObatPasienController::submitTambahStokObatPasien', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('edit/(:any)', 'StokObatPasienController::editStokObatPasien/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit', 'StokObatPasienController::submitEditStokObatPasien', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'StokObatPasienController::submitEditStokObatPasien/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'StokObatPasienController::hapusStokObatPasien/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('(:segment)', 'StokObatPasienController::stokObatPasienData/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('cetak/(:segment)', 'StokObatPasienController::cetak/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+});
 

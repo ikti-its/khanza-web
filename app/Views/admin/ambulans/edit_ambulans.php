@@ -22,7 +22,11 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Supir</label>
                 <input type="text" name="supir" value="<?= $ambulans['supir'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status</label>
-                <input type="text" name="status" value="<?= $ambulans['status'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <select name="status" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="available" <?= ($ambulans['status'] ?? '') === 'available' ? 'selected' : '' ?>>Available</option>
+                    <option value="pending" <?= ($ambulans['status'] ?? '') === 'pending' ? 'selected' : '' ?>>Pending</option>
+                    <option value="accepted" <?= ($ambulans['status'] ?? '') === 'accepted' ? 'selected' : '' ?>>Accepted</option>
+                </select>
             </div>
             
             <div class="mt-5 pt-5 border-t flex justify-end gap-x-2">

@@ -375,6 +375,11 @@
                                             </a>
                                         </div>
                                         <div class="px-3 py-1.5">
+                                            <a href="/permintaanstokobat/tambah/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
+                                                Permintaan Stok Obat Pasien
+                                            </a>
+                                        </div>
+                                        <div class="px-3 py-1.5">
                                             <a href="/pemberianobat/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
                                                 Pemberian Obat
                                             </a>
