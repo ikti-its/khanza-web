@@ -152,6 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = await res.json();
       console.log("✅ API Response:", data);
       alert("✅ Data berhasil disimpan!");
+      window.location.href = "/permintaanstokobat";
     } catch (err) {
       console.error("❌ Fetch error:", err);
       alert("❌ Gagal menyimpan data.");

@@ -235,7 +235,7 @@
                                 <tr>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= $stokobatpasien['no_rawat'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= $stokobatpasien['no_permintaan'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
