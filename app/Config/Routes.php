@@ -6,6 +6,7 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 // $routes->get('/', 'Home::index');
+$routes->get('/', 'authController::index');
 $routes->get('/', 'userPegawaiController::lihatDashboard', ['filter' => 'auth']);
 $routes->get('/login', 'authController::index');
 $routes->post('/logout', 'authController::logout', ['filter' => 'auth']);
