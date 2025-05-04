@@ -271,32 +271,59 @@ class PermintaanStokObatController extends BaseController
         if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);
         }
-
+    
         $token = session()->get('jwt_token');
         $title = 'Edit Permintaan Stok Obat';
-
-        $url = $this->api_url . '/permintaan-stok-obat/' . $noPermintaan;
-        $ch = curl_init($url);
+    
+        // Ambil data permintaan
+        $permintaanUrl = $this->api_url . '/permintaan-stok-obat/' . $noPermintaan;
+        $ch = curl_init($permintaanUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $token,
+            'Accept: application/json'
         ]);
         $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-
-        $data = json_decode($response, true);
-        $permintaan = $data['data'] ?? [];
-
+    
+        if ($status !== 200 || !$response) {
+            return $this->renderErrorView($status);
+        }
+    
+        $responseData = json_decode($response, true);
+        $permintaan = $responseData['data'] ?? [];
+        $noRawat = $permintaan['no_rawat'] ?? '';
+    
+        // ✅ Ambil daftar obat
+        $obatUrl = $this->api_url . '/pemberian-obat/databarang';
+        $ch = curl_init($obatUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $obatResponse = curl_exec($ch);
+        curl_close($ch);
+    
+        $obatData = json_decode($obatResponse, true);
+        $obatList = $obatData['data'] ?? [];
+    
+        // Breadcrumbs
         $this->addBreadcrumb('User', 'user');
         $this->addBreadcrumb('Permintaan Stok Obat', 'permintaanstokobat');
         $this->addBreadcrumb('Edit', 'edit');
-
+    
         return view('/admin/stokobatpasien/edit_permintaanstokobat', [
             'permintaanstokobat' => $permintaan,
+            'no_rawat' => $noRawat,
+            'obat_list' => $obatList,
             'title' => $title,
-            'breadcrumbs' => $this->getBreadcrumbs()
+            'breadcrumbs' => $this->getBreadcrumbs(),
         ]);
     }
+    
+
 
     public function submitEditPermintaanStokObat($noPermintaan)
     {

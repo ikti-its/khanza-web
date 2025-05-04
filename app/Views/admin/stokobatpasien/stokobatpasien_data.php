@@ -126,7 +126,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Nomor Rawat
+                                            Nomor Permintaan
                                         </span>
                                     </div>
                                 </th>
@@ -206,18 +206,77 @@
                                                 <div class="space-y-4">
                                                 <div>
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Ambulans</label>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Permintaan</label>
                                                         <input type="text" name="" value="<?= $stokobatpasien['no_permintaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Supir</label>
-                                                        <input type="text" name="" value="<?= $stokobatpasien['no_permintaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal</label>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['tanggal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Ambulans</label>
-                                                        <input type="text" name="" value="<?= $stokobatpasien['no_permintaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam</label>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['no_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Pasien</label>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kode Obat/BHP</label>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['kode_brng'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Obat/BHP</label>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['nama_brng'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jumlah</label>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['jumlah'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Asal Stok</label>
+                                                        <input type="text" name="" value="Apotek" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">No. Batch</label>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['no_batch'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">No. Faktur</label>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['no_faktur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Aturan Pakai</label>
+                                                        <input type="text" name="" value="<?= $stokobatpasien['aturan_pakai'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                    <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Pemberian Obat</label>
+                                                                <input type="text" name="" value="<?php
+                                                                    $jamList = [];
+                                                                    for ($i = 0; $i <= 23; $i++) {
+                                                                        $key = 'jam' . str_pad($i, 2, '0', STR_PAD_LEFT);
+                                                                        if (!empty($obat[$key]) && $obat[$key] === true) {
+                                                                            $jamList[] = $key;
+                                                                        }
+                                                                    }
+                                                                    echo implode(', ', $jamList);
+                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                     
                                                 </div>
@@ -401,42 +460,6 @@
 
 <!-- End Table Section -->
 <script>
-function fetchAmbulansRequests() {
-  $.ajax({
-    url: "http://127.0.0.1:8080/v1/ambulans/request/pending",
-    method: "GET",
-    success: function (res) {
-      console.log("Ambulance response:", res); // Check if this logs in browser
-      let notifHtml = "";
-
-      if (res.data && res.data.length > 0) {
-        res.data
-        .filter(item => item.status === 'pending')
-        .forEach(function (item) {
-          notifHtml += `
-            <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-blue-500">
-              🚑 Ambulans <strong>${item.no_ambulans}</strong> sedang diminta (${item.status})
-              <a href="/ambulans/terima/${item.no_ambulans}" class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">Terima</a>
-            </div>
-          `;
-        });
-      } else {
-        notifHtml = ""; // Clear section if no data
-      }
-
-      $("#ambulansNotifSection").html(notifHtml);
-    },
-    error: function () {
-      $("#ambulansNotifSection").html(`<div class="text-red-500 p-2">Gagal memuat data permintaan ambulans.</div>`);
-    }
-  });
-}
-
-// Call initially and every 10s
-fetchAmbulansRequests();
-setInterval(fetchAmbulansRequests, 10000);
-
-
     function myFunction() {
         var input, filter, table, tr, td, i, j, txtValue;
         input = document.getElementById("myInput");

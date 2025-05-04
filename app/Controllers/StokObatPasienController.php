@@ -7,46 +7,57 @@ use App\Controllers\BaseController;
 class StokObatPasienController extends BaseController
 {
     public function dataStokObatPasien()
-    {
-        $title = 'Data Stok Obat Pasien';
+{
+    $title = 'Data Stok Obat Pasien';
 
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
 
-            $url = $this->api_url . '/stok-obat-pasien';
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-                'Accept: application/json'
-            ]);
-            $response = curl_exec($ch);
-            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
+    $token = session()->get('jwt_token');
+    $url = $this->api_url . '/stok-obat-pasien';
 
-            if ($http_status !== 200) {
-                return $this->renderErrorView($http_status);
-            }
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
 
-            $stok_data = json_decode($response, true);
-            if (!isset($stok_data['data'])) {
-                return $this->renderErrorView(500);
-            }
+    // Handle connection failure or non-200 status
+    if ($httpStatus !== 200 || !$response) {
+        return $this->renderErrorView($httpStatus);
+    }
 
-            $this->addBreadcrumb('User', 'user');
-            $this->addBreadcrumb('Stok Obat Pasien', 'stokobatpasien');
-            $breadcrumbs = $this->getBreadcrumbs();
+    $decoded = json_decode($response, true);
+    if (!isset($decoded['data']) || !is_array($decoded['data'])) {
+        return $this->renderErrorView(500);
+    }
 
-            return view('/admin/stokobatpasien/stokobatpasien_data', [
-                'stokobatpasien_data' => $stok_data['data'],
-                'title' => $title,
-                'breadcrumbs' => $breadcrumbs,
-                'meta_data' => $stok_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
-            ]);
-        } else {
-            return $this->renderErrorView(401);
+    $stokObatData = $decoded['data'];
+    $metaData = $decoded['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => count($stokObatData)];
+
+    // Optional: inject default value for missing nama_brng to avoid view errors
+    foreach ($stokObatData as &$item) {
+        if (!isset($item['nama_brng'])) {
+            $item['nama_brng'] = '';
         }
     }
+
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Stok Obat Pasien', 'stokobatpasien');
+// dd($stokObatData);
+    return view('/admin/stokobatpasien/stokobatpasien_data', [
+        'stokobatpasien_data' => $stokObatData,
+        'title' => $title,
+        'breadcrumbs' => $this->getBreadcrumbs(),
+        'meta_data' => $metaData,
+    ]);
+}
+
 
     public function tambahStokObatPasien()
     {

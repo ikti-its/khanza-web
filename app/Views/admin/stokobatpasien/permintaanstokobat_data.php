@@ -282,7 +282,7 @@
                                                 </button>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <a href="/ambulans/edit/<?= $permintaanstokobat['no_permintaan'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                <a href="/permintaanstokobat/edit/<?= $permintaanstokobat['no_permintaan'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                     Ubah
                                                 </a>
                                             </div>
@@ -315,7 +315,7 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                            <form action="/ambulans/hapus/<?= $permintaanstokobat['no_permintaan'] ?>" method="POST">
+                                                            <form action="/permintaanstokobat/hapus/<?= $permintaanstokobat['no_permintaan'] ?>" method="POST">
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">
