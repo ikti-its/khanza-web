@@ -170,39 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const poliklinikSelect = document.getElementById("poliklinikSelect");
     const dokterSelect = document.getElementById("dokterSelect");
 
-    poliklinikSelect.addEventListener("change", function () {
-        const selectedPoli = this.value;
-
-        // ✅ Check what's being sent
-        console.log("🟢 Sending request for poliklinik:", selectedPoli);
-
-        dokterSelect.innerHTML = '<option disabled selected value="">Pilih Dokter</option>';
-
-        fetch(`http://127.0.0.1:8080/v1/dokterjaga/poliklinik/${encodeURIComponent(selectedPoli)}`)
-        .then(res => res.json())
-        .then(res => {
-            if (res.status === "success" && Array.isArray(res.data)) {
-                res.data.forEach(dokter => {
-                    const opt = document.createElement("option");
-                    opt.value = dokter.kode_dokter;
-                    opt.textContent = dokter.nama_dokter;
-                    dokterSelect.appendChild(opt);
-                });
-            } else {
-                console.warn("⚠️ No dokter found or bad format:", res);
-            }
-        })
-        .catch(err => {
-            console.error("❌ Fetch error:", err);
-        });
-    });
-});
-
-    document.addEventListener("DOMContentLoaded", function () {
-    const poliklinikSelect = document.getElementById("poliklinikSelect");
-    const dokterSelect = document.getElementById("dokterSelect");
-
-    // Fetch list of poliklinik (optional - if you want it dynamic too)
+    // Populate poliklinik list
     fetch("http://127.0.0.1:8080/v1/dokterjaga/poliklinik-list")
         .then(res => res.json())
         .then(res => {
@@ -215,21 +183,96 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
         });
+
+    // On poliklinik change
+    poliklinikSelect.addEventListener("change", function () {
+        const selectedPoli = this.value;
+        dokterSelect.innerHTML = '<option disabled selected value="">Pilih Dokter</option>';
+
+        fetch(`http://127.0.0.1:8080/v1/dokterjaga/poliklinik/${encodeURIComponent(selectedPoli)}`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === "success" && Array.isArray(res.data)) {
+                    const now = new Date();
+                    const currentDay = normalizeDay(now.toLocaleDateString("id-ID", { weekday: "long" }));
+
+                    let dokterAktifCount = 0;
+
+                    res.data.forEach(dokter => {
+                        const hariKerja = normalizeDay(dokter.hari_kerja);
+                        const jamMulai = padTime(dokter.jam_mulai);
+                        const jamSelesai = padTime(dokter.jam_selesai);
+
+                        const isActive = (hariKerja === currentDay) && isDoctorOnShiftTime(jamMulai, jamSelesai);
+
+                        // Debug output
+                        console.log("🩺 Dokter:", dokter.nama_dokter);
+                        console.log("📅 Hari kerja:", hariKerja, "| Sekarang:", currentDay);
+                        console.log("⏰ Shift:", jamMulai, "-", jamSelesai);
+                        console.log("✅ Aktif sekarang:", isActive);
+
+                        if (isActive) {
+                            const opt = document.createElement("option");
+                            opt.value = dokter.kode_dokter;
+                            opt.textContent = dokter.nama_dokter;
+                            dokterSelect.appendChild(opt);
+                            dokterAktifCount++;
+                        }
+                    });
+
+                    if (dokterAktifCount === 0) {
+                        dokterSelect.innerHTML = '<option disabled selected value="">Tidak ada dokter aktif saat ini</option>';
+                    }
+                } else {
+                    console.warn("⚠️ Format data tidak valid:", res);
+                }
+            })
+            .catch(err => {
+                console.error("❌ Gagal mengambil data dokter:", err);
+            });
+    });
+
+    // Normalize hari (e.g., "Selasa ") → "selasa"
+    function normalizeDay(day) {
+        return day.trim().toLowerCase().replace(/[^a-z]/g, "");
+    }
+
+    // Pad time (e.g., "8:0:0" → "08:00:00")
+    function padTime(timeStr) {
+        const [h = "0", m = "0", s = "0"] = timeStr.split(":");
+        return `${h.padStart(2, "0")}:${m.padStart(2, "0")}:${s.padStart(2, "0")}`;
+    }
+
+    // Compare current time with jam_mulai and jam_selesai (supports overnight shifts)
+    function isDoctorOnShiftTime(startTime, endTime) {
+        const now = new Date();
+        const nowSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+
+        const [startH, startM, startS] = startTime.split(":").map(Number);
+        const [endH, endM, endS] = endTime.split(":").map(Number);
+
+        const startSec = startH * 3600 + startM * 60 + startS;
+        const endSec = endH * 3600 + endM * 60 + endS;
+
+        return startSec < endSec
+            ? nowSec >= startSec && nowSec <= endSec
+            : nowSec >= startSec || nowSec <= endSec;
+    }
 });
 
-    function validateForm() {
-        var requiredFields = document.querySelectorAll('select[required], input[required]');
-        for (var i = 0; i < requiredFields.length; i++) {
-            if (!requiredFields[i].value) {
-                alert("Isi semua field.");
-                return false;
-            }
+// Form validation logic
+function validateForm() {
+    var requiredFields = document.querySelectorAll('select[required], input[required]');
+    for (var i = 0; i < requiredFields.length; i++) {
+        if (!requiredFields[i].value) {
+            alert("Isi semua field.");
+            return false;
         }
-        var submitButton = document.getElementById('submitButton');
-        submitButton.setAttribute('disabled', true);
-        // Ubah teks tombol menjadi sesuatu yang menunjukkan proses sedang berlangsung, misalnya "Menyimpan..."
-        submitButton.innerHTML = 'Menyimpan...';
-        return true;
     }
+    var submitButton = document.getElementById('submitButton');
+    submitButton.setAttribute('disabled', true);
+    submitButton.innerHTML = 'Menyimpan...';
+    return true;
+}
 </script>
 <?= $this->endSection(); ?>
