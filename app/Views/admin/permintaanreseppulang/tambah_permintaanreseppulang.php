@@ -47,6 +47,23 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
                     </select>
 
             </div>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label for="obat-select" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pilih Obat:</label>
+                <select id="obat-select" multiple class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-3/4 dark:border-gray-600 dark:text-white">
+                    <?php foreach ($obat_list as $obat): ?>
+                        <?php if (isset($obat['kode_obat'], $obat['nama_obat'])): ?>
+                            <option value="<?= $obat['kode_obat'] ?>" data-nama="<?= $obat['nama_obat'] ?>">
+                                <?= $obat['nama_obat'] ?>
+                            </option>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+
+            <!-- Input fields will be injected here -->
+            <div id="obat-input-container" class="mt-4">
+            </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label for="status" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Status Validasi</label>
@@ -77,51 +94,114 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 </div>
 
 <script>
-function updateHargaObat() {
-    const selectedObat = document.getElementById("obatSelect").selectedOptions[0];
-    const selectedKelas = document.getElementById("kelasSelect").value;
+const obatSelect = document.getElementById("obat-select");
+const container = document.getElementById("obat-input-container");
 
-    const tarif = selectedObat.getAttribute("data-" + selectedKelas.toLowerCase()) || 0;
-    const nama = selectedObat.getAttribute("data-nama") || "";
-    const jumlah = document.querySelector("input[name='jumlah']").value || 1;
+obatSelect.addEventListener("change", function () {
+    const selectedValues = Array.from(obatSelect.selectedOptions).map(opt => opt.value);
 
-    document.getElementById("biayaObat").value = tarif;
-    document.getElementById("namaObat").value = nama;
-    document.getElementById("totalObat").value = parseInt(tarif) * parseInt(jumlah);
-}
+    Array.from(obatSelect.options).forEach(option => {
+        const kode = option.value;
+        const nama = option.getAttribute('data-nama');
+        const inputId = `input-${kode}`;
+        const existing = document.getElementById(inputId);
 
-// Trigger on change
-document.getElementById("kelasSelect").addEventListener("change", updateHargaObat);
-document.getElementById("obatSelect").addEventListener("change", updateHargaObat);
-document.querySelector("input[name='jumlah']").addEventListener("input", updateHargaObat);
+        if (selectedValues.includes(kode)) {
+            if (selectedValues.includes(kode)) {
+                if (!existing) {
+                    const wrapper = document.createElement("div");
+                    wrapper.id = inputId;
 
-document.getElementById("obatSelect").addEventListener("change", function () {
-    const selected = this.options[this.selectedIndex];
-    document.getElementById("namaObat").value = selected.getAttribute("data-nama");
-    document.getElementById("biayaObat").value = selected.getAttribute("data-tarif");
+                    wrapper.innerHTML = `
+                    <div class="mb-6">
+                        <label class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">${nama}</label>
 
-    const jumlah = document.querySelector("input[name='jumlah']").value || 1;
-    document.getElementById("totalObat").value = parseInt(selected.getAttribute("data-tarif")) * parseInt(jumlah);
+                        <!-- Row 1: Jumlah & Aturan Pakai -->
+                        <div class="mb-5 sm:block md:flex items-center">
+                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah</label>
+                        <input type="number" name="jumlah[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                        <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Aturan Pakai</label>
+                        <input type="text" name="aturan_pakai[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                        </div>
+
+                        <input type="hidden" name="kode_barang[]" value="${kode}">
+                    </div>
+                    `;
+
+                    container.appendChild(wrapper);
+                }
+            }
+
+        } else {
+            // Only remove if input field is empty
+            const jumlahInput = document.querySelector(`input[name="jumlah[${kode}]"]`);
+            if (jumlahInput && jumlahInput.value === '') {
+                const toRemove = document.getElementById(inputId);
+                if (toRemove) toRemove.remove();
+            }
+        }
+    });
 });
 
+document.getElementById("submitButton").addEventListener("click", async function (e) {
+    e.preventDefault();
 
-document.getElementById("obatSelect").addEventListener("change", function () {
-    const selected = this.options[this.selectedIndex];
-    const nama = selected.getAttribute("data-nama") || "";
-    const tarif = selected.getAttribute("data-tarif") || 0;
+    const nomorPermintaan = document.querySelector("input[name='no_permintaan']").value;
+    const tglPermintaan = document.querySelector("input[name='tgl_permintaan']").value;
+    const jam = document.querySelector("input[name='jam']").value;
+    const noRawat = document.querySelector("input[name='nomor_rawat']").value;
+    const kdDokter = document.querySelector("select[name='kode_dokter']").value;
+    const status = document.querySelector("select[name='status']").value;
+    const tglValidasi = document.querySelector("input[name='tgl_validasi']").value;
+    const jamValidasi = document.querySelector("input[name='jam_validasi']").value;
 
-    document.getElementById("namaObat").value = nama;
-    document.getElementById("biayaObat").value = tarif;
+    const kodeBarangEls = document.querySelectorAll("input[name='kode_barang[]']");
+    const dataArray = [];
 
-    const jumlah = document.querySelector("input[name='jumlah']").value || 1;
-    document.getElementById("totalObat").value = parseInt(tarif) * parseInt(jumlah);
+    kodeBarangEls.forEach(el => {
+        const kode = el.value;
+        const jumlah = document.querySelector(`input[name="jumlah[${kode}]"]`).value;
+        const aturanPakai = document.querySelector(`input[name="aturan_pakai[${kode}]"]`).value;
+
+        dataArray.push({
+            no_permintaan: nomorPermintaan,
+            tgl_permintaan: tglPermintaan,
+            jam: jam,
+            no_rawat: noRawat,
+            kd_dokter: kdDokter,
+            status: status,
+            tgl_validasi: tglValidasi,
+            jam_validasi: jamValidasi,
+            kode_brng: kode,
+            jumlah: parseInt(jumlah),
+            aturan_pakai: aturanPakai
+        });
+    });
+
+    try {
+        const response = await fetch("http://127.0.0.1:8080/v1/permintaan-resep-pulang", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataArray)
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert("Data berhasil disimpan!");
+            window.location.href = "/permintaanreseppulang";
+        } else {
+            console.error("❌ Server Error:", result);
+            alert("Gagal menyimpan data. Cek konsol untuk detail.");
+        }
+    } catch (error) {
+        console.error("❌ Network Error:", error);
+        alert("Terjadi kesalahan jaringan.");
+    }
 });
 
-document.querySelector("input[name='jumlah']").addEventListener("input", function () {
-    const jumlah = this.value || 1;
-    const tarif = document.getElementById("biayaObat").value || 0;
-    document.getElementById("totalObat").value = parseInt(tarif) * parseInt(jumlah);
-});
 
 function validateForm() {
     var requiredFields = document.querySelectorAll('select[required], input[required]');

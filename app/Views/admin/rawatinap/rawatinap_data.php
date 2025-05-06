@@ -395,7 +395,7 @@
                                             </a>
                                         </div>
                                         <div class="px-3 py-1.5">
-                                            <a href="/reseppulang/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
+                                            <a href="/reseppulang" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
                                                 Resep Pulang
                                             </a>
                                         </div>

@@ -77,7 +77,7 @@
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
                             <?php if (!empty($permintaanreseppulang_data)) : ?>
                                 <?php $nomor_rawat = $permintaanreseppulang_data['nomor_rawat'] ?? ''; ?>
-                                <div>
+                                <!-- <div>
                                     <a href="<?= base_url('permintaanreseppulang/tambah') . '?nomor_rawat=' . $nomor_rawat ?>"
                                     class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                         <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
@@ -85,7 +85,7 @@
                                         </svg>
                                         Tambah
                                     </a>
-                                </div>
+                                </div> -->
                             <?php endif; ?>
                         </div>
                     </div>
@@ -243,8 +243,12 @@
                                                         <input type="text" name="" value="<?= $permintaanreseppulang['kd_dokter'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
-                                                    <button onclick="validatePermintaan('<?= $permintaanreseppulang['no_permintaan'] ?>')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                                                        Validasi
+                                                    <button 
+                                                        onclick="validatePermintaan(this)" 
+                                                        data-no_permintaan="<?= $permintaanreseppulang['no_permintaan'] ?>" 
+                                                        data-no_rawat="<?= $permintaanreseppulang['no_rawat'] ?>" 
+                                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                                        Buat Resep Pulang
                                                     </button>
                                                 </div>
 
@@ -455,29 +459,59 @@
 
 <!-- End Table Section -->
 <script>
-function validatePermintaan(noPermintaan) {
-    fetch(`http://127.0.0.1:8080/v1/permintaan-resep-pulang/status/${noPermintaan}`, {
-        method: 'PUT',
+function validatePermintaan(button) {
+    const noPermintaan = button.getAttribute('data-no_permintaan');
+    const noRawat = button.getAttribute('data-no_rawat');
+
+    if (!noPermintaan || !noRawat) {
+        alert("Data permintaan tidak lengkap.");
+        return;
+    }
+
+    // Step 1: Fetch kamar info from rawatinap endpoint
+    fetch(`http://127.0.0.1:8080/v1/rawatinap/${encodeURIComponent(noRawat)}`, {
+        method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            // If you have JWT token, you need to include it:
-            // 'Authorization': 'Bearer ' + localStorage.getItem('jwt_token')
-        },
-        body: JSON.stringify({ status: 'Sudah' })
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('Permintaan berhasil divalidasi!');
-            location.reload(); // or refresh table dynamically
-        } else {
-            alert('Gagal memvalidasi permintaan.');
+            'Accept': 'application/json'
+            // Uncomment below if using auth
+            // 'Authorization': 'Bearer ' + token
         }
     })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Gagal mengambil data rawat inap');
+        }
+        return response.json();
+    })
+    .then(rawat => {
+        const kamar = rawat?.data?.kamar || '-';
+
+        // Step 2: Update status of permintaan to 'Sudah'
+        return fetch(`http://127.0.0.1:8080/v1/permintaan-resep-pulang/status/${encodeURIComponent(noPermintaan)}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+                // Uncomment below if using auth
+                // 'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ status: 'Sudah' })
+        })
+        .then(updateRes => {
+            if (!updateRes.ok) {
+                throw new Error('Gagal mengubah status permintaan');
+            }
+
+            // Step 3: Redirect to tambah reseppulang view
+            const targetUrl = `/reseppulang/tambah?no_rawat=${encodeURIComponent(noRawat)}&kamar=${encodeURIComponent(kamar)}&no_permintaan=${encodeURIComponent(noPermintaan)}`;
+            window.location.href = targetUrl;
+        });
+    })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat validasi.');
+        console.error('❌ Error during validation:', error);
+        alert('Terjadi kesalahan saat memproses permintaan resep pulang.');
     });
 }
+
 
 
 

@@ -11,7 +11,7 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Tambah Permintaan Resep Pulang
+                Tambah Resep Pulang
             </h2>
         </div>
         <form action="<?= base_url('reseppulang/submittambah') ?>" id="myForm" onsubmit="return validateForm()" method="post">
@@ -19,51 +19,58 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Rawat</label>
-                <input name="nomor_rawat" value="<?= $prefill['no_rawat'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input name="nomor_rawat" value="<?= esc($no_rawat) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Kamar</label>
-                <input name="kd_bangsal" value="<?= $prefill['kd_bangsal'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input name="kd_bangsal" value="<?= esc($kamar) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kode Obat</label>
-                <select name="kode_brng" id="kode_brng" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required onchange="updateHarga()">
-                    <option value="">-- Pilih Obat --</option>
-                    <?php foreach ($obat_list as $obat): ?>
-                        <option 
-                            value="<?= esc($obat['kode_obat']) ?>"
-                            data-harga-dasar="<?= esc($obat['Dasar']) ?>"
-                            data-harga-kelas1="<?= esc($obat['Kelas1']) ?>"
-                            data-harga-kelas2="<?= esc($obat['Kelas2']) ?>"
-                            data-harga-kelas3="<?= esc($obat['Kelas3']) ?>"
-                            data-harga-utama="<?= esc($obat['Utama']) ?>"
-                            data-harga-vip="<?= esc($obat['VIP']) ?>"
-                            data-harga-vvip="<?= esc($obat['VVIP']) ?>"
-                            <?= isset($prefill['kode_brng']) && $prefill['kode_brng'] == $obat['kode_obat'] ? 'selected' : '' ?>
-                        >
-                            <?= esc($obat['nama_obat']) ?> (<?= esc($obat['kode_obat']) ?>)
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+    <!-- Kode Obat -->
+    <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kode Obat</label>
+    <select name="kode_brng" id="kode_brng"
+        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white"
+        required onchange="updateHarga()">
+        <?php foreach ($obat_list as $obat): ?>
+            <option 
+                value="<?= esc($obat['kode_brng']) ?>"
+                data-harga-dasar="<?= esc($obat['harga_dasar']) ?>"
+                data-harga-kelas1="<?= esc($obat['kelas1']) ?>"
+                data-harga-kelas2="<?= esc($obat['kelas2']) ?>"
+                data-harga-kelas3="<?= esc($obat['kelas3']) ?>"
+                data-harga-utama="<?= esc($obat['utama']) ?>"
+                data-harga-vip="<?= esc($obat['vip']) ?>"
+                data-harga-vvip="<?= esc($obat['vvip']) ?>"
+                <?= isset($prefill['kode_brng']) && $prefill['kode_brng'] == $obat['kode_brng'] ? 'selected' : '' ?>
+            >
+                <?= esc($obat['nama_obat']) ?> (<?= esc($obat['kode_brng']) ?>)
+            </option>
+        <?php endforeach; ?>
+    </select>
 
-                <input type="hidden" id="kd_bangsal" value="<?= esc($prefill['kd_bangsal'] ?? '') ?>">
+    <!-- Hidden KD Bangsal -->
+    <input type="hidden" id="kd_bangsal" value="<?= esc($prefill['kd_bangsal'] ?? '') ?>">
+            
+    <!-- Jumlah Obat -->
+    <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jumlah Obat</label>
+    <input name="jml_barang" id="jumlah_<?= esc($obat['kode_brng']) ?>" value="<?= esc($obat['jumlah'] ?? '') ?>"
+        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+        required>
+</div>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jumlah Obat</label>
-                <input name="jml_barang" value="<?= $prefill['jml_barang'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-            </div>
 
-            <div class="mb-5 sm:block md:flex items-center">
+            <!-- <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Harga</label>
                 <input name="harga" value="<?= $prefill['harga'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Total Harga</label>
                 <input name="total" value="<?= $prefill['total'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-            </div>
+            </div> -->
 
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Dosis</label>
-                <input name="dosis" value="<?= $prefill['dosis'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input name="dosis" value="<?= $prefill['dosis'] ?? ($obat_list[0]['aturan_pakai'] ?? '') ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -96,31 +103,44 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 
 <script>
 
-function updateHarga() {
+function updateHarga() { 
     const select = document.getElementById('kode_brng');
     const selected = select.options[select.selectedIndex];
 
-    const kdBangsal = document.getElementById('kd_bangsal').value.toLowerCase();
+    const kdBangsalRaw = document.getElementById('kd_bangsal');
+    const hargaInput = document.querySelector('input[name="harga"]');
 
-    let harga = selected.getAttribute('data-harga-dasar') || 0; // Default ke harga dasar
+    if (!kdBangsalRaw || !hargaInput || !selected) {
+        console.warn("Missing kd_bangsal, harga input, or selected option");
+        return;
+    }
+
+    const kdBangsal = kdBangsalRaw.value.toLowerCase();
+
+    // Start with dasar as fallback
+    let harga = selected.getAttribute('data-harga-dasar') || 0;
 
     if (kdBangsal.startsWith('vvip')) {
         harga = selected.getAttribute('data-harga-vvip') || harga;
-    } else if (kdBangsal.startsWith('VUP')) {
+    } else if (kdBangsal.startsWith('vup')) {
         harga = selected.getAttribute('data-harga-vip') || harga;
     } else if (kdBangsal.startsWith('utama')) {
         harga = selected.getAttribute('data-harga-utama') || harga;
-    } else if (kdBangsal.startsWith('K1')) {
+    } else if (kdBangsal.startsWith('k1')) {
         harga = selected.getAttribute('data-harga-kelas1') || harga;
-    } else if (kdBangsal.startsWith('K2')) {
+    } else if (kdBangsal.startsWith('k2')) {
         harga = selected.getAttribute('data-harga-kelas2') || harga;
-    } else if (kdBangsal.startsWith('K3')) {
+    } else if (kdBangsal.startsWith('k3')) {
         harga = selected.getAttribute('data-harga-kelas3') || harga;
+    } else {
+        console.warn('🔁 Unknown kd_bangsal:', kdBangsal, '→ Using harga dasar');
+        harga = selected.getAttribute('data-harga-dasar') || 0;
     }
 
-    document.querySelector('input[name="harga"]').value = harga;
+    hargaInput.value = harga;
     updateTotal();
 }
+
 
 function updateTotal() {
     const harga = parseFloat(document.querySelector('input[name="harga"]').value) || 0;
