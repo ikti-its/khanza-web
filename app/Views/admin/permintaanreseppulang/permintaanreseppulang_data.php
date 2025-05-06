@@ -209,18 +209,38 @@
                                                 <div class="space-y-4">
                                                 <div>
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Permintaan</label>
                                                         <input type="text" name="" value="<?= $permintaanreseppulang['no_permintaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal</label>
                                                         <input type="text" name="" value="<?= $permintaanreseppulang['tgl_permintaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
-                                                        <input type="text" name="" value="<?= $permintaanreseppulang['no_permintaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam</label>
+                                                        <input type="text" name="" value="<?= $permintaanreseppulang['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kamar</label>
+                                                        <input type="text" name="" value="<?= $permintaanreseppulang['kamar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status</label>
+                                                        <input type="text" name="" value="<?= $permintaanreseppulang['status'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Pasien</label>
+                                                        <input type="text" name="" value="<?= $permintaanreseppulang['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter Yang Meminta</label>
+                                                        <input type="text" name="" value="<?= $permintaanreseppulang['kd_dokter'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <button onclick="validatePermintaan('<?= $permintaanreseppulang['no_permintaan'] ?>')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">

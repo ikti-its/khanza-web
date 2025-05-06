@@ -10,45 +10,74 @@ class PermintaanResepPulangController extends BaseController
     {
         $title = 'Data Permintaan Resep Pulang';
 
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
-
-            // ✅ Fetch permintaan resep pulang data
-            $url = $this->api_url . '/permintaan-resep-pulang';
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-                'Accept: application/json'
-            ]);
-            $response = curl_exec($ch);
-            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-
-            if ($http_status !== 200) {
-                return $this->renderErrorView($http_status);
-            }
-
-            $permintaan_data = json_decode($response, true);
-            if (!isset($permintaan_data['data'])) {
-                return $this->renderErrorView(500);
-            }
-
-            // ✅ Breadcrumbs
-            $this->addBreadcrumb('User', 'user');
-            $this->addBreadcrumb('Permintaan Resep Pulang', 'PermintaanResepPulang');
-            $breadcrumbs = $this->getBreadcrumbs();
-
-            return view('/admin/permintaanreseppulang/permintaanreseppulang_data', [
-                'permintaanreseppulang_data' => $permintaan_data['data'],
-                'title' => $title,
-                'breadcrumbs' => $breadcrumbs,
-                'meta_data' => $permintaan_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
-            ]);
-        } else {
+        if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);
         }
+
+        $token = session()->get('jwt_token');
+
+        // Step 1: Get permintaan resep pulang list
+        $url = $this->api_url . '/permintaan-resep-pulang';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $response = curl_exec($ch);
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($http_status !== 200) {
+            return $this->renderErrorView($http_status);
+        }
+
+        $permintaan_data = json_decode($response, true);
+        if (!isset($permintaan_data['data'])) {
+            return $this->renderErrorView(500);
+        }
+
+        $permintaan_list = $permintaan_data['data'];
+
+        // Step 2: Loop through each permintaan and fetch rawat inap details
+        foreach ($permintaan_list as &$item) {
+            $no_rawat = $item['no_rawat'] ?? null;
+
+            $item['nama_pasien'] = '-';
+            $item['kamar'] = '-';
+
+            if ($no_rawat) {
+                $url = $this->api_url . '/rawatinap/' . $no_rawat;
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Authorization: Bearer ' . $token,
+                    'Accept: application/json'
+                ]);
+                $response = curl_exec($ch);
+                curl_close($ch);
+
+                $rawat_data = json_decode($response, true);
+                if (isset($rawat_data['data'])) {
+                    $item['nama_pasien'] = $rawat_data['data']['nama_pasien'] ?? '-';
+                    $item['kamar'] = $rawat_data['data']['kamar'] ?? '-';
+                }
+            }
+        }
+
+        // Step 3: Breadcrumbs and render view
+        $this->addBreadcrumb('User', 'user');
+        $this->addBreadcrumb('Permintaan Resep Pulang', 'PermintaanResepPulang');
+        $breadcrumbs = $this->getBreadcrumbs();
+
+        return view('/admin/permintaanreseppulang/permintaanreseppulang_data', [
+            'permintaanreseppulang_data' => $permintaan_list,
+            'title' => $title,
+            'breadcrumbs' => $breadcrumbs,
+            'meta_data' => $permintaan_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
+        ]);
     }
+
 
     public function tambahPermintaanResepPulang()
     {
@@ -110,6 +139,7 @@ class PermintaanResepPulangController extends BaseController
         $token = session()->get('jwt_token');
 
         $postData = [
+            'no_permintaan' => $this->request->getPost('no_permintaan') ?? ('PRP' . date('Ymd') . rand(1000, 9999)),
             'tgl_permintaan' => $this->request->getPost('tgl_permintaan') ?? date('Y-m-d'),
             'jam'            => $this->request->getPost('jam') ?? date('H:i:s'),
             'no_rawat'       => $this->request->getPost('nomor_rawat'),
