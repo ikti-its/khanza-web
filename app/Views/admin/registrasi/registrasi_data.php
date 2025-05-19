@@ -1,6 +1,6 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
-
+<script src="https://unpkg.com/preline@latest/dist/preline.js"></script>
 <!-- Table Section -->
 <div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
     <!-- <div class="max-w-[85rem] w-full py-6 lg:py-3"> -->
@@ -373,13 +373,6 @@ window.addEventListener("DOMContentLoaded", function () {
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
-                                            <!-- <div class="px-3 py-1.5">
-                                            <button type="button" 
-    class="py-2 px-4 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-    data-hs-overlay="#modal-tindakan-<?= $registrasi['nomor_reg'] ?>">
-                                                Tindakan
-                                            </button>  
-                                            </div> -->
                                             <div class="px-3 py-1.5">
                                             <button
                                                 type="button"
@@ -477,31 +470,45 @@ window.addEventListener("DOMContentLoaded", function () {
                                             <label class="block text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
                                             <input type="text" value="<?= $registrasi['nomor_rm'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
                                         </div>
-                                        <div class="px-3 py-1.5">
-                                            <a href="/tindakan/<?= $registrasi['nomor_rawat'] ?>" 
-                                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
-                                                Lihat Tindakan
-                                            </a>
-                                        </div>
-                                        <div class="px-3 py-1.5">
-                                            <form method="GET" action="/tindakan/submit-registrasi/<?= $registrasi['nomor_reg'] ?>">
+                                            <div class="hs-accordion" id="aksi-accordion">
+                                                <button type="button" class="font-bold text-gray-800 dark:text-white hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                    Tindakan
+                                                    <svg class="hs-accordion-active:hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                    <svg class="hs-accordion-active:block hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m18 15-6-6-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                </button>
+
+                                                <div class="hs-accordion-content hidden w-full mt-2 transition-[height] duration-300">
+                                                <ul class="ps-3 space-y-1 border-l-2 border-gray-100 dark:border-gray-700">
+                                                    <li>
+                                                    <a href="/tindakan/<?= $registrasi['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                        Lihat Tindakan
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                    <a href="/tindakan/submit-registrasi/<?= $registrasi['nomor_reg'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                        Tambah Tindakan
+                                                    </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="mt-3">
+                                            <form method="POST" action="/rawatinap/tambah/<?= $registrasi['nomor_reg'] ?>">
                                                 <?= csrf_field() ?>
-                                                <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
-                                                    Tambah Tindakan
+                                                <button type="submit" class="font-bold text-gray-800 dark:text-white w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-800">
+                                                Rawat Inap
                                                 </button>
                                             </form>
+                                            </div>
+
                                         </div>
 
-                                        <div class="px-3 py-1.5">
-                                        <form method="POST" action="/rawatinap/tambah/<?= $registrasi['nomor_reg'] ?>">
-                                            <?= csrf_field() ?>
-                                            <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
-                                                Rawat Inap
-                                            </button>
-                                        </form>
-                                            </div>
                                         <!-- Add more fields if needed -->
                                     </div>
+                                    
                                     <div class="flex justify-end gap-x-2 p-4 border-t dark:border-neutral-700">
                                         <button class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#modal-tindakan-<?= $registrasi['nomor_reg'] ?>">
                                         Tutup
@@ -592,6 +599,28 @@ window.addEventListener("DOMContentLoaded", function () {
 
 <!-- End Table Section -->
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('[data-hs-overlay]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      // Close all open modals
+      document.querySelectorAll('.hs-overlay').forEach(modal => {
+        modal.classList.add('hidden');
+      });
+
+      // Then open the correct one
+      const selector = btn.getAttribute('data-hs-overlay');
+      const targetModal = document.querySelector(selector);
+      if (targetModal) {
+        targetModal.classList.remove('hidden');
+      }
+    });
+  });
+});
+
+  document.addEventListener('DOMContentLoaded', function () {
+    window.HSOverlay?.init();
+  });
+     
     document.addEventListener("DOMContentLoaded", function () {
     const container = document.getElementById("kamarpenuh-content");
     const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];

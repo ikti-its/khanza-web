@@ -26,7 +26,21 @@
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kelas</label>
-                <input type="text" name="kelas" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80">
+                <select name="kelas" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="">--Pilih Kelas--</option>
+                    <option value="Apotek">Apotek</option>
+                    <option value="Gudang">Gudang</option>
+                    <option value="HCU">HCU</option>
+                    <option value="ICU">ICU</option>
+                    <option value="K1">Kelas 1</option>
+                    <option value="K2">Kelas 2</option>
+                    <option value="K3">Kelas 3</option>
+                    <option value="VIP">Kelas VIP</option>
+                    <option value="VVIP">Kelas VVIP</option>
+                    <option value="NICU">NICU</option>
+                    <option value="KO">Kamar Operasi</option>
+                    <option value="B0014">Laborat</option>
+                </select>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tarif Kamar</label>
                 <input name="tarif_kamar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
                 </select>

@@ -136,7 +136,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Kode Obat
+                                            Tanggal
                                         </span>
                                     </div>
                                 </th>
@@ -144,7 +144,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Jumlah Obat
+                                            Jam
                                         </span>
                                     </div>
                                 </th>
@@ -152,7 +152,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Harga
+                                            Pasien
                                         </span>
                                     </div>
                                 </th>
@@ -160,7 +160,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Dosis
+                                            Obat
                                         </span>
                                     </div>
                                 </th>
@@ -168,7 +168,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Kamar
+                                            Jumlah
                                         </span>
                                     </div>
                                 </th>
@@ -209,23 +209,59 @@
                                                 <div class="space-y-4">
                                                 <div>
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
                                                         <input type="text" name="" value="<?= $reseppulang['no_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
-                                                        <input type="text" name="" value="<?= $reseppulang['no_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Resep</label>
+                                                        <input type="text" name="" value="<?= $reseppulang['tanggal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
-                                                        <input type="text" name="" value="<?= $reseppulang['no_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam</label>
+                                                        <input type="text" name="" value="<?= $reseppulang['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
-                                                    <button onclick="validatePermintaan('<?= $reseppulang['no_rawat'] ?>')" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                                                        Validasi
-                                                    </button>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Pasien</label>
+                                                        <input type="text" name="" value="<?= $reseppulang['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Obat</label>
+                                                        <input type="text" name="" value="<?= $reseppulang['kode_brng'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jumlah</label>
+                                                        <input type="text" name="" value="<?= $reseppulang['jml_barang'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Harga</label>
+                                                        <input type="text" name="" value="<?= $reseppulang['harga'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Total</label>
+                                                        <input type="text" name="" value="<?= $reseppulang['total'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dosis</label>
+                                                        <input type="text" name="" value="<?= $reseppulang['dosis'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">No. Batch</label>
+                                                        <input type="text" name="" value="<?= $reseppulang['no_batch'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">No. Faktur</label>
+                                                        <input type="text" name="" value="<?= $reseppulang['no_faktur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
                                                 </div>
 
                                                 </div>
@@ -247,30 +283,30 @@
 
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $reseppulang['kode_brng'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $reseppulang['tanggal'] ?? 'N/A' ?></span>
                 </div>
             </td>
 
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $reseppulang['jml_barang'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $reseppulang['jam'] ?? 'N/A' ?></span>
                 </div>
             </td>
 
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $reseppulang['total'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $reseppulang['nama_pasien'] ?? 'N/A' ?></span>
                 </div>
             </td>
 
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $reseppulang['dosis'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $reseppulang['kode_brng'] ?? 'N/A' ?></span>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $reseppulang['kd_bangsal'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $reseppulang['jml_barang'] ?? 'N/A' ?></span>
                 </div>
             </td>
 
@@ -437,32 +473,6 @@
 
 <!-- End Table Section -->
 <script>
-function validatePermintaan(noPermintaan) {
-    fetch(`http://127.0.0.1:8080/v1/permintaan-resep-pulang/status/${noPermintaan}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            // If you have JWT token, you need to include it:
-            // 'Authorization': 'Bearer ' + localStorage.getItem('jwt_token')
-        },
-        body: JSON.stringify({ status: 'Sudah' })
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('Permintaan berhasil divalidasi!');
-            location.reload(); // or refresh table dynamically
-        } else {
-            alert('Gagal memvalidasi permintaan.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat validasi.');
-    });
-}
-
-
-
     function myFunction() {
         var input, filter, table, tr, td, i, j, txtValue;
         input = document.getElementById("myInput");

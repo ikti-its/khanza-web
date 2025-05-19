@@ -1,6 +1,6 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
-
+<!-- <script src="https://unpkg.com/preline@latest/dist/preline.js"></script> -->
 <!-- Table Section -->
 <div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
     <!-- <div class="max-w-[85rem] w-full py-6 lg:py-3"> -->
@@ -353,52 +353,132 @@
                                             <label class="block text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
                                             <input type="text" value="<?= $rawatinap['nomor_rm'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
                                         </div>
-                                        <div class="px-3 py-1.5">
-                                            <a href="/tindakan/<?= $rawatinap['nomor_rawat'] ?>" 
-                                            class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
-                                                Lihat Tindakan
-                                            </a>
-                                        </div>
-                                        <div class="px-3 py-1.5">
-                                            <a href="/tindakan/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
-                                                Tambah Tindakan
-                                            </a>
-                                        </div>
-                                        <div class="px-3 py-1.5">
-                                            <a href="/resepobat/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
-                                                Buat Resep Obat
-                                            </a>
-                                        </div>
-                                        <div class="px-3 py-1.5">
-                                            <a href="/resepobat/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
-                                                Lihat Resep Obat
-                                            </a>
-                                        </div>
-                                        <div class="px-3 py-1.5">
-                                            <a href="/permintaanstokobat/tambah/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
-                                                Permintaan Stok Obat Pasien
-                                            </a>
-                                        </div>
-                                        <div class="px-3 py-1.5">
-                                            <a href="/pemberianobat/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
-                                                Tambah Pemberian Obat
-                                            </a>
-                                        </div>
-                                        <div class="px-3 py-1.5">
-                                            <a href="/pemberianobat/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
-                                                Lihat Pemberian Obat
-                                            </a>
-                                        </div>
-                                        <div class="px-3 py-1.5">
-                                            <a href="/permintaanreseppulang/submit/<?= $rawatinap['nomor_rawat'] ?>" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
-                                                Permintaan Resep Pulang
-                                            </a>
-                                        </div>
-                                        <div class="px-3 py-1.5">
-                                            <a href="/reseppulang" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold text-blue-600">
-                                                Resep Pulang
-                                            </a>
-                                        </div>
+                                        
+                                            <div class="hs-accordion" id="aksi-accordion">
+                                                <button type="button" class="font-bold text-gray-800 dark:text-white hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                    Tindakan
+                                                    <svg class="hs-accordion-active:hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                    <svg class="hs-accordion-active:block hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m18 15-6-6-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                </button>
+
+                                                <div class="hs-accordion-content hidden w-full mt-2 transition-[height] duration-300">
+                                                <ul class="ps-3 space-y-1 border-l-2 border-gray-100 dark:border-gray-700">
+                                                    <li>
+                                                    <a href="/tindakan/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                        Lihat Tindakan
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                    <a href="/tindakan/submit-registrasi/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                        Tambah Tindakan
+                                                    </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="hs-accordion" id="aksi-accordion">
+                                                <button type="button" class="font-bold text-gray-800 dark:text-white hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                    Resep Obat
+                                                    <svg class="hs-accordion-active:hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                    <svg class="hs-accordion-active:block hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m18 15-6-6-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                </button>
+
+                                                <div class="hs-accordion-content hidden w-full mt-2 transition-[height] duration-300">
+                                                <ul class="ps-3 space-y-1 border-l-2 border-gray-100 dark:border-gray-700">
+                                                    <li>
+                                                        <a href="/resepobat/submit/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Buat Resep Obat
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/resepobat/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Lihat Resep Obat
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="hs-accordion" id="aksi-accordion">
+                                                <button type="button" class="font-bold text-gray-800 dark:text-white hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                    Stok Obat Pasien
+                                                    <svg class="hs-accordion-active:hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                    <svg class="hs-accordion-active:block hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m18 15-6-6-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                </button>
+
+                                                <div class="hs-accordion-content hidden w-full mt-2 transition-[height] duration-300">
+                                                <ul class="ps-3 space-y-1 border-l-2 border-gray-100 dark:border-gray-700">
+                                                    <li>
+                                                        <a href="/permintaanstokobat/tambah/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Permintaan Stok Obat Pasien
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/stokobatpasien/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Lihat Stok Obat Pasien
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="hs-accordion" id="aksi-accordion">
+                                                <button type="button" class="font-bold text-gray-800 dark:text-white hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                    Pemberian Obat
+                                                    <svg class="hs-accordion-active:hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                    <svg class="hs-accordion-active:block hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m18 15-6-6-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                </button>
+
+                                                <div class="hs-accordion-content hidden w-full mt-2 transition-[height] duration-300">
+                                                <ul class="ps-3 space-y-1 border-l-2 border-gray-100 dark:border-gray-700">
+                                                    <li>
+                                                        <a href="/pemberianobat/submit/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Tambah Pemberian Obat
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pemberianobat/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Lihat Pemberian Obat
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="hs-accordion" id="aksi-accordion">
+                                                <button type="button" class="font-bold text-gray-800 dark:text-white hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                    Resep Pulang
+                                                    <svg class="hs-accordion-active:hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                    <svg class="hs-accordion-active:block hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m18 15-6-6-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                </button>
+
+                                                <div class="hs-accordion-content hidden w-full mt-2 transition-[height] duration-300">
+                                                <ul class="ps-3 space-y-1 border-l-2 border-gray-100 dark:border-gray-700">
+                                                    <li>
+                                                        <a href="/permintaanreseppulang/submit/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Permintaan Resep Pulang
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/reseppulang" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Resep Pulang
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         <!-- Add more fields if needed -->
                                     </div>
                                     <div class="flex justify-end gap-x-2 p-4 border-t dark:border-neutral-700">

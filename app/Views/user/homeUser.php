@@ -8,9 +8,9 @@
     <div class="rounded-t-lg h-40 overflow-hidden">
         <img class="object-cover object-top w-full" src="/img/bg-profile.png">
     </div>
- 
+
     <div class="mx-auto w-48 h-48 relative -mt-20 border-4 border-white rounded-full overflow-hidden">
-        <img class="object-cover object-center h-48" src="<?= $akun_data['profil'] ?? '' ?>" alt="Image Description">>
+        <img class="object-cover object-center h-auto" src="<?= $akun_data['profil'] ?? '' ?>" alt="Image Description">
     </div>
     <div class="flex justify-center mt-2 px-4">
 
@@ -58,9 +58,21 @@
                     </h2>
                 </div>
 
-                <form>
+                <form >
                     <!-- Grid -->
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
+
+                        <div class="sm:col-span-3">
+                            <label for="af-account-nama" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Nama
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+                            <input id="af-account-nama" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Nama" value="<?= $akun_data['nama'] ?? '' ?>" readonly>
+                        </div>
+                        <!-- End Col -->
 
                         <div class="sm:col-span-3">
                             <label for="af-account-email" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
@@ -71,6 +83,22 @@
 
                         <div class="sm:col-span-9">
                             <input id="af-account-email" type="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="maria@site.com" value="<?= $akun_data['email'] ?? '' ?>" readonly>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-3">
+                            <label for="af-account-telepon" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Telepon
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+                            <?php
+                            $telepon = $akun_data['telepon'] ?? '';
+                            $telepon_formatted = '(+62) ' . substr($telepon, 1); // Assuming $telepon starts with '0'
+                            ?>
+                            <input id="af-account-telepon" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Nomor Telepon" value="<?= $telepon_formatted ?>" readonly>
                         </div>
                         <!-- End Col -->
 
@@ -129,8 +157,8 @@
                     </h2>
                 </div>
 
-                
-                <form action="/submiteditprofil/<?=$akun_data['akun']?>" method="post">
+                <?php $akun = session('user_specific_data')[0]; ?>
+                <form action="/submiteditprofil/<?= $akun['id'] ?>" method="post" onsubmit="return validateForm()">
                     <!-- Grid -->
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
 
@@ -142,7 +170,47 @@
                         <!-- End Col -->
 
                         <div class="sm:col-span-9">
-                            <input id="af-account-email" type="email" name="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="maria@site.com" value="<?= $akun_data['email'] ?? '' ?>">
+                            <input id="af-account-email" type="email" name="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="maria@site.com" value="<?= $akun_data['email'] ?? '' ?>" required>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-3">
+                            <label for="af-account-telepon" class="inline-block text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Telepon
+                            </label>
+                        </div>
+                        <!-- End Col -->
+
+                        <div class="sm:col-span-9">
+                            <?php
+                            // Retrieve the telepon value from akun_data
+                            $telepon = $akun_data['telepon'] ?? '';
+
+                            // Check if the telepon value starts with '0' and remove it
+                            if (substr($telepon, 0, 1) === '0') {
+                                $telepon = substr($telepon, 1);
+                            }
+
+                            // Format the telepon value for display
+                            $telepon_formatted = '(+62) ' . $telepon;
+                            ?>
+                            <div class="relative">
+                                <span class="text-sm absolute inset-y-0 left-0 pl-3 flex items-center text-gray-600 dark:text-neutral-400">
+                                    (+62)
+                                </span>
+                                <input id="af-account-telepon" type="tel" pattern="[0-9]{10,15}" name="telepon" class="py-2 px-3 pl-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="895616749987" value="<?= $telepon ?>" oninput="removeLeadingZero(this)" required>
+                            </div>
+
+                            <script>
+                                function removeLeadingZero(input) {
+                                    var teleponValue = input.value;
+
+                                    // Check if the input starts with '0' and remove it
+                                    if (teleponValue.startsWith('0')) {
+                                        input.value = teleponValue.substring(1);
+                                    }
+                                }
+                            </script>
                         </div>
                         <!-- End Col -->
 
@@ -154,7 +222,7 @@
                         <!-- End Col -->
 
                         <div class="sm:col-span-9">
-                            <input id="af-account-password" type="text" name="password" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your New Password" value="<?= $akun_data['password'] ?? '' ?>">
+                            <input minlength="6" id="af-account-password" type="password" name="password" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Password baru" value="<?= $akun_data['password'] ?? '' ?>" required>
                         </div>
                         <!-- End Col -->
 
@@ -166,7 +234,7 @@
                         <!-- End Col -->
 
                         <div class="sm:col-span-9">
-                            <input id="af-account-alamat" type="text" name="alamat" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your alamat" value="<?= $akun_data['alamat'] ?? '' ?>">
+                            <input readonly id="af-account-alamat-edit" type="text" name="alamat" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:outline-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Your alamat" value="<?= $akun_data['alamat'] ?? '' ?>">
                         </div>
                         <!-- End Col -->
 
@@ -191,7 +259,7 @@
 
                     <div class="mt-5 flex justify-end gap-x-2">
                         <button type="button" id="edit-location-btn" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-white/10 dark:hover:bg-white/20 dark:text-white dark:hover:text-white">
-                            Edit lokasi
+                            Ubah lokasi
                         </button>
                     </div>
 
@@ -199,21 +267,21 @@
 
 
                     <div class="mt-10 flex justify-end gap-x-2">
-                        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                        <a href="javascript:history.back()" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
                             Batal
-                        </button>
-                        <button type="submit" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-teal-900 text-teal-100 hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+                        </a>
+                        <button type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-teal-900 text-teal-100 hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none">
                             Simpan
                         </button>
                     </div>
 
-                    <input id="af-account-akun" type="hidden" name="akun" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['akun'] ?? '' ?>">
-                    <input id="af-account-profil" type="hidden" name="profil" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['profil'] ?? '' ?>">
-                    <input id="af-account-foto" type="hidden" name="foto" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['foto'] ?? '' ?>">
-                    <input id="af-account-shift" type="hidden" name="shift" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['shift'] ?? '' ?>">
-                    <input id="af-account-jam-masuk" type="hidden" name="jam_masuk" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['jam_masuk'] ?? '' ?>">
-                    <input id="af-account-jam-pulang" type="hidden" name="jam_pulang" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['jam_pulang'] ?? '' ?>">
-                    <input id="af-account-akun-status" type="hidden" name="status" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['status'] ?? '' ?>">
+                    <input id="af-account-akun" type="hidden" name="akun" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['akun'] ?? '' ?>">
+                    <input id="af-account-profil" type="hidden" name="profil" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['profil'] ?? '' ?>">
+                    <input id="af-account-foto" type="hidden" name="foto" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['foto'] ?? '' ?>">
+                    <input id="af-account-shift" type="hidden" name="shift" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['shift'] ?? '' ?>">
+                    <input id="af-account-jam-masuk" type="hidden" name="jam_masuk" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['jam_masuk'] ?? '' ?>">
+                    <input id="af-account-jam-pulang" type="hidden" name="jam_pulang" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['jam_pulang'] ?? '' ?>">
+                    <input id="af-account-akun-status" type="hidden" name="status" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="<?= $akun_data['status'] ?? '' ?>">
                 </form>
             </div>
             <!-- End Card -->
@@ -253,80 +321,120 @@
                     map: map1,
                     title: 'Your Location'
                 });
-                
+
                 map1Initialized = true;
             }
         }
 
         if (!map2Initialized) {
-            // Get latitude and longitude from PHP variable
-            var latLng = '<?= ($akun_data['alamat_lat'] ?? '') . ', ' . ($akun_data['alamat_lon'] ?? '') ?>';
-            var latLngArray = latLng.split(',').map(function(item) {
-                return parseFloat(item);
-            });
+    // Get latitude and longitude from PHP variable
+    var latLng = '<?= ($akun_data['alamat_lat'] ?? '') . ', ' . ($akun_data['alamat_lon'] ?? '') ?>';
+    var latLngArray = latLng.split(',').map(function(item) {
+        return parseFloat(item);
+    });
 
-            // If latitude and longitude are valid
-            if (!isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
-                // Create a LatLng object
-                var myLatLng = {
-                    lat: latLngArray[0],
-                    lng: latLngArray[1]
-                };
+    // If latitude and longitude are valid
+    if (!isNaN(latLngArray[0]) && !isNaN(latLngArray[1])) {
+        // Create a LatLng object
+        var myLatLng = {
+            lat: latLngArray[0],
+            lng: latLngArray[1]
+        };
 
-                // Create a new map object
-                var map = new google.maps.Map(document.getElementById('map2'), {
-                    zoom: 12, // Set the initial zoom level
-                    center: myLatLng // Center the map on the specified location
-                });
+        // Create a new map object
+        var map = new google.maps.Map(document.getElementById('map2'), {
+            zoom: 12, // Set the initial zoom level
+            center: myLatLng // Center the map on the specified location
+        });
 
-                // Add a marker to the map
-                var marker = new google.maps.Marker({
-                    position: myLatLng,
-                    map: map,
-                    title: 'Your Location'
-                });
+        // Add a marker to the map
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Your Location',
+            draggable: true // Make the marker draggable
+        });
 
-                // Add click event listener to the "Edit Location" button
-                document.getElementById('edit-location-btn').addEventListener('click', function() {
-                    // Request the user's current location
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function(position) {
-                            var userLatLng = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude
-                            };
+        // Add click event listener to the "Edit Location" button
+        document.getElementById('edit-location-btn').addEventListener('click', function() {
+            // Request the user's current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLatLng = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
 
-                            // Center the map to the user's current location
-                            map.setCenter(userLatLng);
-                            map.setZoom(15);
+                    // Center the map to the user's current location
+                    map.setCenter(userLatLng);
+                    map.setZoom(15);
 
-                            // Remove previous marker
-                            if (marker) {
-                                marker.setMap(null);
+                    // Update the marker position
+                    marker.setPosition(userLatLng);
+
+                    // Update the input field with the new coordinates
+                    document.getElementById('af-account-alamat-lat').value = userLatLng.lat;
+                    document.getElementById('af-account-alamat-lon').value = userLatLng.lng;
+
+                    // Reverse geocode using OpenStreetMap Nominatim API
+                    var apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLatLng.lat}&lon=${userLatLng.lng}`;
+
+                    fetch(apiUrl)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.display_name) {
+                                // Set the location name to the input field
+                                document.getElementById('af-account-alamat-edit').value = data.display_name;
+                            } else {
+                                console.error('Error: No address found.');
                             }
-
-                            // Add a new marker to the map
-                            marker = new google.maps.Marker({
-                                position: userLatLng,
-                                map: map,
-                                title: 'Your Location'
-                            });
-
-                            // Update the input field with the new coordinates
-                            document.getElementById('af-account-alamat-lat').value = userLatLng.lat;
-                            document.getElementById('af-account-alamat-lon').value = userLatLng.lng;
-                        }, function() {
-                            alert('Error: The Geolocation service failed.');
+                        })
+                        .catch(error => {
+                            console.error('Error fetching address:', error);
                         });
-                    } else {
-                        alert('Error: Your browser doesn\'t support Geolocation.');
-                    }
+                }, function() {
+                    alert('Error: The Geolocation service failed.');
                 });
+            } else {
+                alert('Error: Your browser doesn\'t support Geolocation.');
             }
+        });
 
-            map2Initialized = true;
-        }
+        // Event listener for when marker position changes
+        google.maps.event.addListener(marker, 'dragend', function(event) {
+            // Update the input fields with new coordinates
+            document.getElementById('af-account-alamat-lat').value = event.latLng.lat();
+            document.getElementById('af-account-alamat-lon').value = event.latLng.lng();
 
+            // Reverse geocode using OpenStreetMap Nominatim API for new marker position
+            var apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${event.latLng.lat()}&lon=${event.latLng.lng()}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        // Set the location name to the input field
+                        document.getElementById('af-account-alamat-edit').value = data.display_name;
+                    } else {
+                        console.error('Error: No address found.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching address:', error);
+                });
+        });
+    }
+
+    map2Initialized = true;
+}
+
+
+    }
+
+    function validateForm() {
+        var submitButton = document.getElementById('submitButton');
+        submitButton.setAttribute('disabled', true);
+        submitButton.innerHTML = 'Menyimpan...';
     }
 </script>
 

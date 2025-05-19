@@ -18,8 +18,9 @@
             <span class="text-black"><?php
                                         // Retrieve session data
                                         $userData = session()->get('user_specific_data');
-                                        
+
                                         // dd($userData);
+                                        
                                         // Check if the session data is valid
                                         error_reporting(E_ALL);
                                         ini_set('display_errors', 1);
@@ -37,7 +38,7 @@
                                             // Extract the first part of the email before '@'
                                             $nama = explode('@', $userData['email'])[0];
                                         } else {
-                                            $nama = 'Admin'; // Default fallback if email is also missing
+                                            $nama = 'Admins'; // Default fallback if email is also missing
                                         }
                                         
                                         // Extract the first word from the determined name

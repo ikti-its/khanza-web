@@ -9,46 +9,70 @@ class ResepPulangController extends BaseController
     public function dataResepPulang()
     {
         $title = 'Data Resep Pulang';
-
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
-
-            // ✅ Fetch resep pulang data
-            $url = $this->api_url . '/resep-pulang';
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-                'Accept: application/json'
-            ]);
-            $response = curl_exec($ch);
-            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-
-            if ($http_status !== 200) {
-                return $this->renderErrorView($http_status);
-            }
-
-            $resep_data = json_decode($response, true);
-            if (!isset($resep_data['data'])) {
-                return $this->renderErrorView(500);
-            }
-
-            // ✅ Breadcrumbs
-            $this->addBreadcrumb('User', 'user');
-            $this->addBreadcrumb('Resep Pulang', 'reseppulang');
-            $breadcrumbs = $this->getBreadcrumbs();
-
-            return view('/admin/reseppulang/reseppulang_data', [
-                'reseppulang_data' => $resep_data['data'],
-                'title' => $title,
-                'breadcrumbs' => $breadcrumbs,
-                'meta_data' => $resep_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
-            ]);
-        } else {
+    
+        if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);
         }
+    
+        $token = session()->get('jwt_token');
+    
+        // Fetch resep pulang data
+        $url = $this->api_url . '/resep-pulang';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $response = curl_exec($ch);
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+    
+        if ($http_status !== 200) {
+            return $this->renderErrorView($http_status);
+        }
+    
+        $resep_data = json_decode($response, true);
+        if (!isset($resep_data['data']) || !is_array($resep_data['data'])) {
+            return $this->renderErrorView(500);
+        }
+    
+        $reseppulang_data = $resep_data['data'];
+    
+        // Fetch nama_pasien for each no_rawat
+        foreach ($reseppulang_data as &$item) {
+            $noRawat = $item['no_rawat'] ?? null;
+            if ($noRawat) {
+                $rawatUrl = $this->api_url . '/rawatinap/' . $noRawat;
+                $ch = curl_init($rawatUrl);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Authorization: Bearer ' . $token,
+                    'Accept: application/json'
+                ]);
+                $rawatResponse = curl_exec($ch);
+                curl_close($ch);
+    
+                $rawatParsed = json_decode($rawatResponse, true);
+                $item['nama_pasien'] = $rawatParsed['data']['nama_pasien'] ?? 'N/A';
+            } else {
+                $item['nama_pasien'] = 'N/A';
+            }
+        }
+    
+        // Breadcrumbs
+        $this->addBreadcrumb('User', 'user');
+        $this->addBreadcrumb('Resep Pulang', 'reseppulang');
+        $breadcrumbs = $this->getBreadcrumbs();
+    
+        return view('/admin/reseppulang/reseppulang_data', [
+            'reseppulang_data' => $reseppulang_data,
+            'title' => $title,
+            'breadcrumbs' => $breadcrumbs,
+            'meta_data' => $resep_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
+        ]);
     }
+    
 
     public function tambahResepPulang()
 {
