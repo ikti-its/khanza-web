@@ -1,6 +1,6 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
-<!-- <script src="https://unpkg.com/preline@latest/dist/preline.js"></script> -->
+<script src="https://unpkg.com/preline@latest/dist/preline.js"></script>
 <!-- Table Section -->
 <div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
     <!-- <div class="max-w-[85rem] w-full py-6 lg:py-3"> -->
@@ -450,6 +450,31 @@
                                                     <li>
                                                         <a href="/pemberianobat/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
                                                             Lihat Pemberian Obat
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="hs-accordion" id="aksi-accordion">
+                                                <button type="button" class="font-bold text-gray-800 dark:text-white hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                    Rekam Medis
+                                                    <svg class="hs-accordion-active:hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                    <svg class="hs-accordion-active:block hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m18 15-6-6-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                </button>
+
+                                                <div class="hs-accordion-content hidden w-full mt-2 transition-[height] duration-300">
+                                                <ul class="ps-3 space-y-1 border-l-2 border-gray-100 dark:border-gray-700">
+                                                    <li>
+                                                        <a href="/pasien/rekam-medis/<?= $rawatinap['nomor_rm'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Identitas Pasien
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/pemeriksaanranap" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Observasi Rawat Inap
                                                         </a>
                                                     </li>
                                                 </ul>

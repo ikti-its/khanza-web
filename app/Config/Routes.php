@@ -499,4 +499,27 @@ $routes->group('pemeriksaanranap', ['filter' => 'auth'], function ($routes) {
     // $routes->get('(:segment)', 'PemeriksaanRanapController::pemeriksaanRanapData/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
 });
 
+$routes->group('pasien', ['filter' => 'auth'], function ($routes) {
+    // Halaman utama data pasien (dengan pagination)
+    $routes->get('/', 'PasienController::dataPasien', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+
+    // Form tambah pasien
+    $routes->get('tambah', 'PasienController::tambahPasien', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+
+    // Submit tambah pasien
+    $routes->post('submittambah', 'PasienController::submitTambahPasien', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+
+    // (Opsional) Edit pasien (jika nanti ditambahkan)
+    $routes->get('edit/(:any)', 'PasienController::editPasien/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    $routes->post('submitedit', 'PasienController::submitEditPasien', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'PasienController::submitEditPasien/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+
+    // (Opsional) Hapus pasien
+    $routes->delete('hapus/(:segment)', 'PasienController::hapusPasien/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    $routes->get('rekam-medis/(:segment)', 'PasienController::lihatPasienByRM/$1');
+    // (Opsional) Detail pasien
+    // $routes->get('(:segment)', 'PasienController::detailPasien/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+});
+
+
 

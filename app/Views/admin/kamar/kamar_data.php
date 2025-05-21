@@ -142,7 +142,15 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Kamar
+                                            Kode Kamar
+                                        </span>
+                                    </div>
+                                </th>
+                                
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Nama Kamar
                                         </span>
                                     </div>
                                 </th>
@@ -185,8 +193,110 @@
 
 
 
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+
                             <?php foreach ($kamar_data as $kamar) : ?>
+                                
+                                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                <tr>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['nomor_bed'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['kode_kamar'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['nama_kamar'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['kelas'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['tarif_kamar'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="size-px w-48 whitespace-nowrap">
+                                        <div class="px-6 py-3 text-center">
+                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
+                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
+                                                <?= $kamar['status_kamar'] ?? 'N/A' ?>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap">
+                                        <div class="px-3 py-1.5 text-center inline-flex">
+                                            <!-- <div class="px-3 py-1.5">
+                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>">
+                                                    Lihat Detail
+                                                </button>
+                                            </div> -->
+                                            <div class="px-3 py-1.5">
+                                                <a href="/kamar/edit/<?= $kamar['nomor_bed'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                    Ubah
+                                                </a>
+                                            </div>
+                                            <div class="px-3 py-1.5">
+                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $kamar['nomor_bed'] ?>')" href="#">
+                                                    Hapus
+                                                </button>
+                                                <div id="modelConfirm-<?= $kamar['nomor_bed'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                    <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
+
+                                                        <div class="flex justify-end p-2">
+                                                            <button onclick="closeModal('modelConfirm-<?= $kamar['nomor_bed'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="p-6 pt-0 text-center">
+                                                            <div class="flex justify-center mb-6">
+                                                                <!-- Container for SVG, centered -->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none">
+                                                                    <path d="M8.5 11H40.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                    <path d="M18.5 5H30.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                    <path d="M12.5 17H36.5V40C36.5 41.6569 35.1569 43 33.5 43H15.5C13.8431 43 12.5 41.6569 12.5 40V17Z" fill="#FEE2E2" stroke="#DA4141" stroke-width="4" stroke-linejoin="round" />
+                                                                    <path d="M20.5 25L28.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                    <path d="M28.5 25L20.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                </svg>
+                                                            </div>
+                                                            Hapus data
+                                                            <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
+                                                                untuk menghapus data ini?</h3>
+                                                            <form action="/kamar/hapus/<?= $kamar['nomor_bed'] ?>" method="POST">
+                                                                <?= csrf_field() ?>
+                                                                <div class="w-full sm:flex justify-center">
+                                                                    <input type="hidden" name="_method" value="DELETE">
+                                                                    <button onclick="closeModal('modelConfirm-<?= $kamar['nomor_bed'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                        Hapus
+                                                                    </button>
+                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $kamar['nomor_bed'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                        Batal
+                                                                    </a>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
+
+                            
+                        </tbody>
                                 <div id="hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
                                         <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
@@ -298,101 +408,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['nomor_bed'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['nama_kamar'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['kelas'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['tarif_kamar'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="size-px w-48 whitespace-nowrap">
-                                        <div class="px-6 py-3 text-center">
-                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
-                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
-                                                <?= $kamar['status_kamar'] ?? 'N/A' ?>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <div class="px-3 py-1.5">
-                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>">
-                                                    Lihat Detail
-                                                </button>
-                                            </div>
-                                            <div class="px-3 py-1.5">
-                                                <a href="/kamar/edit/<?= $kamar['nomor_bed'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                                    Ubah
-                                                </a>
-                                            </div>
-                                            <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $kamar['nomor_bed'] ?>')" href="#">
-                                                    Hapus
-                                                </button>
-                                                <div id="modelConfirm-<?= $kamar['nomor_bed'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
-                                                    <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
-
-                                                        <div class="flex justify-end p-2">
-                                                            <button onclick="closeModal('modelConfirm-<?= $kamar['nomor_bed'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
-                                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-
-                                                        <div class="p-6 pt-0 text-center">
-                                                            <div class="flex justify-center mb-6">
-                                                                <!-- Container for SVG, centered -->
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none">
-                                                                    <path d="M8.5 11H40.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                    <path d="M18.5 5H30.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                    <path d="M12.5 17H36.5V40C36.5 41.6569 35.1569 43 33.5 43H15.5C13.8431 43 12.5 41.6569 12.5 40V17Z" fill="#FEE2E2" stroke="#DA4141" stroke-width="4" stroke-linejoin="round" />
-                                                                    <path d="M20.5 25L28.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                    <path d="M28.5 25L20.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                </svg>
-                                                            </div>
-                                                            Hapus data
-                                                            <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
-                                                                untuk menghapus data ini?</h3>
-                                                            <form action="/kamar/hapus/<?= $kamar['nomor_bed'] ?>" method="POST">
-                                                                <?= csrf_field() ?>
-                                                                <div class="w-full sm:flex justify-center">
-                                                                    <input type="hidden" name="_method" value="DELETE">
-                                                                    <button onclick="closeModal('modelConfirm-<?= $kamar['nomor_bed'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
-                                                                        Hapus
-                                                                    </button>
-                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $kamar['nomor_bed'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-                                                                        Batal
-                                                                    </a>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-
-
-                                </tr>
-
-                            <?php endforeach; ?>
-                        </tbody>
+                        <?php endforeach; ?>
                     </table>
                     </div>
 
@@ -494,6 +510,10 @@
 <!-- End Table Section -->
 
 <script>
+window.addEventListener('load', function () {
+    window.HSOverlay?.autoInit();
+  });
+
 function markRoomFull() {
     const nomorReg = document.getElementById("modal-nomor-reg").value;
     const namaPasien = document.getElementById("modal-pasien-nama").textContent;

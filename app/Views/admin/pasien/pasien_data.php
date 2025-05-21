@@ -16,7 +16,7 @@
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
                             <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
-                                Observasi Rawat Inap
+                                Pasien
                             </h2>
 
                         </div>
@@ -44,18 +44,18 @@
                                         <div class="flex">
                                             <div class="flex flex-col gap-2 w-full" id="ambulansNotifSection">
                                                 <!-- 🚑 Ambulans Notification -->
-                                                <?php if (isset($pemeriksaanranap_requests) && count($pemeriksaanranap_requests) > 0): ?>
-                                                    <p>Total request: <?= isset($pemeriksaanranap_requests) ? count($pemeriksaanranap_requests) : 0 ?></p>
+                                                <?php if (isset($pasien_requests) && count($pasien_requests) > 0): ?>
+                                                    <p>Total request: <?= isset($pasien_requests) ? count($pasien_requests) : 0 ?></p>
                                                     <div class="font-semibold text-black flex items-center space-x-1 px-3">
                                                         <span class="text-red-600">🚨</span>
                                                         <span>Permintaan Ambulans</span>
                                                     </div>
-                                                    <?php foreach ($pemeriksaanranap_requests as $req): ?>
+                                                    <?php foreach ($pasien_requests as $req): ?>
                                                         <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-blue-500">
                                                             <div>
-                                                                Ambulans <strong><?= esc($req['no_rawat']) ?></strong> sedang diminta (<?= esc($req['status']) ?>)
+                                                                Ambulans <strong><?= esc($req['no_rkm_medis']) ?></strong> sedang diminta (<?= esc($req['status']) ?>)
                                                             </div>
-                                                            <a href="/ambulans/terima/<?= esc($req['no_rawat']) ?>" 
+                                                            <a href="/ambulans/terima/<?= esc($req['no_rkm_medis']) ?>" 
                                                             class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">
                                                                 Terima
                                                             </a>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
                             <div>
-                                <a href='/pemeriksaanranap/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                <a href='/pasien/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                     <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
                                         <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                     </svg>
@@ -180,15 +180,15 @@
 
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <?php foreach ($pemeriksaanranap_data as $pemeriksaanranap) : ?>
-                                <div id="hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+                            <?php foreach ($pasien_data as $pasien) : ?>
+                                <div id="hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
                                         <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
                                             <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
                                                 <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $pemeriksaanranap['no_rawat'] ?>
+                                                    <?= $pasien['no_rkm_medis'] ?>
                                                 </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>">
+                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>">
                                                     <span class="sr-only">Close</span>
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                         <path d="M18 6 6 18"></path>
@@ -201,81 +201,38 @@
                                                 <div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['no_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $pasien['no_rkm_medis'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $pasien['no_rkm_medis'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Pasien</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $pasien['nm_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Umur</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $pasien['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Kelamin</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['jenis_kelamin'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $pasien['jk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Observasi</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['tanggal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Observasi</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">GCS (E,V,M)</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['gcs'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">TD (mmHg)</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['tensi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">HR (x/menit)</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['nadi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">RR (x/menit)</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['respirasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Suhu (C)</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['suhu_tubuh'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">SpO2(%)</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['spo2'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">NIP</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['nip'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Petugas</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['nama_petugas'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $pasien['tgl_daftar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                 </div>
 
                                                 </div>
                                                 <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                    <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>">
+                                                    <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>">
                                                         Tutup
                                                     </button>
                                                 </div>
@@ -286,55 +243,55 @@
                                 <tr>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= $pemeriksaanranap['no_rawat'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" data-id="<?= $pasien['no_rkm_medis'] ?>"><?= $pasien['no_rkm_medis'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= $pemeriksaanranap['nomor_rm'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" data-id="<?= $pasien['no_rkm_medis'] ?>"><?= $pasien['no_rkm_medis'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= $pemeriksaanranap['nama_pasien'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" data-id="<?= $pasien['no_rkm_medis'] ?>"><?= $pasien['nm_pasien'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= $pemeriksaanranap['umur'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" data-id="<?= $pasien['no_rkm_medis'] ?>"><?= $pasien['umur'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= $pemeriksaanranap['jenis_kelamin'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" data-id="<?= $pasien['no_rkm_medis'] ?>"><?= $pasien['jenis_kelamin'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= date('d-m-Y', strtotime($pemeriksaanranap['tanggal'])) ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" data-id="<?= $pasien['no_rkm_medis'] ?>"><?= date('d-m-Y', strtotime($pasien['tgl_daftar'])) ?></span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
-                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>">
+                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>">
                                                     Lihat Detail
                                                 </button>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <a href="/pemeriksaanranap/edit/<?= $pemeriksaanranap['no_rawat'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                <a href="/pasien/edit/<?= $pasien['no_rkm_medis'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                     Ubah
                                                 </a>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $pemeriksaanranap['no_rawat'] ?>')" href="#">
+                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $pasien['no_rkm_medis'] ?>')" href="#">
                                                     Hapus
                                                 </button>
-                                                <div id="modelConfirm-<?= $pemeriksaanranap['no_rawat'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                <div id="modelConfirm-<?= $pasien['no_rkm_medis'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
                                                     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 
                                                         <div class="flex justify-end p-2">
-                                                            <button onclick="closeModal('modelConfirm-<?= $pemeriksaanranap['no_rawat'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                            <button onclick="closeModal('modelConfirm-<?= $pasien['no_rkm_medis'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                                                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                                                 </svg>
@@ -355,14 +312,14 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                                <form action="/dokterjaga/hapus/<?= $pemeriksaanranap['no_rawat'] ?>" method="POST">
+                                                                <form action="/dokterjaga/hapus/<?= $pasien['no_rkm_medis'] ?>" method="POST">
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">
-                                                                    <button onclick="closeModal('modelConfirm-<?= $pemeriksaanranap['no_rawat'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                    <button onclick="closeModal('modelConfirm-<?= $pasien['no_rkm_medis'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
                                                                         Hapus
                                                                     </button>
-                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $pemeriksaanranap['no_rawat'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $pasien['no_rkm_medis'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
                                                                         Batal
                                                                     </a>
                                                                 </div>
