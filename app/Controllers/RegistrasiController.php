@@ -102,7 +102,7 @@ class RegistrasiController extends BaseController
             $nomor_reg = $this->request->getPost('nomor_reg');
             $nomor_rawat = $this->request->getPost('nomor_rawat');
             $tanggal = $this->request->getPost('tanggal');
-            $nomor_rekam_medis = $this->request->getPost('nomor_rekam_medis');
+            $nomor_rekam_medis = $this->request->getPost('no_rkm_medis');
             $jenis_kelamin = $this->request->getPost('jenis_kelamin');
             $poliklinik = $this->request->getPost('poliklinik');
             $kode_dokter = $this->request->getPost('kode_dokter');

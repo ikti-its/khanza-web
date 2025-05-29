@@ -25,8 +25,11 @@
             </div> -->
             
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Dokter Peresep</label>
-                <input type="text" name="kode_dokter" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <label for="kode_dokter" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Dokter Peresep</label>
+                    <select id="kode_dokter" name="kode_dokter" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                        <option value="">Pilih Dokter</option>
+                        <!-- Options akan diisi lewat JavaScript -->
+                    </select>
                 <?php
                     $generated_no_resep = 'RSP' . date('Ymd') . rand(1000, 9999);
                 ?>
@@ -39,7 +42,7 @@
                 <select id="obat-select" multiple class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-3/4 dark:border-gray-600 dark:text-white">
                     <?php foreach ($obat_list as $obat): ?>
                         <?php if (isset($obat['kode_obat'], $obat['nama_obat'])): ?>
-                            <option value="<?= $obat['kode_obat'] ?>" data-nama="<?= $obat['nama_obat'] ?>">
+                            <option value="<?= $obat['kode_obat'] ?>" data-nama="<?= $obat['nama_obat'] ?>" data-kode="<?= $obat['kode_obat'] ?>">
                                 <?= $obat['nama_obat'] ?>
                             </option>
                         <?php endif; ?>
@@ -81,14 +84,52 @@
 </div>
 <!-- End Card Section -->
 <script>
+async function loadDokterOptions() {
+  const token = "<?= session()->get('jwt_token') ?>";
+  const selectDokter = document.querySelector('select[name="kode_dokter"]');
+
+  try {
+    const response = await fetch('http://127.0.0.1:8080/v1/dokter', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
+    });
+
+    const json = await response.json();
+
+    if (!json.data || !Array.isArray(json.data)) {
+      console.error("❌ Unexpected response structure:", json);
+      return;
+    }
+
+    json.data.forEach(dokter => {
+      const option = document.createElement("option");
+      option.value = dokter.kode_dokter;
+      option.textContent = `${dokter.kode_dokter} - ${dokter.nama_dokter}`;
+      selectDokter.appendChild(option);
+    });
+
+  } catch (err) {
+    console.error("❌ Failed to load dokter list:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadDokterOptions);
+
 const obatSelect = document.getElementById("obat-select");
 const container = document.getElementById("obat-input-container");
 
+// fetch(`http://127.0.0.1:8080/v1/inventory/gudang`)
+//         .then(res => res.json())
+//         .then(data => {
+//             const stok = data?.data?.stok ?? 'N/A';});
+sessionStorage.setItem('jwt_token', "<?= session('jwt_token') ?>");
 obatSelect.addEventListener("change", function () {
-    const selectedValues = Array.from(obatSelect.selectedOptions).map(opt => opt.value);
+    const selectedValues = Array.from(obatSelect.selectedOptions).map(opt => opt.value); 
 
     Array.from(obatSelect.options).forEach(option => {
-        const kode = option.value;
+        const kode = option.value; // kode_obat
         const nama = option.getAttribute('data-nama');
         const inputId = `input-${kode}`;
         const existing = document.getElementById(inputId);
@@ -98,10 +139,22 @@ obatSelect.addEventListener("change", function () {
                 if (!existing) {
                     const wrapper = document.createElement("div");
                     wrapper.id = inputId;
+                    const token = sessionStorage.getItem('jwt_token');
+                    console.log(sessionStorage.getItem('jwt_token'));
+                    fetch(`http://127.0.0.1:8080/v1/inventory/gudang/barang/kode/${kode}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('API response:', data); // 👈 log the whole response
+                        const stok = data?.data?.stok ?? 'N/A';
 
                     wrapper.innerHTML = `
                     <div class="mb-6">
-                        <label class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">${nama}</label>
+                        <label class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">${nama}<span class="text-xs text-gray-500">(Stok: ${stok})</span></label>
 
                         <!-- Row 1: Jumlah & Aturan Pakai -->
                         <div class="mb-5 sm:block md:flex items-center">
@@ -126,7 +179,7 @@ obatSelect.addEventListener("change", function () {
                     `;
 
                     container.appendChild(wrapper);
-                }
+                })}
             }
 
         } else {
@@ -138,24 +191,6 @@ obatSelect.addEventListener("change", function () {
             }
         }
     });
-});
-
-document.getElementById("tindakanSelect").addEventListener("change", function () {
-    const selected = this.options[this.selectedIndex];
-    const tarif = selected.getAttribute("data-tarif") || 0;
-
-    // Set to the biaya input
-    document.getElementById("biayaInput").value = tarif;
-});
-
-    document.getElementById("tindakanSelect").addEventListener("change", function() {
-    const selected = this.options[this.selectedIndex];
-    const kode = selected.value;
-    const nama = selected.getAttribute("data-nama");
-    const tarif = selected.getAttribute("data-tarif");
-
-    document.getElementById("kodeTindakan").value = kode;
-    document.getElementById("tarifTindakan").value = tarif;
 });
 
     function validateForm() {

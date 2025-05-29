@@ -11,6 +11,7 @@
     $persetujuanrole = [1337, 1, 2, 4001, 5001];
     $petugasrole = [1337, 1, 2, 4001, 5001];
     $petugasdokterrole = [1337, 1, 2, 3, 4001, 5001];
+    $dokterrole = [1337, 1, 3, 4001, 5001];
 
     if (is_array($userDetails)) {
         $role  = $userDetails['role']  ?? null;
@@ -700,6 +701,16 @@
                 <?php } ?>
                 </li>
 
+                <?php if (in_array($role, $petugasdokterrole)) { ?>
+                    <li>
+                        <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/pemeriksaanranap">
+                        <svg class="h-8 w-8 text-slate-950"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M8 13.5a4 4 0 1 0 4 0v-8.5a2 2 0 0 0 -4 0v8.5" />  <line x1="8" y1="9" x2="12" y2="9" />  <line x1="16" y1="9" x2="22" y2="9" />  <line x1="19" y1="6" x2="19" y2="12" /></svg>
+                            Pemeriksaan
+                        </a>
+                    </li>
+                <?php } ?>
+                </li>
+
                  <?php if (in_array($role, $petugasrole)) { ?>
                     <li>
                         <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/dokterjaga">
@@ -792,6 +803,8 @@
                                 </div>
     
                 </li>
+                <?php } ?>
+                <?php if (in_array($role, $dokterrole)) { ?>
                 <li class="hs-accordion" id="users-accordion">
                     <button type="button" class="hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     <svg class="h-8 w-8 text-slate-950"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <rect x="4" y="4" width="16" height="16" rx="2" />  <path d="M4 13h3l3 3h4l3 -3h3" /></svg>
@@ -809,16 +822,34 @@
 
                                 <div id="users-accordion-sub-1" class="border-[#F1F1F1] border-l-[2px] mt-2 hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
                                     <ul class="ps-2">
-                                        <li>
-                                            <a href="/pemeriksaanranap" class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                                                Observasi Rawat Inap
-                                            </a>
-                                        </li>
-                                        <li>
+                                                                                <li>
                                             <a href="/pasien" class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                 Daftar Rekam Medis
                                             </a>
                                         </li>
+                                        <li>
+                                            <a href="/catatanobservasiranap" class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                Observasi Rawat Inap
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/catatanobservasikebidanan" class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                Observasi Rawat Inap Kebidanan
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/catatanobservasipostpartum" class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                Observasi Rawat Inap Post Partum
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/diagnosa" class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                                Diagnosa
+                                            </a>
+                                        </li>
+
                                     </ul>
                                 </div>
     

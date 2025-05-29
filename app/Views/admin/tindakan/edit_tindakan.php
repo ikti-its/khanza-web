@@ -7,7 +7,7 @@
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Edit Tindakan
+                Edit Penanganan
             </h2>
         </div>
         <form action="<?= site_url('tindakan/submitedit/' . $tindakan['nomor_rawat']) ?>" onsubmit="return validateForm()" method="post">

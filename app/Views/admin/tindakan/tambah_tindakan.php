@@ -7,7 +7,7 @@
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Tambah Tindakan
+                Tambah Penanganan
             </h2>
         </div>
         <form action="/tindakan/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">

@@ -81,7 +81,7 @@
             </div>
             <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nomor Rekam Medis</label>
-                <input type="text" id="nomor_rm" name="nomor_rekam_medis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" maxlength="3">
+                <input type="text" id="no_rkm_medis" name="no_rkm_medis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama</label>
                 <input id="nama_pasien" name="nama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
@@ -111,23 +111,25 @@
 
             <div class="mb-5 sm:block md:flex items-center">
             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Penanggung Jawab</label>
-            <input type="text" name="penanggung_jawab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+            <input type="text" id="penanggung_jawab" name="penanggung_jawab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Hubungan Penanggung Jawab</label>
-                <select name="hubungan_penanggung_jawab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="Diri Sendiri">Diri Sendiri</option>
-                    <option value="Ayah">Ayah</option>
-                    <option value="Ibu">Ibu</option>
-                    <option value="Saudara">Saudara</option>
-                    <option value="Teman">Teman</option>
-                    <option value="Lainnya">Lainnya</option>
+                <select name="hubungan_penanggung_jawab" id="hubungan_pj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="DIRI SENDIRI">DIRI SENDIRI</option>
+                    <option value="AYAH">AYAH</option>
+                    <option value="IBU">IBU</option>
+                    <option value="ISTRI">ISTRI</option>
+                    <option value="SUAMI">SUAMI</option>
+                    <option value="ANAK">ANAK</option>
+                    <option value="SAUDARA">SAUDARA</option>
+                    <option value="LAIN-LAIN">LAIN-LAIN</option>
                 </select>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat Penanggung Jawab</label>
-            <input type="text" name="alamat_penanggung_jawab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+            <input type="text" id="alamat_pj" name="alamat_penanggung_jawab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
                 <label class="block w-full mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white md:w-1/5">Nomor Telepon</label>
-                <input name="nomor_telepon" class=" border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input name="nomor_telepon" id="no_telp" class=" border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Biaya Registrasi</label>
@@ -176,26 +178,57 @@
 </div>
 <!-- End Card Section -->
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const nomorRMInput = document.querySelector('input[name="no_rkm_medis"]');
+    const token = "<?= session()->get('jwt_token') ?>"; // ensure this prints a token
 
-document.getElementById('nomor_rm').addEventListener('blur', function () {
-    const nomorRM = this.value;
-    if (!nomorRM) return;
+    // ✅ Trigger API when input loses focus
+    nomorRMInput.addEventListener('blur', function () {
+        const nomorRM = nomorRMInput.value.trim();
+        if (!nomorRM) {
+            console.log("❌ No nomor RM entered.");
+            return;
+        }
 
-    fetch(`http://localhost:8080/v1/registrasi/by-nomor-rm/${nomorRM}`)
-        .then(response => response.json())
+        console.log("📡 Fetching data for RM:", nomorRM);
+
+        fetch(`http://127.0.0.1:8080/v1/pasien/${encodeURIComponent(nomorRM)}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(response => {
+            console.log("🔁 HTTP status:", response.status);
+            return response.json();
+        })
         .then(data => {
+            console.log("✅ API response:", data);
             if (data.status === 'success' && data.data) {
-                document.getElementById('nama_pasien').value = data.data.nama_pasien || '';
-                document.getElementById('jenis_kelamin').value = data.data.jenis_kelamin || '';
-                document.getElementById('umur').value = data.data.umur || '';
+                const pasien = data.data;
+
+                document.getElementById('nama_pasien').value = pasien.nm_pasien || '';
+                document.getElementById('jenis_kelamin').value = pasien.jk || '';
+                document.getElementById('umur').value = pasien.umur || '';
+                document.getElementById('penanggung_jawab').value = pasien.namakeluarga || '';
+                document.getElementById('alamat_pj').value = pasien.alamatpj || '';
+                document.getElementById('no_telp').value = pasien.no_tlp || '';
+                document.getElementById('hubungan_pj').value = pasien.keluarga || '';
+
             } else {
-                alert('Pasien tidak ditemukan');
+                console.warn("⚠️ Data pasien tidak ditemukan atau format salah.");
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Gagal mengambil data pasien');
+            console.error("❌ Error calling API:", error);
         });
+    });
+
+    // ✅ Optional: auto-trigger if input already has value
+    if (nomorRMInput.value.trim()) {
+        nomorRMInput.dispatchEvent(new Event('blur'));
+    }
 });
 
 fetch("http://127.0.0.1:8080/v1/registrasi/dokter")

@@ -17,29 +17,7 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Rekam Medis</label>
                 <input type="text" name="nomor_rm" value="<?= $registrasi['nomor_rm'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nomor Rawat</label>
-                <input name="nomor_rawat" value="<?php function generateUniqueNumber($length = 15)
-                                                        {
-                                                            $characters = '1234567890';
-                                                            $charactersLength = strlen($characters);
-                                                            $randomString = '';
-
-                                                            $uniqueLength = $length - 11;
-
-                                                            if ($uniqueLength > 0) {
-                                                                for ($i = 0; $i < $uniqueLength; $i++) {
-                                                                    $randomString .= $characters[rand(0, $charactersLength - 1)];
-                                                                }
-                                                            } else {
-                                                                return "Panjang maksimal terlalu pendek.";
-                                                            }
-
-                                                            return $randomString;
-                                                        }
-
-                                                        $tanggalHariIni = date('Ymd');
-
-                                                        $nomor = "" . $tanggalHariIni . generateUniqueNumber();
-                                                        echo $nomor; ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input name="nomor_rawat" value="<?= $registrasi['nomor_rawat'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama Pasien</label>
@@ -90,7 +68,7 @@
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Lama Rawat Inap</label>
-                <input type="text" name="lama_ranap" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80">
+                <input type="text" name="lama_ranap" id="lamaRanapInput" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80">
                     <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Dokter Penanggung Jawab</label>
                     <select name="dokter_pj" id="dokterSelect" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <option value="">Pilih Dokter</option>
@@ -99,7 +77,7 @@
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Total Biaya</label>
-                <input type="text" name="total_biaya" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80">
+                <input type="text" name="total_biaya" id="totalBiayaInput" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80">
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Bayar</label>
                 <select name="status_pulang" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
                     <option value="Belum">Belum</option>
@@ -160,7 +138,7 @@
                         // Create and append option
                         const option = document.createElement("option");
                         option.value = kamar.nomor_bed;
-                        option.text = `${kamar.nama_kamar} (${kamar.kelas}) - ${kamar.nomor_bed}`;
+                        option.text = `${kamar.nomor_bed} - ${kamar.nama_kamar} (${kamar.kelas})`;
                         kamarSelect.appendChild(option);
                     });
                 }
@@ -181,29 +159,27 @@
             }
         });
     });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        fetch("http://127.0.0.1:8080/v1/kamar/available")
-            .then(response => response.json())
-            .then(data => {
-                const kamarSelect = document.getElementById("kamarSelect");
-                if (data.data && Array.isArray(data.data)) {
-                    data.data.forEach(kamar => {
-                        const option = document.createElement("option");
-                        option.value = kamar.nomor_bed; // Used as value to send
-                        option.text = `${kamar.nama_kamar} (${kamar.kelas}) - ${kamar.nomor_bed}`;
-                        kamarSelect.appendChild(option);
-                    });
-                } else {
-                    console.error("Data not in expected format", data);
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching kamar list:", error);
-            });
-    });
-
     
+// Recalculate total biaya every time lama ranap or tarif kamar is changed
+    function updateTotalBiaya() {
+        const tarifInput = document.getElementById("tarifKamarInput");
+        const lamaInput = document.getElementById("lamaRanapInput");
+        const totalInput = document.getElementById("totalBiayaInput");
+
+        // Remove commas and parse as number
+        const tarif = parseInt(tarifInput.value.replace(/,/g, '')) || 0;
+        const lama = parseInt(lamaInput.value) || 0;
+
+        const total = tarif * lama;
+        totalInput.value = total.toLocaleString(); // formatted with commas
+    }
+
+    // Trigger when tarif kamar changes (from kamar selection)
+    document.getElementById("kamarSelect").addEventListener("change", updateTotalBiaya);
+
+    // Trigger when lama rawat inap is typed
+    document.getElementById("lamaRanapInput").addEventListener("input", updateTotalBiaya);
+
     function validateForm() {
         var requiredFields = document.querySelectorAll('select[required], input[required]');
         for (var i = 0; i < requiredFields.length; i++) {

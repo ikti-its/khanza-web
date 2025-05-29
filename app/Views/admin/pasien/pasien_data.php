@@ -274,9 +274,11 @@
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
-                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>">
+                                                <a
+                                                    href="pasien/rekam-medis/<?= $pasien['no_rkm_medis'] ?>"
+                                                    class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                                     Lihat Detail
-                                                </button>
+                                                </a>
                                             </div>
                                             <div class="px-3 py-1.5">
                                                 <a href="/pasien/edit/<?= $pasien['no_rkm_medis'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">

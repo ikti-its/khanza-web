@@ -10,7 +10,7 @@
                 Edit Data Pasien Rawat Inap
             </h2>
         </div>
-        <form action="/rawatinap/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="<?= site_url('rawatinap/submitedit/' . $rawatinap['nomor_rawat']) ?>" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">

@@ -178,6 +178,7 @@
 
         async function loadLabeledImages() {
             const foto_data = <?= json_encode($foto_data); ?>;
+            console.log("🖼️ foto_data URL:", foto_data);
             const pegawaiId = '<?= $pegawaiId ?>';
             const namaPegawai = '<?= $namaPegawai ?>';
 

@@ -221,7 +221,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nomor_reg'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $registrasi['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
@@ -312,24 +312,6 @@ window.addEventListener("DOMContentLoaded", function () {
 
                                                     <div class="mb-5 flex items-end gap-4">
                                                         <!-- Select input -->
-                                                        <div class="w-full">
-                                                            <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kelas Kamar</label>
-                                                            <select id="kelas_kamar_select" name="kelas_kamar"
-                                                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white"
-                                                                    required>
-                                                                <option value="">-- Pilih Kelas --</option> <!-- Optional default -->
-                                                                <input type="hidden" id="modal-nomor-reg" value="<?= $registrasi['nomor_reg'] ?>">
-                                                            </select>
-                                                        </div>
-
-                                                        <!-- Rawat Inap button -->
-                                                        <button 
-                                                            type="button" 
-                                                            onclick="butuhKamar('<?= $registrasi['nomor_reg'] ?>')" 
-                                                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
-                                                        >
-                                                            Butuh Kamar
-                                                        </button>
                                                     </div>
 
 

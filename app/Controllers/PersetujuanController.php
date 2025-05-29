@@ -23,7 +23,7 @@ class PersetujuanController extends BaseController
             $persetujuan_url = $this->api_url . '/pengadaan/persetujuan';
             $pegawai_url = $this->api_url . '/pegawai';
             $medis_url = $this->api_url . '/inventaris/medis';
-            $satuan_url = $this->api_url . '/inventaris/satuan';
+            $satuan_url = $this->api_url . '/ref/inventory/satuan';
 
             // Initialize cURL for fetching pengajuan data
             $ch_pengajuan = curl_init($pengajuan_url);

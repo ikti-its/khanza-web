@@ -16,7 +16,7 @@
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
                             <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
-                                Observasi Rawat Inap
+                                Pemeriksaan Rawat Inap
                             </h2>
 
                         </div>
@@ -144,7 +144,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Umur
+                                            Tanggal Rawat
                                         </span>
                                     </div>
                                 </th>
@@ -152,7 +152,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Jenis Kelamin
+                                            Jam
                                         </span>
                                     </div>
                                 </th>
@@ -160,7 +160,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Tanggal Observasi
+                                            Suhu
                                         </span>
                                     </div>
                                 </th>
@@ -175,9 +175,6 @@
 
                             </tr>
                         </thead>
-
-
-
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($pemeriksaanranap_data as $pemeriksaanranap) : ?>
@@ -215,27 +212,17 @@
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Umur</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Kelamin</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['jenis_kelamin'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Observasi</label>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Rawat</label>
                                                         <input type="text" name="" value="<?= $pemeriksaanranap['tanggal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
-
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Observasi</label>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Rawat</label>
                                                         <input type="text" name="" value="<?= $pemeriksaanranap['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">GCS (E,V,M)</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['gcs'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Suhu Tubuh</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['suhu_tubuh'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">TD (mmHg)</label>
@@ -253,14 +240,54 @@
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Suhu (C)</label>
-                                                        <input type="text" name="" value="<?= $pemeriksaanranap['suhu_tubuh'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tinggi (cm)</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['tinggi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Berat (Kg)</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['berat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">SpO2(%)</label>
                                                         <input type="text" name="" value="<?= $pemeriksaanranap['spo2'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
-
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">GCS (E,V,M)</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['gcs'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kesadaran</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['kesadaran'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Alergi</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['alergi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Subjek</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['keluhan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Objek</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['pemeriksaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Asesmen</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['penilaian'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Plan</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['rtl'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>  
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Instruksi</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['instruksi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Evaluasi</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['evaluasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>                                                                                                                                                            
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">NIP</label>
                                                         <input type="text" name="" value="<?= $pemeriksaanranap['nip'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
@@ -268,6 +295,10 @@
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Petugas</label>
+                                                        <input type="text" name="" value="<?= $pemeriksaanranap['nama_petugas'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Profesi/Jabatan</label>
                                                         <input type="text" name="" value="<?= $pemeriksaanranap['nama_petugas'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
@@ -301,17 +332,19 @@
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= $pemeriksaanranap['umur'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= isset($pemeriksaanranap['tanggal']) ? (new DateTime($pemeriksaanranap['tanggal']))->format('Y-m-d') : 'N/A' ?>
+</span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= $pemeriksaanranap['jenis_kelamin'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= isset($pemeriksaanranap['jam']) ? (new DateTime($pemeriksaanranap['jam']))->format('H:i:s') : 'N/A' ?>
+</span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= date('d-m-Y', strtotime($pemeriksaanranap['tanggal'])) ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pemeriksaanranap['no_rawat'] ?>" data-id="<?= $pemeriksaanranap['no_rawat'] ?>"><?= $pemeriksaanranap['suhu_tubuh'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
@@ -355,7 +388,7 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                                <form action="/dokterjaga/hapus/<?= $pemeriksaanranap['no_rawat'] ?>" method="POST">
+                                                                <form action="/pemeriksaanranap/hapus/<?= $pemeriksaanranap['no_rawat'] ?>" method="POST">
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">
