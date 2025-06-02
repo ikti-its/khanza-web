@@ -258,7 +258,7 @@ public function submitEditTindakan($nomorRawat)
         curl_close($ch);
 
         if ($http_status === 200) {
-            return redirect()->to(base_url('tindakan'));
+            return redirect()->to(base_url('tindakan/' . $nomorRawat));
         } else {
             return $response;
         }

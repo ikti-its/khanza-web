@@ -444,6 +444,20 @@ $routes->group('resepobatracikan', ['filter' => 'auth'], function ($routes) {
     $routes->get('cetak/(:segment)', 'ResepObatRacikanController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
 });
 
+$routes->group('resepobatracikandetail', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'ResepObatRacikanDetailController::dataResepObatRacikanDetail', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('tambah', 'ResepObatRacikanDetailController::tambahResepObatRacikanDetail', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('tambah/(:any)', 'ResepObatRacikanDetailController::tambahResepObatRacikanDetail/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->post('submittambah', 'ResepObatRacikanDetailController::submitTambahResepObatRacikanDetail', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('edit/(:any)', 'ResepObatRacikanDetailController::editResepObatRacikanDetail/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->post('submitedit', 'ResepObatRacikanDetailController::submitEditResepObatRacikanDetail', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->post('submitedit/(:segment)', 'ResepObatRacikanDetailController::submitEditResepObatRacikanDetail/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->delete('hapus/(:segment)', 'ResepObatRacikanDetailController::hapusResepObatRacikanDetail/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('(:segment)', 'ResepObatRacikanDetailController::ResepObatRacikanDetailData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('submit/(:segment)', 'ResepObatRacikanDetailController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('cetak/(:segment)', 'ResepObatRacikanDetailController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+});
+
 // Permintaan Resep Pulang
 $routes->group('permintaanreseppulang', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'PermintaanResepPulangController::dataPermintaanResepPulang', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
@@ -502,6 +516,7 @@ $routes->group('stokobatpasien', ['filter' => 'auth'], function ($routes) {
     $routes->get('cetak/(:segment)', 'StokObatPasienController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
 });
 
+//Pemeriksaan Ranap
 $routes->group('pemeriksaanranap', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'PemeriksaanRanapController::dataPemeriksaanRanap', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
     $routes->get('by-rawat/(:segment)', 'PemeriksaanRanapController::dataPemeriksaanRanapDetail/$1', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
@@ -517,6 +532,7 @@ $routes->group('pemeriksaanranap', ['filter' => 'auth'], function ($routes) {
     // $routes->get('(:segment)', 'PemeriksaanRanapController::pemeriksaanRanapData/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
 });
 
+//Rekam Medis Data Pasien
 $routes->group('pasien', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'PasienController::dataPasien', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
     $routes->get('tambah', 'PasienController::tambahPasien', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
@@ -530,6 +546,7 @@ $routes->group('pasien', ['filter' => 'auth'], function ($routes) {
     // $routes->get('(:segment)', 'PasienController::detailPasien/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
 });
 
+//Catatan Observasi Kebidanan
 $routes->group('catatanobservasikebidanan', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'CatatanObservasiKebidananController::dataCatatanObservasi', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
     $routes->get('tambah', 'CatatanObservasiKebidananController::tambahCatatanObservasi', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
@@ -540,8 +557,10 @@ $routes->group('catatanobservasikebidanan', ['filter' => 'auth'], function ($rou
     $routes->delete('hapus/(:segment)', 'CatatanObservasiKebidananController::hapusCatatanObservasiKebidanan/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     // Fitur untuk prefill dari rawatinap
     $routes->get('from-rawatinap/(:segment)', 'CatatanObservasiKebidananController::submitFromRawatinapToCatatanObservasi/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    $routes->get('(:segment)', 'CatatanObservasiKebidananController::lihatCatatanObservasiByNoRawat/$1', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
 });
 
+//Catatan Observasi Ranap
 $routes->group('catatanobservasiranap', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'CatatanObservasiRanapController::dataCatatanObservasi', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
     $routes->get('tambah', 'CatatanObservasiRanapController::tambahCatatanObservasi', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
@@ -552,8 +571,10 @@ $routes->group('catatanobservasiranap', ['filter' => 'auth'], function ($routes)
     $routes->delete('hapus/(:segment)', 'CatatanObservasiRanapController::hapusCatatanObservasiRanap/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     // Fitur untuk prefill dari rawatinap
     $routes->get('from-rawatinap/(:segment)', 'CatatanObservasiRanapController::submitFromRawatinapToCatatanObservasi/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    $routes->get('(:segment)', 'CatatanObservasiRanapController::lihatCatatanObservasiByNoRawat/$1', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
 });
 
+//Catatan Observasi Post Partum
 $routes->group('catatanobservasipostpartum', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'CatatanObservasiPostpartumController::dataCatatanObservasi', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
     $routes->get('tambah', 'CatatanObservasiPostpartumController::tambahCatatanObservasi', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
@@ -564,8 +585,11 @@ $routes->group('catatanobservasipostpartum', ['filter' => 'auth'], function ($ro
     $routes->delete('hapus/(:segment)', 'CatatanObservasiPostpartumController::hapusCatatanObservasiPostpartum/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     // Fitur untuk prefill dari rawatinap
     $routes->get('from-rawatinap/(:segment)', 'CatatanObservasiPostpartumController::submitFromRawatinapToCatatanObservasi/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    $routes->get('(:segment)', 'CatatanObservasiPostpartumController::lihatCatatanObservasiByNoRawat/$1', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+
 });
 
+//Diagnosa
 $routes->group('diagnosa', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'DiagnosaController::dataDiagnosa', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
     $routes->get('tambah', 'DiagnosaController::tambahDiagnosa', ['filter' => 'checkpermission:1337,1,2,4001,4002']);

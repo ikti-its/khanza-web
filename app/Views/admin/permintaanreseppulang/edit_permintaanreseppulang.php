@@ -47,7 +47,18 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
                     </select>
 
             </div>
-
+            <div class="mb-5 sm:block md:flex items-center">
+                <label for="obat-select" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pilih Obat:</label>
+                <select id="obat-select" multiple class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-3/4 dark:border-gray-600 dark:text-white">
+                    <?php foreach ($obat_list as $obat): ?>
+                        <?php if (isset($obat['kode_obat'], $obat['nama_obat'])): ?>
+                            <option value="<?= $obat['kode_obat'] ?>" data-nama="<?= $obat['nama_obat'] ?>">
+                                <?= $obat['nama_obat'] ?>
+                            </option>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label for="status" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Status Validasi</label>
                 <select id="status" name="status" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>

@@ -419,25 +419,20 @@
                                                 <div class="hs-accordion-content hidden w-full mt-2 transition-[height] duration-300">
                                                 <ul class="ps-3 space-y-1 border-l-2 border-gray-100 dark:border-gray-700">
                                                     <li>
-                                                        <a href="/resepobat/submit/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
-                                                            Buat Resep Obat Umum
+                                                        <a href="/resepobat/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Lihat Resep Obat
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="/resepobat/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
-                                                            Lihat Resep Obat Umum
+                                                        <a href="/resepobat/submit/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Buat Resep Obat Umum
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a href="/resepobatracikan/submit/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
                                                             Buat Resep Obat Racikan
                                                         </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="/resepobatracikan/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
-                                                            Lihat Resep Obat Racikan
-                                                        </a>
-                                                    </li>                                                    
+                                                    </li>                                                   
                                                 </ul>
                                             </div>
                                             <div class="hs-accordion" id="aksi-accordion">
@@ -454,7 +449,7 @@
                                                 <div class="hs-accordion-content hidden w-full mt-2 transition-[height] duration-300">
                                                 <ul class="ps-3 space-y-1 border-l-2 border-gray-100 dark:border-gray-700">
                                                     <li>
-                                                        <a href="/permintaanstokobat/tambah/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                        <a href="/permintaanstokobat/submit/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
                                                             Permintaan Stok Obat Pasien
                                                         </a>
                                                     </li>
@@ -509,8 +504,38 @@
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="/pemeriksaanranap/from-rawatinap/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
-                                                            Observasi Rawat Inap
+                                                        <a href="/catatanobservasiranap/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Lihat Observasi Rawat Inap
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/catatanobservasiranap/from-rawatinap/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Tambah Observasi Rawat Inap
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/catatanobservasikebidanan/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Lihat Observasi Rawat Inap Kebidanan
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/catatanobservasikebidanan/from-rawatinap/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Tambah Observasi Rawat Inap Kebidanan
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/catatanobservasipostpartum/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Lihat Observasi Rawat Inap Post Partum
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/catatanobservasipostpartum/from-rawatinap/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Tambah Observasi Rawat Inap Post Partum
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/diagnosa/from-rawatinap/<?= $rawatinap['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                            Tambah Diagnosa
                                                         </a>
                                                     </li>
                                                 </ul>

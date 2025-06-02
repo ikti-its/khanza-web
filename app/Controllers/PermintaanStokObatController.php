@@ -472,9 +472,9 @@ class PermintaanStokObatController extends BaseController
 
     $token = session()->get('jwt_token');
 
-    // Step 1: Get rawat inap data
-    $url_rawatinap = $this->api_url . '/rawatinap/' . $nomor_rawat;
-    $ch = curl_init($url_rawatinap);
+    // Step 1: Get Rawat Inap Data
+    $url = $this->api_url . '/rawatinap/' . $nomor_rawat;
+    $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Authorization: Bearer ' . $token,
@@ -483,11 +483,18 @@ class PermintaanStokObatController extends BaseController
     $response = curl_exec($ch);
     curl_close($ch);
 
-    $data = json_decode($response, true);
+    $decoded = json_decode($response, true);
 
-    if ($data && isset($data['data'])) {
-        $rawatinap = is_string($data['data']) ? json_decode($data['data'], true) : $data['data'];
+    if ($decoded && isset($decoded['data'])) {
+        $rawatinap = is_string($decoded['data']) 
+            ? json_decode($decoded['data'], true) 
+            : $decoded['data'];
 
+        if (!$rawatinap) {
+            return redirect()->back()->with('error', 'Gagal memproses data rawat inap.');
+        }
+
+        // Prepare Form Data
         $formData = [
             'no_permintaan'  => 'PRP' . date('Ymd') . rand(100, 999),
             'tgl_permintaan' => date('Y-m-d'),
@@ -499,14 +506,21 @@ class PermintaanStokObatController extends BaseController
             'jam_validasi'   => null,
         ];
 
+        // Step 2: Get Dokter List for Dynamic Dropdown
+        $dokterList = $this->getDokterListFromAPI($token);
+        $obatList = $this->getObatListFromAPI($token);
+// dd($dokterList);
         return view('admin/stokobatpasien/tambah_permintaanstokobat', [
-            'title'         => 'Tambah Permintaan Stok Obat',
+            'title'              => 'Tambah Permintaan Stok Obat',
             'permintaanstokobat' => $formData,
+            'dokterList'         => $dokterList,
+            'obat_list'          => $obatList, 
         ]);
     }
 
     return redirect()->back()->with('error', 'Data rawat inap tidak ditemukan.');
-}    
+}
+
 
 public function fetchStokObatByNoPermintaan($noPermintaan)
 {
@@ -567,6 +581,43 @@ if (is_array($barangList)) {
     return $stokObat;
 }
 
+private function getDokterListFromAPI($token)
+{
+    $url = $this->api_url . '/dokter';
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json',
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+// dd($data);
+    // If response or 'data' is not array, return empty array
+    if (!is_array($data) || !isset($data['data']) || !is_array($data['data'])) {
+        return [];
+    }
+
+    return $data['data'];
+}
+
+private function getObatListFromAPI($token)
+{
+    $url = $this->api_url . '/pemberian-obat/databarang'; // adjust path if needed
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+    return is_array($data['data'] ?? null) ? $data['data'] : [];
+}
 
 
 }

@@ -139,6 +139,14 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            No. Racik
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Kode Obat
                                         </span>
                                     </div>
@@ -211,6 +219,14 @@
                                 <td></td>
                             </tr>
                         </tfoot>
+<?php $noRacikMap = [];
+
+foreach ($racikan_list as $racikan) {
+    $kode = $racikan['kode_brng'] ?? null; // or 'kode_barang' if your racikan list uses that
+    if ($kode && isset($racikan['no_racik'])) {
+        $noRacikMap[$kode] = $racikan['no_racik'];
+    }
+}?>
 
                     
     <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
@@ -222,6 +238,13 @@
                     </span>
                 </div>
             </td> -->
+            <td class="h-px w-64 whitespace-nowrap">
+                <div class="px-6 py-3">
+                    <a href="<?= base_url('resepobatracikan/') ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
+                        <?= isset($noRacikMap[$resepdokter['kode_barang']]) ? $noRacikMap[$resepdokter['kode_barang']] : '-' ?>
+                    </a>
+                </div>
+            </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
                     <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepdokter['kode_barang'] ?? 'N/A' ?></span>

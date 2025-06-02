@@ -157,8 +157,8 @@
                     </h2>
                 </div>
 
-                <?php $akun = session('user_specific_data')[0]; ?>
-                <form action="/submiteditprofil/<?= $akun['id'] ?>" method="post" onsubmit="return validateForm()">
+
+                <form action="/submiteditprofil/<?= $akun_data['akun'] ?>" method="post" onsubmit="return validateForm()">
                     <!-- Grid -->
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
 

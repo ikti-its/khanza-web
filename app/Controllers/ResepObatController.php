@@ -9,50 +9,80 @@ use App\Models\RawatInapModel;
 class ResepObatController extends BaseController
 {
     public function dataResepObat()
-    {
-        $title = 'Data Resep Dokter';
+{
+    $title = 'Data Resep Dokter';
 
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
 
-            // ✅ Fetch resep dokter data
-            $url = $this->api_url . '/resep-obat';
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    $token = session()->get('jwt_token');
+
+    // Fetch resep dokter
+    $url = $this->api_url . '/resep-obat';
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($http_status !== 200) {
+        return $this->renderErrorView($http_status);
+    }
+
+    $resep_data = json_decode($response, true);
+    if (!isset($resep_data['data'])) {
+        return $this->renderErrorView(500);
+    }
+
+    $resep_list = $resep_data['data'];
+
+    // Fetch registrasi data for each resep
+    foreach ($resep_list as &$resep) {
+        $no_rawat = $resep['no_rawat'] ?? null;
+        if ($no_rawat) {
+            $registrasi_url = $this->api_url . '/registrasi/by-no-rawat/' . urlencode($no_rawat);
+            $rch = curl_init($registrasi_url);
+            curl_setopt($rch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($rch, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
                 'Accept: application/json'
             ]);
-            $response = curl_exec($ch);
-            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
+            $rresponse = curl_exec($rch);
+            curl_close($rch);
 
-            if ($http_status !== 200) {
-                return $this->renderErrorView($http_status);
+            $registrasi_data = json_decode($rresponse, true);
+            if (isset($registrasi_data['data'])) {
+                $resep['nomor_rm'] = $registrasi_data['data']['nomor_rm'] ?? null;
+                $resep['nama_pasien'] = $registrasi_data['data']['nama_pasien'] ?? null;
+                $resep['poli'] = $registrasi_data['data']['poli'] ?? null;
+                $resep['jenis_bayar'] = $registrasi_data['data']['jenis_bayar'] ?? null;
+            } else {
+                // fallback values
+                $resep['nomor_rm'] = null;
+                $resep['nama_pasien'] = null;
+                $resep['poli'] = null;
+                $resep['jenis_bayar'] = null;
             }
-
-            $resep_data = json_decode($response, true);
-            if (!isset($resep_data['data'])) {
-                return $this->renderErrorView(500);
-            }
-
-            // ✅ Breadcrumbs
-            $this->addBreadcrumb('User', 'user');
-            $this->addBreadcrumb('Resep Obat', 'ResepObat');
-            $breadcrumbs = $this->getBreadcrumbs();
-
-            // dd($resep_data);
-
-            return view('/admin/ResepObat/resepobat_data', [
-                'resepobat_data' => $resep_data['data'],
-                'title' => $title,
-                'breadcrumbs' => $breadcrumbs,
-                'meta_data' => $resep_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
-            ]);
-        } else {
-            return $this->renderErrorView(401);
         }
     }
+
+    // Breadcrumbs
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Resep Obat', 'ResepObat');
+    $breadcrumbs = $this->getBreadcrumbs();
+// dd($resep_list);
+    return view('/admin/ResepObat/resepobat_data', [
+        'resepobat_data' => $resep_list,
+        'title' => $title,
+        'breadcrumbs' => $breadcrumbs,
+        'meta_data' => $resep_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
+    ]);
+}
 
     public function tambahResepObat()
     {
@@ -222,6 +252,7 @@ class ResepObatController extends BaseController
     $token = session()->get('jwt_token');
     $title = 'Edit Resep Obat';
 
+    // ✅ Fetch resep obat data
     $url = $this->api_url . '/resep-obat/' . $noResep;
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -234,16 +265,33 @@ class ResepObatController extends BaseController
     $data = json_decode($response, true);
     $resep = $data['data'] ?? [];
 
+    // ✅ Fetch obat list
+    $obatUrl = $this->api_url . '/pemberian-obat/databarang';
+    $obatCh = curl_init($obatUrl);
+    curl_setopt($obatCh, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($obatCh, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $obatResponse = curl_exec($obatCh);
+    curl_close($obatCh);
+
+    $obatData = json_decode($obatResponse, true);
+    $obat_list = $obatData['data'] ?? [];
+
+    // ✅ Breadcrumbs
     $this->addBreadcrumb('User', 'user');
     $this->addBreadcrumb('Resep Obat', 'resepobat');
     $this->addBreadcrumb('Edit', 'edit');
 
+    // ✅ Return view with all data
     return view('/admin/resepobat/edit_resepobat', [
         'resepobat' => $resep,
+        'obat_list' => $obat_list,
         'title' => $title,
-        'breadcrumbs' => $this->getBreadcrumbs()
+        'breadcrumbs' => $this->getBreadcrumbs(),
     ]);
 }
+
 
 public function submitEditResepObat($noResep)
 {

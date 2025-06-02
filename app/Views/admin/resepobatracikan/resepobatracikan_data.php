@@ -13,10 +13,10 @@
                     <!-- Header -->
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
-                        <?php if (!empty($resepobat_data)) : ?>
+                        <?php if (!empty($resepobatracikan_data)) : ?>
                             <div class="mb-4 text-xl font-black text-gray-800 dark:text-gray-200 space-y-1">
                                 <div class="flex">
-                                    <span class="w-48">Resep Obat</span>
+                                    <span class="w-48">Resep Obat Racikan</span>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -75,8 +75,8 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?php if (!empty($resepobat_data)) : ?>
-                                <?php $nomor_rawat = $resepobat_data['nomor_rawat'] ?? ''; ?>
+                            <?php if (!empty($resepobatracikan_data)) : ?>
+                                <?php $nomor_rawat = $resepobatracikan_data['nomor_rawat'] ?? ''; ?>
                                 <div>
                                     <a href="<?= base_url('resepobat/tambah') . '?nomor_rawat=' . $nomor_rawat ?>"
                                     class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
@@ -128,7 +128,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Nomor Resep
+                                            Nomor Racik
                                         </span>
                                     </div>
                                 </th>
@@ -136,7 +136,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Tanggal Resep
+                                            Nama Racikan
                                         </span>
                                     </div>
                                 </th>
@@ -144,7 +144,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Nomor Rawat
+                                            Metode Racik
                                         </span>
                                     </div>
                                 </th>
@@ -152,7 +152,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Dokter Peresep
+                                            Jumlah Racik
                                         </span>
                                     </div>
                                 </th>
@@ -160,7 +160,7 @@
                                 <th scope="col" class="px-6 py-3">
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Status
+                                            Aturan Pakai
                                         </span>
                                     </div>
                                 </th>
@@ -181,15 +181,15 @@
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     
-    <?php foreach ($resepobat_data as $i => $resepobat) : ?>
-        <div id="hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+    <?php foreach ($resepobatracikan_data as $i => $resepobatracikan) : ?>
+        <div id="hs-vertically-centered-scrollable-modal-<?= $resepobatracikan['no_racik'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
                                         <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
                                             <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
                                                 <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $resepobat['no_resep'] ?>
+                                                    <?= $resepobatracikan['no_racik'] ?>
                                                 </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>">
+                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobatracikan['no_racik'] ?>">
                                                     <span class="sr-only">Close</span>
                                                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                         <path d="M18 6 6 18"></path>
@@ -201,30 +201,60 @@
                                                 <div class="space-y-4">
                                                 <div>
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
-                                                        <input type="text" name="" value="<?= $resepobat['no_resep'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Racik</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['no_racik'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
-                                                        <input type="text" name="" value="<?= $resepobat['no_resep'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kode Barang</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['kode_brng'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <?php if ($resepobat['validasi']): ?>
-                                                            <span class="text-green-600 font-semibold">sudah divalidasi</span>
-                                                        <?php else: ?>
-                                                            <button
-                                                                class="px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                                                                onclick="validateResep('<?= $resepobat['no_resep'] ?>')"
-                                                            >
-                                                                Validasi
-                                                            </button>
-                                                        <?php endif; ?>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Barang</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['kode_brng'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
-                                                    <a href="/resepobat/cetak/<?= $resepobat['no_resep'] ?>" 
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Satuan</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['kode_sat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Harga</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['kelas1'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Obat</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['kdjns'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Stok</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['stokminimal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kps</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['kapasitas'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div> 
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">P1</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['p1'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div> 
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">P2</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['p2'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kandungan</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['kandungan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jumlah</label>
+                                                        <input type="text" name="" value="<?= $resepobatracikan['jml'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>                                                                                                       
+                                                    <a href="/resepobat/cetak/<?= $resepobatracikan['no_racik'] ?>" 
                                                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
-                                                        data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>">
+                                                        data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobatracikan['no_racik'] ?>">
                                                         Cetak Surat
                                                     </a>
                                                 </div>
@@ -239,36 +269,33 @@
         <tr>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <a href="<?= base_url('resepdokter/' . $resepobat['no_resep']) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                        <?= $resepobat['no_resep'] ?>
+                    <a href="<?= base_url('resepdokter/' . $resepobatracikan['no_racik']) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
+                        <?= $resepobatracikan['no_racik'] ?>
                     </a>
                 </div>
             </td>
 
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepobat['tgl_peresepan'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepobatracikan['nama_racik'] ?? 'N/A' ?></span>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <a href="<?= base_url('resepobat/' . ($resepobat['no_rawat'] ?? 'N/A')) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                        <?= $resepobat['no_rawat'] ?? 'N/A' ?>
+                    <a href="<?= base_url('resepobat/' . ($resepobatracikan['no_rawat'] ?? 'N/A')) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
+                        <?= $resepobatracikan['kd_racik'] ?? 'N/A' ?>
                     </a>
                 </div>
             </td>
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepobat['kd_dokter'] ?? 'N/A' ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepobatracikan['jml_dr'] ?? 'N/A' ?></span>
                 </div>
             </td>
+
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php if ($resepobat['validasi'] === true || $resepobat['validasi'] === 1 || $resepobat['validasi'] === 'true'): ?>
-                <span class="text-green-600 font-semibold">sudah divalidasi</span>
-                    <?php else: ?>
-                        <span class="text-red-600 font-semibold">belum divalidasi</span>
-                    <?php endif; ?></span>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepobatracikan['aturan_pakai'] ?? 'N/A' ?></span>
                 </div>
             </td>
 
@@ -278,22 +305,22 @@
                     <button
                                                 type="button"
                                                 class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
-                                                data-nomor-reg="<?= $resepobat['no_resep'] ?>"
-                                                data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>">
+                                                data-nomor-reg="<?= $resepobatracikan['no_racik'] ?>"
+                                                data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobatracikan['no_racik'] ?>">
                                                 Lihat Detail
                                             </button>
                     </div>
                     <div class="px-3 py-1.5">
-                        <a href="/resepobat/edit/<?= $resepobat['no_resep'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
+                        <a href="/resepobat/edit/<?= $resepobatracikan['no_racik'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
                     </div>
                     <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $resepobat['no_resep'] . '-' . $i ?>')" href="#">Hapus</button>
+                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $resepobatracikan['no_racik'] . '-' . $i ?>')" href="#">Hapus</button>
 
-                                                <div id="modelConfirm-<?= $resepobat['no_resep'] . '-' . $i ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                <div id="modelConfirm-<?= $resepobatracikan['no_racik'] . '-' . $i ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
                                                     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 
                                                         <div class="flex justify-end p-2">
-                                                            <button onclick="closeModal('modelConfirm-<?= $resepobat['no_resep'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                            <button onclick="closeModal('modelConfirm-<?= $resepobatracikan['no_racik'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                                                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                                                 </svg>
@@ -314,12 +341,12 @@
                                                             Hapus data
                                                             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
                                                                 untuk menghapus data ini?</h3>
-                                                                <form action="/resepobat/hapus/<?= $resepobat['no_resep'] ?>" method="POST">
+                                                                <form action="/resepobat/hapus/<?= $resepobatracikan['no_racik'] ?>" method="POST">
                                                                 <?= csrf_field() ?>
                                                                 <div class="w-full sm:flex justify-center">
                                                                     <input type="hidden" name="_method" value="DELETE">
-                                                                    <button onclick="closeModal('modelConfirm-<?= $resepobat['no_resep'] . '-' . $i ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">Hapus</button>
-                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $resepobat['no_resep'] . '-' . $i ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">Batal</a>
+                                                                    <button onclick="closeModal('modelConfirm-<?= $resepobatracikan['no_racik'] . '-' . $i ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">Hapus</button>
+                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $resepobatracikan['no_racik'] . '-' . $i ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">Batal</a>
                                                                 </div>
                                                             </form>
                                                         </div>
@@ -332,24 +359,24 @@
         </tr>
     <?php endforeach; ?>
 </tbody>
-<?php foreach ($resepobat_data as $i => $resepobat) : ?>
-    <div id="hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
+<?php foreach ($resepobatracikan_data as $i => $resepobatracikan) : ?>
+    <div id="hs-vertically-centered-scrollable-modal-<?= $resepobatracikan['no_racik'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
         <div class="mt-20 mx-auto w-full max-w-lg p-6 bg-white dark:bg-neutral-800 rounded shadow">
             <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="text-lg font-bold"><?= $resepobat['no_resep'] ?></h3>
-                <button data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] . '-' . $i ?>" class="text-gray-600 dark:text-white hover:text-red-600">
+                <h3 class="text-lg font-bold"><?= $resepobatracikan['no_racik'] ?></h3>
+                <button data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobatracikan['no_racik'] . '-' . $i ?>" class="text-gray-600 dark:text-white hover:text-red-600">
                     &times;
                 </button>
             </div>
             <div class="mt-4 space-y-3">
-                <div><strong>Nomor Rawat:</strong> <?= $resepobat['no_resep'] ?></div>
-                <!-- <div><strong>Nomor RM:</strong> <?= $resepobat['no_resep'] ?></div> -->
-                <div><strong>Dokter:</strong> <?= $resepobat['no_resep'] ?? 'N/A' ?></div>
-                <div><strong>Tanggal:</strong> <?= $resepobat['no_resep'] ?></div>
-                <div><strong>Jam:</strong> <?= $resepobat['no_resep'] ?></div>
+                <div><strong>Nomor Rawat:</strong> <?= $resepobatracikan['no_racik'] ?></div>
+                <!-- <div><strong>Nomor RM:</strong> <?= $resepobatracikan['no_racik'] ?></div> -->
+                <div><strong>Dokter:</strong> <?= $resepobatracikan['no_racik'] ?? 'N/A' ?></div>
+                <div><strong>Tanggal:</strong> <?= $resepobatracikan['no_racik'] ?></div>
+                <div><strong>Jam:</strong> <?= $resepobatracikan['no_racik'] ?></div>
             </div>
             <div class="mt-6 text-end">
-                <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] . '-' . $i ?>">Tutup</button>
+                <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobatracikan['no_racik'] . '-' . $i ?>">Tutup</button>
             </div>
         </div>
     </div>

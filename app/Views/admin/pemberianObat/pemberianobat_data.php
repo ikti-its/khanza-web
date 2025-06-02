@@ -24,9 +24,9 @@
                                 <div class="flex">
                                     <span class="w-48">Nama Pasien</span> : <?= $pemberianobat_data[0]['nama_pasien'] ?>
                                 </div>
-                                <div class="flex">
+                                <!-- <div class="flex">
                                     <span class="w-48">Kelas</span> : <?= $pemberianobat_data[0]['kelas'] ?>
-                                </div>
+                                </div> -->
                             </div>
                         <?php endif; ?>
 

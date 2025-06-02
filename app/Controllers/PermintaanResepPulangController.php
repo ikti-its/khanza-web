@@ -209,7 +209,7 @@ class PermintaanResepPulangController extends BaseController
         ->with('success', 'Permintaan resep pulang berhasil disimpan.');
 }
 
-    public function editPermintaanResepPulang($noPermintaan)
+public function editPermintaanResepPulang($noPermintaan)
 {
     if (!session()->has('jwt_token')) {
         return $this->renderErrorView(401);
@@ -218,19 +218,38 @@ class PermintaanResepPulangController extends BaseController
     $token = session()->get('jwt_token');
     $title = 'Edit Permintaan Resep Pulang';
 
+    // ✅ Ambil data permintaan resep pulang
     $url = $this->api_url . '/permintaan-resep-pulang/' . $noPermintaan;
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Authorization: Bearer ' . $token,
+        'Accept: application/json'
     ]);
     $response = curl_exec($ch);
     curl_close($ch);
 
     $data = json_decode($response, true);
     $permintaan = $data['data'] ?? [];
+
+    // ✅ Ambil list dokter
     $dokterList = $this->getDokterListFromAPI($token);
 
+    // ✅ Ambil data obat
+    $obatUrl = $this->api_url . '/pemberian-obat/databarang';
+    $chObat = curl_init($obatUrl);
+    curl_setopt($chObat, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($chObat, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $obatResponse = curl_exec($chObat);
+    curl_close($chObat);
+
+    $obatData = json_decode($obatResponse, true);
+    $obatList = $obatData['data'] ?? [];
+
+    // ✅ Breadcrumb
     $this->addBreadcrumb('User', 'user');
     $this->addBreadcrumb('Permintaan Resep Pulang', 'permintaanreseppulang');
     $this->addBreadcrumb('Edit', 'edit');
@@ -239,9 +258,11 @@ class PermintaanResepPulangController extends BaseController
         'permintaanreseppulang' => $permintaan,
         'title' => $title,
         'dokter_list' => $dokterList,
+        'obat_list' => $obatList, // ✅ Kirim ke view
         'breadcrumbs' => $this->getBreadcrumbs()
     ]);
 }
+
 
 public function submitEditPermintaanResepPulang($noPermintaan)
 {

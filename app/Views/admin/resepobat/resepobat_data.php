@@ -201,13 +201,73 @@
                                                 <div class="space-y-4">
                                                 <div>
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Resep</label>
                                                         <input type="text" name="" value="<?= $resepobat['no_resep'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
-                                                        <input type="text" name="" value="<?= $resepobat['no_resep'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Resep</label>
+                                                        <input type="text" name="" value="<?= $resepobat['tgl_peresepan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Peresepan</label>
+                                                        <input type="text" name="" value="<?= $resepobat['jam_peresepan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
+                                                        <input type="text" name="" value="<?= $resepobat['no_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
+                                                        <input type="text" name="" value="<?= $resepobat['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Pasien</label>
+                                                        <input type="text" name="" value="<?= $resepobat['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter Peresep</label>
+                                                        <input type="text" name="" value="<?= $resepobat['kd_dokter'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status</label>
+                                                        <input type="text" name="" value="<?= $resepobat['status'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Poli/Unit</label>
+                                                        <input type="text" name="" value="<?= $resepobat['poli'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Bayar</label>
+                                                        <input type="text" name="" value="<?= $resepobat['jenis_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Validasi</label>
+                                                        <input type="text" name="" value="<?= $resepobat['tgl_perawatan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Validasi</label>
+                                                        <input type="text" name="" value="<?= $resepobat['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Penyerahan</label>
+                                                        <input type="text" name="" value="<?= $resepobat['tgl_penyerahan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Penyerahan</label>
+                                                        <input type="text" name="" value="<?= $resepobat['jam_penyerahan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
@@ -215,7 +275,7 @@
                                                             <span class="text-green-600 font-semibold">sudah divalidasi</span>
                                                         <?php else: ?>
                                                             <button
-                                                                class="px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                                                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
                                                                 onclick="validateResep('<?= $resepobat['no_resep'] ?>')"
                                                             >
                                                                 Validasi
@@ -247,9 +307,22 @@
 
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepobat['tgl_peresepan'] ?? 'N/A' ?></span>
+                    <?php
+                        $tglRaw = $resepobat['tgl_peresepan'] ?? null;
+                        $tglFormatted = 'N/A';
+                        if ($tglRaw) {
+                            try {
+                                $date = new DateTime($tglRaw);
+                                $tglFormatted = $date->format('d-m-Y');
+                            } catch (Exception $e) {
+                                $tglFormatted = 'Invalid Date';
+                            }
+                        }
+                    ?>
+                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $tglFormatted ?></span>
                 </div>
             </td>
+
             <td class="h-px w-64 whitespace-nowrap">
                 <div class="px-6 py-3">
                     <a href="<?= base_url('resepobat/' . ($resepobat['no_rawat'] ?? 'N/A')) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
@@ -284,7 +357,11 @@
                                             </button>
                     </div>
                     <div class="px-3 py-1.5">
-                        <a href="/resepobat/edit/<?= $resepobat['no_resep'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
+                        <?php if ($resepobat['validasi'] === true || $resepobat['validasi'] === 1 || $resepobat['validasi'] === 'true'): ?>
+                            <span class="text-gray-400 text-sm font-semibold cursor-not-allowed" title="Sudah divalidasi, tidak dapat diubah">Ubah</span>
+                        <?php else: ?>
+                            <a href="/resepobat/edit/<?= $resepobat['no_resep'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
+                        <?php endif; ?>
                     </div>
                     <div class="px-3 py-1.5">
                                                 <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $resepobat['no_resep'] . '-' . $i ?>')" href="#">Hapus</button>

@@ -9,14 +9,14 @@ class userPegawaiController extends BaseController
 
 
 
-    public function lihatProfil()
+public function lihatProfil()
     {
         $title = 'Data Akun';
         date_default_timezone_set('Asia/Bangkok');
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
             $tanggal = date('Y-m-d');
-            $akun_url = $this->api_url . '/akun?tanggal=' . $tanggal;
+            $akun_url = $this->api_url . '/m/home?tanggal=' . $tanggal;
             $ch_akun = curl_init($akun_url);
 
             curl_setopt($ch_akun, CURLOPT_RETURNTRANSFER, true);
@@ -32,10 +32,8 @@ class userPegawaiController extends BaseController
 
                 if ($http_status_code_akun === 200) {
                     $akun_data = json_decode($response_akun, true);
-                    // dd($akun_data);
                     session()->set('user_specific_data', $akun_data['data']);
-                    // dd($akun_data['data']);
-                    return view('/user/homeUser', ['akun_data' => $akun_data['data'][0], 'title' => $title]);
+                    return view('/user/homeUser', ['akun_data' => $akun_data['data'], 'title' => $title]);
                 } else {
                     return $this->renderErrorView($http_status_code_akun);
                 }
@@ -227,11 +225,11 @@ class userPegawaiController extends BaseController
                     });
                     // Close the cURL session for ketersediaan data
                     curl_close($ch_ketersediaan);
-// dd($ketersediaan_data['data']['ketersediaan']);
+
                     // Pass data to the view, including the distances array
                     return view('/user/dataPegawai', [
-                        'akun_data' => $ketersediaan_data['data']['ketersediaan'],
-                        'meta_data'  => $ketersediaan_data['data'],
+                        'ketersediaan_data' => $ketersediaan_data['data']['ketersediaan'],
+                        'meta_ketersediaan_data' => $ketersediaan_data['data'],
                         'title' => $title,
                     ]);
                 }
@@ -321,9 +319,8 @@ class userPegawaiController extends BaseController
 
                         if ($http_status_berkas === 200) {
                             $berkasData = json_decode($response_berkas, true);
-                            // dd($berkasData);
                             //Render the view to edit user data, passing the user data
-                            return view('/user/berkasPegawai', ['userData' => $userData['data'], 'meta_data'  => $berkasData['meta'] ?? ['page' => 1, 'size' => 5, 'total' => 1], 'berkasData' => [$berkasData['data']], 'pegawaiId' => $pegawaiId, 'title' => 'Edit Pegawai']);
+                            return view('/user/berkasPegawai', ['userData' => $userData['data'], 'berkasData' => $berkasData['data'], 'pegawaiId' => $pegawaiId, 'title' => 'Edit Pegawai']);
                         } else {
                             // Error fetching file data
                             return $this->renderErrorView($http_status_berkas);

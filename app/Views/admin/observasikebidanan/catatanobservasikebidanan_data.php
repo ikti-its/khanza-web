@@ -16,7 +16,7 @@
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
                             <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
-                                Observasi Rawat Inap
+                                Observasi Rawat Inap Kebidanan
                             </h2>
 
                         </div>
@@ -254,6 +254,24 @@
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">SpO2(%)</label>
                                                         <input type="text" name="" value="<?= $catatan['spo2'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kontraksi/HIS</label>
+                                                        <input type="text" name="" value="<?= $catatan['kontraksi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">BJJ</label>
+                                                        <input type="text" name="" value="<?= $catatan['bjj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">PPV</label>
+                                                        <input type="text" name="" value="<?= $catatan['ppv'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">VT</label>
+                                                        <input type="text" name="" value="<?= $catatan['vt'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">

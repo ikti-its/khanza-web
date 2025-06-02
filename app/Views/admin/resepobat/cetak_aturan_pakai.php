@@ -102,7 +102,7 @@
         </div>
 
 
-      <?= $resep['nama_obat'] ?> <span style="float: right;"><?= $resep['jumlah'] ?> <?= isset($resep['satuan']) ? $resep['satuan'] : 'unit' ?></span>
+      <?= $resep['nama_obat'] ?> <span style="float: right;"><?= $resep['jumlah'] ?> <?= isset($resep['satuan']) ? $resep['satuan'] : 'Ampul' ?></span>
     </div>
 
     <div class="bottom-text">

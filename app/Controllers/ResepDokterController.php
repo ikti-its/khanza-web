@@ -260,11 +260,17 @@ public function ResepDokterData($noResep)
     }
 
     $resep_data = json_decode($response, true);
+    // dd($resep_data);
     if (!isset($resep_data['data'])) {
         return $this->renderErrorView(500);
     }
 
     $data = $resep_data['data'];
+
+    if (!is_array($data)) {
+    log_message('error', 'Invalid or missing data in /resep-dokter/' . $noResep);
+    return $this->renderErrorView(404); // or 204 No Content, depending on your policy
+}
     if (isset($data['no_resep'])) {
         $data = [$data]; // make single object into array
     }
@@ -291,6 +297,27 @@ public function ResepDokterData($noResep)
             log_message('error', 'Missing keys in databarang item: ' . json_encode($item));
         }
     }
+
+    // ✅ Fetch all racikan by no_resep
+    $url_racikan = $this->api_url . '/resep-dokter-racikan-detail/' . $noResep;
+    $ch_racikan = curl_init($url_racikan);
+    curl_setopt($ch_racikan, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch_racikan, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response_racikan = curl_exec($ch_racikan);
+    $http_status_racikan = curl_getinfo($ch_racikan, CURLINFO_HTTP_CODE);
+    curl_close($ch_racikan);
+
+    if ($http_status_racikan === 200) {
+        $racikan_data = json_decode($response_racikan, true);
+        $racikan_list = is_array($racikan_data['data'] ?? null) ? $racikan_data['data'] : [];
+    } else {
+        log_message('error', "Failed to fetch racikan data for no_resep $noResep. HTTP status: $http_status_racikan");
+        $racikan_list = [];
+    }
+
 
     // Get resep_obat header (to fetch kd_dokter)
     $url_header = $this->api_url . '/resep-obat/' . $noResep;
@@ -345,6 +372,7 @@ public function ResepDokterData($noResep)
     $breadcrumbs = $this->getBreadcrumbs();
 
     return view('/admin/resepdokter/resepdokter_data', [
+        'racikan_list'     => $racikan_list,
         'resepdokter_data' => $data,
         'barang_lookup'    => $barang_lookup,
         'harga_lookup'     => $harga_lookup,

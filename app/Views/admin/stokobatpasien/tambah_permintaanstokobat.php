@@ -20,7 +20,8 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Permintaan</label>
                 <input type="text" name="no_permintaan" value="<?= $generated_no_resep ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nomor Rawat</label>
-                <input name="no_rawat" value="<?= $no_rawat ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input name="no_rawat" value="<?= $permintaanstokobat['no_rawat'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+
             </div>
             
             <?php
@@ -37,11 +38,17 @@
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Dokter</label>
-                <input type="text" name="kode_dokter" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
-                <!-- <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status</label>
-                <input name="nomor_rawat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"> -->
-            </div>
+              <label for="dokter-select" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Dokter Peresep</label>
+              <select name="kode_dokter" id="dokter-select" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                  <option value="">Pilih Dokter</option>
+                  <?php foreach ($dokterList as $dokter): ?>
+                      <option value="<?= esc($dokter['kode_dokter']) ?>">
+                          <?= esc($dokter['nama_dokter']) ?>
+                      </option>
+                  <?php endforeach; ?>
+              </select>
+          </div>
+
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label for="obat-select" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pilih Obat:</label>
@@ -85,79 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  submitBtn.addEventListener("click", async function (e) {
-    e.preventDefault();
-
-    const noPermintaanEl = document.querySelector("input[name='no_permintaan']");
-    const tglPermintaanEl = document.querySelector("input[name='tgl_permintaan']");
-    const jamEl = document.querySelector("input[name='jam']");
-    const noRawatEl = document.querySelector("input[name='no_rawat']");
-    const kdDokterEl = document.querySelector("input[name='kode_dokter']");
-
-    if (!noPermintaanEl || !tglPermintaanEl || !jamEl || !noRawatEl || !kdDokterEl) {
-      console.error("❌ One or more form fields not found");
-      return;
-    }
-
-    const payload = {
-      no_permintaan: noPermintaanEl.value,
-      tgl_permintaan: tglPermintaanEl.value,
-      jam: jamEl.value,
-      no_rawat: noRawatEl.value,
-      kd_dokter: kdDokterEl.value,
-      status: "Belum",
-      stok_obat: []
-    };
-
-    document.querySelectorAll(".obat-row").forEach(row => {
-      const kode = row.querySelector("input[name^='kode_barang']")?.value;
-      const jumlah = parseInt(row.querySelector("input[name^='jumlah']")?.value || 0);
-      const aturan = row.querySelector("input[name^='aturan_pakai']")?.value;
-      const embalase = parseFloat(row.querySelector("input[name^='embalase']")?.value || 0);
-      const tuslah = parseFloat(row.querySelector("input[name^='tuslah']")?.value || 0);
-      const kdBangsal = row.querySelector("input[name^='kd_bangsal']")?.value;
-      const noBatch = row.querySelector("input[name^='no_batch']")?.value;
-      const noFaktur = row.querySelector("input[name^='no_faktur']")?.value;
-
-      const jamObat = [];
-      row.querySelectorAll("input[name^='jam_obat']:checked").forEach(cb => {
-        jamObat.push(cb.value);
-      });
-
-      payload.stok_obat.push({
-        kode_barang: kode,
-        jumlah: jumlah,
-        aturan_pakai: aturan,
-        embalase: embalase,
-        tuslah: tuslah,
-        jam_obat: jamObat,
-        kd_bangsal: kdBangsal,
-        no_batch: noBatch,
-        no_faktur: noFaktur
-      });
-    });
-
-    console.log("Stok Obat Count:", payload.stok_obat.length);
-    console.log("Stok Obat Payload:", payload.stok_obat);
-
-    try {
-        const res = await fetch("http://127.0.0.1:8080/v1/permintaan-stok-obat/detail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await res.json();
-      console.log("✅ API Response:", data);
-      alert("✅ Data berhasil disimpan!");
-      window.location.href = "/permintaanstokobat";
-    } catch (err) {
-      console.error("❌ Fetch error:", err);
-      alert("❌ Gagal menyimpan data.");
-    }
-  });
+  
 
   const obatSelect = document.getElementById("obat-select");
   const container = document.getElementById("obat-input-container");

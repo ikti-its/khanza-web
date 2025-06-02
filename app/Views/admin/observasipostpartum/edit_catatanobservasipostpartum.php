@@ -11,10 +11,10 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Edit Observasi Rawat Inap
+                Edit Observasi Rawat Inap Post Partum
             </h2>
         </div>
-        <form action="/pemeriksaanranap/submitedit/<?= $catatan['no_rawat'] ?>" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="/catatanobservasipostpartum/submitedit/<?= $catatan['no_rawat'] ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -45,7 +45,6 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
                     required>
             </div>
 
-
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">GCS (E,V,M)</label>
                 <input name="gudang" value="<?= esc($catatan['gcs']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
@@ -66,6 +65,22 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
                 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">SpO2</label>
                 <input name="total" id="totalObat" value="<?= esc($catatan['spo2']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly>
+            </div>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">TFU</label>
+                <input name="tfu" value="<?= esc($catatan['tfu']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Kontraksi</label>
+                <input name="kontraksi" id="totalObat" value="<?= esc($catatan['kontraksi']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+            </div>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Perdarahan</label>
+                <input name="perdarahan" value="<?= esc($catatan['perdarahan']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Keterangan</label>
+                <input name="keterangan" id="totalObat" value="<?= esc($catatan['keterangan']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
 
             <div class="mt-5 pt-5 border-t flex justify-end gap-x-2">

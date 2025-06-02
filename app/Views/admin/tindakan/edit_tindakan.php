@@ -26,16 +26,20 @@
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tindakan</label>
                     <!-- Select input -->
-                    <select id="tindakanSelect" name="tindakan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <select id="tindakanSelect" name="tindakan" value="<?= $tindakan['nama_tindakan'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                         <option disabled selected value="">Pilih Tindakan</option>
-                        <?php foreach ($jenis_tindakan as $t): ?>
-                            <option 
-                                value="<?= esc($t['kode']) ?>"
-                                data-tarif="<?= esc($t['tarif'] ?? 0) ?>"
-                            >
-                                <?= esc($t['nama_tindakan']) ?>
-                            </option>
-                        <?php endforeach; ?>
+                        <?php if (!empty($jenis_tindakan) && is_array($jenis_tindakan)): ?>
+                            <?php foreach ($jenis_tindakan as $t): ?>
+                                <option 
+                                    value="<?= esc($t['kode']) ?>" 
+                                    data-tarif="<?= esc($t['tarif'] ?? 0) ?>"
+                                >
+                                    <?= esc($t['kode']) ?> - <?= esc($t['nama_tindakan']) ?> (<?= esc($t['kode_bangsal'] ?? '-') ?>) - Rp <?= number_format($t['tarif'] ?? 0, 0, ',', '.') ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <option disabled value="">Tidak ada data tindakan</option>
+                        <?php endif; ?>
                     </select>
 
                     <!-- Hidden fields to submit kode and tarif -->
@@ -44,9 +48,9 @@
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Dokter</label>
-                <input type="text" name="nama_dokter" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <input type="text" name="nama_dokter" value="<?= $tindakan['nama_dokter'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Petugas</label>
-                <input name="nama_petugas" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input name="nama_petugas" value="<?= $tindakan['nama_petugas'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal</label>

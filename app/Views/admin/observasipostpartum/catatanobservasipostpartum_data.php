@@ -16,7 +16,7 @@
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
                             <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
-                                Observasi Rawat Inap
+                                Observasi Rawat Inap Post Partum
                             </h2>
 
                         </div>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
                             <div>
-                                <a href='/catatanobservasikebidanan/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                <a href='/catatanobservasipostpartum/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                     <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
                                         <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                     </svg>
@@ -247,6 +247,24 @@
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">TFU</label>
+                                                        <input type="text" name="" value="<?= $catatan['tfu'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kontraksi</label>
+                                                        <input type="text" name="" value="<?= $catatan['kontraksi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Perdarahan</label>
+                                                        <input type="text" name="" value="<?= $catatan['perdarahan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Keterangan</label>
+                                                        <input type="text" name="" value="<?= $catatan['keterangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">NIP</label>
                                                         <input type="text" name="" value="<?= $catatan['nip'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
@@ -307,7 +325,7 @@
                                                 </button>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <a href="/catatanobservasikebidanan/edit/<?= $catatan['no_rawat'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                <a href="/catatanobservasipostpartum/edit/<?= $catatan['no_rawat'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
                                                     Ubah
                                                 </a>
                                             </div>

@@ -453,8 +453,8 @@
                 </li>
 
                 <li>
-                <?php if (isset(session('user_details')['role']) && in_array(session('user_details')['role'], [2, 3])) : ?>
-                        <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/detailberkaspegawai/<?php echo isset(session('user_specific_data')['pegawai']) ? session('user_specific_data')['pegawai'] : '' ?>
+                    <?php if (session('user_details')['role'] === 2) : ?>
+                        <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/detailberkaspegawai/<?php echo session('user_specific_data')['pegawai'] ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M15.8334 5H13.3334V4.16667C13.3334 3.25 12.5834 2.5 11.6667 2.5H8.33341C7.41675 2.5 6.66675 3.25 6.66675 4.16667V5H4.16675C2.75008 5 1.66675 6.08333 1.66675 7.5V15C1.66675 16.4167 2.75008 17.5 4.16675 17.5H15.8334C17.2501 17.5 18.3334 16.4167 18.3334 15V7.5C18.3334 6.08333 17.2501 5 15.8334 5ZM8.33341 4.16667H11.6667V5H8.33341V4.16667ZM16.6667 15C16.6667 15.5 16.3334 15.8333 15.8334 15.8333H4.16675C3.66675 15.8333 3.33341 15.5 3.33341 15V10.3333H7.00024C7.00024 10.3333 7.00024 10.3333 7.00024 10.3333C7.00024 10.3333 12.4169 10.3333 12.5002 10.3333C12.5836 10.3333 13.4246 10.3333 13.4246 10.3333L16.6667 10.25V15Z" fill="#272727" />
                                 <path d="M15.8332 5H4.1665C3.50346 5 2.86758 5.26339 2.39874 5.73223C1.9299 6.20107 1.6665 6.83696 1.6665 7.5V9.76667L6.74797 11.4612C7.15599 11.5973 7.58328 11.6667 8.01338 11.6667H11.9863C12.4164 11.6667 12.8437 11.5973 13.2517 11.4612L18.3332 9.76667V7.5C18.3332 6.83696 18.0698 6.20107 17.6009 5.73223C17.1321 5.26339 16.4962 5 15.8332 5Z" fill="#272727" />
@@ -462,10 +462,9 @@
                             Pegawai
                         </a>
                     <?php else : ?>
-                        
 
                 <li class="hs-accordion" id="account-accordion">
-                    <button type="button" class="hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    <button type="button" class="hs-accordion-toggle hs-accordion-active:text-slate-700 hs-accordion-active:hover:bg-teal-200 w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 dark:hs-accordion-active:text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M15.8334 5H13.3334V4.16667C13.3334 3.25 12.5834 2.5 11.6667 2.5H8.33341C7.41675 2.5 6.66675 3.25 6.66675 4.16667V5H4.16675C2.75008 5 1.66675 6.08333 1.66675 7.5V15C1.66675 16.4167 2.75008 17.5 4.16675 17.5H15.8334C17.2501 17.5 18.3334 16.4167 18.3334 15V7.5C18.3334 6.08333 17.2501 5 15.8334 5ZM8.33341 4.16667H11.6667V5H8.33341V4.16667ZM16.6667 15C16.6667 15.5 16.3334 15.8333 15.8334 15.8333H4.16675C3.66675 15.8333 3.33341 15.5 3.33341 15V10.3333H7.00024C7.00024 10.3333 7.00024 10.3333 7.00024 10.3333C7.00024 10.3333 12.4169 10.3333 12.5002 10.3333C12.5836 10.3333 13.4246 10.3333 13.4246 10.3333L16.6667 10.25V15Z" fill="#272727" />
                             <path d="M15.8332 5H4.1665C3.50346 5 2.86758 5.26339 2.39874 5.73223C1.9299 6.20107 1.6665 6.83696 1.6665 7.5V9.76667L6.74797 11.4612C7.15599 11.5973 7.58328 11.6667 8.01338 11.6667H11.9863C12.4164 11.6667 12.8437 11.5973 13.2517 11.4612L18.3332 9.76667V7.5C18.3332 6.83696 18.0698 6.20107 17.6009 5.73223C17.1321 5.26339 16.4962 5 15.8332 5Z" fill="#272727" />
@@ -482,17 +481,16 @@
                         </svg>
                     </button>
 
-                    <div id="account-accordion" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
+                    <div id="account-accordion-content" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
                         <ul class="pt-2 ps-2">
                             <li>
-                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" 
-                                    href="/detailberkaspegawai/<?php echo $pegawai; ?>">
-                                        Data Pegawai
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/detailberkaspegawai/<?php echo session('user_specific_data')['pegawai'] ?>">
+                                    Data Pegawai
                                 </a>
                             </li>
 
                             <li>
-                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/datauserpegawai"">
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/datauserpegawai"">
                                     Ketersediaan Pegawai
                                 </a>
                             </li>

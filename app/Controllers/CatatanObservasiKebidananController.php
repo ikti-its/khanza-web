@@ -57,6 +57,7 @@ class CatatanObservasiKebidananController extends BaseController
                 $item['nama_pasien'] = $reg_data['data']['nama_pasien'] ?? '';
                 $item['umur'] = $reg_data['data']['umur'] ?? '';
                 $item['jenis_kelamin'] = $reg_data['data']['jenis_kelamin'] ?? '';
+                $item['nomor_rm'] = $reg_data['data']['nomor_rm'] ?? ''; // ✅ Tambahkan ini
             }
 
             if (!empty($item['nip'])) {
@@ -128,8 +129,11 @@ class CatatanObservasiKebidananController extends BaseController
 
             $postData = [
                 'no_rawat'     => $this->request->getPost('no_rawat'),
-                'tanggal'      => $this->request->getPost('tanggal'),
-                'jam'          => $this->request->getPost('jam'),
+                'nama_pasien'  => $this->request->getPost('nama_pasien'),
+                // 'tgl_lahir'    => $this->request->getPost('tgl_lahir'),
+                'tgl_perawatan'=> $this->request->getPost('tgl_perawatan'),
+                'jam_rawat'    => $this->request->getPost('jam_rawat'),
+                'nip'          => $this->request->getPost('nip'),
                 'gcs'          => $this->request->getPost('gcs'),
                 'td'           => $this->request->getPost('td'),
                 'hr'           => $this->request->getPost('hr'),
@@ -140,9 +144,8 @@ class CatatanObservasiKebidananController extends BaseController
                 'bjj'          => $this->request->getPost('bjj'),
                 'ppv'          => $this->request->getPost('ppv'),
                 'vt'           => $this->request->getPost('vt'),
-                'nip'          => $this->request->getPost('nip'),
             ];
-
+// dd($postData);
             $url = $this->api_url . '/catatan-observasi-ranap-kebidanan';
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -287,7 +290,7 @@ public function submitEditCatatanObservasiKebidanan($noRawat)
     $data = [
         'no_rawat'   => $noRawat,
         'tgl_perawatan' => $tanggal,
-        'jam_rawat'  => $this->request->getPost('jam'),
+        'jam_rawat'  => $this->request->getPost('jam_rawat'),
         'nip'        => $this->request->getPost('nip'),
         'gcs'        => $this->request->getPost('gcs'),
         'td'         => $this->request->getPost('td'),
@@ -300,7 +303,7 @@ public function submitEditCatatanObservasiKebidanan($noRawat)
         'ppv'        => $this->request->getPost('ppv'),
         'vt'         => $this->request->getPost('vt'),
     ];
-
+// dd($data);
     $json = json_encode($data);
 
     $ch = curl_init($url);
@@ -361,7 +364,7 @@ public function submitFromRawatinapToCatatanObservasi($nomor_rawat)
 
     $token = session()->get('jwt_token');
 
-    // Step 1: Fetch rawat inap data
+    // Step 1: Ambil data rawat inap
     $url_rawatinap = $this->api_url . '/rawatinap/' . $nomor_rawat;
     $ch = curl_init($url_rawatinap);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -373,7 +376,6 @@ public function submitFromRawatinapToCatatanObservasi($nomor_rawat)
     curl_close($ch);
 
     $data = json_decode($response, true);
-
     if (!isset($data['data']) || $data['data'] === null) {
         return redirect()->back()->with('error', 'Rawat inap data not found.');
     }
@@ -383,10 +385,45 @@ public function submitFromRawatinapToCatatanObservasi($nomor_rawat)
         return redirect()->back()->with('error', 'Invalid rawat inap data format.');
     }
 
-    // Step 2: Pre-fill catatan observasi form
+    // Step 2: Ambil tgl_lahir dari pasien
+    $nomor_rm = $rawatinap['nomor_rm'] ?? null;
+    $tgl_lahir = '';
+
+    if ($nomor_rm) {
+        $url_pasien = $this->api_url . '/pasien/' . urlencode($nomor_rm);
+        $pch = curl_init($url_pasien);
+        curl_setopt($pch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($pch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $presp = curl_exec($pch);
+        curl_close($pch);
+
+        $pasien_data = json_decode($presp, true);
+        if (isset($pasien_data['data']['tgl_lahir'])) {
+            $tgl_lahir = $pasien_data['data']['tgl_lahir'];
+        }
+    }
+
+    // Step 3: Ambil data pegawai
+    $url_pegawai = $this->api_url . '/pegawai';
+    $pch = curl_init($url_pegawai);
+    curl_setopt($pch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($pch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $presp = curl_exec($pch);
+    curl_close($pch);
+
+    $pegawai_data = json_decode($presp, true);
+    $pegawai_list = $pegawai_data['data'] ?? [];
+
+    // Step 4: Prefill data observasi
     $prefill = [
         'no_rawat'     => $rawatinap['nomor_rawat'] ?? $nomor_rawat,
-        'nip'          => '', // Petugas input sendiri
+        'nip'          => '',
         'nama_pasien'  => $rawatinap['nama_pasien'] ?? '',
         'tanggal'      => $rawatinap['tanggal_masuk'] ?? date('Y-m-d'),
         'jam'          => $rawatinap['jam_masuk'] ?? date('H:i:s'),
@@ -394,6 +431,7 @@ public function submitFromRawatinapToCatatanObservasi($nomor_rawat)
         'bjj'          => '',
         'ppv'          => '',
         'vt'           => '',
+        'tgl_lahir'    => $tgl_lahir,
     ];
 
     $this->addBreadcrumb('User', 'user');
@@ -403,8 +441,101 @@ public function submitFromRawatinapToCatatanObservasi($nomor_rawat)
     return view('/admin/observasikebidanan/tambah_catatanobservasi', [
         'title' => 'Tambah Observasi Kebidanan',
         'breadcrumbs' => $this->getBreadcrumbs(),
-        'prefill' => $prefill
+        'prefill' => $prefill,
+        'pegawai_list' => $pegawai_list
     ]);
 }
+public function lihatCatatanObservasiByNoRawat($no_rawat)
+{
+    $title = 'Catatan Observasi Ranap Kebidanan';
+
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
+
+    $token = session()->get('jwt_token');
+    $url = $this->api_url . '/catatan-observasi-ranap-kebidanan';
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($status !== 200 || !$response) {
+        return $this->renderErrorView($status);
+    }
+
+    $data = json_decode($response, true);
+    if (!isset($data['data']) || !is_array($data['data'])) {
+        return $this->renderErrorView(500);
+    }
+
+    // Filter hanya data dengan no_rawat yang cocok
+    $filtered = array_filter($data['data'], function ($item) use ($no_rawat) {
+        return $item['no_rawat'] === $no_rawat;
+    });
+
+    $list = array_values($filtered);
+
+    // Tambahkan nama pasien & petugas
+    foreach ($list as &$item) {
+        if (isset($item['no_rawat'])) {
+            $registrasi_url = $this->api_url . '/registrasi/by-no-rawat/' . $item['no_rawat'];
+
+            $ch_reg = curl_init($registrasi_url);
+            curl_setopt($ch_reg, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_reg, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Accept: application/json'
+            ]);
+            $response_reg = curl_exec($ch_reg);
+            curl_close($ch_reg);
+
+            $reg_data = json_decode($response_reg, true);
+            $item['nama_pasien'] = $reg_data['data']['nama_pasien'] ?? '';
+            $item['umur'] = $reg_data['data']['umur'] ?? '';
+            $item['jenis_kelamin'] = $reg_data['data']['jenis_kelamin'] ?? '';
+            $item['nomor_rm'] = $reg_data['data']['nomor_rm'] ?? ''; // ✅ Tambahkan ini
+        }
+
+        if (!empty($item['nip'])) {
+            $nip = urlencode($item['nip']);
+            $pegawai_url = $this->api_url . '/pegawai/nip/' . $nip;
+
+            $ch_nama = curl_init($pegawai_url);
+            curl_setopt($ch_nama, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_nama, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $token,
+                'Accept: application/json'
+            ]);
+            $response_nama = curl_exec($ch_nama);
+            curl_close($ch_nama);
+
+            $pegawai_data = json_decode($response_nama, true);
+            $item['nama_petugas'] = $pegawai_data['data']['Nama'] ?? '—';
+        } else {
+            $item['nama_petugas'] = '—';
+        }
+    }
+
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Observasi Kebidanan', 'catatanobservasikebidanan');
+    $breadcrumbs = $this->getBreadcrumbs();
+
+    $meta_data = $data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => count($list)];
+
+    return view('/admin/observasikebidanan/catatanobservasikebidanan_data', [
+        'catatan_data' => $list,
+        'title' => $title,
+        'breadcrumbs' => $breadcrumbs,
+        'meta_data' => $meta_data
+    ]);
+}
+
 
 }
