@@ -685,7 +685,7 @@
                 <?php } ?>
                 </li>
 
-                 <?php if (in_array($role, $petugasdokterrole)) { ?>
+                 <?php if (in_array($role, $petugasrole)) { ?>
                     <li>
                         <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/tindakan">
                         <svg class="h-8 w-8 text-slate-950" width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -699,7 +699,7 @@
                 <?php } ?>
                 </li>
 
-                <?php if (in_array($role, $petugasdokterrole)) { ?>
+                <?php if (in_array($role, $petugasrole)) { ?>
                     <li>
                         <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/pemeriksaanranap">
                         <svg class="h-8 w-8 text-slate-950"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M8 13.5a4 4 0 1 0 4 0v-8.5a2 2 0 0 0 -4 0v8.5" />  <line x1="8" y1="9" x2="12" y2="9" />  <line x1="16" y1="9" x2="22" y2="9" />  <line x1="19" y1="6" x2="19" y2="12" /></svg>
@@ -728,6 +728,7 @@
                     </li>
                 <?php } ?>
                 </li>
+                <?php if (in_array($role, $petugasrole)) { ?>
                 <li class="hs-accordion" id="users-accordion">
                     <button type="button" class="hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     <svg class="h-8 w-8 text-slate-950"  width="23" height="23" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <rect x="4" y="4" width="16" height="16" rx="2" />  <path d="M4 13h3l3 3h4l3 -3h3" /></svg>
@@ -757,9 +758,9 @@
                                         </li>
                                     </ul>
                                 </div>
-                     <?php if (in_array($role, $petugasdokterrole)) { ?>
                 </li>
-                
+                <?php } ?>
+                <?php if (in_array($role, $petugasrole)) { ?>
                     <li>
                         <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/pemberianobat">
                         <svg class="h-8 w-8 text-slate-950"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M4.5 12.5l8 -8a4.94 4.94 0 0 1 7 7l-8 8a4.94 4.94 0 0 1 -7 -7" />  <path d="M8.5 8.5l7 7" /></svg>
@@ -769,7 +770,7 @@
 
                 </li>
                     <?php } ?>
-                 <?php if (in_array($role, $petugasdokterrole)) { ?>
+                 <?php if (in_array($role, $petugasrole)) { ?>
                 <li class="hs-accordion" id="users-accordion">
                     <button type="button" class="hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     <svg class="h-8 w-8 text-slate-950"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />  <path d="M7 12h14l-3 -3m0 6l3 -3" /></svg>

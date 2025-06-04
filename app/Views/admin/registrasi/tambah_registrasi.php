@@ -37,7 +37,7 @@
                                                         $tanggalHariIni = date('Ymd');
 
                                                         $nomor = "REG" . $tanggalHariIni . generateUniqueNumber();
-                                                        echo $nomor; ?>"class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                                                        echo $nomor; ?>"class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required readonly>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nomor Rawat</label>
                 <input name="nomor_rawat" value="<?php function generateUniqueNumber2($length = 15)
                                                         {
@@ -61,18 +61,18 @@
                                                         $tanggalHariIni = date('Ymd');
 
                                                         $nomor = "" . $tanggalHariIni . generateUniqueNumber();
-                                                        echo $nomor; ?>"class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                                                        echo $nomor; ?>"class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required readonly>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Tanggal</label>
-                <input type="text" name="tanggal" value="<?php 
+                <input type="date" name="tanggal" value="<?php 
 
                                                         $tanggalHariIni = date('Y-m-d');
 
                                                         echo $tanggalHariIni; ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam</label>
-                <input type="text" name="jam" value="<?php 
+                <input type="time" name="jam" value="<?php 
 
                     $waktuHariIni = date('H:i:s');
 
@@ -80,30 +80,34 @@
                     ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
             </div>
             <div class="mb-5 sm:block md:flex items-center"> 
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nomor Rekam Medis</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nomor Rekam Medis<span class="text-red-600">*</span></label>
                 <input type="text" id="no_rkm_medis" name="no_rkm_medis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama<span class="text-red-600">*</span></label>
                 <input id="nama_pasien" name="nama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin<span class="text-red-600">*</span></label>
                 <select id="jenis_kelamin" name="jenis_kelamin" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="">-- Pilih --</option>
                     <option value="L">Laki-laki</option>
                     <option value="P">Perempuan</option>
                 </select>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur<span class="text-red-600">*</span></label>
                 <input id="umur" name="umur" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Poliklinik</label>
-                <select name="poliklinik" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="Poli Umum">Poli Umum</option>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Poliklinik<span class="text-red-600">*</span>
+                </label>
+                <select name="poliklinik" id="poliklinik-select"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required>
+                    <option value="">Memuat...</option>
                 </select>
-                <label for="dokter" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Dokter</label>
+                <label for="dokter" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Dokter<span class="text-red-600">*</span></label>
                 <select name="kode_dokter" id="dokter" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="">-- Pilih Dokter --</option>
                 </select>
@@ -128,37 +132,37 @@
             <div class="mb-5 sm:block md:flex items-center">
             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat Penanggung Jawab</label>
             <input type="text" id="alamat_pj" name="alamat_penanggung_jawab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
-                <label class="block w-full mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white md:w-1/5">Nomor Telepon</label>
+                <label class="block w-full mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white md:w-1/5">Nomor Telepon<span class="text-red-600">*</span></label>
                 <input name="nomor_telepon" id="no_telp" class=" border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Biaya Registrasi</label>
-                <input type="number" name="biaya_registrasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0">
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Registrasi</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Biaya Registrasi<span class="text-red-600">*</span></label>
+                <input type="number" name="biaya_registrasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0"v required>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Registrasi<span class="text-red-600">*</span></label>
                 <select name="status_registrasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="Baru">Baru</option>
                     <option value="Lama">Lama</option>
                 </select>
             </div>
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Status Rawat</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Status Rawat<span class="text-red-600">*</span></label>
                 <select name="status_rawat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="Belum">Belum</option>
                     <option value="Sudah">Sudah</option>
                 </select>
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Poliklinik</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Poliklinik<span class="text-red-600">*</span></label>
                 <select name="status_poliklinik" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="Baru">Baru</option>
                     <option value="Lama">Lama</option>
                 </select>
             </div>
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Bayar</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Bayar<span class="text-red-600">*</span></label>
                 <select name="jenis_bayar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="BPJS">BPJS</option>
                     <option value="non-BPJS">non-BPJS</option>
                 </select>
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Bayar</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Bayar<span class="text-red-600">*</span></label>
                 <select name="status_bayar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="Belum Bayar">Belum Bayar</option>
                     <option value="Sudah Bayar">Sudah Bayar</option>
@@ -178,6 +182,29 @@
 </div>
 <!-- End Card Section -->
 <script>
+document.addEventListener("DOMContentLoaded", async function () {
+    const select = document.querySelector("select[name='poliklinik']");
+
+    try {
+        const response = await fetch("http://127.0.0.1:8080/v1/dokterjaga/poliklinik-list");
+        const result = await response.json();
+
+        select.innerHTML = '<option value="">Pilih Poliklinik</option>';
+
+        if (Array.isArray(result.data)) {
+            result.data.forEach(poli => {
+                const option = document.createElement("option");
+                option.value = poli;
+                option.textContent = poli;
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error("Error fetching poliklinik list:", error);
+        select.innerHTML = '<option value="">Gagal memuat data</option>';
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     const nomorRMInput = document.querySelector('input[name="no_rkm_medis"]');
     const token = "<?= session()->get('jwt_token') ?>"; // ensure this prints a token
@@ -215,6 +242,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('alamat_pj').value = pasien.alamatpj || '';
                 document.getElementById('no_telp').value = pasien.no_tlp || '';
                 document.getElementById('hubungan_pj').value = pasien.keluarga || '';
+
+                const statusSelect = document.querySelector('select[name="status_registrasi"]');
+                if (statusSelect) {
+                    statusSelect.value = 'Lama';
+                }
 
             } else {
                 console.warn("⚠️ Data pasien tidak ditemukan atau format salah.");

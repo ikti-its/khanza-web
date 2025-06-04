@@ -19,10 +19,10 @@
                                     <span class="w-48">Nomor Rawat</span> : <?= $tindakan_data[0]['nomor_rawat'] ?>
                                 </div>
                                 <div class="flex">
-                                    <span class="w-48">Nomor Rekam Medis</span> : <?= $tindakan_data[0]['nomor_rm'] ?>
+                                    <span class="w-48">Nama Pasien</span> : <?= $tindakan_data[0]['nama_pasien'] ?>
                                 </div>
                                 <div class="flex">
-                                    <span class="w-48">Nama Pasien</span> : <?= $tindakan_data[0]['nama_pasien'] ?>
+                                    <span class="w-48">Kelas</span> : <?= esc($kelas ?? '-') ?>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -192,6 +192,25 @@
 
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        <?php 
+                            $total_biaya = 0; 
+
+                            foreach ($tindakan_data as $item) {
+                                $total_biaya += intval($item['biaya'] ?? 0);
+                            }
+                            ?>
+
+                            <tfoot class="bg-gray-100 dark:bg-slate-800">
+                                <tr>
+                                    <td colspan="4"></td>
+                                    <td class="px-6 py-4 font-bold text-right text-gray-800 dark:text-gray-200">Total Biaya</td>
+                                    <td class="px-6 py-4 font-bold text-gray-800 dark:text-gray-200">
+                                        <?= 'Rp ' . number_format($total_biaya, 0, ',', '.') ?>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+
                         <?php
                             $namaTindakanMap = [];
                             foreach ($jenis_tindakan as $jt) {

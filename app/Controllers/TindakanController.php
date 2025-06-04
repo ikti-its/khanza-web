@@ -50,7 +50,7 @@ class TindakanController extends BaseController
             $this->addBreadcrumb('User', 'user');
             $this->addBreadcrumb('Tindakan', 'tindakan');
             $breadcrumbs = $this->getBreadcrumbs();
-    
+
             return view('/admin/tindakan/tindakan_data', [
                 'tindakan_data' => $tindakan_data['data'],
                 'jenis_tindakan' => $jenis_tindakan,
@@ -294,7 +294,7 @@ public function submitEditTindakan($nomorRawat)
     }
     
 
-    public function tindakanData($nomorRawat)
+public function tindakanData($nomorRawat)
 {
     $title = 'Detail Tindakan';
 
@@ -303,8 +303,9 @@ public function submitEditTindakan($nomorRawat)
     }
 
     $token = session()->get('jwt_token');
-    $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
 
+    // 🔹 Fetch tindakan data
+    $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
     $ch = curl_init($tindakan_url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -315,22 +316,23 @@ public function submitEditTindakan($nomorRawat)
     $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    $data = []; // ✅ default empty array
+    $data = [];
+    $tindakan_data = [];
+
     if ($http_status === 200) {
         $tindakan_data = json_decode($response, true);
 
         if (isset($tindakan_data['data'])) {
             $data = $tindakan_data['data'];
 
-            // Ensure it's an array
+            // Normalize to array
             if (isset($data['nomor_rawat'])) {
                 $data = [$data];
             }
         }
     }
-    // ✅ If 404 or no data, just continue showing empty table without error
 
-    // Fetch jenis tindakan
+    // 🔹 Fetch jenis tindakan
     $jenis_url = $this->api_url . '/tindakan/jenis';
     $ch2 = curl_init($jenis_url);
     curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
@@ -343,18 +345,53 @@ public function submitEditTindakan($nomorRawat)
     $jenis_data = json_decode($jenis_response, true);
     $jenis_tindakan = $jenis_data['data'] ?? [];
 
+    // 🔹 Fetch rawat inap to get nomor_bed
+    $ranap_url = $this->api_url . '/rawatinap/' . $nomorRawat;
+
+    $ch3 = curl_init($ranap_url);
+    curl_setopt($ch3, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch3, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $ranap_response = curl_exec($ch3);
+    curl_close($ch3);
+
+    $ranap_data = json_decode($ranap_response, true);
+    $nomor_bed = $ranap_data['data']['kamar'] ?? null;
+// dd($nomor_bed);
+    $kelas = null;
+
+    // 🔹 Fetch kamar if nomor_bed is available
+    if ($nomor_bed) {
+        $kamar_url = $this->api_url . '/kamar/' . $nomor_bed;
+        $ch4 = curl_init($kamar_url);
+        curl_setopt($ch4, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch4, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $kamar_response = curl_exec($ch4);
+        curl_close($ch4);
+
+        $kamar_data = json_decode($kamar_response, true);
+        $kelas = $kamar_data['data']['kelas'] ?? null;
+    }
+
     $this->addBreadcrumb('User', 'user');
     $this->addBreadcrumb('Tindakan', 'tindakan');
     $breadcrumbs = $this->getBreadcrumbs();
-
+// dd($kelas);
     return view('/admin/tindakan/tindakan_data', [
         'tindakan_data' => $data,
         'jenis_tindakan' => $jenis_tindakan,
+        'kelas' => $kelas,
         'title' => $title,
         'breadcrumbs' => $breadcrumbs,
         'meta_data' => $tindakan_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 0],
     ]);
 }
+
 
     
 

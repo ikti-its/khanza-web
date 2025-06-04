@@ -11,7 +11,7 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
         <div class="mb-8">
             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Edit Observasi Rawat Inap
+                Edit Observasi Rawat Inap Kebidanan
             </h2>
         </div>
         <form action="/catatanobservasikebidanan/submitedit/<?= $catatan['no_rawat'] ?>" id="myForm" onsubmit="return validateForm()" method="post">

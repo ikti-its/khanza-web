@@ -18,25 +18,25 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Rawat</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Rawat<span class="text-red-600">*</span></label>
                 <input name="nomor_rawat" value="<?= esc($prefill['nomor_rawat'] ?? '') ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Pasien</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Pasien<span class="text-red-600">*</span></label>
                 <input name="nama_pasien" value="<?= esc($prefill['nama_pasien'] ?? '') ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal</label>
-                <input name="tgl_perawatan" value="<?= date('Y-m-d') ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal<span class="text-red-600">*</span></label>
+                <input type="date" name="tgl_perawatan" value="<?= date('Y-m-d') ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam</label>
-                <input name="jam_rawat" value="<?= date('H:i:s') ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam<span class="text-red-600">*</span></label>
+                <input type="time" name="jam_rawat" value="<?= date('H:i:s') ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <!-- NIP Select + Autofill -->
             <div class="mb-5 sm:block md:flex items-center">
                 <!-- NIP Input -->
-                <label for="nip-input" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">NIP</label>
+                <label for="nip-input" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kode Dokter/Perawat<span class="text-red-600">*</span></label>
                 <input list="nip-list" id="nip-input" name="nip" type="text"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white"
                     required>
@@ -50,10 +50,10 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
                 </datalist>
 
                 <!-- Petugas Name Output -->
-                <label for="petugas-input" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Petugas</label>
+                <label for="petugas-input" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama</label>
                 <input id="petugas-input" name="nama_petugas" type="text"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required readonly>
+                     readonly>
             </div>
 
             <!-- Profesi/Jabatan Output -->
@@ -61,66 +61,71 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
                 <label for="profesi-input" class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Profesi/Jabatan</label>
                 <input id="profesi-input" name="profesi" type="text"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required readonly>
+                     readonly>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">GCS (E,V,M)</label>
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">GCS (E,V,M)<span class="text-red-600">*</span></label>
                 <input name="gcs" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">TD (mmHg)</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">TD (mmHg)<span class="text-red-600">*</span></label>
                 <input name="tensi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">HR (x/menit)</label>
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">HR (x/menit)<span class="text-red-600">*</span></label>
                 <input name="nadi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">RR (x/menit)</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">RR (x/menit)<span class="text-red-600">*</span></label>
                 <input name="respirasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Suhu</label>
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Suhu (°C)<span class="text-red-600">*</span></label>
                 <input name="suhu_tubuh" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">SpO2</label>
-                <input name="spo2" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">SpO2 (%)<span class="text-red-600">*</span></label>
+                <input name="spo2" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Tinggi</label>
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Tinggi (cm)<span class="text-red-600">*</span></label>
                 <input name="tinggi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Berat</label>
-                <input name="berat" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Berat (kg)<span class="text-red-600">*</span></label>
+                <input name="berat" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Subjek</label>
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Subjek<span class="text-red-600">*</span></label>
                 <input name="keluhan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Objek</label>
-                <input name="pemeriksaan" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Objek<span class="text-red-600">*</span></label>
+                <input name="pemeriksaan" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Kesadaran</label>
-                <input name="kesadaran" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Alergi</label>
-                <input name="alergi" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Kesadaran<span class="text-red-600">*</span></label>
+                <select name="kesadaran" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="Compos Mentis">Compos Mentis</option>
+                    <option value="Somnolence">Somnolence</option>
+                    <option value="Sopor">Sopor</option>
+                    <option value="Coma">Coma</option>
+                </select>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Alergi<span class="text-red-600">*</span></label>
+                <input name="alergi" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Asesmen</label>
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Asesmen<span class="text-red-600">*</span></label>
                 <input name="penilaian" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Plan</label>
-                <input name="rtl" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Plan<span class="text-red-600">*</span></label>
+                <input name="rtl" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Instruksi</label>
-                <input name="instruksi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input name="instruksi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
                 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Evaluasi</label>
                 <input name="evaluasi" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
@@ -143,6 +148,7 @@ async function fetchFromBothEndpoints(nip) {
   const token = "<?= session()->get('jwt_token') ?>";
 
   try {
+    // 🔍 Check pegawai first
     const pegawaiRes = await fetch(`http://127.0.0.1:8080/v1/pegawai/nip/${encodeURIComponent(nip)}`, {
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -152,38 +158,50 @@ async function fetchFromBothEndpoints(nip) {
 
     if (pegawaiRes.ok) {
       const data = await pegawaiRes.json();
-      console.log("🧪 Pegawai/Dokter API response:", data);
+      console.log("🧪 Pegawai API response:", data);
       return {
         nama: data.nama || data.data?.Nama || '',
         profesi: data.data?.Jabatan || 'Pegawai'
       };
-    } else if (pegawaiRes.status !== 404) {
-      throw new Error(`Unexpected error from pegawai: ${pegawaiRes.status}`);
     }
 
-    const dokterRes = await fetch(`http://127.0.0.1:8080/v1/dokter/${encodeURIComponent(nip)}`, {
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Accept": "application/json"
+    // 🔍 If pegawai not found, try dokter
+    if (pegawaiRes.status === 404) {
+      const dokterRes = await fetch(`http://127.0.0.1:8080/v1/dokter/${encodeURIComponent(nip)}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Accept": "application/json"
+        }
+      });
+
+      if (dokterRes.ok) {
+        const data = await dokterRes.json();
+        console.log("🧪 Dokter API response:", data);
+        return {
+          nama: data.nama || data.data?.nama_dokter || '',
+          profesi: data.data?.Jabatan || 'Dokter'
+        };
       }
-    });
 
-    if (dokterRes.ok) {
-      const data = await dokterRes.json();
-      console.log("🧪 Pegawai/Dokter API response:", data);
-      return {
-        nama: data.nama || data.data?.Nama || '',
-        profesi: data.data?.Jabatan || 'Dokter'
-      };
-    } else {
-      throw new Error(`NIP not found in both tables`);
+      if (dokterRes.status === 404) {
+        alert("Tolong masukkan kode dokter atau petugas.");
+        return null;
+      }
+
+      // Unexpected dokter error
+      throw new Error(`Unexpected error from dokter: ${dokterRes.status}`);
     }
+
+    // Unexpected pegawai error
+    throw new Error(`Unexpected error from pegawai: ${pegawaiRes.status}`);
 
   } catch (err) {
     console.error("❌ Error in fetchFromBothEndpoints:", err);
+    alert("Terjadi kesalahan saat mencari data NIP.");
     return null;
   }
 }
+
 
 
 document.addEventListener("DOMContentLoaded", function () {

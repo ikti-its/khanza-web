@@ -154,7 +154,7 @@ class RegistrasiController extends BaseController
                 'status_poli' => $status_poliklinik,
                 'jenis_bayar' => $jenis_bayar,
             ];
-    
+    // dd($postDataRegistrasi);
             // Example cURL or database insertion logic goes here to save this data in PostgreSQL
             // Assuming you use cURL for external APIs like you did previously:
             

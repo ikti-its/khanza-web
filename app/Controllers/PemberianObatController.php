@@ -165,6 +165,7 @@ public function editPemberianObat($nomorRawat, $jamBeri)
     $token = session()->get('jwt_token');
     $title = 'Edit Pemberian Obat';
 
+    // ✅ Ambil data pemberian obat
     $url = $this->api_url . '/pemberian-obat/' . $nomorRawat;
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -177,7 +178,7 @@ public function editPemberianObat($nomorRawat, $jamBeri)
     $data = json_decode($response, true);
     $selectedObat = [];
 
-    // ✅ Find the pemberian obat with matching jam_beri
+    // ✅ Temukan data sesuai jam_beri
     if (isset($data['data']) && is_array($data['data'])) {
         foreach ($data['data'] as $item) {
             if ($item['jam_beri'] === $jamBeri) {
@@ -187,16 +188,33 @@ public function editPemberianObat($nomorRawat, $jamBeri)
         }
     }
 
+    // ✅ Ambil kelas dari selectedObat, default ke 'dasar'
+    $kelas = $selectedObat['kelas'] ?? 'dasar';
+    $obatUrl = $this->api_url . '/pemberian-obat/databarang?kelas=' . $kelas;
+    $ch = curl_init($obatUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $obatResponse = curl_exec($ch);
+    curl_close($ch);
+
+    $obatData = json_decode($obatResponse, true);
+    $obat_list = $obatData['data'] ?? [];
+
+    // ✅ Breadcrumb
     $this->addBreadcrumb('User', 'user');
     $this->addBreadcrumb('Pemberian Obat', 'pemberianobat');
     $this->addBreadcrumb('Edit', 'edit');
-
+// dd($selectedObat);
     return view('/admin/pemberianObat/edit_pemberianobat', [
         'pemberianobat' => $selectedObat,
+        'obat_list' => $obat_list,
         'title' => $title,
         'breadcrumbs' => $this->getBreadcrumbs()
     ]);
 }
+
 
 public function submitEditPemberianObat($nomorRawat)
 {
