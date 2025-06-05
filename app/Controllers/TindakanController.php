@@ -107,8 +107,8 @@ class TindakanController extends BaseController
         $this->addBreadcrumb('User', 'user');
         $this->addBreadcrumb('Tindakan', 'tindakan');
         $this->addBreadcrumb('Tambah', 'tambah');
-    
-        return view('/admin/tindakan/tambah_tindakan', [
+    // dd($tindakan_data['data'][0]);
+        return view('/admin/tindakan/tambah_tindakan_id', [
             'tindakan' => $tindakan_data['data'][0] ?? [],
             'jenis_tindakan' => $jenis_tindakan,
             'title' => $title,
