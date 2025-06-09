@@ -76,9 +76,9 @@
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
                             <?php if (!empty($resepobat_data)) : ?>
-                                <?php $nomor_rawat = $resepobat_data['nomor_rawat'] ?? ''; ?>
+                                <?php $no_rawat = $resepobat[0]['nomor_rawat'] ?? ''; ?>
                                 <div>
-                                    <a href="<?= base_url('resepobat/tambah') . '?nomor_rawat=' . $nomor_rawat ?>"
+                                    <a href="<?= base_url('resepobat/tambah/' . $no_rawat) ?>"
                                     class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                         <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
                                             <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -240,15 +240,15 @@
                                                         <input type="text" name="" value="<?= $resepobat['status'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
-                                                    <div class="mb-5 sm:block">
+                                                    <!-- <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Poli/Unit</label>
-                                                        <input type="text" name="" value="<?= $resepobat['poli'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                        <input type="text" name="" value="<?= $resepobat['poli'] ?? '' ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Bayar</label>
-                                                        <input type="text" name="" value="<?= $resepobat['jenis_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
+                                                        <input type="text" name="" value="<?= $resepobat['jenis_bayar'] ?? ''  ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div> -->
 
                                                     <div class="mb-5 sm:block">
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Validasi</label>

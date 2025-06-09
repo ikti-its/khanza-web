@@ -7,7 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class RawatInapController extends BaseController
 {
-    public function dataRawatInap()
+public function dataRawatInap()
 {
     $title = 'Data Rawat Inap';
 
@@ -28,8 +28,6 @@ class RawatInapController extends BaseController
     $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    log_message('error', 'Rawat Inap API Response: ' . $response);
-
     if ($http_status !== 200) {
         return $this->renderErrorView($http_status);
     }
@@ -41,7 +39,6 @@ class RawatInapController extends BaseController
 
     $rawatinapList = $data['data'];
 
-    // ✅ Calculate lama_ranap and total_biaya
     foreach ($rawatinapList as &$ri) {
         $tanggalMasuk = $ri['tanggal_masuk'] ?? null;
         $tarifKamar = floatval($ri['tarif_kamar'] ?? 0);
@@ -60,11 +57,41 @@ class RawatInapController extends BaseController
             }
 
             $ri['lama_ranap'] = $lamaRanap;
-            $ri['total_biaya'] = $lamaRanap * $tarifKamar;
+            $totalBiayaKamar = $lamaRanap * $tarifKamar;
         } else {
             $ri['lama_ranap'] = 0;
-            $ri['total_biaya'] = 0;
+            $totalBiayaKamar = 0;
         }
+
+        // ✅ Fetch biaya from tindakan
+        $nomorRawat = $ri['nomor_rawat'];
+        $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
+
+        $ct = curl_init($tindakan_url);
+        curl_setopt($ct, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ct, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $tindakan_response = curl_exec($ct);
+        curl_close($ct);
+
+        $tindakan_data = json_decode($tindakan_response, true);
+        $tindakanList = $tindakan_data['data'] ?? [];
+
+        // Normalize to array if single object
+        if (isset($tindakanList['nomor_rawat'])) {
+            $tindakanList = [$tindakanList];
+        }
+
+        $totalBiayaTindakan = 0;
+        foreach ($tindakanList as $tindakan) {
+            $totalBiayaTindakan += intval($tindakan['biaya'] ?? 0);
+        }
+
+        $ri['total_biaya'] = $totalBiayaKamar + $totalBiayaTindakan;
+        $ri['total_biaya_kamar'] = $totalBiayaKamar;
+        $ri['total_biaya_tindakan'] = $totalBiayaTindakan;
     }
 
     $this->addBreadcrumb('User', 'user');
@@ -78,6 +105,7 @@ class RawatInapController extends BaseController
         'meta_data' => $data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1]
     ]);
 }
+
 
 
     public function submitTambahRawatInap()

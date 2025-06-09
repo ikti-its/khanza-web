@@ -166,34 +166,61 @@ obatSelect.addEventListener("change", function () {
                     })
                     .then(res => res.json())
                     .then(data => {
-                        console.log('API response:', data); // 👈 log the whole response
-                        const stok = data?.data?.stok ?? 'N/A';
+                    console.log('API response:', data); // 👈 log the whole response
+                    const stok = data?.data?.stokminimal ?? 'N/A';
+                    const kapasitas = data?.data?.kapasitas ?? 'N/A';
+                    const token = sessionStorage.getItem('jwt_token');
+
+                    const wrapper = document.createElement("div");
+                    wrapper.id = `group-${kode}`;
+                    wrapper.classList.add("mb-6", "border", "p-4", "rounded-xl", "shadow-sm");
 
                     wrapper.innerHTML = `
-                    <div class="mb-6">
-                        <label class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">${nama}<span class="text-xs text-gray-500">(Stok: ${stok})</span></label>
-
-                        <!-- Row 1: Jumlah & Aturan Pakai -->
-                        <div class="mb-5 sm:block md:flex items-center">
-                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">P1</label>
-                        <input type="number" name="p1[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-
-                        <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">P2</label>
-                        <input type="text" name="p2[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                        <div class="flex items-center mb-2">
+                            <input type="checkbox" id="checkbox-${kode}" class="checkbox-kode mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded" checked>
+                            <label for="checkbox-${kode}" class="text-sm font-bold text-gray-900 dark:text-white">
+                                ${nama} <span class="text-xs text-gray-500">(Stok: ${stok})</span>
+                            </label>
                         </div>
 
-                        <!-- Row 2: Embalase & Tuslah -->
+                        <!-- Row: Stok & Kapasitas -->
                         <div class="mb-5 sm:block md:flex items-center">
-                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kandungan</label>
-                        <input type="number" step="0.01" name="kandungan[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Stok</label>
+                            <input type="number" step="0.01" name="stok[${kode}]" value="${stok}" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" readonly>
 
-                        <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jumlah</label>
-                        <input type="number" step="0.01" name="jml[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                            <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Kapasitas</label>
+                            <input type="number" step="0.01" name="kapasitas[${kode}]" value="${kapasitas}" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly>
+                        </div>
+
+                        <!-- Row: P1 & P2 -->
+                        <div class="mb-5 sm:block md:flex items-center">
+                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">P1/P2</label>
+                            <div class="flex gap-4">
+                                <input type="text" name="p1[${kode}]" placeholder="P1" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-1/4 dark:border-gray-600 dark:text-white" required>
+                                <input type="text" name="p2[${kode}]" placeholder="P2" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-1/4 dark:border-gray-600 dark:text-white" required>
+                            </div>
+                        </div>
+
+                        <!-- Row: Kandungan & Jumlah -->
+                        <div class="mb-5 sm:block md:flex items-center">
+                            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kandungan</label>
+                            <input type="number" step="0.01" name="kandungan_input[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+
+                            <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jumlah</label>
+                            <input type="number" step="0.01" name="jml_input[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
                         </div>
 
                         <input type="hidden" name="kode_barang[]" value="${kode}">
-                    </div>
                     `;
+
+                    container.appendChild(wrapper);
+
+                    // Checkbox event: remove section if unchecked
+                    document.getElementById(`checkbox-${kode}`).addEventListener("change", function () {
+                        if (!this.checked) {
+                            document.getElementById(`group-${kode}`).remove();
+                        }
+                    });
 
                     container.appendChild(wrapper);
                 })}

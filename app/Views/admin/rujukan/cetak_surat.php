@@ -23,15 +23,32 @@
 
   <div class="print-area" id="printThis">
     <div class="header">
-      RS SIMRS KHANZA<br>
-      GUWOSARI, Pajangan, Bantul<br>
-      Hp: 08562675039, 085296559963<br>
-      Email : khanzasoftmedia@gmail.com
+      <?= $organisasi['nama'] ?? 'Rumah Sakit' ?><br>
+      <?= $organisasi['alamat'] ?? '-' ?><br>
+      <?= $organisasi['no_telp'] ?? 'Hp: 08562675039, 085296559963' ?><br>
+      Email : rumahsakitbhayangkara@gmail.com
     </div>
 
     <hr>
 
-    <p class="right">Pajangan, <?= date('d-m-Y', strtotime($rujukan['tanggal_rujuk'])) ?></p>
+    <p class="right">Surabaya, <?php
+function formatTanggalIndo($tanggal)
+{
+    $bulan = [
+        1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    $date = new DateTime($tanggal);
+    $day = $date->format('j');
+    $month = (int) $date->format('n');
+    $year = $date->format('Y');
+
+    return "$day {$bulan[$month]} $year";
+}
+?>
+
+<?= formatTanggalIndo($rujukan['tanggal_rujuk']) ?></p>
 
     <div class="meta">
       <p>Nomor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?= esc($rujukan['nomor_rujuk']) ?></p>
@@ -45,15 +62,18 @@
 
     <br>
     <p>Bersama ini kami beritahukan bahwa kami telah merawat / memeriksa pasien berikut ini.</p>
+    <p>Mohon pemeriksaan dan penanganan lebih lanjut penderita :</p>
 
     <div class="info indent">
-      <p>Tanggal Rawat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?= date('d-m-Y', strtotime($rujukan['tanggal_rujuk'])) ?></p>
+      <p>Tanggal Rawat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?= formatTanggalIndo($rujukan['tanggal_rujuk']) ?></p>
       <p>Nama Pasien&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?= esc($rujukan['nama_pasien']) ?></p>
       <p>No. Rekam Medis&nbsp;&nbsp;: <?= esc($rujukan['nomor_rm']) ?></p>
-      <p>Alamat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: - </p>
-      <p>Diagnosa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?= esc($rujukan['keterangan_diagnosa']) ?></p>
-      <p>Tindakan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
-      <p>Terapi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: -</p>
+      <p>Alamat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?= $rawatinap['alamat_pasien'] ?? '-' ?> </p>
+      <p>Diagnosa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?= esc($rujukan['keterangan_diagnosa']) ?></p>
+      <?php foreach ($tindakanList as $t): ?>
+      <p>Tindakan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?= $t['nama_tindakan'] ?? '-' ?> </p>
+      <?php endforeach; ?>
+      <p>Terapi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: -</p>
     </div>
 
     <br>
@@ -61,7 +81,7 @@
     <p>Atas kerjasamanya kami ucapkan terima kasih</p>
 
     <div class="signature">
-      RS SIMRS KHANZA<br>
+      <?= $organisasi['nama'] ?? 'Rumah Sakit' ?><br>
       Dokter yang merawat,
     </div>
 

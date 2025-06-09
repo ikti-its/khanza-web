@@ -147,7 +147,7 @@ class ResepObatController extends BaseController
         $this->addBreadcrumb('User', 'user');
         $this->addBreadcrumb('Resep Obat', 'resepobat');
         $this->addBreadcrumb('Tambah', 'tambah');
-
+// dd($resep);
         return view('/admin/resepobat/tambah_resepobat', [
             'resepobat' => $resep,
             'title' => $title,
@@ -155,6 +155,75 @@ class ResepObatController extends BaseController
             'breadcrumbs' => $this->getBreadcrumbs()
         ]);
     }
+
+public function tambahResepObatId($nomorRawat)
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
+
+    $token = session()->get('jwt_token');
+    $title = 'Tambah Resep Obat';
+    $resep = [];
+
+    if ($nomorRawat) {
+        $url = $this->api_url . '/rawatinap/' . $nomorRawat;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $parsed = json_decode($response, true);
+        log_message('debug', print_r($parsed, true));
+
+        if (isset($parsed['data'])) {
+            $rawatinap = $parsed['data'];
+            $resep = [
+                'nomor_rm'      => $rawatinap['nomor_rm'] ?? '',
+                'nomor_rawat'   => $rawatinap['nomor_rawat'] ?? '',
+                'nama_pasien'   => $rawatinap['nama_pasien'] ?? '',
+                'nama_dokter'   => $rawatinap['nama_dokter'] ?? '',
+                'kode_dokter'   => $rawatinap['kode_dokter'] ?? '',
+                'no_resep'      => 'RSP' . date('Ymd') . rand(1000, 9999),
+                'tgl_peresepan' => date('Y-m-d'),
+                'jam_peresepan' => date('H:i:s')
+            ];
+        }
+    }
+
+    // get obat data
+    $obat = [];
+    $ch = curl_init($this->api_url . '/pemberian-obat/databarang');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+    if (isset($data['data'])) {
+        $obat = $data['data'];
+    }
+
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Resep Obat', 'resepobat');
+    $this->addBreadcrumb('Tambah', 'tambah');
+// dd($resep);
+    return view('/admin/resepobat/tambah_resepobat', [
+        'resepobat'   => $resep,
+        'nomor_rawat'=> $resep['nomor_rawat'] ?? '',
+        'nomor_rm'   => $resep['nomor_rm'] ?? '',
+        'title'      => $title,
+        'obat_list'  => $obat,
+        'breadcrumbs'=> $this->getBreadcrumbs()
+    ]);
+}
 
     public function submitTambahResepObat()
 {
@@ -376,49 +445,77 @@ public function ResepObatData($nomorRawat)
     $token = session()->get('jwt_token');
     $url = $this->api_url . '/resep-obat/by-nomor-rawat/' . $nomorRawat;
 
-    try {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+
+    if ($response === false) {
+        $error = curl_error($ch);
+        curl_close($ch);
+        log_message('error', 'cURL Error: ' . $error);
+        return $this->renderErrorView(500);
+    }
+
+    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    log_message('error', 'ResepObatData Response: ' . $response);
+    log_message('error', 'ResepObatData HTTP Status: ' . $http_status);
+
+    if ($http_status !== 200) {
+        return $this->renderErrorView($http_status);
+    }
+
+    $resep_data = json_decode($response, true);
+
+    if (!isset($resep_data['data'])) {
+        log_message('error', 'ResepObatData: data key not found');
+        return $this->renderErrorView(500);
+    }
+
+    $data = $resep_data['data'];
+
+    // 🔄 Enrich with nomor_rm and nama_pasien from rawatinap API
+    foreach ($data as &$item) {
+        $rawatUrl = $this->api_url . '/rawatinap/' . $item['no_rawat'];
+
+        $rawatCh = curl_init($rawatUrl);
+        curl_setopt($rawatCh, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($rawatCh, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $token,
             'Accept: application/json'
         ]);
-        $response = curl_exec($ch);
-        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+        $rawatResponse = curl_exec($rawatCh);
+        curl_close($rawatCh);
 
-        log_message('error', 'ResepObatData Response: ' . $response);
-        log_message('error', 'ResepObatData HTTP Status: ' . $http_status);
+        $rawatData = json_decode($rawatResponse, true);
 
-        if ($http_status !== 200) {
-            return $this->renderErrorView($http_status);
+        if (isset($rawatData['data'])) {
+            $item['nomor_rm'] = $rawatData['data']['nomor_rm'] ?? '';
+            $item['nama_pasien'] = $rawatData['data']['nama_pasien'] ?? '';
+        } else {
+            $item['nomor_rm'] = '';
+            $item['nama_pasien'] = '';
         }
-
-        $resep_data = json_decode($response, true);
-
-        if (!isset($resep_data['data'])) {
-            log_message('error', 'ResepObatData: data key not found');
-            return $this->renderErrorView(500);
-        }
-
-        $data = $resep_data['data']; // already an array
-
-        $this->addBreadcrumb('User', 'user');
-        $this->addBreadcrumb('Resep Obat', 'resepobat');
-        $breadcrumbs = $this->getBreadcrumbs();
-
-        return view('/admin/resepobat/resepobat_data', [
-            'resepobat_data' => $data,
-            'title' => $title,
-            'breadcrumbs' => $breadcrumbs,
-            'meta_data' => $resep_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
-        ]);
-
-    } catch (\Throwable $e) {
-        log_message('critical', 'ResepObatData Exception: ' . $e->getMessage());
-        return $this->renderErrorView(500);
     }
+
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Resep Obat', 'resepobat');
+    $breadcrumbs = $this->getBreadcrumbs();
+// dd($data);
+    return view('/admin/resepobat/resepobat_data', [
+        'resepobat_data' => $data,
+        'title' => $title,
+        'breadcrumbs' => $breadcrumbs,
+        'meta_data' => $resep_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
+    ]);
 }
+
+
 
 private function getObatListFromAPI($token)
 {

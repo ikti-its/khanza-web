@@ -65,56 +65,102 @@ class TindakanController extends BaseController
     
 
     public function tambahTindakan($nomorRawat)
-    {
-        if (!session()->has('jwt_token')) {
-            return $this->renderErrorView(401);
-        }
-    
-        $token = session()->get('jwt_token');
-        $title = 'Edit Tindakan';
-    
-        // Fetch specific tindakan data
-        $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
-        $ch = curl_init($tindakan_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-        ]);
-        $response = curl_exec($ch);
-        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-    
-        if ($http_status !== 200) {
-            return $this->renderErrorView($http_status);
-        }
-    
-        $tindakan_data = json_decode($response, true);
-    
-        // ✅ Fetch jenis tindakan list
-        $jenis_url = $this->api_url . '/tindakan/jenis';
-        $ch2 = curl_init($jenis_url);
-        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch2, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-        ]);
-        $jenis_response = curl_exec($ch2);
-        curl_close($ch2);
-    
-        $jenis_data = json_decode($jenis_response, true);
-        $jenis_tindakan = $jenis_data['data'] ?? [];
-        // dd($jenis_tindakan);
-    
-        $this->addBreadcrumb('User', 'user');
-        $this->addBreadcrumb('Tindakan', 'tindakan');
-        $this->addBreadcrumb('Tambah', 'tambah');
-    // dd($tindakan_data['data'][0]);
-        return view('/admin/tindakan/tambah_tindakan_id', [
-            'tindakan' => $tindakan_data['data'][0] ?? [],
-            'jenis_tindakan' => $jenis_tindakan,
-            'title' => $title,
-            'breadcrumbs' => $this->getBreadcrumbs()
-        ]);
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
     }
+
+    $token = session()->get('jwt_token');
+    $title = 'Tambah Tindakan';
+
+    // 🔹 Fetch tindakan (to edit existing if needed)
+    $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
+    $ch = curl_init($tindakan_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $response = curl_exec($ch);
+    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($http_status !== 200) {
+        return $this->renderErrorView($http_status);
+    }
+
+    $tindakan_data = json_decode($response, true);
+    $existing_tindakan = $tindakan_data['data'][0] ?? [];
+
+    // 🔹 Fetch rawat inap to determine kamar
+    $ranap_url = $this->api_url . '/rawatinap/' . $nomorRawat;
+    $ch_ranap = curl_init($ranap_url);
+    curl_setopt($ch_ranap, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch_ranap, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $ranap_response = curl_exec($ch_ranap);
+    curl_close($ch_ranap);
+
+    $ranap_data = json_decode($ranap_response, true);
+    $nomor_bed = $ranap_data['data']['kamar'] ?? null;
+
+    $kodeBangsal = null;
+
+    // 🔹 Fetch kamar to get kode_bangsal
+    if ($nomor_bed) {
+        $kamar_url = $this->api_url . '/kamar/' . $nomor_bed;
+        $ck = curl_init($kamar_url);
+        curl_setopt($ck, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ck, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+        ]);
+        $res_kamar = curl_exec($ck);
+        curl_close($ck);
+
+        $data_kamar = json_decode($res_kamar, true);
+        $kodeBangsalRaw = $data_kamar['data']['kelas'] ?? null;
+    }
+
+    // 🔹 Normalize kode_bangsal
+    $kodeBangsalRaw = strtoupper(trim($kodeBangsalRaw ?? ''));
+    if (in_array($kodeBangsalRaw, ['1', '2', '3'])) {
+        $normalizedBangsal = 'K' . $kodeBangsalRaw;
+    } else {
+        $normalizedBangsal = $kodeBangsalRaw;
+    }
+
+    // 🔹 Fetch all jenis tindakan
+    $jenis_url = $this->api_url . '/tindakan/jenis';
+    $ch2 = curl_init($jenis_url);
+    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $jenis_response = curl_exec($ch2);
+    curl_close($ch2);
+
+    $jenis_data = json_decode($jenis_response, true);
+    $jenis_all = $jenis_data['data'] ?? [];
+
+    // 🔹 Filter jenis tindakan
+    $jenis_tindakan = array_filter($jenis_all, function ($item) use ($normalizedBangsal) {
+        $kode = strtoupper(trim($item['kode_bangsal'] ?? ''));
+        return $kode === $normalizedBangsal || $kode === '-';
+    });
+
+    // 🔹 Breadcrumb + render
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Tindakan', 'tindakan');
+    $this->addBreadcrumb('Tambah', 'tambah');
+
+    return view('/admin/tindakan/tambah_tindakan_id', [
+        'tindakan' => $existing_tindakan,
+        'jenis_tindakan' => $jenis_tindakan,
+        'title' => $title,
+        'breadcrumbs' => $this->getBreadcrumbs()
+    ]);
+}
+
     
 
     public function submitTambahTindakan()
@@ -403,7 +449,7 @@ public function tindakanData($nomorRawat)
 
     $token = session()->get('jwt_token');
 
-    // Step 1: Get rawat inap data by nomor_rawat
+    // 🔹 Step 1: Get rawat inap data
     $url_rawatinap = $this->api_url . '/rawatinap/' . $nomor_rawat;
     $ch = curl_init($url_rawatinap);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -415,18 +461,36 @@ public function tindakanData($nomorRawat)
     curl_close($ch);
 
     $data = json_decode($response, true);
-
     if (!isset($data['data']) || $data['data'] === null) {
         return redirect()->back()->with('error', 'Rawat inap data not found.');
     }
 
     $rawatinap = is_string($data['data']) ? json_decode($data['data'], true) : $data['data'];
-
     if (!is_array($rawatinap)) {
         return redirect()->back()->with('error', 'Invalid rawat inap data format.');
     }
 
-    // Step 2: Prepare data to prefill the form
+    // 🔹 Step 2: Get nomor_bed to fetch kamar
+    $nomor_bed = $rawatinap['kamar'] ?? null;
+    $kodeBangsal = null;
+
+    if ($nomor_bed) {
+        $url_kamar = $this->api_url . '/kamar/' . $nomor_bed;
+        $ck = curl_init($url_kamar);
+        curl_setopt($ck, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ck, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $res_kamar = curl_exec($ck);
+        curl_close($ck);
+
+        $data_kamar = json_decode($res_kamar, true);
+        $kodeBangsal = $data_kamar['data']['kelas'] ?? null;
+    }
+
+
+    // 🔹 Step 3: Prefill form values
     $preFill = [
         'nomor_rawat'    => $rawatinap['nomor_rawat'] ?? $nomor_rawat,
         'nomor_rm'       => $rawatinap['nomor_rm'] ?? '',
@@ -437,15 +501,42 @@ public function tindakanData($nomorRawat)
         'biaya'          => $rawatinap['total_biaya'] ?? 0,
     ];
 
-    // Step 3: Fetch jenis tindakan
-    $jenis_tindakan = $this->getJenisTindakan($token);
+    // 🔹 Step 4: Get all jenis tindakan
+    $jenis_url = $this->api_url . '/tindakan/jenis';
+    $cj = curl_init($jenis_url);
+    curl_setopt($cj, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($cj, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $jenis_response = curl_exec($cj);
+    curl_close($cj);
 
-    // Step 4: Render the form view with prefilled data
+    $jenis_data = json_decode($jenis_response, true);
+    $jenis_all = $jenis_data['data'] ?? [];
+
+    // 🔹 Step 5: Filter based on kelas
+    $kodeBangsalRaw = strtoupper(trim($kodeBangsal ?? ''));
+
+    // Normalize to K1, K2, etc., or keep as VIP/VVIP
+    if (in_array($kodeBangsalRaw, ['1', '2', '3'])) {
+        $normalizedBangsal = 'K' . $kodeBangsalRaw;
+    } else {
+        $normalizedBangsal = $kodeBangsalRaw;
+    }
+
+    $jenis_tindakan = array_filter($jenis_all, function ($item) use ($normalizedBangsal) {
+        $kode = strtoupper(trim($item['kode_bangsal'] ?? ''));
+        return $kode === $normalizedBangsal || $kode === '-';
+    });
+
+
+// dd($normalizedBangsal);
     return view('admin/tindakan/tambah_tindakan', [
         'prefill' => $preFill,
         'jenis_tindakan' => $jenis_tindakan
     ]);
 }
+
 
     public function submitFromRegistrasi($nomor_reg)
 {

@@ -313,7 +313,7 @@ $routes->group('rujukankeluar', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit/(:segment)', 'RujukanKeluarController::submitEditRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->delete('hapus/(:segment)', 'RujukanKeluarController::hapusRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('cetak/(:segment)', 'RujukanKeluarController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-
+    $routes->get('fromrawatinap/(:segment)', 'RujukanKeluarController::submitFromRawatinapToRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Rawat Inap
@@ -428,6 +428,7 @@ $routes->group('resepobat', ['filter' => 'auth'], function ($routes) {
     $routes->get('(:segment)', 'ResepObatController::ResepObatData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'ResepObatController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'ResepObatController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('resepobat/tambah/(:segment)', 'ResepObatController::tambahResepObatId/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
 });
 
 $routes->group('resepobatracikan', ['filter' => 'auth'], function ($routes) {

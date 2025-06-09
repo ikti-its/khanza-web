@@ -31,6 +31,9 @@
                         <!-- Options akan diisi lewat JavaScript -->
                     </select>
                 <?php
+
+                                                                use function PHPSTORM_META\type;
+
                     $generated_no_resep = 'RSP' . date('Ymd') . rand(1000, 9999);
                 ?>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nomor Resep</label>
@@ -58,11 +61,11 @@
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal</label>
-                <input type="text" name="diagnosa_awal" value="<?php 
+                <input type="date" name="tanggal" value="<?php 
                     $tanggalHariIni = date('Y-m-d');
                     echo $tanggalHariIni; ?>"class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam</label>
-                <input name="diagnosa_akhir" value="<?php 
+                <input name="jam" type="time" value="<?php
     $jamSekarang = date('H:i:s');
     echo $jamSekarang; ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
@@ -151,10 +154,19 @@ obatSelect.addEventListener("change", function () {
                     .then(data => {
                         console.log('API response:', data); // 👈 log the whole response
                         const stok = data?.data?.stok ?? 'N/A';
+                    const token = sessionStorage.getItem('jwt_token');
+                    const wrapper = document.createElement("div");
+                    wrapper.id = `group-${kode}`;
+                    wrapper.classList.add("mb-6", "border", "p-4", "rounded-xl", "shadow-sm");
 
                     wrapper.innerHTML = `
-                    <div class="mb-6">
-                        <label class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">${nama}<span class="text-xs text-gray-500">(Stok: ${stok})</span></label>
+
+                        <div class="flex items-center mb-2">
+                            <input type="checkbox" id="checkbox-${kode}" class="checkbox-kode mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded" checked>
+                            <label for="checkbox-${kode}" class="text-sm font-bold text-gray-900 dark:text-white">
+                                ${nama} <span class="text-xs text-gray-500">(Stok: ${stok})</span>
+                            </label>
+                        </div>
 
                         <!-- Row 1: Jumlah & Aturan Pakai -->
                         <div class="mb-5 sm:block md:flex items-center">
@@ -175,9 +187,15 @@ obatSelect.addEventListener("change", function () {
                         </div>
 
                         <input type="hidden" name="kode_barang[]" value="${kode}">
-                    </div>
-                    `;
 
+                    `;
+                    // 👉 Make the checkbox remove the input group when unchecked
+                    container.appendChild(wrapper);
+                    document.getElementById(`checkbox-${kode}`).addEventListener("change", function () {
+                        if (!this.checked) {
+                            document.getElementById(`group-${kode}`).remove();
+                        }
+                    });
                     container.appendChild(wrapper);
                 })}
             }
