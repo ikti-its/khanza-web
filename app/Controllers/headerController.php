@@ -15,12 +15,20 @@ class headerController extends BaseController
 
 
     public function lihatProfile()
-    {
-        $title = 'Profile pengguna';
+{
+    $title = 'Profile Pengguna';
 
-        return  view('/user/homeUser', ['title' => $title]);
+    $userDetails = session()->get('user_details');
 
-    
+    if (!is_array($userDetails)) {
+        return redirect()->to('/login')->with('error', 'Session expired. Please log in again.');
+    }
+
+    return view('/user/homeUser', [
+        'title' => $title,
+        'user_details' => $userDetails
+    ]);
 }
+
 
 }

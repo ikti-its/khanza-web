@@ -16,9 +16,39 @@
         </div>
         <h1 class="font-bold text-3xl md:text-4xl">
             <span class="text-black"><?php
-                                        $nama = session()->get('user_specific_data')['nama'];
+                                        // Retrieve session data
+                                        $userData = session()->get('user_specific_data');
+
+                                        // dd($userData);
+                                        
+                                        // Check if the session data is valid
+                                        error_reporting(E_ALL);
+                                        ini_set('display_errors', 1);
+                                        
+                                        // Example user data (change this based on your actual login system)
+                                        // $userData = [
+                                        //     'email' => 'admin@fathoor.dev' // Example email
+                                            // 'nama' => 'John Doe' // Uncomment to test when 'nama' is available
+                                        // ];
+                                        
+                                        // Check if $userData is an array and contains 'nama'
+                                        if (is_array($userData) && isset($userData['nama']) && !empty(trim($userData['nama']))) {
+                                            $nama = trim($userData['nama']);
+                                        } elseif (isset($userData['email'])) {
+                                            // Extract the first part of the email before '@'
+                                            $nama = explode('@', $userData['email'])[0];
+                                        } else {
+                                            $nama = 'Admins'; // Default fallback if email is also missing
+                                        }
+                                        
+                                        // Extract the first word from the determined name
                                         $firstWord = explode(' ', trim($nama))[0];
+                                        
                                         echo $firstWord;
+
+                                        // $nama = session('user_specific_data')['nama'];
+                                        // $firstWord = explode(' ', trim($nama))[0];
+                                        // echo $firstWord;
                                         ?></span>
         </h1>
         <div class="max-w-4xl flex justify-between">
@@ -27,7 +57,7 @@
                 <span>Status </span>
                 <p class="text-white mt-1 flex items-center">
                     <?php
-                    if (session()->has('user_specific_data') && session('user_specific_data')['status'] === true) {
+                    if (session()->has('user_specific_data') && isset(session('user_specific_data')['status']) && session('user_specific_data')['status'] === true) {
                         echo '<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none" class="mr-2">
                     <circle cx="4" cy="4" r="4" fill="#30DFC4"/>
                   </svg> Hadir';
@@ -43,7 +73,12 @@
 
             <div class="group mt-28 pt-10 items-center py-2 px-2 text-lg font-medium text-white">
                 <span>Shift</span>
-                <p class="text-white mt-1"><?php echo session('user_specific_data')['jam_masuk'] ?> - <?php echo session('user_specific_data')['jam_pulang'] ?> </p>
+                <?php 
+                    $userData = session('user_specific_data');
+                    echo isset($userData['jam_masuk']) ? $userData['jam_masuk'] : 'N/A';
+                    echo ' - ';
+                    echo isset($userData['jam_pulang']) ? $userData['jam_pulang'] : 'N/A';
+                    ?> </p>
             </div>
 
         </div>

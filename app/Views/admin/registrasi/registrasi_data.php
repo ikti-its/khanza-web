@@ -1,0 +1,1001 @@
+<?= $this->extend('layouts/template'); ?>
+<?= $this->section('content'); ?>
+<script src="https://unpkg.com/preline@latest/dist/preline.js"></script>
+<!-- Table Section -->
+<div class="max-w-[85rem] py-6 lg:py-3 mx-auto">
+    <!-- <div class="max-w-[85rem] w-full py-6 lg:py-3"> -->
+    <!-- Card -->
+    <div class="flex flex-col">
+        <div class="-m-1.5 overflow-y-hidden">
+            <div class="sm:px-20 min-w-full inline-block align-middle">
+                <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
+
+                    <!-- Header -->
+                    <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
+                        <div>
+                            <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
+                                Registrasi Pasien
+                            </h2>
+
+                        </div>
+                        <div class="flex gap-x-6 justify-center items-center">
+                            <div class="relative">
+                                <button id="notif-icon" class="relative flex justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M19 8C20.6569 8 22 6.65685 22 5C22 3.34315 20.6569 2 19 2C17.3431 2 16 3.34315 16 5C16 6.65685 17.3431 8 19 8Z" fill="#DA4141" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7 13H12" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7 17H16" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M14 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V10" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+
+                                <!-- Notification Pop-up -->
+                                <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
+                                    <div class="px-4">
+                                        <div class="pt-4 flex justify-between items-center">
+                                            <div class="text-lg font-semibold">Notifikasi</div>
+                                            <svg id="close-popup" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="37" height="36" viewBox="0 0 37 36" fill="none">
+                                                <path d="M20.09 18L23.54 14.55C23.975 14.115 23.975 13.395 23.54 12.96C23.105 12.525 22.385 12.525 21.95 12.96L18.5 16.41L15.05 12.96C14.615 12.525 13.895 12.525 13.46 12.96C13.025 13.395 13.025 14.115 13.46 14.55L16.91 18L13.46 21.45C13.025 21.885 13.025 22.605 13.46 23.04C13.685 23.265 13.97 23.37 14.255 23.37C14.54 23.37 14.825 23.265 15.05 23.04L18.5 19.59L21.95 23.04C22.175 23.265 22.46 23.37 22.745 23.37C23.03 23.37 23.315 23.265 23.54 23.04C23.975 22.605 23.975 21.885 23.54 21.45L20.09 18Z" fill="#272727" />
+                                            </svg>
+                                        </div>
+                                        <div class="flex">                                    
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
+                                        <div id="kamarpenuh-content" class="max-h-[15rem] overflow-y-auto hidden">
+                                            <!-- This will be dynamically filled by JS -->
+                                        </div>
+                                        </div>
+                                        <div class="flex justify-center items-center w-3/4">
+                                            <button id="kamarpenuh-tab" class="flex items-center justify-center text-center w-full py-2 border-b-2">Kamar Penuh
+                                                <span class="ml-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                                                        <circle cx="7.75" cy="7.5" r="7" fill="#EF4444" />
+                                                        <text x="50%" y="45%" text-anchor="middle" dominant-baseline="central" fill="#FFF" font-size="10px"></text>
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <script>
+window.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("kamarpenuh-content");
+    const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
+
+    if (!container) return;
+
+    container.innerHTML = ""; // Clear previous content
+
+    if (notifList.length === 0) {
+        container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
+    } else {
+        notifList.forEach(notif => {
+            container.innerHTML += `
+                <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                        <div>
+                            <p class="text-base font-semibold text-gray-800">
+                                Kamar penuh untuk ${notif.nama_pasien}
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                Nomor Registrasi: ${notif.nomor_reg}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+});
+</script>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
+                            <div>
+                                <a href='/registrasi/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                    <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
+                                        <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                    </svg>
+                                    Tambah
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="py-4 grid gap-3 md:items-start">
+                        <div class="sm:col-span-1">
+                            <label for="hs-as-table-product-review-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <input type="text" id="myInput" onkeyup="myFunction()" class="py-2 px-4 ps-11 block border w-full xl:w-96 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
+                                <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
+                                    <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- End Header -->
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto w-full">                       
+                    <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <colgroup>
+                            <!-- <col width="5%"> -->
+                            <col width="30%">
+                            <col width="25%">
+                            <!-- <col width="20%"> -->
+                            <col width="20%">
+                            <col width="25%">
+                        </colgroup>
+                        <thead class="bg-gray-50 dark:bg-slate-800">
+                            <tr>
+                                <!-- <th scope="col" class="ps-6 py-3 text-start">
+                                    <label for="hs-at-with-checkboxes-main" class="flex">
+                                        <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-main">
+                                        <span class="sr-only">Checkbox</span>
+                                    </label>
+                                </th> -->
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            No. Registrasi
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            No. Rawat
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Nama
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Poliklinik
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Dokter
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Aksi
+                                        </span>
+                                    </div>
+                                </th>
+
+                            </tr>
+                        </thead>
+
+
+
+
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                            <?php foreach ($registrasi_data as $registrasi) : ?>
+                                <div id="hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+                                    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
+                                        <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
+                                            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
+                                                <h3 class="font-bold text-gray-800 dark:text-white">
+                                                    <?= $registrasi['nama_pasien'] ?>
+                                                </h3>
+                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>">
+                                                    <span class="sr-only">Close</span>
+                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M18 6 6 18"></path>
+                                                        <path d="m6 6 12 12"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="p-4">
+                                                <div class="space-y-4">
+                                                <div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
+                                                        <input type="text" name="" value="<?= $registrasi['nomor_reg'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
+                                                        <input type="text" name="" value="<?= $registrasi['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal</label>
+                                                        <input type="text" name="" value="<?= $registrasi['tanggal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam</label>
+                                                        <input type="text" name="" value="<?= $registrasi['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
+                                                        <input type="text" name="" value="<?= $registrasi['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama</label>
+                                                        <input type="text" name="" value="<?= $registrasi['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Kelamin</label>
+                                                        <input type="text" name="" value="<?= $registrasi['jenis_kelamin'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Umur</label>
+                                                        <input type="text" name="" value="<?= $registrasi['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Poliklinik</label>
+                                                        <input type="text" name="" value="<?= $registrasi['poliklinik'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter</label>
+                                                        <input type="text" name="" value="<?= $registrasi['nama_dokter'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Penanggung Jawab</label>
+                                                        <input type="text" name="" value="<?= $registrasi['penanggung_jawab'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Hubungan Penanggung Jawab</label>
+                                                        <input type="text" name="" value="<?= $registrasi['hubungan_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Alamat Penanggung Jawab</label>
+                                                        <input type="text" name="" value="<?= $registrasi['alamat_pj'] ?? '' ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Telepon</label>
+                                                        <input type="text" name="" value="<?= $registrasi['no_telepon'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Biaya Registrasi</label>
+                                                        <input type="text" name="" value="<?= $registrasi['biaya_registrasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Registrasi</label>
+                                                        <input type="text" name="" value="<?= $registrasi['status_registrasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Rawat</label>
+                                                        <input type="text" name="" value="<?= $registrasi['status_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Poliklinik</label>
+                                                        <input type="text" name="" value="<?= $registrasi['status_poli'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Bayar</label>
+                                                        <input type="text" name="" value="<?= $registrasi['jenis_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 sm:block">
+                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
+                                                        <input type="text" name="" value="<?= $registrasi['status_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                    </div>
+
+                                                    <div class="mb-5 flex items-end gap-4">
+                                                        <!-- Select input -->
+                                                    </div>
+
+
+                                                </div>
+
+                                                </div>
+                                                <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <tr>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>" data-id="<?= $registrasi['nomor_reg'] ?>"><?= $registrasi['nomor_reg'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>" data-id="<?= $registrasi['nomor_reg'] ?>"><?= $registrasi['nomor_rawat'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>" data-id="<?= $registrasi['nomor_reg'] ?>"><?= $registrasi['nama_pasien'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="size-px w-48 whitespace-nowrap">
+                                        <div class="px-6 py-3 text-center">
+                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
+                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
+                                                <?= $registrasi['poliklinik'] ?? 'N/A' ?>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-72 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $registrasi['nama_dokter'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap">
+                                        <div class="px-3 py-1.5 text-center inline-flex">
+                                            <div class="px-3 py-1.5">
+                                            <button
+                                                type="button"
+                                                class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
+                                                data-nomor-reg="<?= $registrasi['nomor_reg'] ?>"
+                                                data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>">
+                                                Lihat Detail
+                                            </button>
+                                            </div>
+                                            <div class="px-3 py-1.5">
+                                            <button
+                                                type="button"
+                                                class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
+                                                data-nomor-reg="<?= $registrasi['nomor_reg'] ?>"
+                                                data-hs-overlay="#modal-tindakan-<?= $registrasi['nomor_reg'] ?>">
+                                                Tindakan
+                                            </button>
+                                            </div>
+                                            <div class="px-3 py-1.5">
+                                                <a href="/registrasi/edit/<?= $registrasi['nomor_reg'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                                    Ubah
+                                                </a>
+                                            </div>
+                                            <div class="px-3 py-1.5">
+                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $registrasi['nomor_reg'] ?>')" href="#">
+                                                    Hapus
+                                                </button>
+                                                <div id="modelConfirm-<?= $registrasi['nomor_reg'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
+                                                    <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
+
+                                                        <div class="flex justify-end p-2">
+                                                            <button onclick="closeModal('modelConfirm-<?= $registrasi['nomor_reg'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="p-6 pt-0 text-center">
+                                                            <div class="flex justify-center mb-6">
+                                                                <!-- Container for SVG, centered -->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none">
+                                                                    <path d="M8.5 11H40.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                    <path d="M18.5 5H30.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                    <path d="M12.5 17H36.5V40C36.5 41.6569 35.1569 43 33.5 43H15.5C13.8431 43 12.5 41.6569 12.5 40V17Z" fill="#FEE2E2" stroke="#DA4141" stroke-width="4" stroke-linejoin="round" />
+                                                                    <path d="M20.5 25L28.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                    <path d="M28.5 25L20.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                                                </svg>
+                                                            </div>
+                                                            Hapus data
+                                                            <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
+                                                                untuk menghapus data ini?</h3>
+                                                            <form action="/registrasi/hapus/<?= $registrasi['nomor_reg'] ?>" method="POST">
+                                                                <?= csrf_field() ?>
+                                                                <div class="w-full sm:flex justify-center">
+                                                                    <input type="hidden" name="_method" value="DELETE">
+                                                                    <button onclick="closeModal('modelConfirm-<?= $registrasi['nomor_reg'] ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">
+                                                                        Hapus
+                                                                    </button>
+                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $registrasi['nomor_reg'] ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+                                                                        Batal
+                                                                    </a>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
+                                <!-- Tindakan Modal -->
+                                <div id="modal-tindakan-<?= $registrasi['nomor_reg'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+                                <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
+                                    <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
+                                    <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
+                                        <h3 class="font-bold text-gray-800 dark:text-white">
+                                        Form Tindakan - <?= $registrasi['nama_pasien'] ?>
+                                        </h3>
+                                        <button type="button" class="size-7 rounded-full text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-neutral-700" data-hs-overlay="#modal-tindakan-<?= $registrasi['nomor_reg'] ?>">
+                                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                        </button>
+                                    </div>
+                                    <div class="p-4 space-y-4">
+                                        <div>
+                                            <label class="block text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
+                                            <input type="text" value="<?= $registrasi['nomor_reg'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
+                                            <input type="text" value="<?= $registrasi['nomor_rawat'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
+                                        </div>
+                                            <div class="hs-accordion" id="aksi-accordion">
+                                                <button type="button" class="font-bold text-gray-800 dark:text-white hs-accordion-toggle hs-accordion-active:bg-gray-100 w-1000 flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 shadow-md">
+                                                    <svg class="h-8 w-8 text-slate-950" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                                                    </svg>
+                                                Tindakan
+                                                    <svg class="hs-accordion-active:hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                    <svg class="hs-accordion-active:block hidden size-4 text-gray-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path d="m18 15-6-6-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                    </svg>
+                                                </button>
+
+                                                <div class="hs-accordion-content hidden w-full mt-2 transition-[height] duration-300">
+                                                <ul class="ps-3 space-y-1 border-l-2 border-gray-100 dark:border-gray-700">
+                                                    <li>
+                                                    <a href="/tindakan/<?= $registrasi['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                        Lihat Tindakan
+                                                    </a>
+                                                    </li>
+                                                    <li>
+                                                    <a href="/tindakan/submit-registrasi/<?= $registrasi['nomor_reg'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
+                                                        Tambah Tindakan
+                                                    </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="mt-3">
+                                            <form method="POST" action="/rawatinap/tambah/<?= $registrasi['nomor_reg'] ?>">
+                                                <?= csrf_field() ?>
+                                                <button type="submit" class="font-bold text-gray-800 dark:text-white w-1000 flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-800 shadow-md">
+                                                <svg class="h-8 w-8 text-slate-950"  width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M3 7v11m0 -4h18m0 4v-8a2 2 0 0 0 -2 -2h-8v6" />  <circle cx="7" cy="10" r="1" /></svg>
+                                                Rawat Inap
+                                                </button>
+                                            </form>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Add more fields if needed -->
+                                    </div>
+                                    
+                                    <div class="flex justify-end gap-x-2 p-4 border-t dark:border-neutral-700">
+                                        <button class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#modal-tindakan-<?= $registrasi['nomor_reg'] ?>">
+                                        Tutup
+                                        </button>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    </div>
+
+                    <!-- End Table -->
+
+                    
+
+
+                    <!-- Footer -->
+                    <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
+                        <!-- Pagination -->
+                        <nav class="flex w-full justify-between items-center gap-x-1">
+                            <!-- Previous Button -->
+                            <div class="inline-flex gap-x-2">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m15 18-6-6 6-6"></path>
+                                    </svg>
+                                    <span aria-hidden="true" class="hidden sm:block">Previous</span>
+                                </button>
+                            </div>
+
+                            <!-- Page Numbers -->
+                            <div class="flex items-center gap-x-1">
+                                <?php
+                                $total_pages = $meta_data['total'] ?? 1; // Ensure 'total' always has a value
+                                $current_page = $meta_data['page'] ?? 1;
+
+                                $range = 2; // Number of pages to show before and after the current page
+                                $show_items = ($range * 2) + 1;
+
+                                if ($total_pages <= $show_items) {
+                                    for ($i = 1; $i <= $total_pages; $i++) {
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
+                                    }
+                                } else {
+                                    if ($current_page > $range + 1) {
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=1&size=' . $meta_data['size'] . '\'">1</button>';
+                                        if ($current_page > $range + 2) {
+                                            echo '<span class="py-2 px-3 text-sm">...</span>';
+                                        }
+                                    }
+
+                                    for ($i = max($current_page - $range, 1); $i <= min($current_page + $range, $total_pages); $i++) {
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
+                                    }
+
+                                    if ($current_page < $total_pages - $range - 1) {
+                                        if ($current_page < $total_pages - $range - 2) {
+                                            echo '<span class="py-2 px-3 text-sm">...</span>';
+                                        }
+                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
+                                    }
+                                }
+                                ?>
+                            </div>
+
+                            <!-- Next Button -->
+                            <div class="inline-flex gap-x-2">
+                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
+                                    <span aria-hidden="true" class="hidden sm:block">Next</span>
+                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m9 18 6-6-6-6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </nav>
+                    </div>
+
+                </div>
+                <!-- End Footer -->
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- End Card -->
+
+<!-- End Table Section -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('[data-hs-overlay]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      // Close all open modals
+      document.querySelectorAll('.hs-overlay').forEach(modal => {
+        modal.classList.add('hidden');
+      });
+
+      // Then open the correct one
+      const selector = btn.getAttribute('data-hs-overlay');
+      const targetModal = document.querySelector(selector);
+      if (targetModal) {
+        targetModal.classList.remove('hidden');
+      }
+    });
+  });
+});
+
+  document.addEventListener('DOMContentLoaded', function () {
+    window.HSOverlay?.init();
+  });
+     
+    document.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("kamarpenuh-content");
+    const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
+
+    if (!container) {
+        console.error("⚠️ #kamarpenuh-content not found in DOM");
+        return;
+    }
+
+    container.innerHTML = ""; // clear old
+
+    if (notifList.length === 0) {
+        container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
+        return;
+    }
+
+    notifList.forEach(notif => {
+        container.innerHTML += `
+            <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                    <div>
+                        <p class="text-base font-semibold text-gray-800">
+                            Kamar penuh untuk ${notif.nama_pasien}
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            Nomor Registrasi: ${notif.nomor_reg}
+                        </p>
+                    </div>
+                </div>
+            </div>`;
+    });
+});
+
+    function markRoomFull() {
+    const nomorReg = document.getElementById("modal-nomor-reg").value;
+    const namaPasien = document.getElementById("modal-pasien-nama").textContent;
+
+    const notif = {
+        nama_pasien: namaPasien,
+        nomor_reg: nomorReg,
+        waktu: new Date().toISOString()
+    };
+
+    const existing = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
+    existing.push(notif);
+    localStorage.setItem("kamarPenuhList", JSON.stringify(existing));
+
+    // Optional: Feedback
+    alert("🚨 Kamar penuh notification saved for " + namaPasien);
+
+    // Close modal if needed
+    closeRoomModal();
+}
+    document.addEventListener('DOMContentLoaded', () => {
+    fetch('http://127.0.0.1:8080/v1/kamar/kelas')
+        .then(res => res.json())
+        .then(data => {
+            document.querySelectorAll("#kelas_kamar_select").forEach(select => {
+    fetch("http://127.0.0.1:8080/v1/kamar/kelas")
+        .then(res => res.json())
+        .then(data => {
+            if (!data.data || data.data.length === 0) {
+                console.warn("⚠️ No kelas data received from API");
+                return;
+            }
+
+            data.data.forEach(kelas => {
+                const option = document.createElement("option");
+                option.value = kelas;
+                option.textContent = kelas;
+                select.appendChild(option);
+            });
+        })
+        .catch(err => {
+            console.error("❌ Failed to fetch kelas list:", err);
+        });
+});
+
+            if (!data.data || data.data.length === 0) {
+                console.warn("⚠️ No kelas data received from API");
+                return;
+            }
+
+            data.data.forEach(kelas => {
+                const option = document.createElement("option");
+                option.value = kelas;
+                option.textContent = kelas;
+                select.appendChild(option);
+            });
+        })
+        .catch(err => {
+            console.error("❌ Failed to fetch kelas list:", err);
+        });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+        fetch('http://127.0.0.1:8080/v1/kamar/kelas')
+            .then(res => res.json())
+            .then(res => {
+                const select = document.getElementById("kelas-select");
+                if (!select) {
+                    console.error('Select element not found');
+                    return;
+                }
+
+                res.data.forEach(kelas => {
+                    const option = document.createElement("option");
+                    option.value = kelas;
+                    option.textContent = kelas;
+                    select.appendChild(option);
+                });
+            })
+            .catch(err => console.error('Error fetching kelas:', err));
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+    const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
+    const container = document.getElementById("kamarpenuh-content");
+
+    if (!container) return;
+
+    if (notifList.length === 0) {
+        container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
+    } else {
+        notifList.forEach(notif => {
+            container.innerHTML += `
+                <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                        <div>
+                            <p class="text-base font-semibold text-gray-800">
+                                Kamar penuh untuk ${notif.nama_pasien}
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                Nomor Registrasi: ${notif.nomor_reg}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // OPTIONAL: clear after rendering if you only want them to show once
+    // localStorage.removeItem("kamarPenuhList");
+});
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const notifData = localStorage.getItem('kamarPenuhNotif');
+        if (notifData) {
+            const { nomor_reg, nama } = JSON.parse(notifData);
+            showNotification(`Kamar penuh untuk ${nama} (${nomor_reg})`);
+
+            // Clear so it doesn't show again on refresh
+            localStorage.removeItem('kamarPenuhNotif');
+        }
+    });
+
+    function showNotification(message) {
+        const notif = document.createElement('div');
+        notif.className = 'fixed top-5 right-5 z-[9999] bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg';
+        notif.innerText = message;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 4000);
+    }
+
+    // Fetch kamar penuh notifications
+    function fetchKamarPenuhNotifications() {
+        fetch("http://127.0.0.1:8080/v1/notifikasi/kamar-penuh")
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById("kamarpenuh-content");
+                container.innerHTML = "";
+
+                if (data.status === "success" && data.data.length > 0) {
+                    data.data.forEach(notif => {
+                        container.innerHTML += `
+                        <div class="p-4 flex items-center border-b-2 border-l-2 border-l-red-500 hover:bg-gray-100">
+                            <div class="mx-2 text-red-600">
+                                🚫 ${notif.pesan}
+                                <div class="text-xs text-gray-500">${new Date(notif.created_at).toLocaleString()}</div>
+                            </div>
+                        </div>`;
+                    });
+                } else {
+                    container.innerHTML = `
+                    <div class="p-4 text-gray-500">
+                        Tidak ada notifikasi kamar penuh.
+                    </div>`;
+                }
+            })
+            .catch(err => {
+                console.error("❌ Error fetching kamar penuh notifications:", err);
+            });
+    }
+
+    // Call once and refresh every 10s
+    fetchKamarPenuhNotifications();
+    setInterval(fetchKamarPenuhNotifications, 10000);
+
+document.getElementById("close-popup").addEventListener("click", function () {
+    document.getElementById("notif-popup").classList.add("hidden");
+});
+
+function fetchPendingRooms() {
+    fetch("http://127.0.0.1:8080/v1/registrasi/pending-room")
+    .then(res => res.json())
+    .then(data => {
+        let notifHtml = "";
+        const pending = data.data || [];
+
+        document.getElementById("notifCount").textContent = pending.length;
+
+        if (pending.length === 0) {
+            notifHtml = `<div class="p-4 text-sm text-gray-500">Tidak ada permintaan kamar saat ini.</div>`;
+        } else {
+            pending.forEach(item => {
+                notifHtml += `
+                    <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-red-500">
+                        <div>
+                            <strong>${item.nama_pasien || item.nomor_reg}</strong> menunggu kamar.
+                        </div>
+                        <button 
+                            type="button"
+                            class="bg-green-600 text-white text-sm px-3 py-1 rounded hover:bg-green-700 assign-room-btn"
+                            data-nomor-reg="${item.nomor_reg}">
+                            🚪 Assign Room
+                        </button>
+                    </div>`;
+            });
+        }
+
+        document.getElementById("notifList").innerHTML = notifHtml;
+    })
+    .catch(error => {
+        console.error("Failed to fetch pending room requests:", error);
+        document.getElementById("notifList").innerHTML = `<div class="p-4 text-red-500">Gagal memuat notifikasi.</div>`;
+    });
+}
+
+// Optional: refresh periodically
+setInterval(fetchPendingRooms, 10000);
+
+function butuhKamar(nomorReg) {
+    fetch(`http://127.0.0.1:8080/v1/registrasi/${nomorReg}/assign-room/menunggu`, {
+        method: 'PUT'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Permintaan kamar berhasil dikirim.');
+
+            // Immediately refresh notification list
+            fetchPendingRooms();
+
+            // Show the notification popup
+            document.getElementById("notif-popup").classList.remove("hidden");
+        } else {
+            alert('Gagal mengirim permintaan kamar.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menghubungi server.');
+    });
+}
+
+function butuhKamar(nomorReg) {
+    fetch(`http://127.0.0.1:8080/v1/registrasi/${nomorReg}/assign-room/menunggu`, {
+        method: 'PUT'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Status kamar berhasil diubah ke "menunggu"');
+            // Optional: update the UI, change button text, reload, etc.
+        } else {
+            alert('Gagal memperbarui status kamar');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menghubungi server');
+    });
+}
+
+function updateStatusKamar(nomorReg) {
+  $.ajax({
+    url: `http://localhost:8080/v1/registrasi/status_kamar/${nomorReg}`,
+    method: "PUT",
+    contentType: "application/json",
+    data: JSON.stringify({ status_kamar: "menunggu" }),
+    success: function (res) {
+      alert("Status kamar diubah ke 'menunggu'");
+      // optionally refresh or update UI here
+    },
+    error: function () {
+      alert("Gagal mengubah status kamar");
+    }
+  });
+}
+
+    function myFunction() {
+        var input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable"); // Pastikan ini mengacu pada ID tabel yang benar
+
+        if (!table) return; // Pastikan tabel ada sebelum melanjutkan
+
+        tr = table.getElementsByTagName("tr");
+        var dataFound = false;
+
+        // Iterate over all table rows (including header row)
+        for (i = 0; i < tr.length; i++) {
+            var found = false;
+
+            // Check if it's a regular row (skip header row)
+            if (i > 0) {
+                td = tr[i].getElementsByTagName("td");
+
+                // Iterate over all td elements in the row
+                for (j = 0; j < td.length; j++) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break; // Break out of inner loop if match found
+                    }
+                }
+
+                // Show or hide row based on search result
+                if (found) {
+                    tr[i].style.display = "";
+                    dataFound = true;
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function closeNotificationPopup() {
+        document.getElementById('notif-popup').classList.add('hidden');
+    }
+
+    // Event listener untuk menutup pop up saat mengklik di luar pop up
+    document.addEventListener('click', function(event) {
+        const notifPopup = document.getElementById('notif-popup');
+        const notifIcon = document.getElementById('notif-icon');
+
+        // Periksa apakah yang diklik bukan bagian dari pop up notifikasi
+        if (!notifPopup.contains(event.target) && event.target !== notifIcon) {
+            closeNotificationPopup();
+        }
+    });
+
+    // Event listener untuk menghindari menutup pop up saat mengklik ikon notifikasi
+    document.getElementById('notif-icon').addEventListener('click', function(event) {
+        event.stopPropagation(); // Menghentikan penyebaran event ke elemen lain
+        document.getElementById('notif-popup').classList.toggle('hidden');
+    });
+
+    // Event listener untuk menutup pop up saat mengklik ikon X di dalam pop up
+    document.getElementById('close-popup').addEventListener('click', function(event) {
+        event.stopPropagation(); // Menghentikan penyebaran event ke elemen lain
+        closeNotificationPopup();
+    });
+
+
+    window.openModal = function(modalId) {
+        document.getElementById(modalId).style.display = 'block'
+        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
+    }
+
+    window.closeModal = function(modalId) {
+        document.getElementById(modalId).style.display = 'none'
+        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const tindakanButtons = document.querySelectorAll(".btn-tindakan");
+
+    tindakanButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const nomorReg = this.getAttribute("data-nomor-reg");
+            document.getElementById("formNomorReg").value = nomorReg;
+        });
+    });
+});
+</script>
+<?= $this->endSection(); ?>
