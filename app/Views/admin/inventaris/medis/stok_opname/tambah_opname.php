@@ -57,21 +57,26 @@
                             </div>
                             <div class="border rounded-lg">
                                 <table class="min-w-full divide-y divide-gray-200  dark:divide-neutral-700" id="item-list">
-
-                                    <colgroup>
-                                        <col width="3%">
-                                        <col width="5%">
-                                        <col width="15%">
-                                        <col width="8%">
-                                        <col width="10%">
-                                        <col width="6%">
-                                        <col width="6%">
-                                        <col width="6%">
-                                        <col width="10%">
-                                        <col width="10%">
-                                        <col width="10%">
-                                        <col width="10%">
-                                    </colgroup>
+                                    <?php 
+                                        $widths  = [3, 5, 15, 8, 10, 6, 6, 6, 10, 10, 10, 10];
+                                        echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                                        
+                                        $columns = [
+                                            'Real',
+                                            'Barang',
+                                            'Satuan',
+                                            'Harga',
+                                            'Stok',
+                                            'Selisih',
+                                            'Lebih',
+                                            'Nominal Hilang',
+                                            'Nominal Lebih',
+                                            'No Batch',
+                                            'No Faktur'
+                                        ];
+                                        // echo view('components/data_tabel_thead',['columns' => $columns]);
+                                    ?>
+                                    
                                     <thead class="bg-[#DCDCDC]">
                                         <tr>
                                             <th class="px-1 py-1 text-[0.9375rem] leading-[normal] tracking-[0.00469rem] text-center"></th>

@@ -51,74 +51,21 @@
                     <!-- Table -->
 
                     <table id="myTable" class="overflow-x-auto min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <colgroup>
-                            <col width="14%">
-                            <col width="20%">
-                            <col width="16%">
-                            <col width="14%">
-                            <col width="11%">
-                            <col width="11%">
-                            <col width="14%">
-                        </colgroup>
-                        <thead class="bg-gray-50 dark:bg-slate-800">
-                            <tr>
-
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            No Batch
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Nama Barang
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Tanggal Kadaluwarsa
-                                        </span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            No Faktur
-                                        </span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Jumlah
-                                        </span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Sisa
-                                        </span>
-                                    </div>
-                                </th>
-
-
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Aksi
-                                        </span>
-                                    </div>
-                                </th>
-
-                            </tr>
-                        </thead>
+                        <?php 
+                            $widths  = [14, 20, 16, 14, 11, 11, 14];
+                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            
+                            $columns = [
+                                'No Batch',
+                                'Nama Barang',
+                                'Tanggal Kadaluarsa',
+                                'No Faktur',
+                                'Jumlah',
+                                'Sisa',
+                                'Aksi'
+                            ];
+                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                        ?>    
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($batch_data as $batch) { ?>

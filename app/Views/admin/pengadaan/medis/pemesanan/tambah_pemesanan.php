@@ -75,17 +75,22 @@
                             </div>
                             <div class="border rounded-lg">
                                 <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
-                                    <colgroup>
-                                        <col width="6%">
-                                        <col width="7%">
-                                        <col width="15%">
-                                        <col width="12%">
-                                        <col width="12%">
-                                        <col width="12%">
-                                        <col width="8%">
-                                        <col width="14%">
-                                        <col width="14%">
-                                    </colgroup>
+                                    <?php 
+                                        $widths  = [6, 7, 15, 12, 12, 12, 8, 14, 14];
+                                        echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                                        
+                                        $columns = [
+                                            'Jumlah',
+                                            'Barang',
+                                            'Satuan',
+                                            'Harga Pemesanan',
+                                            'Subtotal',
+                                            'Diskon (%)',
+                                            'Diskon (Jumlah)',
+                                            'Total'
+                                        ];
+                                        // echo view('components/data_tabel_thead',['columns' => $columns]);
+                                    ?>
                                     <thead class="border-b bg-[#DCDCDC]">
                                         <tr class="bg-navy disabled">
                                             <th class="px-1 py-1 text-center"></th>

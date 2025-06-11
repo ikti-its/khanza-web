@@ -74,16 +74,22 @@
                     <div class="p-1.5 min-w-full inline-block align-middle">
                         <div class="border rounded-lg overflow-hidden dark:border-neutral-700">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
-                                <colgroup>
-                                    <col width="5%">
-                                    <col width="10%">
-                                    <col width="20%">
-                                    <col width="15%">
-                                    <col width="10%">
-                                    <col width="10%">
-                                    <col width="10%">
-                                    <col width="10%">
-                                </colgroup>
+                                <?php 
+                                    $widths  = [5, 10, 20, 15, 10, 10, 10, 10, ];
+                                    echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                                    
+                                    $columns = [
+                                        'Jumlah',
+                                        'Barang',
+                                        'Stok Saat Ini',
+                                        'Satuan',
+                                        'Harga',
+                                        'No Faktur',
+                                        'No Batch'
+                                    ];
+                                    // echo view('components/data_tabel_thead',['columns' => $columns]);
+                                ?>
+
                                 <thead class="bg-[#DCDCDC]">
                                     <tr class="bg-navy disabled">
                                         <th class="text-center"></th>

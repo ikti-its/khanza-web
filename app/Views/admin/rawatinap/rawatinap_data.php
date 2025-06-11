@@ -31,77 +31,21 @@
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <colgroup>
-                            <!-- <col width="5%"> -->
-                            <col width="30%">
-                            <col width="25%">
-                            <!-- <col width="20%"> -->
-                            <col width="20%">
-                            <col width="25%">
-                        </colgroup>
-                        <thead class="bg-gray-50 dark:bg-slate-800">
-                            <tr>
-                                <!-- <th scope="col" class="ps-6 py-3 text-start">
-                                    <label for="hs-at-with-checkboxes-main" class="flex">
-                                        <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-main">
-                                        <span class="sr-only">Checkbox</span>
-                                    </label>
-                                </th> -->
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            No. Rawat
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Nama
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Kamar
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Diagnosa
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Dokter
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Aksi
-                                        </span>
-                                    </div>
-                                </th>
-
-                            </tr>
-                        </thead>
-
-
-
-
+                        <?php 
+                            $widths  = [30, 25, 20, 25];
+                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            
+                            $columns = [
+                                'No. Rawat',
+                                'Nama',
+                                'Kamar',
+                                'Diagnosa',
+                                'Dokter',
+                                'Aksi'
+                            ];
+                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                        ?>
+                        
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($rawatinap_data as $rawatinap) : ?>
                                 <div id="hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">

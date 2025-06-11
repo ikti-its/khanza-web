@@ -73,54 +73,18 @@
                     <!-- Table -->
 
                     <table id="myTable" class="overflow-x-auto min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <colgroup>
-                            <!-- <col width="5%"> -->
-                            <col width="20%">
-                            <col width="25%">
-                            <!-- <col width="20%"> -->
-                            <col width="30%">
-                            <col width="25%">
-                        </colgroup>
-                        <thead class="bg-gray-50 dark:bg-slate-800">
-                            <tr>
-
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Tanggal
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Nomor Pengajuan
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Status
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Aksi
-                                        </span>
-                                    </div>
-                                </th>
-
-                            </tr>
-                        </thead>
-
-
-
+                        <?php 
+                            $widths  = [20, 25, 30, 25];
+                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            
+                            $columns = [
+                                'Tanggal',
+                                'Nomor Pengajuan',
+                                'Status',
+                                'Aksi'
+                            ];
+                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                        ?>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php

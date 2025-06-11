@@ -72,13 +72,20 @@
 
                             <div class="border rounded-lg overflow-hidden">
                                 <table class="min-w-full divide-gray-200  dark:divide-neutral-700" id="item-list">
-                                    <colgroup>
-                                        <col width="8%">
-                                        <col width="30%">
-                                        <col width="18%">
-                                        <col width="22%">
-                                        <col width="22%">
-                                    </colgroup>
+                                    <?php 
+                                        $widths  = [8, 30, 18, 22, 22];
+                                        echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                                        
+                                        // $columns = [
+                                        //     'Jumlah',
+                                        //     'Barang',
+                                        //     'Satuan',
+                                        //     'Harga Pengajuan',
+                                        //     'Total'
+                                        // ];
+                                        // echo view('components/data_tabel_thead',['columns' => $columns]);
+                                    ?>
+                                    
                                     <thead class="border-b bg-[#DCDCDC]">
                                         <tr class="bg-navy disabled">
                                             <th class="px-1 py-1 text-center">Jumlah</th>

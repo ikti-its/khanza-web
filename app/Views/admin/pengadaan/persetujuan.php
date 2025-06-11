@@ -22,64 +22,19 @@
                     <div id="noDataFound" class="hidden">Data tidak ditemukan</div>
                     <!-- Table -->
                     <table id="myTable" class="overflow-x-auto min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <colgroup>
-                            <col width="13%">
-                            <col width="19%">
-                            <col width="22%">
-                            <col width="22%">
-                            <col width="24%">
-                        </colgroup>
-                        <thead class="bg-gray-50 dark:bg-slate-800">
-                            <tr>
-                                <th scope="col" class="px-6 pe-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs font-semibold tracking-wide text-[#666] dark:text-gray-200">
-                                            Tanggal
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs font-semibold tracking-wide text-[#666] dark:text-gray-200">
-                                            Nomor Pengajuan
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs font-semibold tracking-wide text-[#666] dark:text-gray-200">
-                                            Status Apoteker
-                                        </span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs font-semibold tracking-wide text-[#666] dark:text-gray-200">
-                                            Status Keuangan
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs font-semibold tracking-wide text-[#666] dark:text-gray-200">
-                                            Aksi
-                                        </span>
-                                    </div>
-                                </th>
-
-
-
-                                <!-- <th scope="col" class="px-6 py-3 text-end"></th>
-                                <th scope="col" class="px-6 py-3 text-end"></th>
-                                <th scope="col" class="px-6 py-3 text-end"></th> -->
-                            </tr>
-                        </thead>
-
-
-
+                        <?php 
+                            $widths  = [13, 19, 22, 22, 24];
+                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            
+                            $columns = [
+                                'Tanggal',
+                                'Nomor Pengajuan',
+                                'Status Apoteker',
+                                'Status Keuangan',
+                                'Aksi'
+                            ];
+                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                        ?>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($pengajuan_medis_data as $pengajuan) : ?>

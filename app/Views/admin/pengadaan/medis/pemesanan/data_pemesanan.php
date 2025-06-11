@@ -42,69 +42,19 @@
                     <div id="noDataFound" class="hidden">Data tidak ditemukan</div>
                     <!-- Table -->
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <colgroup>
-                            <col width="15%">
-                            <col width="20%">
-                            <col width="20%">
-                            <col width="21%">
-                            <col width="24%">
-                        </colgroup>
-                        <thead class="bg-gray-50 dark:bg-slate-800">
-                            <tr>
-                                <!-- <th scope="col" class="ps-6 py-3 text-start">
-                                    <label for="hs-at-with-checkboxes-main" class="flex">
-                                        <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-main">
-                                        <span class="sr-only">Checkbox</span>
-                                    </label>
-                                </th> -->
-
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666666]">
-                                            Tanggal Bayar
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666666]">
-                                            Nomor Pengajuan
-                                        </span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666666]">
-                                            Nomor Pemesanan
-                                        </span>
-                                    </div>
-                                </th>
-                                <!-- <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
-                                            Nomor Faktur
-                                        </span>
-                                    </div>
-                                </th> -->
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666666]">
-                                            Status
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666666]">
-                                            Aksi
-                                        </span>
-                                    </div>
-                                </th>
-
-                            </tr>
-                        </thead>
+                        <?php 
+                            $widths  = [15, 20, 20, 21, 24];
+                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            
+                            $columns = [
+                                'Tanggal Bayar',
+                                'Nomor Pengajuan',
+                                'Nomor Pemesanan',
+                                'Status',
+                                'Aksi'
+                            ];
+                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                        ?>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($pengajuan_medis_data as $pengajuan) : ?>

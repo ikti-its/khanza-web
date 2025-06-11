@@ -92,14 +92,23 @@
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <colgroup>
-                            <!-- <col width="5%"> -->
-                            <col width="30%">
-                            <col width="25%">
-                            <!-- <col width="20%"> -->
-                            <col width="20%">
-                            <col width="25%">
-                        </colgroup>
+                        <?php 
+                            $widths  = [30, 25, 20, 25];
+                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            
+                            $columns = [
+                                'No Racik',
+                                'Kode Obat',
+                                'Nama Obat',
+                                'Jumlah',
+                                'Aturan Pakai',
+                                'Biaya',
+                                'Aksi'
+                            ];
+                            // echo view('components/data_tabel_thead',['columns' => $columns]);
+                        ?>
+                        
+
                         <thead class="bg-gray-50 dark:bg-slate-800">
                             <tr>
                                 <!-- <th scope="col" class="ps-6 py-3 text-start">

@@ -100,16 +100,22 @@
                     <div class="p-1.5 min-w-full inline-block align-middle">
                         <div class="border rounded-lg overflow-hidden dark:border-neutral-700">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
-                                <colgroup>
-                                    <col width="8%">
-                                    <col width="20%">
-                                    <col width="12%">
-                                    <col width="12%">
-                                    <col width="12%">
-                                    <col width="8%">
-                                    <col width="14%">
-                                    <col width="14%">
-                                </colgroup>
+                                <?php 
+                                    $widths  = [8, 20, 12, 12, 12, 8, 14, 14];
+                                    echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                                    
+                                    // $columns = [
+                                    //     'Jumlah',
+                                    //     'Barang',
+                                    //     'Satuan',
+                                    //     'Harga',
+                                    //     'Subtotal',
+                                    //     'Diskon (%)',
+                                    //     'Diskon (Jumlah)',
+                                    //     'Total per Item'
+                                    // ];
+                                    // echo view('components/data_tabel_thead',['columns' => $columns]);
+                                ?>    
                                 <thead class="bg-[#DCDCDC]">
                                     <tr class="bg-navy disabled">
                                         <th class="px-1 py-1 text-center">Jumlah</th>

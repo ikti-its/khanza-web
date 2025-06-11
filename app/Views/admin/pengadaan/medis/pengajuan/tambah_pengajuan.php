@@ -96,15 +96,20 @@
                             </div>
                             <div class="border rounded-lg">
                                 <table class="min-w-full divide-y divide-gray-200  dark:divide-neutral-700" id="item-list">
-
-                                    <colgroup>
-                                        <col width="5%">
-                                        <col width="7%">
-                                        <col width="30%">
-                                        <col width="18%">
-                                        <col width="20%">
-                                        <col width="20%">
-                                    </colgroup>
+                                    <?php 
+                                        $widths  = [5, 7, 30, 18, 20, 20];
+                                        echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                                        
+                                        // $columns = [
+                                        //     'Jumlah',
+                                        //     'Barang',
+                                        //     'Satuan',
+                                        //     'Harga Pengajuan',
+                                        //     'Total'
+                                        // ];
+                                        // echo view('components/data_tabel_thead',['columns' => $columns]);
+                                    ?> 
+                                    
                                     <thead class="bg-[#DCDCDC]">
                                         <tr>
                                             <th class="px-1 py-1 text-center"></th>

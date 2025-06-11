@@ -195,69 +195,20 @@
 
                     <!-- Table -->
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <colgroup>
-                            <col width="19%">
-                            <col width="19%">
-                            <col width="19%">
-                            <col width="19%">
-                            <col width="24%">
-                            <!-- <col width="23%"> -->
-                        </colgroup>
-                        <thead class="bg-gray-50 dark:bg-slate-800">
-                            <tr>
-
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
-                                            Tanggal Pengajuan
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
-                                            Nomor Pengajuan
-                                        </span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
-                                            Nomor Pemesanan
-                                        </span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
-                                            Nomor Faktur
-                                        </span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
-                                            Status
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <!-- <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center">
-                                        <span class="text-xs tracking-wide text-gray-800 dark:text-gray-200">
-                                            Aksi
-                                        </span>
-                                    </div>
-                                </th> -->
-
-                            </tr>
-                        </thead>
-
-
-
-
+                        <?php 
+                            $widths  = [19, 19, 19, 19, 24];
+                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            
+                            $columns = [
+                                'Tanggal Pengajuan',
+                                'Nomor Pengajuan',
+                                'Nomor Pemesanan',
+                                'Nomor Faktur',
+                                'Status'
+                            ];
+                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                        ?>
+                        
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($pengajuan_data as $pengajuan) : ?>
                                 <tr>

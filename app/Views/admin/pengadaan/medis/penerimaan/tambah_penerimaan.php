@@ -111,25 +111,27 @@
                         </div>
                         <div class="border rounded-lg overflow-hidden dark:border-neutral-700">
                             <table class="pt-5 min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
-                                <colgroup>
+                                <?php 
+                                    $widths  = [4, 4, 4, 12, 5, 4, 8, 8, 8, 4, 8, 6, 6];
+                                    echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                                    
+                                    // $columns = [
+                                    //     'Jumlah',
+                                    //     'Satuan Beli',
+                                    //     'Nama Barang',
+                                    //     'Satuan',
+                                    //     'G',
+                                    //     'Kadaluarsa',
+                                    //     'Harga',
+                                    //     'Subtotal',
+                                    //     'Diskon (%)',
+                                    //     'Diskon (Rp)',
+                                    //     'Total',
+                                    //     'No Batch'
+                                    // ];
+                                    // echo view('components/data_tabel_thead',['columns' => $columns]);
+                                ?>
 
-                                    <col width="4%">
-                                    <!-- 38% -->
-                                    <col width="4%">
-                                    <col width="4%">
-                                    <col width="12%">
-                                    <col width="5%">
-                                    <col width="4%">
-                                    <col width="8%">
-                                    <col width="8%">
-                                    <!-- 38% -->
-                                    <col width="8%">
-                                    <col width="4%">
-                                    <col width="8%">
-                                    <col width="6%">
-                                    <col width="6%">
-
-                                </colgroup>
                                 <thead class="bg-[#DCDCDC]">
                                     <tr class="bg-navy disabled">
                                         <th class="px-1 py-1 text-center"></th>

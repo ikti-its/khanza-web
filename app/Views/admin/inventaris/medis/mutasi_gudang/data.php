@@ -51,74 +51,21 @@
                     <!-- Table -->
 
                     <table id="myTable" class="overflow-x-auto min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <colgroup>
-                            <col width="12%">
-                            <col width="16%">
-                            <col width="13%">
-                            <col width="13%">
-                            <col width="11%">
-                            <col width="11%">
-                            <col width="11%">
-
-                        </colgroup>
-                        <thead class="bg-gray-50 dark:bg-slate-800">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Tanggal
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Nama Barang
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Asal Lokasi
-                                        </span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Tujuan Ruangan
-                                        </span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Jumlah
-                                        </span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Harga
-                                        </span>
-                                    </div>
-                                </th>
-
-
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-xs tracking-wide text-[#666]">
-                                            Aksi
-                                        </span>
-                                    </div>
-                                </th>
-
-                            </tr>
-                        </thead>
+                        <?php 
+                            $widths  = [12, 16, 13, 13, 11, 11, 11];
+                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            
+                            $columns = [
+                                'Tanggal',
+                                'Nama Barang',
+                                'Asal Lokasi',
+                                'Tujuan Ruangan',
+                                'Jumlah',
+                                'Harga',
+                                'Aksi'
+                            ];
+                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                        ?>    
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($mutasi_data as $mutasi) { ?>
