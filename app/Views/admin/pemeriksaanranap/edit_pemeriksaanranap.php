@@ -27,11 +27,18 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal</label>
-                <input name="tanggal" value="<?= date('Y-m-d') ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="date" name="tgl_perawatan"
+    value="<?= esc(date('Y-m-d', strtotime($pemeriksaan['tanggal'] ?? ''))) ?>" 
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" 
+                    required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam</label>
-                <input name="jam" value="<?= date('H:i:s') ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="time" name="jam_rawat"
+    value="<?= esc(date('H:i:s', strtotime($pemeriksaan['jam'] ?? ''))) ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" 
+                    required>
             </div>
+
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">NIP</label>
@@ -48,24 +55,69 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">GCS (E,V,M)</label>
-                <input name="gudang" value="<?= esc($pemeriksaan['gcs']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input name="gcs" value="<?= esc($pemeriksaan['gcs']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">TD (mmHg)</label>
-                <input name="no_batch" value="<?= esc($pemeriksaan['tensi']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input name="tensi" value="<?= esc($pemeriksaan['tensi']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">HR (x/menit)</label>
-                <input name="no_faktur" value="<?= esc($pemeriksaan['nadi']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input name="nadi" value="<?= esc($pemeriksaan['nadi']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">RR (x/menit)</label>
-                <input name="tanggal_beri" value="<?= esc($pemeriksaan['respirasi']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input name="respirasi" value="<?= esc($pemeriksaan['respirasi']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Suhu</label>
-                <input name="jam_beri" value="<?= esc($pemeriksaan['suhu_tubuh']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input name="suhu_tubuh" value="<?= esc($pemeriksaan['suhu_tubuh']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">SpO2</label>
-                <input name="total" id="totalObat" value="<?= esc($pemeriksaan['spo2']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly>
+                <input name="spo2" id="totalObat" value="<?= esc($pemeriksaan['spo2']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly>
+            </div>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Tinggi (cm)<span class="text-red-600">*</span></label>
+                <input name="tinggi" value="<?= esc($pemeriksaan['tinggi']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Berat (kg)<span class="text-red-600">*</span></label>
+                <input name="berat" id="totalObat" value="<?= esc($pemeriksaan['berat']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Subjek<span class="text-red-600">*</span></label>
+                <input name="keluhan" value="<?= esc($pemeriksaan['keluhan']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Objek<span class="text-red-600">*</span></label>
+                <input name="pemeriksaan" id="totalObat" value="<?= esc($pemeriksaan['pemeriksaan']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Kesadaran<span class="text-red-600">*</span></label>
+                <select name="kesadaran" value="<?= esc($pemeriksaan['kesadaran']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="Compos Mentis">Compos Mentis</option>
+                    <option value="Somnolence">Somnolence</option>
+                    <option value="Sopor">Sopor</option>
+                    <option value="Coma">Coma</option>
+                </select>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Alergi<span class="text-red-600">*</span></label>
+                <input name="alergi" id="totalObat" value="<?= esc($pemeriksaan['alergi']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Asesmen<span class="text-red-600">*</span></label>
+                <input name="penilaian" value="<?= esc($pemeriksaan['penilaian']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Plan<span class="text-red-600">*</span></label>
+                <input name="rtl" id="totalObat" value="<?= esc($pemeriksaan['rtl']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Instruksi</label>
+                <input name="instruksi" value="<?= esc($pemeriksaan['instruksi']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Evaluasi</label>
+                <input name="evaluasi" id="totalObat" value="<?= esc($pemeriksaan['evaluasi']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <div class="mt-5 pt-5 border-t flex justify-end gap-x-2">

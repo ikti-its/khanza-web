@@ -310,7 +310,7 @@ public function dataPemeriksaanRanapDetail($noRawat)
 
     $pemeriksaan_url = $this->api_url . '/pemeriksaanranap';
     $jsonPayload = json_encode($postDataPemeriksaanRanap);
-// dd($postDataPemeriksaanRanap);
+// dd($jsonPayload);
     $ch = curl_init($pemeriksaan_url);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonPayload);
@@ -424,7 +424,7 @@ public function dataPemeriksaanRanapDetail($noRawat)
     $this->addBreadcrumb('Edit', 'edit');
 
     $breadcrumbs = $this->getBreadcrumbs();
-
+// dd($pemeriksaan);
     // 🔹 Pass data to view
     return view('/admin/pemeriksaanranap/edit_pemeriksaanranap', [
         'pemeriksaan' => $pemeriksaan,
@@ -456,7 +456,7 @@ public function dataPemeriksaanRanapDetail($noRawat)
 
     // Minimal required fields for update
     $postDataPemeriksaanRanap = [
-        'nomor_rawat'        => $this->request->getPost('nomor_rawat'),
+        'no_rawat'        => $this->request->getPost('nomor_rawat'),
         'tgl_perawatan'      => $this->request->getPost('tgl_perawatan'),
         'jam_rawat'          => $this->request->getPost('jam_rawat'),
         'nip'                => $this->request->getPost('nip'),
@@ -482,7 +482,7 @@ public function dataPemeriksaanRanapDetail($noRawat)
     ];
 
     $jsonPayload = json_encode($postDataPemeriksaanRanap);
-
+// dd($jsonPayload);
     $ch = curl_init($pemeriksaan_url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonPayload);

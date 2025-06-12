@@ -159,7 +159,7 @@ class ResepDokterController extends BaseController
         $this->addBreadcrumb('Resep Dokter', 'resepdokter');
         $this->addBreadcrumb('Edit', 'edit');
     
-        return view('/admin/resepdokter/edit_resepdokter', [
+        return view('/admin/resepobat/edit_resepobat', [
             'resepdokter' => $selectedResep,
             'title' => $title,
             'breadcrumbs' => $this->getBreadcrumbs()

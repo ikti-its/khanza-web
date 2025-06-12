@@ -266,78 +266,54 @@ class TindakanController extends BaseController
     ]);
 }
     
-public function submitEditTindakan($nomorRawat)
-    {
-        if (!session()->has('jwt_token')) {
-            return $this->renderErrorView(401);
-        }
-
-        $token = session()->get('jwt_token');
-        $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
-
-        $postData = [
-            'nomor_rawat' => $this->request->getPost('nomor_rawat'),
-            'nomor_rm' => $this->request->getPost('nomor_rm'),
-            'nama_pasien' => $this->request->getPost('nama_pasien'),
-            'tindakan' => $this->request->getPost('tindakan'),
-            'kode_dokter' => $this->request->getPost('kode_dokter'),
-            'nama_dokter' => $this->request->getPost('nama_dokter'),
-            'nip' => $this->request->getPost('nip'),
-            'nama_petugas' => $this->request->getPost('nama_petugas'),
-            'tanggal_rawat' => $this->request->getPost('tanggal_rawat'),
-            'jam_rawat' => $this->request->getPost('jam_rawat'),
-            'biaya' => floatval($this->request->getPost('biaya')),
-        ];
-
-        $payload = json_encode($postData);
-        $ch = curl_init($tindakan_url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($payload),
-            'Authorization: Bearer ' . $token,
-        ]);
-        $response = curl_exec($ch);
-        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($http_status === 200) {
-            return redirect()->to(base_url('tindakan/' . $nomorRawat));
-        } else {
-            return $response;
-        }
+public function submitEditTindakan($nomorRawat, $jamRawat)
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
     }
 
-    public function hapusTindakan($nomor_rawat, $jam_rawat)
-    {
-        if (!session()->has('jwt_token')) {
-            return $this->renderErrorView(401);
-        }
-    
-        $token = session()->get('jwt_token');
-    
-        $delete_url = $this->api_url . "/tindakan/$nomor_rawat/$jam_rawat";
-    
-        $ch = curl_init($delete_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-            'Accept: application/json'
-        ]);
-    
-        $response = curl_exec($ch);
-        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-    
-        if ($http_status !== 200) {
-            return $this->renderErrorView($http_status);
-        }
-    
-        return redirect()->to('/tindakan')->with('success', 'Tindakan deleted');
+    $token = session()->get('jwt_token');
+
+    // Build API URL with nomor_rawat and jam_rawat
+    $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat . '/' . $jamRawat;
+
+    $postData = [
+        'nomor_rawat'    => $this->request->getPost('nomor_rawat'),
+        'nomor_rm'       => $this->request->getPost('nomor_rm'),
+        'nama_pasien'    => $this->request->getPost('nama_pasien'),
+        'tindakan'       => $this->request->getPost('tindakan'),
+        'kode_dokter'    => $this->request->getPost('kode_dokter'),
+        'nama_dokter'    => $this->request->getPost('nama_dokter'),
+        'nip'            => $this->request->getPost('nip'),
+        'nama_petugas'   => $this->request->getPost('nama_petugas'),
+        'tanggal_rawat'  => $this->request->getPost('tanggal_rawat'),
+        'jam_rawat'      => $this->request->getPost('jam_rawat'),
+        'biaya'          => floatval($this->request->getPost('biaya')),
+    ];
+
+    $payload = json_encode($postData);
+// dd($tindakan_url);
+    $ch = curl_init($tindakan_url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($payload),
+        'Authorization: Bearer ' . $token,
+    ]);
+
+    $response = curl_exec($ch);
+    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($http_status === 200) {
+        return redirect()->to(base_url('tindakan/' . $nomorRawat));
+    } else {
+        return $response;
     }
+}
+
     
 
 public function tindakanData($nomorRawat)
@@ -662,10 +638,36 @@ public function submitFromUGD($nomor_rawat)
     ]);
 }
 
+public function hapusTindakan($nomorRawat, $jamRawat)
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
 
+    $token = session()->get('jwt_token');
 
+    // Build DELETE API URL
+    $deleteUrl = $this->api_url . '/tindakan/' . $nomorRawat . '/' . $jamRawat;
 
+    // Initialize cURL
+    $ch = curl_init($deleteUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
 
+    $response = curl_exec($ch);
+    $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpStatus !== 200) {
+        return $this->renderErrorView($httpStatus);
+    }
+
+    return redirect()->to('/tindakan')->with('success', 'Tindakan berhasil dihapus');
+}
 
 
 }

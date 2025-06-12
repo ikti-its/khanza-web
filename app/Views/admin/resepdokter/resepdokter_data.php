@@ -272,7 +272,7 @@ foreach ($racikan_list as $racikan) {
                         </button>
                     </div>
                     <div class="px-3 py-1.5">
-                        <a href="/pemberianobat/edit/<?= $resepdokter['no_resep'] ?>/<?= $resepdokter['no_resep'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
+                        <a href="/resepdokter/edit/<?= $resepdokter['no_resep'] ?>/<?= $resepdokter['kode_barang'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
                     </div>
                     <div class="px-3 py-1.5">
                                                 <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $resepdokter['no_resep'] . '-' . $i ?>')" href="#">Hapus</button>

@@ -1,3 +1,4 @@
+@ -1,666 +1,658 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 
@@ -20,7 +21,14 @@
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <?= view('components/notif_icon') ?>
+                                <button id="notif-icon" class="relative flex justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M19 8C20.6569 8 22 6.65685 22 5C22 3.34315 20.6569 2 19 2C17.3431 2 16 3.34315 16 5C16 6.65685 17.3431 8 19 8Z" fill="#DA4141" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7 13H12" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7 17H16" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M14 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V10" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
 
                                 <!-- Notification Pop-up -->
                                 <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
@@ -97,33 +105,106 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/data_tambah_button', [
-                                'link' => '/ugd/tambah'
-                            ]) ?>
+                            <div>
+                                <a href='/ugd/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                    <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
+                                        <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                    </svg>
+                                    Tambah
+                                </a>
+                            </div>
 
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
+                    <div class="py-4 grid gap-3 md:items-start">
+                        <div class="sm:col-span-1">
+                            <label for="hs-as-table-product-review-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <input type="text" id="myInput" onkeyup="myFunction()" class="py-2 px-4 ps-11 block border w-full xl:w-96 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
+                                <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
+                                    <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- End Header -->
 
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
-                            
-                            $columns = [
-                                'No Registrasi',
-                                'No Rekam Medis',
-                                'Nama',
-                                'Poliklinik',
-                                'Dokter',
-                                'Aksi'
-                            ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
-                        ?>
+                        <colgroup>
+                            <!-- <col width="5%"> -->
+                            <col width="30%">
+                            <col width="25%">
+                            <!-- <col width="20%"> -->
+                            <col width="20%">
+                            <col width="25%">
+                        </colgroup>
+                        <thead class="bg-gray-50 dark:bg-slate-800">
+                            <tr>
+                                <!-- <th scope="col" class="ps-6 py-3 text-start">
+                                    <label for="hs-at-with-checkboxes-main" class="flex">
+                                        <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-main">
+                                        <span class="sr-only">Checkbox</span>
+                                    </label>
+                                </th> -->
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            No. Registrasi
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            No. Rekam Medis
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Nama
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Poliklinik
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Dokter
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex items-center justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Aksi
+                                        </span>
+                                    </div>
+                                </th>
+
+                            </tr>
+                        </thead>
+
+
+
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($ugd_data as $ugd) : ?>
@@ -224,21 +305,13 @@
                                                         <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
                                                         <input type="text" name="" value="<?= $ugd['status_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
                                                     </div>
-                                                    <div class="p-4 space-y-4">
-                                                        <div>
-                                                            <label class="block text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
-                                                            <input type="text" value="<?= $ugd['nomor_reg'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
-                                                        </div>
-                                                        <div>
-                                                            <label class="block text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
-                                                            <input type="text" value="<?= $ugd['nomor_rm'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
-                                                        </div>
-                                                        <div class="px-3 py-1.5">
+                                                    <!-- <div class="p-4 space-y-4"> -->
+                                                        <!-- <div class="px-3 py-1.5">
                                                             <a href="/tindakan/<?= $ugd['nomor_rawat'] ?>" 
                                                             class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
                                                                 Lihat Tindakan
                                                             </a>
-                                                        </div>
+                                                        </div> -->
                                                         <div class="px-3 py-1.5">
                                                             <form method="GET" action="/tindakan/submit-ugd/<?= $ugd['nomor_rawat'] ?>">
                                                                 <?= csrf_field() ?>
@@ -257,11 +330,11 @@
                                                         </form>
                                                             </div>
                                                         <!-- Add more fields if needed -->
-                                                    </div>
+                                                    <!-- </div> -->
 
                                                     <div class="mb-5 flex items-end gap-4">
                                                         <!-- Select input -->
-                                                        <div class="w-full">
+                                                        <!-- <div class="w-full">
                                                             <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kelas Kamar</label>
                                                             <select name="status_poliklinik"
                                                                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white"
@@ -270,16 +343,16 @@
                                                                 <option value="VIP">VIP</option>
                                                                 <option value="VVIP">VVIP</option>
                                                             </select>
-                                                        </div>
+                                                        </div> -->
 
                                                         <!-- Rawat Inap button -->
-                                                        <form id="formButuhKamar" action="/registrasi/trigger-notif" method="post" class="self-end">
+                                                        <!-- <form id="formButuhKamar" action="/registrasi/trigger-notif" method="post" class="self-end">
                                                             <input type="hidden" name="nomor_reg" id="formNomorReg">
                                                             <button type="submit"
                                                                     class="btn btn-warning whitespace-nowrap py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
                                                                 Rawat Inap
                                                             </button>
-                                                        </form>
+                                                        </form> -->
                                                     </div>
 
 

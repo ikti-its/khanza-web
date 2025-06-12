@@ -281,14 +281,14 @@
                                                 Lihat Detail
                                             </button>
                     </div>
-                    <div class="px-3 py-1.5">
+                    <!-- <div class="px-3 py-1.5">
                         <?php if ($resepobat['validasi'] === true || $resepobat['validasi'] === 1 || $resepobat['validasi'] === 'true'): ?>
                             <span class="text-gray-400 text-sm font-semibold cursor-not-allowed" title="Sudah divalidasi, tidak dapat diubah">Ubah</span>
                         <?php else: ?>
                             <a href="/resepobat/edit/<?= $resepobat['no_resep'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
                         <?php endif; ?>
                     </div>
-                    <div class="px-3 py-1.5">
+                    <div class="px-3 py-1.5"> -->
                                                 <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $resepobat['no_resep'] . '-' . $i ?>')" href="#">Hapus</button>
 
                                                 <div id="modelConfirm-<?= $resepobat['no_resep'] . '-' . $i ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">

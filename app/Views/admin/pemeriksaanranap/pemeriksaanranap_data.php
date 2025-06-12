@@ -275,9 +275,9 @@
                                                 </a>
                                             </div>
                                             <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $pemeriksaanranap['no_rawat'] ?>')" href="#">
+                                                <!-- <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $pemeriksaanranap['no_rawat'] ?>')" href="#">
                                                     Hapus
-                                                </button>
+                                                </button> -->
                                                 <div id="modelConfirm-<?= $pemeriksaanranap['no_rawat'] ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
                                                     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 

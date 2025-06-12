@@ -10,7 +10,7 @@
                 Edit Penanganan
             </h2>
         </div>
-        <form action="<?= site_url('tindakan/submitedit/' . $tindakan['nomor_rawat']) ?>" onsubmit="return validateForm()" method="post">
+        <form action="/tindakan/submitedit/<?= $tindakan['nomor_rawat'] ?>/<?= $tindakan['jam_rawat'] ?>" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -47,20 +47,25 @@
                     <input type="hidden" name="tarif_tindakan" id="tarifTindakan">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Dokter</label>
-                <input type="text" name="nama_dokter" value="<?= $tindakan['nama_dokter'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Petugas</label>
-                <input name="nama_petugas" value="<?= $tindakan['nama_petugas'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <!-- Dokter Select -->
+                <label for="dokter-select" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Dokter</label>
+                <select id="dokter-select" name="kode_dokter" value="<?= $tindakan['nama_dokter'] ?? '' ?>" class="border border-gray-300 text-sm text-gray-900 rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                    <option value="">Pilih Dokter</option>
+                </select>
+                <input type="hidden" name="nama_dokter" id="nama-dokter-hidden">
+
+                <!-- Petugas Select -->
+                <label for="pegawai-select" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Petugas</label>
+                <select id="pegawai-select" name="nip" value="<?= $tindakan['nama_petugas'] ?? '' ?>" class="border border-gray-300 text-sm text-gray-900 rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    <option value="">Pilih Petugas</option>
+                </select>
+                <input type="hidden" name="nama_petugas" id="nama-pegawai-hidden">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal</label>
-                <input type="text" name="tanggal_rawat" value="<?php 
-                    $tanggalHariIni = date('Y-m-d');
-                    echo $tanggalHariIni; ?>"class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                <input type="text" name="tanggal_rawat" value="<?= $tindakan['tanggal_rawat'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam</label>
-                <input name="jam_rawat" value="<?php 
-    $jamSekarang = date('H:i:s');
-    echo $jamSekarang; ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input name="jam_rawat" value="<?= $tindakan['jam_rawat'] ?? '' ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <!-- <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Biaya</label>
@@ -73,64 +78,97 @@
 </div>
 <!-- End Card Section -->
 <script>
-    const inputHargaBeli = document.querySelector('input[name="hargabeli"]');
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = "<?= session()->get('jwt_token') ?>";
 
-    // Ambil semua input yang perlu diisi dan diubah
-    const inputHargaRalan = document.querySelector('input[name="hargaralan"]');
-    const inputHargaKelas1 = document.querySelector('input[name="hargakelas1"]');
-    const inputHargaKelas2 = document.querySelector('input[name="hargakelas2"]');
-    const inputHargaKelas3 = document.querySelector('input[name="hargakelas3"]');
-    const inputHargaUtama = document.querySelector('input[name="hargautama"]');
-    const inputHargaVIP = document.querySelector('input[name="hargavip"]');
-    const inputHargaVVIP = document.querySelector('input[name="hargavvip"]');
-    const inputHargaApotekLuar = document.querySelector('input[name="hargaapotekluar"]');
-    const inputHargaObatBebas = document.querySelector('input[name="hargaobatbebas"]');
-    const inputHargaKaryawan = document.querySelector('input[name="hargakaryawan"]');
+    // Populate Dokter
+    const dokterSelect = document.getElementById("dokter-select");
+    const namaDokterHidden = document.getElementById("nama-dokter-hidden");
+    const prefillDokter = "<?= $prefill['kode_dokter'] ?? '' ?>";
 
-    // Tambahkan event listener untuk input harga beli
-    inputHargaBeli.addEventListener('input', function() {
-        // Ambil nilai harga beli
-        const hargaBeli = parseFloat(inputHargaBeli.value);
+    fetch("http://127.0.0.1:8080/v1/dokter", {
+        headers: {
+            "Authorization": "Bearer <?= session()->get('jwt_token') ?>",
+            "Accept": "application/json"
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data?.data && Array.isArray(data.data)) {
+            data.data.forEach(item => {
+                const option = document.createElement("option");
+                option.value = item.kode_dokter;
+                option.textContent = item.kode_dokter + " - " + item.nama_dokter;
 
-        // Pastikan nilai harga beli valid (numerik dan tidak NaN)
-        if (!isNaN(hargaBeli)) {
-            // Hitung harga ralan dan setiap harga rnp dengan tambahan 15%
-            const hargaRalan = hargaBeli * 1.15;
-            const hargaKelas1 = hargaBeli * 1.15;
-            const hargaKelas2 = hargaBeli * 1.15;
-            const hargaKelas3 = hargaBeli * 1.15;
-            const hargaUtama = hargaBeli * 1.15;
-            const hargaVIP = hargaBeli * 1.15;
-            const hargaVVIP = hargaBeli * 1.15;
-            const hargaApotekLuar = hargaBeli * 1.15;
-            const hargaObatBebas = hargaBeli * 1.15;
-            const hargaKaryawan = hargaBeli * 1.15;
+                if (item.kode_dokter === prefillDokter) {
+                    option.selected = true;
+                    namaDokterHidden.value = item.nama_dokter; // ⬅️ prefill hidden field
+                }
 
-            // Masukkan nilai yang dihitung ke dalam masing-masing input
-            inputHargaRalan.value = hargaRalan.toFixed(0);
-            inputHargaKelas1.value = hargaKelas1.toFixed(0);
-            inputHargaKelas2.value = hargaKelas2.toFixed(0);
-            inputHargaKelas3.value = hargaKelas3.toFixed(0);
-            inputHargaUtama.value = hargaUtama.toFixed(0);
-            inputHargaVIP.value = hargaVIP.toFixed(0);
-            inputHargaVVIP.value = hargaVVIP.toFixed(0);
-            inputHargaApotekLuar.value = hargaApotekLuar.toFixed(0);
-            inputHargaObatBebas.value = hargaObatBebas.toFixed(0);
-            inputHargaKaryawan.value = hargaKaryawan.toFixed(0);
-        } else {
-            // Jika harga beli tidak valid, atur nilai input lainnya menjadi kosong
-            inputHargaRalan.value = '';
-            inputHargaKelas1.value = '';
-            inputHargaKelas2.value = '';
-            inputHargaKelas3.value = '';
-            inputHargaUtama.value = '';
-            inputHargaVIP.value = '';
-            inputHargaVVIP.value = '';
-            inputHargaApotekLuar.value = '';
-            inputHargaObatBebas.value = '';
-            inputHargaKaryawan.value = '';
+                dokterSelect.appendChild(option);
+            });
         }
     });
+
+    dokterSelect.addEventListener("change", () => {
+        const selectedOption = dokterSelect.options[dokterSelect.selectedIndex];
+        const nama = selectedOption.textContent.split(" - ")[1] ?? "";
+        namaDokterHidden.value = nama; // ⬅️ set hidden input
+    });
+
+    // Populate Pegawai
+    const pegawaiSelect = document.getElementById("pegawai-select");
+    const namaPegawaiHidden = document.getElementById("nama-pegawai-hidden");
+    const prefillPegawai = "<?= $prefill['nip'] ?? '' ?>";
+
+    fetch("http://127.0.0.1:8080/v1/pegawai", {
+        headers: {
+            "Authorization": "Bearer <?= session()->get('jwt_token') ?>",
+            "Accept": "application/json"
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data?.data && Array.isArray(data.data)) {
+            data.data.forEach(item => {
+                const option = document.createElement("option");
+                option.value = item.nip;
+                option.textContent = item.nip + " - " + item.nama;
+
+                if (item.nip === prefillPegawai) {
+                    option.selected = true;
+                    namaPegawaiHidden.value = item.nama;
+                }
+
+                pegawaiSelect.appendChild(option);
+            });
+        }
+    });
+
+    pegawaiSelect.addEventListener("change", () => {
+        const selectedOption = pegawaiSelect.options[pegawaiSelect.selectedIndex];
+        const nama = selectedOption.textContent.split(" - ")[1] ?? "";
+        namaPegawaiHidden.value = nama;
+    });
+});
+
+document.getElementById("tindakanSelect").addEventListener("change", function () {
+    const selected = this.options[this.selectedIndex];
+    const tarif = selected.getAttribute("data-tarif") || 0;
+
+    // Set to the biaya input
+    document.getElementById("biayaInput").value = tarif;
+});
+
+    document.getElementById("tindakanSelect").addEventListener("change", function() {
+    const selected = this.options[this.selectedIndex];
+    const kode = selected.value;
+    const nama = selected.getAttribute("data-nama");
+    const tarif = selected.getAttribute("data-tarif");
+
+    document.getElementById("kodeTindakan").value = kode;
+    document.getElementById("tarifTindakan").value = tarif;
+});
 
     function validateForm() {
         var requiredFields = document.querySelectorAll('select[required], input[required]');
