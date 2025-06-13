@@ -331,7 +331,7 @@ public function dataPemeriksaanRanapDetail($noRawat)
     }
 }
 
-    public function editPemeriksaanRanap($nomorRawat)
+public function editPemeriksaanRanap($nomorRawat)
 {
     if (!session()->has('jwt_token')) {
         return $this->renderErrorView(401);
@@ -357,6 +357,30 @@ public function dataPemeriksaanRanapDetail($noRawat)
 
     $pemeriksaan_data = json_decode($response, true);
     $pemeriksaan = $pemeriksaan_data['data'] ?? [];
+
+    // 🔹 Normalize jam (ISO 8601 → H:i:s)
+    if (!empty($pemeriksaan['jam'])) {
+        try {
+            $jam = new \DateTime($pemeriksaan['jam']);
+            $pemeriksaan['jam_rawat'] = $jam->format('H:i:s');
+        } catch (\Exception $e) {
+            $pemeriksaan['jam_rawat'] = '';
+        }
+    } else {
+        $pemeriksaan['jam_rawat'] = '';
+    }
+
+    // 🔹 Normalize tanggal (optional)
+    if (!empty($pemeriksaan['tanggal'])) {
+        try {
+            $tanggal = new \DateTime($pemeriksaan['tanggal']);
+            $pemeriksaan['tgl_perawatan'] = $tanggal->format('Y-m-d');
+        } catch (\Exception $e) {
+            $pemeriksaan['tgl_perawatan'] = '';
+        }
+    } else {
+        $pemeriksaan['tgl_perawatan'] = '';
+    }
 
     // 🔹 Fetch registrasi data
     $nama_pasien = '';
@@ -400,8 +424,8 @@ public function dataPemeriksaanRanapDetail($noRawat)
         }
     }
 
+    // 🔹 Fetch tanggal lahir pasien (if available)
     $no_rkm_medis = $reg_data['data']['nomor_rm'] ?? '';
-
     if (!empty($no_rkm_medis)) {
         $pasien_url = $this->api_url . '/pasien/' . urlencode($no_rkm_medis);
 
@@ -425,7 +449,7 @@ public function dataPemeriksaanRanapDetail($noRawat)
 
     $breadcrumbs = $this->getBreadcrumbs();
 // dd($pemeriksaan);
-    // 🔹 Pass data to view
+    // 🔹 Return view with normalized values
     return view('/admin/pemeriksaanranap/edit_pemeriksaanranap', [
         'pemeriksaan' => $pemeriksaan,
         'title' => $title,
@@ -435,6 +459,7 @@ public function dataPemeriksaanRanapDetail($noRawat)
         'nama_petugas' => $nama_petugas,
     ]);
 }
+
 
 
     public function submitEditPemeriksaanRanap($nomorRawat)
@@ -453,12 +478,18 @@ public function dataPemeriksaanRanapDetail($noRawat)
     $tanggalInput = trim($this->request->getPost('tanggal'));
     $tanggal = $tanggalInput !== '' ? $tanggalInput : date('Y-m-d');
 
+    $jamRawat = $this->request->getPost('jam_rawat') ?? '';
+if (strlen($jamRawat) === 5) {
+    // Format is HH:MM, pad with :00
+    $jamRawat .= ':00';
+}
+
 
     // Minimal required fields for update
     $postDataPemeriksaanRanap = [
         'no_rawat'        => $this->request->getPost('nomor_rawat'),
         'tgl_perawatan'      => $this->request->getPost('tgl_perawatan'),
-        'jam_rawat'          => $this->request->getPost('jam_rawat'),
+        'jam_rawat'         => $jamRawat,
         'nip'                => $this->request->getPost('nip'),
         'nama_petugas'       => $this->request->getPost('nama_petugas'),
         'profesi'            => $this->request->getPost('profesi'),
@@ -482,7 +513,7 @@ public function dataPemeriksaanRanapDetail($noRawat)
     ];
 
     $jsonPayload = json_encode($postDataPemeriksaanRanap);
-// dd($jsonPayload);
+// dd($postDataPemeriksaanRanap);
     $ch = curl_init($pemeriksaan_url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonPayload);

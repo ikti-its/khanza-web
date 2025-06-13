@@ -154,6 +154,18 @@ class ResepDokterController extends BaseController
                 }
             }
         }
+
+        $obatUrl = $this->api_url . '/pemberian-obat/databarang';
+        $obatCh = curl_init($obatUrl);
+        curl_setopt($obatCh, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($obatCh, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+        ]);
+        $obatResponse = curl_exec($obatCh);
+        curl_close($obatCh);
+
+        $obatData = json_decode($obatResponse, true);
+        $obat_list = $obatData['data'] ?? [];
     
         $this->addBreadcrumb('User', 'user');
         $this->addBreadcrumb('Resep Dokter', 'resepdokter');
@@ -162,6 +174,7 @@ class ResepDokterController extends BaseController
         return view('/admin/resepobat/edit_resepobat', [
             'resepdokter' => $selectedResep,
             'title' => $title,
+            'obat_list' => $obat_list,
             'breadcrumbs' => $this->getBreadcrumbs()
         ]);
     }

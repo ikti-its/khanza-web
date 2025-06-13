@@ -34,9 +34,12 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam</label>
                 <input type="time" name="jam_rawat"
-    value="<?= esc(date('H:i:s', strtotime($pemeriksaan['jam'] ?? ''))) ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" 
-                    required>
+    value="<?= esc($pemeriksaan['jam_rawat'] ?? '') ?>"
+    step="1"
+    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+    required>
+
+                    <!-- <input type="hidden" name="jam_rawat" value="<?= esc($pemeriksaan['jam']) ?>"> -->
             </div>
 
 
@@ -68,8 +71,11 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Suhu</label>
-                <input name="suhu_tubuh" value="<?= esc($pemeriksaan['suhu_tubuh']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <label for="suhu_tubuh" class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Suhu Tubuh (°C)</label>
+    <input type="number" step="0.1" name="suhu_tubuh" id="suhu_tubuh"
+        value="<?= old('suhu_tubuh', $pemeriksaan['suhu_tubuh'] ?? '') ?>"
+        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+        required>
                 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">SpO2</label>
                 <input name="spo2" id="totalObat" value="<?= esc($pemeriksaan['spo2']) ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly>
