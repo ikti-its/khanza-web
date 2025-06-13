@@ -107,8 +107,8 @@
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     
-    <?php foreach ($permintaanreseppulang_data as $i => $permintaanreseppulang) : ?>
-        <div id="hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+                            <?php foreach ($permintaanreseppulang_data as $i => $permintaanreseppulang) : ?>
+                                <div id="hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
                                         <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
                                             <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
@@ -177,171 +177,113 @@
                                         </div>
                                     </div>
                                 </div>
-        <tr>
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <a data-nomor-reg="<?= $permintaanreseppulang['no_permintaan'] ?>"
-                    data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                        <?= $permintaanreseppulang['no_permintaan'] ?>
-                    </a>
-                </div>
-            </td>
+                                <tr>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <a data-nomor-reg="<?= $permintaanreseppulang['no_permintaan'] ?>"
+                                            data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
+                                                <?= $permintaanreseppulang['no_permintaan'] ?>
+                                            </a>
+                                        </div>
+                                    </td>
 
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $permintaanreseppulang['tgl_permintaan'] ?? 'N/A' ?></span>
-                </div>
-            </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $permintaanreseppulang['tgl_permintaan'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
 
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $permintaanreseppulang['jam'] ?? 'N/A' ?></span>
-                </div>
-            </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $permintaanreseppulang['jam'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
 
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <a href="<?= base_url('resepobat/' . ($permintaanreseppulang['no_rawat'] ?? 'N/A')) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                        <?= $permintaanreseppulang['no_rawat'] ?? 'N/A' ?>
-                    </a>
-                </div>
-            </td>
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $permintaanreseppulang['kd_dokter'] ?? 'N/A' ?></span>
-                </div>
-            </td>
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $permintaanreseppulang['status'] ?? 'N/A' ?></span>
-                </div>
-            </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <a href="<?= base_url('resepobat/' . ($permintaanreseppulang['no_rawat'] ?? 'N/A')) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
+                                                <?= $permintaanreseppulang['no_rawat'] ?? 'N/A' ?>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $permintaanreseppulang['kd_dokter'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $permintaanreseppulang['status'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
 
 
-            <td class="size-px whitespace-nowrap">
-                <div class="px-3 py-1.5 text-center inline-flex">
-                    <div class="px-3 py-1.5">
-                    <button
+                                    <td class="size-px whitespace-nowrap">
+                                        <div class="px-3 py-1.5 text-center inline-flex">
+                                            <div class="px-3 py-1.5">
+                                            <button
                                                 type="button"
                                                 class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
                                                 data-nomor-reg="<?= $permintaanreseppulang['no_permintaan'] ?>"
                                                 data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] ?>">
                                                 Lihat Detail
                                             </button>
-                    </div>
-                    <div class="px-3 py-1.5">
-                        <a href="/permintaanreseppulang/edit/<?= $permintaanreseppulang['no_permintaan'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
-                    </div>
-                    <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $permintaanreseppulang['no_permintaan'] . '-' . $i ?>')" href="#">Hapus</button>
-                                                <?php
-                                                    $row_id  = $permintaanreseppulang['no_permintaan'] . '-' . $i;
-                                                    $api_url = '/permintaanreseppulang/hapus/';
-                                                    echo view('components/data_hapus_form',[
-                                                        'row_id'  => $row_id,
-                                                        'api_url' => $api_url   
-                                                    ]) 
-                                                ?>
                                             </div>
-                </div>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-</tbody>
-<?php foreach ($permintaanreseppulang_data as $i => $permintaanreseppulang) : ?>
-    <div id="hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
-        <div class="mt-20 mx-auto w-full max-w-lg p-6 bg-white dark:bg-neutral-800 rounded shadow">
-            <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="text-lg font-bold"><?= $permintaanreseppulang['no_permintaan'] ?></h3>
-                <button data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] . '-' . $i ?>" class="text-gray-600 dark:text-white hover:text-red-600">
-                    &times;
-                </button>
-            </div>
-            <div class="mt-4 space-y-3">
-                <div><strong>Nomor Rawat:</strong> <?= $permintaanreseppulang['no_permintaan'] ?></div>
-                <!-- <div><strong>Nomor RM:</strong> <?= $permintaanreseppulang['no_permintaan'] ?></div> -->
-                <div><strong>Dokter:</strong> <?= $permintaanreseppulang['no_permintaan'] ?? 'N/A' ?></div>
-                <div><strong>Tanggal:</strong> <?= $permintaanreseppulang['no_permintaan'] ?></div>
-                <div><strong>Jam:</strong> <?= $permintaanreseppulang['no_permintaan'] ?></div>
-            </div>
-            <div class="mt-6 text-end">
-                <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] . '-' . $i ?>">Tutup</button>
-            </div>
-        </div>
-    </div>
-<?php endforeach; ?>
+                                            <?php
+                                                $row_id  = $permintaanreseppulang['no_permintaan'] . '-' . $i;
+                                                $api_url = '/permintaanreseppulang';
+                                                echo view('components/data_lihat_detail',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
+                                                echo view('components/data_ubah',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
+                                                echo view('components/data_hapus',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]); 
+                                            ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                        <?php foreach ($permintaanreseppulang_data as $i => $permintaanreseppulang) : ?>
+                            <div id="hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
+                                <div class="mt-20 mx-auto w-full max-w-lg p-6 bg-white dark:bg-neutral-800 rounded shadow">
+                                    <div class="flex justify-between items-center border-b pb-2">
+                                        <h3 class="text-lg font-bold"><?= $permintaanreseppulang['no_permintaan'] ?></h3>
+                                        <button data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] . '-' . $i ?>" class="text-gray-600 dark:text-white hover:text-red-600">
+                                            &times;
+                                        </button>
+                                    </div>
+                                    <div class="mt-4 space-y-3">
+                                        <div><strong>Nomor Rawat:</strong> <?= $permintaanreseppulang['no_permintaan'] ?></div>
+                                        <!-- <div><strong>Nomor RM:</strong> <?= $permintaanreseppulang['no_permintaan'] ?></div> -->
+                                        <div><strong>Dokter:</strong> <?= $permintaanreseppulang['no_permintaan'] ?? 'N/A' ?></div>
+                                        <div><strong>Tanggal:</strong> <?= $permintaanreseppulang['no_permintaan'] ?></div>
+                                        <div><strong>Jam:</strong> <?= $permintaanreseppulang['no_permintaan'] ?></div>
+                                    </div>
+                                    <div class="mt-6 text-end">
+                                        <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] . '-' . $i ?>">Tutup</button>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </table>
                     </div>
 
                     <!-- End Table -->
-
-                    <!-- Footer -->
-                    <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
-                        <!-- Pagination -->
-                        <nav class="flex w-full justify-between items-center gap-x-1">
-                            <!-- Previous Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m15 18-6-6 6-6"></path>
-                                    </svg>
-                                    <span aria-hidden="true" class="hidden sm:block">Previous</span>
-                                </button>
-                            </div>
-
-                            <!-- Page Numbers -->
-                            <div class="flex items-center gap-x-1">
-                                <?php
-                                $total_pages = $meta_data['total'] ?? 1; // Ensure 'total' always has a value
-                                $current_page = $meta_data['page'] ?? 1;
-
-                                $range = 2; // Number of pages to show before and after the current page
-                                $show_items = ($range * 2) + 1;
-
-                                if ($total_pages <= $show_items) {
-                                    for ($i = 1; $i <= $total_pages; $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                    }
-                                } else {
-                                    if ($current_page > $range + 1) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=1&size=' . $meta_data['size'] . '\'">1</button>';
-                                        if ($current_page > $range + 2) {
-                                            echo '<span class="py-2 px-3 text-sm">...</span>';
-                                        }
-                                    }
-
-                                    for ($i = max($current_page - $range, 1); $i <= min($current_page + $range, $total_pages); $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                    }
-
-                                    if ($current_page < $total_pages - $range - 1) {
-                                        if ($current_page < $total_pages - $range - 2) {
-                                            echo '<span class="py-2 px-3 text-sm">...</span>';
-                                        }
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
-                                    }
-                                }
-                                ?>
-                            </div>
-
-                            <!-- Next Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <span aria-hidden="true" class="hidden sm:block">Next</span>
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m9 18 6-6-6-6"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </nav>
-                    </div>
-
+                    <?= view('components/data_footer.php', [
+                        'meta_data' => $meta_data,
+                        'api_url'   => $api_url
+                    ]) ?>
                 </div>
-                <!-- End Footer -->
             </div>
         </div>
     </div>
-</div>
 </div>
 <!-- End Card -->
 
@@ -493,14 +435,6 @@ function validatePermintaan(button) {
         document.getElementById('stok-tab').classList.remove('border-[#272727]');
     });
 
-    window.openModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'block'
-        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
-    }
-
-    window.closeModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'none'
-        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-    }
+    
 </script>
 <?= $this->endSection(); ?>

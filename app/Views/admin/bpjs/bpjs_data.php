@@ -1,3 +1,4 @@
+@ -1,666 +1,658 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 
@@ -13,18 +14,21 @@
                     <!-- Header -->
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
                         <div>
-                        <?php if (!empty($resepdokter_data)) : ?>
-                            <div class="mb-4 text-xl font-black text-gray-800 dark:text-gray-200 space-y-1">
-                                <div class="flex">
-                                    <span class="w-48">Nomor Resep</span> : <?= $resepdokter_data[0]['no_resep'] ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
+                            <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
+                                Pasien Unit Gawat Darurat
+                            </h2>
 
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <?= view('components/notif_icon') ?>
+                                <button id="notif-icon" class="relative flex justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M19 8C20.6569 8 22 6.65685 22 5C22 3.34315 20.6569 2 19 2C17.3431 2 16 3.34315 16 5C16 6.65685 17.3431 8 19 8Z" fill="#DA4141" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7 13H12" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7 17H16" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M14 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V10" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
 
                                 <!-- Notification Pop-up -->
                                 <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
@@ -61,6 +65,39 @@
                                     </div>
                                     <div>
                                         <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
+                                            <?php
+                                            
+                                            $count_notif_stok = 0;
+                                            $today = new DateTime();
+                                            $today->setTime(0, 0, 0);
+                                            if ($count_notif_stok !== 0) {
+                                                foreach ($ugd_tanpa_params_data as $ugd_stok) {
+                                                    if ($ugd_stok['stok'] <= $ugd_stok['stok_minimum']) {
+                                                        $count_notif_stok++; ?>
+                                                        <a href="/datamedis/edit/<?= $ugd_stok['id'] ?>" class="p-4 flex items-center border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141] hover:bg-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                                                <path d="M12.5358 6.667C14.0754 4.00033 17.9244 4.00033 19.464 6.66699L27.8356 21.167C29.3752 23.8337 27.4507 27.167 24.3715 27.167H7.62834C4.54914 27.167 2.62464 23.8337 4.16424 21.167L12.5358 6.667Z" fill="#DA4141" />
+                                                                <path d="M16 18.333C15.4533 18.333 15 17.8797 15 17.333V10.333C15 9.78634 15.4533 9.33301 16 9.33301C16.5467 9.33301 17 9.78634 17 10.333V17.333C17 17.8797 16.5467 18.333 16 18.333Z" fill="#FEE2E2" />
+                                                                <path d="M15.9998 23.0001C15.8265 23.0001 15.6532 22.9601 15.4932 22.8934C15.3198 22.8268 15.1865 22.7335 15.0531 22.6135C14.9331 22.4802 14.8398 22.3335 14.7598 22.1735C14.6932 22.0135 14.6665 21.8401 14.6665 21.6668C14.6665 21.3201 14.7998 20.9734 15.0531 20.7201C15.1865 20.6001 15.3198 20.5068 15.4932 20.4402C15.9865 20.2268 16.5732 20.3468 16.9465 20.7201C17.0665 20.8534 17.1598 20.9868 17.2265 21.1601C17.2931 21.3201 17.3332 21.4935 17.3332 21.6668C17.3332 21.8401 17.2931 22.0135 17.2265 22.1735C17.1598 22.3335 17.0665 22.4802 16.9465 22.6135C16.6932 22.8668 16.3598 23.0001 15.9998 23.0001Z" fill="#FEE2E2" />
+                                                            </svg>
+                                                            <div class="mx-2">
+                                                                <span>Stok <span class="font-semibold"><?= $ugd_stok['nama'] ?></span> telah mencapai jumlah minimum</span>
+                                                                <div class="py-1 font-semibold text-sm text-[#DA4141]">Sisa stok: <?= $ugd_stok['stok'] ?></div>
+                                                            </div>
+                                                        </a>
+
+                                                <?php }
+                                                }
+                                            } else { ?>
+                                                <button class="p-4 flex items-center border-b-2 border-b-[#F1F1F1] border-l-2 border-l-[#DA4141] hover:bg-gray-100">
+
+                                                    <div class="mx-2">
+                                                        <span>Belum ada notifikasi stok</span>
+
+                                                    </div>
+                                                </button>
+                                            <?php
+                                            } ?>
 
                                         </div>
                                         
@@ -68,131 +105,62 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?php if (!empty($resepdokter_data)) : ?>
-                                <div>
-                                    <a href='/pemberianobat/tambah/<?= $resepdokter_data[0]['no_resep'] ?>' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                                        <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
-                                            <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                        </svg>
-                                        Tambah
-                                    </a>
-                                </div>
-                            <?php endif; ?>
+                            <div>
+                                <a href='/ugd/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                                    <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
+                                        <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                    </svg>
+                                    Tambah
+                                </a>
+                            </div>
+
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
+                    <div class="py-4 grid gap-3 md:items-start">
+                        <div class="sm:col-span-1">
+                            <label for="hs-as-table-product-review-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <input type="text" id="myInput" onkeyup="myFunction()" class="py-2 px-4 ps-11 block border w-full xl:w-96 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
+                                <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
+                                    <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- End Header -->
 
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
-                    <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
+                        <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <?php 
                             $widths  = [30, 25, 20, 25];
                             echo view('components/data_tabel_colgroup',['widths' => $widths]);
                             
                             $columns = [
-                                'Tanggal Beri',
-                                'Jam Beri',
-                                'Kode Obat',
-                                'Nama Obat',
-                                'Jumlah',
-                                'Biaya',
-                                'Aksi'
+                                'Nomor Program',
+                                'Nama Program',
+                                'Penyelenggara',
+                                'Tarif (%)',
+                                'Batas Bawah (Rp)',
+                                'Batas Atas (Rp)'
                             ];
                             echo view('components/data_tabel_thead',['columns' => $columns]);
                         ?>
-                        
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                    
-                            <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
-                                <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                                                <?= $resepdokter['no_resep'] ?>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepdokter['jam_beri'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepdokter['kode_obat'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['nama_obat'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['jumlah'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['total'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <?php
-                                                $row_id  = $resepdokter['no_resep'] . '-' . $i;
-                                                $api_url = '/pemberianobat';
-                                                echo view('components/data_lihat_detail',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_ubah',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_hapus',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]); 
-                                            ?>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                        <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
-                            <div id="hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
-                                <div class="mt-20 mx-auto w-full max-w-lg p-6 bg-white dark:bg-neutral-800 rounded shadow">
-                                    <div class="flex justify-between items-center border-b pb-2">
-                                        <h3 class="text-lg font-bold"><?= $resepdokter['no_resep'] ?></h3>
-                                        <button data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>" class="text-gray-600 dark:text-white hover:text-red-600">
-                                            &times;
-                                        </button>
-                                    </div>
-                                    <div class="mt-4 space-y-3">
-                                        <div><strong>Nomor Rawat:</strong> <?= $resepdokter['no_resep'] ?></div>
-                                        <!-- <div><strong>Nomor RM:</strong> <?= $resepdokter['no_resep'] ?></div> -->
-                                        <div><strong>Dokter:</strong> <?= $resepdokter['no_resep'] ?? 'N/A' ?></div>
-                                        <div><strong>Tanggal:</strong> <?= $resepdokter['no_resep'] ?></div>
-                                        <div><strong>Jam:</strong> <?= $resepdokter['no_resep'] ?></div>
-                                    </div>
-                                    <div class="mt-6 text-end">
-                                        <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>">Tutup</button>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </table>
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                            
+                        </table>
                     </div>
 
                     <!-- End Table -->
+                    
                     <?= view('components/data_footer.php', [
                         'meta_data' => $meta_data,
-                        'api_url'   => $api_url
+                        'api_url'   => '/bpjs'
                     ]) ?>
+                
                 </div>
             </div>
         </div>
@@ -267,6 +235,10 @@
         event.stopPropagation(); // Menghentikan penyebaran event ke elemen lain
         closeNotificationPopup();
     });
+    document.addEventListener('DOMContentLoaded', function() {
+        var count_notif_stok = <?= $count_notif_stok ?>;
+        document.querySelector('#stok-tab svg text').textContent = count_notif_stok;
+    });
 
     document.addEventListener('DOMContentLoaded', function() {
         // Menghitung jumlah div elemen di dalam kadaluwarsa-content
@@ -293,5 +265,16 @@
     });
 
     
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const tindakanButtons = document.querySelectorAll(".btn-tindakan");
+
+    tindakanButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const nomorReg = this.getAttribute("data-nomor-reg");
+            document.getElementById("formNomorReg").value = nomorReg;
+        });
+    });
+});
 </script>
 <?= $this->endSection(); ?>

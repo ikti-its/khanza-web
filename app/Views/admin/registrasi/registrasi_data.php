@@ -51,37 +51,37 @@
                                             </button>
                                         </div>
                                         <script>
-window.addEventListener("DOMContentLoaded", function () {
-    const container = document.getElementById("kamarpenuh-content");
-    const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
+                                        window.addEventListener("DOMContentLoaded", function () {
+                                            const container = document.getElementById("kamarpenuh-content");
+                                            const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
 
-    if (!container) return;
+                                            if (!container) return;
 
-    container.innerHTML = ""; // Clear previous content
+                                            container.innerHTML = ""; // Clear previous content
 
-    if (notifList.length === 0) {
-        container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
-    } else {
-        notifList.forEach(notif => {
-            container.innerHTML += `
-                <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
-                    <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
-                        <div>
-                            <p class="text-base font-semibold text-gray-800">
-                                Kamar penuh untuk ${notif.nama_pasien}
-                            </p>
-                            <p class="text-sm text-gray-500">
-                                Nomor Registrasi: ${notif.nomor_reg}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-    }
-});
-</script>
+                                            if (notifList.length === 0) {
+                                                container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
+                                            } else {
+                                                notifList.forEach(notif => {
+                                                    container.innerHTML += `
+                                                        <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
+                                                            <div class="flex items-center gap-2">
+                                                                <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                                                                <div>
+                                                                    <p class="text-base font-semibold text-gray-800">
+                                                                        Kamar penuh untuk ${notif.nama_pasien}
+                                                                    </p>
+                                                                    <p class="text-sm text-gray-500">
+                                                                        Nomor Registrasi: ${notif.nomor_reg}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    `;
+                                                });
+                                            }
+                                        });
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -292,24 +292,22 @@ window.addEventListener("DOMContentLoaded", function () {
                                                 Tindakan
                                             </button>
                                             </div>
-                                            <div class="px-3 py-1.5">
-                                                <a href="/registrasi/edit/<?= $registrasi['nomor_reg'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                                    Ubah
-                                                </a>
-                                            </div>
-                                            <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $registrasi['nomor_reg'] ?>')" href="#">
-                                                    Hapus
-                                                </button>
-                                                <?php
-                                                    $row_id  = $registrasi['nomor_reg'];
-                                                    $api_url = '/registrasi/hapus/';
-                                                    echo view('components/data_hapus_form',[
-                                                        'row_id'  => $row_id,
-                                                        'api_url' => $api_url   
-                                                    ]) 
+                                            <?php
+                                                $row_id  = $registrasi['nomor_reg'];
+                                                $api_url = '/registrasi';
+                                                echo view('components/data_lihat_detail',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
+                                                echo view('components/data_ubah',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
+                                                echo view('components/data_hapus',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]); 
                                                 ?>
-                                            </div>
                                         </div>
                                     </td>
 
@@ -424,76 +422,14 @@ window.addEventListener("DOMContentLoaded", function () {
 
                     <!-- End Table -->
 
-                    
-
-
-                    <!-- Footer -->
-                    <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
-                        <!-- Pagination -->
-                        <nav class="flex w-full justify-between items-center gap-x-1">
-                            <!-- Previous Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m15 18-6-6 6-6"></path>
-                                    </svg>
-                                    <span aria-hidden="true" class="hidden sm:block">Previous</span>
-                                </button>
-                            </div>
-
-                            <!-- Page Numbers -->
-                            <div class="flex items-center gap-x-1">
-                                <?php
-                                $total_pages = $meta_data['total'] ?? 1; // Ensure 'total' always has a value
-                                $current_page = $meta_data['page'] ?? 1;
-
-                                $range = 2; // Number of pages to show before and after the current page
-                                $show_items = ($range * 2) + 1;
-
-                                if ($total_pages <= $show_items) {
-                                    for ($i = 1; $i <= $total_pages; $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                    }
-                                } else {
-                                    if ($current_page > $range + 1) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=1&size=' . $meta_data['size'] . '\'">1</button>';
-                                        if ($current_page > $range + 2) {
-                                            echo '<span class="py-2 px-3 text-sm">...</span>';
-                                        }
-                                    }
-
-                                    for ($i = max($current_page - $range, 1); $i <= min($current_page + $range, $total_pages); $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                    }
-
-                                    if ($current_page < $total_pages - $range - 1) {
-                                        if ($current_page < $total_pages - $range - 2) {
-                                            echo '<span class="py-2 px-3 text-sm">...</span>';
-                                        }
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
-                                    }
-                                }
-                                ?>
-                            </div>
-
-                            <!-- Next Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <span aria-hidden="true" class="hidden sm:block">Next</span>
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m9 18 6-6-6-6"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </nav>
-                    </div>
-
+                    <?= view('components/data_footer.php', [
+                        'meta_data' => $meta_data,
+                        'api_url'   => $api_url
+                    ]) ?>
                 </div>
-                <!-- End Footer -->
             </div>
         </div>
     </div>
-</div>
 </div>
 <!-- End Card -->
 
@@ -891,15 +827,7 @@ function updateStatusKamar(nomorReg) {
     });
 
 
-    window.openModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'block'
-        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
-    }
-
-    window.closeModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'none'
-        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-    }
+    
 
     document.addEventListener("DOMContentLoaded", function () {
     const tindakanButtons = document.querySelectorAll(".btn-tindakan");

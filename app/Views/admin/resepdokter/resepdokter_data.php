@@ -209,181 +209,118 @@
                                 <td></td>
                             </tr>
                         </tfoot>
-<?php $noRacikMap = [];
+                        <?php $noRacikMap = [];
 
-foreach ($racikan_list as $racikan) {
-    $kode = $racikan['kode_brng'] ?? null; // or 'kode_barang' if your racikan list uses that
-    if ($kode && isset($racikan['no_racik'])) {
-        $noRacikMap[$kode] = $racikan['no_racik'];
-    }
-}?>
+                        foreach ($racikan_list as $racikan) {
+                            $kode = $racikan['kode_brng'] ?? null; // or 'kode_barang' if your racikan list uses that
+                            if ($kode && isset($racikan['no_racik'])) {
+                                $noRacikMap[$kode] = $racikan['no_racik'];
+                            }
+                        }?>
 
-                    
-    <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
-        <tr>
-            <!-- <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                        <?= $resepdokter['no_resep'] ?>
-                    </span>
-                </div>
-            </td> -->
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <a href="<?= base_url('resepobatracikan/') ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                        <?= isset($noRacikMap[$resepdokter['kode_barang']]) ? $noRacikMap[$resepdokter['kode_barang']] : '-' ?>
-                    </a>
-                </div>
-            </td>
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepdokter['kode_barang'] ?? 'N/A' ?></span>
-                </div>
-            </td>
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $barang_lookup[$resepdokter['kode_barang']] ?? 'Nama Barang Tidak Ditemukan' ?>
-                    </span>
-                </div>
-            </td>
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['jumlah'] ?? 'N/A' ?></span>
-                </div>
-            </td>
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['aturan_pakai'] ?? 'N/A' ?></span>
-                </div>
-            </td>
-            <td class="h-px w-64 whitespace-nowrap">
-                <div class="px-6 py-3">
-                    <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= isset($harga_lookup[$resepdokter['kode_barang']]) 
-    ? 'Rp ' . number_format($harga_lookup[$resepdokter['kode_barang']], 0, ',', '.') 
-    : 'N/A' ?></span>
-                </div>
-            </td>
+                                            
+                            <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
+                                <tr>
+                                    <!-- <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
+                                                <?= $resepdokter['no_resep'] ?>
+                                            </span>
+                                        </div>
+                                    </td> -->
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <a href="<?= base_url('resepobatracikan/') ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
+                                                <?= isset($noRacikMap[$resepdokter['kode_barang']]) ? $noRacikMap[$resepdokter['kode_barang']] : '-' ?>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepdokter['kode_barang'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $barang_lookup[$resepdokter['kode_barang']] ?? 'Nama Barang Tidak Ditemukan' ?>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['jumlah'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['aturan_pakai'] ?? 'N/A' ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="h-px w-64 whitespace-nowrap">
+                                        <div class="px-6 py-3">
+                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= isset($harga_lookup[$resepdokter['kode_barang']]) 
+                            ? 'Rp ' . number_format($harga_lookup[$resepdokter['kode_barang']], 0, ',', '.') 
+                            : 'N/A' ?></span>
+                                        </div>
+                                    </td>
 
-            <td class="size-px whitespace-nowrap">
-                <div class="px-3 py-1.5 text-center inline-flex">
-                    <div class="px-3 py-1.5">
-                        <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>">
-                            Lihat Detail
-                        </button>
-                    </div>
-                    <div class="px-3 py-1.5">
-                        <a href="/resepdokter/edit/<?= $resepdokter['no_resep'] ?>/<?= $resepdokter['kode_barang'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
-                    </div>
-                    <div class="px-3 py-1.5">
-                        <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $resepdokter['no_resep'] . '-' . $i ?>')" href="#">Hapus</button>
-                        <?php
-                            $row_id  = $resepdokter['no_resep'];
-                            $api_url = '/pemberianobat/hapus/';
-                            echo view('components/data_hapus_form',[
-                                'row_id'  => $row_id,
-                                'api_url' => $api_url   
-                            ]) 
-                        ?>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-</tbody>
-<?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
-    <div id="hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
-        <div class="mt-20 mx-auto w-full max-w-lg p-6 bg-white dark:bg-neutral-800 rounded shadow">
-            <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="text-lg font-bold"><?= $resepdokter['no_resep'] ?></h3>
-                <button data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>" class="text-gray-600 dark:text-white hover:text-red-600">
-                    &times;
-                </button>
-            </div>
-            <div class="mt-4 space-y-3">
-                <div><strong>Nomor Rawat:</strong> <?= $resepdokter['no_resep'] ?></div>
-                <!-- <div><strong>Nomor RM:</strong> <?= $resepdokter['no_resep'] ?></div> -->
-                <div><strong>Dokter:</strong> <?= $resepdokter['no_resep'] ?? 'N/A' ?></div>
-                <div><strong>Tanggal:</strong> <?= $resepdokter['no_resep'] ?></div>
-                <div><strong>Jam:</strong> <?= $resepdokter['no_resep'] ?></div>
-            </div>
-            <div class="mt-6 text-end">
-                <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>">Tutup</button>
-            </div>
-        </div>
-    </div>
-<?php endforeach; ?>
+                                    <td class="size-px whitespace-nowrap">
+                                        <div class="px-3 py-1.5 text-center inline-flex">
+                                            <?php
+                                                $row_id  = $resepdokter['no_resep'];
+                                                $api_url = '/pemberianobat';
+                                                echo view('components/data_lihat_detail',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
+                                                echo view('components/data_ubah',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
+                                                echo view('components/data_hapus',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]); 
+                                            ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                        <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
+                            <div id="hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
+                                <div class="mt-20 mx-auto w-full max-w-lg p-6 bg-white dark:bg-neutral-800 rounded shadow">
+                                    <div class="flex justify-between items-center border-b pb-2">
+                                        <h3 class="text-lg font-bold"><?= $resepdokter['no_resep'] ?></h3>
+                                        <button data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>" class="text-gray-600 dark:text-white hover:text-red-600">
+                                            &times;
+                                        </button>
+                                    </div>
+                                    <div class="mt-4 space-y-3">
+                                        <div><strong>Nomor Rawat:</strong> <?= $resepdokter['no_resep'] ?></div>
+                                        <!-- <div><strong>Nomor RM:</strong> <?= $resepdokter['no_resep'] ?></div> -->
+                                        <div><strong>Dokter:</strong> <?= $resepdokter['no_resep'] ?? 'N/A' ?></div>
+                                        <div><strong>Tanggal:</strong> <?= $resepdokter['no_resep'] ?></div>
+                                        <div><strong>Jam:</strong> <?= $resepdokter['no_resep'] ?></div>
+                                    </div>
+                                    <div class="mt-6 text-end">
+                                        <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>">Tutup</button>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </table>
                     </div>
 
                     <!-- End Table -->
-
-                    <!-- Footer -->
-                    <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
-                        <!-- Pagination -->
-                        <nav class="flex w-full justify-between items-center gap-x-1">
-                            <!-- Previous Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous page" <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m15 18-6-6 6-6"></path>
-                                    </svg>
-                                    <span aria-hidden="true" class="hidden sm:block">Previous</span>
-                                </button>
-                            </div>
-
-                            <!-- Page Numbers -->
-                            <div class="flex items-center gap-x-1">
-                                <?php
-                                $total_pages = $meta_data['total'] ?? 1; // Ensure 'total' always has a value
-                                $current_page = $meta_data['page'] ?? 1;
-
-                                $range = 2; // Number of pages to show before and after the current page
-                                $show_items = ($range * 2) + 1;
-
-                                if ($total_pages <= $show_items) {
-                                    for ($i = 1; $i <= $total_pages; $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                    }
-                                } else {
-                                    if ($current_page > $range + 1) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=1&size=' . $meta_data['size'] . '\'">1</button>';
-                                        if ($current_page > $range + 2) {
-                                            echo '<span class="py-2 px-3 text-sm">...</span>';
-                                        }
-                                    }
-
-                                    for ($i = max($current_page - $range, 1); $i <= min($current_page + $range, $total_pages); $i++) {
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ' . ($current_page == $i ? 'bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:focus:bg-neutral-500' : 'text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10') . ' py-2 px-3 text-sm rounded-lg" ' . ($current_page == $i ? 'aria-current="page"' : '') . ' onclick="window.location.href=\'/datamedis?page=' . $i . '&size=' . $meta_data['size'] . '\'">' . $i . '</button>';
-                                    }
-
-                                    if ($current_page < $total_pages - $range - 1) {
-                                        if ($current_page < $total_pages - $range - 2) {
-                                            echo '<span class="py-2 px-3 text-sm">...</span>';
-                                        }
-                                        echo '<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10 py-2 px-3 text-sm rounded-lg" onclick="window.location.href=\'/datamedis?page=' . $total_pages . '&size=' . $meta_data['size'] . '\'">' . $total_pages . '</button>';
-                                    }
-                                }
-                                ?>
-                            </div>
-
-                            <!-- Next Button -->
-                            <div class="inline-flex gap-x-2">
-                                <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next page" <?= $current_page >= $total_pages ? 'disabled' : '' ?> onclick="window.location.href='/datamedis?page=<?= $current_page + 1 ?>&size=<?= $meta_data['size'] ?>'">
-                                    <span aria-hidden="true" class="hidden sm:block">Next</span>
-                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m9 18 6-6-6-6"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </nav>
-                    </div>
-
+                    <?= view('components/data_footer.php', [
+                        'meta_data' => $meta_data,
+                        'api_url'   => $api_url
+                    ]) ?>
                 </div>
-                <!-- End Footer -->
             </div>
         </div>
     </div>
-</div>
 </div>
 <!-- End Card -->
 
@@ -479,14 +416,6 @@ foreach ($racikan_list as $racikan) {
         document.getElementById('stok-tab').classList.remove('border-[#272727]');
     });
 
-    window.openModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'block'
-        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
-    }
-
-    window.closeModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'none'
-        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-    }
+    
 </script>
 <?= $this->endSection(); ?>

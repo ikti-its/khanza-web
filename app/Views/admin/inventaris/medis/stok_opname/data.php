@@ -255,19 +255,18 @@
                                     </td>
                                     <td>
                                         <div class="py-1.5 text-center">
-                                            <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $opname['id'] ?>')" href="#">
-                                                    Hapus
-                                                </button>
-                                                <?php
-                                                    $row_id  = $opname['id'];
-                                                    $api_url = '/stokopnamemedis/hapus/';
-                                                    echo view('components/data_hapus_form',[
-                                                        'row_id'  => $row_id,
-                                                        'api_url' => $api_url   
-                                                    ]) 
-                                                ?>
-                                            </div>
+                                            <?php
+                                                $row_id  = $opname['id'];
+                                                $api_url = '/stokopnamemedis';
+                                                echo view('components/data_ubah',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
+                                                echo view('components/data_hapus',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]); 
+                                            ?>
                                         </div>
                                     </td>
 

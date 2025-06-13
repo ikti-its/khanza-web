@@ -275,29 +275,22 @@
                                                         </td>
                                                         <td class="size-px whitespace-nowrap">
                                                             <div class="px-3 py-1.5 inline-flex">
-                                                                <div class="px-3 py-1.5">
-                                                                    <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tagihan['id'] ?>">
-                                                                        Lihat Detail
-                                                                    </button>
-                                                                </div>
-                                                                <div class="px-3 py-1.5">
-                                                                    <a href="/tagihanmedis/edit/<?= $tagihan['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                                                        Ubah
-                                                                    </a>
-                                                                </div>
-                                                                <div class="px-3 py-1.5">
-                                                                    <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $tagihan['id'] ?>')" href="#">
-                                                                        Hapus
-                                                                    </button>
-                                                                    <?php
-                                                                        $row_id  = $tagihan['id'];
-                                                                        $api_url = '/tagihanmedis/hapus/';
-                                                                        echo view('components/data_hapus_form',[
-                                                                            'row_id'  => $row_id,
-                                                                            'api_url' => $api_url   
-                                                                        ]) 
-                                                                    ?>
-                                                                </div>
+                                                                <?php
+                                                                    $row_id  = $tagihan['id'];
+                                                                    $api_url = '/tagihanmedis';
+                                                                    echo view('components/data_lihat_detail',[
+                                                                        'row_id'  => $row_id,
+                                                                        'api_url' => $api_url   
+                                                                    ]);
+                                                                    echo view('components/data_ubah',[
+                                                                        'row_id'  => $row_id,
+                                                                        'api_url' => $api_url   
+                                                                    ]);
+                                                                    echo view('components/data_hapus',[
+                                                                        'row_id'  => $row_id,
+                                                                        'api_url' => $api_url   
+                                                                    ]);
+                                                                ?>
                                                             </div>
                                                         </td>
 
@@ -435,14 +428,6 @@
         }
     }
 
-    window.openModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'block'
-        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
-    }
-
-    window.closeModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'none'
-        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-    }
+    
 </script>
 <?= $this->endSection(); ?>
