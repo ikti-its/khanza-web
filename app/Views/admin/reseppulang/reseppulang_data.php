@@ -233,27 +233,26 @@
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
                                             <button
-                                                                        type="button"
-                                                                        class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
-                                                                        data-nomor-reg="<?= $reseppulang['no_rawat'] ?>"
-                                                                        data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $reseppulang['no_rawat'] ?>">
-                                                                        Lihat Detail
-                                                                    </button>
-                                                                    </div>
-                                                                    <div class="px-3 py-1.5">
-                                                                    <a href="<?= base_url('reseppulang/edit/' . $reseppulang['no_rawat'] . '/' . $reseppulang['kode_brng'] . '/' . $reseppulang['tanggal'] . '/' . $reseppulang['jam']) ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">
-                                                                        Ubah
-                                                                    </a>
+                                                type="button"
+                                                class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
+                                                data-nomor-reg="<?= $reseppulang['no_rawat'] ?>"
+                                                data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $reseppulang['no_rawat'] ?>">
+                                                Lihat Detail
+                                            </button>
+                                            </div>
 
-                                                                    </div>
-                                                                    <?php
-                                                                        $row_id  = $reseppulang['no_rawat'] . '-' . $i;
-                                                                        $api_url = '/reseppulang';
-                                                                        echo view('components/data_hapus',[
-                                                                            'row_id'  => $row_id,
-                                                                            'api_url' => $api_url   
-                                                                        ]) 
-                                                                    ?>
+                                            <?php
+                                                $row_id  = $reseppulang['no_rawat'] . '-' . $i;
+                                                $api_url = '/reseppulang';
+                                                echo view('components/data_ubah',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
+                                                echo view('components/data_hapus',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]); 
+                                            ?>
                                         </div>
                                     </td>
                                 </tr>

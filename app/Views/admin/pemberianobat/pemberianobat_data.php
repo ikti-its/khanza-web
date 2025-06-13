@@ -156,16 +156,17 @@
                                                     Lihat Detail
                                                 </button>
                                             </div>
-                                            <div class="px-3 py-1.5">
-                                                <a href="/pemberianobat/edit/<?= $pemberianobat['nomor_rawat'] ?>/<?= $pemberianobat['jam_beri'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
-                                            </div>
                                             <?php
                                                 $row_id  = $pemberianobat['nomor_rawat'] . '-' . $i;
                                                 $api_url = '/pemberianobat';
+                                                echo view('components/data_ubah',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
                                                 echo view('components/data_hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
-                                                ]) 
+                                                ]); 
                                             ?>
                                         </div>
                                     </td>

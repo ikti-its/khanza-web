@@ -229,16 +229,17 @@
                                                 Lihat Detail
                                             </button>
                                             </div>
-                                            <div class="px-3 py-1.5">
-                                                <a href="/permintaanreseppulang/edit/<?= $permintaanreseppulang['no_permintaan'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
-                                            </div>
                                             <?php
                                                 $row_id  = $permintaanreseppulang['no_permintaan'] . '-' . $i;
                                                 $api_url = '/permintaanreseppulang';
+                                                echo view('components/data_ubah',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
                                                 echo view('components/data_hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
-                                                ]) 
+                                                ]); 
                                             ?>
                                         </div>
                                     </td>

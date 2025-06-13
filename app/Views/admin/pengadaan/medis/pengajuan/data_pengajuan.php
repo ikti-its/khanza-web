@@ -305,18 +305,17 @@
                                                     ($persetujuan['status_apoteker'] === 'Menunggu Persetujuan' &&
                                                         $persetujuan['status_keuangan'] === 'Menunggu Persetujuan')
                                                 ) {  ?>
-                                                    <div class="px-3 py-1.5">
-                                                        <a href="/pengajuanmedis/edit/<?= $pengajuan['id'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                                            Ubah 
-                                                        </a>
-                                                    </div>
                                                     <?php
                                                         $row_id  = $pengajuan['id'];
                                                         $api_url = '/pengajuanmedis';
+                                                        echo view('components/data_ubah',[
+                                                            'row_id'  => $row_id,
+                                                            'api_url' => $api_url   
+                                                        ]);
                                                         echo view('components/data_hapus',[
                                                             'row_id'  => $row_id,
                                                             'api_url' => $api_url   
-                                                        ]) 
+                                                        ]); 
                                                     ?>
                                                 <?php } else { ?>
                                                     <div class="px-3 py-1.5">

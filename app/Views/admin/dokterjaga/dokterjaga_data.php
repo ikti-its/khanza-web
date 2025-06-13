@@ -246,18 +246,17 @@
                                                     Lihat Detail
                                                 </button>
                                             </div>
-                                            <div class="px-3 py-1.5">
-                                                <a href="/dokterjaga/edit/<?= $dokterjaga['kode_dokter'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                                    Ubah
-                                                </a>
-                                            </div>
                                             <?php
                                                 $row_id  = $dokterjaga['kode_dokter'];
                                                 $api_url = '/dokterjaga';
+                                                echo view('components/data_ubah',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
                                                 echo view('components/data_hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
-                                                ]) 
+                                                ]); 
                                             ?>
                                         </div>
                                     </td>

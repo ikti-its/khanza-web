@@ -233,10 +233,14 @@
                                             <?php
                                                 $row_id  = $stok['id'];
                                                 $api_url = '/stokkeluarmedis';
+                                                echo view('components/data_ubah',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
                                                 echo view('components/data_hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
-                                                ]) 
+                                                ]); 
                                             ?>
                                         </div>
                                     </td>

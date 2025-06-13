@@ -227,24 +227,25 @@
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
-                                            <button
-                                                                        type="button"
-                                                                        class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
-                                                                        data-nomor-reg="<?= $resepobatracikan['no_racik'] ?>"
-                                                                        data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobatracikan['no_racik'] ?>">
-                                                                        Lihat Detail
-                                                                    </button>
-                                            </div>
-                                            <div class="px-3 py-1.5">
-                                                <a href="/resepobat/edit/<?= $resepobatracikan['no_racik'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
+                                                    data-nomor-reg="<?= $resepobatracikan['no_racik'] ?>"
+                                                    data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobatracikan['no_racik'] ?>">
+                                                    Lihat Detail
+                                                </button>
                                             </div>
                                             <?php
                                                 $row_id  = $resepobatracikan['no_racik'] . '-' . $i;
                                                 $api_url = '/resepobat';
+                                                echo view('components/data_ubah',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
                                                 echo view('components/data_hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
-                                                ]) 
+                                                ]); 
                                             ?>
                                         </div>
                                     </td>
