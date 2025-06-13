@@ -214,7 +214,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $mutasi['id'];
-                                                    $api_url = '/mutasimedis/hapus/';
+                                                    $api_url = '/mutasimedis';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   
