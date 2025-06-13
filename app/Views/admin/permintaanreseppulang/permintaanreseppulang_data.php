@@ -234,44 +234,14 @@
                     </div>
                     <div class="px-3 py-1.5">
                                                 <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $permintaanreseppulang['no_permintaan'] . '-' . $i ?>')" href="#">Hapus</button>
-
-                                                <div id="modelConfirm-<?= $permintaanreseppulang['no_permintaan'] . '-' . $i ?>" class="fixed hidden z-[70] inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
-                                                    <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
-
-                                                        <div class="flex justify-end p-2">
-                                                            <button onclick="closeModal('modelConfirm-<?= $permintaanreseppulang['no_permintaan'] ?>')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
-                                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-
-                                                        <div class="p-6 pt-0 text-center">
-                                                            <div class="flex justify-center mb-6">
-                                                                <!-- Container for SVG, centered -->
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48" fill="none">
-                                                                    <path d="M8.5 11H40.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                    <path d="M18.5 5H30.5" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                    <path d="M12.5 17H36.5V40C36.5 41.6569 35.1569 43 33.5 43H15.5C13.8431 43 12.5 41.6569 12.5 40V17Z" fill="#FEE2E2" stroke="#DA4141" stroke-width="4" stroke-linejoin="round" />
-                                                                    <path d="M20.5 25L28.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                    <path d="M28.5 25L20.5 33" stroke="#DA4141" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                                                </svg>
-                                                            </div>
-                                                            Hapus data
-                                                            <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">Apakah anda yakin
-                                                                untuk menghapus data ini?</h3>
-                                                                <form action="/permintaanreseppulang/hapus/<?= $permintaanreseppulang['no_permintaan'] ?>" method="POST">
-                                                                <?= csrf_field() ?>
-                                                                <div class="w-full sm:flex justify-center">
-                                                                    <input type="hidden" name="_method" value="DELETE">
-                                                                    <button onclick="closeModal('modelConfirm-<?= $permintaanreseppulang['no_permintaan'] . '-' . $i ?>')" class="w-full text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center justify-center px-3 py-2.5 text-center mr-2">Hapus</button>
-                                                                    <a href="#" onclick="closeModal('modelConfirm-<?= $permintaanreseppulang['no_permintaan'] . '-' . $i ?>')" class="w-full text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center justify-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">Batal</a>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
+                                                <?php
+                                                    $row_id  = $permintaanreseppulang['no_permintaan'] . '-' . $i;
+                                                    $api_url = '/permintaanreseppulang/hapus/';
+                                                    echo view('components/data_hapus_form',[
+                                                        'row_id'  => $row_id,
+                                                        'api_url' => $api_url   
+                                                    ]) 
+                                                ?>
                                             </div>
                 </div>
             </td>

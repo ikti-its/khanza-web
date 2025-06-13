@@ -76,7 +76,7 @@ class ResepObatController extends BaseController
     $this->addBreadcrumb('Resep Obat', 'ResepObat');
     $breadcrumbs = $this->getBreadcrumbs();
 // dd($resep_list);
-    return view('/admin/ResepObat/resepobat_data', [
+    return view('/admin/resepobat/resepobat_data', [
         'resepobat_data' => $resep_list,
         'title' => $title,
         'breadcrumbs' => $breadcrumbs,
