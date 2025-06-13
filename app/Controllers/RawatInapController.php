@@ -89,15 +89,39 @@ public function dataRawatInap()
             $totalBiayaTindakan += intval($tindakan['biaya'] ?? 0);
         }
 
-        $ri['total_biaya'] = $totalBiayaKamar + $totalBiayaTindakan;
+        // ✅ Fetch biaya from pemberian obat
+        $pemberian_url = $this->api_url . '/pemberian-obat/' . $nomorRawat;
+        $cp = curl_init($pemberian_url);
+        curl_setopt($cp, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($cp, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $pemberian_response = curl_exec($cp);
+        curl_close($cp);
+
+        $pemberian_data = json_decode($pemberian_response, true);
+        $pemberianList = $pemberian_data['data'] ?? [];
+// dd($pemberianList);
+        if (isset($pemberianList['nomor_rawat'])) {
+            $pemberianList = [$pemberianList];
+        }
+
+        $totalBiayaObat = 0;
+        foreach ($pemberianList as $obat) {
+            $totalBiayaObat += intval($obat['total'] ?? 0);
+        }
+// dd($totalBiayaObat);
+        $ri['total_biaya'] = $totalBiayaKamar + $totalBiayaTindakan + $totalBiayaObat;
         $ri['total_biaya_kamar'] = $totalBiayaKamar;
         $ri['total_biaya_tindakan'] = $totalBiayaTindakan;
+        $ri['total_biaya_obat'] = $totalBiayaObat;
     }
 
     $this->addBreadcrumb('User', 'user');
     $this->addBreadcrumb('Rawat Inap', 'rawatinap');
     $breadcrumbs = $this->getBreadcrumbs();
-
+// dd($rawatinapList);
     return view('/admin/rawatinap/rawatinap_data', [
         'rawatinap_data' => $rawatinapList,
         'title' => $title,

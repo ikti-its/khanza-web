@@ -12,7 +12,7 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
         <?= view('components/form_judul', [
             'judul' => 'Edit Pemberian Obat'
         ]) ?>
-        <form action="<?= base_url('pemberianobat/submitedit') ?>" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="<?= base_url('pemberianobat/submitedit/' . $pemberianobat['nomor_rawat']) ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">
