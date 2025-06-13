@@ -174,14 +174,13 @@
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
-                                            <div class="px-3 py-1.5">
-                                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>">
-                                                    Lihat Detail
-                                                </button>
-                                            </div>
                                             <?php
-                                                $row_id  = $tindakan['nomor_rawat'];
+                                                $row_id  = $tindakan['nomor_rawat'] . '-' . $i;
                                                 $api_url = '/tindakan';
+                                                echo view('components/data_lihat_detail',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
                                                 echo view('components/data_ubah',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   

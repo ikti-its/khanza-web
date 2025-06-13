@@ -334,14 +334,13 @@
                     </td>
                     <td>
                         <div class="pl-6 py-1.5 flex justify-center">
-                            <div class="pr-3 py-1.5">
-                                <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $penerimaan['id'] ?>">
-                                    Lihat Detail
-                                </button>
-                            </div>
                             <?php
                                 $row_id  = $penerimaan['id'];
                                 $api_url = '/penerimaanmedis';
+                                echo view('components/data_lihat_detail',[
+                                    'row_id'  => $row_id,
+                                    'api_url' => $api_url   
+                                ]);
                                 echo view('components/data_edit',[
                                     'row_id'  => $row_id,
                                     'api_url' => $api_url   

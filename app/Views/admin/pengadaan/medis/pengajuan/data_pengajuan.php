@@ -295,11 +295,6 @@
                                         </td>
                                         <td>
                                             <div class="pl-6 py-1.5 inline-flex">
-                                                <div class="pr-3 py-1.5">
-                                                    <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pengajuan['id'] ?>">
-                                                        Lihat Detail
-                                                    </button>
-                                                </div>
                                                 <?php if (
                                                     $pengajuan['status_pesanan'] === '0' &&
                                                     ($persetujuan['status_apoteker'] === 'Menunggu Persetujuan' &&
@@ -308,6 +303,10 @@
                                                     <?php
                                                         $row_id  = $pengajuan['id'];
                                                         $api_url = '/pengajuanmedis';
+                                                        echo view('components/data_lihat_detail',[
+                                                            'row_id'  => $row_id,
+                                                            'api_url' => $api_url   
+                                                        ]);
                                                         echo view('components/data_ubah',[
                                                             'row_id'  => $row_id,
                                                             'api_url' => $api_url   

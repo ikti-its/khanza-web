@@ -291,6 +291,10 @@
                                                 <?php
                                                     $row_id  = $resepobat['no_resep'] . '-' . $i;
                                                     $api_url = '/resepobat';
+                                                    echo view('components/data_lihat_detail',[
+                                                        'row_id'  => $row_id,
+                                                        'api_url' => $api_url   
+                                                    ]);
                                                     echo view('components/data_hapus',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

@@ -238,6 +238,10 @@
                                             <?php
                                                 $row_id  = $resepobatracikan['no_racik'] . '-' . $i;
                                                 $api_url = '/resepobat';
+                                                echo view('components/data_lihat_detail',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]);
                                                 echo view('components/data_ubah',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
