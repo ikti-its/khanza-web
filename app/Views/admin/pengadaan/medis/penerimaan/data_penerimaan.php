@@ -350,7 +350,7 @@
                                 </button>
                                 <?php
                                     $row_id  = $penerimaan['id'];
-                                    $api_url = '/penerimaanmedis/hapus/';
+                                    $api_url = '/penerimaanmedis';
                                     echo view('components/data_hapus_form',[
                                         'row_id'  => $row_id,
                                         'api_url' => $api_url   

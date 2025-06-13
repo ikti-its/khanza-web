@@ -259,7 +259,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $rujukankeluar['nomor_rujuk'];
-                                                    $api_url = '/rujukankeluar/hapus/';
+                                                    $api_url = '/rujukankeluar';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

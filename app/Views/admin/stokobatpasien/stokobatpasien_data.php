@@ -91,7 +91,6 @@
                                 'Jam',
                                 'Nama',
                                 'Obat',
-                                'Jumlah',
                                 'Aksi'
                             ];
                             echo view('components/data_tabel_thead',['columns' => $columns]);
@@ -247,7 +246,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $stokobatpasien['no_permintaan'];
-                                                    $api_url = '/ambulans/hapus/';
+                                                    $api_url = '/ambulans';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

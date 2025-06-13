@@ -303,7 +303,7 @@ window.addEventListener("DOMContentLoaded", function () {
                                                 </button>
                                                 <?php
                                                     $row_id  = $registrasi['nomor_reg'];
-                                                    $api_url = '/registrasi/hapus/';
+                                                    $api_url = '/registrasi';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

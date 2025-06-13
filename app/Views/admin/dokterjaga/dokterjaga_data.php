@@ -257,7 +257,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $dokterjaga['kode_dokter'];
-                                                    $api_url = '/dokterjaga/hapus/';
+                                                    $api_url = '/dokterjaga';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

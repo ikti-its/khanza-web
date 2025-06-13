@@ -375,7 +375,7 @@
                                                             </button>
                                                             <?php
                                                                 $row_id  = $pemesanan['id'];
-                                                                $api_url = '/pemesananmedis/hapus/';
+                                                                $api_url = '/pemesananmedis';
                                                                 echo view('components/data_hapus_form',[
                                                                     'row_id'  => $row_id,
                                                                     'api_url' => $api_url   

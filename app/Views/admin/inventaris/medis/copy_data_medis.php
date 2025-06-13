@@ -655,7 +655,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $medis['id'];
-                                                    $api_url = '/datamedis/hapus/';
+                                                    $api_url = '/datamedis';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

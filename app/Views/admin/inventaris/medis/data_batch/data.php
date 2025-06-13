@@ -244,7 +244,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $batch['no_batch'];
-                                                    $api_url = '/batchmedis/hapus/';
+                                                    $api_url = '/batchmedis';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

@@ -237,7 +237,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $stok['id'];
-                                                    $api_url = '/stokkeluarmedis/hapus/';
+                                                    $api_url = '/stokkeluarmedis';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

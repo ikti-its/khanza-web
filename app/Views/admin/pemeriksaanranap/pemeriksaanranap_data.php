@@ -280,7 +280,7 @@
                                                 </button> -->
                                                 <?php
                                                     $row_id  = $pemeriksaanranap['no_rawat'];
-                                                    $api_url = '/pemeriksaanranap/hapus/';
+                                                    $api_url = '/pemeriksaanranap';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

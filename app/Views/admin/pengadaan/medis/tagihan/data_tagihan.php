@@ -291,7 +291,7 @@
                                                                     </button>
                                                                     <?php
                                                                         $row_id  = $tagihan['id'];
-                                                                        $api_url = '/tagihanmedis/hapus/';
+                                                                        $api_url = '/tagihanmedis';
                                                                         echo view('components/data_hapus_form',[
                                                                             'row_id'  => $row_id,
                                                                             'api_url' => $api_url   

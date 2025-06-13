@@ -242,7 +242,7 @@
                         <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $resepobatracikan['no_racik'] . '-' . $i ?>')" href="#">Hapus</button>
                         <?php
                             $row_id  = $resepobatracikan['no_racik'] . '-' . $i;
-                            $api_url = '/resepobat/hapus/';
+                            $api_url = '/resepobat';
                             echo view('components/data_hapus_form',[
                                 'row_id'  => $row_id,
                                 'api_url' => $api_url   

@@ -250,7 +250,7 @@
                                                 <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $reseppulang['no_rawat'] . '-' . $i ?>')" href="#">Hapus</button>
                                                 <?php
                                                     $row_id  = $reseppulang['no_rawat'] . '-' . $i;
-                                                    $api_url = 'reseppulang/hapus/';
+                                                    $api_url = '/reseppulang';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

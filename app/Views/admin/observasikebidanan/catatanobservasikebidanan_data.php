@@ -258,7 +258,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $catatan['no_rawat'];
-                                                    $api_url = '/catatanobservasikebidanan/hapus/';
+                                                    $api_url = '/catatanobservasikebidanan';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

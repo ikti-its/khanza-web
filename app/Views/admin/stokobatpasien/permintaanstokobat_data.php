@@ -212,7 +212,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $permintaanstokobat['no_permintaan'];
-                                                    $api_url = '/permintaanstokobat/hapus/';
+                                                    $api_url = '/permintaanstokobat';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

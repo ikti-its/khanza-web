@@ -185,7 +185,7 @@
                     <div class="px-3 py-1.5">
                         <?php
                             $row_id  = $tindakan['nomor_rawat'];
-                            $api_url = '/tindakan/hapus/';
+                            $api_url = '/tindakan';
                             echo view('components/data_hapus_form',[
                                 'row_id'  => $row_id,
                                 'api_url' => $api_url   

@@ -119,7 +119,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $pasien['no_rkm_medis'];
-                                                    $api_url = '/pasien/hapus/';
+                                                    $api_url = '/pasien';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

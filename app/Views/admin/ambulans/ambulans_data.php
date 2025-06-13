@@ -201,7 +201,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $ambulans['no_ambulans'];
-                                                    $api_url = '/ambulans/hapus/';
+                                                    $api_url = '/ambulans';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   

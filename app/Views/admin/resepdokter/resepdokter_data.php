@@ -278,7 +278,7 @@ foreach ($racikan_list as $racikan) {
                         <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $resepdokter['no_resep'] . '-' . $i ?>')" href="#">Hapus</button>
                         <?php
                             $row_id  = $resepdokter['no_resep'];
-                            $api_url = '/pemberianobat/hapus/';
+                            $api_url = '/pemberianobat';
                             echo view('components/data_hapus_form',[
                                 'row_id'  => $row_id,
                                 'api_url' => $api_url   

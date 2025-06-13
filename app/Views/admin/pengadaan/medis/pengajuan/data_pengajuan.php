@@ -317,7 +317,7 @@
                                                         </button>
                                                         <?php
                                                             $row_id  = $pengajuan['id'];
-                                                            $api_url = '/pengajuanmedis/hapus/';
+                                                            $api_url = '/pengajuanmedis';
                                                             echo view('components/data_hapus_form',[
                                                                 'row_id'  => $row_id,
                                                                 'api_url' => $api_url   

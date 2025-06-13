@@ -163,7 +163,7 @@
                         <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $pemberianobat['nomor_rawat'] . '-' . $i ?>')" href="#">Hapus</button>
                         <?php
                             $row_id  = $pemberianobat['nomor_rawat'] . '-' . $i;
-                            $api_url = '/pemberianobat/hapus/';
+                            $api_url = '/pemberianobat';
                             echo view('components/data_hapus_form',[
                                 'row_id'  => $row_id,
                                 'api_url' => $api_url   

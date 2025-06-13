@@ -416,7 +416,7 @@
                                                 </button>
                                                 <?php
                                                     $row_id  = $ugd['nomor_reg'];
-                                                    $api_url = '/ugd/hapus/';
+                                                    $api_url = '/ugd';
                                                     echo view('components/data_hapus_form',[
                                                         'row_id'  => $row_id,
                                                         'api_url' => $api_url   
