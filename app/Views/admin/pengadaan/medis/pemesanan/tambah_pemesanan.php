@@ -5,12 +5,9 @@
 <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <div class="mb-8">
-            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Tambah Pemesanan Barang Medis
-            </h2>
-
-        </div>
+        <?= view('components/form_judul', [
+            'judul' => 'Tambah Pemesanan Barang Medis'
+        ]) ?>
 
         <form action="/submittambahpemesananmedis" method="post">
             <!-- Grid -->

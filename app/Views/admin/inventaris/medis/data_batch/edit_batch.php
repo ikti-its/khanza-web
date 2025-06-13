@@ -5,13 +5,9 @@
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <div class="mb-8">
-            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
-                Ubah Batch Barang Medis
-            </h2>
-
-        </div>
-
+        <?= view('components/form_judul', [
+            'judul' => 'Ubah Batch Barang Medis'
+        ]) ?>
         <form action="/batchmedis/submitedit/<?= $batch_data['no_batch'] ?>/<?= $batch_data['no_faktur'] ?>/<?= $batch_data['id_barang_medis'] ?>" id="myForm" method="post" onsubmit="return validateForm()">
             <?= csrf_field() ?>
 
