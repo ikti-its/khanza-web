@@ -51,37 +51,37 @@
                                             </button>
                                         </div>
                                         <script>
-window.addEventListener("DOMContentLoaded", function () {
-    const container = document.getElementById("kamarpenuh-content");
-    const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
+                                        window.addEventListener("DOMContentLoaded", function () {
+                                            const container = document.getElementById("kamarpenuh-content");
+                                            const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
 
-    if (!container) return;
+                                            if (!container) return;
 
-    container.innerHTML = ""; // Clear previous content
+                                            container.innerHTML = ""; // Clear previous content
 
-    if (notifList.length === 0) {
-        container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
-    } else {
-        notifList.forEach(notif => {
-            container.innerHTML += `
-                <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
-                    <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
-                        <div>
-                            <p class="text-base font-semibold text-gray-800">
-                                Kamar penuh untuk ${notif.nama_pasien}
-                            </p>
-                            <p class="text-sm text-gray-500">
-                                Nomor Registrasi: ${notif.nomor_reg}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-    }
-});
-</script>
+                                            if (notifList.length === 0) {
+                                                container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
+                                            } else {
+                                                notifList.forEach(notif => {
+                                                    container.innerHTML += `
+                                                        <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
+                                                            <div class="flex items-center gap-2">
+                                                                <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                                                                <div>
+                                                                    <p class="text-base font-semibold text-gray-800">
+                                                                        Kamar penuh untuk ${notif.nama_pasien}
+                                                                    </p>
+                                                                    <p class="text-sm text-gray-500">
+                                                                        Nomor Registrasi: ${notif.nomor_reg}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    `;
+                                                });
+                                            }
+                                        });
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -297,19 +297,14 @@ window.addEventListener("DOMContentLoaded", function () {
                                                     Ubah
                                                 </a>
                                             </div>
-                                            <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $registrasi['nomor_reg'] ?>')" href="#">
-                                                    Hapus
-                                                </button>
-                                                <?php
-                                                    $row_id  = $registrasi['nomor_reg'];
-                                                    $api_url = '/registrasi';
-                                                    echo view('components/data_hapus_form',[
-                                                        'row_id'  => $row_id,
-                                                        'api_url' => $api_url   
-                                                    ]) 
+                                            <?php
+                                                $row_id  = $registrasi['nomor_reg'];
+                                                $api_url = '/registrasi';
+                                                echo view('components/data_hapus',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]) 
                                                 ?>
-                                            </div>
                                         </div>
                                     </td>
 
@@ -829,15 +824,7 @@ function updateStatusKamar(nomorReg) {
     });
 
 
-    window.openModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'block'
-        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
-    }
-
-    window.closeModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'none'
-        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-    }
+    
 
     document.addEventListener("DOMContentLoaded", function () {
     const tindakanButtons = document.querySelectorAll(".btn-tindakan");

@@ -238,19 +238,14 @@
                                                     Ubah
                                                 </a>
                                             </div>
-                                            <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $batch['no_batch'] . $batch['no_faktur'] . $batch['id_barang_medis'] ?>')" href="#">
-                                                    Hapus
-                                                </button>
-                                                <?php
-                                                    $row_id  = $batch['no_batch'];
-                                                    $api_url = '/batchmedis';
-                                                    echo view('components/data_hapus_form',[
-                                                        'row_id'  => $row_id,
-                                                        'api_url' => $api_url   
-                                                    ]) 
-                                                ?>
-                                            </div>
+                                            <?php
+                                                $row_id  = $batch['no_batch'];
+                                                $api_url = '/batchmedis';
+                                                echo view('components/data_hapus',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]) 
+                                            ?>
                                         </div>
                                     </td>
 

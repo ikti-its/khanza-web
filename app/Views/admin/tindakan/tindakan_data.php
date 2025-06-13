@@ -182,16 +182,14 @@
                                             <div class="px-3 py-1.5">
                                                 <a href="/tindakan/edit/<?= $tindakan['nomor_rawat'] ?>/<?= $tindakan['jam_rawat'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
                                             </div>
-                                            <div class="px-3 py-1.5">
-                                                <?php
-                                                    $row_id  = $tindakan['nomor_rawat'];
-                                                    $api_url = '/tindakan';
-                                                    echo view('components/data_hapus_form',[
-                                                        'row_id'  => $row_id,
-                                                        'api_url' => $api_url   
-                                                    ]) 
-                                                ?>  
-                                            </div>
+                                            <?php
+                                                $row_id  = $tindakan['nomor_rawat'];
+                                                $api_url = '/tindakan';
+                                                echo view('components/data_hapus',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]) 
+                                            ?>  
                                         </div>
                                     </td>
                                 </tr>
@@ -331,14 +329,6 @@
         document.getElementById('stok-tab').classList.remove('border-[#272727]');
     });
 
-    window.openModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'block'
-        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
-    }
-
-    window.closeModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'none'
-        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-    }
+    
 </script>
 <?= $this->endSection(); ?>

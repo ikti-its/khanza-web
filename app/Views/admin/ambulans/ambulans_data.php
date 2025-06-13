@@ -195,19 +195,14 @@
                                                     Ubah
                                                 </a>
                                             </div>
-                                            <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $ambulans['no_ambulans'] ?>')" href="#">
-                                                    Hapus
-                                                </button>
-                                                <?php
-                                                    $row_id  = $ambulans['no_ambulans'];
-                                                    $api_url = '/ambulans';
-                                                    echo view('components/data_hapus_form',[
-                                                        'row_id'  => $row_id,
-                                                        'api_url' => $api_url   
-                                                    ]) 
-                                                ?>
-                                            </div>
+                                            <?php
+                                                $row_id  = $ambulans['no_ambulans'];
+                                                $api_url = '/ambulans';
+                                                echo view('components/data_hapus',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]) 
+                                            ?>
                                         </div>
                                     </td>
                                 </tr>
@@ -361,15 +356,7 @@ setInterval(fetchAmbulansRequests, 10000);
         document.getElementById('stok-tab').classList.remove('border-[#272727]');
     });
 
-    window.openModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'block'
-        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
-    }
-
-    window.closeModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'none'
-        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-    }
+    
 
     document.addEventListener('DOMContentLoaded', function () {
         const notifText = document.querySelector('#stok-tab svg text');

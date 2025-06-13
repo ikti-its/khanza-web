@@ -310,20 +310,14 @@
                                                             Ubah 
                                                         </a>
                                                     </div>
-
-                                                    <div class="px-3 py-1.5">
-                                                        <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $pengajuan['id'] ?>')" href="#">
-                                                            Hapus
-                                                        </button>
-                                                        <?php
-                                                            $row_id  = $pengajuan['id'];
-                                                            $api_url = '/pengajuanmedis';
-                                                            echo view('components/data_hapus_form',[
-                                                                'row_id'  => $row_id,
-                                                                'api_url' => $api_url   
-                                                            ]) 
-                                                        ?>
-                                                    </div>
+                                                    <?php
+                                                        $row_id  = $pengajuan['id'];
+                                                        $api_url = '/pengajuanmedis';
+                                                        echo view('components/data_hapus',[
+                                                            'row_id'  => $row_id,
+                                                            'api_url' => $api_url   
+                                                        ]) 
+                                                    ?>
                                                 <?php } else { ?>
                                                     <div class="px-3 py-1.5">
                                                         <button class="cursor-default gap-x-1 text-sm text-[#C4C4C4] decoration-2 font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
@@ -506,15 +500,7 @@
     }
 
     //delete confirmation
-    window.openModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'block'
-        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
-    }
-
-    window.closeModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'none'
-        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-    }
+    
 
     // Close all modals when press ESC
     document.onkeyup = function(event) {

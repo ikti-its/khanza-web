@@ -230,20 +230,14 @@
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center flex justify-center">
-                                            
-                                            <div class="px-3 py-1.5">
-                                                <button class="gap-x-1 text-sm text-red-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" onclick="openModal('modelConfirm-<?= $stok['id'] ?>')" href="#">
-                                                    Hapus
-                                                </button>
-                                                <?php
-                                                    $row_id  = $stok['id'];
-                                                    $api_url = '/stokkeluarmedis';
-                                                    echo view('components/data_hapus_form',[
-                                                        'row_id'  => $row_id,
-                                                        'api_url' => $api_url   
-                                                    ]) 
-                                                ?>
-                                            </div>
+                                            <?php
+                                                $row_id  = $stok['id'];
+                                                $api_url = '/stokkeluarmedis';
+                                                echo view('components/data_hapus',[
+                                                    'row_id'  => $row_id,
+                                                    'api_url' => $api_url   
+                                                ]) 
+                                            ?>
                                         </div>
                                     </td>
 
@@ -271,15 +265,7 @@
 </div>
 <!-- End Table Section -->
 <script>
-    window.openModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'block'
-        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
-    }
-
-    window.closeModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'none'
-        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-    }
+    
 
     function myFunction() {
         var input, filter, table, tr, td, i, j, txtValue;
