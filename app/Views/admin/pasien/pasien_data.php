@@ -23,44 +23,6 @@
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
                                 <?= view('components/notif_icon') ?>
-
-                                <!-- Notification Pop-up -->
-                                <div id="notif-popup" style="width: 600px;" class="absolute right-0 mt-2 overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
-
-                                    <div class="px-4">
-                                        <div class="pt-4 flex justify-between items-center">
-                                            <div class="text-lg font-semibold">Notifikasi</div>
-                                            <svg id="close-popup" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="37" height="36" viewBox="0 0 37 36" fill="none">
-                                                <path d="M20.09 18L23.54 14.55C23.975 14.115 23.975 13.395 23.54 12.96C23.105 12.525 22.385 12.525 21.95 12.96L18.5 16.41L15.05 12.96C14.615 12.525 13.895 12.525 13.46 12.96C13.025 13.395 13.025 14.115 13.46 14.55L16.91 18L13.46 21.45C13.025 21.885 13.025 22.605 13.46 23.04C13.685 23.265 13.97 23.37 14.255 23.37C14.54 23.37 14.825 23.265 15.05 23.04L18.5 19.59L21.95 23.04C22.175 23.265 22.46 23.37 22.745 23.37C23.03 23.37 23.315 23.265 23.54 23.04C23.975 22.605 23.975 21.885 23.54 21.45L20.09 18Z" fill="#272727" />
-                                            </svg>
-                                        </div>
-                                        <div class="flex">
-                                            <div class="flex flex-col gap-2 w-full" id="ambulansNotifSection">
-                                                <!-- 🚑 Ambulans Notification -->
-                                                <?php if (isset($pasien_requests) && count($pasien_requests) > 0): ?>
-                                                    <p>Total request: <?= isset($pasien_requests) ? count($pasien_requests) : 0 ?></p>
-                                                    <div class="font-semibold text-black flex items-center space-x-1 px-3">
-                                                        <span class="text-red-600">🚨</span>
-                                                        <span>Permintaan Ambulans</span>
-                                                    </div>
-                                                    <?php foreach ($pasien_requests as $req): ?>
-                                                        <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-blue-500">
-                                                            <div>
-                                                                Ambulans <strong><?= esc($req['no_rkm_medis']) ?></strong> sedang diminta (<?= esc($req['status']) ?>)
-                                                            </div>
-                                                            <a href="/ambulans/terima/<?= esc($req['no_rkm_medis']) ?>" 
-                                                            class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">
-                                                                Terima
-                                                            </a>
-                                                        </div>
-                                                    <?php endforeach; ?>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                    </div>
-                                </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
                             <?= view('components/data_tambah_button', [
@@ -81,12 +43,11 @@
                             echo view('components/data_tabel_colgroup',['widths' => $widths]);
                             
                             $columns = [
-                               'Nomor Rawat',
                                'Nomor RM',
                                'Nama Pasien',
                                'Umur',
                                'Jenis Kelamin',
-                               'Tanggal Observasi',
+                                'Tanggal Daftar',
                                'Aksi'
                             ];
                             echo view('components/data_tabel_thead',['columns' => $columns]);
@@ -109,56 +70,10 @@
                                                     </svg>
                                                 </button>
                                             </div>
-                                            <div class="p-4">
-                                                <div class="space-y-4">
-                                                <div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                                        <input type="text" name="" value="<?= $pasien['no_rkm_medis'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
-                                                        <input type="text" name="" value="<?= $pasien['no_rkm_medis'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Pasien</label>
-                                                        <input type="text" name="" value="<?= $pasien['nm_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Umur</label>
-                                                        <input type="text" name="" value="<?= $pasien['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Kelamin</label>
-                                                        <input type="text" name="" value="<?= $pasien['jk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Observasi</label>
-                                                        <input type="text" name="" value="<?= $pasien['tgl_daftar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                </div>
-
-                                                </div>
-                                                <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                    <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>">
-                                                        Tutup
-                                                    </button>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" data-id="<?= $pasien['no_rkm_medis'] ?>"><?= $pasien['no_rkm_medis'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
                                             <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" data-id="<?= $pasien['no_rkm_medis'] ?>"><?= $pasien['no_rkm_medis'] ?? 'N/A' ?></span>
@@ -176,7 +91,7 @@
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" data-id="<?= $pasien['no_rkm_medis'] ?>"><?= $pasien['jenis_kelamin'] ?? 'N/A' ?></span>
+                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" data-id="<?= $pasien['no_rkm_medis'] ?>"><?= $pasien['jk'] ?? 'N/A' ?></span>
                                         </div>
                                     </td>
                                     <td class="h-px w-64 whitespace-nowrap">

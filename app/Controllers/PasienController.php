@@ -144,7 +144,7 @@ $tgl_daftar_iso = date('Y-m-d\TH:i:sP');
             curl_close($ch);
 
             if ($response && $http_status === 201) {
-                return redirect()->to('/pasien_data?page=1&size=10')->with('success', 'Pasien berhasil ditambahkan.');
+                return view('/admin/pasien/pasien_data');
             } else {
                 return "Gagal menambahkan pasien. HTTP: $http_status";
             }

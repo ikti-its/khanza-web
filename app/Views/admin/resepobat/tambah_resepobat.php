@@ -133,66 +133,69 @@ obatSelect.addEventListener("change", function () {
         if (selectedValues.includes(kode)) {
             if (selectedValues.includes(kode)) {
                 if (!existing) {
-                    const wrapper = document.createElement("div");
-                    wrapper.id = inputId;
                     const token = sessionStorage.getItem('jwt_token');
-                    console.log(sessionStorage.getItem('jwt_token'));
-                    fetch(`http://127.0.0.1:8080/v1/inventory/gudang/barang/kode/${kode}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json'
-                    }
+                    fetch(`http://127.0.0.1:8080/v1/gudang-barang/${kode}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Accept': 'application/json'
+                        }
+
                     })
                     .then(res => res.json())
                     .then(data => {
-                        console.log('API response:', data); // 👈 log the whole response
+                    console.log('✅ Full API response for', kode, ':', data);
+
+
                         const stok = data?.data?.stok ?? 'N/A';
-                    const token = sessionStorage.getItem('jwt_token');
-                    const wrapper = document.createElement("div");
-                    wrapper.id = `group-${kode}`;
-                    wrapper.classList.add("mb-6", "border", "p-4", "rounded-xl", "shadow-sm");
+                        const no_batch = data?.data?.no_batch ?? '-';
+                        const no_faktur = data?.data?.no_faktur ?? '-';
 
-                    wrapper.innerHTML = `
+                        const wrapper = document.createElement("div");
+                        wrapper.id = inputId;
+                        wrapper.classList.add("mb-6", "border", "p-4", "rounded-xl", "shadow-sm");
 
-                        <div class="flex items-center mb-2">
-                            <input type="checkbox" id="checkbox-${kode}" class="checkbox-kode mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded" checked>
-                            <label for="checkbox-${kode}" class="text-sm font-bold text-gray-900 dark:text-white">
-                                ${nama} <span class="text-xs text-gray-500">(Stok: ${stok})</span>
-                            </label>
-                        </div>
+                        wrapper.innerHTML = `
+                            <div class="flex items-center mb-2">
+                                <input type="checkbox" id="checkbox-${kode}" class="checkbox-kode mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded" checked>
+                                <label for="checkbox-${kode}" class="text-sm font-bold text-gray-900 dark:text-white">
+                                    ${nama} <span class="text-xs text-gray-500">(Stok: ${stok})</span>
+                                </label>
+                            </div>
 
-                        <!-- Row 1: Jumlah & Aturan Pakai -->
-                        <div class="mb-5 sm:block md:flex items-center">
-                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah</label>
-                        <input type="number" name="jumlah[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                            <div class="mb-5 sm:block md:flex items-center">
+                                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah<span class="text-red-600">*</span></label>
+                                <input type="number" name="jumlah[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
 
-                        <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Aturan Pakai</label>
-                        <input type="text" name="aturan_pakai[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                        </div>
+                                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Aturan Pakai<span class="text-red-600">*</span></label>
+                                <input type="text" name="aturan_pakai[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                            </div>
 
-                        <!-- Row 2: Embalase & Tuslah -->
-                        <div class="mb-5 sm:block md:flex items-center">
-                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Embalase</label>
-                        <input type="number" step="0.01" name="embalase[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+                            <div class="mb-5 sm:block md:flex items-center">
+                                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Embalase<span class="text-red-600">*</span></label>
+                                <input type="number" step="0.01" name="embalase[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
 
-                        <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tuslah</label>
-                        <input type="number" step="0.01" name="tuslah[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
-                        </div>
+                                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tuslah<span class="text-red-600">*</span></label>
+                                <input type="number" step="0.01" name="tuslah[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                            </div>
 
-                        <input type="hidden" name="kode_barang[]" value="${kode}">
+                            <input type="hidden" name="kode_barang[]" value="${kode}">
+                            <input type="hidden" name="no_batch[${kode}]" value="${no_batch}">
+                            <input type="hidden" name="no_faktur[${kode}]" value="${no_faktur}">
+                        `;
 
-                    `;
-                    // 👉 Make the checkbox remove the input group when unchecked
-                    container.appendChild(wrapper);
-                    document.getElementById(`checkbox-${kode}`).addEventListener("change", function () {
-                        if (!this.checked) {
-                            document.getElementById(`group-${kode}`).remove();
-                        }
+                        container.appendChild(wrapper);
+
+                        document.getElementById(`checkbox-${kode}`).addEventListener("change", function () {
+                            if (!this.checked) {
+                                document.getElementById(inputId).remove();
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error(`Error fetching stok for ${kode}:`, error);
                     });
-                    container.appendChild(wrapper);
-                })}
+                }
             }
-
         } else {
             // Only remove if input field is empty
             const jumlahInput = document.querySelector(`input[name="jumlah[${kode}]"]`);

@@ -633,5 +633,104 @@ public function dataPemeriksaanRanapDetail($noRawat)
     ]);
 }
 
+public function submitFromRegistrasiToPemeriksaanRanap($nomor_reg)
+{
+    if (!session()->has('jwt_token')) {
+        return redirect()->back()->with('error', 'Session token missing.');
+    }
+
+    $token = session()->get('jwt_token');
+
+    // Step 1: Fetch registrasi data
+    $url_registrasi = $this->api_url . '/registrasi/' . $nomor_reg;
+    $ch = curl_init($url_registrasi);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    if (!isset($data['data']) || $data['data'] === null) {
+        return redirect()->back()->with('error', 'Registrasi data not found.');
+    }
+
+    $registrasi = is_string($data['data']) ? json_decode($data['data'], true) : $data['data'];
+    if (!is_array($registrasi)) {
+        return redirect()->back()->with('error', 'Invalid registrasi data format.');
+    }
+
+    // Step 2: Prepare prefill form data
+    $prefill = [
+        'nomor_rawat'        => $registrasi['nomor_rawat'] ?? '',
+        'nip'                => '', // to be selected by user
+        'nama_pasien'        => $registrasi['nama_pasien'] ?? '',
+        'tanggal'            => $registrasi['tanggal_registrasi'] ?? date('Y-m-d'),
+        'jam'                => $registrasi['jam_registrasi'] ?? date('H:i:s'),
+        'diagnosa_awal'      => '', // not available from registrasi directly
+        'status_pemeriksaan' => 'Belum Diperiksa',
+    ];
+
+    // Step 3: Fetch all NIP values (pegawai + dokter)
+    $nip_list = [];
+
+    // 🔹 From pegawai
+    $pegawai_url = $this->api_url . '/pegawai';
+    $ch_pegawai = curl_init($pegawai_url);
+    curl_setopt($ch_pegawai, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch_pegawai, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token
+    ]);
+    $pegawai_response = curl_exec($ch_pegawai);
+    curl_close($ch_pegawai);
+    $pegawai_data = json_decode($pegawai_response, true);
+
+    if (isset($pegawai_data['data']) && is_array($pegawai_data['data'])) {
+        foreach ($pegawai_data['data'] as $pegawai) {
+            if (!empty($pegawai['nip'])) {
+                $nip_list[] = $pegawai['nip'];
+            }
+        }
+    }
+
+    // 🔹 From dokter
+    $dokter_url = $this->api_url . '/dokter';
+    $ch_dokter = curl_init($dokter_url);
+    curl_setopt($ch_dokter, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch_dokter, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token
+    ]);
+    $dokter_response = curl_exec($ch_dokter);
+    curl_close($ch_dokter);
+    $dokter_data = json_decode($dokter_response, true);
+
+    if (isset($dokter_data['data']) && is_array($dokter_data['data'])) {
+        foreach ($dokter_data['data'] as $dokter) {
+            if (!empty($dokter['kd_dokter'])) {
+                $nip_list[] = $dokter['kd_dokter'];
+            }
+        }
+    }
+
+    $nip_list = array_unique($nip_list);
+    sort($nip_list);
+
+    // Step 4: Render view
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Pemeriksaan Ranap', 'pemeriksaanranap');
+    $this->addBreadcrumb('Tambah', 'tambah');
+
+    return view('/admin/pemeriksaanranap/tambah_pemeriksaanranap', [
+        'title'      => 'Tambah Pemeriksaan Ranap',
+        'breadcrumbs'=> $this->getBreadcrumbs(),
+        'prefill'    => $prefill,
+        'nip_list'   => $nip_list,
+    ]);
+}
+
+
 
 }

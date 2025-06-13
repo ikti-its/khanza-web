@@ -46,7 +46,18 @@
                                                     <?php foreach ($ambulans_requests as $req): ?>
                                                         <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-blue-500">
                                                             <div>
-                                                                Ambulans <strong><?= esc($req['no_ambulans']) ?></strong> sedang diminta (<?= esc($req['status']) ?>)
+                                                                Ambulans <strong><?= esc($req['no_ambulans']) ?></strong> sedang diminta <?php
+                                                                    $statusLabels = [
+                                                                        'pending'   => 'Menunggu',
+                                                                        'available'   => 'Tersedia',
+                                                                        'accepted'   => 'Diterima'
+                                                                    ];
+
+                                                                    $status = $req['status'] ?? null;
+                                                                    $label = $statusLabels[$status] ?? 'Tidak Diketahui';
+                                                                    ?>
+
+                                                                    <?= esc($label) ?>
                                                             </div>
                                                             <a href="/ambulans/terima/<?= esc($req['no_ambulans']) ?>" 
                                                             class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">
@@ -150,7 +161,25 @@
                                         <div class="px-6 py-3 text-center">
                                             <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
                                                 <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
-                                                <?= $ambulans['status'] ?? 'N/A' ?>
+                                                <?php
+                                                $status = $ambulans['status'] ?? null;
+
+                                                switch ($status) {
+                                                    case 'pending':
+                                                        $statusText = 'Menunggu';
+                                                        break;
+                                                    case 'available':
+                                                        $statusText = 'Tersedia';
+                                                        break;
+                                                    case 'accepted':
+                                                        $statusText = 'Diterima';
+                                                        break;
+                                                    default:
+                                                        $statusText = 'Tidak Diketahui';
+                                                }
+                                                ?>
+
+                                                <?= $statusText ?>
                                             </span>
                                         </div>
                                     </td>
@@ -311,7 +340,7 @@ function fetchAmbulansRequests() {
         .forEach(function (item) {
           notifHtml += `
             <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-blue-500">
-              🚑 Ambulans <strong>${item.no_ambulans}</strong> sedang diminta (${item.status})
+              🚑 Ambulans <strong>${item.no_ambulans}</strong> sedang diminta
               <a href="/ambulans/terima/${item.no_ambulans}" class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">Terima</a>
             </div>
           `;

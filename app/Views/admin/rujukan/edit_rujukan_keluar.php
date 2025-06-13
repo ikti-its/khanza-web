@@ -10,7 +10,7 @@
                 Edit Rujukan Keluar
             </h2>
         </div>
-        <form action="/rujukanmasuk/submitedit/" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="/rujukankeluar/submitedit/" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">

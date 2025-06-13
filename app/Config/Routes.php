@@ -298,7 +298,7 @@ $routes->group('rujukanmasuk', ['filter' => 'auth'], function ($routes) {
     $routes->get('tambah', 'RujukanMasukController::tambahRujukanMasuk', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->post('submittambah', 'RujukanMasukController::submitTambahRujukanMasuk', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('edit/(:segment)', 'RujukanMasukController::editRujukanMasuk/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-    $routes->post('submitedit', 'RujukanMasukController::submitEditRujukanMasuk', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->post('submitedit', 'RujukanMasukController::submitEditRujukanMasuk', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->post('submitedit/(:segment)', 'RujukanMasukController::submitEditRujukanMasuk/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->delete('hapus/(:segment)', 'RujukanMasukController::hapusRujukanMasuk/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
@@ -529,6 +529,7 @@ $routes->group('pemeriksaanranap', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit/(:segment)', 'PemeriksaanRanapController::submitEditPemeriksaanRanap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->delete('hapus/(:segment)', 'PemeriksaanRanapController::hapusPemeriksaanRanap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('from-rawatinap/(:any)', 'PemeriksaanRanapController::submitFromRawatinapToPemeriksaanRanap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
+    $routes->get('tambah-dari-registrasi/(:segment)', 'PemeriksaanRanapController::submitFromRegistrasiToPemeriksaanRanap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
 
     // $routes->get('(:segment)', 'PemeriksaanRanapController::pemeriksaanRanapData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
