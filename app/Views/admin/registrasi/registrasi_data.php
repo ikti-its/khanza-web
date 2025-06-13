@@ -275,13 +275,6 @@
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
-                                            <button
-                                                type="button"
-                                                class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
-                                                data-nomor-reg="<?= $registrasi['nomor_reg'] ?>"
-                                                data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>">
-                                                Lihat Detail
-                                            </button>
                                             </div>
                                             <div class="px-3 py-1.5">
                                             <button
