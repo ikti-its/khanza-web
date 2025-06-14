@@ -1,3 +1,4 @@
+@ -1,189 +1,207 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 
@@ -5,9 +6,11 @@
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <?= view('components/form_judul', [
-            'judul' => 'Tambah Permintaan Stok Obat'
-        ]) ?>
+        <div class="mb-8">
+            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
+                Tambah Permintaan Stok Obat
+            </h2>
+        </div>
         <form action="/permintaanstokobat/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
@@ -69,7 +72,14 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Biaya</label>
                 <input type="text" name="biaya" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
             </div> -->
-            <?= view('components/form_submit_button') ?>
+            <div class="mt-5 pt-5 border-t flex justify-end gap-x-2">
+                <a href="javascript:history.back()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    Kembali
+                </a>
+                <button type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    Simpan
+                </button>
+            </div>
         </form>
     </div>
     <!-- End Card -->
@@ -98,18 +108,19 @@ document.addEventListener("DOMContentLoaded", function () {
       const existing = document.getElementById(inputId);
 
       if (selectedValues.includes(kode)) {
-        if (!existing) {
-          const wrapper = document.createElement("div");
-          wrapper.id = inputId;
-          wrapper.classList.add("obat-row");
+    if (!existing) {
+        const wrapper = document.createElement("div");
+        wrapper.id = inputId;
+        wrapper.classList.add("obat-row", "mb-6", "border", "p-4", "rounded-xl", "shadow-sm");
 
-          let jamCheckboxes = `
-            <div class="mb-5">
-              <label class="block mb-2 text-sm text-gray-900 dark:text-white">Checklist Jam</label>
-              <div class="flex flex-wrap gap-2">
-          `;
+        // Generate jam checkboxes
+        let jamCheckboxes = `
+          <div class="mb-5">
+            <label class="block mb-2 text-sm text-gray-900 dark:text-white">Checklist Jam</label>
+            <div class="flex flex-wrap gap-2">
+        `;
 
-          for (let i = 0; i < 24; i++) {
+        for (let i = 0; i < 24; i++) {
             const jam = i.toString().padStart(2, '0');
             jamCheckboxes += `
               <label class="inline-flex items-center space-x-1">
@@ -122,36 +133,53 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="text-xs">${jam}</span>
               </label>
             `;
-          }
-
-          jamCheckboxes += `</div></div>`;
-
-          wrapper.innerHTML = `
-            <div class="mb-6 border-t pt-4 mt-4">
-              <label class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">${nama}</label>
-              <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah</label>
-                <input type="number" name="jumlah[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Aturan Pakai</label>
-                <input type="text" name="aturan_pakai[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-              </div>
-              <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Embalase</label>
-                <input type="number" step="0.01" name="embalase[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tuslah</label>
-                <input type="number" step="0.01" name="tuslah[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
-              </div>
-              ${jamCheckboxes}
-              <input type="hidden" name="kode_barang[]" value="${kode}">
-              <input type="hidden" name="kd_bangsal[${kode}]" value="B001">
-              <input type="hidden" name="no_batch[${kode}]" value="BTCH001">
-              <input type="hidden" name="no_faktur[${kode}]" value="FKT20250502">
-            </div>
-          `;
-
-          container.appendChild(wrapper);
         }
-      } else {
+
+        jamCheckboxes += `</div></div>`;
+
+        // Build inner content
+        wrapper.innerHTML = `
+          <div class="flex items-center mb-2">
+              <input type="checkbox" id="checkbox-${kode}" class="checkbox-kode mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded" checked>
+              <label for="checkbox-${kode}" class="text-sm font-bold text-gray-900 dark:text-white">
+                  ${nama}
+              </label>
+          </div>
+
+          <div class="mb-5 sm:block md:flex items-center">
+            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jumlah</label>
+            <input type="number" name="jumlah[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+            <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Aturan Pakai</label>
+            <input type="text" name="aturan_pakai[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+          </div>
+
+          <div class="mb-5 sm:block md:flex items-center">
+            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Embalase</label>
+            <input type="number" step="0.01" name="embalase[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+            <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tuslah</label>
+            <input type="number" step="0.01" name="tuslah[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+          </div>
+
+          ${jamCheckboxes}
+
+          <input type="hidden" name="kode_barang[]" value="${kode}">
+          <input type="hidden" name="kd_bangsal[${kode}]" value="B001">
+          <input type="hidden" name="no_batch[${kode}]" value="BTCH001">
+          <input type="hidden" name="no_faktur[${kode}]" value="FKT20250502">
+        `;
+
+        // Append wrapper to container
+        container.appendChild(wrapper);
+
+        // ✅ Add checkbox handler to remove section on uncheck
+        const checkbox = document.getElementById(`checkbox-${kode}`);
+        checkbox.addEventListener("change", function () {
+            if (!this.checked) {
+                wrapper.remove();
+            }
+        });
+    }
+} else {
         const jumlahInput = document.querySelector(`input[name="jumlah[${kode}]"]`);
         if (jumlahInput && jumlahInput.value === '') {
           const toRemove = document.getElementById(inputId);

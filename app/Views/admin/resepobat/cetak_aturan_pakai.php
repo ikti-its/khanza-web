@@ -91,8 +91,8 @@
     <div class="content">
       <b>No. RM:</b> <?= $resep['nomor_rm'] ?><br>
       <b>Nama:</b> <?= strtoupper($resep['nama_pasien']) ?><br>
-      <b>Alamat:</b> <?= $resep['alamat_pasien'] ?><br>
-      <b>Penanggung Jawab:</b> <?= $resep['penanggung_jawab'] ?><br>
+      <!-- <b>Alamat:</b> <?= $resep['alamat_pasien'] ?><br>
+      <b>Penanggung Jawab:</b> <?= $resep['penanggung_jawab'] ?><br> -->
       <div class="barcode" style="text-align:center; margin-top: 8px;">
         <img 
             src="https://bwipjs-api.metafloor.com/?bcid=code128&text=<?= $resep['no_resep'] ?>&scale=1.2&includetext&height=8"
