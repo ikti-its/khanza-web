@@ -8,26 +8,19 @@
         <?= view('components/form_judul', [
             'judul' => 'Identitas Pasien'
         ]) ?>
-        <form action="/pasien/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="<?= base_url('pasien/submitedit/' . $pasien['no_rkm_medis']) ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
-<?php
-function generateNomorRekamMedis() {
-    $tanggal = date('Ymd'); // 8-digit date
-    $random = str_pad(mt_rand(0, 99999), 5, '0', STR_PAD_LEFT); // 5-digit random
-    return 'RM' . $tanggal . $random; // Add "RM" prefix
-}
-?>
             <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nomor Rekam Medis</label>
-                <input type="text" id="no_rkm_medis" value="<?= generateNomorRekamMedis() ?>" name="no_rkm_medis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="no_rkm_medis" value="<?=$pasien['no_rkm_medis'] ?>" name="no_rkm_medis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama</label>
-                <input id="nm_pasien" name="nm_pasien" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input id="nm_pasien" name="nm_pasien" value="<?=$pasien['nm_pasien'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin</label>
-                <select id="jk" name="jk" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <select id="jk" name="jk" value="<?=$pasien['jk'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="">-- Pilih --</option>
                     <option value="L">Laki-laki</option>
                     <option value="P">Perempuan</option>
@@ -35,7 +28,7 @@ function generateNomorRekamMedis() {
 
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Golongan Darah</label>
-                <select id="gol_darah" name="gol_darah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <select id="gol_darah" name="gol_darah" value="<?=$pasien['gol_darah'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
                     <option value="">-- Pilih --</option>
                     <option value="A">A</option>
                     <option value="B">B</option>
@@ -45,17 +38,17 @@ function generateNomorRekamMedis() {
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Tempat Lahir</label>
-                <input type="text" id="tmp_lahir" name="tmp_lahir" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="tmp_lahir" name="tmp_lahir" value="<?=$pasien['tmp_lahir'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tanggal Lahir</label>
-                <input type="date" id="tgl_lahir" name="tgl_lahir" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="date" id="tgl_lahir" name="tgl_lahir" value="<?=$pasien['tgl_lahir'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Umur</label>
-                <input type="text" id="umur" name="umur" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="umur" name="umur" value="<?=$pasien['umur'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pendidikan</label>
-                <select id="pnd" name="pnd" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <select id="pnd" name="pnd" value="<?=$pasien['pnd'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
                     <option value="">-- Pilih --</option>
                     <option value="TS">TS</option>
                     <option value="TK">TK</option>
@@ -74,10 +67,10 @@ function generateNomorRekamMedis() {
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nama Ibu</label>
-                <input type="text" id="nm_ibu" name="nm_ibu" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="nm_ibu" name="nm_ibu" value="<?=$pasien['nm_ibu'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Penanggung Jawab</label>
-                <select id="keluarga" name="keluarga" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <select id="keluarga" name="keluarga" value="<?=$pasien['keluarga'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
                     <option value="DIRI SENDIRI">DIRI SENDIRI</option>
                     <option value="AYAH">AYAH</option>
                     <option value="IBU">IBU</option>
@@ -90,25 +83,25 @@ function generateNomorRekamMedis() {
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nama Penanggung Jawab</label>
-                <input type="text" id="namakeluarga" name="namakeluarga" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="namakeluarga" name="namakeluarga" value="<?=$pasien['namakeluarga'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pekerjaan Penanggung Jawab</label>
-                <input id="pekerjaanpj" name="pekerjaanpj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input id="pekerjaanpj" name="pekerjaanpj" value="<?=$pasien['pekerjaanpj'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Suku/Bangsa</label>
-                <input type="text" id="suku_bangsa" name="suku_bangsa" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="suku_bangsa" name="suku_bangsa" value="<?=$pasien['suku_bangsa'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Bahasa</label>
-                <input id="bahasa_pasien" name="bahasa_pasien" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input id="bahasa_pasien" name="bahasa_pasien" value="<?=$pasien['bahasa_pasien'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Cacat Fisik</label>
-                <input type="text" id="cacat_fisik" name="cacat_fisik" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="cacat_fisik" name="cacat_fisik" value="<?=$pasien['cacat_fisik'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Agama</label>
-                <select type="text" id="agama" name="agama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <select type="text" id="agama" name="agama" value="<?=$pasien['agama'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
                     <option value="ISLAM">ISLAM</option>
                     <option value="KRISTEN">KRISTEN</option>
                     <option value="KATOLIK">KATOLIK</option>
@@ -119,7 +112,7 @@ function generateNomorRekamMedis() {
                 </select>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Pernikahan</label>
-                <select id="stts_nikah" name="stts_nikah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <select id="stts_nikah" name="stts_nikah" value="<?=$pasien['stts_nikah'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
                     <option value="MENIKAH">MENIKAH</option>
                     <option value="BELUM MENIKAH">BELUM MENIKAH</option>
                     <option value="JANDA">JANDA</option>
@@ -128,71 +121,71 @@ function generateNomorRekamMedis() {
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Asuransi</label>
-                <input type="text" id="kd_pj" name="kd_pj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="kd_pj" name="kd_pj" value="<?=$pasien['kd_pj'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">No. Peserta</label>
-                <input type="text" id="no_peserta" name="no_peserta" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="no_peserta" name="no_peserta" value="<?=$pasien['no_peserta'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Email</label>
-                <input id="email" name="email" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input id="email" name="email" value="<?=$pasien['email'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">No. Telepon</label>
-                <input type="text" id="no_tlp" name="no_tlp" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="no_tlp" name="no_tlp" value="<?=$pasien['no_tlp'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pertama Daftar</label>
-                <input id="tgl_daftar" name="tgl_daftar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input id="tgl_daftar" name="tgl_daftar" value="<?=$pasien['tgl_daftar'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Pekerjaan</label>
-                <input type="text" id="pekerjaan" name="pekerjaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="pekerjaan" name="pekerjaan" value="<?=$pasien['pekerjaan'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">No. KTP/SIM</label>
-                <input id="no_ktp" name="no_ktp" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input id="no_ktp" name="no_ktp" value="<?=$pasien['no_ktp'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat</label>
-                <input type="text" id="alamat" name="alamat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="alamat" name="alamat" value="<?=$pasien['alamat'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kelurahan</label>
-                <input type="text" id="kd_kel" name="kd_kel" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="kd_kel" name="kd_kel" value="<?=$pasien['kd_kel'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Kecamatan</label>
-                <input id="kd_kec" name="kd_kec" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input id="kd_kec" name="kd_kec" value="<?=$pasien['kd_kec'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kabupaten</label>
-                <input type="text" id="kd_kab" name="kd_kab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="kd_kab" name="kd_kab" value="<?=$pasien['kd_kab'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Provinsi</label>
-                <input id="kd_prop" name="kd_prop" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input id="kd_prop" name="kd_prop" value="<?=$pasien['kd_prop'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat PJ</label>
-                <input type="text" id="alamatpj" name="alamatpj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="alamatpj" name="alamatpj" value="<?=$pasien['alamatpj'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kelurahan</label>
-                <input type="text" id="kelurahanpj" name="kelurahanpj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="kelurahanpj" name="kelurahanpj" value="<?=$pasien['kelurahanpj'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Kecamatan</label>
-                <input id="kecamatanpj" name="kecamatanpj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input id="kecamatanpj" name="kecamatanpj" value="<?=$pasien['kecamatanpj'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                         <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kabupaten</label>
-                <input type="text" id="kabupatenpj" name="kabupatenpj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="kabupatenpj" name="kabupatenpj" value="<?=$pasien['kabupatenpj'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Provinsi</label>
-                <input id="propinsipj" name="propinsipj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input id="propinsipj" name="propinsipj" value="<?=$pasien['propinsipj'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
             </div>
                                     <div class="mb-5 sm:block md:flex items-center"> 
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Instansi Pasien</label>
-                <input type="text" id="perusahaan_pasien" name="perusahaan_pasien" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
+                <input type="text" id="perusahaan_pasien" value="<?=$pasien['perusahaan_pasien'] ?>" name="perusahaan_pasien" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" >
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">NIP/NRP</label>
-                <input id="nip" name="nip" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input id="nip" name="nip" value="<?=$pasien['nip'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             
 

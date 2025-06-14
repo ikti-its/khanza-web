@@ -29,7 +29,7 @@
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <?= view('components/notif_icon') ?>
+                                <!-- <?= view('components/notif_icon') ?> -->
 
                                 <!-- Notification Pop-up -->
                                 <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
@@ -73,7 +73,7 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?php if (!empty($resepdokter_data)) : ?>
+                            <!-- <?php if (!empty($resepdokter_data)) : ?>
                                 <div>
                                     <a href='/pemberianobat/tambah/<?= $resepdokter_data[0]['no_resep'] ?>' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                         <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
@@ -82,7 +82,7 @@
                                         Tambah
                                     </a>
                                 </div>
-                            <?php endif; ?>
+                            <?php endif; ?> -->
                         </div>
                     </div>
                     <?= view('components/data_search_bar') ?>
@@ -267,20 +267,20 @@
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php
-                                                $row_id  = $resepdokter['no_resep'];
-                                                $api_url = '/pemberianobat';
+                                                $row_id = $resepdokter['no_resep'] . '/' . $resepdokter['kode_barang'];
+                                                $api_url = '/resepdokter';
                                                 echo view('components/data_lihat_detail',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/data_ubah',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_hapus',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]); 
+                                                // echo view('components/data_ubah',[
+                                                //     'row_id'  => $row_id,
+                                                //     'api_url' => $api_url   
+                                                // ]);
+                                                // echo view('components/data_hapus',[
+                                                //     'row_id'  => $row_id,
+                                                //     'api_url' => $api_url   
+                                                // ]); 
                                             ?>
                                         </div>
                                     </td>

@@ -124,60 +124,80 @@ class ResepDokterController extends BaseController
         }
     }
 
-    public function editResepDokter($noResep, $kodeBarang)
-    {
-        if (!session()->has('jwt_token')) {
-            return $this->renderErrorView(401);
-        }
-    
-        $token = session()->get('jwt_token');
-        $title = 'Edit Resep Dokter';
-    
-        $url = $this->api_url . '/resep-dokter/' . $noResep;
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-        ]);
-        $response = curl_exec($ch);
-        curl_close($ch);
-    
-        $data = json_decode($response, true);
-        $selectedResep = [];
-    
-        // ✅ Find matching kode_barang entry
-        if (isset($data['data']) && is_array($data['data'])) {
-            foreach ($data['data'] as $item) {
-                if ($item['kode_barang'] === $kodeBarang) {
-                    $selectedResep = $item;
-                    break;
-                }
+public function editResepDokter($noResep, $kodeBarang)
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
+
+    $token = session()->get('jwt_token');
+    $title = 'Edit Resep Dokter';
+
+    // Fetch detail resep dokter berdasarkan no_resep
+    $url = $this->api_url . '/resep-dokter/' . $noResep;
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+    $selectedResep = [];
+
+    // Temukan entry yang cocok dengan kode_barang
+    if (isset($data['data']) && is_array($data['data'])) {
+        foreach ($data['data'] as $item) {
+            if ($item['kode_barang'] === $kodeBarang) {
+                $selectedResep = $item;
+                break;
             }
         }
-
-        $obatUrl = $this->api_url . '/pemberian-obat/databarang';
-        $obatCh = curl_init($obatUrl);
-        curl_setopt($obatCh, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($obatCh, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-        ]);
-        $obatResponse = curl_exec($obatCh);
-        curl_close($obatCh);
-
-        $obatData = json_decode($obatResponse, true);
-        $obat_list = $obatData['data'] ?? [];
-    
-        $this->addBreadcrumb('User', 'user');
-        $this->addBreadcrumb('Resep Dokter', 'resepdokter');
-        $this->addBreadcrumb('Edit', 'edit');
-    
-        return view('/admin/resepobat/edit_resepobat', [
-            'resepdokter' => $selectedResep,
-            'title' => $title,
-            'obat_list' => $obat_list,
-            'breadcrumbs' => $this->getBreadcrumbs()
-        ]);
     }
+
+    // 🔍 Fetch nomor_rawat dan nomor_rm dari /resep-obat/:no_resep
+    $infoUrl = $this->api_url . '/resep-obat/' . $noResep;
+    $infoCh = curl_init($infoUrl);
+    curl_setopt($infoCh, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($infoCh, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $infoResponse = curl_exec($infoCh);
+    curl_close($infoCh);
+
+    $infoData = json_decode($infoResponse, true);
+    $nomorRawat = $infoData['data']['no_rawat'] ?? '';
+    $nomorRM = $infoData['data']['nomor_rm'] ?? '';
+// dd($infoData);
+    // 🔎 Fetch obat list
+    $obatUrl = $this->api_url . '/pemberian-obat/databarang';
+    $obatCh = curl_init($obatUrl);
+    curl_setopt($obatCh, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($obatCh, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $obatResponse = curl_exec($obatCh);
+    curl_close($obatCh);
+
+    $obatData = json_decode($obatResponse, true);
+    $obat_list = $obatData['data'] ?? [];
+
+    // Breadcrumbs
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Resep Dokter', 'resepdokter');
+    $this->addBreadcrumb('Edit', 'edit');
+// dd([$nomorRawat, $nomorRM]);
+    return view('/admin/resepobat/edit_resepobat', [
+        'resepdokter'   => $selectedResep,
+        'title'         => $title,
+        'obat_list'     => $obat_list,
+        'nomor_rawat'   => $nomorRawat,
+        'nomor_rm'      => $nomorRM,
+        'breadcrumbs'   => $this->getBreadcrumbs()
+    ]);
+}
+
     
     public function submitEditResepDokter($noResep)
     {

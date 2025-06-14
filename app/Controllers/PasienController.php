@@ -176,7 +176,7 @@ $tgl_daftar_iso = date('Y-m-d\TH:i:sP');
             $data = json_decode($response, true);
             $pasienData = $data['data'] ?? null;
         } else {
-            return redirect()->to('/pasien_data')->with('error', 'Pasien tidak ditemukan.');
+            return redirect()->to('/pasien')->with('error', 'Pasien tidak ditemukan.');
         }
     } else {
         return redirect()->to('/login')->with('error', 'Silakan login terlebih dahulu.');
@@ -217,7 +217,7 @@ public function editPasien($no_rkm_medis)
 
     $this->addBreadcrumb('Pasien', 'pasien_data');
     $this->addBreadcrumb('Edit', '');
-
+// dd($pasienData);
     return view('/admin/pasien/edit_pasien', [
         'title' => $title,
         'pasien' => $pasienData,
@@ -238,30 +238,46 @@ public function submitEditPasien($no_rkm_medis)
     $tgl_lahir_iso = $tgl_lahir ? date(DATE_ATOM, strtotime($tgl_lahir)) : null;
 
     $postData = [
-        'nm_pasien' => $this->request->getPost('nm_pasien'),
-        'no_ktp' => $this->request->getPost('no_ktp'),
-        'jk' => $this->request->getPost('jk'),
-        'tmp_lahir' => $this->request->getPost('tmp_lahir'),
-        'tgl_lahir' => $tgl_lahir_iso,
-        'nm_ibu' => $this->request->getPost('nm_ibu'),
-        'alamat' => $this->request->getPost('alamat'),
-        'gol_darah' => $this->request->getPost('gol_darah'),
-        'pekerjaan' => $this->request->getPost('pekerjaan'),
-        'stts_nikah' => $this->request->getPost('stts_nikah'),
-        'agama' => $this->request->getPost('agama'),
-        'no_tlp' => $this->request->getPost('no_tlp'),
-        'umur' => $this->request->getPost('umur'),
-        'pnd' => $this->request->getPost('pnd'),
-        'keluarga' => $this->request->getPost('keluarga'),
-        'namakeluarga' => $this->request->getPost('namakeluarga'),
-        'kd_pj' => $this->request->getPost('kd_pj'),
-        'no_peserta' => $this->request->getPost('no_peserta'),
-        'email' => $this->request->getPost('email'),
-        // Add more fields as needed...
+        'no_rkm_medis' => $this->request->getPost('no_rkm_medis'),
+            'nm_pasien' => $this->request->getPost('nm_pasien'),
+            'no_ktp' => $this->request->getPost('no_ktp'),
+            'jk' => $this->request->getPost('jk'),
+            'tmp_lahir' => $this->request->getPost('tmp_lahir'),
+            'tgl_lahir' => $tgl_lahir_iso,
+            'nm_ibu' => $this->request->getPost('nm_ibu'),
+            'alamat' => $this->request->getPost('alamat'),
+            'gol_darah' => $this->request->getPost('gol_darah'),
+            'pekerjaan' => $this->request->getPost('pekerjaan'),
+            'stts_nikah' => $this->request->getPost('stts_nikah'),
+            'agama' => $this->request->getPost('agama'),
+            'tgl_daftar' => $this->request->getPost('tgl_daftar'),
+            'no_tlp' => $this->request->getPost('no_tlp'),
+            'umur' => $this->request->getPost('umur'),
+            'pnd' => $this->request->getPost('pnd'),
+            'keluarga' => $this->request->getPost('keluarga'),
+            'namakeluarga' => $this->request->getPost('namakeluarga'),
+            'kd_pj' => $this->request->getPost('kd_pj'),
+            'no_peserta' => $this->request->getPost('no_peserta'),
+            'kd_kel' => $this->request->getPost('kd_kel'),
+            'kd_kec' => $this->request->getPost('kd_kec'),
+            'kd_kab' => $this->request->getPost('kd_kab'),
+            'pekerjaanpj' => $this->request->getPost('pekerjaanpj'),
+            'alamatpj' => $this->request->getPost('alamatpj'),
+            'kelurahanpj' => $this->request->getPost('kelurahanpj'),
+            'kecamatanpj' => $this->request->getPost('kecamatanpj'),
+            'kabupatenpj' => $this->request->getPost('kabupatenpj'),
+            'perusahaan_pasien' => $this->request->getPost('perusahaan_pasien'),
+            'suku_bangsa' => $this->request->getPost('suku_bangsa'),
+            'bahasa_pasien' => $this->request->getPost('bahasa_pasien'),
+            'cacat_fisik' => $this->request->getPost('cacat_fisik'),
+            'email' => $this->request->getPost('email'),
+            'nip' => $this->request->getPost('nip'),
+            'kd_prop' => $this->request->getPost('kd_prop'),
+            'propinsipj' => $this->request->getPost('propinsipj'),
     ];
 
     $jsonPayload = json_encode($postData);
-
+// dd($jsonPayload);
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonPayload);
@@ -277,7 +293,7 @@ public function submitEditPasien($no_rkm_medis)
     curl_close($ch);
 
     if ($http_status === 200) {
-        return redirect()->to('/pasien_data')->with('success', 'Data pasien berhasil diperbarui.');
+        return redirect()->to('/pasien')->with('success', 'Data pasien berhasil diperbarui.');
     } else {
         return $this->renderErrorView($http_status);
     }
@@ -305,7 +321,7 @@ public function hapusPasien($no_rkm_medis)
     curl_close($ch);
 
     if ($http_status === 200) {
-        return redirect()->to('/pasien_data')->with('success', 'Pasien berhasil dihapus.');
+        return redirect()->to('/pasien')->with('success', 'Pasien berhasil dihapus.');
     } else {
         return $this->renderErrorView($http_status);
     }
