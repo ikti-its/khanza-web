@@ -137,7 +137,7 @@
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php
-                                                $row_id  = $pemberianobat['nomor_rawat'] . '-' . $i;
+                                                $row_id  = $pemberianobat['nomor_rawat'] . '/' . $pemberianobat['jam_beri'];
                                                 $api_url = '/pemberianobat';
                                                 echo view('components/data_lihat_detail',[
                                                     'row_id'  => $row_id,

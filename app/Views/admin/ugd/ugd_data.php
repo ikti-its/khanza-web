@@ -185,14 +185,6 @@
                                 </th>
 
                                 <th scope="col" class="px-6 py-3">
-                                    <div class="flex justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Dokter
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
                                     <div class="flex items-center justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Aksi
@@ -373,8 +365,8 @@
                                             'nomor_reg'     => 'indeks',
                                             'nomor_rm'      => 'indeks',
                                             'nama_pasien'   => 'nama',
-                                            'poliklinik'    => 'status',
-                                            'dokter_dituju' => 'nama'
+                                            'poliklinik'    => 'status'
+                                            
                                         ];
                                         echo view('components/data_tabel_td', [
                                             'tabel'  => $tabel,

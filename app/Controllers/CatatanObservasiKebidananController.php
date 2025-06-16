@@ -113,7 +113,7 @@ class CatatanObservasiKebidananController extends BaseController
 
             $breadcrumbs = $this->getBreadcrumbs();
 
-            return view('/admin/observasikebidanan/tambah_catatanobservasikebidanan', [
+            return view('/admin/observasikebidanan/tambah_catatanobservasiranapkebidanan', [
                 'title' => $title,
                 'breadcrumbs' => $breadcrumbs
             ]);

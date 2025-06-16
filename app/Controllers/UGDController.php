@@ -104,7 +104,7 @@ $jamForRegistrasi = date('H:i:s', strtotime($jamRaw)); // for /registrasi
         'status_rawat'     => $this->request->getPost('status_rawat'),
         'status_bayar'     => $this->request->getPost('status_bayar'),
     ];
-
+// dd($postData);
     // Submit to /ugd
     $ugdJson = json_encode($postData);
     $ch1 = curl_init($this->api_url . '/ugd');

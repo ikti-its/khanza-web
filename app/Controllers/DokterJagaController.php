@@ -113,7 +113,7 @@ class DokterJagaController extends BaseController
             'poliklinik' => $this->request->getPost('poliklinik'),
             'status' => $this->request->getPost('status')
         ];
-
+// dd($postData);
         $url = $this->api_url . '/dokterjaga';
         $json = json_encode($postData);
 
