@@ -42,7 +42,7 @@
 
                     </div>
 
-                    <?= view('components/data_search_bar') ?>
+                    <?= view('components/search_bar') ?>
 
 
                     <div class="overflow-x-auto">

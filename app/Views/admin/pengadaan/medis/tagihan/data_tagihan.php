@@ -19,7 +19,7 @@
 
 
                     </div>
-                    <?= view('components/data_search_bar') ?>
+                    <?= view('components/search_bar') ?>
 
                     <div id="noDataFound" style="display: none;">Data tidak ditemukan</div>
                     <!-- End Header -->
@@ -28,7 +28,7 @@
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <?php 
                             $widths  = [18, 18, 18, 22, 24];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel_colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'Tanggal Bayar',
@@ -37,7 +37,7 @@
                                 'Status',
                                 'Aksi'
                             ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                            echo view('components/tabel_thead',['kolom' => $columns]);
                         ?>    
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -278,15 +278,15 @@
                                                                 <?php
                                                                     $row_id  = $tagihan['id'];
                                                                     $api_url = '/tagihanmedis';
-                                                                    echo view('components/data_lihat_detail',[
+                                                                    echo view('components/aksi_detail',[
                                                                         'row_id'  => $row_id,
                                                                         'api_url' => $api_url   
                                                                     ]);
-                                                                    echo view('components/data_ubah',[
+                                                                    echo view('components/aksi_ubah',[
                                                                         'row_id'  => $row_id,
                                                                         'api_url' => $api_url   
                                                                     ]);
-                                                                    echo view('components/data_hapus',[
+                                                                    echo view('components/aksi_hapus',[
                                                                         'row_id'  => $row_id,
                                                                         'api_url' => $api_url   
                                                                     ]);

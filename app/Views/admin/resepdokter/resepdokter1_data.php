@@ -80,74 +80,47 @@
                             <?php endif; ?>
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
-
                     <!-- End Header -->
+                    <?php
+                        echo view('components/search_bar');
+                        
+                        $api_url  = '/pemberianobat';
+                        $tabel    = $resepdokter_data;
+                        $kolom_id = 'no_resep';
+                        $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true,
+                        ];
+                        $data = [
+                            // [visible, Display, Kolom, Jenis]
+                            [1, 'Tanggal Beri', 'no_resep' , 'indeks'],
+                            [1, 'Jam Beri'    , 'jam_beri' , 'jam'],
+                            [1, 'Kode Obat'   , 'kode_obat', 'indeks'],
+                            [1, 'Nama Obat'   , 'nama_obat', 'teks'],
+                            [1, 'Jumlah'      , 'jumlah'   , 'jumlah'],
+                            [1, 'Biaya'       , 'total'    , 'uang'],
+                        ];
+                        echo view('components/tabel', [
+                            'api_url'   => $api_url,
+                            'tabel'     => $tabel,
+                            'kolom_id'  => $kolom_id,
+                            'data'      => $data,
+                            'aksi'      => $aksi
+                        ]);
+                        
+                        echo view('components/footer', [
+                            'meta_data' => $meta_data,
+                            'api_url'   => $api_url
+                        ]);      
+                    ?>
+
 
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
-                            
-                            $columns = [
-                                'Tanggal Beri',
-                                'Jam Beri',
-                                'Kode Obat',
-                                'Nama Obat',
-                                'Jumlah',
-                                'Biaya',
-                                'Aksi'
-                            ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
-                        ?>
-                        
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                    
-                            <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
-                                <tr>
-                                    <?php
-                                        $tabel  = $resepdokter;
-                                        $row_id = 'no_resep';
-                                        $data   = [
-                                            'no_resep'  => 'indeks',
-                                            'jam_beri'  => 'jam',
-                                            'kode_obat' => 'indeks',
-                                            'nama_obat' => 'teks',
-                                            'jumlah'    => 'jumlah',
-                                            'total'     => 'jumlah'
-                                        ];
-                                        echo view('components/data_tabel_td', [
-                                            'tabel'  => $tabel,
-                                            'row_id' => $row_id,
-                                            'data'   => $data
-                                        ]);
-                                    ?>
-                                    
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <?php
-                                                $row_id  = $resepdokter['no_resep'] . '-' . $i;
-                                                $api_url = '/pemberianobat';
-                                                echo view('components/data_lihat_detail',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_ubah',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_hapus',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]); 
-                                            ?>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
                         <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
                             <div id="hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
                                 <div class="mt-20 mx-auto w-full max-w-lg p-6 bg-white dark:bg-neutral-800 rounded shadow">
@@ -174,10 +147,6 @@
                     </div>
 
                     <!-- End Table -->
-                    <?= view('components/data_footer.php', [
-                        'meta_data' => $meta_data,
-                        'api_url'   => $api_url
-                    ]) ?>
                 </div>
             </div>
         </div>

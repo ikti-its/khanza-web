@@ -53,7 +53,7 @@
                     <table id="myTable" class="overflow-x-auto min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <?php 
                             $widths  = [14, 20, 16, 14, 11, 11, 14];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel_colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'No Batch',
@@ -64,7 +64,7 @@
                                 'Sisa',
                                 'Aksi'
                             ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                            echo view('components/tabel_thead',['kolom' => $columns]);
                         ?>    
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -231,15 +231,15 @@
                                             <?php
                                                 $row_id  = $batch['no_batch'];
                                                 $api_url = '/batchmedis';
-                                                echo view('components/data_lihat_detail',[
+                                                echo view('components/aksi_detail',[
                                                     'row_id'  => $row_id . $batch['no_faktur'] . $batch['id_barang_medis'],
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/data_ubah',[
+                                                echo view('components/aksi_ubah',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/data_hapus',[
+                                                echo view('components/aksi_hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]); 

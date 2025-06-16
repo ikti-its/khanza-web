@@ -86,180 +86,69 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/data_tambah_button', [
+                            <?= view('components/tambah_button', [
                                 'link' => '/registrasi/tambah'
                             ]) ?>
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
-
                     <!-- End Header -->
-
+                    <?php
+                        echo view('components/search_bar');
+                        
+                        $api_url  = '/registrasi';
+                        $tabel    = $registrasi_data;
+                        $kolom_id = 'nomor_reg';
+                        $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true,
+                        ];
+                        $data = [
+                            // [visible, Display, Kolom, Jenis]
+                            [1, 'Nomor Registrasi' , 'nomor_reg'    , 'indeks'],
+                            [1, 'Nomor Rawat'      , 'nomor_rawat'  , 'indeks'],
+                            [1, 'Tanggal'          , 'tanggal'      , 'tanggal'],
+                            [1, 'Jam'              , 'jam'          , 'jam'],
+                            [1, 'Nomor Rekam Medis', 'nomor_rm'     , 'indeks'],
+                            [1, 'Nama'             , 'nama_pasien'  , 'nama'],
+                            [1, 'Jenis Kelamin'    , 'jenis_kelamin', 'status'],
+                            [1, 'Umur'             , 'umur'         , 'jumlah'],
+                            [1, 'Poliklinik'       , 'poliklinik'   , 'status'],
+                            [1, 'Dokter'           , 'nama_dokter'  , 'nama'],
+                            [1, 'Penanggung Jawab'         , 'penanggung_jawab', 'nama'],
+                            [1, 'Hubungan Penanggung Jawab', 'hubungan_pj'     , 'teks'],
+                            [1, 'Alamat Penanggung Jawab'  , 'alamat_pj'       , 'teks'],
+                            [1, 'Nomor Telepon'    , 'no_telepon'       , 'teks'],
+                            [1, 'Biaya Registrasi' , 'biaya_registrasi' , 'uang'],
+                            [1, 'Status Registrasi', 'status_registrasi', 'status'],
+                            [1, 'Status Rawat'     , 'status_rawat'     , 'status'], 
+                            [1, 'Status Poliklinik', 'status_poli'      , 'status'],
+                            [1, 'Jenis Bayar'      , 'jenis_bayar'      , 'status'],
+                            [1, 'Status Bayar'     , 'status_bayar'     , 'status'],
+                        ];
+                        echo view('components/tabel', [
+                            'api_url'   => $api_url,
+                            'tabel'     => $tabel,
+                            'kolom_id'  => $kolom_id,
+                            'data'      => $data,
+                            'aksi'      => $aksi
+                        ]);
+                        
+                        echo view('components/footer', [
+                            'meta_data' => $meta_data,
+                            'api_url'   => $api_url
+                        ]);      
+                    ?>
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
-                            
-                            $columns = [
-                                'No. Registrasi',
-                                'No. Rawat',
-                                'Nama',
-                                'Poliklinik',
-                                'Dokter',
-                                'Aksi'
-                            ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
-                        ?>
+                       
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($registrasi_data as $registrasi) : ?>
                                 <div id="hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
-                                    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
-                                        <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
-                                            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
-                                                <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $registrasi['nama_pasien'] ?>
-                                                </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $registrasi['nomor_reg'] ?>">
-                                                    <span class="sr-only">Close</span>
-                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M18 6 6 18"></path>
-                                                        <path d="m6 6 12 12"></path>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            <div class="p-4">
-                                                <div class="space-y-4">
-                                                <div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nomor_reg'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal</label>
-                                                        <input type="text" name="" value="<?= $registrasi['tanggal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam</label>
-                                                        <input type="text" name="" value="<?= $registrasi['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Kelamin</label>
-                                                        <input type="text" name="" value="<?= $registrasi['jenis_kelamin'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Umur</label>
-                                                        <input type="text" name="" value="<?= $registrasi['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Poliklinik</label>
-                                                        <input type="text" name="" value="<?= $registrasi['poliklinik'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter</label>
-                                                        <input type="text" name="" value="<?= $registrasi['nama_dokter'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $registrasi['penanggung_jawab'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Hubungan Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $registrasi['hubungan_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Alamat Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $registrasi['alamat_pj'] ?? '' ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Telepon</label>
-                                                        <input type="text" name="" value="<?= $registrasi['no_telepon'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Biaya Registrasi</label>
-                                                        <input type="text" name="" value="<?= $registrasi['biaya_registrasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Registrasi</label>
-                                                        <input type="text" name="" value="<?= $registrasi['status_registrasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Rawat</label>
-                                                        <input type="text" name="" value="<?= $registrasi['status_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Poliklinik</label>
-                                                        <input type="text" name="" value="<?= $registrasi['status_poli'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Bayar</label>
-                                                        <input type="text" name="" value="<?= $registrasi['jenis_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
-                                                        <input type="text" name="" value="<?= $registrasi['status_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 flex items-end gap-4">
-                                                        <!-- Select input -->
-                                                    </div>
-
-
-                                                </div>
-
-                                                </div>
-                                                <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <tr>
-                                    <?php
-                                        $tabel  = $registrasi;
-                                        $row_id = 'nomor_reg';
-                                        $data   = [
-                                            'nomor_reg'   => 'indeks',
-                                            'nomor_rawat' => 'indeks',
-                                            'nama_pasien' => 'nama',
-                                            'poliklinik'  => 'status',
-                                            'nama_dokter' => 'nama'
-                                        ];
-                                        echo view('components/data_tabel_td', [
-                                            'tabel'  => $tabel,
-                                            'row_id' => $row_id,
-                                            'data'   => $data
-                                        ]);
-                                    ?>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
@@ -273,22 +162,6 @@
                                                 Tindakan
                                             </button>
                                             </div>
-                                            <?php
-                                                $row_id  = $registrasi['nomor_reg'];
-                                                $api_url = '/registrasi';
-                                                echo view('components/data_lihat_detail',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_ubah',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_hapus',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]); 
-                                                ?>
                                         </div>
                                     </td>
 
@@ -402,11 +275,6 @@
                     </div>
 
                     <!-- End Table -->
-
-                    <?= view('components/data_footer.php', [
-                        'meta_data' => $meta_data,
-                        'api_url'   => $api_url
-                    ]) ?>
                 </div>
             </div>
         </div>

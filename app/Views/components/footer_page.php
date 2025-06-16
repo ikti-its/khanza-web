@@ -1,6 +1,6 @@
 <div class="flex items-center gap-x-1">
     <?php
-    $total_pages = $meta_data['total'] ?? 1; // Ensure 'total' always has a value
+    $total_pages  = $meta_data['total'] ?? 1; // Ensure 'total' always has a value
     $current_page = $meta_data['page'] ?? 1;
 
     $range = 2; // Number of pages to show before and after the current page

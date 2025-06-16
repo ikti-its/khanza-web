@@ -64,12 +64,12 @@
                                 <table class="min-w-full divide-y divide-gray-200  dark:divide-neutral-700" id="item-list">
                                     <?php 
                                         $widths  = [3, 5, 15, 8, 10, 7, 7, 10, 10, 10];
-                                        echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                                        echo view('components/tabel_colgroup',['widths' => $widths]);
                                         
                                         // $columns = [
                                             
                                         // ];
-                                        // echo view('components/data_tabel_thead',['columns' => $columns]);
+                                        // echo view('components/tabel_thead',['kolom' => $columns]);
                                     ?>
                                     <thead class="bg-[#DCDCDC]">
                                         <tr>

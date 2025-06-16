@@ -74,7 +74,7 @@
                                 <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
                                     <?php 
                                         $widths  = [6, 7, 15, 12, 12, 12, 8, 14, 14];
-                                        echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                                        echo view('components/tabel_colgroup',['widths' => $widths]);
                                         
                                         $columns = [
                                             'Jumlah',
@@ -86,7 +86,7 @@
                                             'Diskon (Jumlah)',
                                             'Total'
                                         ];
-                                        // echo view('components/data_tabel_thead',['columns' => $columns]);
+                                        // echo view('components/tabel_thead',['kolom' => $columns]);
                                     ?>
                                     <thead class="border-b bg-[#DCDCDC]">
                                         <tr class="bg-navy disabled">

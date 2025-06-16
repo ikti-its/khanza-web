@@ -17,19 +17,19 @@
 
                         </div>
                         <div class="flex gap-x-2 md:items-start">
-                            <?= view('components/data_tambah_button', [
+                            <?= view('components/tambah_button', [
                                 'link' => '/stokkeluarmedis/tambah'
                             ]) ?>
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
+                    <?= view('components/search_bar') ?>
                     <!-- End Header -->
 
                     <!-- Table -->
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <?php 
                             $widths  = [20, 20, 20, 20, 20];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel_colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'Tanggal',
@@ -38,7 +38,7 @@
                                 'Pegawai',
                                 'Aksi'
                             ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                            echo view('components/tabel_thead',['kolom' => $columns]);
                         ?>
         
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -233,11 +233,11 @@
                                             <?php
                                                 $row_id  = $stok['id'];
                                                 $api_url = '/stokkeluarmedis';
-                                                echo view('components/data_ubah',[
+                                                echo view('components/aksi_ubah',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/data_hapus',[
+                                                echo view('components/aksi_hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]); 

@@ -85,105 +85,53 @@
                             <?php endif; ?> -->
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
-
                     <!-- End Header -->
-
+                    <?php 
+                        $resepdokter['harga'] = number_format($harga_lookup[$resepdokter['kode_barang']]) ?? null;
+                        $resepdokter['nama_obat'] = $barang_lookup[$resepdokter['kode_barang']] ?? null;
+                        $resepdokter['kode_obat'] =  $noRacikMap[$resepdokter['kode_barang']] ?? '-';
+                    
+                    ?>
+                    <?php
+                        echo view('components/search_bar');
+                        
+                        $api_url  = '/resepdokter';
+                        $tabel    = $resepdokter_data;
+                        $kolom_id = 'no_resep';
+                        $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => false,
+                            'hapus'    => false,
+                        ];
+                        $data = [
+                            // [visible, Display, Kolom, Jenis]
+                            [1, 'No Racik'    , 'no_resep'    , 'indeks'],
+                            [1, 'Kode Obat'   , 'kode_barang' , 'indeks'],
+                            [1, 'Nama Obat'   , 'nama_obat'   , 'teks'],
+                            [1, 'Jumlah'      , 'jumlah'      , 'jumlah'], 
+                            [1, 'Aturan Pakai', 'aturan_pakai', 'teks'],
+                            [1, 'Biaya'       , 'harga'       , 'uang'],
+                        ];
+                        echo view('components/tabel', [
+                            'api_url'   => $api_url,
+                            'tabel'     => $tabel,
+                            'kolom_id'  => $kolom_id,
+                            'data'      => $data,
+                            'aksi'      => $aksi
+                        ]);
+                        
+                        echo view('components/footer', [
+                            'meta_data' => $meta_data,
+                            'api_url'   => $api_url
+                        ]);      
+                    ?>
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
-                            
-                            $columns = [
-                                'No Racik',
-                                'Kode Obat',
-                                'Nama Obat',
-                                'Jumlah',
-                                'Aturan Pakai',
-                                'Biaya',
-                                'Aksi'
-                            ];
-                            // echo view('components/data_tabel_thead',['columns' => $columns]);
-                        ?>
                         
-
-                        <thead class="bg-gray-50 dark:bg-slate-800">
-                            <tr>
-                                <!-- <th scope="col" class="ps-6 py-3 text-start">
-                                    <label for="hs-at-with-checkboxes-main" class="flex">
-                                        <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-main">
-                                        <span class="sr-only">Checkbox</span>
-                                    </label>
-                                </th> -->
-
-                                <!-- <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Nomor Resep
-                                        </span>
-                                    </div>
-                                </th> -->
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            No. Racik
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Kode Obat
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Nama Obat
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Jumlah
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Aturan Pakai
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Biaya
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Aksi
-                                        </span>
-                                    </div>
-                                </th>
-
-                            </tr>
-                        </thead>
+                      
                         <?php 
                         $total_biaya = 0; 
                         $current_no_resep = $resepdokter_data[0]['no_resep'] ?? null;
@@ -218,74 +166,6 @@
                             }
                         }?>
 
-                                            
-                            <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
-                                <tr>
-                                    <!-- <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                                                <?= $resepdokter['no_resep'] ?>
-                                            </span>
-                                        </div>
-                                    </td> -->
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <a href="<?= base_url('resepobatracikan/') ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                                                <?= isset($noRacikMap[$resepdokter['kode_barang']]) ? $noRacikMap[$resepdokter['kode_barang']] : '-' ?>
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepdokter['kode_barang'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $barang_lookup[$resepdokter['kode_barang']] ?? 'Nama Barang Tidak Ditemukan' ?>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['jumlah'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['aturan_pakai'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= isset($harga_lookup[$resepdokter['kode_barang']]) 
-                            ? 'Rp ' . number_format($harga_lookup[$resepdokter['kode_barang']], 0, ',', '.') 
-                            : 'N/A' ?></span>
-                                        </div>
-                                    </td>
-
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <?php
-                                                $row_id = $resepdokter['no_resep'] . '/' . $resepdokter['kode_barang'];
-                                                $api_url = '/resepdokter';
-                                                echo view('components/data_lihat_detail',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                // echo view('components/data_ubah',[
-                                                //     'row_id'  => $row_id,
-                                                //     'api_url' => $api_url   
-                                                // ]);
-                                                // echo view('components/data_hapus',[
-                                                //     'row_id'  => $row_id,
-                                                //     'api_url' => $api_url   
-                                                // ]); 
-                                            ?>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
                         </tbody>
                         <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
                             <div id="hs-vertically-centered-scrollable-modal-<?= $resepdokter['no_resep'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
@@ -313,10 +193,6 @@
                     </div>
 
                     <!-- End Table -->
-                    <?= view('components/data_footer.php', [
-                        'meta_data' => $meta_data,
-                        'api_url'   => $api_url
-                    ]) ?>
                 </div>
             </div>
         </div>

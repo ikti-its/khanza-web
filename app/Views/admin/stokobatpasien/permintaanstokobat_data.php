@@ -38,182 +38,112 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/data_tambah_button', [
+                            <?= view('components/tambah_button', [
                                 'link' => '/permintaanstokobat/tambah'
                             ]) ?>
 
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
-
                     <!-- End Header -->
-
+                    
+                    <?php
+                        echo view('components/search_bar');
+                        
+                        $api_url  = '/permintaanstokobat';
+                        $tabel    = $permintaanstokobat_data;
+                        $kolom_id = 'no_permintaan';
+                        $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true,
+                        ];
+                        $data = [
+                            // [visible, Display, Kolom, Jenis]
+                            [1, 'Nomor Permintaan'  , 'no_permintaan' , 'indeks'],
+                            [1, 'Tanggal'           , 'tgl_permintaan', 'tanggal'],
+                            [1, 'Jam'               , 'jam'           , 'jam'], 
+                            // [0, 'Kamar'             , 'kd_bangsal'    , 'indeks'],
+                            [0, 'Status'            , 'status'        , 'status'],
+                            // [0, 'Nama Pasien'       , 'nama_pasien'   , 'nama'],
+                            [1, 'Kode Dokter'       , 'kd_dokter'     , 'indeks'],
+                            // [0, 'Kode Obat/BHP'     , 'kode_brng'    , 'indeks'], 
+                            // [0, 'Nama Obat'         , 'nama_brng'    , 'teks'],
+                            // [0, 'Jumlah'            , 'jumlah'       , 'jumlah'],
+                            // [0, 'Jam Pemberian Obat', ],
+                        ];
+                        echo view('components/tabel', [
+                            'api_url'   => $api_url,
+                            'tabel'     => $tabel,
+                            'kolom_id'  => $kolom_id,
+                            'data'      => $data,
+                            'aksi'      => $aksi
+                        ]);
+                        
+                        echo view('components/footer', [
+                            'meta_data' => $meta_data,
+                            'api_url'   => $api_url
+                        ]);      
+                    ?>
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
-                            
-                            $columns = [
-                                'Nomor Permintaan',
-                                'Tanggal',
-                                'Jam',
-                                'Kode Dokter',
-                                'Status',
-                                'Aksi'
-                            ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
-                        ?>
+           
                         
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($permintaanstokobat_data as $permintaanstokobat) : ?>
                                 <div id="hs-vertically-centered-scrollable-modal-<?= $permintaanstokobat['no_permintaan'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
                                         <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
-                                            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
-                                                <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $permintaanstokobat['no_permintaan'] ?>
-                                                </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanstokobat['no_permintaan'] ?>">
-                                                    <span class="sr-only">Close</span>
-                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M18 6 6 18"></path>
-                                                        <path d="m6 6 12 12"></path>
-                                                    </svg>
-                                                </button>
                                             </div>
                                             <div class="p-4">
                                                 <div class="space-y-4">
-                                                <div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Permintaan</label>
-                                                        <input type="text" name="" value="<?= $permintaanstokobat['no_permintaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
+                                                    <div>
+                                                        <!-- Detail Obat -->
+                                                        <?php foreach ($stok_obat as $obat): ?>
+                                                            <div class="border-t pt-4 mt-4">
+                                                                <div class="mb-3 sm:block">
+                                                                    <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kode Barang</label>
+                                                                    <input type="text" name="" value="<?= $obat['kode_brng'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                </div>
 
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal</label>
-                                                        <input type="text" name="" value="<?= $permintaanstokobat['tgl_permintaan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
+                                                                <div class="mb-3 sm:block">
+                                                                    <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Barang</label>
+                                                                    <input type="text" name="" value="<?= $obat['nama_barang'] ?? '' ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                </div>
 
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam</label>
-                                                        <input type="text" name="" value="<?= $permintaanstokobat['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
+                                                                <div class="mb-3 sm:block">
+                                                                    <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jumlah</label>
+                                                                    <input type="text" name="" value="<?= $obat['jumlah'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                </div>
 
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kamar</label>
-                                                        <input type="text" name="" value="<?= $stok_obat[0]['kd_bangsal'] ?? '' ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status</label>
-                                                        <input type="text" name="" value="<?= $permintaanstokobat['status'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Pasien</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['nama_pasien'] ?? '' ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter yang meminta</label>
-                                                        <input type="text" name="" value="<?= $permintaanstokobat['kd_dokter'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <!-- Detail Obat -->
-                                                    <?php foreach ($stok_obat as $obat): ?>
-                                                        <div class="border-t pt-4 mt-4">
-                                                            <div class="mb-3 sm:block">
-                                                                <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kode Barang</label>
-                                                                <input type="text" name="" value="<?= $obat['kode_brng'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                            </div>
-
-                                                            <div class="mb-3 sm:block">
-                                                                <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Barang</label>
-                                                                <input type="text" name="" value="<?= $obat['nama_barang'] ?? '' ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                            </div>
-
-                                                            <div class="mb-3 sm:block">
-                                                                <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jumlah</label>
-                                                                <input type="text" name="" value="<?= $obat['jumlah'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                            </div>
-
-                                                            <div class="mb-3 sm:block">
-                                                                <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Pemberian Obat</label>
-                                                                <input type="text" name="" value="<?php
-                                                                    $jamList = [];
-                                                                    for ($i = 0; $i <= 23; $i++) {
-                                                                        $key = 'jam' . str_pad($i, 2, '0', STR_PAD_LEFT);
-                                                                        if (!empty($obat[$key]) && $obat[$key] === true) {
-                                                                            $jamList[] = $key;
+                                                                <div class="mb-3 sm:block">
+                                                                    <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Pemberian Obat</label>
+                                                                    <input type="text" name="" value="<?php
+                                                                        $jamList = [];
+                                                                        for ($i = 0; $i <= 23; $i++) {
+                                                                            $key = 'jam' . str_pad($i, 2, '0', STR_PAD_LEFT);
+                                                                            if (!empty($obat[$key]) && $obat[$key] === true) {
+                                                                                $jamList[] = $key;
+                                                                            }
                                                                         }
-                                                                    }
-                                                                    echo implode(', ', $jamList);
-                                                                ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                        echo implode(', ', $jamList);
+                                                                    ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    <?php endforeach; ?>
-                                                </div>
-
-                                                </div>
-                                                <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                    <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanstokobat['no_permintaan'] ?>">
-                                                        Tutup
-                                                    </button>
+                                                        <?php endforeach; ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <tr>
-                                    <?php
-                                        $tabel  = $permintaanstokobat;
-                                        $row_id = 'no_permintaan';
-                                        $data   = [
-                                            'no_permintaan'  => 'indeks',
-                                            'tgl_permintaan' => 'tanggal',
-                                            'jam'            => 'jam',
-                                            'kd_dokter'      => 'indeks',
-                                            'status'         => 'status'
-                                        ];
-                                        echo view('components/data_tabel_td', [
-                                            'tabel'  => $tabel,
-                                            'row_id' => $row_id,
-                                            'data'   => $data
-                                        ]);
-                                    ?>
-                                    
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <?php
-                                                $row_id  = $permintaanstokobat['no_permintaan'];
-                                                $api_url = '/permintaanstokobat';
-                                                echo view('components/data_lihat_detail',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_ubah',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_hapus',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]); 
-                                            ?>
-                                        </div>
-                                    </td>
-                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                     </div>
 
                     <!-- End Table -->
-                    <?= view('components/data_footer.php', [
-                        'meta_data' => $meta_data,
-                        'api_url'   => $api_url
-                    ]) ?>
                 </div>
             </div>
         </div>

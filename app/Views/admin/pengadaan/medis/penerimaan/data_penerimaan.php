@@ -27,20 +27,20 @@
 
                         </div>
                         <div>
-                            <?= view('components/data_tambah_button', [
+                            <?= view('components/tambah_button', [
                                 'link' => '/penerimaanmedis/tambah'
                             ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->
-                    <?= view('components/data_search_bar') ?>
+                    <?= view('components/search_bar') ?>
 
                     <div id="noDataFound" style="display: none;">Data tidak ditemukan</div>
                     <!-- Table -->
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <?php 
                             $widths  = [17, 18, 18, 23, 24];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel_colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'Tanggal Datang',
@@ -49,7 +49,7 @@
                                 'Supplier',
                                 'Aksi'
                             ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                            echo view('components/tabel_thead',['kolom' => $columns]);
                         ?>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -337,7 +337,7 @@
                             <?php
                                 $row_id  = $penerimaan['id'];
                                 $api_url = '/penerimaanmedis';
-                                echo view('components/data_lihat_detail',[
+                                echo view('components/aksi_detail',[
                                     'row_id'  => $row_id,
                                     'api_url' => $api_url   
                                 ]);
@@ -345,7 +345,7 @@
                                     'row_id'  => $row_id,
                                     'api_url' => $api_url   
                                 ]);
-                                echo view('components/data_hapus',[
+                                echo view('components/aksi_hapus',[
                                     'row_id'  => $row_id,
                                     'api_url' => $api_url   
                                 ]); 

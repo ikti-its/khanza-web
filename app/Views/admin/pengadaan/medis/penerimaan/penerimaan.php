@@ -123,7 +123,7 @@
                             <table class="pt-5 min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
                                 <?php 
                                     $widths  = [10, 21, 15, 18, 18, 18];
-                                    echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                                    echo view('components/tabel_colgroup',['widths' => $widths]);
                                     
                                     // $columns = [
                                     //     'Jumlah',
@@ -133,7 +133,7 @@
                                     //     'Kadaluwarsa',
                                     //     'No Batch'
                                     // ];
-                                    // echo view('components/data_tabel_thead',['columns' => $columns]);
+                                    // echo view('components/tabel_thead',['kolom' => $columns]);
                                 ?>
                                 
                                 <thead class="bg-[#DCDCDC]">
