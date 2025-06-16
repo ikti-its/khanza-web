@@ -40,7 +40,7 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Jam Rujuk<span class="text-red-600">*</span></label>
                 <input type="time" name="jam_rujuk" value="<?php 
 
-                                                        $tanggalHariIni = date('H:i:s');
+                                                        $tanggalHariIni = date('H:i');
 
                                                         echo $tanggalHariIni; ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Diagnosis<span class="text-red-600">*</span></label>
@@ -50,7 +50,7 @@
                 <label for="dokter_perujuk" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Dokter Perujuk<span class="text-red-600">*</span>
                 </label>
-                <select id="dokter_perujuk" name="dokter_perujuk_select"
+                <select id="dokter_perujuk_select" name="dokter_perujuk_select"
                         class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white"
                         required>
                     <option value="">Pilih Dokter</option>

@@ -242,7 +242,7 @@
                                             </div>
 
                                             <?php
-                                                $row_id  = $reseppulang['no_rawat'] . '-' . $i;
+                                                $row_id  = $reseppulang['no_rawat'];
                                                 $api_url = '/reseppulang';
                                                 echo view('components/data_lihat_detail',[
                                                     'row_id'  => $row_id,

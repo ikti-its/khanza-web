@@ -230,7 +230,7 @@
                                             </button>
                                             </div>
                                             <?php
-                                                $row_id  = $permintaanreseppulang['no_permintaan'] . '-' . $i;
+                                                $row_id  = $permintaanreseppulang['no_permintaan'];
                                                 $api_url = '/permintaanreseppulang';
                                                 echo view('components/data_lihat_detail',[
                                                     'row_id'  => $row_id,

@@ -99,21 +99,21 @@ $tgl_daftar_iso = date('Y-m-d\TH:i:sP');
             'namakeluarga' => $this->request->getPost('namakeluarga'),
             'kd_pj' => $this->request->getPost('kd_pj'),
             'no_peserta' => $this->request->getPost('no_peserta'),
-            'kd_kel' => (int)$this->request->getPost('kd_kel'),
-            'kd_kec' => (int)$this->request->getPost('kd_kec'),
-            'kd_kab' => (int)$this->request->getPost('kd_kab'),
+            'kd_kel' => $this->request->getPost('kd_kel'),
+            'kd_kec' => $this->request->getPost('kd_kec'),
+            'kd_kab' => $this->request->getPost('kd_kab'),
             'pekerjaanpj' => $this->request->getPost('pekerjaanpj'),
             'alamatpj' => $this->request->getPost('alamatpj'),
             'kelurahanpj' => $this->request->getPost('kelurahanpj'),
             'kecamatanpj' => $this->request->getPost('kecamatanpj'),
             'kabupatenpj' => $this->request->getPost('kabupatenpj'),
             'perusahaan_pasien' => $this->request->getPost('perusahaan_pasien'),
-            'suku_bangsa' => (int)$this->request->getPost('suku_bangsa'),
-            'bahasa_pasien' => (int)$this->request->getPost('bahasa_pasien'),
-            'cacat_fisik' => (int)$this->request->getPost('cacat_fisik'),
+            'suku_bangsa' => $this->request->getPost('suku_bangsa'),
+            'bahasa_pasien' => $this->request->getPost('bahasa_pasien'),
+            'cacat_fisik' => $this->request->getPost('cacat_fisik'),
             'email' => $this->request->getPost('email'),
             'nip' => $this->request->getPost('nip'),
-            'kd_prop' => (int)$this->request->getPost('kd_prop'),
+            'kd_prop' => $this->request->getPost('kd_prop'),
             'propinsipj' => $this->request->getPost('propinsipj'),
         ];
         // dd($postData);
@@ -144,7 +144,7 @@ $tgl_daftar_iso = date('Y-m-d\TH:i:sP');
             curl_close($ch);
 
             if ($response && $http_status === 201) {
-                return view('/admin/pasien/pasien_data');
+                return redirect()->to('/pasien');
             } else {
                 return "Gagal menambahkan pasien. HTTP: $http_status";
             }

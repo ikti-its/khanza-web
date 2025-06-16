@@ -12,7 +12,7 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
         <?= view('components/form_judul', [
             'judul' => 'Edit Observasi Rawat Inap'
         ]) ?>
-        <form action="/catatanobservasiranap/submitedit/<?= $catatan['no_rawat'] ?>" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="/catatanobservasiranap/submitedit/<?= $catatan['no_rawat'] ?>/<?= $catatan['tgl_perawatan'] ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">

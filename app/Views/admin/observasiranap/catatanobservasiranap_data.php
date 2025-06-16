@@ -225,7 +225,7 @@
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php
-                                                $row_id  = $catatan['no_rawat'];
+                                                $row_id  = $catatan['no_rawat'] . '/' . $catatan['tanggal'];
                                                 $api_url = '/catatanobservasiranap';
                                                 echo view('components/data_lihat_detail',[
                                                     'row_id'  => $row_id,

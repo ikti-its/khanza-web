@@ -249,10 +249,10 @@
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/data_ubah',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
+                                                // echo view('components/data_ubah',[
+                                                //     'row_id'  => $row_id,
+                                                //     'api_url' => $api_url   
+                                                // ]);
                                                 echo view('components/data_hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
@@ -327,7 +327,7 @@
                     .forEach(item => {
                         list.innerHTML += `
                             <div class="flex justify-between items-center p-2 border rounded">
-                                <div>🚑 <strong>${item.no_ambulans}</strong> (${item.status})</div>
+                                <div>🚑 <strong>${item.no_ambulans}</strong></div>
                                 <button onclick="confirmAmbulance('${item.no_ambulans}', '${nomorRujuk}')" 
                                         class="text-white bg-blue-600 hover:bg-blue-700 px-2 py-1 text-sm rounded">
                                     Pilih

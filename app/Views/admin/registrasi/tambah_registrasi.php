@@ -100,13 +100,13 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Poliklinik<span class="text-red-600">*</span>
                 </label>
-                <select name="poliklinik" id="poliklinik-select"
+                <select name="poliklinik" id="poliklinikSelect"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
                     required>
                     <option value="">Memuat...</option>
                 </select>
                 <label for="dokter" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Dokter<span class="text-red-600">*</span></label>
-                <select name="kode_dokter" id="dokter" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <select name="kode_dokter" id="dokterSelect" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="">-- Pilih Dokter --</option>
                 </select>
             </div>
@@ -173,6 +173,100 @@
 </div>
 <!-- End Card Section -->
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const poliklinikSelect = document.getElementById("poliklinikSelect");
+    const dokterSelect = document.getElementById("dokterSelect");
+
+    // Populate poliklinik list
+    fetch("http://127.0.0.1:8080/v1/dokterjaga/poliklinik-list")
+        .then(res => res.json())
+        .then(res => {
+            if (res.status === "success") {
+                res.data.forEach(poli => {
+                    const opt = document.createElement("option");
+                    opt.value = poli;
+                    opt.textContent = poli;
+                    poliklinikSelect.appendChild(opt);
+                });
+            }
+        });
+
+    // On poliklinik change
+    poliklinikSelect.addEventListener("change", function () {
+        const selectedPoli = this.value;
+        dokterSelect.innerHTML = '<option disabled selected value="">Pilih Dokter</option>';
+
+        fetch(`http://127.0.0.1:8080/v1/dokterjaga/poliklinik/${encodeURIComponent(selectedPoli)}`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === "success" && Array.isArray(res.data)) {
+                    const now = new Date();
+                    const currentDay = normalizeDay(now.toLocaleDateString("id-ID", { weekday: "long" }));
+
+                    let dokterAktifCount = 0;
+
+                    res.data.forEach(dokter => {
+                        const hariKerja = normalizeDay(dokter.hari_kerja);
+                        const jamMulai = padTime(dokter.jam_mulai);
+                        const jamSelesai = padTime(dokter.jam_selesai);
+
+                        const isActive = (hariKerja === currentDay) && isDoctorOnShiftTime(jamMulai, jamSelesai);
+
+                        // Debug output
+                        console.log("🩺 Dokter:", dokter.nama_dokter);
+                        console.log("📅 Hari kerja:", hariKerja, "| Sekarang:", currentDay);
+                        console.log("⏰ Shift:", jamMulai, "-", jamSelesai);
+                        console.log("✅ Aktif sekarang:", isActive);
+
+                        if (isActive) {
+                            const opt = document.createElement("option");
+                            opt.value = dokter.kode_dokter;
+                            opt.textContent = dokter.nama_dokter;
+                            dokterSelect.appendChild(opt);
+                            dokterAktifCount++;
+                        }
+                    });
+
+                    if (dokterAktifCount === 0) {
+                        dokterSelect.innerHTML = '<option disabled selected value="">Tidak ada dokter aktif saat ini</option>';
+                    }
+                } else {
+                    console.warn("⚠️ Format data tidak valid:", res);
+                }
+            })
+            .catch(err => {
+                console.error("❌ Gagal mengambil data dokter:", err);
+            });
+    });
+
+    // Normalize hari (e.g., "Selasa ") → "selasa"
+    function normalizeDay(day) {
+        return day.trim().toLowerCase().replace(/[^a-z]/g, "");
+    }
+
+    // Pad time (e.g., "8:0:0" → "08:00:00")
+    function padTime(timeStr) {
+        const [h = "0", m = "0", s = "0"] = timeStr.split(":");
+        return `${h.padStart(2, "0")}:${m.padStart(2, "0")}:${s.padStart(2, "0")}`;
+    }
+
+    // Compare current time with jam_mulai and jam_selesai (supports overnight shifts)
+    function isDoctorOnShiftTime(startTime, endTime) {
+        const now = new Date();
+        const nowSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+
+        const [startH, startM, startS] = startTime.split(":").map(Number);
+        const [endH, endM, endS] = endTime.split(":").map(Number);
+
+        const startSec = startH * 3600 + startM * 60 + startS;
+        const endSec = endH * 3600 + endM * 60 + endS;
+
+        return startSec < endSec
+            ? nowSec >= startSec && nowSec <= endSec
+            : nowSec >= startSec || nowSec <= endSec;
+    }
+});
+
 document.addEventListener("DOMContentLoaded", async function () {
     const select = document.querySelector("select[name='poliklinik']");
 

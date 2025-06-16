@@ -192,7 +192,7 @@ class CatatanObservasiRanapController extends BaseController
 
 
 
-public function editCatatanObservasiRanap($noRawat)
+public function editCatatanObservasiRanap($noRawat, $tglPerawatan)
 {
     if (!session()->has('jwt_token')) {
         return $this->renderErrorView(401);
@@ -201,7 +201,8 @@ public function editCatatanObservasiRanap($noRawat)
     $token = session()->get('jwt_token');
     $title = 'Edit Observasi Rawat Inap';
 
-    $url = $this->api_url . '/catatan-observasi-ranap/' . $noRawat;
+    // 🔹 Fetch specific catatan observasi berdasarkan no_rawat dan tgl_perawatan
+    $url = $this->api_url . '/catatan-observasi-ranap/' . $noRawat . '/' . $tglPerawatan;
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -218,11 +219,14 @@ public function editCatatanObservasiRanap($noRawat)
     }
 
     $data = json_decode($response, true);
-    $catatan = $data['data'][0] ?? [];
-
+    $catatan = $data['data'] ?? [];
+    // 🔹 Normalisasi format tanggal ISO ke Y-m-d
+    $catatan['tgl_perawatan'] = date('Y-m-d', strtotime($catatan['tgl_perawatan']));
+    
     // 🔹 Fetch pasien data
     $nama_pasien = '';
     $tgl_lahir = '';
+    $no_rkm_medis = '';
 
     if (!empty($catatan['no_rawat'])) {
         $registrasi_url = $this->api_url . '/registrasi/by-no-rawat/' . $catatan['no_rawat'];
@@ -280,49 +284,53 @@ public function editCatatanObservasiRanap($noRawat)
             $nama_petugas = $pegawai_data['data']['Nama'];
         }
     }
-
+// dd($catatan);
     $this->addBreadcrumb('User', 'user');
     $this->addBreadcrumb('Observasi Rawat Inap', 'catatanobservasiranap');
     $this->addBreadcrumb('Edit', 'edit');
     $breadcrumbs = $this->getBreadcrumbs();
-// dd($catatan);
+
     return view('/admin/observasiranap/edit_catatanobservasiranap', [
-        'catatan' => $catatan,
-        'title' => $title,
-        'breadcrumbs' => $breadcrumbs,
-        'nama_pasien' => $nama_pasien,
-        'tgl_lahir' => $tgl_lahir,
-        'nama_petugas' => $nama_petugas,
+        'catatan'       => $catatan,
+        'title'         => $title,
+        'breadcrumbs'   => $breadcrumbs,
+        'nama_pasien'   => $nama_pasien,
+        'tgl_lahir'     => $tgl_lahir,
+        'nama_petugas'  => $nama_petugas,
     ]);
 }
 
-public function submitEditCatatanObservasiRanap($noRawat)
+
+public function submitEditCatatanObservasiRanap($noRawat, $tanggalObservasi)
 {
     if (!session()->has('jwt_token')) {
         return $this->renderErrorView(401);
     }
 
     $token = session()->get('jwt_token');
-    $url = $this->api_url . '/catatan-observasi-ranap/' . $noRawat;
 
+    // URL termasuk tanggal observasi sebagai identitas data yang akan diupdate
+    $url = $this->api_url . '/catatan-observasi-ranap/' . $noRawat . '/' . $tanggalObservasi;
+
+    // Gunakan tanggal dari POST jika tersedia, fallback ke $tanggalObservasi
     $tanggalInput = trim($this->request->getPost('tanggal'));
-    $tanggal = $tanggalInput !== '' ? $tanggalInput : date('Y-m-d');
+    $tanggal = $tanggalInput !== '' ? $tanggalInput : $tanggalObservasi;
 
     $data = [
-        'no_rawat'   => $noRawat,
-        'tgl_perawatan' => $tanggal,
-        'jam_rawat'  => $this->request->getPost('jam'),
-        'nip'        => $this->request->getPost('nip'),
-        'gcs'        => $this->request->getPost('gcs'),
-        'td'         => $this->request->getPost('td'),
-        'hr'         => $this->request->getPost('hr'),
-        'rr'         => $this->request->getPost('rr'),
-        'suhu'       => $this->request->getPost('suhu'),
-        'spo2'       => $this->request->getPost('spo2'),
-        'kontraksi'  => $this->request->getPost('kontraksi'),
-        'bjj'        => $this->request->getPost('bjj'),
-        'ppv'        => $this->request->getPost('ppv'),
-        'vt'         => $this->request->getPost('vt'),
+        'no_rawat'     => $noRawat,
+        'tgl_perawatan'=> $tanggal,
+        'jam_rawat'    => $this->request->getPost('jam'),
+        'nip'          => $this->request->getPost('nip'),
+        'gcs'          => $this->request->getPost('gcs'),
+        'td'           => $this->request->getPost('td'),
+        'hr'           => $this->request->getPost('hr'),
+        'rr'           => $this->request->getPost('rr'),
+        'suhu'         => $this->request->getPost('suhu'),
+        'spo2'         => $this->request->getPost('spo2'),
+        'kontraksi'    => $this->request->getPost('kontraksi'),
+        'bjj'          => $this->request->getPost('bjj'),
+        'ppv'          => $this->request->getPost('ppv'),
+        'vt'           => $this->request->getPost('vt'),
     ];
 
     $json = json_encode($data);
@@ -348,6 +356,7 @@ public function submitEditCatatanObservasiRanap($noRawat)
         return $error['data'] ?? $response;
     }
 }
+
 
    public function hapusCatatanObservasiRanap($noRawat)
 {

@@ -275,10 +275,10 @@
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/data_hapus',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]); 
+                                                // echo view('components/data_hapus',[
+                                                //     'row_id'  => $row_id,
+                                                //     'api_url' => $api_url   
+                                                // ]); 
                                             ?>
                                         </div>
                                     </td>

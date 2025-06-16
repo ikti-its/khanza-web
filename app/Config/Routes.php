@@ -567,9 +567,9 @@ $routes->group('catatanobservasiranap', ['filter' => 'auth'], function ($routes)
     $routes->get('/', 'CatatanObservasiRanapController::dataCatatanObservasi', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
     $routes->get('tambah', 'CatatanObservasiRanapController::tambahCatatanObservasi', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->post('submittambah', 'CatatanObservasiRanapController::submitTambahCatatanObservasi', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-    $routes->get('edit/(:segment)', 'CatatanObservasiRanapController::editCatatanObservasiRanap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get(    'edit/(:segment)/(:segment)',    'CatatanObservasiRanapController::editCatatanObservasiRanap/$1/$2',    ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->post('submitedit', 'CatatanObservasiRanapController::submitEditCatatanObservasiRanap', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-    $routes->post('submitedit/(:segment)', 'CatatanObservasiRanapController::submitEditCatatanObservasiRanap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->post('submitedit/(:segment)/(:segment)', 'CatatanObservasiRanapController::submitEditCatatanObservasiRanap/$1/$2', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->delete('hapus/(:segment)', 'CatatanObservasiRanapController::hapusCatatanObservasiRanap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     // Fitur untuk prefill dari rawatinap
     $routes->get('from-rawatinap/(:segment)', 'CatatanObservasiRanapController::submitFromRawatinapToCatatanObservasi/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
