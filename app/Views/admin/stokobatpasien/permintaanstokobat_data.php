@@ -166,34 +166,23 @@
                                     </div>
                                 </div>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanstokobat['no_permintaan'] ?>" data-id="<?= $permintaanstokobat['no_permintaan'] ?>"><?= $permintaanstokobat['no_permintaan'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanstokobat['no_permintaan'] ?>" data-id="<?= $permintaanstokobat['no_permintaan'] ?>"><?= date('Y-m-d', strtotime($permintaanstokobat['tgl_permintaan'])) ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanstokobat['no_permintaan'] ?>" data-id="<?= $permintaanstokobat['no_permintaan'] ?>"><?= date('H:i', strtotime($permintaanstokobat['jam'])) ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanstokobat['no_permintaan'] ?>" data-id="<?= $permintaanstokobat['no_permintaan'] ?>"><?= $permintaanstokobat['kd_dokter'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="size-px w-48 whitespace-nowrap">
-                                        <div class="px-6 py-3 text-center">
-                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
-                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
-                                                <?= $permintaanstokobat['status'] ?? 'N/A' ?>
-                                            </span>
-                                        </div>
-                                    </td>
+                                    <?php
+                                        $tabel  = $permintaanstokobat;
+                                        $row_id = 'no_permintaan';
+                                        $data   = [
+                                            'no_permintaan'  => 'indeks',
+                                            'tgl_permintaan' => 'tanggal',
+                                            'jam'            => 'jam',
+                                            'kd_dokter'      => 'indeks',
+                                            'status'         => 'status'
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
+                                    
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php

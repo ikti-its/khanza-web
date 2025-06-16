@@ -215,31 +215,23 @@
                                     </div>
                                 </div>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>" data-id="<?= $rujukankeluar['nomor_rujuk'] ?>"><?= $rujukankeluar['nomor_rujuk'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>" data-id="<?= $rujukankeluar['nomor_rujuk'] ?>"><?= $rujukankeluar['nama_pasien'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>" data-id="<?= $rujukankeluar['nomor_rujuk'] ?>"><?= $rujukankeluar['tempat_rujuk'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rujukankeluar['nomor_rujuk'] ?>" data-id="<?= $rujukankeluar['nomor_rujuk'] ?>"><?= $rujukankeluar['kategori_rujuk'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-72 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $rujukankeluar['pengantaran'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
+                                    <?php
+                                        $tabel  = $rujukankeluar;
+                                        $row_id = 'nomor_rujuk';
+                                        $data   = [
+                                            'nomor_rujuk'    => 'indeks',
+                                            'nama_pasien'    => 'nama',
+                                            'tempat_rujuk'   => 'teks',
+                                            'kategori_rujuk' => 'teks',
+                                            'pengantaran'    => 'teks'
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
+                                    
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php

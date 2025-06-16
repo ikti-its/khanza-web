@@ -222,71 +222,62 @@
                                     </div>
                                 </div>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
+                                    <!-- <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
                                             <a href="<?= base_url('resepdokter/' . $resepobat['no_resep']) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
                                                 <?= $resepobat['no_resep'] ?>
                                             </a>
                                         </div>
-                                    </td>
-
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <?php
-                                                $tglRaw = $resepobat['tgl_peresepan'] ?? null;
-                                                $tglFormatted = 'N/A';
-                                                if ($tglRaw) {
-                                                    try {
-                                                        $date = new DateTime($tglRaw);
-                                                        $tglFormatted = $date->format('d-m-Y');
-                                                    } catch (Exception $e) {
-                                                        $tglFormatted = 'Invalid Date';
-                                                    }
-                                                }
-                                            ?>
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $tglFormatted ?></span>
-                                        </div>
-                                    </td>
-
-                                    <td class="h-px w-64 whitespace-nowrap">
+                                    </td> -->
+                                    <!-- <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
                                             <a href="<?= base_url('resepobat/' . ($resepobat['no_rawat'] ?? 'N/A')) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
                                                 <?= $resepobat['no_rawat'] ?? 'N/A' ?>
                                             </a>
                                         </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepobat['kd_dokter'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?php if ($resepobat['validasi'] === true || $resepobat['validasi'] === 1 || $resepobat['validasi'] === 'true'): ?>
-                                        <span class="text-green-600 font-semibold">sudah divalidasi</span>
-                                            <?php else: ?>
-                                                <span class="text-red-600 font-semibold">belum divalidasi</span>
-                                            <?php endif; ?></span>
-                                        </div>
-                                    </td>
+                                    </td> -->
+                                    <?php 
+                                        if ($resepobat['validasi'] === true || $resepobat['validasi'] === 1 || $resepobat['validasi'] === 'true'){
+                                            $statusText = 'Sudah Divalidasi';
+                                        } else {
+                                            $statusText = 'Belum Divalidasi';
+                                        }
+                                        $resepobat['status'] = $statusText;
+                                    ?>
+                                    <?php
+                                        $tabel  = $resepobat;
+                                        $row_id = 'no_resep';
+                                        $data   = [
+                                            'no_resep'      => 'indeks',
+                                            'tgl_peresepan' => 'tanggal',
+                                            'no_rawat'      => 'indeks',
+                                            'kd_dokter'     => 'indeks',
+                                            'status'        => 'status'
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
 
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
-                                            <button
-                                                                        type="button"
-                                                                        class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
-                                                                        data-nomor-reg="<?= $resepobat['no_resep'] ?>"
-                                                                        data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>">
-                                                                        Lihat Detail
-                                                                    </button>
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
+                                                    data-nomor-reg="<?= $resepobat['no_resep'] ?>"
+                                                    data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>">
+                                                    Lihat Detail
+                                                </button>
                                             </div>
-                                            <!-- <div class="px-3 py-1.5">
-                                                <?php if ($resepobat['validasi'] === true || $resepobat['validasi'] === 1 || $resepobat['validasi'] === 'true'): ?>
+                                            <!-- <div class="px-3 py-1.5"> -->
+                                                <!-- <?php if ($resepobat['validasi'] === true || $resepobat['validasi'] === 1 || $resepobat['validasi'] === 'true'): ?>
                                                     <span class="text-gray-400 text-sm font-semibold cursor-not-allowed" title="Sudah divalidasi, tidak dapat diubah">Ubah</span>
                                                 <?php else: ?>
                                                     <a href="/resepobat/edit/<?= $resepobat['no_resep'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
-                                                <?php endif; ?>
+                                                <?php endif; ?> -->
     
                                                 <?php
                                                     $row_id  = $resepobat['no_resep'] . '-' . $i;
@@ -300,7 +291,7 @@
                                                         'api_url' => $api_url   
                                                     ]) 
                                                 ?>
-                                            </div>
+                                            <!-- </div> -->
                                         </div>
                                     </td>
                                 </tr>

@@ -110,39 +110,24 @@
                                 
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['nomor_bed'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['kode_kamar'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['nama_kamar'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['kelas'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $kamar['nomor_bed'] ?>" data-id="<?= $kamar['nomor_bed'] ?>"><?= $kamar['tarif_kamar'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="size-px w-48 whitespace-nowrap">
-                                        <div class="px-6 py-3 text-center">
-                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
-                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
-                                                <?= $kamar['status_kamar'] ?? 'N/A' ?>
-                                            </span>
-                                        </div>
-                                    </td>
+                                    <?php
+                                        $tabel  = $kamar;
+                                        $row_id = 'nomor_bed';
+                                        $data   = [
+                                            'nomor_bed'    => 'indeks',
+                                            'kode_kamar'   => 'indeks',
+                                            'nama_kamar'   => 'teks',
+                                            'kelas'        => 'status',
+                                            'tarif_kamar'  => 'uang',
+                                            'status_kamar' => 'status'
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
+                                    
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php

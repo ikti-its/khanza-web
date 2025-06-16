@@ -107,39 +107,24 @@
                     
                             <?php foreach ($resepdokter_data as $i => $resepdokter) : ?>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                                                <?= $resepdokter['no_resep'] ?>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepdokter['jam_beri'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepdokter['kode_obat'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['nama_obat'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['jumlah'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepdokter['total'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-
+                                    <?php
+                                        $tabel  = $resepdokter;
+                                        $row_id = 'no_resep';
+                                        $data   = [
+                                            'no_resep'  => 'indeks',
+                                            'jam_beri'  => 'jam',
+                                            'kode_obat' => 'indeks',
+                                            'nama_obat' => 'teks',
+                                            'jumlah'    => 'jumlah',
+                                            'total'     => 'jumlah'
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
+                                    
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php

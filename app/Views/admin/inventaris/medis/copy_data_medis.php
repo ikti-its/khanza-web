@@ -619,24 +619,21 @@
                                     </div>
                                 </div>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $medis['id'] ?>" data-id="<?= $medis['id'] ?>"><?= $medis['nama'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="size-px w-48 whitespace-nowrap">
-                                        <div class="px-6 py-3 text-center">
-                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
-                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
-                                                <?= $medis['jenis'] ?? 'N/A' ?>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-72 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $medis['stok'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
+                                    <?php
+                                        $tabel  = $medis;
+                                        $row_id = 'id';
+                                        $data   = [
+                                            'nama'  => 'teks',
+                                            'jenis' => 'status',
+                                            'stok'  => 'jumlah',
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
+                                    
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php

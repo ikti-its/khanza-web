@@ -178,46 +178,31 @@
                                     </div>
                                 </div>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <a data-nomor-reg="<?= $permintaanreseppulang['no_permintaan'] ?>"
-                                            data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $permintaanreseppulang['no_permintaan'] ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                                                <?= $permintaanreseppulang['no_permintaan'] ?>
-                                            </a>
-                                        </div>
-                                    </td>
-
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $permintaanreseppulang['tgl_permintaan'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $permintaanreseppulang['jam'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-
-                                    <td class="h-px w-64 whitespace-nowrap">
+                                    <!-- <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
                                             <a href="<?= base_url('resepobat/' . ($permintaanreseppulang['no_rawat'] ?? 'N/A')) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
                                                 <?= $permintaanreseppulang['no_rawat'] ?? 'N/A' ?>
                                             </a>
                                         </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $permintaanreseppulang['kd_dokter'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $permintaanreseppulang['status'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-
-
+                                    </td> -->
+                                    <?php
+                                        $tabel  = $permintaanreseppulang;
+                                        $row_id = 'no_permintaan';
+                                        $data   = [
+                                            'no_permintaan'  => 'indeks',
+                                            'tgl_permintaan' => 'tanggal',
+                                            'jam'            => 'jam',
+                                            'no_rawat'       => 'indeks',
+                                            'kd_dokter'      => 'indeks',
+                                            'status'         => 'status'
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
+                                    
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">

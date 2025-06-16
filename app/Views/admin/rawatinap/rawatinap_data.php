@@ -451,32 +451,23 @@
                                 </div>
 
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>" data-id="<?= $rawatinap['nomor_rawat'] ?>"><?= $rawatinap['nomor_rawat'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>" data-id="<?= $rawatinap['nomor_rawat'] ?>"><?= $rawatinap['nama_pasien'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>" data-id="<?= $rawatinap['nomor_rawat'] ?>"><?= $rawatinap['kamar'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>" data-id="<?= $rawatinap['nomor_rawat'] ?>"><?= $rawatinap['diagnosa_awal'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
+                                    <?php
+                                        $tabel  = $rawatinap;
+                                        $row_id = 'nomor_rawat';
+                                        $data   = [
+                                            'nomor_rawat'   => 'indeks',
+                                            'nama_pasien'   => 'nama',
+                                            'kamar'         => 'teks',
+                                            'diagnosa_awal' => 'teks',
+                                            'dokter_pj'     => 'nama'
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
                                     
-                                    <td class="h-px w-72 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $rawatinap['dokter_pj'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">

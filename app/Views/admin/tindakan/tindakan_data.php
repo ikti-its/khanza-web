@@ -138,40 +138,24 @@
                             <?php if (!empty($tindakan_data)): ?>
                             <?php foreach ($tindakan_data as $i => $tindakan) : ?>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
-                                                <?= $namaTindakanMap[$tindakan['tindakan']] ?? $tindakan['tindakan'] ?>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $tindakan['nama_dokter'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $tindakan['nama_petugas'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $tindakan['tanggal_rawat'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $tindakan['jam_rawat'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-72 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block cursor-default text-sm font-semibold text-gray-800 dark:text-gray-200"><?= isset($tarifTindakanMap[$tindakan['tindakan']])
-                                            ? number_format($tarifTindakanMap[$tindakan['tindakan']], 0, ',', '.')
-                                            : ($tindakan['biaya'] ?? 'N/A') ?></span>
-                                        </div>
-                                    </td>
+                                    <?php
+                                        $tabel  = $tindakan;
+                                        $row_id = 'tindakan';
+                                        $data   = [
+                                            'tindakan'      => 'teks',
+                                            'nama_dokter'   => 'nama',
+                                            'nama_petugas'  => 'nama',
+                                            'tanggal_rawat' => 'tanggal',
+                                            'jam_rawat'     => 'jam',
+                                            'biaya'         => 'uang'
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
+                                    
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php

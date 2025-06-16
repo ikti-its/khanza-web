@@ -192,7 +192,7 @@
                                                             </div>
                                                         </div>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
+                                    <!-- <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
                                             <a href="<?= base_url('resepdokter/' . $resepobatracikan['no_racik']) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
                                                 <?= $resepobatracikan['no_racik'] ?>
@@ -200,29 +200,30 @@
                                         </div>
                                     </td>
 
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200 hover:underline"><?= $resepobatracikan['nama_racik'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
+                                    
                                     <td class="h-px w-64 whitespace-nowrap">
                                         <div class="px-6 py-3">
                                             <a href="<?= base_url('resepobat/' . ($resepobatracikan['no_rawat'] ?? 'N/A')) ?>" class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline">
                                                 <?= $resepobatracikan['kd_racik'] ?? 'N/A' ?>
                                             </a>
                                         </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepobatracikan['jml_dr'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 dark:text-gray-200"><?= $resepobatracikan['aturan_pakai'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
+                                    </td> -->
+                                    <?php
+                                        $tabel  = $resepobatracikan;
+                                        $row_id = 'no_racik';
+                                        $data   = [
+                                            'no_racik'     => 'indeks',
+                                            'nama_racik'   => 'teks',
+                                            'kd_racik'     => 'indeks',
+                                            'jml_dr'       => 'jumlah', 
+                                            'aturan_pakai' => 'teks'
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
 
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">

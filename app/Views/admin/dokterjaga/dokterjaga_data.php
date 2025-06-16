@@ -206,39 +206,24 @@
                                     </div>
                                 </div>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $dokterjaga['kode_dokter'] ?>" data-id="<?= $dokterjaga['kode_dokter'] ?>"><?= $dokterjaga['kode_dokter'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $dokterjaga['kode_dokter'] ?>" data-id="<?= $dokterjaga['kode_dokter'] ?>"><?= $dokterjaga['nama_dokter'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $dokterjaga['kode_dokter'] ?>" data-id="<?= $dokterjaga['kode_dokter'] ?>"><?= $dokterjaga['hari_kerja'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $dokterjaga['kode_dokter'] ?>" data-id="<?= $dokterjaga['kode_dokter'] ?>"><?= $dokterjaga['jam_mulai'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $dokterjaga['kode_dokter'] ?>" data-id="<?= $dokterjaga['kode_dokter'] ?>"><?= $dokterjaga['jam_selesai'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="size-px w-48 whitespace-nowrap">
-                                        <div class="px-6 py-3 text-center">
-                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
-                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
-                                                <?= $dokterjaga['poliklinik'] ?? 'N/A' ?>
-                                            </span>
-                                        </div>
-                                    </td>
+                                    <?php
+                                        $tabel  = $dokterjaga;
+                                        $row_id = 'kode_dokter';
+                                        $data   = [
+                                            'kode_dokter' => 'indeks',
+                                            'nama_dokter' => 'nama',
+                                            'hari_kerja'  => 'teks',
+                                            'jam_mulai'   => 'jam',
+                                            'jam_selesai' => 'jam',
+                                            'poliklinik'  => 'status'
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
+            
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php

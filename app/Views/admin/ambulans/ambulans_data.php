@@ -147,42 +147,41 @@
                                     </div>
                                 </div>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ambulans['no_ambulans'] ?>" data-id="<?= $ambulans['no_ambulans'] ?>"><?= $ambulans['no_ambulans'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ambulans['no_ambulans'] ?>" data-id="<?= $ambulans['no_ambulans'] ?>"><?= $ambulans['supir'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="size-px w-48 whitespace-nowrap">
-                                        <div class="px-6 py-3 text-center">
-                                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-semibold bg-[#F1F1F1]">
-                                                <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
-                                                <?php
-                                                $status = $ambulans['status'] ?? null;
+                                    <?php
+                                        $status = $ambulans['status'] ?? null;
 
-                                                switch ($status) {
-                                                    case 'pending':
-                                                        $statusText = 'Menunggu';
-                                                        break;
-                                                    case 'available':
-                                                        $statusText = 'Tersedia';
-                                                        break;
-                                                    case 'accepted':
-                                                        $statusText = 'Diterima';
-                                                        break;
-                                                    default:
-                                                        $statusText = 'Tidak Diketahui';
-                                                }
-                                                ?>
+                                        switch ($status) {
+                                            case 'pending':
+                                                $statusText = 'Menunggu';
+                                                break;
+                                            case 'available':
+                                                $statusText = 'Tersedia';
+                                                break;
+                                            case 'accepted':
+                                                $statusText = 'Diterima';
+                                                break;
+                                            default:
+                                                $statusText = 'Tidak Diketahui';
+                                        };
+                                        
+                                        $ambulans['status'] = $statusText;
+                                    ?>
 
-                                                <?= $statusText ?>
-                                            </span>
-                                        </div>
-                                    </td>
+                                    <?php
+                                        $tabel  = $ambulans;
+                                        $row_id = 'no_ambulans';
+                                        $data   = [
+                                            'no_ambulans' => 'indeks',
+                                            'supir'       => 'nama',
+                                            'status'      => 'status',
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
+                                                                               
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php

@@ -203,31 +203,23 @@
                                     </div>
                                 </div>
                                 <tr>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= $stokobatpasien['no_permintaan'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= date('Y-m-d', strtotime($stokobatpasien['tanggal'])) ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= date('H:i', strtotime($stokobatpasien['jam'])) ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= $stokobatpasien['nama_pasien'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="h-px w-64 whitespace-nowrap">
-                                        <div class="px-6 py-3">
-                                            <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $stokobatpasien['no_permintaan'] ?>" data-id="<?= $stokobatpasien['no_permintaan'] ?>"><?= $stokobatpasien['kode_brng'] ?? 'N/A' ?></span>
-                                        </div>
-                                    </td>
+                                    <?php
+                                        $tabel  = $stokobatpasien;
+                                        $row_id = 'no_permintaan';
+                                        $data   = [
+                                            'no_permintaan' => 'indeks',
+                                            'tanggal'       => 'tanggal',
+                                            'jam'           => 'jam',
+                                            'nama_pasien'   => 'nama',
+                                            'kode_brng'     => 'indeks'
+                                        ];
+                                        echo view('components/data_tabel_td', [
+                                            'tabel'  => $tabel,
+                                            'row_id' => $row_id,
+                                            'data'   => $data
+                                        ]);
+                                    ?>
+                                    
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <?php
