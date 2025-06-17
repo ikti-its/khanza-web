@@ -100,230 +100,227 @@ class DokterJagaController extends BaseController
     }
 
     public function submitTambahDokterJaga()
-{
-    if (session()->has('jwt_token')) {
+    {
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+
+            $postData = [
+                'kode_dokter' => $this->request->getPost('kode_dokter'),
+                'nama_dokter' => $this->request->getPost('nama_dokter'),
+                'hari_kerja' => $this->request->getPost('hari_kerja'), // Format: YYYY-MM-DD
+                'jam_mulai' => date("H:i:s", strtotime($this->request->getPost('jam_mulai'))),
+                'jam_selesai' => date("H:i:s", strtotime($this->request->getPost('jam_selesai'))),
+                'poliklinik' => $this->request->getPost('poliklinik'),
+                'status' => $this->request->getPost('status')
+            ];
+    // dd($postData);
+            $url = $this->api_url . '/dokterjaga';
+            $json = json_encode($postData);
+
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($json),
+                'Authorization: Bearer ' . $token
+            ]);
+
+            $response = curl_exec($ch);
+            $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            return ($status === 201)
+                ? redirect()->to(base_url('dokterjaga'))
+                : $this->renderErrorView($status);
+        }
+
+        return $this->renderErrorView(401);
+    }
+
+    public function editDokterJaga($kodeDokter)
+    {
+        if (!session()->has('jwt_token')) return $this->renderErrorView(401);
+
         $token = session()->get('jwt_token');
 
-        $postData = [
-            'kode_dokter' => $this->request->getPost('kode_dokter'),
-            'nama_dokter' => $this->request->getPost('nama_dokter'),
-            'hari_kerja' => $this->request->getPost('hari_kerja'), // Format: YYYY-MM-DD
-            'jam_mulai' => date("H:i:s", strtotime($this->request->getPost('jam_mulai'))),
-            'jam_selesai' => date("H:i:s", strtotime($this->request->getPost('jam_selesai'))),
-            'poliklinik' => $this->request->getPost('poliklinik'),
-            'status' => $this->request->getPost('status')
-        ];
-// dd($postData);
-        $url = $this->api_url . '/dokterjaga';
-        $json = json_encode($postData);
-
+        // 👉 Fetch specific dokter jaga detail
+        $url = $this->api_url . '/dokterjaga/' . $kodeDokter;
         $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($json),
             'Authorization: Bearer ' . $token
         ]);
-
         $response = curl_exec($ch);
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        return ($status === 201)
-            ? redirect()->to(base_url('dokterjaga'))
+        if ($status !== 200) return $this->renderErrorView($status);
+
+        $dokterJagaData = json_decode($response, true);
+
+        // 👉 Fetch all dokter (for dropdown options)
+        $dokterUrl = $this->api_url . '/dokter';
+        $ch = curl_init($dokterUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $dokterResponse = curl_exec($ch);
+        curl_close($ch);
+        $dokterList = json_decode($dokterResponse, true);
+
+        // 🧭 Breadcrumbs
+        $this->addBreadcrumb('User', 'user');
+        $this->addBreadcrumb('Dokter Jaga', 'dokterjaga');
+        $this->addBreadcrumb('Edit', 'edit');
+
+        return view('/admin/dokterjaga/edit_dokterjaga', [
+            'dokterjaga' => $dokterJagaData['data'][0] ?? [],
+            'dokter' => $dokterList['data'] ?? [],
+            'title' => 'Edit Dokter Jaga',
+            'breadcrumbs' => $this->getBreadcrumbs()
+        ]);
+    }
+
+    public function submitEditDokterJaga($kodeDokter)
+    {
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+
+            $postData = [
+                'kode_dokter' => $this->request->getPost('kode_dokter'),
+                'nama_dokter' => $this->request->getPost('nama_dokter'),
+                'hari_kerja' => $this->request->getPost('hari_kerja'),
+                'jam_mulai' => date("H:i:s", strtotime($this->request->getPost('jam_mulai'))),
+                'jam_selesai' => date("H:i:s", strtotime($this->request->getPost('jam_selesai'))),
+                'poliklinik' => $this->request->getPost('poliklinik'),
+                'status' => $this->request->getPost('status')
+            ];
+
+            $json = json_encode($postData);
+            $url = $this->api_url . '/dokterjaga';
+
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $token
+            ]);
+            $response = curl_exec($ch);
+            $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            return ($status === 200)
+                ? redirect()->to(base_url('dokterjaga'))->with('success', 'Data dokter jaga berhasil diperbarui.')
+                : $this->renderErrorView($status);
+        }
+
+        return $this->renderErrorView(401);
+    }
+
+    public function hapusDokterJaga($kodeDokter)
+    {
+        if (!session()->has('jwt_token')) return $this->renderErrorView(401);
+
+        $hariKerja = $this->request->getGet('hari_kerja'); // passed as query param
+        if (!$hariKerja) return $this->renderErrorView(400); // Bad request if missing
+
+        $token = session()->get('jwt_token');
+        $url = $this->api_url . '/dokterjaga/' . $kodeDokter . '?hari_kerja=' . urlencode($hariKerja);
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token
+        ]);
+        $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        return ($status === 200 || $status === 204)
+            ? redirect()->to(base_url('dokterjaga'))->with('success', 'Data dokter jaga berhasil dihapus.')
             : $this->renderErrorView($status);
     }
 
-    return $this->renderErrorView(401);
-}
+    public function panggilDokter($kodeDokter)
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
 
-public function editDokterJaga($kodeDokter)
-{
-    if (!session()->has('jwt_token')) return $this->renderErrorView(401);
-
-    $token = session()->get('jwt_token');
-
-    // 👉 Fetch specific dokter jaga detail
-    $url = $this->api_url . '/dokterjaga/' . $kodeDokter;
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token
-    ]);
-    $response = curl_exec($ch);
-    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($status !== 200) return $this->renderErrorView($status);
-
-    $dokterJagaData = json_decode($response, true);
-
-    // 👉 Fetch all dokter (for dropdown options)
-    $dokterUrl = $this->api_url . '/dokter';
-    $ch = curl_init($dokterUrl);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-        'Accept: application/json'
-    ]);
-    $dokterResponse = curl_exec($ch);
-    curl_close($ch);
-    $dokterList = json_decode($dokterResponse, true);
-
-    // 🧭 Breadcrumbs
-    $this->addBreadcrumb('User', 'user');
-    $this->addBreadcrumb('Dokter Jaga', 'dokterjaga');
-    $this->addBreadcrumb('Edit', 'edit');
-
-    return view('/admin/dokterjaga/edit_dokterjaga', [
-        'dokterjaga' => $dokterJagaData['data'][0] ?? [],
-        'dokter' => $dokterList['data'] ?? [],
-        'title' => 'Edit Dokter Jaga',
-        'breadcrumbs' => $this->getBreadcrumbs()
-    ]);
-}
-
-
-public function submitEditDokterJaga($kodeDokter)
-{
-    if (session()->has('jwt_token')) {
         $token = session()->get('jwt_token');
+        $title = 'Detail Dokter Jaga';
+        $url = $this->api_url . '/dokterjaga/' . $kodeDokter;
 
-        $postData = [
-            'kode_dokter' => $this->request->getPost('kode_dokter'),
-            'nama_dokter' => $this->request->getPost('nama_dokter'),
-            'hari_kerja' => $this->request->getPost('hari_kerja'),
-            'jam_mulai' => date("H:i:s", strtotime($this->request->getPost('jam_mulai'))),
-            'jam_selesai' => date("H:i:s", strtotime($this->request->getPost('jam_selesai'))),
-            'poliklinik' => $this->request->getPost('poliklinik'),
-            'status' => $this->request->getPost('status')
-        ];
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+        ]);
+        $response = curl_exec($ch);
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
 
-        $json = json_encode($postData);
-        $url = $this->api_url . '/dokterjaga';
+        if ($http_status !== 200) {
+            return $this->renderErrorView($http_status);
+        }
+
+        $dokter_data = json_decode($response, true);
+
+        $this->addBreadcrumb('User', 'user');
+        $this->addBreadcrumb('Dokter Jaga', 'dokterjaga');
+        $this->addBreadcrumb('Detail', 'detail');
+        $breadcrumbs = $this->getBreadcrumbs();
+
+        return view('/admin/dokterjaga/detail_dokterjaga', [
+            'dokterjaga' => $dokter_data['data'],
+            'title' => $title,
+            'breadcrumbs' => $breadcrumbs,
+        ]);
+    }
+
+    public function terimaDokter($kodeDokter)
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+
+        $hariKerja = $this->request->getGet('hari_kerja'); // use query param to identify shift
+        if (!$hariKerja) return $this->renderErrorView(400);
+
+        $token = session()->get('jwt_token');
+        $url = $this->api_url . '/dokterjaga/update-status';
+
+        $payload = json_encode([
+            'kode_dokter' => $kodeDokter,
+            'hari_kerja' => $hariKerja,
+            'status' => 'diterima' // or "aktif", depending on your system
+        ]);
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json',
             'Content-Type: application/json',
-            'Authorization: Bearer ' . $token
         ]);
+
         $response = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        return ($status === 200)
-            ? redirect()->to(base_url('dokterjaga'))->with('success', 'Data dokter jaga berhasil diperbarui.')
-            : $this->renderErrorView($status);
-    }
-
-    return $this->renderErrorView(401);
-}
-
-public function hapusDokterJaga($kodeDokter)
-{
-    if (!session()->has('jwt_token')) return $this->renderErrorView(401);
-
-    $hariKerja = $this->request->getGet('hari_kerja'); // passed as query param
-    if (!$hariKerja) return $this->renderErrorView(400); // Bad request if missing
-
-    $token = session()->get('jwt_token');
-    $url = $this->api_url . '/dokterjaga/' . $kodeDokter . '?hari_kerja=' . urlencode($hariKerja);
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token
-    ]);
-    $response = curl_exec($ch);
-    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    return ($status === 200 || $status === 204)
-        ? redirect()->to(base_url('dokterjaga'))->with('success', 'Data dokter jaga berhasil dihapus.')
-        : $this->renderErrorView($status);
-}
-
-public function panggilDokter($kodeDokter)
-{
-    if (!session()->has('jwt_token')) {
-        return $this->renderErrorView(401);
-    }
-
-    $token = session()->get('jwt_token');
-    $title = 'Detail Dokter Jaga';
-    $url = $this->api_url . '/dokterjaga/' . $kodeDokter;
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-    ]);
-    $response = curl_exec($ch);
-    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($http_status !== 200) {
-        return $this->renderErrorView($http_status);
-    }
-
-    $dokter_data = json_decode($response, true);
-
-    $this->addBreadcrumb('User', 'user');
-    $this->addBreadcrumb('Dokter Jaga', 'dokterjaga');
-    $this->addBreadcrumb('Detail', 'detail');
-    $breadcrumbs = $this->getBreadcrumbs();
-
-    return view('/admin/dokterjaga/detail_dokterjaga', [
-        'dokterjaga' => $dokter_data['data'],
-        'title' => $title,
-        'breadcrumbs' => $breadcrumbs,
-    ]);
-}
-
-public function terimaDokter($kodeDokter)
-{
-    if (!session()->has('jwt_token')) {
-        return $this->renderErrorView(401);
-    }
-
-    $hariKerja = $this->request->getGet('hari_kerja'); // use query param to identify shift
-    if (!$hariKerja) return $this->renderErrorView(400);
-
-    $token = session()->get('jwt_token');
-    $url = $this->api_url . '/dokterjaga/update-status';
-
-    $payload = json_encode([
-        'kode_dokter' => $kodeDokter,
-        'hari_kerja' => $hariKerja,
-        'status' => 'diterima' // or "aktif", depending on your system
-    ]);
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-        'Accept: application/json',
-        'Content-Type: application/json',
-    ]);
-
-    $response = curl_exec($ch);
-    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($http_status === 200) {
-        return redirect()->to(base_url('dokterjaga'))->with('success', 'Status dokter jaga berhasil diperbarui.');
-    } else {
-        return $this->renderErrorView($http_status);
+        if ($http_status === 200) {
+            return redirect()->to(base_url('dokterjaga'))->with('success', 'Status dokter jaga berhasil diperbarui.');
+        } else {
+            return $this->renderErrorView($http_status);
+        }
     }
 }
-
-}
-

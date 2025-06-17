@@ -90,84 +90,81 @@ class RujukanMasukController extends BaseController
         }
     }
 
+    public function submitTambahRujukanMasuk()
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
 
-        public function submitTambahRujukanMasuk()
-{
-    if (!session()->has('jwt_token')) {
-        return $this->renderErrorView(401);
-    }
+        $token = session()->get('jwt_token');
 
-    $token = session()->get('jwt_token');
+        // Get data from the form
+        $nomor_rujuk = $this->request->getPost('nomor_rujuk');
+        $perujuk = $this->request->getPost('perujuk');
+        $alamat_perujuk = $this->request->getPost('alamat_perujuk');
+        $nomor_rawat = $this->request->getPost('nomor_rawat');
+        $nomor_rm = $this->request->getPost('nomor_rm');
+        $nama_pasien = $this->request->getPost('nama_pasien');
+        $alamat = $this->request->getPost('alamat');
+        $umur = $this->request->getPost('umur');
+        $tanggal_masuk = $this->request->getPost('tanggal_masuk');
 
-    // Get data from the form
-    $nomor_rujuk = $this->request->getPost('nomor_rujuk');
-    $perujuk = $this->request->getPost('perujuk');
-    $alamat_perujuk = $this->request->getPost('alamat_perujuk');
-    $nomor_rawat = $this->request->getPost('nomor_rawat');
-    $nomor_rm = $this->request->getPost('nomor_rm');
-    $nama_pasien = $this->request->getPost('nama_pasien');
-    $alamat = $this->request->getPost('alamat');
-    $umur = $this->request->getPost('umur');
-    $tanggal_masuk = $this->request->getPost('tanggal_masuk');
+        // FIX: handle null explicitly
+        $tanggal_keluar_input = $this->request->getPost('tanggal_keluar');
+        $tanggal_keluar = (trim($tanggal_keluar_input) !== '') ? $tanggal_keluar_input : null;
 
-    // FIX: handle null explicitly
-    $tanggal_keluar_input = $this->request->getPost('tanggal_keluar');
-    $tanggal_keluar = (trim($tanggal_keluar_input) !== '') ? $tanggal_keluar_input : null;
+        $diagnosa_awal = $this->request->getPost('diagnosa_awal');
 
-    $diagnosa_awal = $this->request->getPost('diagnosa_awal');
+        if (empty($nomor_rawat)) {
+            return $this->response->setJSON([
+                'code' => 400,
+                'status' => 'Bad Request',
+                'data' => 'Nomor Rawat is required.'
+            ]);
+        }
+            
+                    $postData = [
+            'nomor_rujuk'      => $nomor_rujuk,
+            'perujuk'          => $perujuk,
+            'alamat_perujuk'   => $alamat_perujuk,
+            'nomor_rawat'      => $nomor_rawat,
+            'nomor_rm'         => $nomor_rm,
+            'nama_pasien'      => $nama_pasien,
+            'alamat'           => $alamat,
+            'umur'             => $umur,
+            'tanggal_masuk'    => $tanggal_masuk,
+            'tanggal_keluar'   => $tanggal_keluar, // will be null if empty
+            'diagnosa_awal'    => $diagnosa_awal
+        ];
 
-    if (empty($nomor_rawat)) {
-        return $this->response->setJSON([
-            'code' => 400,
-            'status' => 'Bad Request',
-            'data' => 'Nomor Rawat is required.'
+        $jsonData = json_encode($postData);
+
+        $ch = curl_init($this->api_url . '/rujukanmasuk');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($jsonData),
+            'Authorization: Bearer ' . $token
         ]);
+
+        $response = curl_exec($ch);
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($http_status === 201) {
+            return redirect()->to(base_url('rujukanmasuk'));
+        } else {
+            return $this->response->setJSON([
+                'code' => $http_status,
+                'status' => 'Error',
+                'message' => 'Failed to submit rujukan',
+                'response' => $response
+            ]);
+        }
     }
         
-                $postData = [
-        'nomor_rujuk'      => $nomor_rujuk,
-        'perujuk'          => $perujuk,
-        'alamat_perujuk'   => $alamat_perujuk,
-        'nomor_rawat'      => $nomor_rawat,
-        'nomor_rm'         => $nomor_rm,
-        'nama_pasien'      => $nama_pasien,
-        'alamat'           => $alamat,
-        'umur'             => $umur,
-        'tanggal_masuk'    => $tanggal_masuk,
-        'tanggal_keluar'   => $tanggal_keluar, // will be null if empty
-        'diagnosa_awal'    => $diagnosa_awal
-    ];
-
-    $jsonData = json_encode($postData);
-
-    $ch = curl_init($this->api_url . '/rujukanmasuk');
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'Content-Length: ' . strlen($jsonData),
-        'Authorization: Bearer ' . $token
-    ]);
-
-    $response = curl_exec($ch);
-    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($http_status === 201) {
-        return redirect()->to(base_url('rujukanmasuk'));
-    } else {
-        return $this->response->setJSON([
-            'code' => $http_status,
-            'status' => 'Error',
-            'message' => 'Failed to submit rujukan',
-            'response' => $response
-        ]);
-    }
-}
-        
-        
-
     public function editRujukanMasuk($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
@@ -298,8 +295,4 @@ class RujukanMasukController extends BaseController
             return $this->renderErrorView(401);
         }
     }
-
-
-
 }
-

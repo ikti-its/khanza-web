@@ -143,8 +143,8 @@ class authController extends BaseController
                         }
                         // dd($user_details);
                         return redirect()->to('/dashboard')
-    ->with('title', $title)
-    ->with('user_details', $user_details);
+                            ->with('title', $title)
+                            ->with('user_details', $user_details);
                     } else {
                         // Failed to get user details
                         return $this->renderErrorView(500, "Tidak ada respons dari server");

@@ -73,106 +73,106 @@ class UGDController extends BaseController
     }
 
     public function submitTambahUGD()
-{
-    if (!session()->has('jwt_token')) {
-        return $this->renderErrorView(401);
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+
+        $token = session()->get('jwt_token');
+        $jamRaw = $this->request->getPost('jam');
+        $jamForUgd = date('H:i', strtotime($jamRaw));      // for /ugd
+        $jamForRegistrasi = date('H:i:s', strtotime($jamRaw)); // for /registrasi
+
+        // Common input
+        $postData = [
+            'nomor_reg'        => $this->request->getPost('nomor_reg'),
+            'nomor_rawat'      => $this->request->getPost('nomor_rawat'),
+            'tanggal'          => $this->request->getPost('tanggal'),
+            'jam'              => $jamForUgd,
+            'kode_dokter'      => $this->request->getPost('kode_dokter'),
+            'dokter_dituju'    => $this->request->getPost('dokter_dituju'),
+            'nomor_rm'         => $this->request->getPost('nomor_rekam_medis'),
+            'nama_pasien'      => $this->request->getPost('nama'),
+            'jenis_kelamin'    => $this->request->getPost('jenis_kelamin'),
+            'umur'             => $this->request->getPost('umur'),
+            'poliklinik'       => $this->request->getPost('poliklinik'),
+            'penanggung_jawab' => $this->request->getPost('penanggung_jawab'),
+            'alamat_pj'        => $this->request->getPost('alamat_penanggung_jawab'),
+            'hubungan_pj'      => $this->request->getPost('hubungan_penanggung_jawab'),
+            'biaya_registrasi' => floatval($this->request->getPost('biaya_registrasi')),
+            'jenis_bayar'      => $this->request->getPost('jenis_bayar'),
+            'status_rawat'     => $this->request->getPost('status_rawat'),
+            'status_bayar'     => $this->request->getPost('status_bayar'),
+        ];
+    // dd($postData);
+        // Submit to /ugd
+        $ugdJson = json_encode($postData);
+        $ch1 = curl_init($this->api_url . '/ugd');
+        curl_setopt($ch1, CURLOPT_POST, true);
+        curl_setopt($ch1, CURLOPT_POSTFIELDS, $ugdJson);
+        curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch1, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($ugdJson),
+            'Authorization: Bearer ' . $token
+        ]);
+        $responseUgd = curl_exec($ch1);
+        $statusUgd = curl_getinfo($ch1, CURLINFO_HTTP_CODE);
+        curl_close($ch1);
+
+        log_message('error', 'UGD API response: ' . $responseUgd);
+
+        // Prepare payload for /registrasi
+        $postDataRegistrasi = [
+            'nomor_reg' => $postData['nomor_reg'],
+            'nomor_rawat' => $postData['nomor_rawat'],
+            'tanggal' => $postData['tanggal'],
+            'nomor_rm' => $postData['nomor_rm'],
+            'jenis_kelamin' => $postData['jenis_kelamin'],
+            'poliklinik' => $postData['poliklinik'],
+            'nama_dokter' => $postData['dokter_dituju'],
+            'nama_pasien' => $postData['nama_pasien'],
+            'kode_dokter' => $postData['kode_dokter'],
+            'umur' => strval($postData['umur']),
+            'penanggung_jawab' => $postData['penanggung_jawab'],
+            'alamat_pj' => $postData['alamat_pj'],
+            'biaya_registrasi' => $postData['biaya_registrasi'],
+            'status_rawat' => $postData['status_rawat'],
+            'status_bayar' => $postData['status_bayar'],
+            'jam' => $jamForRegistrasi,
+            'hubungan_pj' => $postData['hubungan_pj'],
+            'no_telepon' => $this->request->getPost('nomor_telepon'), // if exists
+            'status_registrasi' => $this->request->getPost('status_registrasi'), // if exists
+            'status_poli' => $this->request->getPost('status_poliklinik'), // if exists
+            'jenis_bayar' => $postData['jenis_bayar'],
+        ];
+
+        $registrasiJson = json_encode($postDataRegistrasi);
+        $ch2 = curl_init($this->api_url . '/registrasi');
+        curl_setopt($ch2, CURLOPT_POST, true);
+        curl_setopt($ch2, CURLOPT_POSTFIELDS, $registrasiJson);
+        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($registrasiJson),
+            'Authorization: Bearer ' . $token
+        ]);
+        $responseRegistrasi = curl_exec($ch2);
+        $statusRegistrasi = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+        curl_close($ch2);
+
+        log_message('error', 'Registrasi API response: ' . $responseRegistrasi);
+
+        if ($statusUgd === 201 && $statusRegistrasi === 201) {
+            return redirect()->to(base_url('ugd'))->with('success', 'Data berhasil ditambahkan ke UGD dan Registrasi.');
+        }
+
+        return $this->response->setStatusCode(500)->setJSON([
+            'message' => 'Gagal menambahkan data',
+            'response_ugd' => json_decode($responseUgd, true),
+            'response_registrasi' => json_decode($responseRegistrasi, true)
+        ]);
     }
-
-    $token = session()->get('jwt_token');
-$jamRaw = $this->request->getPost('jam');
-$jamForUgd = date('H:i', strtotime($jamRaw));      // for /ugd
-$jamForRegistrasi = date('H:i:s', strtotime($jamRaw)); // for /registrasi
-
-    // Common input
-    $postData = [
-        'nomor_reg'        => $this->request->getPost('nomor_reg'),
-        'nomor_rawat'      => $this->request->getPost('nomor_rawat'),
-        'tanggal'          => $this->request->getPost('tanggal'),
-        'jam'              => $jamForUgd,
-        'kode_dokter'      => $this->request->getPost('kode_dokter'),
-        'dokter_dituju'    => $this->request->getPost('dokter_dituju'),
-        'nomor_rm'         => $this->request->getPost('nomor_rekam_medis'),
-        'nama_pasien'      => $this->request->getPost('nama'),
-        'jenis_kelamin'    => $this->request->getPost('jenis_kelamin'),
-        'umur'             => $this->request->getPost('umur'),
-        'poliklinik'       => $this->request->getPost('poliklinik'),
-        'penanggung_jawab' => $this->request->getPost('penanggung_jawab'),
-        'alamat_pj'        => $this->request->getPost('alamat_penanggung_jawab'),
-        'hubungan_pj'      => $this->request->getPost('hubungan_penanggung_jawab'),
-        'biaya_registrasi' => floatval($this->request->getPost('biaya_registrasi')),
-        'jenis_bayar'      => $this->request->getPost('jenis_bayar'),
-        'status_rawat'     => $this->request->getPost('status_rawat'),
-        'status_bayar'     => $this->request->getPost('status_bayar'),
-    ];
-// dd($postData);
-    // Submit to /ugd
-    $ugdJson = json_encode($postData);
-    $ch1 = curl_init($this->api_url . '/ugd');
-    curl_setopt($ch1, CURLOPT_POST, true);
-    curl_setopt($ch1, CURLOPT_POSTFIELDS, $ugdJson);
-    curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch1, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'Content-Length: ' . strlen($ugdJson),
-        'Authorization: Bearer ' . $token
-    ]);
-    $responseUgd = curl_exec($ch1);
-    $statusUgd = curl_getinfo($ch1, CURLINFO_HTTP_CODE);
-    curl_close($ch1);
-
-    log_message('error', 'UGD API response: ' . $responseUgd);
-
-    // Prepare payload for /registrasi
-    $postDataRegistrasi = [
-        'nomor_reg' => $postData['nomor_reg'],
-        'nomor_rawat' => $postData['nomor_rawat'],
-        'tanggal' => $postData['tanggal'],
-        'nomor_rm' => $postData['nomor_rm'],
-        'jenis_kelamin' => $postData['jenis_kelamin'],
-        'poliklinik' => $postData['poliklinik'],
-        'nama_dokter' => $postData['dokter_dituju'],
-        'nama_pasien' => $postData['nama_pasien'],
-        'kode_dokter' => $postData['kode_dokter'],
-        'umur' => strval($postData['umur']),
-        'penanggung_jawab' => $postData['penanggung_jawab'],
-        'alamat_pj' => $postData['alamat_pj'],
-        'biaya_registrasi' => $postData['biaya_registrasi'],
-        'status_rawat' => $postData['status_rawat'],
-        'status_bayar' => $postData['status_bayar'],
-        'jam' => $jamForRegistrasi,
-        'hubungan_pj' => $postData['hubungan_pj'],
-        'no_telepon' => $this->request->getPost('nomor_telepon'), // if exists
-        'status_registrasi' => $this->request->getPost('status_registrasi'), // if exists
-        'status_poli' => $this->request->getPost('status_poliklinik'), // if exists
-        'jenis_bayar' => $postData['jenis_bayar'],
-    ];
-
-    $registrasiJson = json_encode($postDataRegistrasi);
-    $ch2 = curl_init($this->api_url . '/registrasi');
-    curl_setopt($ch2, CURLOPT_POST, true);
-    curl_setopt($ch2, CURLOPT_POSTFIELDS, $registrasiJson);
-    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch2, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'Content-Length: ' . strlen($registrasiJson),
-        'Authorization: Bearer ' . $token
-    ]);
-    $responseRegistrasi = curl_exec($ch2);
-    $statusRegistrasi = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-    curl_close($ch2);
-
-    log_message('error', 'Registrasi API response: ' . $responseRegistrasi);
-
-    if ($statusUgd === 201 && $statusRegistrasi === 201) {
-        return redirect()->to(base_url('ugd'))->with('success', 'Data berhasil ditambahkan ke UGD dan Registrasi.');
-    }
-
-    return $this->response->setStatusCode(500)->setJSON([
-        'message' => 'Gagal menambahkan data',
-        'response_ugd' => json_decode($responseUgd, true),
-        'response_registrasi' => json_decode($responseRegistrasi, true)
-    ]);
-}
 
 
 

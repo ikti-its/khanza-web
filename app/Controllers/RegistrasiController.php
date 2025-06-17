@@ -234,85 +234,85 @@ class RegistrasiController extends BaseController
     
 
     public function submitEditRegistrasi($nomorReg)
-{
-    if (session()->has('jwt_token')) {
-        $token = session()->get('jwt_token');
-        $registrasi_url = $this->api_url . '/registrasi/' . $nomorReg;
+    {
+        if (session()->has('jwt_token')) {
+            $token = session()->get('jwt_token');
+            $registrasi_url = $this->api_url . '/registrasi/' . $nomorReg;
 
-        // Get data from the form
-        $nomor_reg = $this->request->getPost('nomor_reg');
-        $nomor_rawat = $this->request->getPost('nomor_rawat');
-        $tanggal = $this->request->getPost('tanggal');
-        $nomor_rekam_medis = $this->request->getPost('nomor_rekam_medis');
-        $jenis_kelamin = $this->request->getPost('jenis_kelamin');
-        $poliklinik = $this->request->getPost('poliklinik');
-        $dokter = $this->request->getPost('dokter');
-        $nama = $this->request->getPost('nama');
-        $umur = intval($this->request->getPost('umur'));
-        $penanggung_jawab = $this->request->getPost('penanggung_jawab');
-        $alamat_penanggung_jawab = $this->request->getPost('alamat_penanggung_jawab');
-        $biaya_registrasi = intval($this->request->getPost('biaya_registrasi'));
-        $status_rawat = $this->request->getPost('status_rawat');
-        $status_bayar = $this->request->getPost('status_bayar');
-        $jam = $this->request->getPost('jam');
-        $hubungan_penanggung_jawab = $this->request->getPost('hubungan_penanggung_jawab');
-        $nomor_telepon = $this->request->getPost('nomor_telepon');
-        $status_registrasi = $this->request->getPost('status_registrasi');
-        $status_poliklinik = $this->request->getPost('status_poliklinik');
-        $jenis_bayar = $this->request->getPost('jenis_bayar');
-        
-        // Prepare data to be updated
-        $postDataRegistrasi = [
-            'nomor_reg' => $nomor_reg,
-            'nomor_rawat' => $nomor_rawat,
-            'tanggal' => $tanggal,
-            'nomor_rm' => $nomor_rekam_medis,
-            'jenis_kelamin' => $jenis_kelamin,
-            'poliklinik' => $poliklinik,
-            'nama_dokter' => $dokter,
-            'nama_pasien' => $nama,
-            'kode_dokter' => "D001",
-            'umur' => strval($umur),
-            'penanggung_jawab' => $penanggung_jawab,
-            'alamat_pj' => $alamat_penanggung_jawab,
-            'biaya_registrasi' => $biaya_registrasi,
-            'status_rawat' => $status_rawat,
-            'status_bayar' => $status_bayar,
-            'jam' => $jam,
-            'hubungan_pj' => $hubungan_penanggung_jawab,
-            'no_telepon' => $nomor_telepon,
-            'status_registrasi' => $status_registrasi,
-            'status_poli' => $status_poliklinik,
-            'jenis_bayar' => $jenis_bayar,
-        ];
+            // Get data from the form
+            $nomor_reg = $this->request->getPost('nomor_reg');
+            $nomor_rawat = $this->request->getPost('nomor_rawat');
+            $tanggal = $this->request->getPost('tanggal');
+            $nomor_rekam_medis = $this->request->getPost('nomor_rekam_medis');
+            $jenis_kelamin = $this->request->getPost('jenis_kelamin');
+            $poliklinik = $this->request->getPost('poliklinik');
+            $dokter = $this->request->getPost('dokter');
+            $nama = $this->request->getPost('nama');
+            $umur = intval($this->request->getPost('umur'));
+            $penanggung_jawab = $this->request->getPost('penanggung_jawab');
+            $alamat_penanggung_jawab = $this->request->getPost('alamat_penanggung_jawab');
+            $biaya_registrasi = intval($this->request->getPost('biaya_registrasi'));
+            $status_rawat = $this->request->getPost('status_rawat');
+            $status_bayar = $this->request->getPost('status_bayar');
+            $jam = $this->request->getPost('jam');
+            $hubungan_penanggung_jawab = $this->request->getPost('hubungan_penanggung_jawab');
+            $nomor_telepon = $this->request->getPost('nomor_telepon');
+            $status_registrasi = $this->request->getPost('status_registrasi');
+            $status_poliklinik = $this->request->getPost('status_poliklinik');
+            $jenis_bayar = $this->request->getPost('jenis_bayar');
+            
+            // Prepare data to be updated
+            $postDataRegistrasi = [
+                'nomor_reg' => $nomor_reg,
+                'nomor_rawat' => $nomor_rawat,
+                'tanggal' => $tanggal,
+                'nomor_rm' => $nomor_rekam_medis,
+                'jenis_kelamin' => $jenis_kelamin,
+                'poliklinik' => $poliklinik,
+                'nama_dokter' => $dokter,
+                'nama_pasien' => $nama,
+                'kode_dokter' => "D001",
+                'umur' => strval($umur),
+                'penanggung_jawab' => $penanggung_jawab,
+                'alamat_pj' => $alamat_penanggung_jawab,
+                'biaya_registrasi' => $biaya_registrasi,
+                'status_rawat' => $status_rawat,
+                'status_bayar' => $status_bayar,
+                'jam' => $jam,
+                'hubungan_pj' => $hubungan_penanggung_jawab,
+                'no_telepon' => $nomor_telepon,
+                'status_registrasi' => $status_registrasi,
+                'status_poli' => $status_poliklinik,
+                'jenis_bayar' => $jenis_bayar,
+            ];
 
-        // cURL setup for PUT request
-        $tambah_registrasi_JSON = json_encode($postDataRegistrasi);
+            // cURL setup for PUT request
+            $tambah_registrasi_JSON = json_encode($postDataRegistrasi);
 
-        $ch_registrasi = curl_init($registrasi_url);
-        curl_setopt($ch_registrasi, CURLOPT_CUSTOMREQUEST, "PUT");  // Use PUT instead of POST
-        curl_setopt($ch_registrasi, CURLOPT_POSTFIELDS, ($tambah_registrasi_JSON));
-        curl_setopt($ch_registrasi, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch_registrasi, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($tambah_registrasi_JSON),
-            'Authorization: Bearer ' . $token,
-        ]);
-        $response_registrasi = curl_exec($ch_registrasi);
-        $http_status_code_registrasi = curl_getinfo($ch_registrasi, CURLINFO_HTTP_CODE);
+            $ch_registrasi = curl_init($registrasi_url);
+            curl_setopt($ch_registrasi, CURLOPT_CUSTOMREQUEST, "PUT");  // Use PUT instead of POST
+            curl_setopt($ch_registrasi, CURLOPT_POSTFIELDS, ($tambah_registrasi_JSON));
+            curl_setopt($ch_registrasi, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch_registrasi, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($tambah_registrasi_JSON),
+                'Authorization: Bearer ' . $token,
+            ]);
+            $response_registrasi = curl_exec($ch_registrasi);
+            $http_status_code_registrasi = curl_getinfo($ch_registrasi, CURLINFO_HTTP_CODE);
 
-        // Handle the response based on the HTTP status code
-        if ($http_status_code_registrasi === 200) {
-            return redirect()->to(base_url('registrasi'));
+            // Handle the response based on the HTTP status code
+            if ($http_status_code_registrasi === 200) {
+                return redirect()->to(base_url('registrasi'));
+            } else {
+                return $response_registrasi;
+            }
+
+            curl_close($ch_registrasi);
         } else {
-            return $response_registrasi;
+            return $this->renderErrorView(401);
         }
-
-        curl_close($ch_registrasi);
-    } else {
-        return $this->renderErrorView(401);
     }
-}
 
 
     public function hapusRegistrasi($nomorReg)
@@ -344,26 +344,22 @@ class RegistrasiController extends BaseController
     }
 
     public function triggerNotif()
-{
-    $nomorReg = $this->request->getPost('nomor_reg');
+    {
+        $nomorReg = $this->request->getPost('nomor_reg');
 
-    // Optional: validate
-    if (!$nomorReg) {
-        return redirect()->back()->with('error', 'Nomor Registrasi tidak ditemukan.');
-    }
+        // Optional: validate
+        if (!$nomorReg) {
+            return redirect()->back()->with('error', 'Nomor Registrasi tidak ditemukan.');
+        }
 
-    // Call the Go API to update the status_kamar
-    $client = \Config\Services::curlrequest();
-    $response = $client->request('PUT', 'http://127.0.0.1:8080/v1/registrasi/'.$nomorReg.'/assign-room-false');
+        // Call the Go API to update the status_kamar
+        $client = \Config\Services::curlrequest();
+        $response = $client->request('PUT', 'http://127.0.0.1:8080/v1/registrasi/'.$nomorReg.'/assign-room-false');
 
-    if ($response->getStatusCode() === 200) {
-        return redirect()->back()->with('success', 'Status kamar berhasil diperbarui.');
-    } else {
-        return redirect()->back()->with('error', 'Gagal mengubah status kamar.');
+        if ($response->getStatusCode() === 200) {
+            return redirect()->back()->with('success', 'Status kamar berhasil diperbarui.');
+        } else {
+            return redirect()->back()->with('error', 'Gagal mengubah status kamar.');
+        }
     }
 }
-   
-
-
-}
-

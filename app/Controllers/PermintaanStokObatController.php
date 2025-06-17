@@ -465,161 +465,157 @@ class PermintaanStokObatController extends BaseController
     }
     
     public function submitFromRawatinap($nomor_rawat)
-{
-    if (!session()->has('jwt_token')) {
-        return redirect()->back()->with('error', 'Session token missing.');
-    }
-
-    $token = session()->get('jwt_token');
-
-    // Step 1: Get Rawat Inap Data
-    $url = $this->api_url . '/rawatinap/' . $nomor_rawat;
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-        'Accept: application/json'
-    ]);
-    $response = curl_exec($ch);
-    curl_close($ch);
-
-    $decoded = json_decode($response, true);
-
-    if ($decoded && isset($decoded['data'])) {
-        $rawatinap = is_string($decoded['data']) 
-            ? json_decode($decoded['data'], true) 
-            : $decoded['data'];
-
-        if (!$rawatinap) {
-            return redirect()->back()->with('error', 'Gagal memproses data rawat inap.');
+    {
+        if (!session()->has('jwt_token')) {
+            return redirect()->back()->with('error', 'Session token missing.');
         }
 
-        // Prepare Form Data
-        $formData = [
-            'no_permintaan'  => 'PRP' . date('Ymd') . rand(100, 999),
-            'tgl_permintaan' => date('Y-m-d'),
-            'jam'            => date('H:i:s'),
-            'no_rawat'       => $rawatinap['nomor_rawat'] ?? $nomor_rawat,
-            'kd_dokter'      => $rawatinap['kode_dokter'] ?? '',
-            'status'         => 'Belum',
-            'tgl_validasi'   => null,
-            'jam_validasi'   => null,
-        ];
+        $token = session()->get('jwt_token');
 
-        // Step 2: Get Dokter List for Dynamic Dropdown
-        $dokterList = $this->getDokterListFromAPI($token);
-        $obatList = $this->getObatListFromAPI($token);
-// dd($dokterList);
-        return view('admin/stokobatpasien/tambah_permintaanstokobat', [
-            'title'              => 'Tambah Permintaan Stok Obat',
-            'permintaanstokobat' => $formData,
-            'dokterList'         => $dokterList,
-            'obat_list'          => $obatList, 
+        // Step 1: Get Rawat Inap Data
+        $url = $this->api_url . '/rawatinap/' . $nomor_rawat;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
         ]);
-    }
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-    return redirect()->back()->with('error', 'Data rawat inap tidak ditemukan.');
-}
+        $decoded = json_decode($response, true);
 
+        if ($decoded && isset($decoded['data'])) {
+            $rawatinap = is_string($decoded['data']) 
+                ? json_decode($decoded['data'], true) 
+                : $decoded['data'];
 
-public function fetchStokObatByNoPermintaan($noPermintaan)
-{
-    $token = session()->get('jwt_token');
-    $url = $this->api_url . '/stok-obat-pasien/' . $noPermintaan;
+            if (!$rawatinap) {
+                return redirect()->back()->with('error', 'Gagal memproses data rawat inap.');
+            }
 
-    // Request stok_obat_pasien data
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-        'Accept: application/json'
-    ]);
-    $response = curl_exec($ch);
-    curl_close($ch);
+            // Prepare Form Data
+            $formData = [
+                'no_permintaan'  => 'PRP' . date('Ymd') . rand(100, 999),
+                'tgl_permintaan' => date('Y-m-d'),
+                'jam'            => date('H:i:s'),
+                'no_rawat'       => $rawatinap['nomor_rawat'] ?? $nomor_rawat,
+                'kd_dokter'      => $rawatinap['kode_dokter'] ?? '',
+                'status'         => 'Belum',
+                'tgl_validasi'   => null,
+                'jam_validasi'   => null,
+            ];
 
-    $parsed = json_decode($response, true);
-    $stokObat = is_array($parsed) && isset($parsed['data']) && is_array($parsed['data'])
-        ? $parsed['data']
-        : [];
-
-    // Request databarang reference data
-    $barangUrl = $this->api_url . '/pemberian-obat/databarang';
-    $ch = curl_init($barangUrl);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-        'Accept: application/json'
-    ]);
-    $barangResponse = curl_exec($ch);
-    curl_close($ch);
-
-    $barangParsed = json_decode($barangResponse, true);
-
-$barangList = $barangParsed['data'] ?? $barangParsed; // support both formats
-$barangMap = [];
-
-if (is_array($barangList)) {
-    foreach ($barangList as $b) {
-        if (isset($b['kode_obat'], $b['nama_obat'])) {
-            $kode = trim((string)$b['kode_obat']);
-            $barangMap[$kode] = $b['nama_obat'];
+            // Step 2: Get Dokter List for Dynamic Dropdown
+            $dokterList = $this->getDokterListFromAPI($token);
+            $obatList = $this->getObatListFromAPI($token);
+    // dd($dokterList);
+            return view('admin/stokobatpasien/tambah_permintaanstokobat', [
+                'title'              => 'Tambah Permintaan Stok Obat',
+                'permintaanstokobat' => $formData,
+                'dokterList'         => $dokterList,
+                'obat_list'          => $obatList, 
+            ]);
         }
+
+        return redirect()->back()->with('error', 'Data rawat inap tidak ditemukan.');
     }
-}
 
 
-    // Enrich stokObat entries with resolved nama_barang
-    foreach ($stokObat as &$obat) {
-        if (isset($obat['kode_brng'])) {
-            $key = trim((string)$obat['kode_brng']);
-            $obat['nama_barang'] = $barangMap[$key] ?? '-';
-        } else {
-            $obat['nama_barang'] = '-';
+    public function fetchStokObatByNoPermintaan($noPermintaan)
+    {
+        $token = session()->get('jwt_token');
+        $url = $this->api_url . '/stok-obat-pasien/' . $noPermintaan;
+
+        // Request stok_obat_pasien data
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $parsed = json_decode($response, true);
+        $stokObat = is_array($parsed) && isset($parsed['data']) && is_array($parsed['data'])
+            ? $parsed['data']
+            : [];
+
+        // Request databarang reference data
+        $barangUrl = $this->api_url . '/pemberian-obat/databarang';
+        $ch = curl_init($barangUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $barangResponse = curl_exec($ch);
+        curl_close($ch);
+
+        $barangParsed = json_decode($barangResponse, true);
+
+        $barangList = $barangParsed['data'] ?? $barangParsed; // support both formats
+        $barangMap = [];
+
+        if (is_array($barangList)) {
+            foreach ($barangList as $b) {
+                if (isset($b['kode_obat'], $b['nama_obat'])) {
+                    $kode = trim((string)$b['kode_obat']);
+                    $barangMap[$kode] = $b['nama_obat'];
+                }
+            }
         }
+
+
+        // Enrich stokObat entries with resolved nama_barang
+        foreach ($stokObat as &$obat) {
+            if (isset($obat['kode_brng'])) {
+                $key = trim((string)$obat['kode_brng']);
+                $obat['nama_barang'] = $barangMap[$key] ?? '-';
+            } else {
+                $obat['nama_barang'] = '-';
+            }
+        }
+
+        return $stokObat;
     }
 
-    return $stokObat;
-}
+    private function getDokterListFromAPI($token)
+    {
+        $url = $this->api_url . '/dokter';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json',
+        ]);
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-private function getDokterListFromAPI($token)
-{
-    $url = $this->api_url . '/dokter';
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-        'Accept: application/json',
-    ]);
-    $response = curl_exec($ch);
-    curl_close($ch);
+        $data = json_decode($response, true);
+    // dd($data);
+        // If response or 'data' is not array, return empty array
+        if (!is_array($data) || !isset($data['data']) || !is_array($data['data'])) {
+            return [];
+        }
 
-    $data = json_decode($response, true);
-// dd($data);
-    // If response or 'data' is not array, return empty array
-    if (!is_array($data) || !isset($data['data']) || !is_array($data['data'])) {
-        return [];
+        return $data['data'];
     }
 
-    return $data['data'];
+    private function getObatListFromAPI($token)
+    {
+        $url = $this->api_url . '/pemberian-obat/databarang'; // adjust path if needed
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $data = json_decode($response, true);
+        return is_array($data['data'] ?? null) ? $data['data'] : [];
+    }
 }
-
-private function getObatListFromAPI($token)
-{
-    $url = $this->api_url . '/pemberian-obat/databarang'; // adjust path if needed
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-        'Accept: application/json'
-    ]);
-    $response = curl_exec($ch);
-    curl_close($ch);
-
-    $data = json_decode($response, true);
-    return is_array($data['data'] ?? null) ? $data['data'] : [];
-}
-
-
-}
-
-
