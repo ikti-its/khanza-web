@@ -85,7 +85,7 @@ abstract class BaseController extends Controller
     }
 
 
-    protected function fetchDataUsingCurl($method, $url, $data = null)
+    protected function fetchDataUsingCurl($method, $url, $data = null, $redirect_url = null, $redirect_msg = null)
     {
         $allowed_methods = ['GET', 'POST', 'PUT', 'DELETE'];
         if(!in_array($method, $allowed_methods)){
@@ -137,6 +137,10 @@ abstract class BaseController extends Controller
             echo $this->renderErrorView(500);
         }
 
+        if($method !== 'GET'){
+            return redirect()->to(base_url($redirect_url))->with('success', $redirect_msg ?? 'Berhasil');
+        }
+        
         return  [
             'data' => $return_data, 
             'kode' => $http_status_code];
