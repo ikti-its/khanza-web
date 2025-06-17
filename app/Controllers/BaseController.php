@@ -80,11 +80,11 @@ abstract class BaseController extends Controller
     {
         $allowed_methods = ['GET', 'POST', 'PUT', 'DELETE'];
         if(!in_array($method, $allowed_methods)){
-            return $this->renderErrorView(405);
+            echo $this->renderErrorView(405);
         }
 
         if (!session()->has('jwt_token')) {
-            return $this->renderErrorView(401);
+            echo $this->renderErrorView(401);
         }
         $token = session()->get('jwt_token');
         
@@ -117,16 +117,20 @@ abstract class BaseController extends Controller
         $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        if ($http_status_code !== 200) {
-            return $this->renderErrorView($http_status_code);
+        if ($http_status_code !== 200 && $http_status_code !== 201) {
+            log_message('error', $url . ' API error. Status: ' . $http_status_code .', response: ' . $response);
+            echo $this->renderErrorView($http_status_code);
         }
 
         $return_data = json_decode($response, true);
-        if (!isset($return_data['data'])) {
-            return $this->renderErrorView(500);
+        if (json_last_error() !== JSON_ERROR_NONE || !isset($return_data['data'])) {
+            log_message('error', 'JSON decode error: ' . json_last_error_msg());
+            echo $this->renderErrorView(500);
         }
 
-        return  $return_data;
+        return  [
+            'data' => $return_data, 
+            'kode' => $http_status_code];
     }
 
     protected function renderErrorView($status_code, $custom_message = null)
