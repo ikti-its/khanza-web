@@ -126,7 +126,8 @@ abstract class BaseController extends Controller
         $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        if ($http_status_code !== 200 && $http_status_code !== 201) {
+        $http_success_codes = [200, 201, 204];
+        if (!in_array($http_status_code, $http_success_codes)) {
             log_message('error', $url . ' API error. Status: ' . $http_status_code .', response: ' . $response);
             echo $this->renderErrorView($http_status_code);
         }
