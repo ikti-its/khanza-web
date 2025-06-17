@@ -76,6 +76,15 @@ abstract class BaseController extends Controller
     {
         return $this->breadcrumbs;
     }
+
+    protected function setBreadcrumbs($array): void
+    {
+        foreach($array as $elem){
+            $this->addBreadcrumb($elem, strtolower($elem));
+        }
+    }
+
+
     protected function fetchDataUsingCurl($method, $url, $data = null)
     {
         $allowed_methods = ['GET', 'POST', 'PUT', 'DELETE'];
