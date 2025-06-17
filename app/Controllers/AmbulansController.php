@@ -10,46 +10,20 @@ class AmbulansController extends BaseController
     public function dataAmbulans()
     {
         $title = 'Data Ambulans';
+        $ambulans_data = $this->fetchDataUsingCurl('GET', '/ambulans')['data'];
+        $this->addBreadcrumb('User', 'user');
+        $this->addBreadcrumb('Ambulans', 'ambulans');
+        $breadcrumbs = $this->getBreadcrumbs();
 
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
-            $ambulans_url = $this->api_url . '/ambulans';
+        $meta_data = $ambulans_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1];
 
-            $ch = curl_init($ambulans_url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-                'Accept: application/json'
-            ]);
-            $response = curl_exec($ch);
-            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-
-            if ($http_status !== 200) {
-                return $this->renderErrorView($http_status);
-            }
-
-            $ambulans_data = json_decode($response, true);
-
-            if (!isset($ambulans_data['data'])) {
-                return $this->renderErrorView(500);
-            }
-
-            $this->addBreadcrumb('User', 'user');
-            $this->addBreadcrumb('Ambulans', 'ambulans');
-            $breadcrumbs = $this->getBreadcrumbs();
-
-            $meta_data = $ambulans_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1];
-
-            return view('/admin/ambulans/ambulans_data', [
-                'ambulans_data' => $ambulans_data['data'],
-                'title' => $title,
-                'breadcrumbs' => $breadcrumbs,
-                'meta_data' => $meta_data
-            ]);
-        } else {
-            return $this->renderErrorView(401);
-        }
+        return view('/admin/ambulans/ambulans_data', [
+            'ambulans_data' => $ambulans_data['data'],
+            'title' => $title,
+            'breadcrumbs' => $breadcrumbs,
+            'meta_data' => $meta_data
+        ]);
+        
     }
 
     public function tambahAmbulans()
@@ -72,59 +46,17 @@ class AmbulansController extends BaseController
 
     public function submitTambahAmbulans()
     {
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
-
-            $postData = [
-                'no_ambulans' => $this->request->getPost('no_ambulans'),
-                'status' => $this->request->getPost('status'),
-                'supir' => $this->request->getPost('supir')
-            ];
-
-            $url = $this->api_url . '/ambulans';
-            $json = json_encode($postData);
-
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($json),
-                'Authorization: Bearer ' . $token
-            ]);
-
-            $response = curl_exec($ch);
-            $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-
-            return ($status === 201)
-                ? redirect()->to(base_url('ambulans'))
-                : $this->renderErrorView($status);
-        }
-
-        return $this->renderErrorView(401);
+        $postData = [
+            'no_ambulans' => $this->request->getPost('no_ambulans'),
+            'status' => $this->request->getPost('status'),
+            'supir' => $this->request->getPost('supir')
+        ];
+        return $this->fetchDataUsingCurl('POST', '/ambulans', $postData, 'ambulans');
     }
 
     public function editAmbulans($noAmbulans)
     {
-        if (!session()->has('jwt_token')) return $this->renderErrorView(401);
-
-        $token = session()->get('jwt_token');
-        $url = $this->api_url . '/ambulans/' . $noAmbulans;
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token
-        ]);
-        $response = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($status !== 200) return $this->renderErrorView($status);
-
-        $ambulans_data = json_decode($response, true);
+        $ambulans_data = $this->fetchDataUsingCurl('GET', '/ambulans/' . $noAmbulans)['data'];
 
         $this->addBreadcrumb('User', 'user');
         $this->addBreadcrumb('Ambulans', 'ambulans');
@@ -139,131 +71,40 @@ class AmbulansController extends BaseController
 
     public function submitEditAmbulans($noAmbulans)
     {
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
-
-            $postData = [
-                'no_ambulans' => $this->request->getPost('no_ambulans'),
-                'status' => $this->request->getPost('status'),
-                'supir' => $this->request->getPost('supir')
-            ];
-
-            $json = json_encode($postData);
-            $url = $this->api_url . '/ambulans/' . $noAmbulans;
-
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/json',
-                'Authorization: Bearer ' . $token
-            ]);
-            $response = curl_exec($ch);
-            $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-
-            return ($status === 200)
-                ? redirect()->to(base_url('ambulans'))->with('success', 'Ambulans berhasil diperbarui.')
-                : $this->renderErrorView($status);
-        }
-
-        return $this->renderErrorView(401);
+        $postData = [
+            'no_ambulans' => $this->request->getPost('no_ambulans'),
+            'status' => $this->request->getPost('status'),
+            'supir' => $this->request->getPost('supir')
+        ];
+        return $this->fetchDataUsingCurl('PUT', '/ambulans/' . $noAmbulans, $postData, 'ambulans', 'Ambulans berhasil diperbarui.');
     }
 
     public function hapusAmbulans($noAmbulans)
     {
-        if (!session()->has('jwt_token')) return $this->renderErrorView(401);
-
-        $token = session()->get('jwt_token');
-        $url = $this->api_url . '/ambulans/' . $noAmbulans;
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token
-        ]);
-        $response = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        return ($status === 200 || $status === 204)
-            ? redirect()->to(base_url('ambulans'))->with('success', 'Ambulans berhasil dihapus.')
-            : $this->renderErrorView($status);
+        return $this->fetchDataUsingCurl('DELETE', '/ambulans/' . $noAmbulans, null, 'ambulans', 'Ambulans berhasil dihapus.' );
     }
 
     public function panggilAmbulans($nomorBed)
-{
-    if (!session()->has('jwt_token')) {
-        return $this->renderErrorView(401);
+    {
+        $title = 'Edit Kamar';
+        $kamar_data = $this->fetchDataUsingCurl('GET', '/kamar/' . $nomorBed)['data'];
+
+        // Breadcrumbs setup
+        $this->addBreadcrumb('User', 'user');
+        $this->addBreadcrumb('Kamar', 'kamar');
+        $this->addBreadcrumb('Terima', 'terima');
+        $breadcrumbs = $this->getBreadcrumbs();
+            // dd($kamar_data);
+        // Return the edit view with kamar data
+        return view('/admin/kamar/terima_kamar', [
+            'kamar' => $kamar_data['data'],
+            'title' => $title,
+            'breadcrumbs' => $breadcrumbs,
+        ]);
     }
 
-    $token = session()->get('jwt_token');
-    $title = 'Edit Kamar';
-    $kamar_url = $this->api_url . '/kamar/' . $nomorBed;
-
-    // dd($kamar_url);
-
-    // Make API request to fetch kamar data
-    $ch_kamar = curl_init($kamar_url);
-    curl_setopt($ch_kamar, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch_kamar, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-    ]);
-    $response = curl_exec($ch_kamar);
-    $http_status = curl_getinfo($ch_kamar, CURLINFO_HTTP_CODE);
-    curl_close($ch_kamar);
-
-    // dd($response);
-
-    // Handle API response
-    if ($http_status !== 200) {
-        return $this->renderErrorView($http_status);
+    public function terimaAmbulans($noAmbulans)
+    {
+        return $this->fetchDataUsingCurl('PUT', '/ambulans/terima' . $noAmbulans, null, 'ambulans', 'Ambulans telah diterima.');
     }
-
-    $kamar_data = json_decode($response, true);
-
-    // Breadcrumbs setup
-    $this->addBreadcrumb('User', 'user');
-    $this->addBreadcrumb('Kamar', 'kamar');
-    $this->addBreadcrumb('Terima', 'terima');
-    $breadcrumbs = $this->getBreadcrumbs();
-        // dd($kamar_data);
-    // Return the edit view with kamar data
-    return view('/admin/kamar/terima_kamar', [
-        'kamar' => $kamar_data['data'],
-        'title' => $title,
-        'breadcrumbs' => $breadcrumbs,
-    ]);
-}
-
-public function terimaAmbulans($noAmbulans)
-{
-    if (!session()->has('jwt_token')) {
-        return $this->renderErrorView(401);
-    }
-
-    $token = session()->get('jwt_token');
-    $url = $this->api_url . '/ambulans/terima/' . $noAmbulans;
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $token,
-        'Accept: application/json',
-    ]);
-
-    $response = curl_exec($ch);
-    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($http_status === 200) {
-        return redirect()->to(base_url('ambulans'))->with('success', 'Ambulans telah diterima.');
-    } else {
-        return $this->renderErrorView($http_status);
-    }
-}
-
 }
