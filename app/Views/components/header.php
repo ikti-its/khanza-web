@@ -729,7 +729,7 @@
                 <?php } ?>
                 </li>
                 <?php if (in_array($role, $petugasrole)) { ?>
-                <li class="hs-accordion" id="users-accordion">
+                <!-- <li class="hs-accordion" id="users-accordion">
                     <button type="button" class="hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     <svg class="h-8 w-8 text-slate-950"  width="23" height="23" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <rect x="4" y="4" width="16" height="16" rx="2" />  <path d="M4 13h3l3 3h4l3 -3h3" /></svg>
                         Stok Obat Pasien
@@ -758,7 +758,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                </li>
+                </li> -->
                 <?php } ?>
                 <?php if (in_array($role, $petugasrole)) { ?>
                     <li>

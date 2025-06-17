@@ -109,52 +109,113 @@ class PemberianObatController extends BaseController
 
 public function submitTambahPemberianObat()
 {
-    if (session()->has('jwt_token')) {
-        $token = session()->get('jwt_token');
-
-        $postData = [
-            'tanggal_beri'   => $this->request->getPost('tanggal_beri') ?? date('Y-m-d'),
-            'jam_beri'       => $this->request->getPost('jam_beri') ?? date('H:i:s'),
-            'nomor_rawat'    => $this->request->getPost('nomor_rawat'),
-            'nama_pasien'    => $this->request->getPost('nama_pasien'),
-            'kode_obat'      => $this->request->getPost('kode_obat'),
-            'nama_obat'      => $this->request->getPost('nama_obat'),
-            'embalase'       => $this->request->getPost('embalase'),
-            'tuslah'         => $this->request->getPost('tuslah'),
-            'jumlah'         => $this->request->getPost('jumlah'),
-            'biaya_obat'     => floatval($this->request->getPost('biaya_obat')),
-            'total'          => floatval($this->request->getPost('total')),
-            'gudang'         => $this->request->getPost('gudang'),
-            'no_batch'       => $this->request->getPost('no_batch'),
-            'no_faktur'      => $this->request->getPost('no_faktur'),
-        ];
-
-        $url = $this->api_url . '/pemberian-obat';
-        $payload = json_encode($postData);
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($payload),
-            'Authorization: Bearer ' . $token,
-        ]);
-
-        $response = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($status === 201 || $status === 200) {
-            return redirect()->to(base_url('pemberianobat/' . $postData['nomor_rawat']));
-        } else {
-            return $this->renderErrorView($status);
-        }
-    } else {
+    if (!session()->has('jwt_token')) {
         return $this->renderErrorView(401);
     }
+
+    $token = session()->get('jwt_token');
+    $kode_obat = $this->request->getPost('kode_obat');
+    $jumlah = floatval($this->request->getPost('jumlah'));
+
+    // Step 1: Get current stok from gudang
+    $getUrl = $this->api_url . '/gudang-barang/' . $kode_obat;
+
+    $ch = curl_init($getUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $getResponse = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($status !== 200) {
+        return $this->renderErrorView($status);
+    }
+
+    $gudangData = json_decode($getResponse, true)['data'] ?? null;
+    if (!$gudangData) {
+        return $this->renderErrorView(500);
+    }
+// dd($gudangData);
+    // Step 2: Update stok
+    $newStok = floatval($gudangData['stok']) - $jumlah;
+    if ($newStok < 0) $newStok = 0;
+
+    $putData = [
+        'id_barang_medis' => $gudangData['id_barang_medis'],
+        'id_ruangan'      => $gudangData['id_ruangan'],
+        'stok'            => $newStok,
+        'no_batch'        => $gudangData['no_batch'],
+        'no_faktur'       => $gudangData['no_faktur'],
+    ];
+
+
+
+    $putUrl = $this->api_url . '/gudang-barang/' . $gudangData['id'];;
+    $putPayload = json_encode($putData);
+// dd($putUrl);
+    $ch = curl_init($putUrl);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $putPayload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($putPayload),
+        'Authorization: Bearer ' . $token,
+    ]);
+    
+    $putResponse = curl_exec($ch);
+    $putStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+log_message('error', "PUT Response: " . $putResponse);
+log_message('error', "PUT Status: " . $putStatus);
+    if ($putStatus !== 200) {
+        return $this->renderErrorView($putStatus);
+    }
+
+    // Step 3: Submit pemberian obat
+    $postData = [
+        'tanggal_beri'   => $this->request->getPost('tanggal_beri') ?? date('Y-m-d'),
+        'jam_beri'       => $this->request->getPost('jam_beri') ?? date('H:i:s'),
+        'nomor_rawat'    => $this->request->getPost('nomor_rawat'),
+        'nama_pasien'    => $this->request->getPost('nama_pasien'),
+        'kode_obat'      => $kode_obat,
+        'nama_obat'      => $this->request->getPost('nama_obat'),
+        'embalase'       => $this->request->getPost('embalase'),
+        'tuslah'         => $this->request->getPost('tuslah'),
+        'jumlah'         => $this->request->getPost('jumlah'),
+        'biaya_obat'     => floatval($this->request->getPost('biaya_obat')),
+        'total'          => floatval($this->request->getPost('total')),
+        'gudang'         => $this->request->getPost('gudang'),
+        'no_batch'       => $this->request->getPost('no_batch'),
+        'no_faktur'      => $this->request->getPost('no_faktur'),
+    ];
+
+    $url = $this->api_url . '/pemberian-obat';
+    $payload = json_encode($postData);
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($payload),
+        'Authorization: Bearer ' . $token,
+    ]);
+    $response = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($status === 200 || $status === 201) {
+        return redirect()->to(base_url('pemberianobat/' . $postData['nomor_rawat']));
+    } else {
+        return $this->renderErrorView($status);
+    }
 }
+
 
 public function editPemberianObat($nomorRawat, $jamBeri)
 {
