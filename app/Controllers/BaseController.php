@@ -76,44 +76,50 @@ abstract class BaseController extends Controller
     {
         return $this->breadcrumbs;
     }
-    protected function fetchData($url, $token, &$status_codes, $data = null, $method = "GET")
+    protected function fetchDataUsingCurl($method, $url, $data = null, )
     {
-        $ch = curl_init($url);
+        $allowed_methods = ['GET', 'POST', 'PUT', 'DELETE'];
+        if(!in_array($method, $allowed_methods)){
+            return $this->renderErrorView(405);
+        }
+
+        if (!session()->has('jwt_token')) {
+            return $this->renderErrorView(401);
+        }
+        $token = session()->get('jwt_token');
+        
+        $full_url = $this->api_url . $url;
+        $ch = curl_init($full_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $token,
         ]);
 
+        if($method === 'POST' || $method === 'PUT'){
+            $postData = json_encode($data);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($postData)
+            ]);
+        }
+
         if ($method === 'POST') {
-            $postData = json_encode($data);
             curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-            // Set Content-Type and Content-Length for POST
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($postData)
-            ]);
         } elseif ($method === 'PUT') {
-            $postData = json_encode($data);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-            // Set Content-Type and Content-Length for PUT
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($postData)
-            ]);
         } elseif ($method === 'DELETE') {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
         }
 
-        $response = curl_exec($ch);
+        $response         = curl_exec($ch);
         $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        // Menyimpan status code untuk URL tertentu
-        $status_codes[$url] = $http_status_code;
-
-        return ['response' => $response];
+        return [
+            'response'         => $response,
+            'http_status_code' => $http_status_code,
+        ];
     }
 
     protected function renderErrorView($status_code, $custom_message = null)
@@ -145,6 +151,11 @@ abstract class BaseController extends Controller
                 $data['title'] = 'Not Found';
                 $data['errorTitle'] = 'Halaman tidak ditemukan';
                 $data['message'] = $custom_message ?? 'Kami tidak dapat menemukan halaman yang Anda cari. Periksa URL atau kembali ke halaman utama';
+                break;
+            case 405:
+                $data['title'] = 'Method Not Allowed ';
+                $data['errorTitle'] = 'Method HTTP yang Anda gunakan tidak tersedia';
+                $data['message'] = $custom_message ?? 'Kami tidak menyediakan method HTTP tersebut. Periksa kembali URL dan method http Anda';
                 break;
             case 500:
                 $data['title'] = 'Internal Server Error';
