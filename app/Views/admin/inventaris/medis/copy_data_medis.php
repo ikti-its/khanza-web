@@ -286,13 +286,13 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/data_tambah_button', [
+                            <?= view('components/tambah_button', [
                                 'link' => '/datamedis/tambah'
                             ]) ?>
 
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
+                    <?= view('components/search_bar') ?>
 
                     <!-- End Header -->
 
@@ -301,7 +301,7 @@
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <?php 
                             $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel_colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'Nama',
@@ -309,7 +309,7 @@
                                 'Stok',
                                 'Aksi'
                             ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                            echo view('components/tabel_thead',['kolom' => $columns]);
                         ?>    
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -627,7 +627,7 @@
                                             'jenis' => 'status',
                                             'stok'  => 'jumlah',
                                         ];
-                                        echo view('components/data_tabel_td', [
+                                        echo view('components/tabel_td', [
                                             'tabel'  => $tabel,
                                             'row_id' => $row_id,
                                             'data'   => $data
@@ -639,15 +639,15 @@
                                             <?php
                                                 $row_id  = $medis['id'];
                                                 $api_url = '/datamedis';
-                                                echo view('components/data_lihat_detail',[
+                                                echo view('components/aksi_detail',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/data_ubah',[
+                                                echo view('components/aksi_ubah',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/data_hapus',[
+                                                echo view('components/aksi_hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]); 

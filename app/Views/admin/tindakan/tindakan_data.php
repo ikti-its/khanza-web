@@ -86,28 +86,46 @@
                             <?php endif; ?>
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
-
+                    
                     <!-- End Header -->
-
+                    <?php
+                        echo view('components/search_bar');
+                        
+                        $api_url  = '/tindakan';
+                        $tabel    = $tindakan_data;
+                        $kolom_id = 'nomor_rawat';
+                        $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => false,
+                        ];
+                        $data = [
+                            // [visible, Display, Kolom, Jenis]
+                            [1, 'Tindakan', 'tindakan'     , 'teks'],
+                            [1, 'Dokter'  , 'nama_dokter'  , 'nama'],
+                            [1, 'Petugas' , 'nama_petugas' , 'nama'],
+                            [1, 'Tanggal' , 'tanggal_rawat', 'tanggal'],
+                            [1, 'Jam'     , 'jam_rawat'    , 'jam'],
+                            [1, 'Biaya'   , 'biaya'        , 'uang'],
+                        ];
+                        echo view('components/tabel', [
+                            'api_url'   => $api_url,
+                            'tabel'     => $tabel,
+                            'kolom_id'  => $kolom_id,
+                            'data'      => $data,
+                            'aksi'      => $aksi
+                        ]);
+                        
+                        echo view('components/footer', [
+                            'meta_data' => $meta_data,
+                            'api_url'   => $api_url
+                        ]);      
+                    ?>
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
-                            
-                            $columns = [
-                                'Tindakan',
-                                'Dokter',
-                                'Petugas',
-                                'Tanggal',
-                                'Jam',
-                                'Biaya',
-                                'Aksi'
-                            ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
-                        ?>
                         
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                         <?php 
@@ -129,91 +147,40 @@
                                 </tr>
                             </tfoot>
 
-                        <?php
-                            $namaTindakanMap = [];
-                            foreach ($jenis_tindakan as $jt) {
-                                $namaTindakanMap[$jt['kode']] = $jt['nama_tindakan'];
-                            }
-                        ?>                       
-                            <?php if (!empty($tindakan_data)): ?>
+                            <?php
+                                $namaTindakanMap = [];
+                                foreach ($jenis_tindakan as $jt) {
+                                    $namaTindakanMap[$jt['kode']] = $jt['nama_tindakan'];
+                                }
+                            ?>                       
+                                
+                            </tbody>
                             <?php foreach ($tindakan_data as $i => $tindakan) : ?>
-                                <tr>
-                                    <?php
-                                        $tabel  = $tindakan;
-                                        $row_id = 'tindakan';
-                                        $data   = [
-                                            'tindakan'      => 'teks',
-                                            'nama_dokter'   => 'nama',
-                                            'nama_petugas'  => 'nama',
-                                            'tanggal_rawat' => 'tanggal',
-                                            'jam_rawat'     => 'jam',
-                                            'biaya'         => 'uang'
-                                        ];
-                                        echo view('components/data_tabel_td', [
-                                            'tabel'  => $tabel,
-                                            'row_id' => $row_id,
-                                            'data'   => $data
-                                        ]);
-                                    ?>
-                                    
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <?php
-                                                $row_id  = $tindakan['nomor_rawat'] . '-' . $i;
-                                                $api_url = '/tindakan';
-                                                echo view('components/data_lihat_detail',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_ubah',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                // echo view('components/data_hapus',[
-                                                //     'row_id'  => $row_id,
-                                                //     'api_url' => $api_url   
-                                                // ]); 
-                                            ?>  
+                                <div id="hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
+                                    <div class="mt-20 mx-auto w-full max-w-lg p-6 bg-white dark:bg-neutral-800 rounded shadow">
+                                        <div class="flex justify-between items-center border-b pb-2">
+                                            <h3 class="text-lg font-bold"><?= $tindakan['nama_pasien'] ?></h3>
+                                            <button data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>" class="text-gray-600 dark:text-white hover:text-red-600">
+                                                &times;
+                                            </button>
                                         </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                            <?php else: ?>
-                            <tr>
-                                <td colspan="6" class="text-center">Tidak ada tindakan untuk nomor rawat ini.</td>
-                            </tr>
-                        <?php endif; ?>
-                        </tbody>
-                        <?php foreach ($tindakan_data as $i => $tindakan) : ?>
-                            <div id="hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
-                                <div class="mt-20 mx-auto w-full max-w-lg p-6 bg-white dark:bg-neutral-800 rounded shadow">
-                                    <div class="flex justify-between items-center border-b pb-2">
-                                        <h3 class="text-lg font-bold"><?= $tindakan['nama_pasien'] ?></h3>
-                                        <button data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>" class="text-gray-600 dark:text-white hover:text-red-600">
-                                            &times;
-                                        </button>
-                                    </div>
-                                    <div class="mt-4 space-y-3">
-                                        <div><strong>Nomor Rawat:</strong> <?= $tindakan['nomor_rawat'] ?></div>
-                                        <div><strong>Nomor RM:</strong> <?= $tindakan['nomor_rm'] ?></div>
-                                        <div><strong>Dokter:</strong> <?= $tindakan['nama_dokter'] ?? 'N/A' ?></div>
-                                        <div><strong>Tanggal:</strong> <?= $tindakan['tanggal_rawat'] ?></div>
-                                        <div><strong>Jam:</strong> <?= $tindakan['jam_rawat'] ?></div>
-                                    </div>
-                                    <div class="mt-6 text-end">
-                                        <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>">Tutup</button>
+                                        <div class="mt-4 space-y-3">
+                                            <div><strong>Nomor Rawat:</strong> <?= $tindakan['nomor_rawat'] ?></div>
+                                            <div><strong>Nomor RM:</strong> <?= $tindakan['nomor_rm'] ?></div>
+                                            <div><strong>Dokter:</strong> <?= $tindakan['nama_dokter'] ?? 'N/A' ?></div>
+                                            <div><strong>Tanggal:</strong> <?= $tindakan['tanggal_rawat'] ?></div>
+                                            <div><strong>Jam:</strong> <?= $tindakan['jam_rawat'] ?></div>
+                                        </div>
+                                        <div class="mt-6 text-end">
+                                            <button class="text-sm text-gray-700 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tindakan['nomor_rawat'] . '-' . $i ?>">Tutup</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </table>
+                            <?php endforeach; ?>
+                        </table>
                     </div>
 
                     <!-- End Table -->
-                    <?= view('components/data_footer.php', [
-                        'meta_data' => $meta_data,
-                        'api_url'   => $api_url
-                    ]) ?>
                 </div>
             </div>
         </div>

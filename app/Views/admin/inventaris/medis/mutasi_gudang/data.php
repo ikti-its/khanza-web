@@ -53,7 +53,7 @@
                     <table id="myTable" class="overflow-x-auto min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <?php 
                             $widths  = [12, 16, 13, 13, 11, 11, 11];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel_colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'Tanggal',
@@ -64,7 +64,7 @@
                                 'Harga',
                                 'Aksi'
                             ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
+                            echo view('components/tabel_thead',['kolom' => $columns]);
                         ?>    
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -211,11 +211,11 @@
                                             <?php
                                                 $row_id  = $mutasi['id'];
                                                 $api_url = '/mutasimedis';
-                                                echo view('components/data_ubah',[
+                                                echo view('components/aksi_ubah',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/data_hapus',[
+                                                echo view('components/aksi_hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]); 

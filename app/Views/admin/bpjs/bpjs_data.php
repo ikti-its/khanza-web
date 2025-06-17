@@ -131,36 +131,41 @@
                     </div>
 
                     <!-- End Header -->
-
-                    <!-- Table -->
-                    <div class="overflow-x-auto w-full">                       
-                        <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
-                            
-                            $columns = [
-                                'Nomor Program',
-                                'Nama Program',
-                                'Penyelenggara',
-                                'Tarif (%)',
-                                'Batas Bawah (Rp)',
-                                'Batas Atas (Rp)'
-                            ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
-                        ?>
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            
-                        </table>
-                    </div>
-
-                    <!-- End Table -->
-                    
-                    <?= view('components/data_footer.php', [
-                        'meta_data' => $meta_data,
-                        'api_url'   => '/bpjs'
-                    ]) ?>
-                
+                    <?php
+                        echo view('components/search_bar');
+                        
+                        $api_url  = '/bpjs';
+                        $tabel    = $bpjs_data;
+                        $kolom_id = 'no_bpjs';
+                        $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true
+                        ];
+                        $data = [
+                            // [visible, Display, Kolom, Jenis]
+                            [1, 'Nomor Program' , 'no_bpjs'       , 'indeks'],
+                            [1, 'Nama Program'  , 'nama_program'  , 'nama'],
+                            [1, 'Penyelenggara' , 'penyelenggara' , 'status'],
+                            [1, 'Tarif(%)'      , 'tarif'         , 'jumlah'],
+                            [1, 'Batas Bawah'   , 'batas_bawah'   , 'uang'],
+                            [1, 'Batas Atas'    , 'batas_atas'    , 'uang']
+                        ];
+                        echo view('components/tabel', [
+                            'api_url'   => $api_url,
+                            'tabel'     => $tabel,
+                            'kolom_id'  => $kolom_id,
+                            'data'      => $data,
+                            'aksi'      => $aksi
+                        ]);
+                        
+                        echo view('components/footer', [
+                            'meta_data' => $meta_data,
+                            'api_url'   => $api_url
+                        ]);      
+                    ?>
                 </div>
             </div>
         </div>

@@ -19,160 +19,70 @@
 
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
-                            <!-- <?= view('components/data_tambah_button', [
+                            <!-- <?= view('components/tambah_button', [
                                 'link' => '/rawatinap/tambah'
                             ]) ?> -->
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
-
                     <!-- End Header -->
-
+                    <?php
+                        echo view('components/search_bar');
+                        
+                        $api_url  = '/rawatinap';
+                        $tabel    = $rawatinap_data;
+                        $kolom_id = 'nomor_rawat';
+                        $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => true,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true,
+                        ];
+                        $data = [
+                            // [visible, Display, Kolom, Jenis]
+                            [1, 'Nomor Rawat'      , 'nomor_rawat'   , 'indeks'],
+                            [0, 'Nomor Rekam Medis', 'nomor_rm'      , 'indeks'],
+                            [1, 'Nama Pasien'      , 'nama_pasien'   , 'nama'],
+                            [0, 'Alamat Pasien'    , 'alamat_pasien' , 'teks'],
+                            [0, 'Penanggung Jawab' , 'penanggung_jawab'   , 'nama'],
+                            [0, 'Hubungan Penanggung Jawab', 'hubungan_pj', 'teks'],
+                            [0, 'Jenis Bayar'      , 'jenis_bayar'   , 'status'],
+                            [0, 'Kamar'            , 'kamar'         , 'teks'],
+                            [0, 'Tarif Kamar'      , 'tarif_kamar'   , 'uang'],
+                            [1, 'Diagnosa Awal'    , 'diagnosa_awal' , 'teks'],
+                            [0, 'Diagnosa Akhir'   , 'diagnosa_akhir','teks'],
+                            [0, 'Tanggal Masuk'    , 'tanggal_masuk' , 'tanggal'],
+                            [0, 'Jam Masuk'        , 'jam_masuk'     , 'jam'],
+                            [0, 'Tanggal Keluar'   , 'tanggal_keluar', 'tanggal'],
+                            [0, 'Jam Keluar'       , 'jam_keluar'    , 'jam'],
+                            [0, 'Total Biaya'      , 'total_biaya'   , 'uang'],
+                            [0, 'Status Pulang'    , 'status_pulang' , 'status'],
+                            [0, 'Lama'             , 'lama_ranap'    , 'teks'],
+                            [1, 'Dokter'           , 'dokter_pj'     , 'indeks'],
+                            [0, 'Status Bayar'     , 'status_bayar'  , 'status']
+                            
+                        ];
+                        echo view('components/tabel', [
+                            'api_url'   => $api_url,
+                            'tabel'     => $tabel,
+                            'kolom_id'  => $kolom_id,
+                            'data'      => $data,
+                            'aksi'      => $aksi
+                        ]);
+                        
+                        echo view('components/footer', [
+                            'meta_data' => $meta_data,
+                            'api_url'   => $api_url
+                        ]);      
+                    ?>
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
-                            
-                            $columns = [
-                                'No. Rawat',
-                                'Nama',
-                                'Kamar',
-                                'Diagnosa',
-                                'Dokter',
-                                'Aksi'
-                            ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
-                        ?>
+                       
                         
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($rawatinap_data as $rawatinap) : ?>
-                                <div id="hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
-                                    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
-                                        <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
-                                            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
-                                                <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $rawatinap['nama_pasien'] ?>
-                                                </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>">
-                                                    <span class="sr-only">Close</span>
-                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M18 6 6 18"></path>
-                                                        <path d="m6 6 12 12"></path>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            <div class="p-4">
-                                                <div class="space-y-4">
-                                                <div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Pasien</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Alamat Pasien</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['alamat_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['penanggung_jawab'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Hubungan Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['hubungan_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Bayar</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['jenis_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kamar</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['kamar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tarif Kamar</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['tarif_kamar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Diagnosa Awal</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['diagnosa_awal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Diagnosa Akhir</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['diagnosa_akhir'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Masuk</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['tanggal_masuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Masuk</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['jam_masuk'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                   <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Keluar</label>
-                                                        <input type="text" name="" 
-                                                            value="<?= ($rawatinap['tanggal_keluar'] === '0001-01-01' || empty($rawatinap['tanggal_keluar'])) ? '-' : $rawatinap['tanggal_keluar'] ?>" 
-                                                            class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Keluar</label>
-                                                        <input type="text" name="" 
-                                                            value="<?= ($rawatinap['jam_keluar'] === '00:00:00' || empty($rawatinap['jam_keluar'])) ? '-' : $rawatinap['jam_keluar'] ?>" 
-                                                            class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Total Biaya</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['total_biaya'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Pulang</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['status_pulang'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Lama</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['lama_ranap'] . ' hari'?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['dokter_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
-                                                        <input type="text" name="" value="<?= $rawatinap['status_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                </div>
-
-                                                </div>
-                                                <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                    <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $rawatinap['nomor_rawat'] ?>">
-                                                        Tutup
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                
                                 <!-- Tindakan Modal -->
                                 <div id="modal-tindakan-<?= $rawatinap['nomor_rawat'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                 <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
@@ -451,22 +361,7 @@
                                 </div>
 
                                 <tr>
-                                    <?php
-                                        $tabel  = $rawatinap;
-                                        $row_id = 'nomor_rawat';
-                                        $data   = [
-                                            'nomor_rawat'   => 'indeks',
-                                            'nama_pasien'   => 'nama',
-                                            'kamar'         => 'teks',
-                                            'diagnosa_awal' => 'teks',
-                                            'dokter_pj'     => 'nama'
-                                        ];
-                                        echo view('components/data_tabel_td', [
-                                            'tabel'  => $tabel,
-                                            'row_id' => $row_id,
-                                            'data'   => $data
-                                        ]);
-                                    ?>
+                                    
                                     
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
@@ -474,25 +369,6 @@
                                             <button type="button" class="gap-x-1 text-sm decoration-2 hover:underline font-semibold ..." data-hs-overlay="#modal-tindakan-<?= $rawatinap['nomor_rawat'] ?>">
                                                 Tindakan
                                             </button>
-
-                                            </div>
-                                            <?php
-                                                $row_id  = $rawatinap['nomor_rawat'];
-                                                $api_url = '/rawatinap';
-                                                echo view('components/data_lihat_detail',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_ubah',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_hapus',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]); 
-                                            ?>
-                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -501,10 +377,6 @@
                     </div>
 
                     <!-- End Table -->
-                    <?= view('components/data_footer.php', [
-                        'meta_data' => $meta_data,
-                        'api_url'   => $api_url
-                    ]) ?>
                 </div>
             </div>
         </div>

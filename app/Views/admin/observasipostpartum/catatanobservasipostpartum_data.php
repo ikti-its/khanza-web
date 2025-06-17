@@ -63,191 +63,63 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/data_tambah_button', [
+                            <?= view('components/tambah_button', [
                                 'link' => '/catatanobservasipostpartum/tambah'
                             ]) ?>
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
-
                     <!-- End Header -->
+                    <?php
+                        echo view('components/search_bar');
+                        
+                        $api_url  = '/catatanobservasipostpartum';
+                        $tabel    = $catatan_data;
+                        $kolom_id = 'no_rawat';
+                        $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true
+                        ];
+                        $data = [
+                            // [visible, Display, Kolom, Jenis]
+                            [1, 'Nomor Rawat'      , 'no_rawat'     , 'indeks'],
+                            [1, 'Nama Pasien'      , 'nama_pasien'  , 'nama'  ],
+                            [1, 'Umur'             , 'umur'         , 'jumlah'],
+                            [1, 'Jenis Kelamin'    , 'jenis_kelamin', 'status'], 
+                            // [1, 'Tanggal Observasi', 'tanggal'      , 'tanggal'],
+                            // [0, 'Jam Observasi'    , 'jam'          , 'jam'   ],
+                            [0, 'GCS (E, V, M)'    , 'gcs'          , 'jumlah'],
+                            [0, 'TD (mmHG)'        , 'td'           , ],
+                            [0, 'HR (x/menit)'     , 'hr'           , ],
+                            [0, 'RR (x/menit)'     , 'rr'           , ],
+                            [0, 'Suhu (C)'         , 'suhu'         , ],
+                            [0, 'SpO2(%)'          , 'spo2'         , ],
+                            [0, 'TFU'              , 'tfu'          , ],
+                            [0, 'Kontraksi/HIS'    , 'kontraksi'    , ],
+                            [0, 'Perdarahan'       , 'perdarahan'   , ],
+                            [0, 'Keterangan'       , 'keterangan'   , ], 
+                            // [0, 'BJJ'              , 'bjj'          , ],
+                            // [0, 'PPV'              , 'ppv'          , ],
+                            // [0, 'VT'               , 'vt'           , ],
+                            [0, 'NIP'              , 'nip'          , ],
+                            [0, 'Nama Petugas'     , 'nama_petugas' , ],
 
-                    <!-- Table -->
-                    <div class="overflow-x-auto w-full">                       
-                    <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
-                            
-                            $columns = [
-                               'Nomor Rawat',
-                               'Nomor RM',
-                               'Nama Pasien',
-                               'Umur',
-                               'Jenis Kelamin',
-                               'Tanggal Observasi',
-                               'Aksi'
-                            ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
-                        ?>
-                       
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <?php foreach ($catatan_data as $catatan) : ?>
-                                <div id="hs-vertically-centered-scrollable-modal-<?= $catatan['no_rawat'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
-                                    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
-                                        <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
-                                            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
-                                                <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $catatan['no_rawat'] ?>
-                                                </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $catatan['no_rawat'] ?>">
-                                                    <span class="sr-only">Close</span>
-                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M18 6 6 18"></path>
-                                                        <path d="m6 6 12 12"></path>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            <div class="p-4">
-                                                <div class="space-y-4">
-                                                <div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                                        <input type="text" name="" value="<?= $catatan['no_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Pasien</label>
-                                                        <input type="text" name="" value="<?= $catatan['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Umur</label>
-                                                        <input type="text" name="" value="<?= $catatan['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Kelamin</label>
-                                                        <input type="text" name="" value="<?= $catatan['jenis_kelamin'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">GCS (E,V,M)</label>
-                                                        <input type="text" name="" value="<?= $catatan['gcs'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">TD (mmHg)</label>
-                                                        <input type="text" name="" value="<?= $catatan['td'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">HR (x/menit)</label>
-                                                        <input type="text" name="" value="<?= $catatan['hr'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">RR (x/menit)</label>
-                                                        <input type="text" name="" value="<?= $catatan['rr'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Suhu (C)</label>
-                                                        <input type="text" name="" value="<?= $catatan['suhu'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">SpO2(%)</label>
-                                                        <input type="text" name="" value="<?= $catatan['spo2'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">TFU</label>
-                                                        <input type="text" name="" value="<?= $catatan['tfu'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Kontraksi</label>
-                                                        <input type="text" name="" value="<?= $catatan['kontraksi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Perdarahan</label>
-                                                        <input type="text" name="" value="<?= $catatan['perdarahan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Keterangan</label>
-                                                        <input type="text" name="" value="<?= $catatan['keterangan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">NIP</label>
-                                                        <input type="text" name="" value="<?= $catatan['nip'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama Petugas</label>
-                                                        <input type="text" name="" value="<?= $catatan['nama_petugas'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                </div>
-
-                                                </div>
-                                                <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
-                                                    <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $catatan['no_rawat'] ?>">
-                                                        Tutup
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <tr>
-                                    <?php
-                                        $tabel  = $catatan;
-                                        $row_id = 'no_rawat';
-                                        $data   = [
-                                            'no_rawat'      => 'indeks',
-                                            'nomor_rm'      => 'indeks',
-                                            'nama_pasien'   => 'nama',
-                                            'umur'          => 'jumlah',
-                                            'jenis_kelamin' => 'status',
-                                            'tgl_perawatan' => 'tanggal'
-                                        ];
-                                        echo view('components/data_tabel_td', [
-                                            'tabel'  => $tabel,
-                                            'row_id' => $row_id,
-                                            'data'   => $data
-                                        ]);
-                                    ?>
-                                    
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <?php
-                                                $row_id  = $catatan['no_rawat'];
-                                                $api_url = '/catatanobservasipostpartum';
-                                                echo view('components/data_lihat_detail',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_ubah',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_hapus',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]); 
-                                            ?>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                    </div>
-
-                    <!-- End Table -->
-                    <?= view('components/data_footer.php', [
-                        'meta_data' => $meta_data,
-                        'api_url'   => $api_url
-                    ]) ?>
+                        ];
+                        echo view('components/tabel', [
+                            'api_url'   => $api_url,
+                            'tabel'     => $tabel,
+                            'kolom_id'  => $kolom_id,
+                            'data'      => $data,
+                            'aksi'      => $aksi
+                        ]);
+                        
+                        echo view('components/footer', [
+                            'meta_data' => $meta_data,
+                            'api_url'   => $api_url
+                        ]);      
+                    ?>
                 </div>
             </div>
         </div>

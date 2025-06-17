@@ -25,110 +25,48 @@
                                 <?= view('components/notif_icon') ?>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/data_tambah_button', [
+                            <?= view('components/tambah_button', [
                                 'link' => '/pasien/tambah'
                             ]) ?>
 
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
-
                     <!-- End Header -->
+                    <?php
+                        echo view('components/search_bar');
+                        
+                        $api_url  = '/pasien';
+                        $tabel    = $pasien_data;
+                        $kolom_id = 'no_rkm_medis';
+                        $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => false,
+                            'ubah'     => false,
+                            'hapus'    => false,
+                        ];
+                        $data = [
+                            // [visible, Display, Kolom, Jenis]
+                            [1, 'Nomor RM'      , 'no_rkm_medis', 'indeks'],
+                            [1, 'Nama Pasien'   , 'nm_pasien'   , 'nama'],
+                            [1, 'Umur'          , 'umur'        , 'jumlah'],
+                            [1, 'Jenis Kelamin' , 'jk'          , 'status'],
+                            [1, 'Tanggal Daftar', 'tgl_daftar'  , 'tanggal'],
 
-                    <!-- Table -->
-                    <div class="overflow-x-auto w-full">                       
-                    <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
-                            
-                            $columns = [
-                               'Nomor RM',
-                               'Nama Pasien',
-                               'Umur',
-                               'Jenis Kelamin',
-                                'Tanggal Daftar',
-                               'Aksi'
-                            ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
-                        ?>
-
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <?php foreach ($pasien_data as $pasien) : ?>
-                                <div id="hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
-                                    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
-                                        <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
-                                            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
-                                                <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $pasien['no_rkm_medis'] ?>
-                                                </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $pasien['no_rkm_medis'] ?>">
-                                                    <span class="sr-only">Close</span>
-                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M18 6 6 18"></path>
-                                                        <path d="m6 6 12 12"></path>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <tr>
-                                    <?php
-                                        $tabel  = $pasien;
-                                        $row_id = 'no_rkm_medis';
-                                        $data   = [
-                                            'no_rkm_medis' => 'indeks',
-                                            'nm_pasien'    => 'nama',
-                                            'umur'         => 'jumlah',
-                                            'jk'           => 'status',
-                                            'tgl_daftar'   => 'tanggal'
-                                        ];
-                                        echo view('components/data_tabel_td', [
-                                            'tabel'  => $tabel,
-                                            'row_id' => $row_id,
-                                            'data'   => $data
-                                        ]);
-                                    ?>
-                                    
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <div class="px-3 py-1.5">
-                                                <a
-                                                    href="pasien/rekam-medis/<?= $pasien['no_rkm_medis'] ?>"
-                                                    class="gap-x-1 text-sm decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                                                    Lihat Detail
-                                                </a>
-                                            </div>
-                                            <?php
-                                                $row_id  = $pasien['no_rkm_medis'];
-                                                $api_url = '/pasien';
-                                                // echo view('components/data_lihat_detail',[
-                                                //     'row_id'  => $row_id,
-                                                //     'api_url' => $api_url   
-                                                // ]);
-                                                // echo view('components/data_ubah',[
-                                                //     'row_id'  => $row_id,
-                                                //     'api_url' => $api_url   
-                                                // ]);
-                                                // echo view('components/data_hapus',[
-                                                //     'row_id'  => $row_id,
-                                                //     'api_url' => $api_url   
-                                                // ]); 
-                                            ?>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                    </div>
-
-                    <!-- End Table -->
-                    <?= view('components/data_footer.php', [
-                        'meta_data' => $meta_data,
-                        'api_url'   => $api_url
-                    ]) ?>
+                        ];
+                        echo view('components/tabel', [
+                            'api_url'   => $api_url,
+                            'tabel'     => $tabel,
+                            'kolom_id'  => $kolom_id,
+                            'data'      => $data,
+                            'aksi'      => $aksi
+                        ]);
+                        
+                        echo view('components/footer', [
+                            'meta_data' => $meta_data,
+                            'api_url'   => $api_url
+                        ]);      
+                    ?>
                 </div>
             </div>
         </div>

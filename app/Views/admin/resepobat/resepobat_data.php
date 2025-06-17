@@ -82,119 +82,63 @@
                             <?php endif; ?>
                         </div>
                     </div>
-                    <?= view('components/data_search_bar') ?>
 
                     <!-- End Header -->
+                    <?php
+                        echo view('components/search_bar');
+                        
+                        $api_url  = '/resepobat';
+                        $tabel    = $resepobat_data;
+                        $kolom_id = 'no_resep';
+                        $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => false,
+                            'hapus'    => true,
+                        ];
+                        $data = [
+                            // [visible, Display, Kolom, Jenis]
+                            [1, 'Nomor Resep'   , 'no_resep'     , 'indeks'],
+                            [1, 'Tanggal Resep' , 'tgl_peresepan', 'tanggal'],
+                            [0, 'Jam Peresepan' , 'jam_peresepan', 'jam'],
+                            [1, 'Nomor Rawat'   , 'no_rawat'     , 'indeks'],
+                            // [0, 'Nomor RM'      , 'nomor_rm'     , 'indeks'],
+                            // [0, 'Pasien'        , 'nama_pasien'  , 'nama'],
+                            [1, 'Dokter Peresep', 'kd_dokter'    , 'indeks'],
+                            [1, 'Status'        , 'status'       , 'status'],
+                            [0, 'Tanggal Validasi'  , 'tgl_perawatan' , 'tanggal'],
+                            [0, 'Jam Validasi'      , 'jam'           , 'jam'],
+                            [0, 'Tanggal Penyerahan', 'tgl_penyerahan', 'tanggal'],
+                            [0, 'Jam Penyerahan'    , 'jam_penyerahan', 'jam']
+                        ];
+                        echo view('components/tabel', [
+                            'api_url'   => $api_url,
+                            'tabel'     => $tabel,
+                            'kolom_id'  => $kolom_id,
+                            'data'      => $data,
+                            'aksi'      => $aksi
+                        ]);
+                        
+                        echo view('components/footer', [
+                            'meta_data' => $meta_data,
+                            'api_url'   => $api_url
+                        ]);      
+                    ?>
 
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/data_tabel_colgroup',['widths' => $widths]);
                             
-                            $columns = [
-                                'Nomor Resep',
-                                'Tanggal Resep',
-                                'Nomor Rawat',
-                                'Dokter Peresep',
-                                'Status',
-                                'Aksi'
-                            ];
-                            echo view('components/data_tabel_thead',['columns' => $columns]);
-                        ?>
-                        
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     
                             <?php foreach ($resepobat_data as $i => $resepobat) : ?>
                                 <div id="hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
-                                        <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
-                                            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
-                                                <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $resepobat['no_resep'] ?>
-                                                </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>">
-                                                    <span class="sr-only">Close</span>
-                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M18 6 6 18"></path>
-                                                        <path d="m6 6 12 12"></path>
-                                                    </svg>
-                                                </button>
-                                            </div>
+                                        <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">   
                                             <div class="p-4">
                                                 <div class="space-y-4">
                                                 <div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Resep</label>
-                                                        <input type="text" name="" value="<?= $resepobat['no_resep'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Resep</label>
-                                                        <input type="text" name="" value="<?= $resepobat['tgl_peresepan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Peresepan</label>
-                                                        <input type="text" name="" value="<?= $resepobat['jam_peresepan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                                        <input type="text" name="" value="<?= $resepobat['no_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
-                                                        <input type="text" name="" value="<?= $resepobat['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Pasien</label>
-                                                        <input type="text" name="" value="<?= $resepobat['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter Peresep</label>
-                                                        <input type="text" name="" value="<?= $resepobat['kd_dokter'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status</label>
-                                                        <input type="text" name="" value="<?= $resepobat['status'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <!-- <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Poli/Unit</label>
-                                                        <input type="text" name="" value="<?= $resepobat['poli'] ?? '' ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Bayar</label>
-                                                        <input type="text" name="" value="<?= $resepobat['jenis_bayar'] ?? ''  ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div> -->
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Validasi</label>
-                                                        <input type="text" name="" value="<?= $resepobat['tgl_perawatan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Validasi</label>
-                                                        <input type="text" name="" value="<?= $resepobat['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal Penyerahan</label>
-                                                        <input type="text" name="" value="<?= $resepobat['tgl_penyerahan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam Penyerahan</label>
-                                                        <input type="text" name="" value="<?= $resepobat['jam_penyerahan'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
                                                     <div class="mb-5 sm:block">
                                                         <?php if ($resepobat['validasi']): ?>
                                                             <span class="text-green-600 font-semibold">sudah divalidasi</span>
@@ -244,22 +188,6 @@
                                         }
                                         $resepobat['status'] = $statusText;
                                     ?>
-                                    <?php
-                                        $tabel  = $resepobat;
-                                        $row_id = 'no_resep';
-                                        $data   = [
-                                            'no_resep'      => 'indeks',
-                                            'tgl_peresepan' => 'tanggal',
-                                            'no_rawat'      => 'indeks',
-                                            'kd_dokter'     => 'indeks',
-                                            'status'        => 'status'
-                                        ];
-                                        echo view('components/data_tabel_td', [
-                                            'tabel'  => $tabel,
-                                            'row_id' => $row_id,
-                                            'data'   => $data
-                                        ]);
-                                    ?>
 
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
@@ -279,18 +207,7 @@
                                                     <a href="/resepobat/edit/<?= $resepobat['no_resep'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
                                                 <?php endif; ?> -->
     
-                                                <?php
-                                                    $row_id  = $resepobat['no_resep'] . '-' . $i;
-                                                    $api_url = '/resepobat';
-                                                    echo view('components/data_lihat_detail',[
-                                                        'row_id'  => $row_id,
-                                                        'api_url' => $api_url   
-                                                    ]);
-                                                    echo view('components/data_hapus',[
-                                                        'row_id'  => $row_id,
-                                                        'api_url' => $api_url   
-                                                    ]) 
-                                                ?>
+                                               
                                             <!-- </div> -->
                                         </div>
                                     </td>
@@ -323,10 +240,6 @@
                     </div>
 
                     <!-- End Table -->
-                    <?= view('components/data_footer.php', [
-                        'meta_data' => $meta_data,
-                        'api_url'   => $api_url
-                    ]) ?>
                 </div>
             </div>
         </div>

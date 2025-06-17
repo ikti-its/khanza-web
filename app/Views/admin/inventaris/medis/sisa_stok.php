@@ -20,7 +20,7 @@
 
                     </div>
                     <!-- End Header -->
-                    <?= view('components/data_search_bar') ?>
+                    <?= view('components/search_bar') ?>
 
                     <div id="noDataFound" style="display: none;">Data tidak ditemukan</div>
                     <!-- Table -->

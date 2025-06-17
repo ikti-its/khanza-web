@@ -1,9 +1,9 @@
 <td class="h-px w-64 whitespace-nowrap">
     <div class="px-6 py-3">
         <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" 
-            data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $tabel[$row_id] ?>" 
-            data-id="<?= $tabel[$row_id] ?>">
-            <?= $tabel[$teks] ?>
+            data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $id ?>" 
+            data-id="<?= $id ?>">
+            <?= date('H:i', strtotime($data)) ?>
         </span>
     </div>
 </td>

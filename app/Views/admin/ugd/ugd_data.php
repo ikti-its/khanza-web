@@ -116,20 +116,6 @@
 
                         </div>
                     </div>
-                    <div class="py-4 grid gap-3 md:items-start">
-                        <div class="sm:col-span-1">
-                            <label for="hs-as-table-product-review-search" class="sr-only">Search</label>
-                            <div class="relative">
-                                <input type="text" id="myInput" onkeyup="myFunction()" class="py-2 px-4 ps-11 block border w-full xl:w-96 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
-                                <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
-                                    <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- End Header -->
 
                     <!-- Table -->
@@ -180,6 +166,14 @@
                                     <div class="flex justify-center gap-x-2">
                                         <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
                                             Poliklinik
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="flex justify-center gap-x-2">
+                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
+                                            Dokter
                                         </span>
                                     </div>
                                 </th>
@@ -365,8 +359,8 @@
                                             'nomor_reg'     => 'indeks',
                                             'nomor_rm'      => 'indeks',
                                             'nama_pasien'   => 'nama',
-                                            'poliklinik'    => 'status'
-                                            
+                                            'poliklinik'    => 'status',
+                                            'dokter_dituju' => 'nama'
                                         ];
                                         echo view('components/data_tabel_td', [
                                             'tabel'  => $tabel,
