@@ -119,44 +119,39 @@ abstract class BaseController extends Controller
     protected function renderErrorView($status_code, $custom_message = null)
     {
         $data = [
-            'title' => '',
+            'kode'       => $status_code,
+            'title'      => '',
             'errorTitle' => '',
-            'message' => $custom_message
+            'message'    => $custom_message
         ];
 
         switch ($status_code) {
             case 400:
-                $data['kode'] = $status_code;
                 $data['title'] = 'Bad Request';
                 $data['errorTitle'] = 'Oops! ada kesalahan pada permintaan Anda';
                 $data['message'] = $custom_message ?? 'Permintaan yang anda buat tidak dapat diproses. Pastikan Anda telah memasukkan informasi dengan benar. Coba periksa kembali dan kirim ulang';
                 break;
             case 401:
-                $data['kode'] = $status_code;
                 $data['title'] = 'Unauthorized';
                 $data['errorTitle'] = 'Akses terbatas';
                 $data['message'] = $custom_message ?? 'Anda harus login untuk mengakses halaman ini';
                 break;
             case 403:
-                $data['kode'] = $status_code;
                 $data['title'] = 'Forbidden';
                 $data['errorTitle'] = 'Access ditolak';
                 $data['message'] = $custom_message ?? 'Anda tidak memiliki izin untuk melihat halaman ini. Kalau Anda merasa ini salah, hubungi admin.';
                 break;
             case 404:
-                $data['kode'] = $status_code;
                 $data['title'] = 'Not Found';
                 $data['errorTitle'] = 'Halaman tidak ditemukan';
                 $data['message'] = $custom_message ?? 'Kami tidak dapat menemukan halaman yang Anda cari. Periksa URL atau kembali ke halaman utama';
                 break;
             case 500:
-                $data['kode'] = $status_code;
                 $data['title'] = 'Internal Server Error';
                 $data['errorTitle'] = 'Kesalahan Server';
                 $data['message'] = $custom_message ?? 'Terjadi masalah pada server kami. Silakan coba lagi nanti atau hubungi dukungan teknis jika masalah berlanjut';
                 break;
             default:
-                $data['kode'] = $status_code;
                 $data['title'] = 'Error';
                 $data['errorTitle'] = 'Unexpected Error';
                 $data['message'] = $custom_message ?? "Error fetching data. HTTP Status Code: $status_code";
