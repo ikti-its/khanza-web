@@ -76,7 +76,7 @@ abstract class BaseController extends Controller
     {
         return $this->breadcrumbs;
     }
-    protected function fetchDataUsingCurl($method, $url, $data = null, )
+    protected function fetchDataUsingCurl($method, $url, $data = null)
     {
         $allowed_methods = ['GET', 'POST', 'PUT', 'DELETE'];
         if(!in_array($method, $allowed_methods)){
@@ -93,6 +93,7 @@ abstract class BaseController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $token,
+            'Accept: application/json'
         ]);
 
         if($method === 'POST' || $method === 'PUT'){
@@ -116,10 +117,16 @@ abstract class BaseController extends Controller
         $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        return [
-            'response'         => $response,
-            'http_status_code' => $http_status_code,
-        ];
+        if ($http_status_code !== 200) {
+            return $this->renderErrorView($http_status_code);
+        }
+
+        $return_data = json_decode($response, true);
+        if (!isset($return_data['data'])) {
+            return $this->renderErrorView(500);
+        }
+
+        return  $return_data;
     }
 
     protected function renderErrorView($status_code, $custom_message = null)
