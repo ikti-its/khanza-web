@@ -24,32 +24,7 @@
 
                                 <!-- Notification Pop-up -->
                                 <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
-                                    <div class="px-4">
-                                        <?= view('components/notif_header') ?>
-                                        <div class="flex">
-                                            <div class="flex justify-center items-center w-3/4">
-                                                <button id="stok-tab" class="flex items-center justify-center text-center w-full py-2 border-b-2 border-[#272727]">
-                                                    Stok
-                                                    <span class="ml-1"> <!-- Add margin-left for spacing -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
-                                                            <circle cx="7.75" cy="7.5" r="7" fill="#EF4444" />
-                                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="central" fill="#FFF" font-size="10px"></text>
-                                                        </svg>
-                                                    </span>
-                                                </button>
-                                            </div>
-                                            <div class="flex justify-center items-center w-3/4">
-                                                <button id="kadaluwarsa-tab" class="flex items-center justify-center text-center w-full py-2 border-b-2">Kadaluwarsa
-                                                    <span class="ml-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
-                                                            <circle cx="7.75" cy="7.5" r="7" fill="#EF4444" />
-                                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="central" fill="#FFF" font-size="10px"></text>
-                                                        </svg>
-                                                    </span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?= view('components/notif') ?>
                                     <div>
                                         <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
                                             <?php
