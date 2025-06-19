@@ -22,15 +22,9 @@
                                     Catatan Cuti
                                 </h2>
                             </div>
-
                         </div>
-
                     </div>
-
                     <?= view('components/search_bar') ?>
-
-
-
                     <!-- Table -->
                     <div class="overflow-x-auto">
                         <table id="myTable" class="min-w-full divide-y divide-gray-50 dark:divid e-neutral-700 text-xs">
@@ -272,12 +266,7 @@
                             </tbody>
                         </table>
                     </div>
-
                     <!-- End Table -->
-
-
-
-
                 </div>
             </div>
         </div>
@@ -292,32 +281,6 @@ function updateStatus(status) {
         document.getElementById('status_input').value = status;
     }
 
-    function myFunction() {
-        var input, filter, table, tr, td, i, j, txtValue, found;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-
-        for (i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
-            tr[i].style.display = "none"; // Hide the row initially
-            td = tr[i].getElementsByTagName("td");
-            found = false;
-            for (j = 0; j < td.length; j++) {
-                if (td[j]) {
-                    txtValue = td[j].textContent || td[j].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            if (found) {
-                tr[i].style.display = "";
-            }
-        }
-    }
-
     function validateForm() {
     var submitButton = document.getElementById('submitButton');
     submitButton.disabled = true; // Disable the button
@@ -326,6 +289,5 @@ function updateStatus(status) {
     return true; // Return true to allow form submission
 }
 </script>
-
 
 <?= $this->endSection(); ?>

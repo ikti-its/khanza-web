@@ -110,47 +110,6 @@ function fetchAmbulansRequests() {
 // Call initially and every 10s
 fetchAmbulansRequests();
 setInterval(fetchAmbulansRequests, 10000);
-
-
-    function myFunction() {
-        var input, filter, table, tr, td, i, j, txtValue;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable"); // Pastikan ini mengacu pada ID tabel yang benar
-
-        if (!table) return; // Pastikan tabel ada sebelum melanjutkan
-
-        tr = table.getElementsByTagName("tr");
-        var dataFound = false;
-
-        // Iterate over all table rows (including header row)
-        for (i = 0; i < tr.length; i++) {
-            var found = false;
-
-            // Check if it's a regular row (skip header row)
-            if (i > 0) {
-                td = tr[i].getElementsByTagName("td");
-
-                // Iterate over all td elements in the row
-                for (j = 0; j < td.length; j++) {
-                    txtValue = td[j].textContent || td[j].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        found = true;
-                        break; // Break out of inner loop if match found
-                    }
-                }
-
-                // Show or hide row based on search result
-                if (found) {
-                    tr[i].style.display = "";
-                    dataFound = true;
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
-        }
-    }
-
     
     document.addEventListener('DOMContentLoaded', function() {
         var count_notif_stok = <?= isset($count_notif_stok) ? $count_notif_stok : 0 ?>;

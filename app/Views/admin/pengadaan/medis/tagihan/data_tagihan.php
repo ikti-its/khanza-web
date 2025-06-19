@@ -375,59 +375,5 @@
     <!-- End Card -->
 </div>
 <!-- End Table Section -->
-<script>
-    function myFunction() {
-        var input, filter, table, tr, td, i, j, txtValue;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-        th = table.getElementsByTagName("th"); // Get all th elements
 
-        var dataFound = false;
-
-        // Iterate over table rows (including header row)
-        for (i = 0; i < tr.length; i++) {
-            var found = false;
-
-            // Check if it's a header row (th elements)
-            if (i === 0) {
-                // Iterate over th elements
-                for (j = 0; j < th.length; j++) {
-                    txtValue = th[j].textContent || th[j].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        found = true;
-                        break;
-                    }
-                }
-            } else {
-                // Iterate over td elements in regular rows
-                td = tr[i].getElementsByTagName("td");
-                for (j = 0; j < td.length; j++) {
-                    txtValue = td[j].textContent || td[j].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-
-            if (found) {
-                tr[i].style.display = "";
-                dataFound = true;
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
-
-        // Show/hide message if no data found
-        if (!dataFound) {
-            document.getElementById("noDataFound").style.display = "block";
-        } else {
-            document.getElementById("noDataFound").style.display = "none";
-        }
-    }
-
-    
-</script>
 <?= $this->endSection(); ?>
