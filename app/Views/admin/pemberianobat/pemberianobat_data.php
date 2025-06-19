@@ -125,53 +125,7 @@
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        
                     
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                    
-                            <?php foreach ($pemberianobat_data as $i => $pemberianobat) : ?>
-                                <tr>
-                                    <?php
-                                        $tabel  = $pemberianobat;
-                                        $row_id = 'nomor_rawat';
-                                        $data   = [
-                                            'tanggal_beri' => 'tanggal',
-                                            'jam_beri'     => 'jam',
-                                            'kode_obat'    => 'indeks',
-                                            'nama_obat'    => 'teks',
-                                            'jumlah'       => 'jumlah',
-                                            'total'        => 'uang'
-                                        ];
-                                        echo view('components/data_tabel_td', [
-                                            'tabel'  => $tabel,
-                                            'row_id' => $row_id,
-                                            'data'   => $data
-                                        ]);
-                                    ?>
-                                    
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <?php
-                                                $row_id  = $pemberianobat['nomor_rawat'] . '-' . $i;
-                                                $api_url = '/pemberianobat';
-                                                echo view('components/data_lihat_detail',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_ubah',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_hapus',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]); 
-                                            ?>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
                         <?php foreach ($pemberianobat_data as $i => $pemberianobat) : ?>
                             <div id="hs-vertically-centered-scrollable-modal-<?= $pemberianobat['nomor_rawat'] . '-' . $i ?>" class="hs-overlay hidden fixed top-0 start-0 z-[80] w-full h-full bg-gray-800 bg-opacity-50 overflow-y-auto">
                                 <div class="mt-20 mx-auto w-full max-w-lg p-6 bg-white dark:bg-neutral-800 rounded shadow">

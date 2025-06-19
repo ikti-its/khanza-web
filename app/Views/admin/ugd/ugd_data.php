@@ -21,14 +21,7 @@
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <button id="notif-icon" class="relative flex justify-center items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M19 8C20.6569 8 22 6.65685 22 5C22 3.34315 20.6569 2 19 2C17.3431 2 16 3.34315 16 5C16 6.65685 17.3431 8 19 8Z" fill="#DA4141" stroke="#DA4141" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M7 13H12" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M7 17H16" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M14 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V10" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </button>
+                                <?= view('components/notif_icon') ?>
 
                                 <!-- Notification Pop-up -->
                                 <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
@@ -100,192 +93,76 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <div>
-                                <a href='/ugd/tambah' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                                    <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
-                                        <path d="M2.63452 7.50001L13.6345 7.5M8.13452 13V2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                    </svg>
-                                    Tambah
-                                </a>
-                            </div>
+                            <?= view('components/tambah_button', [
+                                'link' => '/ugd/tambah'
+                            ]) ?>
 
                         </div>
                     </div>
                     <!-- End Header -->
+                    
+                    <?php
+                        echo view('components/search_bar');
+                        
+                        $api_url  = '/ugd';
+                        $tabel    = $ugd_data;
+                        $kolom_id = 'nomor_reg';
+                        $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => false,
+                        ];
+                        $data = [
+                            // [visible, Display, Kolom, Jenis]
+                            [1, 'No. Registrasi'  , 'nomor_reg'       , 'indeks'],
+                            [0, 'Nomor Rawat'     , 'nomor_rawat'     , 'indeks'],
+                            [0, 'Tanggal'         , 'tanggal'         , 'tanggal'],
+                            [0, 'Jam'             , 'jam'             , 'jam'],
+                            [1, 'No. Rekam Medis' , 'nomor_rm'        , 'indeks'],
+                            [1, 'Nama'            , 'nama_pasien'     , 'nama'],
+                            [0, 'Jenis Kelamin'   , 'jenis_kelamin'   , 'status'],
+                            [0, 'Umur'            , 'umur'            , 'jumlah'],
+                            [1, 'Poliklinik'      , 'poliklinik'      , 'status'],
+                            [1, 'Dokter'          , 'dokter_dituju'   , 'nama'],
+                            [0, 'Penanggung Jawab'         , 'penanggung_jawab', 'nama'],
+                            [0, 'Hubungan Penanggung Jawab', 'hubungan_pj'     , 'status'],
+                            [0, 'Alamat Penanggung Jawab'  , 'alamat_pj'       , 'teks'],
+                            [0, 'Biaya Registrasi', 'biaya_registrasi', 'uang'],
+                            [0, 'Status Rawat'    , 'status_rawat'    , 'status'],
+                            [0, 'Jenis Bayar'     , 'jenis_bayar'     , 'status'],
+                            [0, 'Status Bayar'    , 'status_bayar'    , 'status'],
 
+                        ];
+                        echo view('components/tabel', [
+                            'api_url'   => $api_url,
+                            'tabel'     => $tabel,
+                            'kolom_id'  => $kolom_id,
+                            'data'      => $data,
+                            'aksi'      => $aksi
+                        ]);
+                        
+                        echo view('components/footer', [
+                            'meta_data' => $meta_data,
+                            'api_url'   => $api_url
+                        ]);      
+                    ?>
                     <!-- Table -->
                     <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <colgroup>
-                            <!-- <col width="5%"> -->
-                            <col width="30%">
-                            <col width="25%">
-                            <!-- <col width="20%"> -->
-                            <col width="20%">
-                            <col width="25%">
-                        </colgroup>
-                        <thead class="bg-gray-50 dark:bg-slate-800">
-                            <tr>
-                                <!-- <th scope="col" class="ps-6 py-3 text-start">
-                                    <label for="hs-at-with-checkboxes-main" class="flex">
-                                        <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-main">
-                                        <span class="sr-only">Checkbox</span>
-                                    </label>
-                                </th> -->
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            No. Registrasi
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            No. Rekam Medis
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Nama
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Poliklinik
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Dokter
-                                        </span>
-                                    </div>
-                                </th>
-
-                                <th scope="col" class="px-6 py-3">
-                                    <div class="flex items-center justify-center gap-x-2">
-                                        <span class="text-xs tracking-wide text-[#666] dark:text-gray-200">
-                                            Aksi
-                                        </span>
-                                    </div>
-                                </th>
-
-                            </tr>
-                        </thead>
-
-
-
+                        
+    
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <?php foreach ($ugd_data as $ugd) : ?>
                                 <div id="hs-vertically-centered-scrollable-modal-<?= $ugd['nomor_reg'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                     <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center ">
                                         <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
-                                            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
-                                                <h3 class="font-bold text-gray-800 dark:text-white">
-                                                    <?= $ugd['nama_pasien'] ?>
-                                                </h3>
-                                                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700" data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $ugd['nomor_reg'] ?>">
-                                                    <span class="sr-only">Close</span>
-                                                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path d="M18 6 6 18"></path>
-                                                        <path d="m6 6 12 12"></path>
-                                                    </svg>
-                                                </button>
-                                            </div>
                                             <div class="p-4">
                                                 <div class="space-y-4">
                                                 <div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Registrasi</label>
-                                                        <input type="text" name="" value="<?= $ugd['nomor_reg'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
-                                                        <input type="text" name="" value="<?= $ugd['nomor_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Tanggal</label>
-                                                        <input type="text" name="" value="<?= $ugd['tanggal'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jam</label>
-                                                        <input type="text" name="" value="<?= $ugd['jam'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nomor Rekam Medis</label>
-                                                        <input type="text" name="" value="<?= $ugd['nomor_rm'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Nama</label>
-                                                        <input type="text" name="" value="<?= $ugd['nama_pasien'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Kelamin</label>
-                                                        <input type="text" name="" value="<?= $ugd['jenis_kelamin'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Umur</label>
-                                                        <input type="text" name="" value="<?= $ugd['umur'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Poliklinik</label>
-                                                        <input type="text" name="" value="<?= $ugd['poliklinik'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Dokter</label>
-                                                        <input type="text" name="" value="<?= $ugd['dokter_dituju'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $ugd['penanggung_jawab'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Hubungan Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $ugd['hubungan_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Alamat Penanggung Jawab</label>
-                                                        <input type="text" name="" value="<?= $ugd['alamat_pj'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Biaya Registrasi</label>
-                                                        <input type="text" name="" value="<?= $ugd['biaya_registrasi'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Rawat</label>
-                                                        <input type="text" name="" value="<?= $ugd['status_rawat'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Jenis Bayar</label>
-                                                        <input type="text" name="" value="<?= $ugd['jenis_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
-
-                                                    <div class="mb-5 sm:block">
-                                                        <label class="block mb-2 text-sm text-gray-900 dark:text-white">Status Bayar</label>
-                                                        <input type="text" name="" value="<?= $ugd['status_bayar'] ?>" class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white" readonly>
-                                                    </div>
+                                                    
                                                     <!-- <div class="p-4 space-y-4"> -->
                                                         <!-- <div class="px-3 py-1.5">
                                                             <a href="/tindakan/<?= $ugd['nomor_rawat'] ?>" 
@@ -347,23 +224,6 @@
                                     </div>
                                 </div>
                                 <tr>
-                                    <?php
-                                        $tabel  = $ugd;
-                                        $row_id = 'nomor_reg';
-                                        $data   = [
-                                            'nomor_reg'     => 'indeks',
-                                            'nomor_rm'      => 'indeks',
-                                            'nama_pasien'   => 'nama',
-                                            'poliklinik'    => 'status',
-                                            'dokter_dituju' => 'nama'
-                                        ];
-                                        echo view('components/data_tabel_td', [
-                                            'tabel'  => $tabel,
-                                            'row_id' => $row_id,
-                                            'data'   => $data
-                                        ]);
-                                    ?>
-                                    
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
@@ -375,18 +235,6 @@
                                                 Tindakan
                                             </button>
                                             </div>
-                                            <?php
-                                                $row_id  = $ugd['nomor_reg'];
-                                                $api_url = '/ugd';
-                                                echo view('components/data_ubah',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]);
-                                                echo view('components/data_hapus',[
-                                                    'row_id'  => $row_id,
-                                                    'api_url' => $api_url   
-                                                ]); 
-                                            ?>
                                         </div>
                                     </td>
                                 </tr>
@@ -396,11 +244,6 @@
                     </div>
 
                     <!-- End Table -->
-                     
-                    <?= view('components/data_footer.php', [
-                        'meta_data' => $meta_data,
-                        'api_url'   => $api_url
-                    ]) ?>
                 </div>
             </div>
         </div>

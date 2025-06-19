@@ -116,25 +116,7 @@
                             'meta_data' => $meta_data,
                             'api_url'   => $api_url
                         ]);      
-                    ?>
-                    <!-- Table -->
-                    <div class="overflow-x-auto w-full">                       
-                    <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <?php 
-                            $widths  = [30, 25, 20, 25];
-                            echo view('components/tabel_colgroup',['widths' => $widths]);
-                            
-                            $columns = [
-                                'Nomor Rawat',
-                                'Nomor RM',
-                                'Nama Pasien',
-                                'Tanggal Rawat',
-                                'Jam',
-                                'Suhu',
-                                'Aksi'
-                            ];
-                            echo view('components/tabel_thead',['kolom' => $columns]);
-                        ?>
+                    ?> 
                 </div>
             </div>
         </div>
