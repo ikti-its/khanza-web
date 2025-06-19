@@ -280,32 +280,7 @@
         }
     }
 
-    function closeNotificationPopup() {
-        document.getElementById('notif-popup').classList.add('hidden');
-    }
-
-    // Event listener untuk menutup pop up saat mengklik di luar pop up
-    document.addEventListener('click', function(event) {
-        const notifPopup = document.getElementById('notif-popup');
-        const notifIcon = document.getElementById('notif-icon');
-
-        // Periksa apakah yang diklik bukan bagian dari pop up notifikasi
-        if (!notifPopup.contains(event.target) && event.target !== notifIcon) {
-            closeNotificationPopup();
-        }
-    });
-
-    // Event listener untuk menghindari menutup pop up saat mengklik ikon notifikasi
-    document.getElementById('notif-icon').addEventListener('click', function(event) {
-        event.stopPropagation(); // Menghentikan penyebaran event ke elemen lain
-        document.getElementById('notif-popup').classList.toggle('hidden');
-    });
-
-    // Event listener untuk menutup pop up saat mengklik ikon X di dalam pop up
-    document.getElementById('close-popup').addEventListener('click', function(event) {
-        event.stopPropagation(); // Menghentikan penyebaran event ke elemen lain
-        closeNotificationPopup();
-    });
+    
 
     document.addEventListener('DOMContentLoaded', function() {
         // Menghitung jumlah div elemen di dalam kadaluwarsa-content
