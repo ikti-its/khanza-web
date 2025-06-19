@@ -11,3 +11,42 @@
         </div>
     </div>
 </div>
+
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, j, txtValue;
+        input  = document.getElementById("myInput");
+        table  = document.getElementById("myTable"); // Pastikan ini mengacu pada ID tabel yang benar
+        filter = input.value.toUpperCase();
+        
+        if (!table) return; // Pastikan tabel ada sebelum melanjutkan
+
+        tr = table.getElementsByTagName("tr");
+        var dataFound = false;
+
+        // Iterate over all table rows (excluding header row)
+        for (i = 1; i < tr.length; i++) {
+            var found = false;
+
+            td = tr[i].getElementsByTagName("td");
+
+            // Iterate over all td elements in the row
+            for (j = 0; j < td.length; j++) {
+                txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                    break; // Break out of inner loop if match found
+                }
+            }
+
+            // Show or hide row based on search result
+            if (found) {
+                tr[i].style.display = "";
+                dataFound = true;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
