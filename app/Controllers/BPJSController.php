@@ -7,54 +7,27 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class BPJSController extends BaseController
 {
-    public function dataBPJS()
+    public function data()
     {
         $title = 'Data BPJS';
-    
-        // if (!session()->has('jwt_token')) {
-        //     return $this->renderErrorView(401);
-        // }
-    
-        // $token = session()->get('jwt_token');
-        // $ugd_url = $this->api_url . '/ugd';
-    
-        // $ch = curl_init($ugd_url);
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        //     'Authorization: Bearer ' . $token,
-        //     'Accept: application/json'
-        // ]);
-        // $response = curl_exec($ch);
-        // $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        // curl_close($ch);
-    
-        // // dd($response);
-
-        // if ($status !== 200 || !$response) {
-        //     log_message('error', "UGD API error: status {$status}, response: " . $response);
-        //     return $this->renderErrorView($status);
-        // }
-    
-        // $ugd_data = json_decode($response, true);
-        // if (json_last_error() !== JSON_ERROR_NONE || !isset($ugd_data['data'])) {
-        //     log_message('error', 'JSON decode error: ' . json_last_error_msg());
-        //     return $this->renderErrorView(500);
-        // }
+        
+        $data = $this->fetchDataUsingCurl('GET', '/bpjs')['data'];
+        
     
         $this->addBreadcrumb('User', 'user');
         $this->addBreadcrumb('BPJS', 'bpjs');
         $breadcrumbs = $this->getBreadcrumbs();
-        // $meta_data = $ugd_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1];
         $meta_data =['page' => 1, 'size' => 10, 'total' => 1];
-        return view('/admin/bpjs/bpjs_data', [
-            'title' => $title,
+        return view('/admin/bpjs/data', [
+            'title'       => $title,
             'breadcrumbs' => $breadcrumbs,
-            'meta_data' => $meta_data,
+            'meta_data'   => $meta_data,
+            'tabel'       => $data['data']
         ]);
     }
     
 
-    public function tambahUGD()
+    public function tambah()
     {
         if (session()->has('jwt_token')) {
             $title = 'Tambah UGD';
@@ -71,7 +44,7 @@ class BPJSController extends BaseController
         }
     }
 
-    public function submitTambahUGD()
+    public function submitTambah()
     {
         if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);
@@ -173,7 +146,7 @@ class BPJSController extends BaseController
         ]);
     }
 
-    public function editUGD($nomorReg)
+    public function edit($nomorReg)
     {
         if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);
@@ -209,7 +182,7 @@ class BPJSController extends BaseController
         ]);
     }
 
-    public function submitEditUGD($nomorReg)
+    public function submitEdit($nomorReg)
     {
         if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);
@@ -259,7 +232,7 @@ class BPJSController extends BaseController
         return $response;
     }
 
-    public function hapusUGD($nomorReg)
+    public function hapus($nomorReg)
     {
         if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);

@@ -606,14 +606,26 @@ $routes->group('diagnosa', ['filter' => 'auth'], function ($routes) {
 
 //BPJS
 $routes->group('bpjs', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'BPJSController::dataBPJS', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-    $routes->get('tambah', 'UGDController::tambahUGD', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-    $routes->post('submittambah', 'UGDController::submitTambahUGD', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-    $routes->get('edit/(:any)', 'UGDController::editUGD/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-    $routes->post('submitedit', 'UGDController::submitEditUGD', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-    $routes->post('submitedit/(:segment)', 'UGDController::submitEditUGD/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-    $routes->delete('hapus/(:segment)', 'UGDController::hapusUGD/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
-    $routes->post('trigger-notif', 'UGDController::triggerNotif');
+    $routes->get('/',                      'BPJSController::data',          ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->get('tambah',                 'BPJSController::tambah',        ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->post('submittambah',          'BPJSController::submitTambah',  ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->get('edit/(:any)',            'BPJSController::edit/$1',       ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->post('submitedit',            'BPJSController::submitEdit',    ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->post('submitedit/(:segment)', 'BPJSController::submitEdit/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->delete('hapus/(:segment)',    'BPJSController::hapusUGD/$1',   ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    // $routes->post('trigger-notif',         'BPJSController::triggerNotif');
+});
+
+//Golongan
+$routes->group('golongan', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/',                      'GolonganController::data',          ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->get('tambah',                 'BPJSController::tambah',        ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->post('submittambah',          'BPJSController::submitTambah',  ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->get('edit/(:any)',            'BPJSController::edit/$1',       ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->post('submitedit',            'BPJSController::submitEdit',    ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->post('submitedit/(:segment)', 'BPJSController::submitEdit/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->delete('hapus/(:segment)',    'BPJSController::hapusUGD/$1',   ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    // $routes->post('trigger-notif',         'BPJSController::triggerNotif');
 });
 
 
