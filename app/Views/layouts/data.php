@@ -10,37 +10,11 @@
         <div class="-m-1.5 overflow-y-hidden">
             <div class="sm:px-20 min-w-full inline-block align-middle">
                 <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
-
-                    <!-- Header -->
-                    <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
-                        <?= view('components/judul', [
-                                'judul' => $judul
-                            ]) ?>
-                        <div class="flex gap-x-6 justify-center items-center">
-                            <div class="relative">
-                                <?= view('components/notif_icon') ?>
-
-                                <!-- Notification Pop-up -->
-                                <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
-                                    <?= view('components/notif') ?>
-                                    <div>
-                                        <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/tambah_button', [
-                                'link' => $modul_path . '/tambah'
-                            ]) ?>
-                            <?= view('components/audit_button', [
-                                'link' => $modul_path . '/audit'
-                            ]) ?>
-                        </div>
-                    </div>
-
-                    <!-- End Header -->
                     <?php
+                        echo view('components/data_header',[
+                            'judul'      => $judul,
+                            'modul_path' => $modul_path
+                        ]);
                         echo view('components/search_bar');
                         
                         echo view('components/tabel', [
