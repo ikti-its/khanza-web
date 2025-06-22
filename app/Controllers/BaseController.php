@@ -91,7 +91,7 @@ abstract class BaseController extends Controller
     }
 
 
-    protected function fetchDataUsingCurl($method, $url, $data = null, $redirect_url = null, $redirect_msg = null)
+    protected function fetchDataUsingCurl($method, $path, $data = null, $redirect_url = null, $redirect_msg = null)
     {
         $allowed_methods = ['GET', 'POST', 'PUT', 'DELETE'];
         if(!in_array($method, $allowed_methods)){
@@ -103,7 +103,7 @@ abstract class BaseController extends Controller
         }
         $token = session()->get('jwt_token');
         
-        $full_url = $this->api_url . $url;
+        $full_url = $this->api_url . $path;
         $ch = curl_init($full_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -134,7 +134,7 @@ abstract class BaseController extends Controller
 
         $http_success_codes = [200, 201, 204];
         if (!in_array($http_status_code, $http_success_codes)) {
-            log_message('error', $url . ' API error. Status: ' . $http_status_code .', response: ' . $response);
+            log_message('error', $path . ' API error. Status: ' . $http_status_code .', response: ' . $response);
             echo $this->renderErrorView($http_status_code);
         }
 
@@ -209,7 +209,6 @@ abstract class BaseController extends Controller
             'judul'       => $this->judul,
             'breadcrumbs' => $this->getBreadcrumbs(),
             'meta_data'   => $this->meta_data,
-            'full_url'    => $this->api_url . $this->modul_path,
             'modul_path'  => $this->modul_path,
             'kolom_id'    => $this->kolom_id,
             'konfig'      => $this->konfig,
