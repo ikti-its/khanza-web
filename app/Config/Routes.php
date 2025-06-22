@@ -640,3 +640,15 @@ $routes->group('jabatan', ['filter' => 'auth'], function ($routes) {
     // $routes->post('trigger-notif',         'BPJSController::triggerNotif');
 });
 
+//PTKP
+$routes->group('ptkp', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/',                      'PTKP::tampilData',          ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->get('tambah',                 'BPJSController::tambah',        ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->post('submittambah',          'BPJSController::submitTambah',  ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->get('edit/(:any)',            'BPJSController::edit/$1',       ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->post('submitedit',            'BPJSController::submitEdit',    ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->post('submitedit/(:segment)', 'BPJSController::submitEdit/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    // $routes->delete('hapus/(:segment)',    'BPJSController::hapusUGD/$1',   ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    // $routes->post('trigger-notif',         'BPJSController::triggerNotif');
+});
+
