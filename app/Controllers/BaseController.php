@@ -62,7 +62,13 @@ abstract class BaseController extends Controller
     {
         $this->api_url = getenv('api_URL');
     }
-    protected $breadcrumbs = [];
+    protected array $breadcrumbs = [];
+    protected string $judul;
+    protected string $modul_path;
+    protected string $kolom_id;
+    protected array $aksi;
+    protected array $konfig;
+    protected array $meta_data;
 
     protected function addBreadcrumb($title, $icon = '')
     {
@@ -195,5 +201,20 @@ abstract class BaseController extends Controller
         }
 
         return view('errors/html/general_error', $data);
+    }
+    
+    public function tampilData()
+    {               
+        return view('/layouts/data', [
+            'judul'       => $this->judul,
+            'breadcrumbs' => $this->getBreadcrumbs(),
+            'meta_data'   => $this->meta_data,
+            'full_url'    => $this->api_url . $this->modul_path,
+            'modul_path'  => $this->modul_path,
+            'kolom_id'    => $this->kolom_id,
+            'konfig'      => $this->konfig,
+            'aksi'        => $this->aksi, 
+            'tabel'       => $this->fetchDataUsingCurl('GET', $this->modul_path)['data']['data']
+        ]);
     }
 }
