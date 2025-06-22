@@ -618,7 +618,7 @@ $routes->group('bpjs', ['filter' => 'auth'], function ($routes) {
 
 //Golongan
 $routes->group('golongan', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/',                      'GolonganController::data',          ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('/',                      'Golongan::tampilData',          ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     // $routes->get('tambah',                 'BPJSController::tambah',        ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     // $routes->post('submittambah',          'BPJSController::submitTambah',  ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     // $routes->get('edit/(:any)',            'BPJSController::edit/$1',       ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);

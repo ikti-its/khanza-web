@@ -8,7 +8,7 @@ class Jabatan extends BaseController
 {
     protected string $judul = 'Data Jabatan';
     protected array $breadcrumbs = [
-        ['title' => 'User', 'icon' => 'user'], 
+        ['title' => 'User',    'icon' => 'user'], 
         ['title' => 'Jabatan', 'icon' => 'jabatan'],
     ];
     protected string $modul_path = '/jabatan';
