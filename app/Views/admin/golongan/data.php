@@ -44,7 +44,7 @@
                     <?php
                         echo view('components/search_bar');
                         
-                        $api_url  = '/golongan';
+                        $modul_path = '/golongan';
                         $kolom_id = 'no_golongan';
                         $aksi = [
                             'cetak'    => false,
@@ -63,16 +63,16 @@
                             
                         ];
                         echo view('components/tabel', [
-                            'api_url'   => $api_url,
-                            'tabel'     => $tabel,
-                            'kolom_id'  => $kolom_id,
-                            'data'      => $data,
-                            'aksi'      => $aksi
+                            'modul_path' => $modul_path,
+                            'tabel'      => $tabel,
+                            'kolom_id'   => $kolom_id,
+                            'data'       => $data,
+                            'aksi'       => $aksi
                         ]);
                         
                         echo view('components/footer', [
-                            'meta_data' => $meta_data,
-                            'api_url'   => $api_url
+                            'meta_data'  => $meta_data,
+                            'modul_path' => $modul_path
                         ]);      
                     ?>
                 </div>

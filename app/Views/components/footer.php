@@ -2,16 +2,16 @@
     <nav class="flex w-full justify-between items-center gap-x-1">
         <?php
             echo view('components/footer_prev', [
-                'meta_data' => $meta_data,
-                'api_url'   => $api_url
+                'meta_data'  => $meta_data,
+                'modul_path' => $modul_path
             ]);
             echo view('components/footer_page', [
-                'meta_data' => $meta_data,
-                'api_url'   => $api_url
+                'meta_data'  => $meta_data,
+                'modul_path' => $modul_path
             ]);
             echo view('components/footer_next', [
-                'meta_data' => $meta_data,
-                'api_url'   => $api_url
+                'meta_data'  => $meta_data,
+                'modul_path' => $modul_path
             ]);
         ?>
     </nav>

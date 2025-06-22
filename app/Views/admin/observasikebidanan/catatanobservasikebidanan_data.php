@@ -69,7 +69,7 @@
                     <?php
                         echo view('components/search_bar');
                         
-                        $api_url  = '/catatanobservasikebidanan';
+                        $modul_path = '/catatanobservasikebidanan';
                         $tabel    = $catatan_data;
                         $kolom_id = 'no_rawat';
                         $aksi = [
@@ -102,16 +102,16 @@
 
                         ];
                         echo view('components/tabel', [
-                            'api_url'   => $api_url,
-                            'tabel'     => $tabel,
-                            'kolom_id'  => $kolom_id,
-                            'data'      => $data,
-                            'aksi'      => $aksi
+                            'modul_path' => $modul_path,
+                            'tabel'      => $tabel,
+                            'kolom_id'   => $kolom_id,
+                            'data'       => $data,
+                            'aksi'       => $aksi
                         ]);
                         
                         echo view('components/footer', [
-                            'meta_data' => $meta_data,
-                            'api_url'   => $api_url
+                            'meta_data'  => $meta_data,
+                            'modul_path' => $modul_path
                         ]);      
                     ?>
                 </div>

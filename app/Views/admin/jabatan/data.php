@@ -13,13 +13,13 @@
 
                     <!-- Header -->
                     <div class="py-1 flex justify-between items-center border-gray-200 dark:border-gray-700">
-                        <div>
-                            <h2 class="mb-2 text-xl font-black text-gray-800 dark:text-gray-200">
-                                Jabatan Struktural dan Fungsional
-                            </h2>
-
-                        </div>
+                        <?= view('components/judul', [
+                                'judul' => $judul
+                            ]) ?>
                         <div class="flex gap-x-6 justify-center items-center">
+                            <?= view('components/audit_button', [
+                                'link' => '/bpjs/audit'
+                            ]) ?>
                             <div class="relative">
                                 <?= view('components/notif_icon') ?>
 
@@ -44,8 +44,7 @@
                     <?php
                         echo view('components/search_bar');
                         
-                        $api_url  = '/jabatan';
-                        $tabel    = $jabatan_data;
+                        $modul_path = '/jabatan';
                         $kolom_id = 'no_jabatan';
                         $aksi = [
                             'cetak'    => false,
@@ -63,16 +62,16 @@
                             [1, 'Tunjangan'    , 'tunjangan'    , 'uang']
                         ];
                         echo view('components/tabel', [
-                            'api_url'   => $api_url,
-                            'tabel'     => $tabel,
-                            'kolom_id'  => $kolom_id,
-                            'data'      => $data,
-                            'aksi'      => $aksi
+                            'modul_path' => $modul_path,
+                            'tabel'      => $tabel,
+                            'kolom_id'   => $kolom_id,
+                            'data'       => $data,
+                            'aksi'       => $aksi
                         ]);
                         
                         echo view('components/footer', [
-                            'meta_data' => $meta_data,
-                            'api_url'   => $api_url
+                            'meta_data'  => $meta_data,
+                            'modul_path' => $modul_path
                         ]);      
                     ?>
                 </div>

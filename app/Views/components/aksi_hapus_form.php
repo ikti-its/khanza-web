@@ -11,8 +11,8 @@
             </h3>
             
             <?= view('components/aksi_hapus_form_opsi', [
-                'api_url' => $api_url,
-                'id'      => $id
+                'modul_path' => $modul_path,
+                'id'         => $id
                 
             ]) ?>
         </div>

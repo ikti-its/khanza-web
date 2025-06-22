@@ -2,8 +2,8 @@
     <div class="px-3 py-1.5 text-center inline-flex">
         <?php
             $data = [
-                'id'      => $id,
-                'api_url' => $api_url   
+                'id'         => $id,
+                'modul_path' => $modul_path   
             ];
             if($aksi['cetak'] === true){
                 echo view('components/aksi_cetak', $data);

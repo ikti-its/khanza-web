@@ -1,4 +1,4 @@
-<form action="<?= $api_url . '/hapus/' . $id ?>" method="POST">
+<form action="<?= $modul_path . '/hapus/' . $id ?>" method="POST">
     <?= csrf_field() ?>
     <div class="w-full sm:flex justify-center">
         <input type="hidden" name="_method" value="DELETE">
