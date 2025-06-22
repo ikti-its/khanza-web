@@ -64,7 +64,7 @@
                             'ubah'     => true,
                             'hapus'    => true,
                         ];
-                        $data = [
+                        $konfig = [
                             // [visible, Display, Kolom, Jenis]
                             [1, 'Tanggal Beri', 'no_resep' , 'indeks'],
                             [1, 'Jam Beri'    , 'jam_beri' , 'jam'],
@@ -77,7 +77,7 @@
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
-                            'data'       => $data,
+                            'konfig'     => $konfig,
                             'aksi'       => $aksi
                         ]);
                         

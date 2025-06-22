@@ -92,7 +92,7 @@
                             'ubah'     => true,
                             'hapus'    => true
                         ];
-                        $data = [
+                        $konfig = [
                             // [visible, Display, Kolom, Jenis]
                             [1, 'Nomor Bed'   , 'nomor_bed'   , 'indeks'],
                             [1, 'Kode Kamar'  , 'kode_kamar'  , 'indeks'],
@@ -105,7 +105,7 @@
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
-                            'data'       => $data,
+                            'konfig'     => $konfig,
                             'aksi'       => $aksi
                         ]);
                         

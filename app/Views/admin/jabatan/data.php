@@ -53,7 +53,7 @@
                             'ubah'     => true,
                             'hapus'    => true
                         ];
-                        $data = [
+                        $konfig = [
                             // [visible, Display, Kolom, Jenis]
                             [1, 'Nomor Jabatan', 'no_jabatan'   , 'indeks'],
                             [1, 'Jenis Jabatan', 'jenis_jabatan', 'status'],
@@ -65,7 +65,7 @@
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
-                            'data'       => $data,
+                            'konfig'     => $konfig,
                             'aksi'       => $aksi
                         ]);
                         

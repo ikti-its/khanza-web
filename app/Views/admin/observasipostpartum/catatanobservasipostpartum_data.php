@@ -77,7 +77,7 @@
                             'ubah'     => true,
                             'hapus'    => true
                         ];
-                        $data = [
+                        $konfig = [
                             // [visible, Display, Kolom, Jenis]
                             [1, 'Nomor Rawat'      , 'no_rawat'     , 'indeks'],
                             [1, 'Nama Pasien'      , 'nama_pasien'  , 'nama'  ],
@@ -106,7 +106,7 @@
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
-                            'data'       => $data,
+                            'konfig'     => $konfig,
                             'aksi'       => $aksi
                         ]);
                         

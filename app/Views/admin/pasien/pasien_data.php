@@ -45,7 +45,7 @@
                             'ubah'     => false,
                             'hapus'    => false,
                         ];
-                        $data = [
+                        $konfig = [
                             // [visible, Display, Kolom, Jenis]
                             [1, 'Nomor RM'      , 'no_rkm_medis', 'indeks'],
                             [1, 'Nama Pasien'   , 'nm_pasien'   , 'nama'],
@@ -58,7 +58,7 @@
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
-                            'data'       => $data,
+                            'konfig'     => $konfig,
                             'aksi'       => $aksi
                         ]);
                         

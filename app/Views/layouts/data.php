@@ -47,7 +47,7 @@
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
-                            'data'       => $konfig,
+                            'konfig'     => $konfig,
                             'aksi'       => $aksi
                         ]);
                         

@@ -8,11 +8,11 @@
             $JENIS   = 3;
             // $OPSI    = 4;
             
-            $data_visible = array_filter($data, fn($input) => $input[$VISIBLE]);
+            $data_visible = array_filter($konfig, fn($input) => $input[$VISIBLE]);
             
-            echo view('components/tabel_colgroup',[
-                'kolom' => array_column($data_visible, $DISPLAY)
-            ]);
+            // echo view('components/tabel_colgroup',[
+            //     'kolom' => array_column($data_visible, $DISPLAY)
+            // ]);
             
             echo view('components/tabel_thead',[
                 'kolom' => array_column($data_visible, $DISPLAY)
@@ -25,8 +25,8 @@
                 echo view('components/popup', [
                     'baris'  => $baris,
                     'id'     => $id,
-                    'kolom'  => array_column($data, $KOLOM),
-                    'label'  => array_column($data, $DISPLAY)
+                    'kolom'  => array_column($konfig, $KOLOM),
+                    'label'  => array_column($konfig, $DISPLAY)
                 ]);
             
                 echo '<tr>';
