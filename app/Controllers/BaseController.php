@@ -228,7 +228,7 @@ abstract class BaseController extends Controller
         ];
         ;
         return view('/layouts/audit', [
-            'judul'       => 'Audit' . $this->judul,
+            'judul'       => 'Audit ' . $this->judul,
             'breadcrumbs' => array_merge($this->getBreadcrumbs(), $breadcrumbs),
             'meta_data'   => $this->meta_data,
             'modul_path'  => $this->modul_path . '/audit',

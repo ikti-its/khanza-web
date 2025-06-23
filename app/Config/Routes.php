@@ -608,7 +608,7 @@ $routes->group('diagnosa', ['filter' => 'auth'], function ($routes) {
 //BPJS
 $routes->group('bpjs', ['filter' => 'auth'], function ($routes) {
     $routes->get('/'    , 'BPJS::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-    $routes->get('audit', 'BPJS::tempilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'BPJS::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Golongan
