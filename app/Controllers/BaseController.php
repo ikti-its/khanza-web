@@ -234,7 +234,7 @@ abstract class BaseController extends Controller
             'modul_path'  => $this->modul_path . '/audit',
             'kolom_id'    => 'action',
             'konfig'      => array_merge($audit_konfig, $this->konfig),
-            'tabel'       => Audit::GetAuditData('ambulans')
+            'tabel'       => Audit::GetAuditData($this->modul_path)
         ]);
     }
 }

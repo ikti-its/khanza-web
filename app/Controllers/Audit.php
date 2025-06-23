@@ -7,6 +7,8 @@ use App\Controllers\BaseController;
 class Audit extends BaseController
 {
     public static function GetAuditData($tabel){
+        $tabel = str_replace('/', '', $tabel);
+
         $db = \Config\Database::connect();
         $query = $db->query("SELECT * FROM sik." . $tabel . "_audit ORDER BY changed_by DESC");
         $results = $query->getResult();

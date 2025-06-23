@@ -10,7 +10,7 @@
             
             $data_visible = $konfig;
             
-            echo view('components/tabel_thead',[
+            echo view('components/tabel_audit_thead',[
                 'kolom' => array_column($data_visible, $DISPLAY)
             ]);
         
