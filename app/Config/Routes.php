@@ -278,6 +278,7 @@ $routes->group('registrasi', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit/(:segment)', 'RegistrasiController::submitEditRegistrasi/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->delete('hapus/(:segment)', 'RegistrasiController::hapusRegistrasi/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->post('trigger-notif', 'RegistrasiController::triggerNotif');
+    $routes->get('audit', 'RegistrasiController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Kamar
@@ -290,6 +291,7 @@ $routes->group('kamar', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit/(:segment)', 'KamarController::submitEditKamar/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     $routes->delete('hapus/(:segment)', 'KamarController::hapusKamar/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     $routes->get('terima/(:any)', 'KamarController::terimaKamar/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    $routes->get('audit', 'KamarController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Rujukan Masuk
@@ -301,6 +303,7 @@ $routes->group('rujukanmasuk', ['filter' => 'auth'], function ($routes) {
     // $routes->post('submitedit', 'RujukanMasukController::submitEditRujukanMasuk', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->post('submitedit/(:segment)', 'RujukanMasukController::submitEditRujukanMasuk/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->delete('hapus/(:segment)', 'RujukanMasukController::hapusRujukanMasuk/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'RujukanMasukController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Rujukan Keluar
@@ -314,6 +317,7 @@ $routes->group('rujukankeluar', ['filter' => 'auth'], function ($routes) {
     $routes->delete('hapus/(:segment)', 'RujukanKeluarController::hapusRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('cetak/(:segment)', 'RujukanKeluarController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('fromrawatinap/(:segment)', 'RujukanKeluarController::submitFromRawatinapToRujukanKeluar/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'RujukanKeluarController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Rawat Inap
@@ -326,6 +330,7 @@ $routes->group('rawatinap', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit', 'RawatInapController::submitEditRawatInap', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->post('submitedit/(:segment)', 'RawatInapController::submitEditRawatInap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->delete('hapus/(:segment)', 'RawatInapController::hapusRawatInap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'RawatInapController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Ambulans
@@ -340,6 +345,7 @@ $routes->group('ambulans', ['filter' => 'auth'], function ($routes) {
     $routes->get('panggil/(:any)', 'AmbulansController::panggilAmbulans/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     $routes->get('terima/(:any)', 'AmbulansController::terimaAmbulans/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     $routes->get('audit', 'AmbulansController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    $routes->get('audit', 'AmbulansController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Unit Gawat Darurat
@@ -352,6 +358,7 @@ $routes->group('ugd', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit/(:segment)', 'UGDController::submitEditUGD/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->delete('hapus/(:segment)', 'UGDController::hapusUGD/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     $routes->post('trigger-notif', 'UGDController::triggerNotif');
+    $routes->get('audit', 'UGDController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Tindakan
@@ -370,6 +377,7 @@ $routes->group('tindakan', ['filter' => 'auth'], function ($routes) {
     $routes->get('submit-ranap/(:segment)', 'TindakanController::submitFromRawatInap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit-registrasi/(:segment)', 'TindakanController::submitFromRegistrasi/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit-ugd/(:segment)', 'TindakanController::submitFromUGD/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'TindakanController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Dokter Jaga
@@ -383,6 +391,7 @@ $routes->group('dokterjaga', ['filter' => 'auth'], function ($routes) {
     $routes->delete('hapus/(:segment)', 'DokterJagaController::hapusDokterJaga/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     $routes->get('panggil/(:any)', 'DokterJagaController::panggilDokterJaga/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     $routes->get('terima/(:any)', 'DokterJagaController::terimaDokterJaga/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    $routes->get('audit', 'DokterJagaController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Pemberian Obat
@@ -398,7 +407,7 @@ $routes->group('pemberianobat', ['filter' => 'auth'], function ($routes) {
     $routes->get('(:segment)', 'PemberianObatController::PemberianObatData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'PemberianObatController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('pemberianobat/edit/(:segment)/(:segment)', 'PemberianObatController::editPemberianObat/$1/$2');
-
+    $routes->get('audit', 'PemberianObatController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 // Resep Dokter
@@ -414,6 +423,7 @@ $routes->group('resepdokter', ['filter' => 'auth'], function ($routes) {
     $routes->get('(:segment)', 'ResepDokterController::ResepDokterData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'ResepDokterController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('resepdokter/edit/(:segment)/(:segment)', 'ResepDokterController::editResepDokter/$1/$2');
+    $routes->get('audit', 'ResepDokterController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 // Resep Obat
@@ -430,6 +440,7 @@ $routes->group('resepobat', ['filter' => 'auth'], function ($routes) {
     $routes->get('submit/(:segment)', 'ResepObatController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'ResepObatController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('resepobat/tambah/(:segment)', 'ResepObatController::tambahResepObatId/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'ResepObatController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 $routes->group('resepobatracikan', ['filter' => 'auth'], function ($routes) {
@@ -444,6 +455,7 @@ $routes->group('resepobatracikan', ['filter' => 'auth'], function ($routes) {
     $routes->get('(:segment)', 'ResepObatRacikanController::ResepObatRacikanData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'ResepObatRacikanController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'ResepObatRacikanController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'ResepObatRacikanController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 $routes->group('resepobatracikandetail', ['filter' => 'auth'], function ($routes) {
@@ -458,6 +470,7 @@ $routes->group('resepobatracikandetail', ['filter' => 'auth'], function ($routes
     $routes->get('(:segment)', 'ResepObatRacikanDetailController::ResepObatRacikanDetailData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'ResepObatRacikanDetailController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'ResepObatRacikanDetailController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'ResepObatRacikanDetailController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 // Permintaan Resep Pulang
@@ -473,6 +486,7 @@ $routes->group('permintaanreseppulang', ['filter' => 'auth'], function ($routes)
     $routes->get('(:segment)', 'PermintaanResepPulangController::PermintaanResepPulangData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'PermintaanResepPulangController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'PermintaanResepPulangController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'PermintaanResepPulangController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 // Resep Pulang
@@ -487,6 +501,7 @@ $routes->group('reseppulang', ['filter' => 'auth'], function ($routes) {
     $routes->delete('hapus/(:segment)/(:segment)/(:segment)/(:segment)', 'ResepPulangController::hapusResepPulang/$1/$2/$3/$4');
     $routes->get('(:segment)', 'ResepPulangController::resepPulangData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'ResepPulangController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'ResepPulangController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 // Permintaan Stok Obat
@@ -502,6 +517,7 @@ $routes->group('permintaanstokobat', ['filter' => 'auth'], function ($routes) {
     $routes->get('(:segment)', 'PermintaanStokObatController::permintaanStokObatData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'PermintaanStokObatController::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'PermintaanStokObatController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'PermintaanStokObatController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 // Stok Obat Pasien
@@ -516,6 +532,7 @@ $routes->group('stokobatpasien', ['filter' => 'auth'], function ($routes) {
     $routes->delete('hapus/(:segment)', 'StokObatPasienController::hapusStokObatPasien/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('(:segment)', 'StokObatPasienController::stokObatPasienData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'StokObatPasienController::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'StokObatPasienController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Pemeriksaan Ranap
@@ -531,6 +548,7 @@ $routes->group('pemeriksaanranap', ['filter' => 'auth'], function ($routes) {
     $routes->delete('hapus/(:segment)', 'PemeriksaanRanapController::hapusPemeriksaanRanap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('from-rawatinap/(:any)', 'PemeriksaanRanapController::submitFromRawatinapToPemeriksaanRanap/$1', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('tambah-dari-registrasi/(:segment)', 'PemeriksaanRanapController::submitFromRegistrasiToPemeriksaanRanap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'PemeriksaanRanapController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 
     // $routes->get('(:segment)', 'PemeriksaanRanapController::pemeriksaanRanapData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
@@ -547,6 +565,7 @@ $routes->group('pasien', ['filter' => 'auth'], function ($routes) {
     $routes->get('rekam-medis/(:segment)', 'PasienController::lihatPasienByRM/$1');
     // (Opsional) Detail pasien
     // $routes->get('(:segment)', 'PasienController::detailPasien/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'PasienController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Catatan Observasi Kebidanan
@@ -561,6 +580,7 @@ $routes->group('catatanobservasikebidanan', ['filter' => 'auth'], function ($rou
     // Fitur untuk prefill dari rawatinap
     $routes->get('from-rawatinap/(:segment)', 'CatatanObservasiKebidananController::submitFromRawatinapToCatatanObservasi/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('(:segment)', 'CatatanObservasiKebidananController::lihatCatatanObservasiByNoRawat/$1', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('audit', 'CatatanObservasiKebidananController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Catatan Observasi Ranap
@@ -575,6 +595,7 @@ $routes->group('catatanobservasiranap', ['filter' => 'auth'], function ($routes)
     // Fitur untuk prefill dari rawatinap
     $routes->get('from-rawatinap/(:segment)', 'CatatanObservasiRanapController::submitFromRawatinapToCatatanObservasi/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('(:segment)', 'CatatanObservasiRanapController::lihatCatatanObservasiByNoRawat/$1', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('audit', 'CatatanObservasiRanapController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Catatan Observasi Post Partum
@@ -589,7 +610,7 @@ $routes->group('catatanobservasipostpartum', ['filter' => 'auth'], function ($ro
     // Fitur untuk prefill dari rawatinap
     $routes->get('from-rawatinap/(:segment)', 'CatatanObservasiPostpartumController::submitFromRawatinapToCatatanObservasi/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('(:segment)', 'CatatanObservasiPostpartumController::lihatCatatanObservasiByNoRawat/$1', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
-
+    $routes->get('audit', 'CatatanObservasiPostpartumController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Diagnosa
@@ -603,6 +624,7 @@ $routes->group('diagnosa', ['filter' => 'auth'], function ($routes) {
     $routes->delete('hapus/(:segment)', 'DiagnosaController::hapusDiagnosa/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     // Fitur untuk prefill dari rawatinap
     $routes->get('from-rawatinap/(:segment)', 'DiagnosaController::submitFromRawatinapToCatatanObservasi/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'DiagnosaController::tampilAudit', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
 });
 
 //BPJS
@@ -658,6 +680,3 @@ $routes->group('upmk', ['filter' => 'auth'], function ($routes) {
     $routes->get('/'    , 'UangPenghargaanMasaKerja::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('audit', 'UangPenghargaanMasaKerja::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
-
-// $routes->get('/(:segment)/audit', to: 'Audit::GetAuditData/$1');
-// $routes->get('/AUDIT/(:segmen)', to: 'Audit::GetAuditData/$1');
