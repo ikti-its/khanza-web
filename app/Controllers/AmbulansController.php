@@ -7,6 +7,15 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class AmbulansController extends BaseController
 {
+    protected string $judul = 'Data Ambulans';
+    protected string $modul_path = '/ambulans';
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+    protected array $konfig = [
+        // [visible, Display, Kolom, Jenis]
+        [1, 'Nomor Ambulans' , 'no_ambulans', 'indeks'],
+        [1, 'Supir'          , 'supir'      , 'nama'],
+        [1, 'Status Ambulans', 'status'     , 'status']
+    ];
     public function dataAmbulans()
     {
         $title = 'Data Ambulans';

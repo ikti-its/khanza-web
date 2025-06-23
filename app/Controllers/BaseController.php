@@ -216,4 +216,25 @@ abstract class BaseController extends Controller
             'tabel'       => $this->fetchDataUsingCurl('GET', $this->modul_path)['data']['data']
         ]);
     }
+    public function tampilAudit(){
+        $audit_konfig = [
+            // [1, 'Nomor Perubahan'  , 'change_id' , 'indeks'],
+            [1, 'Aksi Perubahan'   , 'action'    , 'status'],
+            [1, 'Pengubah'         , 'changed_by', 'indeks'],
+            [1, 'Tanggal Perubahan', 'changed_at', 'tanggal']
+        ];
+        $breadcrumbs = [
+            ['title' => 'Audit', 'icon', 'audit']
+        ];
+        ;
+        return view('/layouts/audit', [
+            'judul'       => 'Audit' . $this->judul,
+            'breadcrumbs' => array_merge($this->getBreadcrumbs(), $breadcrumbs),
+            'meta_data'   => $this->meta_data,
+            'modul_path'  => $this->modul_path . '/audit',
+            'kolom_id'    => 'action',
+            'konfig'      => array_merge($audit_konfig, $this->konfig),
+            'tabel'       => Audit::GetAuditData('ambulans')
+        ]);
+    }
 }

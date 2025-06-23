@@ -339,6 +339,7 @@ $routes->group('ambulans', ['filter' => 'auth'], function ($routes) {
     $routes->delete('hapus/(:segment)', 'AmbulansController::hapusAmbulans/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     $routes->get('panggil/(:any)', 'AmbulansController::panggilAmbulans/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     $routes->get('terima/(:any)', 'AmbulansController::terimaAmbulans/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    $routes->get('audit', 'AmbulansController::tampilAudit', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
 });
 
 //Unit Gawat Darurat
@@ -606,44 +607,57 @@ $routes->group('diagnosa', ['filter' => 'auth'], function ($routes) {
 
 //BPJS
 $routes->group('bpjs', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'BPJS::data', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('/'    , 'BPJS::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'BPJS::tempilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Golongan
 $routes->group('golongan', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'Golongan::tampilData', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('/'    , 'Golongan::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'Golongan::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //Jabatan
 $routes->group('jabatan', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'Jabatan::tampilData', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('/'    , 'Jabatan::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'Jabatan::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 //PTKP
 $routes->group('ptkp', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'PTKP::tampilData', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('/'    , 'PTKP::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'PTKP::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 $routes->group('pph21', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'PPH21::tampilData', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('/'    , 'PPH21::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'PPH21::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 $routes->group('lembur', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'Lembur::tampilData', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('/'    , 'Lembur::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'Lembur::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 $routes->group('umr', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'UMR::tampilData', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('/'    , 'UMR::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'UMR::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 $routes->group('thr', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'THR::tampilData', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('/'    , 'THR::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'THR::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 $routes->group('pesangon', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'Pesangon::tampilData', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('/'    , 'Pesangon::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'Pesangon::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 $routes->group('upmk', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'UangPenghargaanMasaKerja::tampilData', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('/'    , 'UangPenghargaanMasaKerja::tampilData' , ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('audit', 'UangPenghargaanMasaKerja::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
+
+// $routes->get('/(:segment)/audit', to: 'Audit::GetAuditData/$1');
+// $routes->get('/AUDIT/(:segmen)', to: 'Audit::GetAuditData/$1');
