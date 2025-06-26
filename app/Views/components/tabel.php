@@ -20,31 +20,32 @@
         
 
         echo '<tbody class="divide-y divide-gray-200 dark:divide-gray-700">';
-            foreach($tabel as $baris){
-                $id = $baris[$kolom_id];
-                echo view('components/popup', [
-                    'baris'  => $baris,
-                    'id'     => $id,
-                    'kolom'  => array_column($konfig, $KOLOM),
-                    'label'  => array_column($konfig, $DISPLAY)
-                ]);
-            
-                echo '<tr>';
-                    echo view('components/tabel_td', [
-                        'baris'    => $baris,
-                        'id'       => $id,
-                        'kolom'    => array_column($data_visible, $KOLOM),
-                        'jenis'    => array_column($data_visible, $JENIS), 
+            if($tabel !== null){
+                foreach($tabel as $baris){
+                    $id = $baris[$kolom_id];
+                    echo view('components/popup', [
+                        'baris'  => $baris,
+                        'id'     => $id,
+                        'kolom'  => array_column($konfig, $KOLOM),
+                        'label'  => array_column($konfig, $DISPLAY)
                     ]);
-                    echo view('components/aksi', [
-                        'modul_path' => $modul_path,
-                        'id'         => $id,
-                        'aksi'       => $aksi
-                    ]);                              
-                echo '</tr>';
                 
+                    echo '<tr>';
+                        echo view('components/tabel_td', [
+                            'baris'    => $baris,
+                            'id'       => $id,
+                            'kolom'    => array_column($data_visible, $KOLOM),
+                            'jenis'    => array_column($data_visible, $JENIS), 
+                        ]);
+                        echo view('components/aksi', [
+                            'modul_path' => $modul_path,
+                            'id'         => $id,
+                            'aksi'       => $aksi
+                        ]);                              
+                    echo '</tr>';
+                    
+                }
             }
-            
         echo '</tbody>';
         ?>
     </table>

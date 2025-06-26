@@ -16,19 +16,20 @@
         
 
         echo '<tbody class="divide-y divide-gray-200 dark:divide-gray-700">';
-            foreach($tabel as $baris){
-                $id = $baris[$kolom_id];
-            
-                echo '<tr>';
-                    echo view('components/tabel_td', [
-                        'baris'    => $baris,
-                        'id'       => $id,
-                        'kolom'    => array_column($data_visible, $KOLOM),
-                        'jenis'    => array_column($data_visible, $JENIS), 
-                    ]);                   
-                echo '</tr>';
+            if($tabel !== null){
+                foreach($tabel as $baris){
+                    $id = $baris[$kolom_id];
+                
+                    echo '<tr>';
+                        echo view('components/tabel_td', [
+                            'baris'    => $baris,
+                            'id'       => $id,
+                            'kolom'    => array_column($data_visible, $KOLOM),
+                            'jenis'    => array_column($data_visible, $JENIS), 
+                        ]);                   
+                    echo '</tr>';
+                }
             }
-            
         echo '</tbody>';
         ?>
     </table>
