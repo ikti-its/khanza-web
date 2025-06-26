@@ -238,4 +238,16 @@ abstract class BaseController extends Controller
             'tabel'       => Audit::GetAuditData($this->modul_path)
         ]);
     }
+    public function tampilTambah(){
+        $breadcrumbs = [
+            ['title' => 'Tambah', 'icon', 'tambah']
+        ];
+        return view('/layouts/tambah', [
+            'judul'       => 'Tambah ' . $this->judul,
+            'breadcrumbs' => array_merge($this->getBreadcrumbs(), $breadcrumbs),
+            'modul_path'  => $this->modul_path,
+            'kolom_id'    => $this->kolom_id,
+            'konfig'      => $this->konfig,
+        ]);
+    }
 }
