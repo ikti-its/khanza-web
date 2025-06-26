@@ -132,19 +132,18 @@ abstract class BaseController extends Controller
     $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    $http_success_codes = [200, 201, 204];
-    if (!in_array($http_status_code, $http_success_codes)) {
-        log_message('error', $path . ' API error. Status: ' . $http_status_code . ', response: ' . $response);
-        echo $this->renderErrorView($http_status_code);
-    }
-
     $return_data = json_decode($response, true);
-    if (json_last_error() !== JSON_ERROR_NONE || !isset($return_data['data'])) {
-        log_message('error', 'JSON decode error: ' . json_last_error_msg());
-        echo $this->renderErrorView(500);
-    }
-
     if ($method !== 'GET') {
+        $http_success_codes = [200, 201, 204];
+        if (!in_array($http_status_code, $http_success_codes)) {
+            log_message('error', $path . ' API error. Status: ' . $http_status_code . ', response: ' . $response);
+            echo $this->renderErrorView($http_status_code);
+        }
+
+        if (json_last_error() !== JSON_ERROR_NONE || !isset($return_data['data'])) {
+            log_message('error', 'JSON decode error: ' . json_last_error_msg());
+            echo $this->renderErrorView(status_code: 500);
+        }
         return redirect()->to(base_url($redirect_url))->with('success', $redirect_msg ?? 'Berhasil');
     }
 
