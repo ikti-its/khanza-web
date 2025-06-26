@@ -61,6 +61,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/catatanobservasipostpartum/tambah'
                             ]) ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/catatanobservasipostpartum/audit'
+                            ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->

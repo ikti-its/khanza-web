@@ -57,6 +57,9 @@
                                     </a>
                                 </div>
                             <?php endif; ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/pemberianobat/audit'
+                            ]) ?>
                         </div>
                     </div>
 

@@ -22,6 +22,9 @@
                             <!-- <?= view('components/tambah_button', [
                                 'link' => '/rawatinap/tambah'
                             ]) ?> -->
+                            <?= view('components/audit_button', [
+                                'link' => '/rawatinap/audit'
+                            ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->

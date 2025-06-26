@@ -50,6 +50,9 @@
                                     </a>
                                 </div> -->
                             <?php endif; ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/permintaanreseppulang/audit'
+                            ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->

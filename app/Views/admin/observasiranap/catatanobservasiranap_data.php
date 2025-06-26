@@ -61,7 +61,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/catatanobservasiranap/tambah'
                             ]) ?>
-
+                            <?= view('components/audit_button', [
+                                'link' => '/catatanobservasiranap/audit'
+                            ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->

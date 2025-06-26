@@ -61,6 +61,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/pemeriksaanranap/tambah'
                             ]) ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/pemeriksaanranap/audit'
+                            ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->

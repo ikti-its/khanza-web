@@ -67,6 +67,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => 'ABCDEFGH'
                             ]) ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/stokobat/audit'
+                            ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->

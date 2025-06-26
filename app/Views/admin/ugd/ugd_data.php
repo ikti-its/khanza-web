@@ -71,7 +71,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/ugd/tambah'
                             ]) ?>
-
+                            <?= view('components/audit_button', [
+                                'link' => '/ugd/audit'
+                            ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->

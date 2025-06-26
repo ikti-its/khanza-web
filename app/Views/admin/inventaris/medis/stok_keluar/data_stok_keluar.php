@@ -18,7 +18,10 @@
                         </div>
                         <div class="flex gap-x-2 md:items-start">
                             <?= view('components/tambah_button', [
-                                'link' => '/stokkeluarmedis/tambah'
+                                'link' => '//tambah'
+                            ]) ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/stokkeluarmedis/audit'
                             ]) ?>
                         </div>
                     </div>

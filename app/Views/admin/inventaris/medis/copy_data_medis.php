@@ -259,6 +259,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/datamedis/tambah'
                             ]) ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/datamedis/audit'
+                            ]) ?>
 
                         </div>
                     </div>

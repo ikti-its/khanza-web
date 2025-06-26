@@ -28,7 +28,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/pasien/tambah'
                             ]) ?>
-
+                            <?= view('components/audit_button', [
+                                'link' => '/pasien/audit'
+                            ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->

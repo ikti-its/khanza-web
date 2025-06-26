@@ -30,6 +30,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/penerimaanmedis/tambah'
                             ]) ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/penerimaanmedis/audit'
+                            ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->

@@ -36,7 +36,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/permintaanstokobat/tambah'
                             ]) ?>
-
+                            <?= view('components/audit_button', [
+                                'link' => '/permintaanstokobat/audit'
+                            ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->

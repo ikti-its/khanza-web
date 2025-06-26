@@ -61,6 +61,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/dokterjaga/tambah'
                             ]) ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/dokterjaga/audit'
+                            ]) ?>
 
                         </div>
                     </div>

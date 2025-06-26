@@ -72,6 +72,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/ambulans/tambah'
                             ]) ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/ambulans/audit'
+                            ]) ?>
 
                         </div>
                     </div>

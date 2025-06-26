@@ -61,7 +61,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/catatanobservasikebidanan/tambah'
                             ]) ?>
-
+                            <?= view('components/audit_button', [
+                                'link' => '/catatanobservasikebidanan/audit'
+                            ]) ?>
                         </div>
                     </div>
 

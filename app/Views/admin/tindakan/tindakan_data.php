@@ -79,6 +79,9 @@
                                     </a>
                                 </div>
                             <?php endif; ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/tindakan/audit'
+                            ]) ?>
                         </div>
                     </div>
                     

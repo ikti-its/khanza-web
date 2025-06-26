@@ -69,6 +69,9 @@
                             <?= view('components/tambah_button', [
                                 'link' => '/rujukankeluar/tambah'
                             ]) ?>
+                            <?= view('components/audit_button', [
+                                'link' => '/rujukankeluar/audit'
+                            ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->
