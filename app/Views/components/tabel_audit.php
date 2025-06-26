@@ -16,7 +16,7 @@
         
 
         echo '<tbody class="divide-y divide-gray-200 dark:divide-gray-700">';
-            if($tabel !== null){
+            if(gettype($tabel) === 'array'){
                 foreach($tabel as $baris){
                     $id = $baris[$kolom_id];
                 
