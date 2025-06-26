@@ -40,7 +40,8 @@
                         echo view('components/aksi', [
                             'modul_path' => $modul_path,
                             'id'         => $id,
-                            'aksi'       => $aksi
+                            'aksi'       => $aksi,
+                            'baris'      => $baris
                         ]);                              
                     echo '</tr>';
                     
