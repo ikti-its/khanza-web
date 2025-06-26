@@ -3,13 +3,23 @@
         <?php
             $data = [
                 'id'         => $id,
-                'modul_path' => $modul_path   
+                'modul_path' => $modul_path,
+                'baris'      => $baris   
             ];
             if($aksi['cetak'] === true){
                 echo view('components/aksi_cetak', $data);
             }
             if($aksi['tindakan'] === true){
-                echo view('components/aksi_tindakan', $data);
+                switch($modul_path){
+                    case '/registrasi':
+                        echo view('components/aksi_tindakan_registrasi', $data);
+                        break;
+                    case '/rawatinap':
+                        echo view('components/aksi_tindakan_rawatinap', $data);
+                        break;
+                    default:
+                        break;
+                }
             }
             if($aksi['detail'] === true){
                 echo view('components/aksi_detail', $data);

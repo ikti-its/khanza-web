@@ -1,7 +1,6 @@
 <!-- Table -->
 <div style="overflow-x: auto; width: 100%;">
     <table id="myTable" style="min-width: 1500px; white-space: nowrap;" class="text-sm divide-y divide-gray-200 dark:divide-gray-700">
-
         <?php
         $VISIBLE = 0;
         $DISPLAY = 1;
