@@ -3,18 +3,18 @@
         <div class="overflow-y-auto w-full max-h-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
             <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
                 <?php 
-                    echo view('components/popup_judul',    ['id' => $id]);
-                    echo view('components/popup_tombol_x', ['id' => $id]);
+                    echo view('components/popup/judul',    ['id' => $id]);
+                    echo view('components/popup/tombol_x', ['id' => $id]);
                 ?>
             </div>
             <div class="p-4">
                 <?php
-                    echo view('components/popup_data', [
+                    echo view('components/popup/data', [
                         'baris' => $baris,
                         'kolom' => $kolom,
                         'label' => $label
                     ]);
-                    echo view('components/popup_tombol_tutup', ['id' => $id]);
+                    echo view('components/popup/tombol_tutup', ['id' => $id]);
                 ?>
             </div>
         </div>

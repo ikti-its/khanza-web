@@ -23,7 +23,7 @@
             if(gettype($tabel) === 'array'){
                 foreach($tabel as $baris){
                     $id = $baris[$kolom_id];
-                    echo view('components/popup', [
+                    echo view('components/popup/popup', [
                         'baris'  => $baris,
                         'id'     => $id,
                         'kolom'  => array_column($konfig, $KOLOM),
