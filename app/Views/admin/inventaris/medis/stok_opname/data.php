@@ -258,11 +258,11 @@
                                             <?php
                                                 $row_id  = $opname['id'];
                                                 $api_url = '/stokopnamemedis';
-                                                echo view('components/aksi_ubah',[
+                                                echo view('components/aksi/ubah',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/aksi_hapus',[
+                                                echo view('components/aksi/hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]); 

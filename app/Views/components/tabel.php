@@ -37,7 +37,7 @@
                             'kolom'    => array_column($data_visible, $KOLOM),
                             'jenis'    => array_column($data_visible, $JENIS), 
                         ]);
-                        echo view('components/aksi', [
+                        echo view('components/aksi/aksi', [
                             'modul_path' => $modul_path,
                             'id'         => $id,
                             'aksi'       => $aksi,
