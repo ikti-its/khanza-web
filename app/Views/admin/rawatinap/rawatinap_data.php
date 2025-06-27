@@ -68,7 +68,7 @@
                             [0, 'Status Bayar'     , 'status_bayar'  , 'status']
                             
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,

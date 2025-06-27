@@ -32,7 +32,7 @@
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <?php 
                             $widths  = [20, 20, 20, 20, 20];
-                            echo view('components/tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel/colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'Tanggal',
@@ -41,7 +41,7 @@
                                 'Pegawai',
                                 'Aksi'
                             ];
-                            echo view('components/tabel_thead',['kolom' => $columns]);
+                            echo view('components/tabel/thead',['kolom' => $columns]);
                         ?>
         
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">

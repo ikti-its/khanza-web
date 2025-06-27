@@ -274,7 +274,7 @@
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <?php 
                             $widths  = [30, 25, 20, 25];
-                            echo view('components/tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel/colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'Nama',
@@ -282,7 +282,7 @@
                                 'Stok',
                                 'Aksi'
                             ];
-                            echo view('components/tabel_thead',['kolom' => $columns]);
+                            echo view('components/tabel/thead',['kolom' => $columns]);
                         ?>    
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -600,7 +600,7 @@
                                             'jenis' => 'status',
                                             'stok'  => 'jumlah',
                                         ];
-                                        echo view('components/tabel_td', [
+                                        echo view('components/tabel/td', [
                                             'tabel'  => $tabel,
                                             'row_id' => $row_id,
                                             'data'   => $data

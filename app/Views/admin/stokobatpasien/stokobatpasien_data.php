@@ -103,7 +103,7 @@
                             [0, 'Aturan Pakai'      , 'aturan_pakai' , 'teks'],
                             // [0, 'Jam Pemberian Obat', ],
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,

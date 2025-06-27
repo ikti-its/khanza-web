@@ -75,7 +75,7 @@
                     <table id="myTable" class="overflow-x-auto min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <?php 
                             $widths  = [20, 25, 30, 25];
-                            echo view('components/tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel/colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'Tanggal',
@@ -83,7 +83,7 @@
                                 'Status',
                                 'Aksi'
                             ];
-                            echo view('components/tabel_thead',['kolom' => $columns]);
+                            echo view('components/tabel/thead',['kolom' => $columns]);
                         ?>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">

@@ -8,11 +8,11 @@
         
         $elem = $baris[$kolom[$i]];
         if(!isset($elem) || $elem === null || $elem === ''){
-            echo view('components/tabel_td_kosong');
+            echo view('components/tabel/td/kosong');
             continue;
         }
     
-        echo view('components/tabel_td_' . $jenis[$i], [
+        echo view('components/tabel/td/' . $jenis[$i], [
             'id'   => $id,
             'data' => $elem,
         ]);

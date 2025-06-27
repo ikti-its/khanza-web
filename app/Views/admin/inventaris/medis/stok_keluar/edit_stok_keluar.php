@@ -73,7 +73,7 @@
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
                                 <?php 
                                     $widths  = [30, 15, 15, 20, 20];
-                                    echo view('components/tabel_colgroup',['widths' => $widths]);
+                                    echo view('components/tabel/colgroup',['widths' => $widths]);
                                     
                                     $columns = [
                                         'Barang',
@@ -82,7 +82,7 @@
                                         'No Faktur',
                                         'No Batch'
                                     ];
-                                    // echo view('components/tabel_thead',['kolom' => $columns]);
+                                    // echo view('components/tabel/thead',['kolom' => $columns]);
                                 ?>
                     
                                 <thead class="bg-[#DCDCDC]">

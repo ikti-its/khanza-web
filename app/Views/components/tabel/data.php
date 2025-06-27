@@ -10,12 +10,12 @@
             
             $data_visible = array_filter($konfig, fn($input) => $input[$VISIBLE]);
             
-            // echo view('components/tabel_colgroup',[
+            // echo view('components/tabel/colgroup',[
             //     'kolom' => array_column($data_visible, $DISPLAY)
             // ]);
             
-            echo view('components/tabel_thead',[
-                'kolom' => array_column($data_visible, $DISPLAY)
+            echo view('components/tabel/thead',[
+                'kolom' => array_merge(array_column($data_visible, $DISPLAY), ['Aksi'])
             ]);
         
 
@@ -31,7 +31,7 @@
                     ]);
                 
                     echo '<tr>';
-                        echo view('components/tabel_td', [
+                        echo view('components/tabel/td', [
                             'baris'    => $baris,
                             'id'       => $id,
                             'kolom'    => array_column($data_visible, $KOLOM),

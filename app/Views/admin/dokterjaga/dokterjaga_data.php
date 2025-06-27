@@ -91,7 +91,7 @@
                             [1, 'Jam Selesai', 'jam_selesai', 'jam'],
                             [1, 'Poliklinik' , 'poliklinik' , 'status']
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,

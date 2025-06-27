@@ -80,7 +80,7 @@
                             [1, 'Status'             , 'status'        , 'status'],
                             [1, 'Nama Pasien'        , 'nama_pasien'   , 'nama']
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,

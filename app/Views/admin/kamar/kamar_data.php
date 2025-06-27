@@ -103,7 +103,7 @@
                             [1, 'Tarif Kamar' , 'tarif_kamar' , 'uang'],
                             [1, 'Status Kamar', 'status_kamar', 'status'],
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,

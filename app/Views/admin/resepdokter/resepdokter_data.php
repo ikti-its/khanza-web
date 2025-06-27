@@ -87,7 +87,7 @@
                             [1, 'Aturan Pakai', 'aturan_pakai', 'teks'],
                             [1, 'Biaya'       , 'harga'       , 'uang'],
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,

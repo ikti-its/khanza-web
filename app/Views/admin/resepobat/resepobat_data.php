@@ -85,7 +85,7 @@
                             [0, 'Tanggal Penyerahan', 'tgl_penyerahan', 'tanggal'],
                             [0, 'Jam Penyerahan'    , 'jam_penyerahan', 'jam']
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,

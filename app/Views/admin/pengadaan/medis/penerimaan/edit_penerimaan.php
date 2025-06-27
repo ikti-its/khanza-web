@@ -112,7 +112,7 @@
                             <table class="pt-5 min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
                                 <?php 
                                     $widths  = [4, 6, 12, 5, 4, 8, 8, 8, 4, 6, 8, 8];
-                                    echo view('components/tabel_colgroup',['widths' => $widths]);
+                                    echo view('components/tabel/colgroup',['widths' => $widths]);
                                     
                                     $columns = [
                                         'Jumlah',
@@ -128,7 +128,7 @@
                                         'Total',
                                         'No Batch'
                                     ];
-                                    // echo view('components/tabel_thead',['kolom' => $columns]);
+                                    // echo view('components/tabel/thead',['kolom' => $columns]);
                                 ?>
 
                                 <thead class="bg-[#DCDCDC]">

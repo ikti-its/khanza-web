@@ -83,7 +83,7 @@
                             [0, 'No. Batch'    , 'no_batch'   , 'indeks'],
                             [0, 'No. Faktur'   , 'no_faktur'  , 'indeks'],
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,

@@ -17,7 +17,7 @@
                         ]);
                         echo view('components/search_bar');
                         
-                        echo view('components/tabel_audit', [
+                        echo view('components/tabel/audit', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
