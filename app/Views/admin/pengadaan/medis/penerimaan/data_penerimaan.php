@@ -27,10 +27,10 @@
 
                         </div>
                         <div>
-                            <?= view('components/tambah_button', [
+                            <?= view('components/header/tambah_button', [
                                 'link' => '/penerimaanmedis/tambah'
                             ]) ?>
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/penerimaanmedis/audit'
                             ]) ?>
                         </div>

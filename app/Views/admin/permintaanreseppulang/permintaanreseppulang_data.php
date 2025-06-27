@@ -50,7 +50,7 @@
                                     </a>
                                 </div> -->
                             <?php endif; ?>
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/permintaanreseppulang/audit'
                             ]) ?>
                         </div>

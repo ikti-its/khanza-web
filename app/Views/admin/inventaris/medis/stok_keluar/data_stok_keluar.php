@@ -17,10 +17,10 @@
 
                         </div>
                         <div class="flex gap-x-2 md:items-start">
-                            <?= view('components/tambah_button', [
+                            <?= view('components/header/tambah_button', [
                                 'link' => '//tambah'
                             ]) ?>
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/stokkeluarmedis/audit'
                             ]) ?>
                         </div>

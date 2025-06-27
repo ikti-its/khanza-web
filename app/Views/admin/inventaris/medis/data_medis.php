@@ -19,10 +19,10 @@
 
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
-                            <?= view('components/tambah_button', [
+                            <?= view('components/header/tambah_button', [
                                 'link' => '/datamedis/tambah'
                             ]) ?>
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/datamedis/audit'
                             ]) ?>
                         </div>
