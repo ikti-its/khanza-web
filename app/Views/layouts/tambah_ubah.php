@@ -11,7 +11,7 @@
         <form action="<?= $modul_path ?>/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
            <?php 
                 echo csrf_field();
-                echo view('components/form/isian', ['konfig' => $konfig]);
+                echo view('components/form/isian', ['konfig' => $konfig, 'baris' => $baris ??  '']);
                 echo view('components/form/submit_button')
             ?>
         </form>
