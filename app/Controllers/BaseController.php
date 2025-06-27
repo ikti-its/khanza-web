@@ -92,67 +92,76 @@ abstract class BaseController extends Controller
 
 
     protected function fetchDataUsingCurl($method, $path, $data = null, $redirect_url = null, $redirect_msg = null)
-{
-    $allowed_methods = ['GET', 'POST', 'PUT', 'DELETE'];
-    if (!in_array($method, $allowed_methods)) {
-        echo $this->renderErrorView(405);
-    }
-
-    if (!session()->has('jwt_token')) {
-        echo $this->renderErrorView(401);
-    }
-
-    $token = session()->get('jwt_token');
-    $full_url = $this->api_url . $path;
-    $ch = curl_init($full_url);
-
-    $headers = [
-        'Authorization: Bearer ' . $token,
-        'Accept: application/json',
-    ];
-
-    if ($method === 'POST' || $method === 'PUT') {
-        $postData = json_encode($data);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-        $headers[] = 'Content-Type: application/json';
-        $headers[] = 'Content-Length: ' . strlen($postData);
-    }
-
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); // ✅ set merged headers
-
-    // Set method
-    if ($method === 'POST') {
-        curl_setopt($ch, CURLOPT_POST, true);
-    } elseif ($method === 'PUT' || $method === 'DELETE') {
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-    }
-
-    $response = curl_exec($ch);
-    $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    $return_data = json_decode($response, true);
-    if ($method !== 'GET') {
-        $http_success_codes = [200, 201, 204];
-        if (!in_array($http_status_code, $http_success_codes)) {
-            log_message('error', $path . ' API error. Status: ' . $http_status_code . ', response: ' . $response);
-            echo $this->renderErrorView($http_status_code);
+    {
+        $allowed_methods = ['GET', 'POST', 'PUT', 'DELETE'];
+        if (!in_array($method, $allowed_methods)) {
+            echo $this->renderErrorView(405);
         }
 
-        if (json_last_error() !== JSON_ERROR_NONE || !isset($return_data['data'])) {
-            log_message('error', 'JSON decode error: ' . json_last_error_msg());
-            echo $this->renderErrorView(status_code: 500);
+        if (!session()->has('jwt_token')) {
+            echo $this->renderErrorView(401);
         }
-        return redirect()->to(base_url($redirect_url))->with('success', $redirect_msg ?? 'Berhasil');
+
+        $token = session()->get('jwt_token');
+        $full_url = $this->api_url . $path;
+        $ch = curl_init($full_url);
+
+        $headers = [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json',
+        ];
+
+        if ($method === 'POST' || $method === 'PUT') {
+            $postData = json_encode($data);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+            $headers[] = 'Content-Type: application/json';
+            $headers[] = 'Content-Length: ' . strlen($postData);
+        }
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); // ✅ set merged headers
+
+        // Set method
+        if ($method === 'POST') {
+            curl_setopt($ch, CURLOPT_POST, true);
+        } elseif ($method === 'PUT' || $method === 'DELETE') {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+        }
+
+        $response = curl_exec($ch);
+        $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $return_data = json_decode($response, true);
+        if ($method !== 'GET') {
+            $http_success_codes = [200, 201, 204];
+            if (!in_array($http_status_code, $http_success_codes)) {
+                log_message('error', $path . ' API error. Status: ' . $http_status_code . ', response: ' . $response);
+                echo $this->renderErrorView($http_status_code);
+            }
+
+            if (json_last_error() !== JSON_ERROR_NONE || !isset($return_data['data'])) {
+                log_message('error', 'JSON decode error: ' . json_last_error_msg());
+                echo $this->renderErrorView(status_code: 500);
+            }
+            return redirect()->to(base_url($redirect_url))->with('success', $redirect_msg ?? 'Berhasil');
+        }
+
+        return [
+            'data' => $return_data,
+            'kode' => $http_status_code
+        ];
     }
 
-    return [
-        'data' => $return_data,
-        'kode' => $http_status_code
-    ];
-}
-
+    private function getPostData(){
+        $KOLOM = 2;
+        $postData = [];
+        foreach($this->konfig as $k){
+            $kolom = $k[$KOLOM];
+            $postData[$kolom] = $this->request->getPost($kolom);
+        }
+        return $postData;
+    }
 
     protected function renderErrorView($status_code, $custom_message = null)
     {
@@ -264,5 +273,20 @@ abstract class BaseController extends Controller
             'konfig'      => $this->konfig,
             'baris'       => $baris
         ]);
+    }
+    public function simpanTambah()
+    {   
+        $postData = $this->getPostData();
+        return $this->fetchDataUsingCurl('POST', $this->modul_path, $postData, $this->modul_path);
+    }
+    public function simpanUbah($id)
+    {
+        $postData = $this->getPostData();
+        return $this->fetchDataUsingCurl('PUT', $this->modul_path . '/' . $id, $postData, $this->modul_path, $this->judul . ' berhasil diperbarui.');
+    }
+
+    public function hapus($id)
+    {
+        return $this->fetchDataUsingCurl('DELETE', $this->modul_path . '/' . $id, null, $this->modul_path, $this->judul . ' berhasil dihapus.' );
     }
 }
