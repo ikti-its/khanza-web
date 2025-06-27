@@ -21,12 +21,15 @@ class PasienController extends BaseController
         'hapus'    => true
     ];
     protected array $konfig = [
-        [1, 'Nomor Registrasi', 'nomor_reg', 'indeks'],
-        [1, 'Nomor Rawat',      'nomor_rawat', 'indeks'],
+        [1, 'Nomor Registrasi', 'nomor_reg', 'indeks', 1],
+        [1, 'Nomor Rawat',      'nomor_rawat', 'indeks', 1],
         [1, 'Tanggal',          'tanggal', 'tanggal'],
         [1, 'Jam',              'jam', 'jam'],
         [1, 'Nama',             'nama_pasien', 'nama'],
-        [1, 'Jenis Kelamin',    'jenis_kelamin', 'status'],
+        [1, 'Jenis Kelamin',    'jenis_kelamin', 'status', [
+            ['Laki-laki', 'Laki-laki'],
+            ['Perempuan', 'Perempuan']
+        ]],
         [1, 'Umur',             'umur', 'jumlah']
     ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
@@ -37,7 +40,7 @@ class PasienController extends BaseController
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
             $page = $this->request->getGet('page') ?? 1;
-            $size = $this->meta_data['size']; // default 10 dari atas
+            $size = $this->meta_data['size'];
 
             $api_url = $this->api_url . "/registrasi?page={$page}&size={$size}";
 
@@ -58,6 +61,9 @@ class PasienController extends BaseController
             $response_data = json_decode($response, true);
             $this->tabel = $response_data['data'] ?? [];
             $this->meta_data = $response_data['meta_data'] ?? $this->meta_data;
+
+            // 🔁 Force modul_path ke '/registrasi' biar tombol Tambah redirect ke sana
+            $this->modul_path = '/registrasi';
 
             return view('layouts/data', get_object_vars($this));
         }

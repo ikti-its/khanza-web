@@ -286,13 +286,13 @@ $routes->group('datapasien', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'PasienController::tampilData', [
         'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
     ]);
-    $routes->get('tambah', 'PasienController::tambah', [
+    $routes->get('tambah', 'PasienController::tampilTambah', [
         'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
     ]);
     $routes->post('submittambah', 'PasienController::submitTambah', [
         'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
     ]);
-    $routes->get('edit/(:any)', 'PasienController::edit/$1', [
+    $routes->get('edit/(:any)', 'PasienController::tampilUbah/$1', [
         'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
     ]);
     $routes->post('submitedit', 'PasienController::submitEdit', [
@@ -659,27 +659,26 @@ $routes->group('diagnosa', ['filter' => 'auth'], function ($routes) {
 
 //Fitur Penggajian
 $fitur = [
-    ['BPJS'    , 'bpjs'],
+    ['BPJS', 'bpjs'],
     ['Golongan', 'golongan'],
-    ['Jabatan' , 'jabatan'],
-    ['PTKP'    , 'ptkp'],
-    ['PPH21'   , 'pph21'],
-    ['Lembur'  , 'lembur'],
-    ['UMR'     , 'umr'],
-    ['THR'     , 'thr'],
+    ['Jabatan', 'jabatan'],
+    ['PTKP', 'ptkp'],
+    ['PPH21', 'pph21'],
+    ['Lembur', 'lembur'],
+    ['UMR', 'umr'],
+    ['THR', 'thr'],
     ['Pesangon', 'pesangon'],
     ['UangPenghargaanMasaKerja', 'upmk']
 ];
 $filter = ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'];
-foreach($fitur as $f){
+foreach ($fitur as $f) {
     $routes->group($f[1], ['filter' => 'auth'], function ($routes) use ($f, $filter) {
-        $routes->get('/'                    , $f[0] . '::tampilData'   , $filter);
-        $routes->get('audit'                , $f[0] . '::tampilAudit'  , $filter);
-        $routes->get('tambah'               , $f[0] . '::tampilTambah' , $filter);
-        $routes->post('submittambah'        , $f[0] . '::simpanTambah' , $filter);
-        $routes->get('edit/(:segment)'      , $f[0] . '::tampilUbah/$1', $filter);
+        $routes->get('/', $f[0] . '::tampilData', $filter);
+        $routes->get('audit', $f[0] . '::tampilAudit', $filter);
+        $routes->get('tambah', $f[0] . '::tampilTambah', $filter);
+        $routes->post('submittambah', $f[0] . '::simpanTambah', $filter);
+        $routes->get('edit/(:segment)', $f[0] . '::tampilUbah/$1', $filter);
         $routes->post('submitedit(:segment)', $f[0] . '::simpanUbah/$1', $filter);
-        $routes->delete('hapus/(:segment)'  , $f[0] . '::hapusData/$1' , $filter);
+        $routes->delete('hapus/(:segment)', $f[0] . '::hapusData/$1', $filter);
     });
 }
-
