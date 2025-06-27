@@ -344,7 +344,7 @@
                                     'row_id'  => $row_id,
                                     'api_url' => $api_url   
                                 ]);
-                                echo view('components/data_edit',[
+                                echo view('components/aksi_ubah',[
                                     'row_id'  => $row_id,
                                     'api_url' => $api_url   
                                 ]);
