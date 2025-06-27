@@ -22,12 +22,12 @@
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <?= view('components/notif_icon') ?>
+                                <?= view('components/notif/icon') ?>
 
                                 <!-- Notification Pop-up -->
                                 <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
                                     <div class="px-4">
-                                        <?= view('components/notif_header') ?>
+                                        <?= view('components/notif/header') ?>
                                         <div class="flex">
                                             <div class="flex justify-center items-center w-3/4">
                                                 <button id="stok-tab" class="flex items-center justify-center text-center w-full py-2 border-b-2 border-[#272727]">
@@ -72,17 +72,17 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/tambah_button', [
+                            <?= view('components/header/tambah_button', [
                                 'link' => '/kamar/tambah'
                             ]) ?>
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/kamar/audit'
                             ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->
                     <?php
-                        echo view('components/search_bar');
+                        echo view('components/header/search_bar');
                         
                         $modul_path = '/kamar';
                         $tabel    = $kamar_data;
@@ -103,7 +103,7 @@
                             [1, 'Tarif Kamar' , 'tarif_kamar' , 'uang'],
                             [1, 'Status Kamar', 'status_kamar', 'status'],
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
@@ -111,7 +111,7 @@
                             'aksi'       => $aksi
                         ]);
                         
-                        echo view('components/footer', [
+                        echo view('components/footer/footer', [
                             'meta_data'  => $meta_data,
                             'modul_path' => $modul_path
                         ]);      

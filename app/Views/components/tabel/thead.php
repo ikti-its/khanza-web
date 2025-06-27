@@ -6,11 +6,9 @@
                 <span class="sr-only">Checkbox</span>
             </label>
         </th> -->
-    <?php
-        array_push($kolom, 'Aksi');
-        
+    <?php        
         foreach ($kolom as $k){
-            echo view('components/tabel_th', [
+            echo view('components/tabel/th', [
                 'kolom' => esc($k)
             ]);
         }

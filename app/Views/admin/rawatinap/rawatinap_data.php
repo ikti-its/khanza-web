@@ -19,17 +19,17 @@
 
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
-                            <!-- <?= view('components/tambah_button', [
+                            <!-- <?= view('components/header/tambah_button', [
                                 'link' => '/rawatinap/tambah'
                             ]) ?> -->
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/rawatinap/audit'
                             ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->
                     <?php
-                        echo view('components/search_bar');
+                        echo view('components/header/search_bar');
                         
                         $modul_path = '/rawatinap';
                         $tabel    = $rawatinap_data;
@@ -68,7 +68,7 @@
                             [0, 'Status Bayar'     , 'status_bayar'  , 'status']
                             
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
@@ -76,7 +76,7 @@
                             'aksi'       => $aksi
                         ]);
                         
-                        echo view('components/footer', [
+                        echo view('components/footer/footer', [
                             'meta_data'  => $meta_data,
                             'modul_path' => $modul_path
                         ]);      

@@ -22,13 +22,13 @@
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <?= view('components/notif_icon') ?>
+                                <?= view('components/notif/icon') ?>
 
                                 <!-- Notification Pop-up -->
                                 <div id="notif-popup" style="width: 600px;" class="absolute right-0 mt-2 overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
 
                                     <div class="px-4">
-                                        <?= view('components/notif_header') ?>
+                                        <?= view('components/notif/header') ?>
                                         <div class="flex">
                                             <div class="flex flex-col gap-2 w-full" id="ambulansNotifSection">
                                                 <!-- 🚑 Ambulans Notification -->
@@ -69,10 +69,10 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/tambah_button', [
+                            <?= view('components/header/tambah_button', [
                                 'link' => '/ambulans/tambah'
                             ]) ?>
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/ambulans/audit'
                             ]) ?>
 
@@ -100,7 +100,7 @@
                         $ambulans['status'] = $statusText;
                     ?>
                     <?php
-                        echo view('components/search_bar');
+                        echo view('components/header/search_bar');
                         
                         $modul_path = '/ambulans';
                         $tabel    = $ambulans_data;
@@ -118,7 +118,7 @@
                             [1, 'Supir'          , 'supir'      , 'nama'],
                             [1, 'Status Ambulans', 'status'     , 'status']
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
@@ -126,7 +126,7 @@
                             'aksi'       => $aksi
                         ]);
                         
-                        echo view('components/footer', [
+                        echo view('components/footer/footer', [
                             'meta_data'  => $meta_data,
                             'modul_path' => $modul_path
                         ]);      

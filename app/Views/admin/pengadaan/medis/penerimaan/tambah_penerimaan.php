@@ -5,7 +5,7 @@
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <?= view('components/form_judul', [
+        <?= view('components/form/judul', [
             'judul' => 'Tambah Penerimaan Barang Medis'
         ]) ?>
 
@@ -110,7 +110,7 @@
                             <table class="pt-5 min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
                                 <?php 
                                     $widths  = [4, 4, 4, 12, 5, 4, 8, 8, 8, 4, 8, 6, 6];
-                                    echo view('components/tabel_colgroup',['widths' => $widths]);
+                                    echo view('components/tabel/colgroup',['widths' => $widths]);
                                     
                                     // $columns = [
                                     //     'Jumlah',
@@ -126,7 +126,7 @@
                                     //     'Total',
                                     //     'No Batch'
                                     // ];
-                                    // echo view('components/tabel_thead',['kolom' => $columns]);
+                                    // echo view('components/tabel/thead',['kolom' => $columns]);
                                 ?>
 
                                 <thead class="bg-[#DCDCDC]">

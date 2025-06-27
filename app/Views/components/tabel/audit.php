@@ -10,7 +10,7 @@
             
             $data_visible = $konfig;
             
-            echo view('components/tabel_audit_thead',[
+            echo view('components/tabel/thead',[
                 'kolom' => array_column($data_visible, $DISPLAY)
             ]);
         
@@ -21,7 +21,7 @@
                     $id = $baris[$kolom_id];
                 
                     echo '<tr>';
-                        echo view('components/tabel_td', [
+                        echo view('components/tabel/td', [
                             'baris'    => $baris,
                             'id'       => $id,
                             'kolom'    => array_column($data_visible, $KOLOM),

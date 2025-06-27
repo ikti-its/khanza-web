@@ -20,11 +20,11 @@
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <?= view('components/notif_icon') ?>
+                                <?= view('components/notif/icon') ?>
 
                                 <!-- Notification Pop-up -->
                                 <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
-                                    <?= view('components/notif') ?>
+                                    <?= view('components/notif/notif') ?>
                                     <div>
                                         <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
                                             <?php
@@ -256,16 +256,16 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/tambah_button', [
+                            <?= view('components/header/tambah_button', [
                                 'link' => '/datamedis/tambah'
                             ]) ?>
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/datamedis/audit'
                             ]) ?>
 
                         </div>
                     </div>
-                    <?= view('components/search_bar') ?>
+                    <?= view('components/header/search_bar') ?>
 
                     <!-- End Header -->
 
@@ -274,7 +274,7 @@
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <?php 
                             $widths  = [30, 25, 20, 25];
-                            echo view('components/tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel/colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'Nama',
@@ -282,7 +282,7 @@
                                 'Stok',
                                 'Aksi'
                             ];
-                            echo view('components/tabel_thead',['kolom' => $columns]);
+                            echo view('components/tabel/thead',['kolom' => $columns]);
                         ?>    
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -600,7 +600,7 @@
                                             'jenis' => 'status',
                                             'stok'  => 'jumlah',
                                         ];
-                                        echo view('components/tabel_td', [
+                                        echo view('components/tabel/td', [
                                             'tabel'  => $tabel,
                                             'row_id' => $row_id,
                                             'data'   => $data
@@ -612,15 +612,15 @@
                                             <?php
                                                 $row_id  = $medis['id'];
                                                 $api_url = '/datamedis';
-                                                echo view('components/aksi_detail',[
+                                                echo view('components/aksi/detail',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/aksi_ubah',[
+                                                echo view('components/aksi/ubah',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/aksi_hapus',[
+                                                echo view('components/aksi/hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]); 

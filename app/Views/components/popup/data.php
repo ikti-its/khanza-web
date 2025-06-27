@@ -13,7 +13,7 @@
                 }
             }
             for($i = 0; $i < sizeof($kolom); $i++){
-                echo view('components/popup_baris', [
+                echo view('components/popup/baris', [
                     'baris' => $baris,
                     'kolom' => $kolom[$i],
                     'label' => $label[$i]

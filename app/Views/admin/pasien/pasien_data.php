@@ -22,20 +22,20 @@
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <?= view('components/notif_icon') ?>
+                                <?= view('components/notif/icon') ?>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/tambah_button', [
+                            <?= view('components/header/tambah_button', [
                                 'link' => '/pasien/tambah'
                             ]) ?>
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/pasien/audit'
                             ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->
                     <?php
-                        echo view('components/search_bar');
+                        echo view('components/header/search_bar');
                         
                         $modul_path = '/pasien';
                         $tabel    = $pasien_data;
@@ -56,7 +56,7 @@
                             [1, 'Tanggal Daftar', 'tgl_daftar'  , 'tanggal'],
 
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
@@ -64,7 +64,7 @@
                             'aksi'       => $aksi
                         ]);
                         
-                        echo view('components/footer', [
+                        echo view('components/footer/footer', [
                             'meta_data'  => $meta_data,
                             'modul_path' => $modul_path
                         ]);      

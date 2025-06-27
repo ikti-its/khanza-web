@@ -11,20 +11,20 @@
             <div class="sm:px-20 min-w-full inline-block align-middle">
                 <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
                     <?php
-                        echo view('components/data_header_audit',[
+                        echo view('components/header/audit',[
                             'judul'      => $judul,
                             'modul_path' => $modul_path
                         ]);
-                        echo view('components/search_bar');
+                        echo view('components/header/search_bar');
                         
-                        echo view('components/tabel_audit', [
+                        echo view('components/tabel/audit', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
                             'konfig'     => $konfig,
                         ]);
                         
-                        echo view('components/footer', [
+                        echo view('components/footer/footer', [
                             'meta_data'  => $meta_data,
                             'modul_path' => $modul_path
                         ]);      

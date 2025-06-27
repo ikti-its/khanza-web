@@ -53,7 +53,7 @@
                     <table id="myTable" class="overflow-x-auto min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <?php 
                             $widths  = [14, 16, 11, 11, 11, 11, 12, 14];
-                            echo view('components/tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel/colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'Tanggal',
@@ -65,7 +65,7 @@
                                 'Lokasi',
                                 'Aksi'
                             ];
-                            echo view('components/tabel_thead',['kolom' => $columns]);
+                            echo view('components/tabel/thead',['kolom' => $columns]);
                         ?>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -258,11 +258,11 @@
                                             <?php
                                                 $row_id  = $opname['id'];
                                                 $api_url = '/stokopnamemedis';
-                                                echo view('components/aksi_ubah',[
+                                                echo view('components/aksi/ubah',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/aksi_hapus',[
+                                                echo view('components/aksi/hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]); 

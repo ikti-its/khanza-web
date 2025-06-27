@@ -5,7 +5,7 @@
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <?= view('components/form_judul', [
+        <?= view('components/form/judul', [
             'judul' => 'Tambah Registrasi Pasien'
         ]) ?>
         <form action="/registrasi/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
@@ -166,7 +166,7 @@
                     <option value="Sudah Bayar">Sudah Bayar</option>
                 </select>
             </div>
-            <?= view('components/form_submit_button') ?>
+            <?= view('components/form/submit_button') ?>
         </form>
     </div>
     <!-- End Card -->

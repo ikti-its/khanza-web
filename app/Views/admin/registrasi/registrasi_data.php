@@ -20,12 +20,12 @@
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <?= view('components/notif_icon') ?>
+                                <?= view('components/notif/icon') ?>
 
                                 <!-- Notification Pop-up -->
                                 <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
                                     <div class="px-4">
-                                        <?= view('components/notif_header') ?>
+                                        <?= view('components/notif/header') ?>
                                         <div class="flex">                                    
                                         </div>
                                     </div>
@@ -81,17 +81,17 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/tambah_button', [
+                            <?= view('components/header/tambah_button', [
                                 'link' => '/registrasi/tambah'
                             ]) ?>
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/registrasi/audit'
                             ]) ?>
                         </div>
                     </div>
                     <!-- End Header -->
                     <?php
-                        echo view('components/search_bar');
+                        echo view('components/header/search_bar');
                         
                         $modul_path = '/registrasi';
                         $tabel    = $registrasi_data;
@@ -126,7 +126,7 @@
                             [0, 'Jenis Bayar'      , 'jenis_bayar'      , 'status'],
                             [0, 'Status Bayar'     , 'status_bayar'     , 'status'],
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
@@ -134,7 +134,7 @@
                             'aksi'       => $aksi
                         ]);
                         
-                        echo view('components/footer', [
+                        echo view('components/footer/footer', [
                             'meta_data'  => $meta_data,
                             'modul_path' => $modul_path
                         ]);      

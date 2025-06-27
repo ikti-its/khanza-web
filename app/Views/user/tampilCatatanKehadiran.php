@@ -28,7 +28,7 @@
 
                     </div>
 
-                    <?= view('components/search_bar') ?>
+                    <?= view('components/header/search_bar') ?>
 
 
                     <div class="overflow-x-auto">

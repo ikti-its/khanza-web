@@ -21,11 +21,11 @@
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <?= view('components/notif_icon') ?>
+                                <?= view('components/notif/icon') ?>
 
                                 <!-- Notification Pop-up -->
                                 <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
-                                    <?= view('components/notif') ?>
+                                    <?= view('components/notif/notif') ?>
                                     <div>
                                         <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
                                             <?php
@@ -68,10 +68,10 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/tambah_button', [
+                            <?= view('components/header/tambah_button', [
                                 'link' => '/ugd/tambah'
                             ]) ?>
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/ugd/audit'
                             ]) ?>
                         </div>
@@ -79,7 +79,7 @@
                     <!-- End Header -->
                     
                     <?php
-                        echo view('components/search_bar');
+                        echo view('components/header/search_bar');
                         
                         $modul_path = '/ugd';
                         $tabel    = $ugd_data;
@@ -112,7 +112,7 @@
                             [0, 'Status Bayar'    , 'status_bayar'    , 'status'],
 
                         ];
-                        echo view('components/tabel', [
+                        echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
@@ -120,7 +120,7 @@
                             'aksi'       => $aksi
                         ]);
                         
-                        echo view('components/footer', [
+                        echo view('components/footer/footer', [
                             'meta_data'  => $meta_data,
                             'modul_path' => $modul_path
                         ]);      

@@ -17,22 +17,22 @@
 
                         </div>
                         <div class="flex gap-x-2 md:items-start">
-                            <?= view('components/tambah_button', [
+                            <?= view('components/header/tambah_button', [
                                 'link' => '//tambah'
                             ]) ?>
-                            <?= view('components/audit_button', [
+                            <?= view('components/header/audit_button', [
                                 'link' => '/stokkeluarmedis/audit'
                             ]) ?>
                         </div>
                     </div>
-                    <?= view('components/search_bar') ?>
+                    <?= view('components/header/search_bar') ?>
                     <!-- End Header -->
 
                     <!-- Table -->
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <?php 
                             $widths  = [20, 20, 20, 20, 20];
-                            echo view('components/tabel_colgroup',['widths' => $widths]);
+                            echo view('components/tabel/colgroup',['widths' => $widths]);
                             
                             $columns = [
                                 'Tanggal',
@@ -41,7 +41,7 @@
                                 'Pegawai',
                                 'Aksi'
                             ];
-                            echo view('components/tabel_thead',['kolom' => $columns]);
+                            echo view('components/tabel/thead',['kolom' => $columns]);
                         ?>
         
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -236,11 +236,11 @@
                                             <?php
                                                 $row_id  = $stok['id'];
                                                 $api_url = '/stokkeluarmedis';
-                                                echo view('components/aksi_ubah',[
+                                                echo view('components/aksi/ubah',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]);
-                                                echo view('components/aksi_hapus',[
+                                                echo view('components/aksi/hapus',[
                                                     'row_id'  => $row_id,
                                                     'api_url' => $api_url   
                                                 ]); 

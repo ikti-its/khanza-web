@@ -206,6 +206,7 @@ abstract class BaseController extends Controller
     
     public function tampilData()
     {               
+        $tabel = $this->fetchDataUsingCurl('GET', $this->modul_path)['data']['data'];
         return view('/layouts/data', [
             'judul'       => $this->judul,
             'breadcrumbs' => $this->getBreadcrumbs(),
@@ -214,7 +215,7 @@ abstract class BaseController extends Controller
             'kolom_id'    => $this->kolom_id,
             'konfig'      => $this->konfig,
             'aksi'        => $this->aksi, 
-            'tabel'       => $this->fetchDataUsingCurl('GET', $this->modul_path)['data']['data']
+            'tabel'       => $tabel,
         ]);
     }
     public function tampilAudit(){
@@ -236,6 +237,32 @@ abstract class BaseController extends Controller
             'kolom_id'    => 'action',
             'konfig'      => array_merge($audit_konfig, $this->konfig),
             'tabel'       => Audit::GetAuditData($this->modul_path)
+        ]);
+    }
+    public function tampilTambah(){
+        $breadcrumbs = [
+            ['title' => 'Tambah', 'icon', 'tambah']
+        ];
+        return view('/layouts/tambah_ubah', [
+            'judul'       => 'Tambah ' . $this->judul,
+            'breadcrumbs' => array_merge($this->getBreadcrumbs(), $breadcrumbs),
+            'modul_path'  => $this->modul_path,
+            'kolom_id'    => $this->kolom_id,
+            'konfig'      => $this->konfig,
+        ]);
+    }
+    public function tampilUbah($id){
+        $breadcrumbs = [
+            ['title' => 'Ubah', 'icon', 'Ubah']
+        ];
+        $baris = $this->fetchDataUsingCurl('GET', $this->modul_path . '/' . $id)['data']['data'];
+        return view('/layouts/tambah_ubah', [
+            'judul'       => 'Ubah ' . $this->judul,
+            'breadcrumbs' => array_merge($this->getBreadcrumbs(), $breadcrumbs),
+            'modul_path'  => $this->modul_path,
+            'kolom_id'    => $this->kolom_id,
+            'konfig'      => $this->konfig,
+            'baris'       => $baris
         ]);
     }
 }

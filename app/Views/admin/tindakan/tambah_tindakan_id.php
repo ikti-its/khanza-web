@@ -5,7 +5,7 @@
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <?= view('components/form_judul', [
+        <?= view('components/form/judul', [
             'judul' => 'Tambah Penanganan'
         ]) ?>
         <form action="/tindakan/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
@@ -74,7 +74,7 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Biaya</label>
                 <input type="text" name="biaya" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
             </div> -->
-            <?= view('components/form_submit_button') ?>
+            <?= view('components/form/submit_button') ?>
         </form>
     </div>
     <!-- End Card -->

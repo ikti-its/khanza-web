@@ -12,6 +12,7 @@
 
                 <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
                     <?php
+<<<<<<< HEAD
                     echo view('components/data_header', [
                         'judul'      => $judul,
                         'modul_path' => $modul_path
@@ -30,6 +31,26 @@
                         'meta_data'  => $meta_data,
                         'modul_path' => $modul_path
                     ]);
+=======
+                        echo view('components/header/data',[
+                            'judul'      => $judul,
+                            'modul_path' => $modul_path
+                        ]);
+                        echo view('components/header/search_bar');
+                        
+                        echo view('components/tabel/data', [
+                            'modul_path' => $modul_path,
+                            'tabel'      => $tabel,
+                            'kolom_id'   => $kolom_id,
+                            'konfig'     => $konfig,
+                            'aksi'       => $aksi
+                        ]);
+                        
+                        echo view('components/footer/footer', [
+                            'meta_data'  => $meta_data,
+                            'modul_path' => $modul_path
+                        ]);      
+>>>>>>> 58215c537618a230410551d7790d049d66eb19c5
                     ?>
                 </div>
             </div>

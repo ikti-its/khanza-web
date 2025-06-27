@@ -5,7 +5,7 @@
 <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <?= view('components/form_judul', [
+        <?= view('components/form/judul', [
             'judul' => 'Tambah Pemesanan Barang Medis'
         ]) ?>
 
@@ -74,7 +74,7 @@
                                 <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700" id="item-list">
                                     <?php 
                                         $widths  = [6, 7, 15, 12, 12, 12, 8, 14, 14];
-                                        echo view('components/tabel_colgroup',['widths' => $widths]);
+                                        echo view('components/tabel/colgroup',['widths' => $widths]);
                                         
                                         $columns = [
                                             'Jumlah',
@@ -86,7 +86,7 @@
                                             'Diskon (Jumlah)',
                                             'Total'
                                         ];
-                                        // echo view('components/tabel_thead',['kolom' => $columns]);
+                                        // echo view('components/tabel/thead',['kolom' => $columns]);
                                     ?>
                                     <thead class="border-b bg-[#DCDCDC]">
                                         <tr class="bg-navy disabled">

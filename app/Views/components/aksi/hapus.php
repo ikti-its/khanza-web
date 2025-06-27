@@ -1,9 +1,9 @@
 <div class="px-3 py-1.5">
     <?php
-        echo view('components/aksi_hapus_tombol', [
+        echo view('components/aksi/hapus_tombol', [
             'modul_path' => $modul_path 
         ]);
-        echo view('components/aksi_hapus_form',[
+        echo view('components/aksi/hapus_form',[
             'modul_path' => $modul_path,
             'id'         => $id
         ]);
