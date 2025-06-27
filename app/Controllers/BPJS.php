@@ -24,8 +24,11 @@ class BPJS extends BaseController
         // [visible, Display, Kolom, Jenis]
         [1, 'Nomor Program' , 'no_bpjs'       , 'indeks'],
         [1, 'Nama Program'  , 'nama_program'  , 'nama'],
-        [1, 'Penyelenggara' , 'penyelenggara' , 'status'],
-        [1, 'Tarif(%)'      , 'tarif'         , 'jumlah'],
+        [1, 'Penyelenggara' , 'penyelenggara' , 'status', [
+            ['BPJS Kesehatan', 'BPJS Kesehatan'],
+            ['BPJS Ketenagakerjaan', 'BPJS Ketenagakerjaan']
+        ]],
+        [1, 'Tarif (%)'     , 'tarif'         , 'jumlah'],
         [1, 'Batas Bawah'   , 'batas_bawah'   , 'uang'],
         [1, 'Batas Atas'    , 'batas_atas'    , 'uang']
     ];        
