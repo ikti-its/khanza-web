@@ -5,7 +5,7 @@
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <?= view('components/form_judul', [
+        <?= view('components/form/judul', [
             'judul' => 'Edit Dokter Jaga'
         ]) ?>
         <form action="<?= site_url('dokterjaga/submitedit/' . $dokterjaga['kode_dokter']) ?>" method="POST">
@@ -41,7 +41,7 @@
                 <input type="text" name="status" value="<?= $dokterjaga['status'] ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
             </div>
             
-            <?= view('components/form_submit_button') ?>
+            <?= view('components/form/submit_button') ?>
         </form>
     </div>
     <!-- End Card -->

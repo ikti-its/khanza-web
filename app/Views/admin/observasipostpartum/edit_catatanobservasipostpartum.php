@@ -9,7 +9,7 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <?= view('components/form_judul', [
+        <?= view('components/form/judul', [
             'judul' => 'Edit Observasi Rawat Inap Post Partum'
         ]) ?>
         <form action="/catatanobservasipostpartum/submitedit/<?= $catatan['no_rawat'] ?>" id="myForm" onsubmit="return validateForm()" method="post">

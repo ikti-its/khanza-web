@@ -5,7 +5,7 @@
     $JENIS   = 3;
     $OPSI    = 4;
 
-    $list_jenis = ['indeks', 'tanggal', 'jam', 'uang', 'status', 'nama', 'teks', 'jumlah'];
+    $list_jenis = ['indeks', 'tanggal', 'jam', 'uang', 'status', 'nama', 'teks', 'jumlah', 'kosong'];
     $len = sizeof($konfig);
     if($len % 2 !== 0){
         array_push($konfig, [0, '', '', 'kosong']);
@@ -25,7 +25,7 @@
 
         if($is_left){echo '<div class="mb-5 sm:block md:flex items-center">';}
 
-        echo view('components/form_isian_label', [
+        echo view('components/form/label', [
             'is_left' => $is_left,
             'display' => $display
         ]);
@@ -34,7 +34,7 @@
         }
 
         $opsi = $elem[$OPSI];
-        echo view('components/form_isian_' . $jenis, [
+        echo view('components/form/isian/' . $jenis, [
             'id'    => '',
             'kolom' => $kolom,
             'value' => '',

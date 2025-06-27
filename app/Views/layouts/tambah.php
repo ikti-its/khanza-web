@@ -5,14 +5,14 @@
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <?= view('components/form_judul', [
+        <?= view('components/form/judul', [
             'judul' => $judul
         ]) ?>
         <form action="<?= $modul_path ?>/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
            <?php 
                 echo csrf_field();
-                echo view('components/form_isian', ['konfig' => $konfig]);
-                echo view('components/form_submit_button')
+                echo view('components/form/isian', ['konfig' => $konfig]);
+                echo view('components/form/submit_button')
             ?>
         </form>
     </div>

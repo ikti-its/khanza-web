@@ -5,7 +5,7 @@
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <?= view('components/form_judul', [
+        <?= view('components/form/judul', [
             'judul' => 'Ubah Stok Keluar Barang Medis'
         ]) ?>
         <form action="/stokkeluarmedis/submitedit/<?= $stok_keluar_data['id'] ?>" id="formId" method="post">
