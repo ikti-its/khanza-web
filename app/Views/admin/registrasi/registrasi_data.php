@@ -20,12 +20,12 @@
                         </div>
                         <div class="flex gap-x-6 justify-center items-center">
                             <div class="relative">
-                                <?= view('components/notif_icon') ?>
+                                <?= view('components/notif/icon') ?>
 
                                 <!-- Notification Pop-up -->
                                 <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
                                     <div class="px-4">
-                                        <?= view('components/notif_header') ?>
+                                        <?= view('components/notif/header') ?>
                                         <div class="flex">                                    
                                         </div>
                                     </div>
