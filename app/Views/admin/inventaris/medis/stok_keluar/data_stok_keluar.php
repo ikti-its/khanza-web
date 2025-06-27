@@ -25,7 +25,7 @@
                             ]) ?>
                         </div>
                     </div>
-                    <?= view('components/search_bar') ?>
+                    <?= view('components/header/search_bar') ?>
                     <!-- End Header -->
 
                     <!-- Table -->

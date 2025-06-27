@@ -29,7 +29,7 @@
                     </div>
                     <!-- End Header -->
                     <?php
-                        echo view('components/search_bar');
+                        echo view('components/header/search_bar');
                         
                         $modul_path = '/rawatinap';
                         $tabel    = $rawatinap_data;

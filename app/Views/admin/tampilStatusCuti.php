@@ -24,7 +24,7 @@
                             </div>
                         </div>
                     </div>
-                    <?= view('components/search_bar') ?>
+                    <?= view('components/header/search_bar') ?>
                     <!-- Table -->
                     <div class="overflow-x-auto">
                         <table id="myTable" class="min-w-full divide-y divide-gray-50 dark:divid e-neutral-700 text-xs">

@@ -79,7 +79,7 @@
                     <!-- End Header -->
                     
                     <?php
-                        echo view('components/search_bar');
+                        echo view('components/header/search_bar');
                         
                         $modul_path = '/ugd';
                         $tabel    = $ugd_data;
