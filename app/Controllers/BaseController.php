@@ -285,7 +285,7 @@ abstract class BaseController extends Controller
         return $this->fetchDataUsingCurl('PUT', $this->modul_path . '/' . $id, $postData, $this->modul_path, $this->judul . ' berhasil diperbarui.');
     }
 
-    public function hapus($id)
+    public function hapusData($id)
     {
         return $this->fetchDataUsingCurl('DELETE', $this->modul_path . '/' . $id, null, $this->modul_path, $this->judul . ' berhasil dihapus.' );
     }
