@@ -82,7 +82,7 @@
                             'hapus'    => true
                         ];
                         $konfig = [
-                            // [visible, Display, Kolom, Jenis]
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'Nomor Rawat'      , 'no_rawat'     , 'indeks'],
                             [1, 'Nama Pasien'      , 'nama_pasien'  , 'nama'  ],
                             [1, 'Umur'             , 'umur'         , 'jumlah'],

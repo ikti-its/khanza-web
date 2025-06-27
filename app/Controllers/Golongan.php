@@ -21,12 +21,12 @@ class Golongan extends BaseController
         'hapus'    => true
     ];
     protected array $konfig = [
-        // [visible, Display, Kolom, Jenis]
-        [1, 'Nomor Golongan', 'no_golongan'  , 'indeks'],
-        [1, 'Kode Golongan' , 'kode_golongan', 'teks'],
-        [1, 'Nama Golongan' , 'nama_golongan', 'teks'],
-        [1, 'Pendidikan'    , 'pendidikan'   , 'teks'],
-        [1, 'Gaji Pokok'    , 'gaji_pokok'   , 'uang']
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Nomor Golongan', 'no_golongan'  , 'indeks', 1],
+        [1, 'Kode Golongan' , 'kode_golongan', 'teks'  , 1],
+        [1, 'Nama Golongan' , 'nama_golongan', 'teks'  , 1],
+        [1, 'Pendidikan'    , 'pendidikan'   , 'teks'  , 1],
+        [1, 'Gaji Pokok'    , 'gaji_pokok'   , 'uang'  , 1],
     ];
     protected array $meta_data =['page' => 1, 'size' => 10, 'total' => 1];
 }

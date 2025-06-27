@@ -83,7 +83,7 @@
                             'hapus'    => true
                         ];
                         $konfig = [
-                            // [visible, Display, Kolom, Jenis]
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'Kode Dokter', 'kode_dokter', 'indeks'],
                             [1, 'Nama Dokter', 'nama_dokter', 'nama'],
                             [1, 'Hari Kerja' , 'hari_kerja' , 'teks'], 

@@ -21,14 +21,14 @@ class Jabatan extends BaseController
         'hapus'    => true
     ];
     protected array $konfig = [
-        // [visible, Display, Kolom, Jenis]
-        [1, 'Nomor Jabatan', 'no_jabatan'   , 'indeks'],
-        [1, 'Jenis Jabatan', 'jenis_jabatan', 'status', [
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Nomor Jabatan', 'no_jabatan'   , 'indeks' , 1],
+        [1, 'Jenis Jabatan', 'jenis_jabatan', 'status' , 1, [
             ['Struktural', 'Struktural'],
             ['Fungsional', 'Fungsional'],
         ]],
-        [1, 'Nama Jabatan' , 'nama_jabatan' , 'teks'],
-        [1, 'Jenjang'      , 'jenjang'      , 'status',[
+        [1, 'Nama Jabatan' , 'nama_jabatan' , 'teks'   , 1],
+        [1, 'Jenjang'      , 'jenjang'      , 'status' , 1, [
             ['Ahli Pertama', 'Ahli Pertama'],
             ['Muda', 'Muda'],
             ['Madya', 'Madya'],
@@ -38,7 +38,7 @@ class Jabatan extends BaseController
             ['Penyelia', 'Penyelia'],
             ['Ahli', 'Ahli'],
         ]],
-        [1, 'Tunjangan'    , 'tunjangan'    , 'uang']
+        [1, 'Tunjangan'    , 'tunjangan'    , 'uang'  , 1],
     ];
     protected array $meta_data =['page' => 1, 'size' => 10, 'total' => 1];    
 }

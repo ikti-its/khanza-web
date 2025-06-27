@@ -57,7 +57,7 @@
                             'hapus'    => true,
                         ];
                         $konfig = [
-                            // [visible, Display, Kolom, Jenis]
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'Nomor Permintaan'  , 'no_permintaan' , 'indeks'],
                             [1, 'Tanggal'           , 'tgl_permintaan', 'tanggal'],
                             [1, 'Jam'               , 'jam'           , 'jam'], 

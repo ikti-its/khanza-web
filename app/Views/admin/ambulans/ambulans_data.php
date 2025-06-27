@@ -113,7 +113,7 @@
                             'hapus'    => true
                         ];
                         $konfig = [
-                            // [visible, Display, Kolom, Jenis]
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'Nomor Ambulans' , 'no_ambulans', 'indeks'],
                             [1, 'Supir'          , 'supir'      , 'nama'],
                             [1, 'Status Ambulans', 'status'     , 'status']

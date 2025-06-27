@@ -71,7 +71,7 @@
                             'hapus'    => true,
                         ];
                         $konfig = [
-                            // [visible, Display, Kolom, Jenis]
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'Nomor Racik' , 'no_racik'    , 'indeks'],
                             [0, 'Kode Barang' , 'kode_brng'   , 'indeks'],
                             [1, 'Nama Racikan', 'nama_racik'  , 'teks'],

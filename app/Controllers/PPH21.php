@@ -21,11 +21,11 @@ class PPH21 extends BaseController
         'hapus'    => true
     ];
     protected array $konfig = [
-        // [visible, Display, Kolom, Jenis]
-        [1, 'Nomor Pajak'    , 'no_pph21'   , 'indeks'],
-        [1, 'Batas Bawah PKP', 'pkp_bawah'  , 'uang'],
-        [1, 'Batas Atas PKP' , 'pkp_atas'   , 'uang'],
-        [1, 'Tarif Pajak (%)', 'tarif_pajak', 'jumlah'],
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Nomor Pajak'    , 'no_pph21'   , 'indeks', 1],
+        [1, 'Batas Bawah PKP', 'pkp_bawah'  , 'uang'  , 1],
+        [1, 'Batas Atas PKP' , 'pkp_atas'   , 'uang'  , 1],
+        [1, 'Tarif Pajak (%)', 'tarif_pajak', 'jumlah', 1],
     ];
     protected array $meta_data =['page' => 1, 'size' => 10, 'total' => 1];    
 }

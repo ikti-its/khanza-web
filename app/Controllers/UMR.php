@@ -21,11 +21,11 @@ class UMR extends BaseController
         'hapus'    => true
     ];
     protected array $konfig = [
-        // [visible, Display, Kolom, Jenis]
-        [1, 'Nomor UMR'   , 'no_umr'      , 'indeks'],
-        [1, 'Provinsi'    , 'provinsi'    , 'teks'],
-        [1, 'Kota/Kab'    , 'kotakab'     , 'teks'],
-        [1, 'Jenis'       , 'jenis'       , 'status',[
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Nomor UMR'   , 'no_umr'      , 'indeks', 1],
+        [1, 'Provinsi'    , 'provinsi'    , 'teks'  , 1],
+        [1, 'Kota/Kab'    , 'kotakab'     , 'teks'  , 1],
+        [1, 'Jenis'       , 'jenis'       , 'status', 1, [
             ['UMP', 'UMP'],
             ['UMK', 'UMK'],
         ]],

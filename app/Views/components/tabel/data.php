@@ -6,7 +6,8 @@
             $DISPLAY = 1;
             $KOLOM   = 2;
             $JENIS   = 3;
-            // $OPSI    = 4;
+            // $REQUIRED= 4;
+            // $OPSI    = 5;
             
             $data_visible = array_filter($konfig, fn($input) => $input[$VISIBLE]);
             

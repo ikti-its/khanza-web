@@ -3,8 +3,8 @@
     $DISPLAY = 1;
     $KOLOM   = 2;
     $JENIS   = 3;
-    // $REQUIRED= 4;
-    $OPSI    = 4;
+    $REQUIRED= 4;
+    $OPSI    = 5;
 
     $list_jenis = ['indeks', 'tanggal', 'jam', 'uang', 'status', 'nama', 'teks', 'jumlah', 'kosong'];
     $len = sizeof($konfig);
@@ -17,6 +17,7 @@
         $display  = $elem[$DISPLAY];
         $kolom    = $elem[$KOLOM];
         $jenis    = $elem[$JENIS];
+        $required = $elem[$REQUIRED];
         // $required = $elem[$REQUIRED];
 
         $is_left = $i % 2 === 0;
@@ -42,7 +43,7 @@
             'id'    => '',
             'kolom' => $kolom,
             'value' => $baris[$kolom] ?? '',
-            // 'req'   => $required,
+            'req'   => $required,
             'opsi'  => $opsi,
         ]);
 

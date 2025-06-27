@@ -21,7 +21,7 @@ class PasienController extends BaseController
         'hapus'    => true
     ];
     protected array $konfig = [
-        // [visible, Display, Kolom, Jenis]
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
         [1, 'Nomor Registrasi', 'no_bpjs', 'indeks'],
         [1, 'Nama Rawat', 'nama_program', 'nama'],
         [1, 'Tanggal', 'penyelenggara', 'status'],

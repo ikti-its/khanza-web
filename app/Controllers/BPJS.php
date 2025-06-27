@@ -21,16 +21,16 @@ class BPJS extends BaseController
         'hapus'    => true
     ];
     protected array $konfig = [
-        // [visible, Display, Kolom, Jenis]
-        [1, 'Nomor Program' , 'no_bpjs'       , 'indeks'],
-        [1, 'Nama Program'  , 'nama_program'  , 'nama'],
-        [1, 'Penyelenggara' , 'penyelenggara' , 'status', [
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Nomor Program' , 'no_bpjs'       , 'indeks', 0],
+        [1, 'Nama Program'  , 'nama_program'  , 'nama'  , 1],
+        [1, 'Penyelenggara' , 'penyelenggara' , 'status', 1, [
             ['BPJS Kesehatan', 'BPJS Kesehatan'],
             ['BPJS Ketenagakerjaan', 'BPJS Ketenagakerjaan']
         ]],
-        [1, 'Tarif (%)'     , 'tarif'         , 'jumlah'],
-        [1, 'Batas Bawah'   , 'batas_bawah'   , 'uang'],
-        [1, 'Batas Atas'    , 'batas_atas'    , 'uang']
+        [1, 'Tarif (%)'     , 'tarif'         , 'jumlah', 1],
+        [1, 'Batas Bawah'   , 'batas_bawah'   , 'uang'  , 1],
+        [1, 'Batas Atas'    , 'batas_atas'    , 'uang'  , 1]
     ];        
     protected array $meta_data =['page' => 1, 'size' => 10, 'total' => 1];
 }

@@ -71,7 +71,7 @@
                             'hapus'    => true,
                         ];
                         $konfig = [
-                            // [visible, Display, Kolom, Jenis]
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'Nomor Resep'   , 'no_resep'     , 'indeks'],
                             [1, 'Tanggal Resep' , 'tgl_peresepan', 'tanggal'],
                             [0, 'Jam Peresepan' , 'jam_peresepan', 'jam'],

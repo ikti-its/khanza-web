@@ -92,7 +92,7 @@
                             'hapus'    => false,
                         ];
                         $konfig = [
-                            // [visible, Display, Kolom, Jenis]
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'No. Registrasi'  , 'nomor_reg'       , 'indeks'],
                             [0, 'Nomor Rawat'     , 'nomor_rawat'     , 'indeks'],
                             [0, 'Tanggal'         , 'tanggal'         , 'tanggal'],

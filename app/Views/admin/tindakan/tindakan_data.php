@@ -100,7 +100,7 @@
                             'hapus'    => false,
                         ];
                         $konfig = [
-                            // [visible, Display, Kolom, Jenis]
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'Tindakan', 'tindakan'     , 'teks'],
                             [1, 'Dokter'  , 'nama_dokter'  , 'nama'],
                             [1, 'Petugas' , 'nama_petugas' , 'nama'],

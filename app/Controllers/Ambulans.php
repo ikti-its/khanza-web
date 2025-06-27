@@ -11,7 +11,7 @@ class Ambulans extends BaseController
     protected string $modul_path = '/ambulans';
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
     protected array $konfig = [
-        // [visible, Display, Kolom, Jenis]
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
         [1, 'Nomor Ambulans' , 'no_ambulans', 'indeks'],
         [1, 'Supir'          , 'supir'      , 'nama'],
         [1, 'Status Ambulans', 'status'     , 'status']

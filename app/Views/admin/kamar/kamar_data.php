@@ -95,7 +95,7 @@
                             'hapus'    => true
                         ];
                         $konfig = [
-                            // [visible, Display, Kolom, Jenis]
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'Nomor Bed'   , 'nomor_bed'   , 'indeks'],
                             [1, 'Kode Kamar'  , 'kode_kamar'  , 'indeks'],
                             [1, 'Nama Kamar'  , 'nama_kamar'  , 'teks'],

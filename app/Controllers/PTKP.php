@@ -21,16 +21,16 @@ class PTKP extends BaseController
         'hapus'    => true
     ];
     protected array $konfig = [
-        // [visible, Display, Kolom, Jenis]
-        [1, 'Nomor PTKP', 'no_ptkp'   , 'indeks'],
-        [1, 'Kode PTKP' , 'kode_ptkp' , 'teks'],
-        [1, 'Perkawinan', 'perkawinan', 'status', [
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Nomor PTKP', 'no_ptkp'   , 'indeks', 1],
+        [1, 'Kode PTKP' , 'kode_ptkp' , 'teks'  , 1],
+        [1, 'Perkawinan', 'perkawinan', 'status', 1, [
             ['Tidak kawin', 'Tidak kawin'],
             ['Kawin', 'Kawin'],
             ['Kawin (harta digabung)', 'Kawin (harta digabung)']
         ]],
-        [1, 'Tanggungan', 'tanggungan', 'jumlah'],
-        [1, 'Nilai PTKP', 'nilai_ptkp', 'uang']
+        [1, 'Tanggungan', 'tanggungan', 'jumlah', 1],
+        [1, 'Nilai PTKP', 'nilai_ptkp', 'uang'  , 1],
     ];
     protected array $meta_data =['page' => 1, 'size' => 10, 'total' => 1];    
 }
