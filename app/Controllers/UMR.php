@@ -29,7 +29,7 @@ class UMR extends BaseController
             ['UMP', 'UMP'],
             ['UMK', 'UMK'],
         ]],
-        [1, 'Upah Minimum', 'upah_minimum', 'uang'],
+        [1, 'Upah Minimum', 'upah_minimum', 'uang'  , 1],
     ];
     protected array $meta_data =['page' => 1, 'size' => 10, 'total' => 1];    
 }

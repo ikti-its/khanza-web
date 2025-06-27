@@ -9,7 +9,7 @@
     $list_jenis = ['indeks', 'tanggal', 'jam', 'uang', 'status', 'nama', 'teks', 'jumlah', 'kosong'];
     $len = sizeof($konfig);
     if($len % 2 !== 0){
-        array_push($konfig, [0, '', '', 'kosong']);
+        array_push($konfig, [0, '', '', 'kosong', 0]);
         $len++;
     }
     for($i = 0; $i < $len; $i++){
@@ -18,7 +18,6 @@
         $kolom    = $elem[$KOLOM];
         $jenis    = $elem[$JENIS];
         $required = $elem[$REQUIRED];
-        // $required = $elem[$REQUIRED];
 
         $is_left = $i % 2 === 0;
 
@@ -30,8 +29,9 @@
         if($is_left){echo '<div class="mb-5 sm:block md:flex items-center">';}
 
         echo view('components/form/label', [
-            'is_left' => $is_left,
-            'display' => $display
+            'is_left'  => $is_left,
+            'display'  => $display,
+            'required' => $required,
         ]);
         if(!isset($elem[$OPSI])){
             $elem[$OPSI] = null;
