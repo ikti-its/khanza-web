@@ -10,6 +10,7 @@
     $len = sizeof($konfig);
     if($len % 2 !== 0){
         array_push($konfig, [0, '', '', 'kosong']);
+        $len++;
     }
     for($i = 0; $i < $len; $i++){
         $elem     = $konfig[$i];
