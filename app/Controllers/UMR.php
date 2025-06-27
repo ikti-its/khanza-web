@@ -25,7 +25,10 @@ class UMR extends BaseController
         [1, 'Nomor UMR'   , 'no_umr'      , 'indeks'],
         [1, 'Provinsi'    , 'provinsi'    , 'teks'],
         [1, 'Kota/Kab'    , 'kotakab'     , 'teks'],
-        [1, 'Jenis'       , 'jenis'       , 'status'],
+        [1, 'Jenis'       , 'jenis'       , 'status',[
+            ['UMP', 'UMP'],
+            ['UMK', 'UMK'],
+        ]],
         [1, 'Upah Minimum', 'upah_minimum', 'uang'],
     ];
     protected array $meta_data =['page' => 1, 'size' => 10, 'total' => 1];    

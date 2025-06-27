@@ -24,7 +24,11 @@ class PTKP extends BaseController
         // [visible, Display, Kolom, Jenis]
         [1, 'Nomor PTKP', 'no_ptkp'   , 'indeks'],
         [1, 'Kode PTKP' , 'kode_ptkp' , 'teks'],
-        [1, 'Perkawinan', 'perkawinan', 'status'],
+        [1, 'Perkawinan', 'perkawinan', 'status', [
+            ['Tidak kawin', 'Tidak kawin'],
+            ['Kawin', 'Kawin'],
+            ['Kawin (harta digabung)', 'Kawin (harta digabung)']
+        ]],
         [1, 'Tanggungan', 'tanggungan', 'jumlah'],
         [1, 'Nilai PTKP', 'nilai_ptkp', 'uang']
     ];

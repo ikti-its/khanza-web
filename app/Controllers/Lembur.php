@@ -23,7 +23,10 @@ class Lembur extends BaseController
     protected array $konfig = [
         // [visible, Display, Kolom, Jenis]
         [1, 'Nomor Lembur', 'no_lembur', 'indeks'],
-        [1, 'Jenis Lembur', 'jenis_lembur', 'status'],
+        [1, 'Jenis Lembur', 'jenis_lembur', 'status',[
+            ['Libur Nasional', 'Libur Nasional'],
+            ['Hari Biasa', 'Hari Biasa']
+        ]],
         [1, 'Jam Lembur'  , 'jam_lembur'  , 'jumlah'],
         [1, 'Pengali Upah', 'pengali_upah', 'jumlah']
     ];

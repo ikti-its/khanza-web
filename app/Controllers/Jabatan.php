@@ -23,9 +23,21 @@ class Jabatan extends BaseController
     protected array $konfig = [
         // [visible, Display, Kolom, Jenis]
         [1, 'Nomor Jabatan', 'no_jabatan'   , 'indeks'],
-        [1, 'Jenis Jabatan', 'jenis_jabatan', 'status'],
+        [1, 'Jenis Jabatan', 'jenis_jabatan', 'status', [
+            ['Struktural', 'Struktural'],
+            ['Fungsional', 'Fungsional'],
+        ]],
         [1, 'Nama Jabatan' , 'nama_jabatan' , 'teks'],
-        [1, 'Jenjang'      , 'jenjang'      , 'status'],
+        [1, 'Jenjang'      , 'jenjang'      , 'status',[
+            ['Ahli Pertama', 'Ahli Pertama'],
+            ['Muda', 'Muda'],
+            ['Madya', 'Madya'],
+            ['Utama', 'Utama'],
+            ['Pemula', 'Pemula'],
+            ['Mahir', 'Mahir'],
+            ['Penyelia', 'Penyelia'],
+            ['Ahli', 'Ahli'],
+        ]],
         [1, 'Tunjangan'    , 'tunjangan'    , 'uang']
     ];
     protected array $meta_data =['page' => 1, 'size' => 10, 'total' => 1];    
