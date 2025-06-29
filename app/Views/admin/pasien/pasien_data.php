@@ -43,7 +43,7 @@
                         $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,
-                            'detail'   => false,
+                            'detail'   => true,
                             'ubah'     => false,
                             'hapus'    => false,
                         ];

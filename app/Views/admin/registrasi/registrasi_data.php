@@ -112,7 +112,7 @@
                             [0, 'Nomor Rekam Medis', 'nomor_rm'     , 'indeks'],
                             [1, 'Nama'             , 'nama_pasien'  , 'nama'],
                             [1, 'Jenis Kelamin'    , 'jenis_kelamin', 'status'],
-                            [1, 'Umur'             , 'umur'         , 'jumlah'],
+                            [0, 'Umur'             , 'umur'         , 'jumlah'],
                             [0, 'Poliklinik'       , 'poliklinik'   , 'status'],
                             [0, 'Dokter'           , 'nama_dokter'  , 'nama'],
                             [0, 'Penanggung Jawab'         , 'penanggung_jawab', 'nama'],
