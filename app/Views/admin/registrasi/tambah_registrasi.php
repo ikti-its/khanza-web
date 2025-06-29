@@ -14,76 +14,95 @@
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nomor Registrasi</label>
                 <input type="text" name="nomor_reg" value="<?php function generateUniqueNumber($length = 15)
-                                                        {
-                                                            $characters = '1234567890';
-                                                            $charactersLength = strlen($characters);
-                                                            $randomString = '';
+                                                            {
+                                                                $characters = '1234567890';
+                                                                $charactersLength = strlen($characters);
+                                                                $randomString = '';
 
-                                                            $uniqueLength = $length - 11;
+                                                                $uniqueLength = $length - 11;
 
-                                                            if ($uniqueLength > 0) {
-                                                                for ($i = 0; $i < $uniqueLength; $i++) {
-                                                                    $randomString .= $characters[rand(0, $charactersLength - 1)];
+                                                                if ($uniqueLength > 0) {
+                                                                    for ($i = 0; $i < $uniqueLength; $i++) {
+                                                                        $randomString .= $characters[rand(0, $charactersLength - 1)];
+                                                                    }
+                                                                } else {
+                                                                    return "Panjang maksimal terlalu pendek.";
                                                                 }
-                                                            } else {
-                                                                return "Panjang maksimal terlalu pendek.";
+
+                                                                return $randomString;
                                                             }
 
-                                                            return $randomString;
-                                                        }
+                                                            $tanggalHariIni = date('Ymd');
 
-                                                        $tanggalHariIni = date('Ymd');
-
-                                                        $nomor = "REG" . $tanggalHariIni . generateUniqueNumber();
-                                                        echo $nomor; ?>"class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required readonly>
+                                                            $nomor = "REG" . $tanggalHariIni . generateUniqueNumber();
+                                                            echo $nomor; ?>" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required readonly>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nomor Rawat</label>
                 <input name="nomor_rawat" value="<?php function generateUniqueNumber2($length = 15)
-                                                        {
-                                                            $characters = '1234567890';
-                                                            $charactersLength = strlen($characters);
-                                                            $randomString = '';
+                                                    {
+                                                        $characters = '1234567890';
+                                                        $charactersLength = strlen($characters);
+                                                        $randomString = '';
 
-                                                            $uniqueLength = $length - 11;
+                                                        $uniqueLength = $length - 11;
 
-                                                            if ($uniqueLength > 0) {
-                                                                for ($i = 0; $i < $uniqueLength; $i++) {
-                                                                    $randomString .= $characters[rand(0, $charactersLength - 1)];
-                                                                }
-                                                            } else {
-                                                                return "Panjang maksimal terlalu pendek.";
+                                                        if ($uniqueLength > 0) {
+                                                            for ($i = 0; $i < $uniqueLength; $i++) {
+                                                                $randomString .= $characters[rand(0, $charactersLength - 1)];
                                                             }
-
-                                                            return $randomString;
+                                                        } else {
+                                                            return "Panjang maksimal terlalu pendek.";
                                                         }
 
-                                                        $tanggalHariIni = date('Ymd');
+                                                        return $randomString;
+                                                    }
 
-                                                        $nomor = "" . $tanggalHariIni . generateUniqueNumber();
-                                                        echo $nomor; ?>"class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required readonly>
+                                                    $tanggalHariIni = date('Ymd');
+
+                                                    $nomor = "" . $tanggalHariIni . generateUniqueNumber();
+                                                    echo $nomor; ?>" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required readonly>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Tanggal</label>
-                <input type="date" name="tanggal" value="<?php 
+                <input type="date" name="tanggal" value="<?php
 
-                                                        $tanggalHariIni = date('Y-m-d');
+                                                            $tanggalHariIni = date('Y-m-d');
 
-                                                        echo $tanggalHariIni; ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                                                            echo $tanggalHariIni; ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam</label>
-                <input type="time" name="jam" value="<?php 
+                <input type="time" name="jam" value="<?php
 
-                    $waktuHariIni = date('H:i:s');
+                                                        $waktuHariIni = date('H:i:s');
 
-                    echo $waktuHariIni; 
-                    ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+                                                        echo $waktuHariIni;
+                                                        ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
             </div>
-            <div class="mb-5 sm:block md:flex items-center"> 
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nomor Rekam Medis<span class="text-red-600">*</span></label>
-                <input type="text" id="no_rkm_medis" name="no_rkm_medis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">
+                    Nomor Rekam Medis<span class="text-red-600">*</span>
+                </label>
+                <div class="relative w-full md:w-1/4">
+                    <input type="text" id="no_rkm_medis" name="no_rkm_medis"
+                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white"
+                        placeholder="Nomor RM">
+                    <a href="/pasien/tambah"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-blue-600"
+                        title="Tambah Pasien">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M18 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h6m5-3h5m0 0v5m0-5L10 14" />
+                        </svg>
+                    </a>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama<span class="text-red-600">*</span></label>
-                <input id="nama_pasien" name="nama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                </div>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Nama<span class="text-red-600">*</span>
+                </label>
+                <input id="nama_pasien" name="nama"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
+
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin<span class="text-red-600">*</span></label>
@@ -112,8 +131,8 @@
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Penanggung Jawab</label>
-            <input type="text" id="penanggung_jawab" name="penanggung_jawab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Penanggung Jawab</label>
+                <input type="text" id="penanggung_jawab" name="penanggung_jawab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Hubungan Penanggung Jawab</label>
                 <select name="hubungan_penanggung_jawab" id="hubungan_pj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="DIRI SENDIRI">DIRI SENDIRI</option>
@@ -128,14 +147,14 @@
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat Penanggung Jawab</label>
-            <input type="text" id="alamat_pj" name="alamat_penanggung_jawab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat Penanggung Jawab</label>
+                <input type="text" id="alamat_pj" name="alamat_penanggung_jawab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
                 <label class="block w-full mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white md:w-1/5">Nomor Telepon<span class="text-red-600">*</span></label>
                 <input name="nomor_telepon" id="no_telp" class=" border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Biaya Registrasi<span class="text-red-600">*</span></label>
-                <input type="number" name="biaya_registrasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0"v required>
+                <input type="number" name="biaya_registrasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" placeholder="0" v required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Registrasi<span class="text-red-600">*</span></label>
                 <select name="status_registrasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="Baru">Baru</option>
@@ -173,193 +192,195 @@
 </div>
 <!-- End Card Section -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const poliklinikSelect = document.getElementById("poliklinikSelect");
-    const dokterSelect = document.getElementById("dokterSelect");
+    document.addEventListener("DOMContentLoaded", function() {
+        const poliklinikSelect = document.getElementById("poliklinikSelect");
+        const dokterSelect = document.getElementById("dokterSelect");
 
-    // Populate poliklinik list
-    fetch("http://127.0.0.1:8080/v1/dokterjaga/poliklinik-list")
-        .then(res => res.json())
-        .then(res => {
-            if (res.status === "success") {
-                res.data.forEach(poli => {
-                    const opt = document.createElement("option");
-                    opt.value = poli;
-                    opt.textContent = poli;
-                    poliklinikSelect.appendChild(opt);
-                });
-            }
-        });
-
-    // On poliklinik change
-    poliklinikSelect.addEventListener("change", function () {
-        const selectedPoli = this.value;
-        dokterSelect.innerHTML = '<option disabled selected value="">Pilih Dokter</option>';
-
-        fetch(`http://127.0.0.1:8080/v1/dokterjaga/poliklinik/${encodeURIComponent(selectedPoli)}`)
+        // Populate poliklinik list
+        fetch("http://127.0.0.1:8080/v1/dokterjaga/poliklinik-list")
             .then(res => res.json())
             .then(res => {
-                if (res.status === "success" && Array.isArray(res.data)) {
-                    const now = new Date();
-                    const currentDay = normalizeDay(now.toLocaleDateString("id-ID", { weekday: "long" }));
-
-                    let dokterAktifCount = 0;
-
-                    res.data.forEach(dokter => {
-                        const hariKerja = normalizeDay(dokter.hari_kerja);
-                        const jamMulai = padTime(dokter.jam_mulai);
-                        const jamSelesai = padTime(dokter.jam_selesai);
-
-                        const isActive = (hariKerja === currentDay) && isDoctorOnShiftTime(jamMulai, jamSelesai);
-
-                        // Debug output
-                        console.log("🩺 Dokter:", dokter.nama_dokter);
-                        console.log("📅 Hari kerja:", hariKerja, "| Sekarang:", currentDay);
-                        console.log("⏰ Shift:", jamMulai, "-", jamSelesai);
-                        console.log("✅ Aktif sekarang:", isActive);
-
-                        if (isActive) {
-                            const opt = document.createElement("option");
-                            opt.value = dokter.kode_dokter;
-                            opt.textContent = dokter.nama_dokter;
-                            dokterSelect.appendChild(opt);
-                            dokterAktifCount++;
-                        }
+                if (res.status === "success") {
+                    res.data.forEach(poli => {
+                        const opt = document.createElement("option");
+                        opt.value = poli;
+                        opt.textContent = poli;
+                        poliklinikSelect.appendChild(opt);
                     });
-
-                    if (dokterAktifCount === 0) {
-                        dokterSelect.innerHTML = '<option disabled selected value="">Tidak ada dokter aktif saat ini</option>';
-                    }
-                } else {
-                    console.warn("⚠️ Format data tidak valid:", res);
                 }
-            })
-            .catch(err => {
-                console.error("❌ Gagal mengambil data dokter:", err);
             });
+
+        // On poliklinik change
+        poliklinikSelect.addEventListener("change", function() {
+            const selectedPoli = this.value;
+            dokterSelect.innerHTML = '<option disabled selected value="">Pilih Dokter</option>';
+
+            fetch(`http://127.0.0.1:8080/v1/dokterjaga/poliklinik/${encodeURIComponent(selectedPoli)}`)
+                .then(res => res.json())
+                .then(res => {
+                    if (res.status === "success" && Array.isArray(res.data)) {
+                        const now = new Date();
+                        const currentDay = normalizeDay(now.toLocaleDateString("id-ID", {
+                            weekday: "long"
+                        }));
+
+                        let dokterAktifCount = 0;
+
+                        res.data.forEach(dokter => {
+                            const hariKerja = normalizeDay(dokter.hari_kerja);
+                            const jamMulai = padTime(dokter.jam_mulai);
+                            const jamSelesai = padTime(dokter.jam_selesai);
+
+                            const isActive = (hariKerja === currentDay) && isDoctorOnShiftTime(jamMulai, jamSelesai);
+
+                            // Debug output
+                            console.log("🩺 Dokter:", dokter.nama_dokter);
+                            console.log("📅 Hari kerja:", hariKerja, "| Sekarang:", currentDay);
+                            console.log("⏰ Shift:", jamMulai, "-", jamSelesai);
+                            console.log("✅ Aktif sekarang:", isActive);
+
+                            if (isActive) {
+                                const opt = document.createElement("option");
+                                opt.value = dokter.kode_dokter;
+                                opt.textContent = dokter.nama_dokter;
+                                dokterSelect.appendChild(opt);
+                                dokterAktifCount++;
+                            }
+                        });
+
+                        if (dokterAktifCount === 0) {
+                            dokterSelect.innerHTML = '<option disabled selected value="">Tidak ada dokter aktif saat ini</option>';
+                        }
+                    } else {
+                        console.warn("⚠️ Format data tidak valid:", res);
+                    }
+                })
+                .catch(err => {
+                    console.error("❌ Gagal mengambil data dokter:", err);
+                });
+        });
+
+        // Normalize hari (e.g., "Selasa ") → "selasa"
+        function normalizeDay(day) {
+            return day.trim().toLowerCase().replace(/[^a-z]/g, "");
+        }
+
+        // Pad time (e.g., "8:0:0" → "08:00:00")
+        function padTime(timeStr) {
+            const [h = "0", m = "0", s = "0"] = timeStr.split(":");
+            return `${h.padStart(2, "0")}:${m.padStart(2, "0")}:${s.padStart(2, "0")}`;
+        }
+
+        // Compare current time with jam_mulai and jam_selesai (supports overnight shifts)
+        function isDoctorOnShiftTime(startTime, endTime) {
+            const now = new Date();
+            const nowSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+
+            const [startH, startM, startS] = startTime.split(":").map(Number);
+            const [endH, endM, endS] = endTime.split(":").map(Number);
+
+            const startSec = startH * 3600 + startM * 60 + startS;
+            const endSec = endH * 3600 + endM * 60 + endS;
+
+            return startSec < endSec ?
+                nowSec >= startSec && nowSec <= endSec :
+                nowSec >= startSec || nowSec <= endSec;
+        }
     });
 
-    // Normalize hari (e.g., "Selasa ") → "selasa"
-    function normalizeDay(day) {
-        return day.trim().toLowerCase().replace(/[^a-z]/g, "");
-    }
+    document.addEventListener("DOMContentLoaded", async function() {
+        const select = document.querySelector("select[name='poliklinik']");
 
-    // Pad time (e.g., "8:0:0" → "08:00:00")
-    function padTime(timeStr) {
-        const [h = "0", m = "0", s = "0"] = timeStr.split(":");
-        return `${h.padStart(2, "0")}:${m.padStart(2, "0")}:${s.padStart(2, "0")}`;
-    }
+        try {
+            const response = await fetch("http://127.0.0.1:8080/v1/dokterjaga/poliklinik-list");
+            const result = await response.json();
 
-    // Compare current time with jam_mulai and jam_selesai (supports overnight shifts)
-    function isDoctorOnShiftTime(startTime, endTime) {
-        const now = new Date();
-        const nowSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+            select.innerHTML = '<option value="">Pilih Poliklinik</option>';
 
-        const [startH, startM, startS] = startTime.split(":").map(Number);
-        const [endH, endM, endS] = endTime.split(":").map(Number);
+            if (Array.isArray(result.data)) {
+                result.data.forEach(poli => {
+                    const option = document.createElement("option");
+                    option.value = poli;
+                    option.textContent = poli;
+                    select.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error("Error fetching poliklinik list:", error);
+            select.innerHTML = '<option value="">Gagal memuat data</option>';
+        }
+    });
 
-        const startSec = startH * 3600 + startM * 60 + startS;
-        const endSec = endH * 3600 + endM * 60 + endS;
+    document.addEventListener('DOMContentLoaded', function() {
+        const nomorRMInput = document.querySelector('input[name="no_rkm_medis"]');
+        const token = "<?= session()->get('jwt_token') ?>"; // ensure this prints a token
 
-        return startSec < endSec
-            ? nowSec >= startSec && nowSec <= endSec
-            : nowSec >= startSec || nowSec <= endSec;
-    }
-});
+        // ✅ Trigger API when input loses focus
+        nomorRMInput.addEventListener('blur', function() {
+            const nomorRM = nomorRMInput.value.trim();
+            if (!nomorRM) {
+                console.log("❌ No nomor RM entered.");
+                return;
+            }
 
-document.addEventListener("DOMContentLoaded", async function () {
-    const select = document.querySelector("select[name='poliklinik']");
+            console.log("📡 Fetching data for RM:", nomorRM);
 
-    try {
-        const response = await fetch("http://127.0.0.1:8080/v1/dokterjaga/poliklinik-list");
-        const result = await response.json();
+            fetch(`http://127.0.0.1:8080/v1/pasien/${encodeURIComponent(nomorRM)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .then(response => {
+                    console.log("🔁 HTTP status:", response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("✅ API response:", data);
+                    if (data.status === 'success' && data.data) {
+                        const pasien = data.data;
 
-        select.innerHTML = '<option value="">Pilih Poliklinik</option>';
+                        document.getElementById('nama_pasien').value = pasien.nm_pasien || '';
+                        document.getElementById('jenis_kelamin').value = pasien.jk || '';
+                        document.getElementById('umur').value = pasien.umur || '';
+                        document.getElementById('penanggung_jawab').value = pasien.namakeluarga || '';
+                        document.getElementById('alamat_pj').value = pasien.alamatpj || '';
+                        document.getElementById('no_telp').value = pasien.no_tlp || '';
+                        document.getElementById('hubungan_pj').value = pasien.keluarga || '';
 
-        if (Array.isArray(result.data)) {
-            result.data.forEach(poli => {
+                        const statusSelect = document.querySelector('select[name="status_registrasi"]');
+                        if (statusSelect) {
+                            statusSelect.value = 'Lama';
+                        }
+
+                    } else {
+                        console.warn("⚠️ Data pasien tidak ditemukan atau format salah.");
+                    }
+                })
+                .catch(error => {
+                    console.error("❌ Error calling API:", error);
+                });
+        });
+
+        // ✅ Optional: auto-trigger if input already has value
+        if (nomorRMInput.value.trim()) {
+            nomorRMInput.dispatchEvent(new Event('blur'));
+        }
+    });
+
+    fetch("http://127.0.0.1:8080/v1/registrasi/dokter")
+        .then(res => res.json())
+        .then(data => {
+            const select = document.getElementById("dokter");
+
+            data.data.forEach(dokter => {
                 const option = document.createElement("option");
-                option.value = poli;
-                option.textContent = poli;
+                option.value = dokter.kode_dokter; // value = kode
+                option.textContent = dokter.nama_dokter; // shown = name
                 select.appendChild(option);
             });
-        }
-    } catch (error) {
-        console.error("Error fetching poliklinik list:", error);
-        select.innerHTML = '<option value="">Gagal memuat data</option>';
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    const nomorRMInput = document.querySelector('input[name="no_rkm_medis"]');
-    const token = "<?= session()->get('jwt_token') ?>"; // ensure this prints a token
-
-    // ✅ Trigger API when input loses focus
-    nomorRMInput.addEventListener('blur', function () {
-        const nomorRM = nomorRMInput.value.trim();
-        if (!nomorRM) {
-            console.log("❌ No nomor RM entered.");
-            return;
-        }
-
-        console.log("📡 Fetching data for RM:", nomorRM);
-
-        fetch(`http://127.0.0.1:8080/v1/pasien/${encodeURIComponent(nomorRM)}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + token
-            }
-        })
-        .then(response => {
-            console.log("🔁 HTTP status:", response.status);
-            return response.json();
-        })
-        .then(data => {
-            console.log("✅ API response:", data);
-            if (data.status === 'success' && data.data) {
-                const pasien = data.data;
-
-                document.getElementById('nama_pasien').value = pasien.nm_pasien || '';
-                document.getElementById('jenis_kelamin').value = pasien.jk || '';
-                document.getElementById('umur').value = pasien.umur || '';
-                document.getElementById('penanggung_jawab').value = pasien.namakeluarga || '';
-                document.getElementById('alamat_pj').value = pasien.alamatpj || '';
-                document.getElementById('no_telp').value = pasien.no_tlp || '';
-                document.getElementById('hubungan_pj').value = pasien.keluarga || '';
-
-                const statusSelect = document.querySelector('select[name="status_registrasi"]');
-                if (statusSelect) {
-                    statusSelect.value = 'Lama';
-                }
-
-            } else {
-                console.warn("⚠️ Data pasien tidak ditemukan atau format salah.");
-            }
-        })
-        .catch(error => {
-            console.error("❌ Error calling API:", error);
         });
-    });
-
-    // ✅ Optional: auto-trigger if input already has value
-    if (nomorRMInput.value.trim()) {
-        nomorRMInput.dispatchEvent(new Event('blur'));
-    }
-});
-
-fetch("http://127.0.0.1:8080/v1/registrasi/dokter")
-    .then(res => res.json())
-    .then(data => {
-        const select = document.getElementById("dokter");
-
-        data.data.forEach(dokter => {
-            const option = document.createElement("option");
-            option.value = dokter.kode_dokter; // value = kode
-            option.textContent = dokter.nama_dokter; // shown = name
-            select.appendChild(option);
-        });
-    });
 
     document.addEventListener('DOMContentLoaded', () => {
         fetch('http://127.0.0.1:8080/v1/registrasi/dokter')

@@ -282,14 +282,14 @@ $routes->group('registrasi', ['filter' => 'auth'], function ($routes) {
 });
 
 // Olah Data Pasien
-$routes->group('datapasien', ['filter' => 'auth'], function ($routes) {
+$routes->group('masterpasien', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'PasienController::tampilData', [
         'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
     ]);
     $routes->get('tambah', 'PasienController::tampilTambah', [
         'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
     ]);
-    $routes->post('submittambah', 'PasienController::submitTambah', [
+    $routes->post('masterpasien/submitTambah', 'PasienController::submitTambah', [
         'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
     ]);
     $routes->get('edit/(:any)', 'PasienController::tampilUbah/$1', [
@@ -662,6 +662,7 @@ $fitur = [
     ['BPJS', 'bpjs'],
     ['Golongan', 'golongan'],
     ['Jabatan', 'jabatan'],
+    ['PasienController', 'masterpasien'],
     ['PTKP', 'ptkp'],
     ['PPH21', 'pph21'],
     ['Lembur', 'lembur'],
