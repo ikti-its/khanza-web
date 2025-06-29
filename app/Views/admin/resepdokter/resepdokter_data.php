@@ -59,12 +59,14 @@
                         </div>
                     </div>
                     <!-- End Header -->
+                     <?php foreach ($resepdokter_data as $resepdokter): ?>
                     <?php 
                         $resepdokter['harga'] = number_format($harga_lookup[$resepdokter['kode_barang']]) ?? null;
                         $resepdokter['nama_obat'] = $barang_lookup[$resepdokter['kode_barang']] ?? null;
                         $resepdokter['kode_obat'] =  $noRacikMap[$resepdokter['kode_barang']] ?? '-';
                     
                     ?>
+                    <?php endforeach; ?>
                     <?php
                         echo view('components/header/search_bar');
                         

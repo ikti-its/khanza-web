@@ -114,6 +114,6 @@ class Ambulans extends BaseController
 
     public function terimaAmbulans($noAmbulans)
     {
-        return $this->fetchDataUsingCurl('PUT', '/ambulans/terima' . $noAmbulans, null, 'ambulans', 'Ambulans telah diterima.');
+        return $this->fetchDataUsingCurl('PUT', '/ambulans/terima/' . $noAmbulans, null, 'ambulans', 'Ambulans telah diterima.');
     }
 }

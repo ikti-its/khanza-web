@@ -169,67 +169,86 @@ document.addEventListener("DOMContentLoaded", function () {
     const poliklinikSelect = document.getElementById("poliklinikSelect");
     const dokterSelect = document.getElementById("dokterSelect");
 
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+        alert("Session expired. Silakan login ulang.");
+        window.location.href = "/login";
+        return;
+    }
+
     // Populate poliklinik list
-    fetch("http://127.0.0.1:8080/v1/dokterjaga/poliklinik-list")
-        .then(res => res.json())
-        .then(res => {
-            if (res.status === "success") {
-                res.data.forEach(poli => {
-                    const opt = document.createElement("option");
-                    opt.value = poli;
-                    opt.textContent = poli;
-                    poliklinikSelect.appendChild(opt);
-                });
-            }
-        });
+    fetch("http://127.0.0.1:8080/v1/dokterjaga/poliklinik-list", {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (res.status === "success") {
+            res.data.forEach(poli => {
+                const opt = document.createElement("option");
+                opt.value = poli;
+                opt.textContent = poli;
+                poliklinikSelect.appendChild(opt);
+            });
+        }
+    });
 
     // On poliklinik change
     poliklinikSelect.addEventListener("change", function () {
         const selectedPoli = this.value;
         dokterSelect.innerHTML = '<option disabled selected value="">Pilih Dokter</option>';
 
-        fetch(`http://127.0.0.1:8080/v1/dokterjaga/poliklinik/${encodeURIComponent(selectedPoli)}`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.status === "success" && Array.isArray(res.data)) {
-                    const now = new Date();
-                    const currentDay = normalizeDay(now.toLocaleDateString("id-ID", { weekday: "long" }));
+        fetch(`http://127.0.0.1:8080/v1/dokterjaga/poliklinik/${encodeURIComponent(selectedPoli)}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            if (res.status === "success" && Array.isArray(res.data)) {
+                const now = new Date();
+                const currentDay = normalizeDay(now.toLocaleDateString("id-ID", { weekday: "long" }));
 
-                    let dokterAktifCount = 0;
+                let dokterAktifCount = 0;
 
-                    res.data.forEach(dokter => {
-                        const hariKerja = normalizeDay(dokter.hari_kerja);
-                        const jamMulai = padTime(dokter.jam_mulai);
-                        const jamSelesai = padTime(dokter.jam_selesai);
+                res.data.forEach(dokter => {
+                    const hariKerja = normalizeDay(dokter.hari_kerja);
+                    const jamMulai = padTime(dokter.jam_mulai);
+                    const jamSelesai = padTime(dokter.jam_selesai);
 
-                        const isActive = (hariKerja === currentDay) && isDoctorOnShiftTime(jamMulai, jamSelesai);
+                    const isActive = (hariKerja === currentDay) && isDoctorOnShiftTime(jamMulai, jamSelesai);
 
-                        // Debug output
-                        console.log("🩺 Dokter:", dokter.nama_dokter);
-                        console.log("📅 Hari kerja:", hariKerja, "| Sekarang:", currentDay);
-                        console.log("⏰ Shift:", jamMulai, "-", jamSelesai);
-                        console.log("✅ Aktif sekarang:", isActive);
+                    // Debug output
+                    console.log("🩺 Dokter:", dokter.nama_dokter);
+                    console.log("📅 Hari kerja:", hariKerja, "| Sekarang:", currentDay);
+                    console.log("⏰ Shift:", jamMulai, "-", jamSelesai);
+                    console.log("✅ Aktif sekarang:", isActive);
 
-                        if (isActive) {
-                            const opt = document.createElement("option");
-                            opt.value = dokter.kode_dokter;
-                            opt.textContent = dokter.nama_dokter;
-                            dokterSelect.appendChild(opt);
-                            dokterAktifCount++;
-                        }
-                    });
-
-                    if (dokterAktifCount === 0) {
-                        dokterSelect.innerHTML = '<option disabled selected value="">Tidak ada dokter aktif saat ini</option>';
+                    if (isActive) {
+                        const opt = document.createElement("option");
+                        opt.value = dokter.kode_dokter;
+                        opt.textContent = dokter.nama_dokter;
+                        dokterSelect.appendChild(opt);
+                        dokterAktifCount++;
                     }
-                } else {
-                    console.warn("⚠️ Format data tidak valid:", res);
+                });
+
+                if (dokterAktifCount === 0) {
+                    dokterSelect.innerHTML = '<option disabled selected value="">Tidak ada dokter aktif saat ini</option>';
                 }
-            })
-            .catch(err => {
-                console.error("❌ Gagal mengambil data dokter:", err);
-            });
+            } else {
+                console.warn("⚠️ Format data tidak valid:", res);
+            }
+        })
+        .catch(err => {
+            console.error("❌ Gagal mengambil data dokter:", err);
+        });
     });
+
+
 
     // Normalize hari (e.g., "Selasa ") → "selasa"
     function normalizeDay(day) {

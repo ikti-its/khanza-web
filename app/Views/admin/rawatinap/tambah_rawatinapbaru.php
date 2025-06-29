@@ -137,8 +137,14 @@
         const tarifInput = document.getElementById("tarifKamarInput");
 
         let kamarDataMap = {}; // Store kamar data for fast lookup by nomor_bed
+        const token = sessionStorage.getItem("token");
 
-        fetch("http://127.0.0.1:8080/v1/kamar/available")
+        fetch("http://127.0.0.1:8080/v1/kamar/available", {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 if (data.data && Array.isArray(data.data)) {

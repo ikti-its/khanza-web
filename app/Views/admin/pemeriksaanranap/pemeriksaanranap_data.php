@@ -70,7 +70,7 @@
                     <?php
                         echo view('components/header/search_bar');
                         
-                        $modul_path = '/pemberianobat';
+                        $modul_path = '/pemeriksaanranap';
                         $tabel    = $pemeriksaanranap_data;
                         $kolom_id = 'no_rawat';
                         $aksi = [

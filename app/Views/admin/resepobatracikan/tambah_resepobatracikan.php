@@ -160,14 +160,18 @@ obatSelect.addEventListener("change", function () {
 
             fetch(`http://127.0.0.1:8080/v1/gudang-barang/${kode}`, {
                 headers: {
-                    "Authorization": `Bearer ${sessionStorage.getItem('jwt_token')}`,
+                    "Authorization": `Bearer ${sessionStorage.getItem('token')}`,
                     "Accept": "application/json"
                 }
             })
             .then(res => res.json())
             .then(data => {
+                console.log("📦 Response gudang-barang:", data);
+                console.log("➡️ kapasitas:", data?.data?.kapasitas);
+                console.log("📦 data.data:", data);
                 const stok = data?.data?.stok ?? '0';
-                const kapasitas = data?.data?.kapasitas ?? '0';
+                const innerData = data?.data ?? {};
+                const kapasitas = innerData.kapasitas ?? '0';
 
                 const wrapper = document.createElement("div");
                 wrapper.id = `group-${kode}`;

@@ -85,7 +85,7 @@
                             'cetak'    => false,
                             'tindakan' => false,
                             'detail'   => true,
-                            'ubah'     => true,
+                            'ubah'     => false,
                             'hapus'    => false,
                         ];
                         $konfig = [
@@ -184,85 +184,85 @@
 </div>
 <!-- End Table Section -->
 <script>
-    function requestAmbulanceModal(nomorRujuk) {
-        // Show modal
-        document.getElementById('ambulansModal').classList.remove('hidden');
+function requestAmbulanceModal(nomorRujuk) {
+    document.getElementById('ambulansModal').classList.remove('hidden');
 
-        // Fetch ambulans list
-        fetch('http://127.0.0.1:8080/v1/ambulans/request/pending')
-            .then(res => res.json())
-            .then(res => {
-                const list = document.getElementById('ambulansList');
-                list.innerHTML = '';
+    const token = sessionStorage.getItem("token") || '<?= session('jwt_token') ?>';
 
-                if (!res.data || res.data.length === 0) {
-                    list.innerHTML = `<p class="text-sm text-gray-500">Tidak ada ambulans tersedia.</p>`;
-                    return;
-                }
+    fetch('http://127.0.0.1:8080/v1/ambulans/request/pending', {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(res => res.json())
+    .then(res => {
+        const list = document.getElementById('ambulansList');
+        list.innerHTML = '';
 
-                res.data
-                    .filter(item => item.status.toLowerCase() === 'available')
-                    .forEach(item => {
-                        list.innerHTML += `
-                            <div class="flex justify-between items-center p-2 border rounded">
-                                <div>🚑 <strong>${item.no_ambulans}</strong></div>
-                                <button onclick="confirmAmbulance('${item.no_ambulans}', '${nomorRujuk}')" 
-                                        class="text-white bg-blue-600 hover:bg-blue-700 px-2 py-1 text-sm rounded">
-                                    Pilih
-                                </button>
-                            </div>`;
-                    });
+        if (!res.data || res.data.length === 0) {
+            list.innerHTML = `<p class="text-sm text-gray-500">Tidak ada ambulans tersedia.</p>`;
+            return;
+        }
 
-                if (list.innerHTML === '') {
-                    list.innerHTML = `<p class="text-sm text-gray-500">Tidak ada ambulans yang tersedia.</p>`;
-                }
-
-            })
-            .catch(() => {
-                document.getElementById('ambulansList').innerHTML = `<p class="text-sm text-red-500">Gagal memuat data ambulans.</p>`;
+        res.data
+            .filter(item => item.status.toLowerCase() === 'available')
+            .forEach(item => {
+                list.innerHTML += `
+                    <div class="flex justify-between items-center p-2 border rounded" id="ambulans-${item.no_ambulans}">
+                        <div>🚑 <strong>${item.no_ambulans}</strong></div>
+                        <button onclick="confirmAmbulance('${item.no_ambulans}', '${nomorRujuk}')" 
+                                class="text-white bg-blue-600 hover:bg-blue-700 px-2 py-1 text-sm rounded">
+                            Pilih
+                        </button>
+                    </div>`;
             });
-    }
+
+        if (list.innerHTML === '') {
+            list.innerHTML = `<p class="text-sm text-gray-500">Tidak ada ambulans yang tersedia.</p>`;
+        }
+    })
+    .catch(() => {
+        document.getElementById('ambulansList').innerHTML = `<p class="text-sm text-red-500">Gagal memuat data ambulans.</p>`;
+    });
+}
+
 
     function closeAmbulansModal() {
         document.getElementById('ambulansModal').classList.add('hidden');
     }
 
     function confirmAmbulance(noAmbulans, nomorRujuk) {
-        fetch('http://127.0.0.1:8080/v1/ambulans/request', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + '<?= session('jwt_token') ?>'
-            },
-            body: JSON.stringify({ no_ambulans: noAmbulans })
-        })
-        .then(res => res.json())
-        .then(res => {
-            // Update color of ambulance label
-            const el = document.getElementById(`ambulans-${noAmbulans}`);
-            if (el) {
-                el.querySelector('strong').classList.remove('text-red-600');
-                el.querySelector('strong').classList.add('text-green-600');
-                el.querySelector('span').classList.remove('text-red-600');
-                el.querySelector('span').classList.add('text-green-600');
-            }
+    fetch('http://127.0.0.1:8080/v1/ambulans/request', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer <?= session('jwt_token') ?>'
+        },
+        body: JSON.stringify({ no_ambulans: noAmbulans })
+    })
+    .then(res => res.json())
+    .then(res => {
+        const el = document.getElementById(`ambulans-${noAmbulans}`);
+        if (el) {
+            el.querySelector('strong').classList.replace('text-red-600', 'text-green-600');
+            el.querySelector('span')?.classList.replace('text-red-600', 'text-green-600');
+        }
 
-            // Update the "Panggil Ambulans" button
-            const panggilBtn = document.getElementById(`btn-panggil-${nomorRujuk}`);
-            if (panggilBtn) {
-                panggilBtn.innerText = "Sudah Dipanggil";
-                panggilBtn.classList.remove("text-blue-600");
-                panggilBtn.classList.add("text-green-600");
-                panggilBtn.style.pointerEvents = "none";
-            }
+        const panggilBtn = document.getElementById(`btn-panggil-${nomorRujuk}`);
+        if (panggilBtn) {
+            panggilBtn.innerText = "Sudah Dipanggil";
+            panggilBtn.classList.replace("text-blue-600", "text-green-600");
+            panggilBtn.style.pointerEvents = "none";
+        }
 
-            closeAmbulansModal();
-            alert("✅ Permintaan ambulans dikirim.");
-        })
-        .catch(() => {
-            alert("❌ Gagal mengirim permintaan.");
-        });
-    }
+        closeAmbulansModal();
+        alert("✅ Permintaan ambulans dikirim.");
+    })
+    .catch(() => {
+        alert("❌ Gagal mengirim permintaan.");
+    });
+}
+
 
 
 
