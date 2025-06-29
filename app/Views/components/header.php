@@ -972,7 +972,7 @@
                             <ul class="ps-2">
                                 <li>
                                     <a href="/umr" class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:bg-gray-800 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                                        UMR
+                                        
                                     </a>
                                 </li>
                                 <li>
@@ -1030,6 +1030,23 @@
                         </div>
                     </li>
                 <?php } ?>
+                <?php
+                    $menu_list = [
+                        ['Penggajian', '', 'icon', $petugasrole, [
+                            ['Upah Minimum Regional'       , '/umr'     , 'icon'],
+                            ['Jaminan Sosial'              , '/bpjs'    , 'icon'],
+                            ['Uang Lembur'                 , '/lembur'  , 'icon'],
+                            ['Pajak Penghasilan'           , '/pph21'   , 'icon'],
+                            ['Penghasilan Tidak Kena Pajak', '/ptkp'    , 'icon'],
+                            ['Golongan Pegawai'            , '/golongan', 'icon'],
+                            ['Jabatan Pegawai'             , '/jabatan' , 'icon'],
+                            ['Tunjangan Hari Raya'         , 'thr'      , 'icon'],
+                            ['Uang Pesangon'               , '/pesangon', 'icon'],
+                            ['Uang Penghargaan Masa Kerja' , 'upmk'     , 'icon'],
+                        ]],
+                    ];
+                    echo view('components/menu/menu', ['menu_list' => $menu_list]);
+                ?>
                 <li>
                     <button onclick="event.preventDefault(); openModal('modelLogout')" class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
