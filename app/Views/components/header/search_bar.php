@@ -14,39 +14,46 @@
 
 <script>
     function myFunction() {
-        var input, filter, table, tr, td, i, j, txtValue;
-        input  = document.getElementById("myInput");
-        table  = document.getElementById("myTable"); // Pastikan ini mengacu pada ID tabel yang benar
-        filter = input.value.toUpperCase();
-        
+        let table  = document.getElementById("myTable"); // Pastikan ini mengacu pada ID tabel yang benar
         if (!table) return; // Pastikan tabel ada sebelum melanjutkan
 
-        tr = table.getElementsByTagName("tr");
-        var dataFound = false;
+        let input  = document.getElementById("myInput");
+        let filter = input.value.toUpperCase();
+        let tr = table.getElementsByTagName("tr");
+        if(!tr || tr.length <= 1) return;
 
         // Iterate over all table rows (excluding header row)
-        for (i = 1; i < tr.length; i++) {
-            var found = false;
+        for (let i = 1; i < tr.length; i++) {
+            let found = false;
 
-            td = tr[i].getElementsByTagName("td");
+            let td_list = tr[i].getElementsByTagName("td");
 
             // Iterate over all td elements in the row
-            for (j = 0; j < td.length; j++) {
-                txtValue = td[j].textContent || td[j].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    found = true;
-                    break; // Break out of inner loop if match found
-                }
-            }
+            for (let j = 0; j < td_list.length; j++) {
+                let td = td_list[j];
+                let nested = td.firstElementChild?.firstElementChild;
+                let text = nested.textContent;
 
+                // Reset cell text (remove any old highlights)
+                
+                nested.innerHTML = text;
+
+                let index = text.toUpperCase().indexOf(filter);
+                if (index == -1) {
+                    continue;
+                }
+                nested.innerHTML =
+                    text.substring(0, index) +
+                    "<mark>" + text.substring(index, index + filter.length) + "</mark>" +
+                    text.substring(index + filter.length);
+                found = true;
+            }
             // Show or hide row based on search result
             if (found) {
                 tr[i].style.display = "";
-                dataFound = true;
             } else {
                 tr[i].style.display = "none";
             }
         }
     }
 </script>
-
