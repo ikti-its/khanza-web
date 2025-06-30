@@ -41,6 +41,7 @@
                 
                     echo '<tr>';
                         echo view('components/tabel/td', [
+                            'modul_path' => $modul_path,
                             'baris'    => $baris,
                             'id'       => $id,
                             'kolom'    => array_column($data_visible, $KOLOM),

@@ -11,10 +11,16 @@
             echo view('components/tabel/td/kosong');
             continue;
         }
-    
-        echo view('components/tabel/td/' . $jenis[$i], [
-            'id'   => $id,
-            'data' => $elem,
-        ]);
+        if($modul_path === '/resepobat'){
+            echo view('components/tabel/td/indeks_resep_obat', [
+                'id'   => $id,
+                'data' => $elem,
+            ]);
+        } else {
+            echo view('components/tabel/td/' . $jenis[$i], [
+                'id'   => $id,
+                'data' => $elem,
+            ]);
+        }
     }
 ?>
