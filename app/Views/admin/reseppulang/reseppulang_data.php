@@ -61,7 +61,7 @@
                         
                         $modul_path = '/reseppulang';
                         $tabel    = $reseppulang_data;
-                        $kolom_id = 'no_rawat';
+                        $kolom_id = ['no_rawat', 'kode_brng', 'tanggal', 'jam'];
                         $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,

@@ -23,7 +23,15 @@
         echo '<tbody class="divide-y divide-gray-200 dark:divide-gray-700">';
             if(gettype($tabel) === 'array'){
                 foreach($tabel as $baris){
-                    $id = $baris[$kolom_id];
+                    if (is_array($kolom_id)) {
+                        $idParts = [];
+                        foreach ($kolom_id as $key) {
+                            $idParts[] = $baris[$key];
+                        }
+                        $id = implode('/', $idParts);
+                    } else {
+                        $id = $baris[$kolom_id];
+                    }
                     echo view('components/popup/popup', [
                         'baris'  => $baris,
                         'id'     => $id,
