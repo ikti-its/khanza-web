@@ -282,7 +282,7 @@
                 <!-- Add more fields if needed -->
                 </div>
                 <div class="flex justify-end gap-x-2 p-4 border-t dark:border-neutral-700">
-                    <button class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#modal-tindakan-<?= $baris['nomor_rawat'] ?>">
+                    <button class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="modal-tindakan-<?= $baris['nomor_rawat'] ?>">
                     Tutup
                     </button>
                 </div>
@@ -290,3 +290,13 @@
         </div>
     </div>
 </div>
+<script>
+    document.querySelectorAll('.hs-accordion-toggle').forEach(button => {
+        button.addEventListener('click', () => {
+            const content = button.parentElement.querySelector('.hs-accordion-content');
+            if (content) {
+            content.classList.toggle('hidden');
+            }
+        });
+    });
+</script>

@@ -109,16 +109,12 @@
         <!-- Add more fields if needed -->    
 </div>
 <script>
-document.querySelectorAll('.btn-tindakan').forEach(btn => {
-    btn.addEventListener('click', () => {
-        setTimeout(() => {
-            const accordions = document.querySelectorAll('.hs-accordion');
-            accordions.forEach(el => {
-                if (el instanceof HTMLElement) {
-                    new HSAccordion(el); // ✅ Only initialize if it's a real element
-                }
-            });
-        }, 300); // Delay to ensure modal is shown
+    document.querySelectorAll('.hs-accordion-toggle').forEach(button => {
+        button.addEventListener('click', () => {
+            const content = button.parentElement.querySelector('.hs-accordion-content');
+            if (content) {
+            content.classList.toggle('hidden');
+            }
+        });
     });
-});
 </script>
