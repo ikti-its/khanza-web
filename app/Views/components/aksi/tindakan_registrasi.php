@@ -16,7 +16,7 @@
                 <h3 class="font-bold text-gray-800 dark:text-white">
                     Form Tindakan - <?= $baris['nomor_rawat'] ?>
                 </h3>
-                <button type="button" class="size-7 rounded-full text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-neutral-700" data-hs-overlay="#modal-tindakan-<?= $baris['nomor_reg'] ?>">
+                <button type="button" onclick="console.log('Close clicked')" class="size-7 rounded-full text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-neutral-700" data-hs-overlay-close>
                     <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -100,7 +100,7 @@
                 </div>
             </div>
             <div class="flex justify-end gap-x-2 p-4 border-t dark:border-neutral-700">
-                <button class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay="#modal-tindakan-<?= $baris['nomor_reg'] ?>">
+                <button class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800" data-hs-overlay-close>
                 Tutup
                 </button>
             </div>
@@ -113,8 +113,25 @@
         button.addEventListener('click', () => {
             const content = button.parentElement.querySelector('.hs-accordion-content');
             if (content) {
-            content.classList.toggle('hidden');
+                content.classList.toggle('hidden');
             }
         });
+    });
+</script>
+
+<script>
+    document.querySelectorAll('[data-hs-overlay-close]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        // Get the closest open modal by finding the parent .hs-overlay
+        const modal = btn.closest('.hs-overlay');
+        if (modal) {
+        setTimeout(() => {
+            // Force-hide the modal if it reopens accidentally
+            modal.classList.add('hidden');
+            modal.classList.remove('hs-overlay-open:mt-7', 'hs-overlay-open:opacity-100', 'hs-overlay-open:duration-500');
+            modal.style.pointerEvents = 'none';
+        }, 100); // Delay allows the close animation, but prevents instant reopen
+        }
+    });
     });
 </script>
