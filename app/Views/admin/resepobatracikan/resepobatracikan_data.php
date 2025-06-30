@@ -72,20 +72,24 @@
                         ];
                         $konfig = [
                             // [visible, Display, Kolom, Jenis, Required, *Opsi]
-                            [1, 'Nomor Racik' , 'no_racik'    , 'indeks'],
+                            [1, 'Nomor Resep' , 'no_resep'    , 'indeks'],
+                            [1, 'Nomor Racik' , 'no_racik'    , 'indeks'],                            
                             [0, 'Kode Barang' , 'kode_brng'   , 'indeks'],
+                            [1, 'Nama Barang' , 'nama_barang' , 'teks'],
                             [1, 'Nama Racikan', 'nama_racik'  , 'teks'],
                             [0, 'Satuan'      , 'kode_sat'    , 'teks'],
                             [0, 'Harga'       , 'kelas1'      , 'uang'], 
-                            [0, 'Jenis Obat'  , 'kdjsn'       , 'status'],
+                            [0, 'Jenis Obat'  , 'kdjns'       , 'status'],
                             [0, 'Stok'        , 'stokminimal' , 'jumlah'], 
                             [0, 'Kps'         , 'kapasitas'   , 'jumlah'], 
                             [0, 'P1'          , 'p1'          , 'teks'], 
                             [0, 'P2'          , 'p2'          , 'teks'],
                             [0, 'Kandungan'   , 'kandungan'   , 'teks'], 
-                            [1, 'Metode Racik', 'kd_racik'    , 'indeks'],
+                            [1, 'Kode Racik'  , 'kd_racik'    , 'indeks'],
                             [1, 'Jumlah Racik', 'jml_dr'      , 'jumlah'],
+                            [1, 'Jumlah'      , 'jml'         , 'jumlah'],
                             [1, 'Aturan Pakai', 'aturan_pakai', 'teks'],
+                            [1, 'Keterangan'  , 'keterangan'  , 'teks'],
                         ];
                         echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
