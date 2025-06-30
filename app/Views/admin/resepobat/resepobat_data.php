@@ -64,7 +64,7 @@
                         $tabel    = $resepobat_data;
                         $kolom_id = 'no_resep';
                         $aksi = [
-                            'cetak'    => false,
+                            'cetak'    => true,
                             'tindakan' => false,
                             'detail'   => true,
                             'ubah'     => false,

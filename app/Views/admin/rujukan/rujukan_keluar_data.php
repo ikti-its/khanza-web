@@ -82,7 +82,7 @@
                         $tabel    = $rujukankeluar_data;
                         $kolom_id = 'nomor_rujuk';
                         $aksi = [
-                            'cetak'    => false,
+                            'cetak'    => true,
                             'tindakan' => false,
                             'detail'   => true,
                             'ubah'     => true,
