@@ -281,33 +281,7 @@ $routes->group('registrasi', ['filter' => 'auth'], function ($routes) {
     $routes->get('audit', 'Registrasi::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
-// Olah Data Pasien
-$routes->group('masterpasien', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'PasienController::tampilData', [
-        'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
-    ]);
-    $routes->get('tambah', 'PasienController::tampilTambah', [
-        'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
-    ]);
-    $routes->post('masterpasien/submitTambah', 'PasienController::submitTambah', [
-        'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
-    ]);
-    $routes->get('edit/(:any)', 'PasienController::tampilUbah/$1', [
-        'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
-    ]);
-    $routes->post('submitedit', 'PasienController::submitEdit', [
-        'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
-    ]);
-    $routes->post('submitedit/(:segment)', 'PasienController::submitEdit/$1', [
-        'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
-    ]);
-    $routes->delete('hapus/(:segment)', 'PasienController::hapus/$1', [
-        'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
-    ]);
-    $routes->get('audit', 'PasienController::audit', [
-        'filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'
-    ]);
-});
+
 
 
 
@@ -663,6 +637,7 @@ $fitur = [
     ['Golongan', 'golongan'],
     ['Jabatan', 'jabatan'],
     ['PasienController', 'masterpasien'],
+    ['DokterController', 'datadokter'],
     ['PTKP', 'ptkp'],
     ['PPH21', 'pph21'],
     ['Lembur', 'lembur'],
