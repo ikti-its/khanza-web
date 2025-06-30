@@ -28,8 +28,8 @@
 
             let td_list = tr[i].getElementsByTagName("td");
 
-            // Iterate over all td elements in the row
-            for (let j = 0; j < td_list.length; j++) {
+            // Iterate over all td elements in the row except the last
+            for (let j = 0; j < td_list.length - 1; j++) {
                 let td = td_list[j];
                 let nested = td.firstElementChild?.firstElementChild;
                 let text = nested.textContent;
