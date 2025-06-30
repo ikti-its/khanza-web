@@ -8,7 +8,7 @@
         <?= view('components/form/judul', [
             'judul' => 'Edit Rujukan Masuk'
         ]) ?>
-        <form action="<?= site_url('rujukanmasuk/submitedit/' . $rujukan['nomor_rawat']) ?>" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="<?= site_url('rujukanmasuk/submitedit/' . $rujukan['nomor_rujuk']) ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">

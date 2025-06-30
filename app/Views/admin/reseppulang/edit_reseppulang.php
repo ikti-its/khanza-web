@@ -12,7 +12,7 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
         <?= view('components/form/judul', [
             'judul' => 'Edit Resep Pulang'
         ]) ?>
-        <form action="<?= base_url('reseppulang/submittambah') ?>" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="<?= base_url("reseppulang/submitedit/{$no_rawat}/{$kode_brng}/{$tanggal}/{$jam}") ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
             <div class="mb-5 sm:block md:flex items-center">

@@ -206,54 +206,59 @@ class ResepPulang extends BaseController
             ->with('success', 'Resep pulang berhasil disimpan.');
     }
 
-    public function editResepPulang($no_rawat, $kode_brng, $tanggal, $jam)
-    {
-        if (!session()->has('jwt_token')) {
-            return $this->renderErrorView(401);
-        }
-    
-        $token = session()->get('jwt_token');
-        $title = 'Edit Resep Pulang';
-    
-        // 🔥 Step 1: Fetch resep pulang data untuk prefill
-        $url = $this->api_url . "/resep-pulang/$no_rawat/$kode_brng/$tanggal/$jam";
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-        ]);
-        $response = curl_exec($ch);
-        curl_close($ch);
-    
-        $data = json_decode($response, true);
-        $prefill = $data['data'] ?? [];
-    
-        // 🔥 Step 2: Fetch obat list
-        $obat_url = $this->api_url . '/pemberian-obat/databarang';
-        $ch = curl_init($obat_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-            'Accept: application/json'
-        ]);
-        $obat_response = curl_exec($ch);
-        curl_close($ch);
-    
-        $obat_data = json_decode($obat_response, true);
-        $obat_list = $obat_data['data'] ?? [];
-    
-        // Breadcrumbs
-        $this->addBreadcrumb('User', 'user');
-        $this->addBreadcrumb('Resep Pulang', 'reseppulang');
-        $this->addBreadcrumb('Edit', 'edit');
-    
-        return view('admin/reseppulang/edit_reseppulang', [
-            'prefill' => $prefill,
-            'obat_list' => $obat_list, // ✅ Kirim obat_list ke View
-            'title' => $title,
-            'breadcrumbs' => $this->getBreadcrumbs()
-        ]);
+public function editResepPulang($no_rawat, $kode_brng, $tanggal, $jam)
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
     }
+
+    $token = session()->get('jwt_token');
+    $title = 'Edit Resep Pulang';
+
+    // 🔥 Step 1: Fetch resep pulang data untuk prefill
+    $url = $this->api_url . "/resep-pulang/$no_rawat/$kode_brng/$tanggal/$jam";
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+    ]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+    $prefill = $data['data'] ?? [];
+
+    // 🔥 Step 2: Fetch obat list
+    $obat_url = $this->api_url . '/pemberian-obat/databarang';
+    $ch = curl_init($obat_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $obat_response = curl_exec($ch);
+    curl_close($ch);
+
+    $obat_data = json_decode($obat_response, true);
+    $obat_list = $obat_data['data'] ?? [];
+
+    // Breadcrumbs
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Resep Pulang', 'reseppulang');
+    $this->addBreadcrumb('Edit', 'edit');
+
+    return view('admin/reseppulang/edit_reseppulang', [
+        'no_rawat'   => $no_rawat,
+        'kode_brng'  => $kode_brng,
+        'tanggal'    => $tanggal,
+        'jam'        => $jam,
+        'prefill'    => $prefill,
+        'obat_list'  => $obat_list,
+        'title'      => $title,
+        'breadcrumbs'=> $this->getBreadcrumbs()
+    ]);
+}
+
     
 
     public function submitEditResepPulang($no_rawat, $kode_brng, $tanggal, $jam)

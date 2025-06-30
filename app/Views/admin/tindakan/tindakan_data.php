@@ -91,7 +91,7 @@
                         
                         $modul_path = '/tindakan';
                         $tabel    = $tindakan_data;
-                        $kolom_id = 'nomor_rawat';
+                        $kolom_id = ['nomor_rawat', 'jam_rawat'];
                         $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,

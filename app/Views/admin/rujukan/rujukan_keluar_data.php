@@ -85,7 +85,7 @@
                             'cetak'    => false,
                             'tindakan' => false,
                             'detail'   => true,
-                            'ubah'     => false,
+                            'ubah'     => true,
                             'hapus'    => false,
                         ];
                         $konfig = [
@@ -262,9 +262,6 @@ function requestAmbulanceModal(nomorRujuk) {
         alert("❌ Gagal mengirim permintaan.");
     });
 }
-
-
-
 
     function requestAmbulance(noAmbulans) {
             $.ajax({

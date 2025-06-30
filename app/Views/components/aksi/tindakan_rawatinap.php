@@ -1,3 +1,4 @@
+<script src="https://unpkg.com/preline@latest/dist/preline.js"></script>
 <!-- Tindakan Modal -->
 <div class="px-3 py-1.5">
     <button

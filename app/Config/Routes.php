@@ -527,7 +527,7 @@ $routes->group('reseppulang', ['filter' => 'auth'], function ($routes) {
     $routes->get('submit/(:segment)', 'ResepPulang::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->post('submittambah', 'ResepPulang::submitTambahResepPulang', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('edit/(:segment)/(:segment)/(:segment)/(:segment)', 'ResepPulang::editResepPulang/$1/$2/$3/$4');
-    $routes->post('submitedit/(:segment)', 'ResepPulang::submitEditResepPulang/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->post('submitedit/(:segment)/(:segment)/(:segment)/(:segment)', 'ResepPulang::submitEditResepPulang/$1/$2/$3/$4', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->delete('hapus/(:segment)/(:segment)/(:segment)/(:segment)', 'ResepPulang::hapusResepPulang/$1/$2/$3/$4');
     $routes->get('(:segment)', 'ResepPulang::resepPulangData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'ResepPulang::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
