@@ -5,7 +5,7 @@
             echo "Jenis tidak ditemukan pada daftar";
             break;
         }
-        
+        // print_r($baris);
         $elem = $baris[$kolom[$i]];
         if(!isset($elem) || $elem === null || $elem === ''){
             echo view('components/tabel/td/kosong');

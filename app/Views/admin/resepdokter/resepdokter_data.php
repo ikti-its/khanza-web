@@ -84,10 +84,10 @@
                             // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'No Racik'    , 'no_resep'    , 'indeks'],
                             [1, 'Kode Obat'   , 'kode_barang' , 'indeks'],
-                            [1, 'Nama Obat'   , 'nama_obat'   , 'teks'],
+                            // [1, 'Nama Obat'   , 'nama_obat'   , 'teks'],
                             [1, 'Jumlah'      , 'jumlah'      , 'jumlah'], 
                             [1, 'Aturan Pakai', 'aturan_pakai', 'teks'],
-                            [1, 'Biaya'       , 'harga'       , 'uang'],
+                            // [1, 'Biaya'       , 'harga'       , 'uang'],
                         ];
                         echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
