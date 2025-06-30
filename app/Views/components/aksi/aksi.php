@@ -6,7 +6,7 @@
                 'modul_path' => $modul_path,
                 'baris'      => $baris   
             ];
-            $aksi_list = ['cetak', 'tindakan', 'detail', 'ubah', 'hapus'];
+            $aksi_list = ['cetak', 'tindakan', 'detail', 'ubah', 'hapus', 'validasi'];
             if(ENVIRONMENT === 'development'){
                 foreach($aksi as $key => $value){
                     if(!in_array($key, $aksi_list)){
@@ -30,6 +30,16 @@
                     default:
                         break;
                 }
+            }
+            if(isset($aksi['validasi']) && $aksi['validasi'] === true){
+                switch($modul_path){
+                    case '/permintaanreseppulang':
+                        echo view('components/aksi/validasi_buatreseppulang', $data);
+                        break;
+                    default:
+                        break;
+                }
+
             }
             if($aksi['cetak']  === true){echo view('components/aksi/cetak',  $data);}
             if($aksi['detail'] === true){echo view('components/aksi/detail', $data);}

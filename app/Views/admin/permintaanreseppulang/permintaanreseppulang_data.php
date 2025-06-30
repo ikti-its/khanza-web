@@ -59,7 +59,7 @@
                     <?php
                         echo view('components/header/search_bar');
                         
-                        $modul_path = '/pemberianobat';
+                        $modul_path = '/permintaanreseppulang';
                         $tabel    = $permintaanreseppulang_data;
                         $kolom_id = 'no_rawat';
                         $aksi = [
@@ -68,6 +68,7 @@
                             'detail'   => true,
                             'ubah'     => true,
                             'hapus'    => true,
+                            'validasi' => true,
                         ];
                         $konfig = [
                             // [visible, Display, Kolom, Jenis, Required, *Opsi]
