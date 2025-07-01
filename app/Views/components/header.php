@@ -511,7 +511,64 @@
     
                 <?php
                     $menu_list = [
-                        ['Inventaris Medis', '','inventaris_medis', $petugasrole, [
+                        /*
+                        **** Format  *******
+                        ['Nama menu', 'Link menu', 'Icon menu', 'Prefiks', $rolelist, [
+                            ['Nama submenu 1' , 'Link submenu 1', 'Icon submenu 1'],
+                            ['Nama submenu 2' , 'Link submenu 2', 'Icon submenu 2'],
+                            ['Nama submenu 3' , 'Link submenu 3', 'Icon submenu 3'],
+                            dst
+                        ]]
+
+                        **** Keterangan *****
+                        Nama menu => Nama yang akan muncul di tampilan user di sidebar sebelah kiri
+                        Link menu => Link sesuai routes yang telah dibuat di app/Config/Routes.php
+                                     Jika menu ini memiliki submenu, maka link menu WAJIB diisi '' (empty string)
+                        Icon menu => Nama file icon menu dalam bentuk file svg yang disimpan di public/svg
+                                     Nama Icon menu pada halaman ini TIDAK BOLEH mencantumkan ekstensi .svg
+                                     Apabila icon tidak ada, Icon menu WAJIB diisi '' (empty string)
+                                     Tetapi Icon menu DISARANKAN ada supaya tampilan terlihat rapi
+                        Prefiks   => Prefiks url yang ditambahkan sebelum Link Menu
+                                     Apabila tidak menggunakan prefiks, Prefiks diisi '' (empty string)
+                        Rolelist  => List role user yang dapat melihat dan mengakses menu ini
+
+                        Submenu      => Opsi submenu yang dikelompokkan dalam 1 menu untuk memudahkan navigasi
+                                        Apabila tidak ada submenu, maka submenu WAJIB diisi [] (empty array)
+                                        Submenu dan Link menu bersifat mutually exclusive sehingga
+                                        apabila Link Menu diisi, maka Submenu WAJIB kosong dan sebaliknya
+                        Nama submenu => Nama yang akan muncul di tampilan user ketika menu diklik
+                        Link submenu => Link sesuai routes yang telah dibuat di app/Config/Routes.php
+                        Icon submenu => Nama file icon menu dalam bentuk file svg yang disimpan di public/svg
+                                        Nama Icon menu pada halaman ini TIDAK BOLEH mencantumkan ekstensi .svg
+                                        Apabila icon tidak ada, Icon submenu WAJIB diisi '' (empty string)
+                                        Pada 1 menu, DISARANKAN submenu memiliki icon seluruhnya atau 
+                                        tidak memiliki icon seluruhnya supaya tampilan terlihat rapi
+                        */
+                        ['Aturan Penggajian', '', 'aturan_penggajian', '/aturan-penggajian', $petugasrole, [
+                            ['Upah Minimum Regional'       , '/umr'     , ''],
+                            ['Jaminan Sosial'              , '/bpjs'    , ''],
+                            ['Uang Lembur'                 , '/lembur'  , ''],
+                            ['Pajak Penghasilan'           , '/pph21'   , ''],
+                            ['Penghasilan Tidak Kena Pajak', '/ptkp'    , ''],
+                            ['Golongan Pegawai'            , '/golongan', ''],
+                            ['Jabatan Pegawai'             , '/jabatan' , ''],
+                            ['Tunjangan Hari Raya'         , '/thr'     , ''],
+                            ['Uang Pesangon'               , '/pesangon', ''],
+                            ['Uang Penghargaan Masa Kerja' , '/upmk'    , ''],
+                        ]],
+                        ['Data Penggajian', '', 'data_penggajian', '/data-penggajian', $petugasrole, [
+                            ['Upah Minimum Regional'       , '/umr'     , ''],
+                            ['Jaminan Sosial'              , '/bpjs'    , ''],
+                            ['Uang Lembur'                 , '/lembur'  , ''],
+                            ['Pajak Penghasilan'           , '/pph21'   , ''],
+                            ['Penghasilan Tidak Kena Pajak', '/ptkp'    , ''],
+                            ['Golongan Pegawai'            , '/golongan', ''],
+                            ['Jabatan Pegawai'             , '/jabatan' , ''],
+                            ['Tunjangan Hari Raya'         , '/thr'     , ''],
+                            ['Uang Pesangon'               , '/pesangon', ''],
+                            ['Uang Penghargaan Masa Kerja' , '/upmk'    , ''],
+                        ]],
+                        ['Inventaris Medis', '','inventaris_medis', '',  $petugasrole, [
                             ['Data'                 , '/datamedis'      , ''],
                             ['Stok Opname'          , '/stokopnamemedis', ''],
                             ['Mutasi Antar Gudang'  , '/mutasimedis'    , ''],
@@ -520,48 +577,35 @@
                             ['Sisa Stok'            ,  '/sisastokmedis' , ''],
                             ['Data Batch'           , '/batchmedis'     , '']
                         ]],
-                        ['Rujukan', '', 'rujukan', $petugasdokterrole, [
+                        ['Rujukan', '', 'rujukan', '', $petugasdokterrole, [
                             ['Rujukan Masuk' , '/rujukanmasuk' , ''],
                             ['Rujukan Keluar', '/rujukankeluar', ''],
                         ]] , #allrole
-                        ['Persetujuan', '/persetujuanpengajuan', 'persetujuan', $persetujuanrole, []],
-                        ['Registrasi', '/registrasi', 'registrasi', $petugasrole, []],
-                        ['Olah Data Pasien', '', 'olah_data_pasien', $petugasrole, [
+                        ['Persetujuan', '/persetujuanpengajuan', 'persetujuan', '', $persetujuanrole, []],
+                        ['Registrasi', '/registrasi', 'registrasi', '', $petugasrole, []],
+                        ['Olah Data Pasien', '', 'olah_data_pasien', '', $petugasrole, [
                             ['Data Pasien'    , '/masterpasien', ''],
                             ['Kelahiran Bayi' , '/kelahiran'   , ''],
                             ['Kematian Pasien', '/kematian'    , ''],
                         ]],
-                        ['Rawat Inap'        , '/rawatinap'       , 'rawat_inap'    , $petugasdokterrole, []],
-                        ['Ruangan'           , '/kamar'           , 'kamar'         , $petugasrole      , []],
-                        ['Unit Gawat Darurat', '/ugd'             , 'ugd'           , $petugasdokterrole, []],
-                        ['Ambulans'          , '/ambulans'        , 'ambulans'      , $petugasrole      , []],
-                        ['Tindakan'          , '/tindakan'        , 'tindakan'      , $petugasrole      , []],
-                        ['Pemeriksaan'       , '/pemeriksaanranap', 'pemeriksaan'   , $petugasrole      , []],
-                        ['Dokter Jaga'       , '/dokterjaga'      , 'dokter_jaga'   , $petugasrole      , []],
-                        ['Resep Obat'        , '/resepobat'       , 'resep_obat'    , $petugasdokterrole, []],
-                        ['Pemberian Obat'    , '/pemberianobat'   , 'pemberian_obat', $petugasrole      , []],
-                        ['Resep Pulang', '', 'resep_pulang', $petugasrole, [
+                        ['Rawat Inap'        , '/rawatinap'       , 'rawat_inap'    , '', $petugasdokterrole, []],
+                        ['Ruangan'           , '/kamar'           , 'kamar'         , '', $petugasrole      , []],
+                        ['Unit Gawat Darurat', '/ugd'             , 'ugd'           , '', $petugasdokterrole, []],
+                        ['Ambulans'          , '/ambulans'        , 'ambulans'      , '', $petugasrole      , []],
+                        ['Tindakan'          , '/tindakan'        , 'tindakan'      , '', $petugasrole      , []],
+                        ['Pemeriksaan'       , '/pemeriksaanranap', 'pemeriksaan'   , '', $petugasrole      , []],
+                        ['Dokter Jaga'       , '/dokterjaga'      , 'dokter_jaga'   , '', $petugasrole      , []],
+                        ['Resep Obat'        , '/resepobat'       , 'resep_obat'    , '', $petugasdokterrole, []],
+                        ['Pemberian Obat'    , '/pemberianobat'   , 'pemberian_obat', '', $petugasrole      , []],
+                        ['Resep Pulang', '', 'resep_pulang', '', $petugasrole, [
                             ['Permintaan Resep Pulang', '/permintaanreseppulang', ''],
                             ['Resep Pulang'           , '/reseppulang'          , ''],
                         ]],
-                        ['Rekam Medis', '', 'rekam_medis', $dokterrole, [
+                        ['Rekam Medis', '', 'rekam_medis', '', $dokterrole, [
                             ['Daftar Rekam Medis'              , '/pasien'                    , ''],
                             ['Observasi Rawat Inap'            , '/catatanobservasiranap'     , ''],
                             ['Observasi Rawat Inap Kebidanan'  , '/catatanobservasikebidanan' , ''],
                             ['Observasi Rawat Inap Post Partum', '/catatanobservasipostpartum', ''],
-                        ]],
-                        ['Penggajian', '', 'icon', $petugasrole, [
-                            ['Upah Minimum Regional'       , '/umr'     , 'icon'],
-                            ['Jaminan Sosial'              , '/bpjs'    , 'icon'],
-                            ['Uang Lembur'                 , '/lembur'  , 'icon'],
-                            ['Pajak Penghasilan'           , '/pph21'   , 'icon'],
-                            ['Penghasilan Tidak Kena Pajak', '/ptkp'    , 'icon'],
-                            ['Golongan Pegawai'            , '/golongan', 'icon'],
-                            ['Jabatan Pegawai'             , '/jabatan' , 'icon'],
-                            ['Tunjangan Hari Raya'         , '/thr'      , 'icon'],
-                            ['Uang Pesangon'               , '/pesangon', 'icon'],
-                            ['Uang Penghargaan Masa Kerja' , '/upmk'     , 'icon'],
-                            ['Data Pegawai'                , '/datapegawai', 'icon']
                         ]],
                     ];
                     echo view('components/menu/menu', ['menu_list' => $menu_list]);

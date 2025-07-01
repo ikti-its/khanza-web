@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\AturanPenggajian;
 
 use App\Controllers\BaseController;
 
@@ -11,7 +11,8 @@ class Pesangon extends BaseController
         ['title' => 'User'     , 'icon' => 'user'], 
         ['title' => 'Pesangon' , 'icon' => 'pesangon'],
     ];
-    protected string $modul_path = '/pesangon';
+    protected string $modul_path = '/aturan-penggajian/pesangon';
+    protected string $api_path = '/pesangon';
     protected string $kolom_id = 'no_pesangon';
     protected array $aksi = [
         'cetak'    => false,

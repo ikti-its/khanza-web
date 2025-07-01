@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\AturanPenggajian;
 
 use App\Controllers\BaseController;
 
@@ -11,7 +11,8 @@ class PPH21 extends BaseController
         ['title' => 'User',  'icon' => 'user'], 
         ['title' => 'PPH21', 'icon' => 'pph21'],
     ];
-    protected string $modul_path = '/pph21';
+    protected string $modul_path = '/aturan-penggajian/pph21';
+    protected string $api_path = '/pph21';
     protected string $kolom_id = 'no_pph21';
     protected array $aksi = [
         'cetak'    => false,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\AturanPenggajian;
 
 use App\Controllers\BaseController;
 
@@ -11,7 +11,8 @@ class Lembur extends BaseController
         ['title' => 'User'  , 'icon' => 'user'], 
         ['title' => 'Lembur', 'icon' => 'lembur'],
     ];
-    protected string $modul_path = '/lembur';
+    protected string $modul_path = '/aturan-penggajian/lembur';
+    protected string $api_path = '/lembur';
     protected string $kolom_id = 'no_lembur';
     protected array $aksi = [
         'cetak'    => false,

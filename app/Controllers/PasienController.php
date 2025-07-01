@@ -12,6 +12,7 @@ class PasienController extends BaseController
         ['title' => 'Data Pasien', 'icon' => 'pasien']
     ];
     protected string $modul_path = '/masterpasien';
+    protected string $api_path = '/masterpasien';
     protected string $kolom_id = 'no_rkm_medis';
     protected array $aksi = [
         'cetak'    => false,

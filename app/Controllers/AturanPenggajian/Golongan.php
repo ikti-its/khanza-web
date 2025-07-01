@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\AturanPenggajian;
 
 use App\Controllers\BaseController;
 
@@ -11,7 +11,8 @@ class Golongan extends BaseController
         ['title' => 'User',     'icon' => 'user'], 
         ['title' => 'Golongan', 'icon' => 'golongan'],
     ];
-    protected string $modul_path = '/golongan';
+    protected string $modul_path = '/aturan-penggajian/golongan';
+    protected string $api_path = '/golongan';
     protected string $kolom_id = 'no_golongan';
     protected array $aksi = [
         'cetak'    => false,

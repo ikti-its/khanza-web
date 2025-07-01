@@ -7,9 +7,10 @@
         $link = $s[$LINK];
         $icon = $s[$ICON];
         echo view('components/menu/submenu_baris', [
-            'teks' => $teks,
-            'link' => $link,
-            'icon' => $icon
+            'teks'    => $teks,
+            'link'    => $link,
+            'icon'    => $icon,
+            'prefiks' => $prefiks,
         ]);
     }
 ?>
