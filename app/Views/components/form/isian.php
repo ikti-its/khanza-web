@@ -13,19 +13,30 @@
         $len++;
     }
     for($i = 0; $i < $len; $i++){
-        $elem     = $konfig[$i];
-        $display  = $elem[$DISPLAY];
-        $kolom    = $elem[$KOLOM];
+        $elem = $konfig[$i];
+
+        if(sizeof($elem) < 5){
+            echo "Data pada konfig kurang lengkap";
+            return;
+        }
+        $display = $elem[$DISPLAY];
+        $kolom = $elem[$KOLOM];
+        if($baris !== '' && $kolom !=='' &&!isset($baris[$kolom])){
+            echo "Tidak ditemukan kolom: " . $kolom . " pada baris";
+            return;
+        }
         $jenis    = $elem[$JENIS];
-        $required = $elem[$REQUIRED];
-
-        $is_left = $i % 2 === 0;
-
         if(!in_array($jenis, $list_jenis)){
-            echo "Jenis tidak ditemukan pada daftar";
+            echo "Jenis: " . $jenis . " tidak ditemukan pada daftar";
             break;
         }
+        $required = $elem[$REQUIRED];
+        if(!in_array($required, [0, 1])){
+            echo "Konfig required tidak dikenali: " . $display;
+            return;
+        }
 
+        $is_left = $i % 2 === 0;
         if($is_left){echo '<div class="mb-5 sm:block md:flex items-center">';}
 
         echo view('components/form/label', [
