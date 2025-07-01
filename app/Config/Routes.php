@@ -650,12 +650,12 @@ $fitur = [
 $filter = ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'];
 foreach ($fitur as $f) {
     $routes->group($f[1], ['filter' => 'auth'], function ($routes) use ($f, $filter) {
-        $routes->get('/',                      $f[0] . '::tampilData', $filter);
-        $routes->get('audit',                  $f[0] . '::tampilAudit', $filter);
-        $routes->get('tambah',                 $f[0] . '::tampilTambah', $filter);
-        $routes->post('submittambah',          $f[0] . '::simpanTambah', $filter);
+        $routes->get('/',                      $f[0] . '::tampilData'   , $filter); //  ojok diubah din, iki wes rapi
+        $routes->get('audit',                  $f[0] . '::tampilAudit'  , $filter);
+        $routes->get('tambah',                 $f[0] . '::tampilTambah' , $filter);
+        $routes->post('submittambah',          $f[0] . '::simpanTambah' , $filter);
         $routes->get('edit/(:segment)',        $f[0] . '::tampilUbah/$1', $filter);
         $routes->post('submitedit/(:segment)', $f[0] . '::simpanUbah/$1', $filter);
-        $routes->delete('hapus/(:segment)',    $f[0] . '::hapusData/$1', $filter);
+        $routes->delete('hapus/(:segment)',    $f[0] . '::hapusData/$1' , $filter);
     });
 }
