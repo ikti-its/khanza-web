@@ -11,7 +11,8 @@ class UMR extends BaseController
         ['title' => 'User', 'icon' => 'user'], 
         ['title' => 'UMR' , 'icon' => 'umr'],
     ];
-    protected string $modul_path = '/umr';
+    protected string $modul_path = '/aturan-penggajian/umr';
+    protected string $api_path = '/umr';
     protected string $kolom_id = 'no_umr';
     protected array $aksi = [
         'cetak'    => false,

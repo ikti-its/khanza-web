@@ -11,7 +11,8 @@ class Jabatan extends BaseController
         ['title' => 'User',    'icon' => 'user'], 
         ['title' => 'Jabatan', 'icon' => 'jabatan'],
     ];
-    protected string $modul_path = '/jabatan';
+    protected string $modul_path = '/aturan-penggajian/jabatan';
+    protected string $api_path = '/jabatan';
     protected string $kolom_id = 'no_jabatan';
     protected array $aksi = [
         'cetak'    => false,

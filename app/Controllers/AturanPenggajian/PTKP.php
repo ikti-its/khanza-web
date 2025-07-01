@@ -11,7 +11,8 @@ class PTKP extends BaseController
         ['title' => 'User', 'icon' => 'user'], 
         ['title' => 'PTKP', 'icon' => 'ptkp'],
     ];
-    protected string $modul_path = '/ptkp';
+    protected string $modul_path = '/aturan-penggajian/ptkp';
+    protected string $api_path = '/ptkp';
     protected string $kolom_id = 'no_ptkp';
     protected array $aksi = [
         'cetak'    => false,

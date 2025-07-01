@@ -11,7 +11,8 @@ class THR extends BaseController
         ['title' => 'User', 'icon' => 'user'], 
         ['title' => 'THR' , 'icon' => 'thr'],
     ];
-    protected string $modul_path = '/thr';
+    protected string $modul_path = '/aturan-penggajian/thr';
+    protected string $api_path = '/thr';
     protected string $kolom_id = 'no_thr';
     protected array $aksi = [
         'cetak'    => false,

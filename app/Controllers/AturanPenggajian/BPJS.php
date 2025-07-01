@@ -11,7 +11,8 @@ class BPJS extends BaseController
         ['title' => 'User', 'icon' => 'user'],
         ['title' => 'BPJS', 'icon' => 'bpjs'],
     ];
-    protected string $modul_path  = '/bpjs';
+    protected string $modul_path  = '/aturan-penggajian/bpjs';
+    protected string $api_path = '/bpjs';
     protected string $kolom_id = 'no_bpjs';
     protected array $aksi = [
         'cetak'    => false,

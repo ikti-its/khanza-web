@@ -11,7 +11,8 @@ class UPMK extends BaseController
         ['title' => 'User', 'icon' => 'user'], 
         ['title' => 'UPMK', 'icon' => 'upmk'],
     ];
-    protected string $modul_path = '/upmk';
+    protected string $modul_path = '/aturan-penggajian/upmk';
+    protected string $api_path = '/upmk';
     protected string $kolom_id = 'no_upmk';
     protected array $aksi = [
         'cetak'    => false,
