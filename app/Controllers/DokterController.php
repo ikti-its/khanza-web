@@ -12,6 +12,7 @@ class DokterController extends BaseController
         ['title' => 'Dokter', 'icon' => 'dokter'],
     ];
     protected string $modul_path = '/datadokter';
+    protected string $api_path = '/datadokter';
     protected string $kolom_id = 'kode_dokter';
     protected array $aksi = [
         'cetak'    => false,

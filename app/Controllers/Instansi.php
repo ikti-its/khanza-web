@@ -12,6 +12,7 @@ class Instansi extends BaseController
         ['title' => 'Instansi', 'icon' => 'instansi'],
     ];
     protected string $modul_path  = '/datainstansi';
+    protected string $api_path = '/datainstansi';
     protected string $kolom_id = 'kode_instansi'; // harus sama persis dengan response
     protected array $aksi = [
         'cetak'    => false,
