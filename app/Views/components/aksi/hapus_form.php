@@ -2,18 +2,17 @@
     <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
         <?= view('components/aksi/hapus_form_close', ['id' => $id]) ?>
         <div class="p-6 pt-0 text-center">
-            <?= view('components/aksi/hapus_form_svg') ?>
-            
+            <div class="flex justify-center mb-6">
+                <!-- Container for SVG, centered -->
+                <img src="<?= base_url('svg/form_hapus.svg') ?>">
+            </div>
             Hapus data
-            
             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">
                 Apakah anda yakin untuk menghapus data ini?
             </h3>
-            
             <?= view('components/aksi/hapus_form_opsi', [
                 'modul_path' => $modul_path,
                 'id'         => $id
-                
             ]) ?>
         </div>
     </div>
