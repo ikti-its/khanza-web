@@ -632,30 +632,40 @@ $routes->group('diagnosa', ['filter' => 'auth'], function ($routes) {
 });
 
 //Fitur Penggajian
-$fitur = [
-    ['BPJS', 'bpjs'],
-    ['Golongan', 'golongan'],
-    ['Jabatan', 'jabatan'],
-    ['PasienController', 'masterpasien'],
-    ['DokterController', 'datadokter'],
-    ['Instansi', 'datainstansi'],
-    ['PTKP', 'ptkp'],
-    ['PPH21', 'pph21'],
-    ['Lembur', 'lembur'],
-    ['UMR', 'umr'],
-    ['THR', 'thr'],
-    ['Pesangon', 'pesangon'],
-    ['UangPenghargaanMasaKerja', 'upmk']
+$fiturs = [
+    ['AturanPenggajian\\', [
+        ['BPJS'    , 'aturan-bpjs'],
+        ['Golongan', 'aturan-golongan'],
+        ['Jabatan' , 'aturan-jabatan'],
+        ['PTKP'    , 'aturan-ptkp'],
+        ['PPH21'   , 'aturan-pph21'],
+        ['Lembur'  , 'aturan-lembur'],
+        ['UMR'     , 'aturan-umr'],
+        ['THR'     , 'aturan-thr'],
+        ['Pesangon', 'aturan-pesangon'],
+        ['UPMK'    , 'aturan-upmk']
+    ]],
+    ['', [
+        ['PasienController', 'masterpasien'],
+        ['DokterController', 'datadokter'],
+        ['Instansi', 'datainstansi'],
+    ]],    
 ];
 $filter = ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'];
-foreach ($fitur as $f) {
-    $routes->group($f[1], ['filter' => 'auth'], function ($routes) use ($f, $filter) {
-        $routes->get('/',                      $f[0] . '::tampilData'   , $filter); //  ojok diubah din, iki wes rapi
-        $routes->get('audit',                  $f[0] . '::tampilAudit'  , $filter);
-        $routes->get('tambah',                 $f[0] . '::tampilTambah' , $filter);
-        $routes->post('submittambah',          $f[0] . '::simpanTambah' , $filter);
-        $routes->get('edit/(:segment)',        $f[0] . '::tampilUbah/$1', $filter);
-        $routes->post('submitedit/(:segment)', $f[0] . '::simpanUbah/$1', $filter);
-        $routes->delete('hapus/(:segment)',    $f[0] . '::hapusData/$1' , $filter);
-    });
+foreach($fiturs as $fitur){
+    $prefiks = $fitur[0];
+    $moduls   = $fitur[1];
+    foreach ($moduls as $modul) {
+        $m = $prefiks . $modul[0];
+        $routes->group($modul[1], ['filter' => 'auth'], function ($routes) use ($m, $filter) {
+            $routes->get('/',                      $m . '::tampilData'   , $filter); //  ojok diubah din, iki wes rapi
+            $routes->get('audit',                  $m . '::tampilAudit'  , $filter);
+            $routes->get('tambah',                 $m . '::tampilTambah' , $filter);
+            $routes->post('submittambah',          $m . '::simpanTambah' , $filter);
+            $routes->get('edit/(:segment)',        $m . '::tampilUbah/$1', $filter);
+            $routes->post('submitedit/(:segment)', $m . '::simpanUbah/$1', $filter);
+            $routes->delete('hapus/(:segment)',    $m . '::hapusData/$1' , $filter);
+        });
+    }
 }
+

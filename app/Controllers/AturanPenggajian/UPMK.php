@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\AturanPenggajian;
 
 use App\Controllers\BaseController;
 
-class THR extends BaseController
+class UPMLK extends BaseController
 {   
-    protected string $judul = 'Tunjangan Hari Raya';
+    protected string $judul = 'Uang Penghargaan Masa Kerja';
     protected array $breadcrumbs = [
         ['title' => 'User', 'icon' => 'user'], 
-        ['title' => 'THR' , 'icon' => 'thr'],
+        ['title' => 'UPMK', 'icon' => 'upmk'],
     ];
-    protected string $modul_path = '/thr';
-    protected string $kolom_id = 'no_thr';
+    protected string $modul_path = '/upmk';
+    protected string $kolom_id = 'no_upmk';
     protected array $aksi = [
         'cetak'    => false,
         'tindakan' => false,
@@ -22,9 +22,9 @@ class THR extends BaseController
     ];
     protected array $konfig = [
         // [visible, Display, Kolom, Jenis, Required, *Opsi]
-        [1, 'Nomor THR'          , 'no_thr'     , 'indeks', 1],
-        [1, 'Masa Kerja (bulan)' , 'masa_kerja' , 'jumlah', 1],
-        [1, 'Pengali Upah'       , 'pengali_upah', 'teks' , 1],
+        [1, 'Nomor UPMK'         , 'no_upmk'     , 'indeks', 1],
+        [1, 'Masa Kerja (tahun)' , 'masa_kerja'  , 'jumlah', 1],
+        [1, 'Pengali Upah'       , 'pengali_upah', 'teks'  , 1],
     ];
     protected array $meta_data =['page' => 1, 'size' => 10, 'total' => 1];    
 }

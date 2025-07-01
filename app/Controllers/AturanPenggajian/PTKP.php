@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\AturanPenggajian;
 
 use App\Controllers\BaseController;
 

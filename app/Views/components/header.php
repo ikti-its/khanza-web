@@ -551,17 +551,16 @@
                             ['Observasi Rawat Inap Post Partum', '/catatanobservasipostpartum', ''],
                         ]],
                         ['Penggajian', '', 'icon', $petugasrole, [
-                            ['Upah Minimum Regional'       , '/umr'     , 'icon'],
-                            ['Jaminan Sosial'              , '/bpjs'    , 'icon'],
-                            ['Uang Lembur'                 , '/lembur'  , 'icon'],
-                            ['Pajak Penghasilan'           , '/pph21'   , 'icon'],
-                            ['Penghasilan Tidak Kena Pajak', '/ptkp'    , 'icon'],
-                            ['Golongan Pegawai'            , '/golongan', 'icon'],
-                            ['Jabatan Pegawai'             , '/jabatan' , 'icon'],
-                            ['Tunjangan Hari Raya'         , '/thr'      , 'icon'],
-                            ['Uang Pesangon'               , '/pesangon', 'icon'],
-                            ['Uang Penghargaan Masa Kerja' , '/upmk'     , 'icon'],
-                            ['Data Pegawai'                , '/datapegawai', 'icon']
+                            ['Upah Minimum Regional'       , '/aturan-umr'     , 'icon'],
+                            ['Jaminan Sosial'              , '/aturan-bpjs'    , 'icon'],
+                            ['Uang Lembur'                 , '/aturan-lembur'  , 'icon'],
+                            ['Pajak Penghasilan'           , '/aturan-pph21'   , 'icon'],
+                            ['Penghasilan Tidak Kena Pajak', '/aturan-ptkp'    , 'icon'],
+                            ['Golongan Pegawai'            , '/aturan-golongan', 'icon'],
+                            ['Jabatan Pegawai'             , '/aturan-jabatan' , 'icon'],
+                            ['Tunjangan Hari Raya'         , '/aturan-thr'     , 'icon'],
+                            ['Uang Pesangon'               , '/aturan-pesangon', 'icon'],
+                            ['Uang Penghargaan Masa Kerja' , '/aturan-upmk'    , 'icon'],
                         ]],
                     ];
                     echo view('components/menu/menu', ['menu_list' => $menu_list]);
