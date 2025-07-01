@@ -87,6 +87,7 @@
                             'detail'   => true,
                             'ubah'     => true,
                             'hapus'    => false,
+                            'ambulans' => true
                         ];
                         $konfig = [
                             // [visible, Display, Kolom, Jenis, Required, *Opsi]
@@ -118,7 +119,7 @@
                     ?>
 
                     <!-- Table -->
-                    <div class="overflow-x-auto w-full">                       
+                    <!-- <div class="overflow-x-auto w-full">                       
                     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -140,28 +141,12 @@
                                 </div>
                                 <tr>
                                     
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <div class="w-full">
-                                            <?php if (strtolower($rujukankeluar['pengantaran']) === 'ambulans'): ?>
-                                                <div class="px-3 py-1.5">
-                                                <a id="btn-panggil-<?= $rujukankeluar['nomor_rujuk'] ?>"
-                                                    href="javascript:void(0);" 
-                                                    class="text-sm text-blue-600 hover:underline font-semibold"
-                                                    onclick="requestAmbulanceModal('<?= esc($rujukankeluar['nomor_rujuk']) ?>')">
-                                                    Panggil Ambulans
-                                                </a>
-
-                                                </div>
-                                            <?php endif; ?>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-                    </div>
+                    </div> -->
 
                     <!-- End Table -->
                 </div>
