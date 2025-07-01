@@ -84,7 +84,11 @@
                             [0, 'Tanggal Validasi'  , 'tgl_perawatan' , 'tanggal'],
                             [0, 'Jam Validasi'      , 'jam'           , 'jam'],
                             [0, 'Tanggal Penyerahan', 'tgl_penyerahan', 'tanggal'],
-                            [0, 'Jam Penyerahan'    , 'jam_penyerahan', 'jam']
+                            [0, 'Jam Penyerahan'    , 'jam_penyerahan', 'jam'],
+                            [1, 'Validasi', 'validasi', 'teks', 1, [
+                                ['Sudah', true],
+                                ['Belum', false]
+                            ]],
                         ];
                         echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
