@@ -6,6 +6,33 @@ use App\Controllers\BaseController;
 
 class PermintaanResepPulang extends BaseController
 {
+
+protected array $breadcrumbs = [];
+    protected string $judul = 'Audit Permintaan Resep Pulang';
+    protected string $modul_path = '/permintaanreseppulang';
+    protected string $api_path = '/permintaanreseppulang';
+    protected string $kolom_id = 'no_permintaan';
+    protected array $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true,
+                            'validasi' => true,
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'Nomor Permintaan'   , 'no_permintaan' , 'indeks'],
+                            [1, 'Tanggal Permintaan' , 'tgl_permintaan', 'tanggal'],
+                            [1, 'Jam Permintaan'     , 'jam'           , 'jam'],
+                            [0, 'Kamar'              , 'kamar'         , 'teks'],
+                            [1, 'Nomor Rawat'        , 'no_rawat'      , 'indeks'],
+                            [1, 'Dokter Peresep'     , 'kd_dokter'     , 'indeks'],
+                            [1, 'Status'             , 'status'        , 'status'],
+                            [1, 'Nama Pasien'        , 'nama_pasien'   , 'nama']
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
     public function dataPermintaanResepPulang()
     {
         $title = 'Data Permintaan Resep Pulang';

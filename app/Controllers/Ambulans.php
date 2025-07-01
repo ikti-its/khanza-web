@@ -16,6 +16,7 @@ class Ambulans extends BaseController
         [1, 'Supir'          , 'supir'      , 'nama'],
         [1, 'Status Ambulans', 'status'     , 'status']
     ];
+    
     public function dataAmbulans()
     {
         $title = 'Data Ambulans';

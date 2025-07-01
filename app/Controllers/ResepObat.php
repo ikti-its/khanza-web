@@ -8,6 +8,38 @@ use App\Models\RawatInapModel;
 
 class ResepObat extends BaseController
 {
+
+protected array $breadcrumbs = [];
+    protected string $judul = 'Audit Resep Obat';
+    protected string $modul_path = '/resepobat';
+    protected string $api_path = '/resepobat';
+    protected string $kolom_id = 'no_resep';
+    protected array $aksi = [
+                            'cetak'    => true,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => false,
+                            'hapus'    => true,
+                            'validasi' => true,
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'Nomor Resep'   , 'no_resep'     , 'indeks'],
+                            [1, 'Tanggal Resep' , 'tgl_peresepan', 'tanggal'],
+                            [0, 'Jam Peresepan' , 'jam_peresepan', 'jam'],
+                            [1, 'Nomor Rawat'   , 'no_rawat'     , 'indeks'],
+                            // [0, 'Nomor RM'      , 'nomor_rm'     , 'indeks'],
+                            // [0, 'Pasien'        , 'nama_pasien'  , 'nama'],
+                            [1, 'Dokter Peresep', 'kd_dokter'    , 'indeks'],
+                            [1, 'Status'        , 'status'       , 'status'],
+                            [0, 'Tanggal Validasi'  , 'tgl_perawatan' , 'tanggal'],
+                            [0, 'Jam Validasi'      , 'jam'           , 'jam'],
+                            [0, 'Tanggal Penyerahan', 'tgl_penyerahan', 'tanggal'],
+                            [0, 'Jam Penyerahan'    , 'jam_penyerahan', 'jam'],
+                            [1, 'Validasi', 'validasi', 'bool', 1],
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
     public function dataResepObat()
     {
         $title = 'Data Resep Dokter';

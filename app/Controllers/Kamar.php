@@ -7,6 +7,30 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Kamar extends BaseController
 {
+
+protected array $breadcrumbs = [];
+    protected string $judul = 'Audit Kamar';
+    protected string $modul_path = '/kamar';
+    protected string $api_path = '/kamar';
+    protected string $kolom_id = 'nomor_bed';
+    protected array $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'Nomor Bed'   , 'nomor_bed'   , 'indeks'],
+                            [1, 'Kode Kamar'  , 'kode_kamar'  , 'indeks'],
+                            [1, 'Nama Kamar'  , 'nama_kamar'  , 'teks'],
+                            [1, 'Kelas'       , 'kelas'       , 'status'],
+                            [1, 'Tarif Kamar' , 'tarif_kamar' , 'uang'],
+                            [1, 'Status Kamar', 'status_kamar', 'status'],
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
     public function dataKamar()
     {
         $title = 'Data Kamar';

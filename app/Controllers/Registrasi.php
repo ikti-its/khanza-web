@@ -7,6 +7,45 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Registrasi extends BaseController
 {
+    protected array $breadcrumbs = [];
+    protected string $judul = 'Audit Registrasi';
+    protected string $modul_path = '/registrasi';
+    protected string $api_path = '/registrasi';
+    protected string $kolom_id = 'nomor_reg';
+    protected array $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => true,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true,
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'Nomor Registrasi' , 'nomor_reg'    , 'indeks'],
+                            [1, 'Nomor Rawat'      , 'nomor_rawat'  , 'indeks'],
+                            [1, 'Tanggal'          , 'tanggal'      , 'tanggal'],
+                            [1, 'Jam'              , 'jam'          , 'jam'],
+                            [0, 'Nomor Rekam Medis', 'nomor_rm'     , 'indeks'],
+                            [1, 'Nama'             , 'nama_pasien'  , 'nama'],
+                            [1, 'Jenis Kelamin'    , 'jenis_kelamin', 'status'],
+                            [0, 'Umur'             , 'umur'         , 'jumlah'],
+                            [0, 'Poliklinik'       , 'poliklinik'   , 'status'],
+                            [0, 'Dokter'           , 'nama_dokter'  , 'nama'],
+                            [0, 'Penanggung Jawab'         , 'penanggung_jawab', 'nama'],
+                            [0, 'Hubungan Penanggung Jawab', 'hubungan_pj'     , 'teks'],
+                            [0, 'Alamat Penanggung Jawab'  , 'alamat_pj'       , 'teks'],
+                            [0, 'Nomor Telepon'    , 'no_telepon'       , 'teks'],
+                            [0, 'Biaya Registrasi' , 'biaya_registrasi' , 'uang'],
+                            [0, 'Status Registrasi', 'status_registrasi', 'status'],
+                            [0, 'Status Rawat'     , 'status_rawat'     , 'status'], 
+                            [0, 'Status Poliklinik', 'status_poli'      , 'status'],
+                            [0, 'Jenis Bayar'      , 'jenis_bayar'      , 'status'],
+                            [0, 'Status Bayar'     , 'status_bayar'     , 'status'],
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
+    
+
     public function dataRegistrasi()
     {
         $title = 'Data Registrasi';

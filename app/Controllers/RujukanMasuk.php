@@ -7,6 +7,35 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class RujukanMasuk extends BaseController
 {
+
+protected array $breadcrumbs = [];
+    protected string $judul = 'Audit Registrasi';
+    protected string $modul_path = '/rujukanmasuk';
+    protected string $api_path = '/rujukanmasuk';
+    protected string $kolom_id = 'nomor_rujuk';
+    protected array $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true,
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'Nomor Rujuk'      , 'nomor_rujuk'   , 'indeks'],
+                            [1, 'Perujuk'          , 'perujuk'       , 'nama'],
+                            [0, 'Alamat Perujuk'   , 'alamat_perujuk', 'teks'],
+                            [0, 'Nomor Rawat'      , 'nomor_rawat'   , 'indeks'],
+                            [0, 'Nomor Rekam Medis', 'nomor_rm'      ,'indeks'],
+                            [1, 'Nama Pasien'      , 'nama_pasien'   , 'nama'],
+                            [0, 'Alamat'           , 'alamat'        , 'teks'],
+                            [0, 'Umur'             , 'umur'          , 'jumlah'], 
+                            [1, 'Tanggal Masuk'    , 'tanggal_masuk' , 'tanggal'],
+                            [0, 'Tanggal Keluar'   , 'tanggal_keluar', 'tanggal'],
+                            [1, 'Diagnosa Awal'    , 'diagnosa_awal' , 'teks'],
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
     public function dataRujukanMasuk()
     {
         $title = 'Data Rujukan Masuk';

@@ -8,6 +8,42 @@ use App\Models\RawatInapModel;
 
 class ResepObatRacikan extends BaseController
 {
+
+protected array $breadcrumbs = [];
+    protected string $judul = 'Audit Resep Obat Racikan';
+    protected string $modul_path = '/resepobat';
+    protected string $api_path = '/resepobat';
+    protected string $kolom_id = 'no_racik';
+    protected array $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true,
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'Nomor Resep' , 'no_resep'    , 'indeks'],
+                            [1, 'Nomor Racik' , 'no_racik'    , 'indeks'],                            
+                            [0, 'Kode Barang' , 'kode_brng'   , 'indeks'],
+                            [1, 'Nama Barang' , 'nama_barang' , 'teks'],
+                            [1, 'Nama Racikan', 'nama_racik'  , 'teks'],
+                            [0, 'Satuan'      , 'kode_sat'    , 'teks'],
+                            [0, 'Harga'       , 'kelas1'      , 'uang'], 
+                            [0, 'Jenis Obat'  , 'kdjns'       , 'status'],
+                            [0, 'Stok'        , 'stokminimal' , 'jumlah'], 
+                            [0, 'Kps'         , 'kapasitas'   , 'jumlah'], 
+                            [0, 'P1'          , 'p1'          , 'teks'], 
+                            [0, 'P2'          , 'p2'          , 'teks'],
+                            [0, 'Kandungan'   , 'kandungan'   , 'teks'], 
+                            [1, 'Kode Racik'  , 'kd_racik'    , 'indeks'],
+                            [1, 'Jumlah Racik', 'jml_dr'      , 'jumlah'],
+                            [1, 'Jumlah'      , 'jml'         , 'jumlah'],
+                            [1, 'Aturan Pakai', 'aturan_pakai', 'teks'],
+                            [1, 'Keterangan'  , 'keterangan'  , 'teks'],
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
     public function dataResepObatRacikan()
     {
         $title = 'Data Resep Obat Racikan';

@@ -6,6 +6,42 @@ use App\Controllers\BaseController;
 
 class CatatanObservasiKebidanan extends BaseController
 {
+    protected array $breadcrumbs = [];
+    protected string $judul = 'Audit Catatan Observasi Kebidanan';
+    protected string $modul_path = '/catatanobservasikebidanan';
+    protected string $api_path = '/catatanobservasikebidanan';
+    protected string $kolom_id = 'no_rawat';
+    protected array $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true,
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'Nomor Rawat'      , 'no_rawat'     , 'indeks'],
+                            [1, 'Nama Pasien'      , 'nama_pasien'  , 'nama'  ],
+                            [1, 'Umur'             , 'umur'         , 'jumlah'],
+                            [1, 'Jenis Kelamin'    , 'jenis_kelamin', 'status'], 
+                            [1, 'Tanggal Observasi', 'tanggal'      , 'tanggal'],
+                            [0, 'Jam Observasi'    , 'jam'          , 'jam'   ],
+                            [0, 'GCS (E, V, M)'    , 'gcs'          , 'jumlah'],
+                            [0, 'TD (mmHG)'        , 'td'           , ],
+                            [0, 'HR (x/menit)'     , 'hr'           , ],
+                            [0, 'RR (x/menit)'     , 'rr'           , ],
+                            [0, 'Suhu (C)'         , 'suhu'         , ],
+                            [0, 'SpO2(%)'          , 'spo2'         , ],
+                            [0, 'Kontraksi/HIS'    , 'kontraksi'    , ],
+                            [0, 'BJJ'              , 'bjj'          , ],
+                            [0, 'PPV'              , 'ppv'          , ],
+                            [0, 'VT'               , 'vt'           , ],
+                            [0, 'NIP'              , 'nip'          , ],
+                            [0, 'Nama Petugas'     , 'nama_petugas' , ],
+
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
     public function dataCatatanObservasi()
     {
         $title = 'Catatan Observasi Ranap Kebidanan';

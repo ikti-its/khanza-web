@@ -6,6 +6,35 @@ use App\Controllers\BaseController;
 
 class ResepPulang extends BaseController
 {
+
+protected array $breadcrumbs = [];
+    protected string $judul = 'Audit Resep Pulang';
+    protected string $modul_path = '/reseppulang';
+    protected string $api_path = '/reseppulang';
+    protected string $kolom_id = 'no_rawat';
+    protected array $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true,
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'Nomor Rawat'  , 'no_rawat'   , 'indeks'],
+                            [1, 'Tanggal Resep', 'tanggal'    , 'tanggal'],
+                            [1, 'Jam'          , 'jam'        , 'jam'],
+                            [1, 'Pasien'       , 'nama_pasien', 'nama'],
+                            [1, 'Obat'         , 'kode_brng'  , 'indeks'],
+                            [1, 'Jumlah'       , 'jml_barang' , 'jumlah'],
+                            [0, 'Harga'        , 'harga'      , 'uang'],
+                            [0, 'Total'        , 'total'      , 'uang'],
+                            [0, 'Dosis'        , 'dosis'      , 'jumlah'], 
+                            [0, 'No. Batch'    , 'no_batch'   , 'indeks'],
+                            [0, 'No. Faktur'   , 'no_faktur'  , 'indeks'],
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
     public function dataResepPulang()
     {
         $title = 'Data Resep Pulang';

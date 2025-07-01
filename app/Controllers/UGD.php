@@ -7,6 +7,42 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class UGD extends BaseController
 {
+
+protected array $breadcrumbs = [];
+    protected string $judul = 'Audit UGD';
+    protected string $modul_path = '/ugd';
+    protected string $api_path = '/ugd';
+    protected string $kolom_id = 'nomor_reg';
+    protected array $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => false,
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'No. Registrasi'  , 'nomor_reg'       , 'indeks'],
+                            [0, 'Nomor Rawat'     , 'nomor_rawat'     , 'indeks'],
+                            [0, 'Tanggal'         , 'tanggal'         , 'tanggal'],
+                            [0, 'Jam'             , 'jam'             , 'jam'],
+                            [1, 'No. Rekam Medis' , 'nomor_rm'        , 'indeks'],
+                            [1, 'Nama'            , 'nama_pasien'     , 'nama'],
+                            [0, 'Jenis Kelamin'   , 'jenis_kelamin'   , 'status'],
+                            [0, 'Umur'            , 'umur'            , 'jumlah'],
+                            [1, 'Poliklinik'      , 'poliklinik'      , 'status'],
+                            [1, 'Dokter'          , 'dokter_dituju'   , 'nama'],
+                            [0, 'Penanggung Jawab'         , 'penanggung_jawab', 'nama'],
+                            [0, 'Hubungan Penanggung Jawab', 'hubungan_pj'     , 'status'],
+                            [0, 'Alamat Penanggung Jawab'  , 'alamat_pj'       , 'teks'],
+                            [0, 'Biaya Registrasi', 'biaya_registrasi', 'uang'],
+                            [0, 'Status Rawat'    , 'status_rawat'    , 'status'],
+                            [0, 'Jenis Bayar'     , 'jenis_bayar'     , 'status'],
+                            [0, 'Status Bayar'    , 'status_bayar'    , 'status'],
+
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
     public function dataUGD()
     {
         $title = 'Data UGD';

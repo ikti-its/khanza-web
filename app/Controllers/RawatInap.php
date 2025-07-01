@@ -7,6 +7,48 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class RawatInap extends BaseController
 {
+
+protected array $breadcrumbs = [];
+    protected string $judul = 'Audit Rawat Inap';
+    protected string $modul_path = '/rawatinap';
+    protected string $api_path = '/rawatinap';
+    protected string $kolom_id = 'nomor_rawat';
+    protected array $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => true,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => true,
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'Nomor Rawat'      , 'nomor_rawat'   , 'indeks'],
+                            [0, 'Nomor Rekam Medis', 'nomor_rm'      , 'indeks'],
+                            [1, 'Nama Pasien'      , 'nama_pasien'   , 'nama'],
+                            [0, 'Alamat Pasien'    , 'alamat_pasien' , 'teks'],
+                            [0, 'Penanggung Jawab' , 'penanggung_jawab'   , 'nama'],
+                            [0, 'Hubungan Penanggung Jawab', 'hubungan_pj', 'teks'],
+                            [0, 'Jenis Bayar'      , 'jenis_bayar'   , 'status'],
+                            [0, 'Kamar'            , 'kamar'         , 'teks'],
+                            [0, 'Tarif Kamar'      , 'tarif_kamar'   , 'uang'],
+                            [1, 'Diagnosa Awal'    , 'diagnosa_awal' , 'teks'],
+                            [0, 'Diagnosa Akhir'   , 'diagnosa_akhir','teks'],
+                            [0, 'Tanggal Masuk'    , 'tanggal_masuk' , 'tanggal'],
+                            [0, 'Jam Masuk'        , 'jam_masuk'     , 'jam'],
+                            [0, 'Tanggal Keluar'   , 'tanggal_keluar', 'tanggal'],
+                            [0, 'Jam Keluar'       , 'jam_keluar'    , 'jam'],
+                            [0, 'Total Biaya Kamar'      , 'total_biaya_kamar'   , 'uang'],
+                            [0, 'Total Biaya Tindakan'      , 'total_biaya_tindakan'   , 'uang'],
+                            [0, 'Total Biaya Obat'      , 'total_biaya_obat'   , 'uang'],
+                            [0, 'Total Biaya'      , 'total_biaya'   , 'uang'],
+                            [0, 'Status Pulang'    , 'status_pulang' , 'status'],
+                            [0, 'Lama'             , 'lama_ranap'    , 'teks'],
+                            [1, 'Dokter'           , 'dokter_pj'     , 'indeks'],
+                            [0, 'Status Bayar'     , 'status_bayar'  , 'status']
+                            
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
     public function dataRawatInap()
     {
         $title = 'Data Rawat Inap';

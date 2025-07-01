@@ -9,6 +9,37 @@ use App\Models\RujukanModel;
 
 class RujukanKeluar extends BaseController
 {
+
+protected array $breadcrumbs = [];
+    protected string $judul = 'Audit Registrasi';
+    protected string $modul_path = '/rujukankeluar';
+    protected string $api_path = '/rujukankeluar';
+    protected string $kolom_id = 'nomor_rujuk';
+    protected array $aksi = [
+                            'cetak'    => true,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => false,
+                            'ambulans' => true
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'Nomor Rujuk'        , 'nomor_rujuk', 'indeks'],
+                            [0, 'Nomor Rawat'        , 'nomor_rawat'],
+                            [0, 'Nomor Rekam Medis'  , 'nomor_rm'],
+                            [1, 'Nama Pasien'        , 'nama_pasien', 'indeks'],
+                            [1, 'Tempat Rujuk'       , 'tempat_rujuk', 'teks'],
+                            [0, 'Tanggal Rujuk'      , 'tanggal_rujuk'],
+                            [0, 'Jam Rujuk'          , 'jam_rujuk'],
+                            [0, 'Keterangan Diagnosa', 'keterangan_diagnosa'],
+                            [0, 'Dokter Perujuk'     , 'dokter_perujuk'],
+                            [1, 'Kategori Rujuk'     , 'kategori_rujuk', 'status'],
+                            [1, 'Pengantaran'        , 'pengantaran', 'teks'],
+                            [0, 'Keterangan'         , 'keterangan'],
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
     public function dataRujukanKeluar()
     {
         $title = 'Data Rujukan Keluar';

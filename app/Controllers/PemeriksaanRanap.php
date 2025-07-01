@@ -7,6 +7,48 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class PemeriksaanRanap extends BaseController
 {
+
+    protected array $breadcrumbs = [];
+    protected string $judul = 'Audit Pemeriksaan Ranap';
+    protected string $modul_path = '/pemeriksaanranap';
+    protected string $api_path = '/pemeriksaanranap';
+    protected string $kolom_id = 'no_rawat';
+    protected array $aksi = [
+                            'cetak'    => false,
+                            'tindakan' => false,
+                            'detail'   => true,
+                            'ubah'     => true,
+                            'hapus'    => false,
+                        ];
+    protected array $konfig = [
+                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                            [1, 'Nomor Rawat'  , 'no_rawat'    , 'indeks'],
+                            [1, 'Nomor RM'     , 'nomor_rm'    , 'indeks'],
+                            [1, 'Nama Pasien'  , 'nama_pasien' , 'nama'],
+                            [1, 'Tanggal Rawat', 'tanggal'     , 'tanggal'],
+                            [1, 'Jam'          , 'jam'         , 'jam'],
+                            [1, 'Suhu'         , 'suhu_tubuh'  , 'suhu'],
+                            [0, 'TD (mmHG)'    , 'tensi'       ],
+                            [0, 'HR (x/menit)' , 'nadi'        ],
+                            [0, 'RR (x/menit)' , 'respirasi'   ],
+                            [0, 'Tinggi (cm)'  , 'tinggi'      ],
+                            [0, 'Berat (kg)'   , 'berat'       ],
+                            [0, 'SpO2(%)'      , 'spo2'        ],
+                            [0, 'GCS (E, V, M)', 'gcs'         ],
+                            [0, 'Kesadaran'    , 'kesadaran'   ],
+                            [0, 'Alergi'       , 'alergi'      ],
+                            [0, 'Subjek'       , 'keluhan'     ],
+                            [0, 'Objek'        , 'pemeriksaan' ],
+                            [0, 'Asesmen'      , 'penilaian'   ],
+                            [0, 'Plan'         , 'rtl'         ],
+                            [0, 'Instruksi'    , 'instruksi'   ],
+                            [0, 'Evaluasi'     , 'evaluasi'    ],
+                            [0, 'NIP'          , 'nip'         ],
+                            [0, 'Nama Petugas' , 'nama_petugas'],
+                            [0, 'Profesi'      , 'nama_petugas']
+                        ];
+    protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
+
     public function dataPemeriksaanRanap()
     {
         $title = 'Data Pemeriksaan Ranap';
