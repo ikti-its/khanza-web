@@ -37,6 +37,9 @@
                     case '/permintaanreseppulang':
                         echo view('components/aksi/validasi_buatreseppulang', $data);
                         break;
+                    case '/resepobat':
+                        echo view('components/aksi/validasi_resepobat', $data);
+                        break;
                     default:
                         echo 'Aksi Validasi belum dibuat pada modul ' . $modul_path;
                         break;

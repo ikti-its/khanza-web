@@ -69,6 +69,7 @@
                             'detail'   => true,
                             'ubah'     => false,
                             'hapus'    => true,
+                            'validasi' => true,
                         ];
                         $konfig = [
                             // [visible, Display, Kolom, Jenis, Required, *Opsi]
@@ -124,11 +125,7 @@
                                                             </button>
                                                         <?php endif; ?>
                                                     </div>
-                                                    <a href="/resepobat/cetak/<?= $resepobat['no_resep'] ?>" 
-                                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
-                                                        data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>">
-                                                        Cetak Surat
-                                                    </a>
+                        
                                                 </div>
 
                                                 </div>
@@ -162,28 +159,6 @@
                                         $resepobat['status'] = $statusText;
                                     ?>
 
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5 text-center inline-flex">
-                                            <div class="px-3 py-1.5">
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-info btn-tindakan gap-x-1 text-sm font-semibold"
-                                                    data-nomor-reg="<?= $resepobat['no_resep'] ?>"
-                                                    data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $resepobat['no_resep'] ?>">
-                                                    Lihat Detail
-                                                </button>
-                                            </div>
-                                            <!-- <div class="px-3 py-1.5"> -->
-                                                <!-- <?php if ($resepobat['validasi'] === true || $resepobat['validasi'] === 1 || $resepobat['validasi'] === 'true'): ?>
-                                                    <span class="text-gray-400 text-sm font-semibold cursor-not-allowed" title="Sudah divalidasi, tidak dapat diubah">Ubah</span>
-                                                <?php else: ?>
-                                                    <a href="/resepobat/edit/<?= $resepobat['no_resep'] ?>" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold">Ubah</a>
-                                                <?php endif; ?> -->
-    
-                                               
-                                            <!-- </div> -->
-                                        </div>
-                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -221,31 +196,5 @@
 <!-- End Card -->
 
 <!-- End Table Section -->
-<script>
-    function validateResep(noResep) {
-    if (!confirm("Yakin ingin memvalidasi resep ini?")) return;
 
-    fetch(`http://127.0.0.1:8080/v1/resep-obat/${noResep}/validasi`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer <?= session('jwt_token') ?>'
-        },
-        body: JSON.stringify({ validasi: true })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === 'success') {
-            alert('Berhasil divalidasi');
-            location.reload(); // ⏮ Refresh to see updated status
-        } else {
-            alert('Gagal memvalidasi resep');
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert('Terjadi kesalahan');
-    });
-}
-</script>
 <?= $this->endSection(); ?>
