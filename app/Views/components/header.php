@@ -544,6 +544,30 @@
                                         Pada 1 menu, DISARANKAN submenu memiliki icon seluruhnya atau 
                                         tidak memiliki icon seluruhnya supaya tampilan terlihat rapi
                         */
+                        ['Aturan Penggajian', '', 'aturan_penggajian', '/aturan-penggajian', $petugasrole, [
+                            ['Upah Minimum Regional'       , '/umr'     , ''],
+                            ['Jaminan Sosial'              , '/bpjs'    , ''],
+                            ['Uang Lembur'                 , '/lembur'  , ''],
+                            ['Pajak Penghasilan'           , '/pph21'   , ''],
+                            ['Penghasilan Tidak Kena Pajak', '/ptkp'    , ''],
+                            ['Golongan Pegawai'            , '/golongan', ''],
+                            ['Jabatan Pegawai'             , '/jabatan' , ''],
+                            ['Tunjangan Hari Raya'         , '/thr'     , ''],
+                            ['Uang Pesangon'               , '/pesangon', ''],
+                            ['Uang Penghargaan Masa Kerja' , '/upmk'    , ''],
+                        ]],
+                        ['Data Penggajian', '', 'data_penggajian', '/data-penggajian', $petugasrole, [
+                            ['Upah Minimum Regional'       , '/umr'     , ''],
+                            ['Jaminan Sosial'              , '/bpjs'    , ''],
+                            ['Uang Lembur'                 , '/lembur'  , ''],
+                            ['Pajak Penghasilan'           , '/pph21'   , ''],
+                            ['Penghasilan Tidak Kena Pajak', '/ptkp'    , ''],
+                            ['Golongan Pegawai'            , '/golongan', ''],
+                            ['Jabatan Pegawai'             , '/jabatan' , ''],
+                            ['Tunjangan Hari Raya'         , '/thr'     , ''],
+                            ['Uang Pesangon'               , '/pesangon', ''],
+                            ['Uang Penghargaan Masa Kerja' , '/upmk'    , ''],
+                        ]],
                         ['Inventaris Medis', '','inventaris_medis', '',  $petugasrole, [
                             ['Data'                 , '/datamedis'      , ''],
                             ['Stok Opname'          , '/stokopnamemedis', ''],
@@ -582,18 +606,6 @@
                             ['Observasi Rawat Inap'            , '/catatanobservasiranap'     , ''],
                             ['Observasi Rawat Inap Kebidanan'  , '/catatanobservasikebidanan' , ''],
                             ['Observasi Rawat Inap Post Partum', '/catatanobservasipostpartum', ''],
-                        ]],
-                        ['Aturan Penggajian', '', 'aturan_penggajian', '/aturan-penggajian', $petugasrole, [
-                            ['Upah Minimum Regional'       , '/umr'     , ''],
-                            ['Jaminan Sosial'              , '/bpjs'    , ''],
-                            ['Uang Lembur'                 , '/lembur'  , ''],
-                            ['Pajak Penghasilan'           , '/pph21'   , ''],
-                            ['Penghasilan Tidak Kena Pajak', '/ptkp'    , ''],
-                            ['Golongan Pegawai'            , '/golongan', ''],
-                            ['Jabatan Pegawai'             , '/jabatan' , ''],
-                            ['Tunjangan Hari Raya'         , '/thr'     , ''],
-                            ['Uang Pesangon'               , '/pesangon', ''],
-                            ['Uang Penghargaan Masa Kerja' , '/upmk'    , ''],
                         ]],
                     ];
                     echo view('components/menu/menu', ['menu_list' => $menu_list]);
