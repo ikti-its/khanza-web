@@ -4,15 +4,15 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 
-class BPJS extends BaseController
+class KelahiranBayi extends BaseController
 {
-    protected string $judul = 'Data BPJS';
+    protected string $judul = 'Data Kelahiran Bayi';
     protected array $breadcrumbs = [
         ['title' => 'User', 'icon' => 'user'],
-        ['title' => 'BPJS', 'icon' => 'bpjs'],
+        ['title' => 'Kelahiran Bayi', 'icon' => 'kelahiran_bayi'],
     ];
-    protected string $modul_path  = '/bpjs';
-    protected string $kolom_id = 'no_bpjs';
+    protected string $modul_path  = '/kelahiran_bayi';
+    protected string $kolom_id = 'no_keluar';
     protected array $aksi = [
         'cetak'    => false,
         'tindakan' => false,

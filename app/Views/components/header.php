@@ -558,9 +558,10 @@
                             ['Penghasilan Tidak Kena Pajak', '/ptkp'    , 'icon'],
                             ['Golongan Pegawai'            , '/golongan', 'icon'],
                             ['Jabatan Pegawai'             , '/jabatan' , 'icon'],
-                            ['Tunjangan Hari Raya'         , 'thr'      , 'icon'],
+                            ['Tunjangan Hari Raya'         , '/thr'      , 'icon'],
                             ['Uang Pesangon'               , '/pesangon', 'icon'],
-                            ['Uang Penghargaan Masa Kerja' , 'upmk'     , 'icon'],
+                            ['Uang Penghargaan Masa Kerja' , '/upmk'     , 'icon'],
+                            ['Data Pegawai'                , '/datapegawai', 'icon']
                         ]],
                     ];
                     echo view('components/menu/menu', ['menu_list' => $menu_list]);

@@ -8,7 +8,7 @@
         <?= view('components/form/judul', [
             'judul' => $judul
         ]) ?>
-        <form action="<?= $modul_path ?>/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="<?= $modul_path . $form_action ?>" id="myForm" onsubmit="return validateForm()" method="post">
            <?php 
                 echo csrf_field();
                 echo view('components/form/isian', ['konfig' => $konfig, 'baris' => $baris ??  '']);

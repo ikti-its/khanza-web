@@ -155,10 +155,16 @@ abstract class BaseController extends Controller
 
     private function getPostData(){
         $KOLOM = 2;
+        $JENIS = 3;
         $postData = [];
         foreach($this->konfig as $k){
             $kolom = $k[$KOLOM];
-            $postData[$kolom] = $this->request->getPost($kolom);
+            $jenis = $k[$JENIS];
+            $raw_data = $this->request->getPost($kolom);
+            if(in_array($jenis, ['jumlah', 'uang', 'suhu'])){
+                $raw_data = floatval($raw_data);
+            }
+            $postData[$kolom] = $raw_data; 
         }
         return $postData;
     }
@@ -258,6 +264,7 @@ abstract class BaseController extends Controller
             'modul_path'  => $this->modul_path,
             'kolom_id'    => $this->kolom_id,
             'konfig'      => $this->konfig,
+            'form_action' => '/submittambah/',
         ]);
     }
     public function tampilUbah($id){
@@ -271,7 +278,8 @@ abstract class BaseController extends Controller
             'modul_path'  => $this->modul_path,
             'kolom_id'    => $this->kolom_id,
             'konfig'      => $this->konfig,
-            'baris'       => $baris
+            'baris'       => $baris,
+            'form_action' => '/submitedit/' . $baris[$this->kolom_id],
         ]);
     }
     public function simpanTambah()
