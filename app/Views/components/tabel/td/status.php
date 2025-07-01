@@ -4,7 +4,7 @@
             data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $id ?>" 
             data-id="<?= $id ?>">
             <span class="size-1.5 inline-block rounded-full bg-[#535353]"></span>
-            <?= $data ?>
+            <?= $elem ?>
         </span>
     </div>
 </td>

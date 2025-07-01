@@ -3,6 +3,6 @@
         <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" 
             data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $id ?>" 
             data-id="<?= $id ?>">
-            <?= date('Y-m-d', strtotime($data)) ?></span>
+            <?= date('Y-m-d', strtotime($elem)) ?></span>
     </div>
 </td>

@@ -3,7 +3,7 @@
         <span class="text-center block text-sm font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline" 
             data-hs-overlay="#hs-vertically-centered-scrollable-modal-<?= $id ?>" 
             data-id="<?= $id ?>">
-            <?= $data ? "Sudah" : "Belum "?>
+            <?= $elem ? "Sudah" : "Belum "?>
         </span>
     </div>
 </td>

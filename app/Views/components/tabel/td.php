@@ -6,20 +6,19 @@
             break;
         }
         $elem = $baris[$kolom[$i]];
+        $data = [
+            'id'   => $id,
+            'elem' => $elem,
+        ];
         if(!isset($elem) || $elem === null || $elem === ''){
             echo view('components/tabel/td/kosong');
             continue;
         }
         if($modul_path === '/resepobat' && $kolom[$i] !== 'validasi'){
-            echo view('components/tabel/td/indeks_resep_obat', [
-                'id'   => $id,
-                'data' => $elem,
-            ]);
-        } else {
-            echo view('components/tabel/td/' . $jenis[$i], [
-                'id'   => $id,
-                'data' => $elem,
-            ]);
-        }
+            echo view('components/tabel/td/indeks_resep_obat', $data);
+            continue;
+        } 
+
+        echo view('components/tabel/td/' . $jenis[$i], $data);
     }
 ?>
