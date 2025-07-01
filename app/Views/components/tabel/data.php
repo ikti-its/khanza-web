@@ -19,45 +19,43 @@
                 'kolom' => array_merge(array_column($data_visible, $DISPLAY), ['Aksi'])
             ]);
         
-
-        echo '<tbody class="divide-y divide-gray-200 dark:divide-gray-700">';
-            if(gettype($tabel) === 'array'){
-                foreach($tabel as $baris){
-                    if (is_array($kolom_id)) {
-                        $idParts = [];
-                        foreach ($kolom_id as $key) {
-                            $idParts[] = $baris[$key];
+            echo '<tbody class="divide-y divide-gray-200 dark:divide-gray-700">';
+                if(gettype($tabel) === 'array'){
+                    foreach($tabel as $baris){
+                        if (is_array($kolom_id)) {
+                            $idParts = [];
+                            foreach ($kolom_id as $key) {
+                                $idParts[] = $baris[$key];
+                            }
+                            $id = implode('/', $idParts);
+                        } else {
+                            $id = $baris[$kolom_id];
                         }
-                        $id = implode('/', $idParts);
-                    } else {
-                        $id = $baris[$kolom_id];
-                    }
-                    echo view('components/popup/popup', [
-                        'baris'  => $baris,
-                        'id'     => $id,
-                        'kolom'  => array_column($konfig, $KOLOM),
-                        'label'  => array_column($konfig, $DISPLAY)
-                    ]);
-                
-                    echo '<tr>';
-                        echo view('components/tabel/td', [
-                            'modul_path' => $modul_path,
-                            'baris'    => $baris,
-                            'id'       => $id,
-                            'kolom'    => array_column($data_visible, $KOLOM),
-                            'jenis'    => array_column($data_visible, $JENIS), 
+                        echo view('components/popup/popup', [
+                            'baris'  => $baris,
+                            'id'     => $id,
+                            'kolom'  => array_column($konfig, $KOLOM),
+                            'label'  => array_column($konfig, $DISPLAY)
                         ]);
-                        echo view('components/aksi/aksi', [
-                            'modul_path' => $modul_path,
-                            'id'         => $id,
-                            'aksi'       => $aksi,
-                            'baris'      => $baris
-                        ]);                              
-                    echo '</tr>';
                     
+                        echo '<tr>';
+                            echo view('components/tabel/td', [
+                                'modul_path' => $modul_path,
+                                'baris'    => $baris,
+                                'id'       => $id,
+                                'kolom'    => array_column($data_visible, $KOLOM),
+                                'jenis'    => array_column($data_visible, $JENIS), 
+                            ]);
+                            echo view('components/aksi/aksi', [
+                                'modul_path' => $modul_path,
+                                'id'         => $id,
+                                'aksi'       => $aksi,
+                                'baris'      => $baris
+                            ]);                              
+                        echo '</tr>';
+                    }
                 }
-            }
-        echo '</tbody>';
+            echo '</tbody>';
         ?>
     </table>
 </div>

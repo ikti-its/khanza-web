@@ -14,12 +14,10 @@
                 'kolom' => array_column($data_visible, $DISPLAY)
             ]);
         
-
         echo '<tbody class="divide-y divide-gray-200 dark:divide-gray-700">';
             if(gettype($tabel) === 'array'){
                 foreach($tabel as $baris){
                     $id = $baris[$kolom_id];
-                
                     echo '<tr>';
                         echo view('components/tabel/td', [
                             'baris'    => $baris,
