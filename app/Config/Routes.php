@@ -497,7 +497,7 @@ $routes->group('permintaanreseppulang', ['filter' => 'auth'], function ($routes)
 $routes->group('reseppulang', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'ResepPulang::dataResepPulang', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('tambah', 'ResepPulang::tambahResepPulang', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
-    $routes->get('tambah/(:any)', 'ResepPulang::tambahResepPulang/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('tambah/(:any)', 'ResepPulang::tambahResepPulangFromPermintaan/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'ResepPulang::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->post('submittambah', 'ResepPulang::submitTambahResepPulang', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('edit/(:segment)/(:segment)/(:segment)/(:segment)', 'ResepPulang::editResepPulang/$1/$2/$3/$4');

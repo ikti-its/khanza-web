@@ -61,7 +61,7 @@
                         
                         $modul_path = '/permintaanreseppulang';
                         $tabel    = $permintaanreseppulang_data;
-                        $kolom_id = 'no_rawat';
+                        $kolom_id = 'no_permintaan';
                         $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,

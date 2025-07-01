@@ -51,7 +51,7 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
             
     <!-- Jumlah Obat -->
     <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jumlah Obat<span class="text-red-600">*</span></label>
-    <input name="jml_barang" id="jumlah_<?= esc($prefill['kode_brng'] ?? '') ?>" value="<?= esc($prefill['jumlah'] ?? '') ?>"
+    <input name="jml_barang" id="jumlah_<?= esc($prefill['kode_brng'] ?? '') ?>" value="<?= esc($obat_list[0]['jumlah'] ?? '-') ?>"
     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
     required>
 

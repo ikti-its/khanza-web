@@ -159,6 +159,124 @@ class ResepPulang extends BaseController
         ]);
     }
 
+    public function tambahResepPulangFromPermintaan($noPermintaan)
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
+
+    $token = session()->get('jwt_token');
+    $title = 'Tambah Resep Pulang';
+    $resep = [];
+
+    $kamar = $this->request->getGet('kamar') ?? 'TIDAK ADA';
+    $noRawat = null;
+
+    // 🔹 Step 1: Ambil nomor_rawat dari master permintaan
+    $masterUrl = $this->api_url . '/permintaan-resep-pulang/' . $noPermintaan;
+    $ch = curl_init($masterUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $masterResponse = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+// dd($masterResponse);
+    $parsedMaster = json_decode($masterResponse, true);
+    if ($httpCode === 200 && isset($parsedMaster['data']['no_rawat'])) {
+    $noRawat = $parsedMaster['data']['no_rawat'];
+} else {
+    log_message('error', '❌ Gagal mengambil data master permintaan resep pulang: ' . $masterResponse);
+}
+
+
+    // 🔹 Step 2: Ambil daftar obat dari permintaan resep pulang
+$obat_list = [];
+
+if ($noPermintaan) {
+    $obatUrl = $this->api_url . '/permintaan-resep-pulang/obat/' . $noPermintaan;
+    $ch = curl_init($obatUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $obatResponse = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    $parsedObat = json_decode($obatResponse, true);
+
+    if ($httpCode === 200 && isset($parsedObat['data'])) {
+        $obat_list = is_string($parsedObat['data'])
+            ? json_decode($parsedObat['data'], true)
+            : $parsedObat['data'];
+
+        if (!empty($obat_list)) {
+            $resep['dosis'] = $obat_list[0]['aturan_pakai'] ?? '';
+            $resep['jumlah'] = $obat_list[0]['jumlah'] ?? 0;
+        }
+    } else {
+        log_message('error', '❌ Gagal mengambil data obat dari permintaan resep pulang. Status: ' . $httpCode . ' Response: ' . $obatResponse);
+    }
+}
+
+
+// dd($obat_list);
+    // 🔹 Step 3: Ambil data Rawat Inap berdasarkan nomor_rawat
+    if ($noRawat) {
+        $url = $this->api_url . '/rawatinap/' . $noRawat;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $parsed = json_decode($response, true);
+
+        if ($httpCode === 200 && isset($parsed['data']) && is_array($parsed['data'])) {
+            $rawatinap = $parsed['data'];
+
+            $resep = array_merge($resep, [
+                'nomor_rm'     => $rawatinap['nomor_rm'] ?? '',
+                'nomor_rawat'  => $rawatinap['nomor_rawat'] ?? '',
+                'nama_pasien'  => $rawatinap['nama_pasien'] ?? '',
+                'nama_dokter'  => $rawatinap['dokter_pj'] ?? '',
+                'kode_dokter'  => $rawatinap['kode_dokter'] ?? '',
+                'tanggal'      => date('Y-m-d'),
+                'jam'          => date('H:i:s')
+            ]);
+
+            $kamar = $this->request->getGet('kamar') ?? $rawatinap['kamar'] ?? null;
+        } else {
+            log_message('error', '❌ Gagal mengambil data rawatinap (' . $httpCode . '): ' . $response);
+        }
+    }
+
+    // 🔹 Breadcrumbs
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Resep Pulang', 'reseppulang');
+    $this->addBreadcrumb('Tambah', 'tambah');
+// dd($noRawat);
+    return view('/admin/reseppulang/tambah_reseppulang', [
+        'reseppulang' => $resep,
+        'no_rawat' => $noRawat,
+        'kamar' => $kamar,
+        'no_permintaan' => $noPermintaan,
+        'title' => $title,
+        'obat_list' => $obat_list,
+        'breadcrumbs' => $this->getBreadcrumbs()
+    ]);
+}
+
+
+
 
     public function submitTambahResepPulang()
     {
@@ -205,6 +323,59 @@ class ResepPulang extends BaseController
         return redirect()->to(base_url('reseppulang'))
             ->with('success', 'Resep pulang berhasil disimpan.');
     }
+
+// public function tambahResepPulangFromPermintaan($no_rawat, $kode_brng, $tanggal, $jam)
+// {
+//     if (!session()->has('jwt_token')) {
+//         return $this->renderErrorView(401);
+//     }
+
+//     $token = session()->get('jwt_token');
+//     $title = 'Edit Resep Pulang';
+
+//     // 🔥 Step 1: Fetch resep pulang data untuk prefill
+//     $url = $this->api_url . "/resep-pulang/$no_rawat/$kode_brng/$tanggal/$jam";
+//     $ch = curl_init($url);
+//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//     curl_setopt($ch, CURLOPT_HTTPHEADER, [
+//         'Authorization: Bearer ' . $token,
+//     ]);
+//     $response = curl_exec($ch);
+//     curl_close($ch);
+
+//     $data = json_decode($response, true);
+//     $prefill = $data['data'] ?? [];
+
+//     // 🔥 Step 2: Fetch obat list
+//     $obat_url = $this->api_url . '/pemberian-obat/databarang';
+//     $ch = curl_init($obat_url);
+//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//     curl_setopt($ch, CURLOPT_HTTPHEADER, [
+//         'Authorization: Bearer ' . $token,
+//         'Accept: application/json'
+//     ]);
+//     $obat_response = curl_exec($ch);
+//     curl_close($ch);
+
+//     $obat_data = json_decode($obat_response, true);
+//     $obat_list = $obat_data['data'] ?? [];
+
+//     // Breadcrumbs
+//     $this->addBreadcrumb('User', 'user');
+//     $this->addBreadcrumb('Resep Pulang', 'reseppulang');
+//     $this->addBreadcrumb('Edit', 'edit');
+
+//     return view('admin/reseppulang/edit_reseppulang', [
+//         'no_rawat'   => $no_rawat,
+//         'kode_brng'  => $kode_brng,
+//         'tanggal'    => $tanggal,
+//         'jam'        => $jam,
+//         'prefill'    => $prefill,
+//         'obat_list'  => $obat_list,
+//         'title'      => $title,
+//         'breadcrumbs'=> $this->getBreadcrumbs()
+//     ]);
+// }
 
 public function editResepPulang($no_rawat, $kode_brng, $tanggal, $jam)
 {
