@@ -1,10 +1,6 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
-<script>
-  window.HS_CONFIG = {
-    autoInit: false
-  };
-</script>
+
 <script src="https://unpkg.com/preline@latest/dist/preline.js"></script>
 
 <!-- Table Section -->

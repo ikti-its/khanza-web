@@ -164,50 +164,60 @@ class PermintaanResepPulang extends BaseController
 
 
     public function submitTambahPermintaanResepPulang()
-    {
-        if (!session()->has('jwt_token')) {
-            return $this->renderErrorView(401);
-        }
+{
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
 
-        $token = session()->get('jwt_token');
+    $token = session()->get('jwt_token');
+    $url = $this->api_url . '/permintaan-resep-pulang';
 
-        $postData = [
-            'no_permintaan' => $this->request->getPost('no_permintaan') ?? ('PRP' . date('Ymd') . rand(1000, 9999)),
-            'tgl_permintaan' => $this->request->getPost('tgl_permintaan') ?? date('Y-m-d'),
-            'jam'            => $this->request->getPost('jam') ?? date('H:i:s'),
+    $kode_barang_list = $this->request->getPost('kode_barang');
+    $jumlah_map = $this->request->getPost('jumlah');
+    $aturan_pakai_map = $this->request->getPost('aturan_pakai');
+
+    $dataArray = [];
+
+    foreach ($kode_barang_list as $kode) {
+        $dataArray[] = [
+            'no_permintaan'  => $this->request->getPost('no_permintaan'),
+            'tgl_permintaan' => $this->request->getPost('tgl_permintaan'),
+            'jam'            => $this->request->getPost('jam'),
             'no_rawat'       => $this->request->getPost('nomor_rawat'),
             'kd_dokter'      => $this->request->getPost('kode_dokter'),
-            'status'         => $this->request->getPost('status') ?? 'Belum',
-            'tgl_validasi'   => $this->request->getPost('tgl_validasi') ?? date('Y-m-d'),
-            'jam_validasi'   => $this->request->getPost('jam_validasi') ?? date('H:i:s'),
-            'kode_brng'      => $this->request->getPost('kode_brng'), // new
-            'jumlah'         => (int) $this->request->getPost('jumlah'), // new
-            'aturan_pakai'   => $this->request->getPost('aturan_pakai'), // new
+            'status'         => $this->request->getPost('status'),
+            'tgl_validasi'   => $this->request->getPost('tgl_validasi'),
+            'jam_validasi'   => $this->request->getPost('jam_validasi'),
+            'kode_brng'      => $kode,
+            'jumlah'         => (int) ($jumlah_map[$kode] ?? 0),
+            'aturan_pakai'   => $aturan_pakai_map[$kode] ?? '-'
         ];
-
-        $url = $this->api_url . '/permintaan-resep-pulang';
-        $payload = json_encode($postData);
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $token,
-        ]);
-        $response = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($status !== 200 && $status !== 201) {
-            log_message('error', 'Failed to insert permintaan_resep_pulang: ' . $response);
-            return $this->renderErrorView($status);
-        }
-
-        return redirect()->to(base_url('permintaanreseppulang'))
-            ->with('success', 'Permintaan resep pulang berhasil disimpan.');
     }
+
+    $payload = json_encode($dataArray);
+    log_message('debug', '📤 Final JSON array ke API: ' . $payload);
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . trim($token),
+    ]);
+    $response = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($status !== 200 && $status !== 201) {
+        log_message('error', '❌ Gagal insert permintaan_resep_pulang: ' . $response);
+        return $this->renderErrorView($status);
+    }
+
+    return redirect()->to(base_url('permintaanreseppulang'))
+        ->with('success', 'Permintaan resep pulang berhasil disimpan.');
+}
+
 
     public function editPermintaanResepPulang($noPermintaan)
     {

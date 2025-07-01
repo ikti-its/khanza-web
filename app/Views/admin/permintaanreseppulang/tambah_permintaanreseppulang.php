@@ -142,63 +142,67 @@ obatSelect.addEventListener("change", function () {
     });
 });
 
-document.getElementById("submitButton").addEventListener("click", async function (e) {
-    e.preventDefault();
+// document.getElementById("submitButton").addEventListener("click", async function (e) {
+//     e.preventDefault();
 
-    const nomorPermintaan = document.querySelector("input[name='no_permintaan']").value;
-    const tglPermintaan = document.querySelector("input[name='tgl_permintaan']").value;
-    const jam = document.querySelector("input[name='jam']").value;
-    const noRawat = document.querySelector("input[name='nomor_rawat']").value;
-    const kdDokter = document.querySelector("select[name='kode_dokter']").value;
-    const status = document.querySelector("select[name='status']").value;
-    const tglValidasi = document.querySelector("input[name='tgl_validasi']").value;
-    const jamValidasi = document.querySelector("input[name='jam_validasi']").value;
+//     const nomorPermintaan = document.querySelector("input[name='no_permintaan']").value;
+//     const tglPermintaan = document.querySelector("input[name='tgl_permintaan']").value;
+//     const jam = document.querySelector("input[name='jam']").value;
+//     const noRawat = document.querySelector("input[name='nomor_rawat']").value;
+//     const kdDokter = document.querySelector("select[name='kode_dokter']").value;
+//     const status = document.querySelector("select[name='status']").value;
+//     const tglValidasi = document.querySelector("input[name='tgl_validasi']").value;
+//     const jamValidasi = document.querySelector("input[name='jam_validasi']").value;
 
-    const kodeBarangEls = document.querySelectorAll("input[name='kode_barang[]']");
-    const dataArray = [];
+//     const kodeBarangEls = document.querySelectorAll("input[name='kode_barang[]']");
+//     const dataArray = [];
 
-    kodeBarangEls.forEach(el => {
-        const kode = el.value;
-        const jumlah = document.querySelector(`input[name="jumlah[${kode}]"]`).value;
-        const aturanPakai = document.querySelector(`input[name="aturan_pakai[${kode}]"]`).value;
+//     kodeBarangEls.forEach(el => {
+//         const kode = el.value;
+//         const jumlah = document.querySelector(`input[name="jumlah[${kode}]"]`).value;
+//         const aturanPakai = document.querySelector(`input[name="aturan_pakai[${kode}]"]`).value;
 
-        dataArray.push({
-            no_permintaan: nomorPermintaan,
-            tgl_permintaan: tglPermintaan,
-            jam: jam,
-            no_rawat: noRawat,
-            kd_dokter: kdDokter,
-            status: status,
-            tgl_validasi: tglValidasi,
-            jam_validasi: jamValidasi,
-            kode_brng: kode,
-            jumlah: parseInt(jumlah),
-            aturan_pakai: aturanPakai
-        });
-    });
+//         dataArray.push({
+//             no_permintaan: nomorPermintaan,
+//             tgl_permintaan: tglPermintaan,
+//             jam: jam,
+//             no_rawat: noRawat,
+//             kd_dokter: kdDokter,
+//             status: status,
+//             tgl_validasi: tglValidasi,
+//             jam_validasi: jamValidasi,
+//             kode_brng: kode,
+//             jumlah: parseInt(jumlah),
+//             aturan_pakai: aturanPakai
+//         });
+//     });
 
-    try {
-        const response = await fetch("http://127.0.0.1:8080/v1/permintaan-resep-pulang", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataArray)
-        });
+    // try {
+    //     const token = sessionStorage.getItem("jwt_token"); // atau localStorage jika kamu simpan di sana
 
-        const result = await response.json();
-        if (response.ok) {
-            alert("Data berhasil disimpan!");
-            window.location.href = "/permintaanreseppulang";
-        } else {
-            console.error("❌ Server Error:", result);
-            alert("Gagal menyimpan data. Cek konsol untuk detail.");
-        }
-    } catch (error) {
-        console.error("❌ Network Error:", error);
-        alert("Terjadi kesalahan jaringan.");
-    }
-});
+    //     const response = await fetch("http://127.0.0.1:8080/v1/permintaan-resep-pulang", {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //         "Authorization": "Bearer " + token
+    //     },
+    //     body: JSON.stringify(dataArray)
+    //     })
+
+
+    //     const result = await response.json();
+    //     if (response.ok) {
+    //         alert("Data berhasil disimpan!");
+    //         window.location.href = "/permintaanreseppulang";
+    //     } else {
+    //         console.error("❌ Server Error:", result);
+    //         alert("Gagal menyimpan data. Cek konsol untuk detail.");
+    //     }
+    // } catch (error) {
+    //     console.error("❌ Network Error:", error);
+    //     alert("Terjadi kesalahan jaringan.");
+    // }
+// });
 
 
 function validateForm() {

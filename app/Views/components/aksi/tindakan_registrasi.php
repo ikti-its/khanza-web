@@ -31,7 +31,7 @@
                     <label class="block text-sm text-gray-900 dark:text-white">Nomor Rawat</label>
                     <input type="text" value="<?= $baris['nomor_rawat'] ?>" readonly class="bg-gray-100 text-gray-900 text-sm rounded-lg p-2 w-full dark:bg-neutral-700 dark:text-white">
                 </div>
-                <div class="hs-accordion" id="aksi-accordion-<?= $baris['nomor_reg'] ?>">
+                <div class="hs-accordion" id="tindakan-accordion-<?= $baris['nomor_reg'] ?>-tindakan">
                     <button type="button" class="font-bold text-gray-800 dark:text-white hs-accordion-toggle hs-accordion-active:bg-gray-100 w-1000 flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 shadow-md">
                         <svg class="h-8 w-8 text-slate-950" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
@@ -60,7 +60,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="hs-accordion" id="aksi-accordion-<?= $baris['nomor_reg'] ?>">
+                <div class="hs-accordion" id="tindakan-accordion-<?= $baris['nomor_reg'] ?>-pemeriksaan">
                     <button type="button" class="font-bold text-gray-800 dark:text-white hs-accordion-toggle hs-accordion-active:bg-gray-100 w-1000 flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 shadow-md">
                         <svg class="h-8 w-8 text-slate-950" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
@@ -109,14 +109,51 @@
         <!-- Add more fields if needed -->    
 </div>
 <script>
-    document.querySelectorAll('.hs-accordion-toggle').forEach(button => {
-        button.addEventListener('click', () => {
-            const content = button.parentElement.querySelector('.hs-accordion-content');
-            if (content) {
-                content.classList.toggle('hidden');
-            }
-        });
+document.querySelectorAll('.hs-accordion-toggle').forEach((button, index) => {
+    button.addEventListener('click', () => {
+        const accordion = button.closest('.hs-accordion');
+        const content = accordion?.querySelector('.hs-accordion-content');
+
+        if (!content) {
+            console.warn(`⚠️ Tidak menemukan .hs-accordion-content dalam .hs-accordion untuk button #${index}`);
+            return;
+        }
+
+        content.classList.toggle('hidden');
+        console.log(`✅ Toggled accordion #${index}`);
     });
+});
+
+function setupAccordions() {
+  document.querySelectorAll('.hs-accordion-toggle').forEach((button) => {
+    // Hindari duplikat event listener
+    if (!button.dataset.listenerAttached) {
+      button.addEventListener('click', () => {
+        const accordion = button.closest('.hs-accordion');
+        const content = accordion?.querySelector('.hs-accordion-content');
+
+        if (content) {
+          content.classList.toggle('hidden');
+          console.log(`✅ Toggled accordion for:`, button);
+        } else {
+          console.warn('❌ No .hs-accordion-content found for button:', button);
+        }
+      });
+      button.dataset.listenerAttached = 'true';
+    }
+  });
+}
+
+// Panggil saat awal halaman dimuat
+document.addEventListener('DOMContentLoaded', setupAccordions);
+
+// Tambahkan juga ketika modal dibuka
+document.querySelectorAll('[data-hs-overlay]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    setTimeout(setupAccordions, 200); // beri delay agar modal sempat render
+  });
+});
+
 </script>
 
 <script>

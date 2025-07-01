@@ -69,7 +69,7 @@
                         
                         $modul_path = '/pemberianobat';
                         $tabel    = $pemberianobat_data;
-                        $kolom_id = 'nomor_rawat';
+                        $kolom_id = ['nomor_rawat', 'jam_beri'];
                         $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,
