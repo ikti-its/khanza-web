@@ -4,7 +4,7 @@ namespace App\Controllers\AturanPenggajian;
 
 use App\Controllers\BaseController;
 
-class UPMLK extends BaseController
+class UPMK extends BaseController
 {   
     protected string $judul = 'Uang Penghargaan Masa Kerja';
     protected array $breadcrumbs = [

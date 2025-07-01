@@ -633,19 +633,19 @@ $routes->group('diagnosa', ['filter' => 'auth'], function ($routes) {
 
 //Fitur Penggajian
 $fiturs = [
-    ['AturanPenggajian\\', [
-        ['BPJS'    , 'aturan-bpjs'],
-        ['Golongan', 'aturan-golongan'],
-        ['Jabatan' , 'aturan-jabatan'],
-        ['PTKP'    , 'aturan-ptkp'],
-        ['PPH21'   , 'aturan-pph21'],
-        ['Lembur'  , 'aturan-lembur'],
-        ['UMR'     , 'aturan-umr'],
-        ['THR'     , 'aturan-thr'],
-        ['Pesangon', 'aturan-pesangon'],
-        ['UPMK'    , 'aturan-upmk']
+    ['AturanPenggajian\\', 'aturan-penggajian/', [
+        ['BPJS'    , 'bpjs'],
+        ['Golongan', 'golongan'],
+        ['Jabatan' , 'jabatan'],
+        ['PTKP'    , 'ptkp'],
+        ['PPH21'   , 'pph21'],
+        ['Lembur'  , 'lembur'],
+        ['UMR'     , 'umr'],
+        ['THR'     , 'thr'],
+        ['Pesangon', 'pesangon'],
+        ['UPMK'    , 'upmk']
     ]],
-    ['', [
+    ['', '', [
         ['PasienController', 'masterpasien'],
         ['DokterController', 'datadokter'],
         ['Instansi', 'datainstansi'],
@@ -653,11 +653,12 @@ $fiturs = [
 ];
 $filter = ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'];
 foreach($fiturs as $fitur){
-    $prefiks = $fitur[0];
-    $moduls   = $fitur[1];
+    $folder  = $fitur[0];
+    $prefiks = $fitur[1];
+    $moduls  = $fitur[2];
     foreach ($moduls as $modul) {
-        $m = $prefiks . $modul[0];
-        $routes->group($modul[1], ['filter' => 'auth'], function ($routes) use ($m, $filter) {
+        $m = $folder . $modul[0];
+        $routes->group($prefiks . $modul[1] , ['filter' => 'auth'], function ($routes) use ($m, $filter) {
             $routes->get('/',                      $m . '::tampilData'   , $filter); //  ojok diubah din, iki wes rapi
             $routes->get('audit',                  $m . '::tampilAudit'  , $filter);
             $routes->get('tambah',                 $m . '::tampilTambah' , $filter);
