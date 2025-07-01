@@ -6,13 +6,14 @@ use App\Controllers\BaseController;
 
 class PTKP extends BaseController
 {   
-    protected string $judul = 'Penghasilan Tidak Kena Pajak';
+    protected string $judul = 'Aturan Penghasilan Tidak Kena Pajak';
     protected array $breadcrumbs = [
         ['title' => 'User', 'icon' => 'user'], 
         ['title' => 'PTKP', 'icon' => 'ptkp'],
     ];
     protected string $modul_path = '/aturan-penggajian/ptkp';
     protected string $api_path = '/ptkp';
+    protected string $nama_tabel = 'ptkp';
     protected string $kolom_id = 'no_ptkp';
     protected array $aksi = [
         'cetak'    => false,

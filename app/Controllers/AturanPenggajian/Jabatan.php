@@ -6,13 +6,14 @@ use App\Controllers\BaseController;
 
 class Jabatan extends BaseController
 {
-    protected string $judul = 'Data Jabatan';
+    protected string $judul = 'Aturan Jabatan Pegawai';
     protected array $breadcrumbs = [
         ['title' => 'User',    'icon' => 'user'], 
         ['title' => 'Jabatan', 'icon' => 'jabatan'],
     ];
     protected string $modul_path = '/aturan-penggajian/jabatan';
     protected string $api_path = '/jabatan';
+    protected string $nama_tabel = 'jabatan_pegawai';
     protected string $kolom_id = 'no_jabatan';
     protected array $aksi = [
         'cetak'    => false,

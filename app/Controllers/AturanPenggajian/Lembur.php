@@ -6,13 +6,14 @@ use App\Controllers\BaseController;
 
 class Lembur extends BaseController
 {   
-    protected string $judul = 'Upah Lembur';
+    protected string $judul = 'Aturan Uang Lembur';
     protected array $breadcrumbs = [
         ['title' => 'User'  , 'icon' => 'user'], 
         ['title' => 'Lembur', 'icon' => 'lembur'],
     ];
     protected string $modul_path = '/aturan-penggajian/lembur';
     protected string $api_path = '/lembur';
+    protected string $nama_tabel = 'lembur';
     protected string $kolom_id = 'no_lembur';
     protected array $aksi = [
         'cetak'    => false,

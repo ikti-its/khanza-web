@@ -6,13 +6,14 @@ use App\Controllers\BaseController;
 
 class THR extends BaseController
 {   
-    protected string $judul = 'Tunjangan Hari Raya';
+    protected string $judul = 'Aturan Tunjangan Hari Raya';
     protected array $breadcrumbs = [
         ['title' => 'User', 'icon' => 'user'], 
         ['title' => 'THR' , 'icon' => 'thr'],
     ];
     protected string $modul_path = '/aturan-penggajian/thr';
     protected string $api_path = '/thr';
+    protected string $nama_tabel = 'thr';
     protected string $kolom_id = 'no_thr';
     protected array $aksi = [
         'cetak'    => false,

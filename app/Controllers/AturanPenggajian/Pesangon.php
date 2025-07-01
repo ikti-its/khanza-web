@@ -6,13 +6,14 @@ use App\Controllers\BaseController;
 
 class Pesangon extends BaseController
 {   
-    protected string $judul = 'Uang Pesangon';
+    protected string $judul = 'Aturan Uang Pesangon';
     protected array $breadcrumbs = [
         ['title' => 'User'     , 'icon' => 'user'], 
         ['title' => 'Pesangon' , 'icon' => 'pesangon'],
     ];
     protected string $modul_path = '/aturan-penggajian/pesangon';
     protected string $api_path = '/pesangon';
+    protected string $nama_tabel = 'pesangon';
     protected string $kolom_id = 'no_pesangon';
     protected array $aksi = [
         'cetak'    => false,

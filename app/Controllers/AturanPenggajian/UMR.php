@@ -6,13 +6,14 @@ use App\Controllers\BaseController;
 
 class UMR extends BaseController
 {   
-    protected string $judul = 'Upah Minimum Provinsi/Kota/Kabupaten';
+    protected string $judul = 'Aturan Upah Minimum Provinsi/Kota/Kabupaten';
     protected array $breadcrumbs = [
         ['title' => 'User', 'icon' => 'user'], 
         ['title' => 'UMR' , 'icon' => 'umr'],
     ];
     protected string $modul_path = '/aturan-penggajian/umr';
     protected string $api_path = '/umr';
+    protected string $nama_tabel = 'umr';
     protected string $kolom_id = 'no_umr';
     protected array $aksi = [
         'cetak'    => false,

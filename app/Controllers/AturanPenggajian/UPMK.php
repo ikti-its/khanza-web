@@ -6,13 +6,14 @@ use App\Controllers\BaseController;
 
 class UPMK extends BaseController
 {   
-    protected string $judul = 'Uang Penghargaan Masa Kerja';
+    protected string $judul = 'Aturan Uang Penghargaan Masa Kerja';
     protected array $breadcrumbs = [
         ['title' => 'User', 'icon' => 'user'], 
         ['title' => 'UPMK', 'icon' => 'upmk'],
     ];
     protected string $modul_path = '/aturan-penggajian/upmk';
     protected string $api_path = '/upmk';
+    protected string $nama_tabel = 'upmk';
     protected string $kolom_id = 'no_upmk';
     protected array $aksi = [
         'cetak'    => false,

@@ -66,6 +66,7 @@ abstract class BaseController extends Controller
     protected string $judul;
     protected string $modul_path;
     protected string $api_path;
+    protected string $nama_tabel;
     protected string $kolom_id;
     protected array $aksi;
     protected array $konfig;
@@ -252,7 +253,7 @@ abstract class BaseController extends Controller
             'modul_path'  => $this->modul_path . '/audit',
             'kolom_id'    => 'action',
             'konfig'      => array_merge($audit_konfig, $this->konfig),
-            'tabel'       => Audit::GetAuditData($this->modul_path)
+            'tabel'       => Audit::GetAuditData($this->nama_tabel)
         ]);
     }
     public function tampilTambah(){

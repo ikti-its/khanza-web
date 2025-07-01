@@ -6,13 +6,14 @@ use App\Controllers\BaseController;
 
 class Golongan extends BaseController
 {
-    protected string $judul = 'Golongan Pegawai';
+    protected string $judul = 'Aturan Golongan Pegawai';
     protected array $breadcrumbs = [
         ['title' => 'User',     'icon' => 'user'], 
         ['title' => 'Golongan', 'icon' => 'golongan'],
     ];
     protected string $modul_path = '/aturan-penggajian/golongan';
     protected string $api_path = '/golongan';
+    protected string $nama_tabel = 'golongan';
     protected string $kolom_id = 'no_golongan';
     protected array $aksi = [
         'cetak'    => false,

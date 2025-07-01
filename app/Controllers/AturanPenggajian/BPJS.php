@@ -6,13 +6,14 @@ use App\Controllers\BaseController;
 
 class BPJS extends BaseController
 {
-    protected string $judul = 'Data BPJS';
+    protected string $judul = 'Aturan BPJS';
     protected array $breadcrumbs = [
         ['title' => 'User', 'icon' => 'user'],
         ['title' => 'BPJS', 'icon' => 'bpjs'],
     ];
     protected string $modul_path  = '/aturan-penggajian/bpjs';
     protected string $api_path = '/bpjs';
+    protected string $nama_tabel = 'bpjs';
     protected string $kolom_id = 'no_bpjs';
     protected array $aksi = [
         'cetak'    => false,
