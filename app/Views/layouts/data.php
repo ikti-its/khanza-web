@@ -14,7 +14,8 @@
                     <?php
                         echo view('components/header/data',[
                             'judul'      => $judul,
-                            'modul_path' => $modul_path
+                            'modul_path' => $modul_path,
+                            'aksi'       => $aksi,
                         ]);
                         echo view('components/header/search_bar');
                         

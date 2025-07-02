@@ -4,25 +4,22 @@
             'judul' => $judul
         ]) ?>
     <div class="flex gap-x-6 justify-center items-center">
-        <div class="relative">
-            <?= view('components/notif/icon') ?>
-
-            <!-- Notification Pop-up -->
-            <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
-                <?= view('components/notif/notif') ?>
-                <div>
-                    <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-        <?= view('components/header/tambah_button', [
-            'link' => $modul_path . '/tambah'
-        ]) ?>
-        <?= view('components/header/audit_button', [
-            'link' => $modul_path . '/audit'
-        ]) ?>
+        <?php 
+            if(isset($aksi['notif']) && $aksi['notif'] === true){
+                echo view('components/header/notif_button');
+                echo '<div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>';
+            }
+            if(isset($aksi['tambah']) && $aksi['tambah'] === true){
+                echo view('components/header/tambah_button', [
+                    'link' => $modul_path . '/tambah'
+                ]);
+            }
+            if(isset($aksi['audit']) && $aksi['audit'] === true){
+                echo view('components/header/audit_button', [
+                    'link' => $modul_path . '/audit'
+                ]);
+            }
+        ?>
     </div>
 </div>
 
