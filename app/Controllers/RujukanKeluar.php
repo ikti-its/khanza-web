@@ -27,8 +27,8 @@ protected array $breadcrumbs = [];
     protected array $konfig = [
                             // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'Nomor Rujuk'        , 'nomor_rujuk', 'indeks'],
-                            [0, 'Nomor Rawat'        , 'nomor_rawat'],
-                            [0, 'Nomor Rekam Medis'  , 'nomor_rm'],
+                            [0, 'Nomor Rawat'        , 'nomor_rawat', 'indeks'],
+                            [0, 'Nomor Rekam Medis'  , 'nomor_rm'   , 'indeks'],
                             [1, 'Nama Pasien'        , 'nama_pasien', 'indeks'],
                             [1, 'Tempat Rujuk'       , 'tempat_rujuk', 'teks'],
                             [0, 'Tanggal Rujuk'      , 'tanggal_rujuk', 'tanggal'],
