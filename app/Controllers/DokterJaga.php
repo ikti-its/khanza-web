@@ -13,6 +13,7 @@ protected array $breadcrumbs = [];
     protected string $modul_path = '/dokterjaga';
     protected string $api_path = '/dokterjaga';
     protected string $kolom_id = 'kode_dokter';
+    protected string $nama_tabel = 'dokter_jaga';
     protected array $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,

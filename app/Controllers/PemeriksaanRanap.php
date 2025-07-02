@@ -13,6 +13,7 @@ class PemeriksaanRanap extends BaseController
     protected string $modul_path = '/pemeriksaanranap';
     protected string $api_path = '/pemeriksaanranap';
     protected string $kolom_id = 'no_rawat';
+    protected string $nama_tabel = 'pemeriksaan_ranap';
     protected array $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,

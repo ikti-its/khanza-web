@@ -15,6 +15,7 @@ protected array $breadcrumbs = [];
     protected string $modul_path = '/rujukankeluar';
     protected string $api_path = '/rujukankeluar';
     protected string $kolom_id = 'nomor_rujuk';
+    protected string $nama_tabel = 'rujukan_keluar';
     protected array $aksi = [
                             'cetak'    => true,
                             'tindakan' => false,

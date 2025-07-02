@@ -13,6 +13,7 @@ protected array $breadcrumbs = [];
     protected string $modul_path = '/rawatinap';
     protected string $api_path = '/rawatinap';
     protected string $kolom_id = 'nomor_rawat';
+    protected string $nama_tabel = 'rawat_inap';
     protected array $aksi = [
                             'cetak'    => false,
                             'tindakan' => true,

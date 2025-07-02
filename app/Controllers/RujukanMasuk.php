@@ -13,6 +13,7 @@ protected array $breadcrumbs = [];
     protected string $modul_path = '/rujukanmasuk';
     protected string $api_path = '/rujukanmasuk';
     protected string $kolom_id = 'nomor_rujuk';
+    protected string $nama_tabel = 'rujukan_masuk';
     protected array $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,
