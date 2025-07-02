@@ -238,9 +238,11 @@ abstract class BaseController extends Controller
     public function tampilAudit(){
         $audit_konfig = [
             // [1, 'Nomor Perubahan'  , 'change_id' , 'indeks'],
+            [1, 'Nama'             , 'nama'      , 'teks'],
             [1, 'Aksi Perubahan'   , 'action'    , 'status'],
-            [1, 'Pengubah'         , 'changed_by', 'indeks'],
-            [1, 'Tanggal Perubahan', 'changed_at', 'tanggal']
+            [1, 'IP address user'  , 'user_ip'   , 'teks'],
+            // [1, 'Pengubah'         , 'changed_by', 'indeks'],
+            [1, 'Tanggal Perubahan', 'changed_at', 'tanggal'],
         ];
         $breadcrumbs = [
             ['title' => 'Audit', 'icon', 'audit']

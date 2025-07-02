@@ -8,7 +8,7 @@ class CatatanObservasiPostpartum extends BaseController
 {
 
     protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Catatan Observasi Post Partum';
+    protected string $judul = 'Catatan Observasi Post Partum';
     protected string $modul_path = '/catatanobservasipostpartum';
     protected string $api_path = '/catatanobservasipostpartum';
     protected string $kolom_id = 'no_rawat';

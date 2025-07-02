@@ -200,7 +200,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <tr>
+                                <!-- <tr>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
@@ -214,7 +214,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr> -->
                             <?php endforeach; ?>
                         </tbody>
                     </table>

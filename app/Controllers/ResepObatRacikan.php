@@ -10,7 +10,7 @@ class ResepObatRacikan extends BaseController
 {
 
 protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Resep Obat Racikan';
+    protected string $judul = 'Resep Obat Racikan';
     protected string $modul_path = '/resepobat';
     protected string $api_path = '/resepobat';
     protected string $kolom_id = 'no_racik';

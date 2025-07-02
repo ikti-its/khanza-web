@@ -10,7 +10,12 @@ class Audit extends BaseController
         $tabel = str_replace('/', '', $tabel);
 
         $db = \Config\Database::connect();
-        $query = $db->query("SELECT * FROM sik." . $tabel . "_audit ORDER BY changed_by DESC");
+        $query = $db->query(
+            "SELECT * FROM sik." . $tabel . "_audit
+            LEFT OUTER JOIN 
+            (SELECT id, nama FROM sik.pegawai) c
+            ON sik." . $tabel . "_audit.changed_by = c.id
+            ORDER BY changed_by DESC");
         $results = $query->getResult();
 
         for($i = 0; $i < sizeof($results); $i++){

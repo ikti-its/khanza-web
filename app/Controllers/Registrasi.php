@@ -8,7 +8,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 class Registrasi extends BaseController
 {
     protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Registrasi';
+    protected string $judul = 'Registrasi';
     protected string $modul_path = '/registrasi';
     protected string $api_path = '/registrasi';
     protected string $nama_tabel = 'registrasi';

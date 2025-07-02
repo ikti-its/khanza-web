@@ -9,7 +9,7 @@ class PemeriksaanRanap extends BaseController
 {
 
     protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Pemeriksaan Ranap';
+    protected string $judul = 'Pemeriksaan Ranap';
     protected string $modul_path = '/pemeriksaanranap';
     protected string $api_path = '/pemeriksaanranap';
     protected string $kolom_id = 'no_rawat';

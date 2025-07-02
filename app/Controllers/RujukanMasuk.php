@@ -9,7 +9,7 @@ class RujukanMasuk extends BaseController
 {
 
 protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Registrasi';
+    protected string $judul = 'Rujukan Masuk';
     protected string $modul_path = '/rujukanmasuk';
     protected string $api_path = '/rujukanmasuk';
     protected string $kolom_id = 'nomor_rujuk';

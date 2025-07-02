@@ -9,7 +9,7 @@ class RawatInap extends BaseController
 {
 
 protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Rawat Inap';
+    protected string $judul = 'Rawat Inap';
     protected string $modul_path = '/rawatinap';
     protected string $api_path = '/rawatinap';
     protected string $kolom_id = 'nomor_rawat';

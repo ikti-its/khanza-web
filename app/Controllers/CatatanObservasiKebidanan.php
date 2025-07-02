@@ -7,7 +7,7 @@ use App\Controllers\BaseController;
 class CatatanObservasiKebidanan extends BaseController
 {
     protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Catatan Observasi Kebidanan';
+    protected string $judul = 'Catatan Observasi Kebidanan';
     protected string $modul_path = '/catatanobservasikebidanan';
     protected string $api_path = '/catatanobservasikebidanan';
     protected string $kolom_id = 'no_rawat';

@@ -8,7 +8,7 @@ class ResepDokter extends BaseController
 {
 
 protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Resep Dokter';
+    protected string $judul = 'Resep Dokter';
     protected string $modul_path = '/resepdokter';
     protected string $api_path = '/resepdokter';
     protected string $kolom_id = 'no_resep';

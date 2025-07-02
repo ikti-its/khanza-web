@@ -8,7 +8,7 @@ class Tindakan extends BaseController
 {
 
 protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Tindakan';
+    protected string $judul = 'Tindakan';
     protected string $modul_path = '/tindakan';
     protected string $api_path = '/tindakan';
     protected string $kolom_id = 'nomor_rawat';
