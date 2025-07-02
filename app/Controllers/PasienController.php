@@ -27,14 +27,15 @@ class PasienController extends BaseController
         [1, 'Nama Pasien', 'nm_pasien', 'nama', 1],
         [1, 'No. KTP/SIM', 'no_ktp', 'indeks', 0],
         [1, 'Jenis Kelamin', 'jk', 'status', 1, [
-            ['L', 'Laki-laki'],
-            ['P', 'Perempuan']
+            ['Laki-laki', 'Laki-laki'],
+            ['Perempuan', 'Perempuan']
         ]],
         [1, 'Tempat Lahir', 'tmp_lahir', 'nama', 0],
         [1, 'Tanggal Lahir', 'tgl_lahir', 'tanggal', 0],
         [1, 'Nama Ibu', 'nm_ibu', 'nama', 0],
         [1, 'Alamat Pasien', 'alamat', 'teks', 1],
-        [1, 'Golongan Darah', 'gol_darah', 'status', 0, [
+        [1, 'Golongan Darah', 'gol_darah', 'status', 1, [
+            ['-', '-'],
             ['A', 'A'],
             ['B', 'B'],
             ['AB', 'AB'],
@@ -119,11 +120,12 @@ class PasienController extends BaseController
                 ['Cerai', 'Cerai']
             ]],
             [1, 'Jenis Kelamin', 'jk', 'status', 1, [
-                ['L', 'Laki-laki'],
-                ['P', 'Perempuan']
+                ['Laki-laki', 'Laki-laki'],
+                ['Perempuan', 'Perempuan']
             ]],
 
-            [1, 'Golongan Darah', 'gol_darah', 'status', 0, [
+            [1, 'Golongan Darah', 'gol_darah', 'status', 1, [
+                ['-', '-'],
                 ['A', 'A'],
                 ['B', 'B'],
                 ['AB', 'AB'],
@@ -201,11 +203,12 @@ class PasienController extends BaseController
                 ['Cerai', 'Cerai']
             ]],
             [1, 'Jenis Kelamin', 'jk', 'status', 1, [
-                ['L', 'Laki-laki'],
-                ['P', 'Perempuan']
+                ['Laki-laki', 'Laki-laki'],
+                ['Perempuan', 'Perempuan']
             ]],
 
-            [1, 'Golongan Darah', 'gol_darah', 'status', 0, [
+            [1, 'Golongan Darah', 'gol_darah', 'status', 1, [
+                ['-', '-'],
                 ['A', 'A'],
                 ['B', 'B'],
                 ['AB', 'AB'],
