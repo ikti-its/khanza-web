@@ -584,7 +584,7 @@
                     ['Persetujuan', '/persetujuanpengajuan', 'persetujuan', '', $persetujuanrole, []],
                     ['Registrasi', '/registrasi', 'registrasi', '', $petugasrole, []],
                     ['Data Pasien', '', 'olah_data_pasien', '', $petugasrole, [
-                        ['Data Pasien', '/masterpasien', ''],
+                        ['Daftar Pasien', '/masterpasien', ''],
                         ['Kelahiran Bayi', '/kelahiran', ''],
                         ['Kematian Pasien', '/kematian', ''],
                     ]],

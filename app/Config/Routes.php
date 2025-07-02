@@ -282,7 +282,10 @@ $routes->group('registrasi', ['filter' => 'auth'], function ($routes) {
 });
 
 
-
+$routes->get('masterpasien/tambah-pasien', 'MasterPasien\MasterPasien_tambah::tambahPasien', [
+    'filter' => 'checkpermission:1337,1,2,3'
+]);
+$routes->post('masterpasien/simpanTambah', 'MasterPasien\MasterPasien_tambah::simpanTambah');
 
 
 //Kamar
@@ -491,7 +494,6 @@ $routes->group('permintaanreseppulang', ['filter' => 'auth'], function ($routes)
     $routes->get('(:segment)', 'PermintaanResepPulang::PermintaanResepPulang/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'PermintaanResepPulang::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'PermintaanResepPulang::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
-    
 });
 
 // Resep Pulang
@@ -635,39 +637,38 @@ $routes->group('diagnosa', ['filter' => 'auth'], function ($routes) {
 //Fitur Penggajian
 $fiturs = [
     ['AturanPenggajian\\', 'aturan-penggajian/', [
-        ['BPJS'    , 'bpjs'],
+        ['BPJS', 'bpjs'],
         ['Golongan', 'golongan'],
-        ['Jabatan' , 'jabatan'],
-        ['PTKP'    , 'ptkp'],
-        ['PPH21'   , 'pph21'],
-        ['Lembur'  , 'lembur'],
-        ['UMR'     , 'umr'],
-        ['THR'     , 'thr'],
+        ['Jabatan', 'jabatan'],
+        ['PTKP', 'ptkp'],
+        ['PPH21', 'pph21'],
+        ['Lembur', 'lembur'],
+        ['UMR', 'umr'],
+        ['THR', 'thr'],
         ['Pesangon', 'pesangon'],
-        ['UPMK'    , 'upmk']
+        ['UPMK', 'upmk']
     ]],
-    ['', '', [
+    ['MasterPasien\\', '', [
         ['PasienController', 'masterpasien'],
         ['DokterController', 'datadokter'],
         ['Instansi', 'datainstansi'],
-    ]],    
+    ]],
 ];
 $filter = ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'];
-foreach($fiturs as $fitur){
+foreach ($fiturs as $fitur) {
     $folder  = $fitur[0];
     $prefiks = $fitur[1];
     $moduls  = $fitur[2];
     foreach ($moduls as $modul) {
         $m = $folder . $modul[0];
-        $routes->group($prefiks . $modul[1] , ['filter' => 'auth'], function ($routes) use ($m, $filter) {
-            $routes->get('/',                      $m . '::tampilData'   , $filter); //  ojok diubah din, iki wes rapi
-            $routes->get('audit',                  $m . '::tampilAudit'  , $filter);
-            $routes->get('tambah',                 $m . '::tampilTambah' , $filter);
-            $routes->post('submittambah',          $m . '::simpanTambah' , $filter);
+        $routes->group($prefiks . $modul[1], ['filter' => 'auth'], function ($routes) use ($m, $filter) {
+            $routes->get('/',                      $m . '::tampilData', $filter); //  ojok diubah din, iki wes rapi
+            $routes->get('audit',                  $m . '::tampilAudit', $filter);
+            $routes->get('tambah',                 $m . '::tampilTambah', $filter);
+            $routes->post('submittambah',          $m . '::simpanTambah', $filter);
             $routes->get('edit/(:segment)',        $m . '::tampilUbah/$1', $filter);
             $routes->post('submitedit/(:segment)', $m . '::simpanUbah/$1', $filter);
-            $routes->delete('hapus/(:segment)',    $m . '::hapusData/$1' , $filter);
+            $routes->delete('hapus/(:segment)',    $m . '::hapusData/$1', $filter);
         });
     }
 }
-
