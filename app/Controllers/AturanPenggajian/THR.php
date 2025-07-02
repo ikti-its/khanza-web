@@ -16,6 +16,9 @@ class THR extends BaseController
     protected string $nama_tabel = 'thr';
     protected string $kolom_id = 'no_thr';
     protected array $aksi = [
+        'notif'    => false,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,

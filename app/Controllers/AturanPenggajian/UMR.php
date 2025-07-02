@@ -16,6 +16,9 @@ class UMR extends BaseController
     protected string $nama_tabel = 'umr';
     protected string $kolom_id = 'no_umr';
     protected array $aksi = [
+        'notif'    => false,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,

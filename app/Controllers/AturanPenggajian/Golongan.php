@@ -16,6 +16,9 @@ class Golongan extends BaseController
     protected string $nama_tabel = 'golongan';
     protected string $kolom_id = 'no_golongan';
     protected array $aksi = [
+        'notif'    => false,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,

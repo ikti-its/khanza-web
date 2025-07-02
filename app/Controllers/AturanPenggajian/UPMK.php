@@ -16,6 +16,9 @@ class UPMK extends BaseController
     protected string $nama_tabel = 'upmk';
     protected string $kolom_id = 'no_upmk';
     protected array $aksi = [
+        'notif'    => false,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,

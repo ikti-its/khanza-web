@@ -16,6 +16,9 @@ class PPH21 extends BaseController
     protected string $nama_tabel = 'pph21';
     protected string $kolom_id = 'no_pph21';
     protected array $aksi = [
+        'notif'    => false,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,

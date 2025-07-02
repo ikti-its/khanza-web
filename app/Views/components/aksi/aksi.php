@@ -6,7 +6,7 @@
                 'modul_path' => $modul_path,
                 'baris'      => $baris   
             ];
-            $aksi_list = ['cetak', 'tindakan', 'detail', 'ubah', 'hapus', 'validasi', 'ambulans'];
+            $aksi_list = ['notif', 'tambah', 'audit', 'cetak', 'tindakan', 'detail', 'ubah', 'hapus', 'validasi', 'ambulans'];
             if(ENVIRONMENT === 'development'){
                 foreach($aksi as $key => $value){
                     if(!in_array($key, $aksi_list)){

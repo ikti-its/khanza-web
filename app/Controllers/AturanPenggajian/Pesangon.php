@@ -16,6 +16,9 @@ class Pesangon extends BaseController
     protected string $nama_tabel = 'pesangon';
     protected string $kolom_id = 'no_pesangon';
     protected array $aksi = [
+        'notif'    => false,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,

@@ -16,6 +16,9 @@ class PTKP extends BaseController
     protected string $nama_tabel = 'ptkp';
     protected string $kolom_id = 'no_ptkp';
     protected array $aksi = [
+        'notif'    => false,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,

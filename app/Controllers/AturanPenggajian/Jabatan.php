@@ -16,6 +16,9 @@ class Jabatan extends BaseController
     protected string $nama_tabel = 'jabatan_pegawai';
     protected string $kolom_id = 'no_jabatan';
     protected array $aksi = [
+        'notif'    => false,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,

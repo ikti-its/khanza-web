@@ -16,6 +16,9 @@ class BPJS extends BaseController
     protected string $nama_tabel = 'bpjs';
     protected string $kolom_id = 'no_bpjs';
     protected array $aksi = [
+        'notif'    => false,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,
