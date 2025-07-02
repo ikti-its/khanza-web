@@ -15,6 +15,9 @@ class PasienController extends BaseController
     protected string $api_path = '/masterpasien';
     protected string $kolom_id = 'no_rkm_medis';
     protected array $aksi = [
+        'notif'    => true,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,
