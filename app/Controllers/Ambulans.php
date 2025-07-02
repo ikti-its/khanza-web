@@ -9,6 +9,7 @@ class Ambulans extends BaseController
 {
     protected string $judul = 'Data Ambulans';
     protected string $modul_path = '/ambulans';
+    protected string $nama_tabel = 'ambulans';
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
     protected array $konfig = [
         // [visible, Display, Kolom, Jenis, Required, *Opsi]

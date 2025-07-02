@@ -124,16 +124,45 @@ document.querySelectorAll('.hs-accordion-toggle').forEach((button, index) => {
     });
 });
 
+function toggleAccordionContent(content) {
+  const isOpen = content.classList.contains('open');
+
+  if (isOpen) {
+    // Tutup accordion
+    content.style.height = content.scrollHeight + 'px'; // set to current height
+    requestAnimationFrame(() => {
+      content.style.height = '0px';
+    });
+    content.classList.remove('open');
+  } else {
+    content.classList.remove('hidden');
+    content.style.height = 'auto';
+    const height = content.scrollHeight + 'px';
+    content.style.height = '0px';
+    requestAnimationFrame(() => {
+      content.style.height = height;
+    });
+    content.classList.add('open');
+  }
+
+  // Setelah animasi selesai, reset height
+  content.addEventListener('transitionend', () => {
+    if (!content.classList.contains('open')) {
+      content.classList.add('hidden');
+    }
+    content.style.height = '';
+  }, { once: true });
+}
+
 function setupAccordions() {
   document.querySelectorAll('.hs-accordion-toggle').forEach((button) => {
-    // Hindari duplikat event listener
     if (!button.dataset.listenerAttached) {
       button.addEventListener('click', () => {
         const accordion = button.closest('.hs-accordion');
         const content = accordion?.querySelector('.hs-accordion-content');
 
         if (content) {
-          content.classList.toggle('hidden');
+          toggleAccordionContent(content);
           console.log(`✅ Toggled accordion for:`, button);
         } else {
           console.warn('❌ No .hs-accordion-content found for button:', button);
@@ -143,6 +172,8 @@ function setupAccordions() {
     }
   });
 }
+
+
 
 // Panggil saat awal halaman dimuat
 document.addEventListener('DOMContentLoaded', setupAccordions);
@@ -157,18 +188,28 @@ document.querySelectorAll('[data-hs-overlay]').forEach(btn => {
 </script>
 
 <script>
-    document.querySelectorAll('[data-hs-overlay-close]').forEach(btn => {
+document.querySelectorAll('[data-hs-overlay]').forEach(button => {
+    button.addEventListener('click', () => {
+        const modalId = button.getAttribute('data-hs-overlay');
+        const modal = document.querySelector(modalId);
+        if (modal) {
+            modal.classList.remove('pointer-events-none');
+        }
+
+        // Tunggu modal muncul, lalu setup accordion
+        setTimeout(() => {
+            setupAccordions();
+        }, 300); // Pastikan cukup waktu render
+    });
+});
+
+document.querySelectorAll('[data-hs-overlay-close]').forEach(btn => {
     btn.addEventListener('click', () => {
-        // Get the closest open modal by finding the parent .hs-overlay
         const modal = btn.closest('.hs-overlay');
         if (modal) {
-        setTimeout(() => {
-            // Force-hide the modal if it reopens accidentally
-            modal.classList.add('hidden');
-            modal.classList.remove('hs-overlay-open:mt-7', 'hs-overlay-open:opacity-100', 'hs-overlay-open:duration-500');
-            modal.style.pointerEvents = 'none';
-        }, 100); // Delay allows the close animation, but prevents instant reopen
+            modal.classList.add('pointer-events-none');
         }
     });
-    });
+});
+
 </script>

@@ -131,12 +131,12 @@ class Pasien extends BaseController
 
             $response = curl_exec($ch);
             $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            dd([
-                'payload' => $postData,
-                'json' => $jsonPayload,
-                'response' => $response,
-                'http_code' => $http_status,
-            ]);
+            // dd([
+            //     'payload' => $postData,
+            //     'json' => $jsonPayload,
+            //     'response' => $response,
+            //     'http_code' => $http_status,
+            // ]);
             curl_close($ch);
 
             if ($response && $http_status === 201) {
