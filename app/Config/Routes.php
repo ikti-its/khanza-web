@@ -408,10 +408,10 @@ $routes->group('pemberianobat', ['filter' => 'auth'], function ($routes) {
     // $routes->post('submitedit', 'PemberianObat::submitEditPemberianObat', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->post('submitedit/(:segment)', 'PemberianObat::submitEditPemberianObat/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->delete('hapus/(:segment)/(:segment)', 'PemberianObat::hapusPemberianObat/$1/$2', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'PemberianObat::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('(:segment)', 'PemberianObat::PemberianObatData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'PemberianObat::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('pemberianobat/edit/(:segment)/(:segment)', 'PemberianObat::editPemberianObat/$1/$2');
-    $routes->get('audit', 'PemberianObat::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 // Resep Dokter
@@ -440,11 +440,11 @@ $routes->group('resepobat', ['filter' => 'auth'], function ($routes) {
     $routes->post('submitedit', 'ResepObat::submitEditResepObat', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->post('submitedit/(:segment)', 'ResepObat::submitEditResepObat/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->delete('hapus/(:segment)', 'ResepObat::hapusResepObat/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'ResepObat::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('(:segment)', 'ResepObat::ResepObatData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'ResepObat::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'ResepObat::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('resepobat/tambah/(:segment)', 'ResepObat::tambahResepObatId/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
-    $routes->get('audit', 'ResepObat::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
 $routes->group('resepobatracikan', ['filter' => 'auth'], function ($routes) {
@@ -504,9 +504,9 @@ $routes->group('reseppulang', ['filter' => 'auth'], function ($routes) {
     $routes->get('edit/(:segment)/(:segment)/(:segment)/(:segment)', 'ResepPulang::editResepPulang/$1/$2/$3/$4');
     $routes->post('submitedit/(:segment)/(:segment)/(:segment)/(:segment)', 'ResepPulang::submitEditResepPulang/$1/$2/$3/$4', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->delete('hapus/(:segment)/(:segment)/(:segment)/(:segment)', 'ResepPulang::hapusResepPulang/$1/$2/$3/$4');
-    $routes->get('(:segment)', 'ResepPulang::resepPulangData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
-    $routes->get('cetak/(:segment)', 'ResepPulang::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('audit', 'ResepPulang::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('(:segment)', 'ResepPulang::resepPulang/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('cetak/(:segment)', 'ResepPulang::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
 });
 
 // Permintaan Stok Obat

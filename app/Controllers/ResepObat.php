@@ -14,6 +14,7 @@ protected array $breadcrumbs = [];
     protected string $modul_path = '/resepobat';
     protected string $api_path = '/resepobat';
     protected string $kolom_id = 'no_resep';
+    protected string $nama_tabel = 'resep_obat';
     protected array $aksi = [
                             'cetak'    => true,
                             'tindakan' => false,

@@ -13,6 +13,7 @@ protected array $breadcrumbs = [];
     protected string $modul_path = '/ugd';
     protected string $api_path = '/ugd';
     protected string $kolom_id = 'nomor_reg';
+    protected string $nama_tabel = 'ugd';
     protected array $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,

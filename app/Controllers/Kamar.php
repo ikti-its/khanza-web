@@ -13,6 +13,7 @@ protected array $breadcrumbs = [];
     protected string $modul_path = '/kamar';
     protected string $api_path = '/kamar';
     protected string $kolom_id = 'nomor_bed';
+    protected string $nama_tabel = 'kamar';
     protected array $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,

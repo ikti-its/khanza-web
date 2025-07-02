@@ -8,10 +8,11 @@ class ResepPulang extends BaseController
 {
 
 protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Resep Pulang';
+    protected string $judul = 'Resep Pulang';
     protected string $modul_path = '/reseppulang';
-    protected string $api_path = '/reseppulang';
+    protected string $api_path = '/resep-pulang';
     protected string $kolom_id = 'no_rawat';
+    protected string $nama_tabel = 'resep_pulang';
     protected array $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,
@@ -24,7 +25,7 @@ protected array $breadcrumbs = [];
                             [1, 'Nomor Rawat'  , 'no_rawat'   , 'indeks'],
                             [1, 'Tanggal Resep', 'tanggal'    , 'tanggal'],
                             [1, 'Jam'          , 'jam'        , 'jam'],
-                            [1, 'Pasien'       , 'nama_pasien', 'nama'],
+                            // [1, 'Pasien'       , 'nama_pasien', 'nama'],
                             [1, 'Obat'         , 'kode_brng'  , 'indeks'],
                             [1, 'Jumlah'       , 'jml_barang' , 'jumlah'],
                             [0, 'Harga'        , 'harga'      , 'uang'],

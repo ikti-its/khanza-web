@@ -11,6 +11,7 @@ class Registrasi extends BaseController
     protected string $judul = 'Audit Registrasi';
     protected string $modul_path = '/registrasi';
     protected string $api_path = '/registrasi';
+    protected string $nama_tabel = 'registrasi';
     protected string $kolom_id = 'nomor_reg';
     protected array $aksi = [
                             'cetak'    => false,

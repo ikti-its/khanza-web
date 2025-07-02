@@ -12,6 +12,7 @@ class PemberianObat extends BaseController
     protected string $modul_path = '/pemberianobat';
     protected string $api_path = '/pemberianobat';
     protected string $kolom_id = 'nomor_rawat';
+    protected string $nama_tabel = 'pemberian_obat';
     protected array $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,
