@@ -487,10 +487,11 @@ $routes->group('permintaanreseppulang', ['filter' => 'auth'], function ($routes)
     // $routes->post('submitedit', 'PermintaanResepPulang::submitEditPermintaanResepPulang', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->post('submitedit/(:segment)', 'PermintaanResepPulang::submitEditPermintaanResepPulang/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->delete('hapus/(:segment)', 'PermintaanResepPulang::hapusPermintaanResepPulang/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
-    $routes->get('(:segment)', 'PermintaanResepPulang::PermintaanResepPulangData/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
+    $routes->get('audit', 'PermintaanResepPulang::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('(:segment)', 'PermintaanResepPulang::PermintaanResepPulang/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('submit/(:segment)', 'PermintaanResepPulang::submitFromRawatinap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
     $routes->get('cetak/(:segment)', 'PermintaanResepPulang::cetak/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002']);
-    $routes->get('audit', 'PermintaanResepPulang::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    
 });
 
 // Resep Pulang
