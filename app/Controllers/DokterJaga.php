@@ -9,7 +9,7 @@ class DokterJaga extends BaseController
 {
 
 protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Dokter Jaga';
+    protected string $judul = 'Dokter Jaga';
     protected string $modul_path = '/dokterjaga';
     protected string $api_path = '/dokterjaga';
     protected string $kolom_id = 'kode_dokter';

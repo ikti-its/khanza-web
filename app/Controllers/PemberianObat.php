@@ -8,7 +8,7 @@ class PemberianObat extends BaseController
 {
 
     protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Pemberian Obat';
+    protected string $judul = 'Pemberian Obat';
     protected string $modul_path = '/pemberianobat';
     protected string $api_path = '/pemberianobat';
     protected string $kolom_id = 'nomor_rawat';

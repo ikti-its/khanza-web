@@ -8,7 +8,7 @@ class PermintaanResepPulang extends BaseController
 {
 
 protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Permintaan Resep Pulang';
+    protected string $judul = 'Permintaan Resep Pulang';
     protected string $modul_path = '/permintaanreseppulang';
     protected string $api_path = '/permintaanreseppulang';
     protected string $kolom_id = 'no_permintaan';

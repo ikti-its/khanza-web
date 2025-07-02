@@ -9,7 +9,7 @@ class Kamar extends BaseController
 {
 
 protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Kamar';
+    protected string $judul = 'Kamar';
     protected string $modul_path = '/kamar';
     protected string $api_path = '/kamar';
     protected string $kolom_id = 'nomor_bed';

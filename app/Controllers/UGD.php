@@ -9,7 +9,7 @@ class UGD extends BaseController
 {
 
 protected array $breadcrumbs = [];
-    protected string $judul = 'Audit UGD';
+    protected string $judul = 'UGD';
     protected string $modul_path = '/ugd';
     protected string $api_path = '/ugd';
     protected string $kolom_id = 'nomor_reg';

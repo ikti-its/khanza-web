@@ -8,7 +8,7 @@ class CatatanObservasiRanap extends BaseController
 {
 
 protected array $breadcrumbs = [];
-    protected string $judul = 'Audit Catatan Observasi Ranap';
+    protected string $judul = 'Catatan Observasi Ranap';
     protected string $modul_path = '/catatanobservasiranap';
     protected string $api_path = '/catatanobservasiranap';
     protected string $kolom_id = 'no_rawat';
