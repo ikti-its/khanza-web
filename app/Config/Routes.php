@@ -652,6 +652,7 @@ $fiturs = [
         ['PasienController', 'masterpasien'],
         ['DokterController', 'datadokter'],
         ['Instansi', 'datainstansi'],
+        ['PasienMeninggal', 'pasienmeninggal'],
     ]],
 ];
 $filter = ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'];
@@ -662,7 +663,7 @@ foreach ($fiturs as $fitur) {
     foreach ($moduls as $modul) {
         $m = $folder . $modul[0];
         $routes->group($prefiks . $modul[1], ['filter' => 'auth'], function ($routes) use ($m, $filter) {
-            $routes->get('/',                      $m . '::tampilData', $filter); //  ojok diubah din, iki wes rapi
+            $routes->get('/',                      $m . '::tampilData', $filter); //  ojok diubah din, iki wes rapi //sepurane iki vscode ku onok auto rapi ne wkwk
             $routes->get('audit',                  $m . '::tampilAudit', $filter);
             $routes->get('tambah',                 $m . '::tampilTambah', $filter);
             $routes->post('submittambah',          $m . '::simpanTambah', $filter);
