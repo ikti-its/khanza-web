@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\MasterPasien;
 
 use App\Controllers\BaseController;
 

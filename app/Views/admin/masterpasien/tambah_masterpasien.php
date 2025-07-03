@@ -14,221 +14,261 @@
             <!-- Nomor Rekam Medis dan Nama Pasien -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nomor Rekam Medis</label>
-                <input type="text" id="no_rkm_medis" value="<?= old('no_rkm_medis', $no_rkm_medis) ?>" name="no_rkm_medis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
+                <input type="text" id="no_rkm_medis"
+                    value="<?= old('no_rkm_medis', $no_rkm_medis) ?>"
+                    name="no_rkm_medis"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    readonly required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama<span class="text-red-600">*</span></label>
-                <input id="nm_pasien" name="nm_pasien" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input id="nm_pasien" name="nm_pasien"
+                    value="<?= old('nm_pasien', $form_data['nm_pasien'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required>
             </div>
 
-            <!-- Jenis Kelamin -->
+            <!-- Jenis Kelamin dan Golongan Darah -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin<span class="text-red-600">*</span></label>
                 <select id="jk" name="jk" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="" selected disabled>-- Pilih --</option>
-                    <option value="L">Laki-laki</option>
-                    <option value="P">Perempuan</option>
+                    <option value="" disabled <?= old('jk', $form_data['jk'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
+                    <option value="L" <?= old('jk', $form_data['jk'] ?? '') === 'L' ? 'selected' : '' ?>>Laki-laki</option>
+                    <option value="P" <?= old('jk', $form_data['jk'] ?? '') === 'P' ? 'selected' : '' ?>>Perempuan</option>
                 </select>
 
-                <!-- Golongan Darah -->
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Golongan Darah<span class="text-red-600">*</span></label>
                 <select id="gol_darah" name="gol_darah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="" selected disabled>-- Pilih --</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="AB">AB</option>
-                    <option value="O">O</option>
+                    <option value="" disabled <?= old('gol_darah', $form_data['gol_darah'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
+                    <?php foreach (['A', 'B', 'AB', 'O'] as $gd): ?>
+                        <option value="<?= $gd ?>" <?= old('gol_darah', $form_data['gol_darah'] ?? '') === $gd ? 'selected' : '' ?>><?= $gd ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
 
             <!-- Tempat Lahir dan Tanggal Lahir -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Tempat Lahir<span class="text-red-600">*</span></label>
-                <input type="text" id="tmp_lahir" name="tmp_lahir" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="text" id="tmp_lahir" name="tmp_lahir"
+                    value="<?= old('tmp_lahir', $form_data['tmp_lahir'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tanggal Lahir<span class="text-red-600">*</span></label>
-                <input type="date" id="tgl_lahir" name="tgl_lahir" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="date" id="tgl_lahir" name="tgl_lahir"
+                    value="<?= old('tgl_lahir', $form_data['tgl_lahir'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required>
             </div>
 
             <!-- Umur dan Pendidikan -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Umur<span class="text-red-600">*</span></label>
-                <input type="text" id="umur" name="umur" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
+                <input type="text" id="umur" name="umur"
+                    value="<?= old('umur', $form_data['umur'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    readonly required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pendidikan<span class="text-red-600">*</span></label>
                 <select id="pnd" name="pnd" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="" selected disabled>-- Pilih --</option>
-                    <option value="TS">TS</option>
-                    <option value="TK">TK</option>
-                    <option value="SD">SD</option>
-                    <option value="SMP">SMP</option>
-                    <option value="SMA">SMA</option>
-                    <option value="SLTA/SEDERAJAT">SLTA/SEDERAJAT</option>
-                    <option value="D1">D1</option>
-                    <option value="D2">D2</option>
-                    <option value="D3">D3</option>
-                    <option value="D4">D4</option>
-                    <option value="S1">S1</option>
-                    <option value="S2">S2</option>
-                    <option value="S3">S3</option>
+                    <option value="" disabled <?= old('pnd', $form_data['pnd'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
+                    <?php foreach (['TS', 'TK', 'SD', 'SMP', 'SMA', 'SLTA/SEDERAJAT', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'] as $edu): ?>
+                        <option value="<?= $edu ?>" <?= old('pnd', $form_data['pnd'] ?? '') === $edu ? 'selected' : '' ?>><?= $edu ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
 
             <!-- Nama Ibu dan Penanggung Jawab -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nama Ibu<span class="text-red-600">*</span></label>
-                <input type="text" id="nm_ibu" name="nm_ibu" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="text" id="nm_ibu" name="nm_ibu"
+                    value="<?= old('nm_ibu', $form_data['nm_ibu'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Penanggung Jawab<span class="text-red-600">*</span></label>
                 <select id="keluarga" name="keluarga" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="" selected disabled>-- Pilih --</option>
-                    <option value="DIRI SENDIRI">DIRI SENDIRI</option>
-                    <option value="AYAH">AYAH</option>
-                    <option value="IBU">IBU</option>
-                    <option value="ISTRI">ISTRI</option>
-                    <option value="SUAMI">SUAMI</option>
-                    <option value="ANAK">KAKAK</option>
-                    <option value="SAUDARA">ADIK</option>
-                    <option value="ISTRI">PAMAN</option>
-                    <option value="SUAMI">BIBI</option>
-                    <option value="ANAK">KAKEK</option>
-                    <option value="SAUDARA">NENEK</option>
-                    <option value="SAUDARA">SAUDARA</option>
-                    <option value="LAIN-LAIN">LAIN-LAIN</option>
+                    <option value="" disabled <?= old('keluarga', $form_data['keluarga'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
+                    <?php
+                    $options_keluarga = ['DIRI SENDIRI', 'AYAH', 'IBU', 'ISTRI', 'SUAMI', 'ANAK', 'KAKAK', 'ADIK', 'PAMAN', 'BIBI', 'KAKEK', 'NENEK', 'SAUDARA', 'LAIN-LAIN'];
+                    foreach ($options_keluarga as $opt): ?>
+                        <option value="<?= $opt ?>" <?= old('keluarga', $form_data['keluarga'] ?? '') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
 
-            <!-- Nama PJ dan Pekerjaan PJ -->
+            <!-- Nama PJ dan Pekerjaan -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nama Penanggung Jawab</label>
-                <input type="text" id="namakeluarga" name="namakeluarga" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" id="namakeluarga" name="namakeluarga"
+                    value="<?= old('namakeluarga', $form_data['namakeluarga'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pekerjaan Penanggung Jawab</label>
-                <input id="pekerjaanpj" name="pekerjaanpj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pekerjaan</label>
+                <input id="pekerjaan" name="pekerjaan"
+                    value="<?= old('pekerjaan', $form_data['pekerjaan'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <!-- Suku/Bangsa dan Bahasa -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Suku/Bangsa<span class="text-red-600">*</span></label>
-                <input type="text" id="suku_bangsa" name="suku_bangsa" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="text" id="suku_bangsa" name="suku_bangsa"
+                    value="<?= old('suku_bangsa', $form_data['suku_bangsa'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Bahasa<span class="text-red-600">*</span></label>
-                <input id="bahasa_pasien" name="bahasa_pasien" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input id="bahasa_pasien" name="bahasa_pasien"
+                    value="<?= old('bahasa_pasien', $form_data['bahasa_pasien'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required>
             </div>
 
             <!-- Cacat Fisik -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Cacat Fisik<span class="text-red-600">*</span></label>
-                <input type="text" id="cacat_fisik" name="cacat_fisik" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="text" id="cacat_fisik" name="cacat_fisik"
+                    value="<?= old('cacat_fisik', $form_data['cacat_fisik'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required>
             </div>
 
             <!-- Agama dan Status Pernikahan -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Agama<span class="text-red-600">*</span></label>
-                <select type="text" id="agama" name="agama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="" selected disabled>-- Pilih --</option>
-                    <option value="ISLAM">ISLAM</option>
-                    <option value="KRISTEN">KRISTEN</option>
-                    <option value="KATOLIK">KATOLIK</option>
-                    <option value="HINDU">HINDU</option>
-                    <option value="BUDHA">BUDHA</option>
-                    <option value="KONG HU CHU">KONG HU CHU</option>
-                    <option value="-">-</option>
+                <select id="agama" name="agama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="" disabled <?= old('agama', $form_data['agama'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
+                    <?php foreach (['ISLAM', 'KRISTEN', 'KATOLIK', 'HINDU', 'BUDHA', 'KONG HU CHU', '-'] as $agama): ?>
+                        <option value="<?= $agama ?>" <?= old('agama', $form_data['agama'] ?? '') === $agama ? 'selected' : '' ?>><?= $agama ?></option>
+                    <?php endforeach; ?>
                 </select>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Pernikahan<span class="text-red-600">*</span></label>
                 <select id="stts_nikah" name="stts_nikah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="" selected disabled>-- Pilih --</option>
-                    <option value="MENIKAH">MENIKAH</option>
-                    <option value="BELUM MENIKAH">BELUM MENIKAH</option>
-                    <option value="JANDA">JANDA</option>
-                    <option value="DUDA">DUDA</option>
+                    <option value="" disabled <?= old('stts_nikah', $form_data['stts_nikah'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
+                    <?php foreach (['MENIKAH', 'BELUM MENIKAH', 'JANDA', 'DUDA'] as $status): ?>
+                        <option value="<?= $status ?>" <?= old('stts_nikah', $form_data['stts_nikah'] ?? '') === $status ? 'selected' : '' ?>><?= $status ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
 
             <!-- Asuransi -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Asuransi</label>
-                <input type="text" id="kd_pj" name="kd_pj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" id="kd_pj" name="kd_pj"
+                    value="<?= old('kd_pj', $form_data['kd_pj'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <!-- No. Peserta dan Email -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">No. Peserta</label>
-                <input type="text" id="no_peserta" name="no_peserta" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" id="no_peserta" name="no_peserta"
+                    value="<?= old('no_peserta', $form_data['no_peserta'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Email</label>
-                <input id="email" name="email" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input id="email" name="email"
+                    value="<?= old('email', $form_data['email'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <!-- No. Telepon dan Tanggal Daftar -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">No. Telepon<span class="text-red-600">*</span></label>
-                <input type="text" id="no_tlp" name="no_tlp" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="text" id="no_tlp" name="no_tlp"
+                    value="<?= old('no_tlp', $form_data['no_tlp'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pertama Daftar<span class="text-red-600">*</span></label>
-                <input type="date" value="<?php
-
-                                            $tanggalHariIni = date('Y-m-d');
-
-                                            echo $tanggalHariIni; ?>" id="tgl_daftar" name="tgl_daftar" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="date" id="tgl_daftar" name="tgl_daftar"
+                    value="<?= old('tgl_daftar', $form_data['tgl_daftar'] ?? date('Y-m-d')) ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required>
             </div>
 
-            <!-- Pekerjaan dan No. KTP/SIM -->
+            <!-- Pekerjaan PJ dan No. KTP/SIM -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Pekerjaan</label>
-                <input type="text" id="pekerjaan" name="pekerjaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Pekerjaan Penanggung Jawab</label>
+                <input id="pekerjaanpj" name="pekerjaanpj"
+                    value="<?= old('pekerjaanpj', $form_data['pekerjaanpj'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">No. KTP/SIM</label>
-                <input id="no_ktp" name="no_ktp" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input id="no_ktp" name="no_ktp"
+                    value="<?= old('no_ktp', $form_data['no_ktp'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <!-- Alamat -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat</label>
-                <input type="text" id="alamat" name="alamat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat Pasien</label>
+                <input type="text" id="alamat" name="alamat"
+                    value="<?= old('alamat', $form_data['alamat'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <!-- Kelurahan dan Kecamatan -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kelurahan</label>
-                <input type="text" id="kd_kel" name="kd_kel" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4"></label>
+                <input type="text" id="kd_kel" name="kd_kel" placeholder="Kelurahan"
+                    value="<?= old('kd_kel', $form_data['kd_kel'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Kecamatan</label>
-                <input id="kd_kec" name="kd_kec" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5"></label>
+                <input id="kd_kec" name="kd_kec" placeholder="Kecamatan"
+                    value="<?= old('kd_kec', $form_data['kd_kec'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <!-- Kabupaten dan Provinsi -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kabupaten</label>
-                <input type="text" id="kd_kab" name="kd_kab" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4"></label>
+                <input type="text" id="kd_kab" name="kd_kab" placeholder="Kabupaten"
+                    value="<?= old('kd_kab', $form_data['kd_kab'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Provinsi</label>
-                <input id="kd_prop" name="kd_prop" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5"></label>
+                <input id="kd_prop" name="kd_prop" placeholder="Provinsi"
+                    value="<?= old('kd_prop', $form_data['kd_prop'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <!-- Alamat PJ -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat PJ</label>
-                <input type="text" id="alamatpj" name="alamatpj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <input type="text" id="alamatpj" name="alamatpj"
+                    value="<?= old('alamatpj', $form_data['alamatpj'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
-            <!-- Kelurahan dan Kecamatan -->
+            <!-- Kelurahan dan Kecamatan PJ -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kelurahan</label>
-                <input type="text" id="kelurahanpj" name="kelurahanpj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4"></label>
+                <input type="text" id="kelurahanpj" name="kelurahanpj" placeholder="Kelurahan PJ"
+                    value="<?= old('kelurahanpj', $form_data['kelurahanpj'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Kecamatan</label>
-                <input id="kecamatanpj" name="kecamatanpj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5"></label>
+                <input id="kecamatanpj" name="kecamatanpj" placeholder="Kecamatan PJ"
+                    value="<?= old('kecamatanpj', $form_data['kecamatanpj'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
-            <!-- Kabupaten dan Provinsi -->
+            <!-- Kabupaten dan Provinsi PJ -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Kabupaten</label>
-                <input type="text" id="kabupatenpj" name="kabupatenpj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4"></label>
+                <input type="text" id="kabupatenpj" name="kabupatenpj" placeholder="Kabupaten PJ"
+                    value="<?= old('kabupatenpj', $form_data['kabupatenpj'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Provinsi</label>
-                <input id="propinsipj" name="propinsipj" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5"></label>
+                <input id="propinsipj" name="propinsipj" placeholder="Provinsi PJ"
+                    value="<?= old('propinsipj', $form_data['propinsipj'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
+
 
             <!-- Instansi dan NIP/NRP -->
             <div class="mb-5 sm:block md:flex items-center">
@@ -238,7 +278,8 @@
                 <!-- Input Instansi + Link -->
                 <div class="relative w-full md:w-1/4">
                     <input type="text" id="perusahaan_pasien" name="perusahaan_pasien"
-                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white">
+                        value="<?= esc($form_data['perusahaan_pasien'] ?? '') ?>"
+                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white" readonly>
                     <a href="/datainstansi"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-blue-600"
                         title="Tambah Instansi">
@@ -254,6 +295,7 @@
 
                 <!-- Input NIP -->
                 <input id="nip" name="nip"
+                    value="<?= old('nip', $form_data['nip'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
@@ -335,20 +377,80 @@
         onlyNumber('#no_peserta');
         onlyNumber('#nip');
 
-        // 👤 Autofill Nama PJ
+        // 👤 Autofill Nama, Alamat, dan Pekerjaan PJ jika DIRI SENDIRI
         const pjSelect = document.getElementById('keluarga');
         const namaPasien = document.getElementById('nm_pasien');
         const namaPJ = document.getElementById('namakeluarga');
 
+        const pekerjaanPasien = document.getElementById('pekerjaan');
+        const pekerjaanPJ = document.getElementById('pekerjaanpj');
+
+        const alamatPasien = document.getElementById('alamat');
+        const kelurahanPasien = document.getElementById('kd_kel');
+        const kecamatanPasien = document.getElementById('kd_kec');
+        const kabupatenPasien = document.getElementById('kd_kab');
+        const provinsiPasien = document.getElementById('kd_prop');
+
+        const alamatPJ = document.getElementById('alamatpj');
+        const kelurahanPJ = document.getElementById('kelurahanpj');
+        const kecamatanPJ = document.getElementById('kecamatanpj');
+        const kabupatenPJ = document.getElementById('kabupatenpj');
+        const provinsiPJ = document.getElementById('propinsipj');
+
+        const fieldsToSync = [pekerjaanPasien, alamatPasien, kelurahanPasien, kecamatanPasien, kabupatenPasien, provinsiPasien];
+
+        fieldsToSync.forEach(field => {
+            if (field) {
+                field.addEventListener('input', function() {
+                    if (pjSelect.value === 'DIRI SENDIRI') {
+                        autofillPJ();
+                    }
+                });
+            }
+        });
+
+        function autofillPJ() {
+            if (pjSelect.value === 'DIRI SENDIRI') {
+                namaPJ.value = namaPasien.value;
+                pekerjaanPJ.value = pekerjaanPasien.value;
+                alamatPJ.value = alamatPasien.value;
+                kelurahanPJ.value = kelurahanPasien.value;
+                kecamatanPJ.value = kecamatanPasien.value;
+                kabupatenPJ.value = kabupatenPasien.value;
+                provinsiPJ.value = provinsiPasien.value;
+
+                namaPJ.readOnly = true;
+                pekerjaanPJ.readOnly = true;
+                alamatPJ.readOnly = true;
+                kelurahanPJ.readOnly = true;
+                kecamatanPJ.readOnly = true;
+                kabupatenPJ.readOnly = true;
+                provinsiPJ.readOnly = true;
+            } else {
+                namaPJ.readOnly = false;
+                pekerjaanPJ.readOnly = false;
+                alamatPJ.readOnly = false;
+                kelurahanPJ.readOnly = false;
+                kecamatanPJ.readOnly = false;
+                kabupatenPJ.readOnly = false;
+                provinsiPJ.readOnly = false;
+
+                namaPJ.value = '';
+                pekerjaanPJ.value = '';
+                alamatPJ.value = '';
+                kelurahanPJ.value = '';
+                kecamatanPJ.value = '';
+                kabupatenPJ.value = '';
+                provinsiPJ.value = '';
+            }
+        }
+
         if (pjSelect && namaPasien && namaPJ) {
             pjSelect.addEventListener('change', function() {
-                if (this.value === 'DIRI SENDIRI') {
-                    namaPJ.value = namaPasien.value;
-                    namaPJ.setAttribute('readonly', true);
-                } else {
-                    namaPJ.removeAttribute('readonly');
-                    namaPJ.value = '';
-                }
+                // Kasih delay sedikit biar autofill Chrome selesai
+                setTimeout(() => {
+                    autofillPJ();
+                }, 50); // 50ms udah cukup
             });
 
             namaPasien.addEventListener('input', function() {
@@ -356,7 +458,14 @@
                     namaPJ.value = this.value;
                 }
             });
+
+            pekerjaanPasien.addEventListener('input', function() {
+                if (pjSelect.value === 'DIRI SENDIRI') {
+                    pekerjaanPJ.value = this.value;
+                }
+            });
         }
+
 
         // 📥 Ambil kode instansi dari localStorage
         const kodeInstansi = localStorage.getItem('kode_instansi_terpilih');
