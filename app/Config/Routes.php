@@ -287,6 +287,12 @@ $routes->get('masterpasien/tambah-pasien', 'MasterPasien\MasterPasien_tambah::ta
 ]);
 $routes->post('masterpasien/simpanTambah', 'MasterPasien\MasterPasien_tambah::simpanTambah');
 
+$routes->get('pasienmeninggal/tambah-pasien', 'PasienMeninggal\PasienMeninggal_tambah::tambahPasien', [
+    'filter' => 'checkpermission:1337,1,2,3'
+]);
+$routes->post('pasienmeninggal/simpanTambah', 'PasienMeninggal\PasienMeninggal_tambah::simpanTambah');
+
+
 
 //Kamar
 $routes->group('kamar', ['filter' => 'auth'], function ($routes) {
