@@ -263,7 +263,7 @@ class Registrasi extends BaseController
         $this->addBreadcrumb('Edit', 'edit');
     
         $breadcrumbs = $this->getBreadcrumbs();
-    
+// dd($registrasi_data);
         return view('/admin/registrasi/edit_registrasi', [
             'registrasi' => $registrasi_data['data'],
             'title' => $title,
