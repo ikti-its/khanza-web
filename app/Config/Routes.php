@@ -661,6 +661,7 @@ $fiturs = [
         ['DokterController', 'datadokter'],
         ['Instansi', 'datainstansi'],
         ['PasienMeninggal', 'pasienmeninggal'],
+        ['KelahiranBayi', 'kelahiranbayi'],
     ]],
 ];
 $filter = ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'];
