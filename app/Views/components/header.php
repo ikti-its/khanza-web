@@ -586,7 +586,7 @@
                     ['Data Pasien', '', 'olah_data_pasien', '', $petugasrole, [
                         ['Daftar Pasien', '/masterpasien', ''],
                         ['Kelahiran Bayi', '/kelahiran', ''],
-                        ['Kematian Pasien', '/kematian', ''],
+                        ['Pasien Meninggal', '/pasienmeninggal', ''],
                     ]],
                     ['Rawat Inap', '/rawatinap', 'rawat_inap', '', $petugasdokterrole, []],
                     ['Ruangan', '/kamar', 'kamar', '', $petugasrole, []],

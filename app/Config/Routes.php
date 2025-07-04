@@ -281,17 +281,19 @@ $routes->group('registrasi', ['filter' => 'auth'], function ($routes) {
     $routes->get('audit', 'Registrasi::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
-
+//masterpasien/tambah-pasien
 $routes->get('masterpasien/tambah-pasien', 'MasterPasien\MasterPasien_tambah::tambahPasien', [
     'filter' => 'checkpermission:1337,1,2,3'
 ]);
 $routes->post('masterpasien/simpanTambah', 'MasterPasien\MasterPasien_tambah::simpanTambah');
 
-$routes->get('pasienmeninggal/tambah-pasien', 'PasienMeninggal\PasienMeninggal_tambah::tambahPasien', [
+
+//pasienmeninggal/tambah-pasien
+$routes->get('pasienmeninggal/tambah-pasien', 'MasterPasien\PasienMeninggal_tambah::tambahPasien', [
     'filter' => 'checkpermission:1337,1,2,3'
 ]);
-$routes->post('pasienmeninggal/simpanTambah', 'PasienMeninggal\PasienMeninggal_tambah::simpanTambah');
-
+$routes->post('pasienmeninggal/simpanTambah', 'MasterPasien\PasienMeninggal_tambah::simpanTambah');
+$routes->get('api/fetch-pasien-by-rm', 'MasterPasien\PasienMeninggal_tambah::fetchPasienByRM');
 
 
 //Kamar

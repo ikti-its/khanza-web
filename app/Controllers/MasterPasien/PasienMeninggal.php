@@ -64,30 +64,8 @@ class PasienMeninggal extends BaseController
 
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 
-    public function isiOtomatis($no_rkm_medis)
+    public function tampilTambah()
     {
-        $client = \Config\Services::curlrequest();
-        $url = base_url('/v1/masterpasien/' . $no_rkm_medis); // asumsi API MasterPasien sudah ada
-
-        $response = $client->get($url, [
-            'headers' => [
-                'Authorization' => 'Bearer ' . session('jwt') // sesuaikan jika perlu
-            ]
-        ]);
-
-        $data = json_decode($response->getBody(), true);
-
-        if (isset($data['data'])) {
-            return $this->response->setJSON([
-                'status' => 'success',
-                'data'   => [
-                    'nm_pasien' => $data['data']['nm_pasien'],
-                    'jk'        => $data['data']['jk'],
-                    'tgl_lahir' => $data['data']['tgl_lahir']
-                ]
-            ]);
-        }
-
-        return $this->response->setStatusCode(404)->setJSON(['status' => 'not found']);
+        return redirect()->to('pasienmeninggal/tambah-pasien');
     }
 }
