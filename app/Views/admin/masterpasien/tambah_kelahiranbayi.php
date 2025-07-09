@@ -1,0 +1,463 @@
+<?= $this->extend('layouts/template'); ?>
+<?= $this->section('content'); ?>
+
+<div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
+    <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
+        <?= view('components/form/judul', ['judul' => 'Form Tambah Kelahiran Bayi']) ?>
+
+        <form action="<?= base_url('/kelahiranbayi/simpanTambah') ?>" method="post" id="myForm" onsubmit="return validateForm()">
+            <?= csrf_field() ?>
+
+            <!-- No. Rekam Medis dan Nama Bayi -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">No. Rekam Medis Bayi<span class="text-red-600">*</span></label>
+                <input type="text" id="no_rkm_medis" name="no_rkm_medis"
+                    value="<?= old('no_rkm_medis', $form_data['no_rkm_medis'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Bayi<span class="text-red-600">*</span></label>
+                <input type="text" id="nm_pasien" name="nm_pasien"
+                    value="<?= old('nm_pasien', $form_data['nm_pasien'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Nama Ibu dan Umur Ibu -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama Ibu<span class="text-red-600">*</span></label>
+                <input type="text" id="nm_ibu" name="nm_ibu"
+                    value="<?= old('nm_ibu', $form_data['nm_ibu'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur Ibu<span class="text-red-600">*</span></label>
+                <input type="number" id="umur_ibu" name="umur_ibu"
+                    value="<?= old('umur_ibu', $form_data['umur_ibu'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Nama Ayah dan Umur Ayah -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama Ayah<span class="text-red-600">*</span></label>
+                <input type="text" id="nm_ayah" name="nm_ayah"
+                    value="<?= old('nm_ayah', $form_data['nm_ayah'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur Ayah<span class="text-red-600">*</span></label>
+                <input type="number" id="umur_ayah" name="umur_ayah"
+                    value="<?= old('umur_ayah', $form_data['umur_ayah'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Alamat Ibu -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label for="alamat_ibu" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Alamat Ibu<span class="text-red-600">*</span>
+                </label>
+                <textarea id="alamat_ibu" name="alamat_ibu"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    rows="2"
+                    required><?= old('alamat_ibu', $form_data['alamat_ibu'] ?? '') ?></textarea>
+            </div>
+
+            <!-- Jenis Kelamin dan Panjang Badan -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin<span class="text-red-600">*</span></label>
+                <select id="jk" name="jk"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    <option value="" disabled <?= old('jk', $form_data['jk'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
+                    <option value="L" <?= old('jk', $form_data['jk'] ?? '') === 'L' ? 'selected' : '' ?>>Laki-laki</option>
+                    <option value="P" <?= old('jk', $form_data['jk'] ?? '') === 'P' ? 'selected' : '' ?>>Perempuan</option>
+                </select>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Panjang Badan (cm)<span class="text-red-600">*</span></label>
+                <input type="number" step="0.1" id="pb" name="pb"
+                    value="<?= old('pb', $form_data['pb'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Berat Badan dan Lingkar Dada -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Berat Badan (gram)<span class="text-red-600">*</span></label>
+                <input type="number" step="0.1" id="bb" name="bb"
+                    value="<?= old('bb', $form_data['bb'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Lingkar Dada (cm)<span class="text-red-600">*</span></label>
+                <input type="number" step="0.1" id="lk_dada" name="lk_dada"
+                    value="<?= old('lk_dada', $form_data['lk_dada'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Lingkar Kepala dan Lingkar Perut -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Lingkar Kepala (cm)<span class="text-red-600">*</span></label>
+                <input type="number" step="0.1" id="lk_kepala" name="lk_kepala"
+                    value="<?= old('lk_kepala', $form_data['lk_kepala'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Lingkar Perut (cm)<span class="text-red-600">*</span></label>
+                <input type="number" step="0.1" id="lk_perut" name="lk_perut"
+                    value="<?= old('lk_perut', $form_data['lk_perut'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Tanggal Lahir dan Jam Lahir -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Lahir<span class="text-red-600">*</span></label>
+                <input type="date" id="tgl_lahir" name="tgl_lahir"
+                    value="<?= old('tgl_lahir', $form_data['tgl_lahir'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam Lahir<span class="text-red-600">*</span></label>
+                <input type="time" id="jam" name="jam"
+                    value="<?= old('jam', $form_data['jam'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Umur dan No. SKL -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Umur<span class="text-red-600">*</span></label>
+                <input type="text" id="umur" name="umur"
+                    value="<?= old('umur', $form_data['umur'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">No. SKL<span class="text-red-600">*</span></label>
+                <input type="text" id="no_skl" name="no_skl"
+                    value="<?= old('no_skl', $form_data['no_skl'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Tanggal Daftar -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Daftar<span class="text-red-600">*</span></label>
+                <input type="date" id="tgl_daftar" name="tgl_daftar"
+                    value="<?= old('tgl_daftar', $form_data['tgl_daftar'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Judul Keterangan -->
+            <div class="mb-3 mt-8">
+                <h3 class="text-lg font-bold text-gray-700 dark:text-white">Riwayat Persalinan</h3>
+            </div>
+
+            <!-- Penolong dan Keterangan -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label for="penolong" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Penolong<span class="text-red-600">*</span>
+                </label>
+                <input type="text" id="penolong" name="penolong"
+                    value="<?= old('penolong', $form_data['penolong'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label for="keterangan" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Keterangan<span class="text-red-600">*</span>
+                </label>
+                <textarea id="keterangan" name="keterangan" rows="2"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required><?= old('keterangan', $form_data['keterangan'] ?? '') ?></textarea>
+            </div>
+
+
+            <!-- Diagnosa dan Ketuban -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Diagnosa<span class="text-red-600">*</span></label>
+                <input type="text" id="diagnosa" name="diagnosa"
+                    value="<?= old('diagnosa', $form_data['diagnosa'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Ketuban<span class="text-red-600">*</span></label>
+                <input type="text" id="ketuban" name="ketuban"
+                    value="<?= old('ketuban', $form_data['ketuban'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Penyulit dan proses kelahiran -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Penyulit Kehamilan<span class="text-red-600">*</span></label>
+                <input type="text" id="penyulit_kehamilan" name="penyulit_kehamilan"
+                    value="<?= old('penyulit_kehamilan', $form_data['penyulit_kehamilan'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Proses Kelahiran<span class="text-red-600">*</span></label>
+                <input type="text" id="proses_lahir" name="proses_lahir"
+                    value="<?= old('proses_lahir', $form_data['proses_lahir'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Kelahiran ke dan Gravida -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kelahiran Ke<span class="text-red-600">*</span></label>
+                <input type="text" id="kelahiran_ke" name="kelahiran_ke"
+                    value="<?= old('kelahiran_ke', $form_data['kelahiran_ke'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Gravida<span class="text-red-600">*</span></label>
+                <input type="text" id="gravida" name="gravida"
+                    value="<?= old('gravida', $form_data['gravida'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Para dan Abortus -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Para<span class="text-red-600">*</span></label>
+                <input type="text" id="para" name="para"
+                    value="<?= old('para', $form_data['para'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Abortus<span class="text-red-600">*</span></label>
+                <input type="text" id="abortus" name="abortus"
+                    value="<?= old('abortus', $form_data['abortus'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Judul Nilai APGAR -->
+            <div class="mb-3 mt-8">
+                <h3 class="text-lg font-bold text-gray-700 dark:text-white">Nilai APGAR</h3>
+            </div>
+
+            <!-- Tabel APGAR -->
+            <div class="overflow-x-auto mb-5">
+                <table class="min-w-full border border-gray-300 text-sm text-center">
+                    <thead class="bg-gray-100 text-gray-700">
+                        <tr>
+                            <th rowspan="2" class="border border-gray-300 px-4 py-2 align-middle">Tanda</th>
+                            <th colspan="3" class="border border-gray-300 px-4 py-2">Nilai</th>
+                            <th colspan="3" class="border border-gray-300 px-4 py-2">Skor</th>
+                        </tr>
+                        <tr>
+                            <th class="border border-gray-300 px-4 py-2">0</th>
+                            <th class="border border-gray-300 px-4 py-2">1</th>
+                            <th class="border border-gray-300 px-4 py-2">2</th>
+                            <th class="border border-gray-300 px-4 py-2">N 1'</th>
+                            <th class="border border-gray-300 px-4 py-2">N 5'</th>
+                            <th class="border border-gray-300 px-4 py-2">N 10'</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-800">
+                        <?php
+                        $data_apgar = [
+                            'Frekuensi Jantung' => ['Tidak Ada', '&lt; 100', '&gt; 100'],
+                            'Usaha Nafas' => ['Tidak Ada', 'Lambat Tak Teratur', 'Menangis Kuat'],
+                            'Tonus Otot' => ['Lumpuh', 'Ext. Fleksi Sedikit', 'Gerakan Aktif'],
+                            'Refleks' => ['Tidak Ada Respon', 'Pergerakan Sedikit', 'Menangis'],
+                            'Warna' => ['Biru Pucat', 'Tubuh Kemerahan, Tangan &amp; Kaki Biru', 'Kemerahan']
+                        ];
+                        $prefixes = ['f', 'u', 't', 'r', 'w'];
+                        $index = 0;
+                        foreach ($data_apgar as $label => $deskripsi):
+                            $id = $prefixes[$index++];
+                        ?>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 text-left font-medium"><?= $label ?></td>
+                                <?php foreach ($deskripsi as $d): ?>
+                                    <td class="border border-gray-300 px-4 py-2 text-left"><?= $d ?></td>
+                                <?php endforeach; ?>
+                                <td class="border border-gray-300 p-2"><input type="number" name="<?= $id ?>1" id="<?= $id ?>1" min="0" max="2" value="<?= old($id . '1', $form_data[$id . '1'] ?? '') ?>" class="w-full p-1 text-sm border rounded"></td>
+                                <td class="border border-gray-300 p-2"><input type="number" name="<?= $id ?>5" id="<?= $id ?>5" min="0" max="2" value="<?= old($id . '5', $form_data[$id . '5'] ?? '') ?>" class="w-full p-1 text-sm border rounded"></td>
+                                <td class="border border-gray-300 p-2"><input type="number" name="<?= $id ?>10" id="<?= $id ?>10" min="0" max="2" value="<?= old($id . '10', $form_data[$id . '10'] ?? '') ?>" class="w-full p-1 text-sm border rounded"></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr class="bg-gray-50 font-semibold">
+                            <td colspan="4" class="border border-gray-300 px-4 py-2 text-left">Jumlah Nilai</td>
+                            <td class="border border-gray-300 p-2">
+                                <input type="number" name="n1" id="n1" value="<?= old('n1', $form_data['n1'] ?? '') ?>" class="w-full p-1 text-sm border rounded font-bold text-gray-900">
+                            </td>
+                            <td class="border border-gray-300 p-2">
+                                <input type="number" name="n5" id="n5" value="<?= old('n5', $form_data['n5'] ?? '') ?>" class="w-full p-1 text-sm border rounded font-bold text-gray-900">
+                            </td>
+                            <td class="border border-gray-300 p-2">
+                                <input type="number" name="n10" id="n10" value="<?= old('n10', $form_data['n10'] ?? '') ?>" class="w-full p-1 text-sm border rounded font-bold text-gray-900">
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Resusitas dan Mikasi -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label for="resusitas" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Resusitas<span class="text-red-600">*</span>
+                </label>
+                <input type="text" id="resusitas" name="resusitas"
+                    value="<?= old('resusitas', $form_data['resusitas'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label for="mikasi" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Mikasi<span class="text-red-600">*</span>
+                </label>
+                <input type="text" id="mikasi" name="mikasi"
+                    value="<?= old('mikasi', $form_data['mikasi'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+            <!-- Obat Diberikan dan Mikonium -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label for="obat" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Obat Diberikan<span class="text-red-600">*</span>
+                </label>
+                <textarea id="obat" name="obat" rows="2"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required><?= old('obat', $form_data['obat'] ?? '') ?></textarea>
+
+                <label for="mikonium" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Mikonium<span class="text-red-600">*</span>
+                </label>
+                <input type="text" id="mikonium" name="mikonium"
+                    value="<?= old('mikonium', $form_data['mikonium'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
+
+
+            <!-- Button -->
+            <div class="mt-5 pt-5 border-t flex justify-end gap-x-2">
+                <a href="javascript:history.back()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    Kembali
+                </a>
+                <button type="submit" id="submitButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E]">
+                    Simpan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="toast-apgar" class="hidden opacity-0 fixed top-6 right-6 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50 text-sm transition-all duration-300">
+    Nilai APGAR hanya boleh antara 0 sampai 2.
+</div>
+
+<script>
+    function validateForm() {
+        const required = document.querySelectorAll('input[required], select[required]');
+        for (let field of required) {
+            if (!field.value.trim()) {
+                alert("Harap isi semua field wajib.");
+                return false;
+            }
+        }
+        document.getElementById('submitButton').disabled = true;
+        document.getElementById('submitButton').innerText = 'Menyimpan...';
+        return true;
+    }
+
+    // Apgar Score Auto Update + Validasi Maksimum Nilai
+    function updateApgarTotal(prefix) {
+        const fields = ['f', 'u', 't', 'r', 'w'];
+        let total = 0;
+        let hasInvalid = false;
+
+        fields.forEach(field => {
+            const input = document.getElementById(field + prefix);
+            if (input && input.value !== '') {
+                let val = parseInt(input.value);
+                if (isNaN(val)) val = 0;
+
+                if (val > 2 || val < 0) {
+                    input.classList.add('border-red-500');
+
+                    // Tampilkan toast
+                    const toast = document.getElementById('toast-apgar');
+                    toast.classList.remove('hidden');
+                    toast.classList.add('opacity-100');
+
+                    // Sembunyikan otomatis setelah 3 detik
+                    setTimeout(() => {
+                        toast.classList.remove('hidden', 'opacity-0');
+                        toast.classList.add('opacity-100');
+
+                    }, 3000);
+
+                    input.value = '';
+                    return;
+                } else {
+                    input.classList.remove('border-red-500');
+                    total += val;
+                }
+            }
+        });
+
+        const totalInput = document.getElementById('n' + prefix);
+        if (totalInput) {
+            totalInput.value = total;
+        }
+
+        if (hasInvalid) {
+            alert('Nilai APGAR hanya boleh antara 0 sampai 2.');
+        }
+    }
+
+    ['1', '5', '10'].forEach(minute => {
+        ['f', 'u', 't', 'r', 'w'].forEach(field => {
+            const input = document.getElementById(field + minute);
+            if (input) {
+                input.addEventListener('input', () => updateApgarTotal(minute));
+            }
+        });
+    });
+
+    // Format Float dengan 2 desimal
+    ['pb', 'lk_perut', 'lk_dada', 'lk_kepala'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('blur', () => {
+                const val = parseFloat(el.value.replace(',', '.'));
+                if (!isNaN(val)) {
+                    el.value = val.toFixed(2);
+                }
+            });
+        }
+    });
+
+    // Auto Hitung Umur Bayi saat input tgl_lahir dan jam_lahir
+    document.addEventListener('DOMContentLoaded', function() {
+        const tglLahirInput = document.getElementById('tgl_lahir');
+        const jamLahirInput = document.getElementById('jam');
+        const umurInput = document.getElementById('umur');
+
+        function updateUmur() {
+            const tanggal = tglLahirInput.value;
+            const jam = jamLahirInput.value;
+
+            if (!tanggal || !jam) {
+                umurInput.value = '';
+                return;
+            }
+
+            const lahir = new Date(`${tanggal}T${jam}`);
+            const now = new Date();
+
+            if (isNaN(lahir.getTime())) {
+                umurInput.value = '';
+                return;
+            }
+
+            let tahun = now.getFullYear() - lahir.getFullYear();
+            let bulan = now.getMonth() - lahir.getMonth();
+            let hari = now.getDate() - lahir.getDate();
+
+            if (hari < 0) {
+                bulan--;
+                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                hari += prevMonth.getDate();
+            }
+
+            if (bulan < 0) {
+                tahun--;
+                bulan += 12;
+            }
+
+            let result = '';
+            if (tahun > 0) result += `${tahun} Th `;
+            if (bulan > 0) result += `${bulan} Bl `;
+            result += `${hari} Hr`;
+
+            umurInput.value = result.trim();
+        }
+
+        if (tglLahirInput && jamLahirInput && umurInput) {
+            tglLahirInput.addEventListener('change', updateUmur);
+            jamLahirInput.addEventListener('change', updateUmur);
+        }
+    });
+</script>
+
+<?= $this->endSection(); ?>

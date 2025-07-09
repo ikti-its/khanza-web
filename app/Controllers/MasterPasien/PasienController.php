@@ -62,7 +62,7 @@ class PasienController extends BaseController
         ]],
         [1, 'Tanggal Daftar', 'tgl_daftar', 'tanggal', 1],
         [1, 'No. Telepon', 'no_tlp', 'teks', 0],
-        [1, 'Umur', 'umur', 'jumlah', 0],
+        [1, 'Umur', 'umur', 'teks', 0],
         [1, 'Pendidikan', 'pnd', 'status', 0, [
             ['SD', 'SD'],
             ['SMP', 'SMP'],
