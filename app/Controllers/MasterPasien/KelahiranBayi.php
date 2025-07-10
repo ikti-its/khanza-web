@@ -94,8 +94,8 @@ class KelahiranBayi extends BaseController
 
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 
-    // public function tampilTambah()
-    // {
-    //     return redirect()->to('registrasi/kelahiranbayi/tambah-pasien');
-    // }
+    public function tampilTambah()
+    {
+        return redirect()->to('/kelahiranbayi/tambah-pasien');
+    }
 }
