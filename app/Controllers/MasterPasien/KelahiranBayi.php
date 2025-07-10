@@ -34,6 +34,7 @@ class KelahiranBayi extends BaseController
             ['L', 'Laki-laki'],
             ['P', 'Perempuan']
         ]],
+        [1, 'Tempat Lahir', 'tmp_lahir', 'nama', 1],
         [1, 'Tanggal Lahir', 'tgl_lahir', 'tanggal', 1],
         [1, 'Jam Lahir', 'jam', 'jam', 1],
         [1, 'Umur', 'umur', 'teks', 1],
@@ -42,7 +43,7 @@ class KelahiranBayi extends BaseController
         [1, 'Umur Ibu', 'umur_ibu', 'teks', 1],
         [1, 'Nama Ayah', 'nm_ayah', 'nama', 1],
         [1, 'Umur Ayah', 'umur_ayah', 'teks', 1],
-        [1, 'Alamat Ibu', 'alamat_ibu', 'teks', 1],
+        [1, 'Alamat Ibu', 'alamat', 'teks', 1],
         [1, 'Berat Badan (gram)', 'bb', 'jumlah', 1],
         [1, 'Panjang Badan (cm)', 'pb', 'jumlah', 1],
         [1, 'Proses Lahir', 'proses_lahir', 'teks', 1],
