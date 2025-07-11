@@ -2,7 +2,11 @@
     $list_jenis = ['indeks', 'tanggal', 'jam', 'uang', 'status', 'nama', 'teks', 'jumlah', 'suhu', 'bool'];
     for($i = 0; $i < sizeof($kolom); $i++){
         if(!in_array($jenis[$i], $list_jenis)){
-            echo "Jenis tidak ditemukan pada daftar";
+            echo 'Jenis tidak ditemukan pada daftar';
+            break;
+        }
+        if(!array_key_exists($kolom[$i], $baris)){
+            echo 'Tidak ada kolom: ' . $kolom[$i] . ' pada baris: ' . json_encode($baris);
             break;
         }
         $elem = $baris[$kolom[$i]];
