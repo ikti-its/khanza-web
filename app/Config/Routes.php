@@ -294,12 +294,15 @@ $routes->get('pasienmeninggal/tambah-pasien', 'MasterPasien\PasienMeninggal_tamb
 ]);
 $routes->post('pasienmeninggal/simpanTambah', 'MasterPasien\PasienMeninggal_tambah::simpanTambah');
 $routes->get('api/fetch-pasien-by-rm', 'MasterPasien\PasienMeninggal_tambah::fetchPasienByRM');
+$routes->get('/pasienmeninggal/listpasien', 'MasterPasien\PasienMeninggal_tambah::getListPasien');
 
 //kelahiranbayi/tambah-pasien
 $routes->get('kelahiranbayi/tambah-pasien', 'MasterPasien\KelahiranBayi_tambah::tambahPasien', [
     'filter' => 'checkpermission:1337,1,2,3'
 ]);
 $routes->post('kelahiranbayi/simpanTambah', 'MasterPasien\KelahiranBayi_tambah::simpanTambah');
+
+
 
 
 //Kamar

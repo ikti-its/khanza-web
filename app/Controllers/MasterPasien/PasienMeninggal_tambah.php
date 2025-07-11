@@ -84,11 +84,14 @@ class PasienMeninggal_tambah extends BaseController
     public function fetchPasienByRM()
     {
         $no_rkm_medis = $this->request->getGet('no_rkm_medis');
+        if (!$no_rkm_medis) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'No RM kosong']);
+        }
+
         $url = 'http://localhost:8080/v1/masterpasien/' . urlencode($no_rkm_medis);
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // ❌ Jangan kirim Authorization dulu
         $response = curl_exec($ch);
         $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
@@ -99,5 +102,27 @@ class PasienMeninggal_tambah extends BaseController
         }
 
         return $this->response->setStatusCode(404)->setJSON(['error' => 'Pasien tidak ditemukan']);
+    }
+
+
+    public function getListPasien()
+    {
+        if (!session()->has('jwt_token')) {
+            return $this->response->setJSON(['error' => 'Unauthorized']);
+        }
+
+        $token = session()->get('jwt_token');
+        $url = $this->api_url . "/masterpasien";
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
+        ]);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return $this->response->setJSON(json_decode($response, true));
     }
 }

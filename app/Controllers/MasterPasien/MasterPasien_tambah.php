@@ -27,9 +27,11 @@ class MasterPasien_tambah extends BaseController
             return redirect()->to('/masterpasien/tambah-pasien');
         }
 
-        $tgl_lahir_raw = $this->request->getPost('tgl_lahir');
-        $tgl_lahir_iso = $tgl_lahir_raw ? date('Y-m-d\TH:i:sP', strtotime($tgl_lahir_raw)) : null;
-        $tgl_daftar_iso = date('Y-m-d\TH:i:sP');
+        $tgl_lahir_raw   = $this->request->getPost('tgl_lahir');
+        $tgl_daftar_raw  = $this->request->getPost('tgl_daftar');
+
+        $tgl_lahir_iso   = $tgl_lahir_raw ? date('Y-m-d\TH:i:sP', strtotime($tgl_lahir_raw)) : null;
+        $tgl_daftar_iso  = $tgl_daftar_raw ? date('Y-m-d\TH:i:sP', strtotime($tgl_daftar_raw)) : null;
 
         $postData = [
             'no_rkm_medis' => $this->request->getPost('no_rkm_medis'),

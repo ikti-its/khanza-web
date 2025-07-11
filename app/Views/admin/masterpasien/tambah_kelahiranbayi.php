@@ -102,59 +102,41 @@
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
-            <!-- Tombol untuk membuka modal detail orang tua -->
-            <div class="mb-5">
-                <button type="button" onclick="toggleModal('modalOrtu')"
-                    class="bg-[#0A2D27] hover:bg-[#13594E] text-[#ACF2E7] text-sm font-medium py-2 px-4 rounded-lg shadow">
-                    Isi Detail Orang Tua
-                </button>
+            <!-- Nama Ibu dan Umur Ibu -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama Ibu<span class="text-red-600">*</span></label>
+                <input type="text" id="nm_ibu" name="nm_ibu"
+                    value="<?= old('nm_ibu', $form_data['nm_ibu'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur Ibu<span class="text-red-600">*</span></label>
+                <input type="number" id="umur_ibu" name="umur_ibu"
+                    value="<?= old('umur_ibu', $form_data['umur_ibu'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
-            <div id="modalOrtu" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-                <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-                    <h2 class="text-lg font-bold mb-4 text-center">Detail Orang Tua</h2>
+            <!-- Nama Ayah dan Umur Ayah -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama Ayah<span class="text-red-600">*</span></label>
+                <input type="text" id="nm_ayah" name="nm_ayah"
+                    value="<?= old('nm_ayah', $form_data['nm_ayah'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
 
-                    <!-- Nama Ibu -->
-                    <div class="mb-4">
-                        <label for="nm_ibu" class="block text-sm font-medium text-gray-700">Nama Ibu<span class="text-red-600">*</span></label>
-                        <input type="text" id="nm_ibu" name="nm_ibu" class="mt-1 block w-full border border-gray-300 rounded-md p-2 text-sm" required>
-                    </div>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur Ayah<span class="text-red-600">*</span></label>
+                <input type="number" id="umur_ayah" name="umur_ayah"
+                    value="<?= old('umur_ayah', $form_data['umur_ayah'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+            </div>
 
-                    <!-- Umur Ibu -->
-                    <div class="mb-4">
-                        <label for="umur_ibu" class="block text-sm font-medium text-gray-700">Umur Ibu<span class="text-red-600">*</span></label>
-                        <input type="number" id="umur_ibu" name="umur_ibu" class="mt-1 block w-full border border-gray-300 rounded-md p-2 text-sm" required>
-                    </div>
-
-                    <!-- Nama Ayah -->
-                    <div class="mb-4">
-                        <label for="nm_ayah" class="block text-sm font-medium text-gray-700">Nama Ayah<span class="text-red-600">*</span></label>
-                        <input type="text" id="nm_ayah" name="nm_ayah" class="mt-1 block w-full border border-gray-300 rounded-md p-2 text-sm" required>
-                    </div>
-
-                    <!-- Umur Ayah -->
-                    <div class="mb-4">
-                        <label for="umur_ayah" class="block text-sm font-medium text-gray-700">Umur Ayah<span class="text-red-600">*</span></label>
-                        <input type="number" id="umur_ayah" name="umur_ayah" class="mt-1 block w-full border border-gray-300 rounded-md p-2 text-sm" required>
-                    </div>
-
-                    <!-- Alamat Ibu -->
-                    <div class="mb-4">
-                        <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat Ibu<span class="text-red-600">*</span></label>
-                        <textarea id="alamat" name="alamat" rows="2" class="mt-1 block w-full border border-gray-300 rounded-md p-2 text-sm" required></textarea>
-                    </div>
-
-
-                    <!-- Tombol Tutup di kanan bawah -->
-                    <div class="mt-6 flex justify-end">
-                        <button
-                            type="button"
-                            onclick="toggleModal('modalOrtu')"
-                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E]">
-                            Simpan
-                        </button>
-                    </div>
-                </div>
+            <!-- Alamat Ibu -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label for="alamat" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Alamat Ibu<span class="text-red-600">*</span>
+                </label>
+                <textarea id="alamat" name="alamat"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    rows="2"
+                    required><?= old('alamat', $form_data['alamat'] ?? '') ?></textarea>
             </div>
 
             <!-- Judul Keterangan -->
@@ -496,23 +478,6 @@
             }
         }
     });
-
-    function toggleModal(id) {
-        const modal = document.getElementById(id);
-        if (modal.classList.contains('hidden')) {
-            modal.classList.remove('hidden');
-        } else {
-            modal.classList.add('hidden');
-        }
-    }
-
-    function openModal() {
-        document.getElementById('modalOrtu').classList.remove('hidden');
-    }
-
-    function closeModal() {
-        document.getElementById('modalOrtu').classList.add('hidden');
-    }
 </script>
 
 <?= $this->endSection(); ?>

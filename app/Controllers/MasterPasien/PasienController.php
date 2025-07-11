@@ -37,7 +37,7 @@ class PasienController extends BaseController
         [1, 'Tanggal Lahir', 'tgl_lahir', 'tanggal', 0],
         [1, 'Nama Ibu', 'nm_ibu', 'nama', 0],
         [1, 'Alamat Pasien', 'alamat', 'teks', 1],
-        [1, 'Golongan Darah', 'gol_darah', 'status', 1, [
+        [1, 'Golongan Darah', 'gol_darah', 'status', 0, [
             ['-', '-'],
             ['A', 'A'],
             ['B', 'B'],

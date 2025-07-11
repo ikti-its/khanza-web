@@ -10,21 +10,59 @@
         <form action="<?= base_url('/pasienmeninggal/simpanTambah') ?>" method="post" id="myForm" onsubmit="return validateForm()">
             <?= csrf_field() ?>
 
-
-
+            <!-- Modal Pilih Pasien -->
+            <div id="modalPasien" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
+                <div class="bg-white rounded-xl px-6 py-4 w-full max-w-md max-h-[75vh] overflow-y-auto shadow-lg">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-base font-semibold text-gray-800">Pilih Pasien</h2>
+                        <button onclick="closeModalPasien()" class="text-gray-500 hover:text-red-600 text-xl font-bold">&times;</button>
+                    </div>
+                    <table class="w-full text-sm text-center text-gray-700 border border-gray-300">
+                        <thead style="background-color: #E6F2EF;">
+                            <tr>
+                                <th class="p-2 border">No. RM</th>
+                                <th class="p-2 border">Nama Pasien</th>
+                                <th class="p-2 border">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pasienTable">
+                            <!-- Data dari AJAX -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <!-- Nomor RM dan Nama -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">No. Rekam Medis</label>
-                <input type="text" id="no_rkm_medis" name="no_rkm_medis"
-                    value="<?= old('no_rkm_medis', $form_data['no_rkm_medis'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <!-- Label No. RM -->
+                <label for="no_rkm_medis" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    No. Rekam Medis <span class="text-red-600">*</span>
+                </label>
 
+                <!-- Input RM + Icon Modal -->
+                <div class="relative w-full md:w-1/4">
+                    <input type="text" id="no_rkm_medis" name="no_rkm_medis"
+                        value="<?= old('no_rkm_medis', $form_data['no_rkm_medis'] ?? '') ?>"
+                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white"
+                        readonly required>
+                    <button type="button" onclick="openModalPasien()" title="Pilih Pasien"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M18 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h6m5-3h5m0 0v5m0-5L10 14" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Label + Input Nama Pasien -->
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Pasien<span class="text-red-600">*</span></label>
                 <input type="text" id="nm_pasien" name="nm_pasien"
                     value="<?= old('nm_pasien', $form_data['nm_pasien'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    readonly required>
             </div>
+
 
             <!-- Jenis Kelamin dan Golongan Darah -->
             <div class="mb-5 sm:block md:flex items-center">
@@ -158,35 +196,24 @@
 <!-- Script Validasi -->
 <script>
     function validateForm() {
-        var requiredFields = document.querySelectorAll('select[required], input[required]');
-        for (var i = 0; i < requiredFields.length; i++) {
+        const requiredFields = document.querySelectorAll('select[required], input[required]');
+        for (let i = 0; i < requiredFields.length; i++) {
             if (!requiredFields[i].value) {
                 alert("Isi semua field.");
                 return false;
             }
         }
-        var submitButton = document.getElementById('submitButton');
+        const submitButton = document.getElementById('submitButton');
         submitButton.setAttribute('disabled', true);
         submitButton.innerHTML = 'Menyimpan...';
         return true;
     }
-</script>
 
-<script>
     document.addEventListener('DOMContentLoaded', function() {
         const noRMInput = document.querySelector('input[name="no_rkm_medis"]');
-        const form = document.getElementById('myForm');
 
-        // Enter langsung trigger blur
-        noRMInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                noRMInput.blur();
-            }
-        });
-
-        noRMInput.addEventListener('blur', async function() {
-            const noRM = this.value.trim();
+        async function fetchPasienByRM() {
+            const noRM = noRMInput.value.trim();
             if (!noRM) return;
 
             try {
@@ -199,63 +226,85 @@
                     return;
                 }
 
-                // Isi field dasar
+                // Autofill field
                 document.querySelector('input[name="nm_pasien"]').value = pasien.nm_pasien || '';
                 document.querySelector('select[name="jk"]').value = pasien.jk || '';
                 document.querySelector('select[name="gol_darah"]').value = pasien.gol_darah || '';
                 document.querySelector('input[name="tgl_lahir"]').value = pasien.tgl_lahir?.split('T')[0] || '';
+                document.querySelector('input[name="umur"]').value = pasien.umur || '';
+                const normalize = str => (str || '').trim().toUpperCase();
+                document.querySelector('select[name="stts_nikah"]').value = normalize(pasien.stts_nikah);
+                document.querySelector('select[name="agama"]').value = normalize(pasien.agama);
 
-                // Perbandingan teks stts_nikah
-                const nikahSelect = document.querySelector('select[name="stts_nikah"]');
-                for (const opt of nikahSelect.options) {
-                    if (opt.textContent.trim().toLowerCase() === (pasien.stts_nikah || '').toLowerCase()) {
-                        nikahSelect.value = opt.value;
-                        break;
-                    }
-                }
-
-                // Perbandingan teks agama
-                const agamaSelect = document.querySelector('select[name="agama"]');
-                for (const opt of agamaSelect.options) {
-                    if (opt.textContent.trim().toLowerCase() === (pasien.agama || '').toLowerCase()) {
-                        agamaSelect.value = opt.value;
-                        break;
-                    }
-                }
-
-                // Hitung umur otomatis
-                const umurField = document.querySelector('input[name="umur"]');
-                if (umurField && pasien.tgl_lahir) {
-                    const tglLahir = new Date(pasien.tgl_lahir);
-                    const today = new Date();
-                    let tahun = today.getFullYear() - tglLahir.getFullYear();
-                    let bulan = today.getMonth() - tglLahir.getMonth();
-                    let hari = today.getDate() - tglLahir.getDate();
-                    if (hari < 0) {
-                        bulan--;
-                        hari += 30;
-                    }
-                    if (bulan < 0) {
-                        tahun--;
-                        bulan += 12;
-                    }
-                    umurField.value = `${tahun} Th ${bulan} Bl ${hari} Hr`;
-                } else if (umurField) {
-                    umurField.value = pasien.umur || '';
-                }
 
             } catch (err) {
-                alert("Pasien tidak ditemukan.");
-                console.error(err);
+                console.error('Gagal mengambil data pasien:', err);
+            }
+        }
+
+        // Trigger blur saat tekan Enter
+        noRMInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                noRMInput.blur();
             }
         });
+
+        // Trigger autofill saat blur atau manual set
+        noRMInput.addEventListener('blur', fetchPasienByRM);
+        noRMInput.addEventListener('change', fetchPasienByRM); // ← penting
     });
+
+    // ----------------- Modal -----------------
+    function openModalPasien() {
+        const modal = document.getElementById('modalPasien');
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+
+        fetch("/pasienmeninggal/listpasien")
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('pasienTable');
+                tbody.innerHTML = "";
+
+                if (data.data && Array.isArray(data.data)) {
+                    data.data.forEach(pasien => {
+                        const row = `
+                            <tr class="border-b">
+                                <td class="p-2 border">${pasien.no_rkm_medis}</td>
+                                <td class="p-2 border">${pasien.nm_pasien}</td>
+                                <td class="p-2 border text-center">
+                                    <button type="button" onclick="selectPasien('${pasien.no_rkm_medis}')" style="color:#0A2D27" class="hover:underline">Pilih</button>
+                                </td>
+                            </tr>`;
+                        tbody.insertAdjacentHTML('beforeend', row);
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="3" class="text-center p-2 text-red-500">Data tidak ditemukan</td></tr>`;
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('pasienTable').innerHTML =
+                    `<tr><td colspan="3" class="text-center p-2 text-red-500">Gagal memuat data</td></tr>`;
+            });
+    }
+
+    function closeModalPasien() {
+        document.getElementById('modalPasien').classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    function selectPasien(nomorRM) {
+        const inputRM = document.getElementById('no_rkm_medis');
+        inputRM.value = nomorRM;
+
+        // ✅ Trigger autofill fetch
+        inputRM.dispatchEvent(new Event('change'));
+
+        closeModalPasien();
+    }
 </script>
-
-
-
-
-
 
 
 <?= $this->endSection(); ?>
