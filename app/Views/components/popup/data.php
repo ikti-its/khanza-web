@@ -6,12 +6,12 @@
                 echo 'Jumlah kolom dan label tidak sama';
                 return false;
             }
-            foreach($kolom as $k){
-                if(!isset($baris[$k])){
-                    echo 'Tidak ada kolom ' . $k . ' pada baris ' . $baris;
-                    return false;
-                }
-            }
+            // foreach($kolom as $k){
+            //     if(!isset($baris[$k])){
+            //         echo 'Tidak ada kolom ' . $k . ' pada baris ' . $baris;
+            //         return false;
+            //     }
+            // }
             for($i = 0; $i < sizeof($kolom); $i++){
                 echo view('components/popup/baris', [
                     'baris' => $baris,

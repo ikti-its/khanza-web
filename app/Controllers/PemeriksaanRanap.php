@@ -346,7 +346,7 @@ class PemeriksaanRanap extends BaseController
             'rtl'                => $this->request->getPost('rtl'),
             'instruksi'          => $this->request->getPost('instruksi'),
             'evaluasi'           => $this->request->getPost('evaluasi'),
-            'keluhan'          => $this->request->getPost('keluhan'),
+            'keluhan'            => $this->request->getPost('keluhan'),
             'pemeriksaan'           => $this->request->getPost('pemeriksaan'),
         ];
 
