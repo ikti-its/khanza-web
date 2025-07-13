@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Controllers;
+
 use App\Libraries\JWT;
+
 class auth extends BaseController
 {
     protected $api_url;
@@ -40,22 +43,22 @@ class auth extends BaseController
             // Get the email and password from the form
             $email = $this->request->getPost('email');
             $password = $this->request->getPost('password');
-    
+
             // Create an array with the login data
             $login_data = [
                 'email' => $email,
                 'password' => $password
             ];
-    
+
             // Convert the data to JSON
             $login_data_json = json_encode($login_data);
 
-    
+
             // Define the API endpoint URL
             $api_url = $this->api_url . '/auth/login';
-    
+
             $ch = curl_init($api_url);
-    
+
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $login_data_json);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -63,21 +66,21 @@ class auth extends BaseController
                 'Content-Type: application/json',
                 'Content-Length: ' . strlen($login_data_json)
             ]);
-    
+
             // Execute the cURL request
             $response = curl_exec($ch);
 
-    
+
             // Check the API response
             if ($response) {
                 // The API returned a response
                 $http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    
+
                 if ($http_status_code === 200) {
                     // Login success
                     $response_data = json_decode($response, true);
                     $token = $response_data['data']['token'];
-    
+
                     // Store the token securely (in a session variable)
                     session()->set('jwt_token', $token);
 
@@ -89,25 +92,28 @@ class auth extends BaseController
                         'Authorization: Bearer ' . $token,
                         'Content-Type: application/json'
                     ];
-    
+
                     // Initialize cURL session for user details
                     $user_details_ch = curl_init($user_details_url);
                     curl_setopt($user_details_ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($user_details_ch, CURLOPT_HTTPHEADER, $headers);
-    
+
                     // Execute the cURL request for user details
                     $user_details_response = curl_exec($user_details_ch);
-    
+
                     // Check the user details API response
                     if ($user_details_response) {
                         // Decode the JSON response
                         $user_details = json_decode($user_details_response, true);
-    
+
                         // Store user details in session along with the token
                         session()->set('user_details', $user_details['data']);
-    
+
                         // Close the cURL session for user details
                         curl_close($user_details_ch);
+
+                        dd(session()->get('user_details'));
+
 
                         // Check if the user role is 2 or 1
                         if ($user_details['data']['role'] == 2 || $user_details['data']['role'] == 1) {
@@ -167,5 +173,4 @@ class auth extends BaseController
         // If the form was not submitted or any other case where it doesn't validate or process login
         return view('login'); // Return the login view by default
     }
-
 }

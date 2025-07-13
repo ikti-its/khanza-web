@@ -1,5 +1,6 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
+<?= $this->include('components/modal/modalpasien') ?>
 
 <!-- Card Section -->
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
@@ -77,6 +78,8 @@
                                                         echo $waktuHariIni;
                                                         ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
             </div>
+
+            <!-- Nomor Rekam Medis dan Nama -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">
                     Nomor Rekam Medis<span class="text-red-600">*</span>
@@ -84,24 +87,23 @@
                 <div class="relative w-full md:w-1/4">
                     <input type="text" id="no_rkm_medis" name="no_rkm_medis"
                         class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white"
-                        placeholder="Nomor RM">
-                    <a href="/pasien/tambah"
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-blue-600"
-                        title="Tambah Pasien">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        placeholder="Nomor RM" required>
+                    <button type="button" onclick="openModalPasien()" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-blue-600" title="Pilih Pasien">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M18 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h6m5-3h5m0 0v5m0-5L10 14" />
                         </svg>
-                    </a>
-
+                    </button>
                 </div>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Nama<span class="text-red-600">*</span>
                 </label>
                 <input id="nama_pasien" name="nama"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
             </div>
+
 
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -193,36 +195,36 @@
 <!-- End Card Section -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-    const poliklinikSelect = document.getElementById("poliklinikSelect");
-    const dokterSelect = document.getElementById("dokterSelect");
+        const poliklinikSelect = document.getElementById("poliklinikSelect");
+        const dokterSelect = document.getElementById("dokterSelect");
 
-    const token = sessionStorage.getItem("token"); // Atau localStorage jika Anda menyimpan di sana
+        const token = sessionStorage.getItem("token"); // Atau localStorage jika Anda menyimpan di sana
 
-    fetch("http://127.0.0.1:8080/v1/dokterjaga/poliklinik-list", {
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-        }
-    })
-    .then(res => {
-        if (!res.ok) {
-            throw new Error("Gagal fetch poliklinik: " + res.status);
-        }
-        return res.json();
-    })
-    .then(res => {
-        if (res.status === "success") {
-            res.data.forEach(poli => {
-                const opt = document.createElement("option");
-                opt.value = poli;
-                opt.textContent = poli;
-                poliklinikSelect.appendChild(opt);
+        fetch("http://127.0.0.1:8080/v1/dokterjaga/poliklinik-list", {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("Gagal fetch poliklinik: " + res.status);
+                }
+                return res.json();
+            })
+            .then(res => {
+                if (res.status === "success") {
+                    res.data.forEach(poli => {
+                        const opt = document.createElement("option");
+                        opt.value = poli;
+                        opt.textContent = poli;
+                        poliklinikSelect.appendChild(opt);
+                    });
+                }
+            })
+            .catch(err => {
+                console.error("❌ Error:", err.message);
             });
-        }
-    })
-    .catch(err => {
-        console.error("❌ Error:", err.message);
-    });
 
         // On poliklinik change
         poliklinikSelect.addEventListener("change", function() {
@@ -231,77 +233,78 @@
             const token = sessionStorage.getItem("token");
 
             fetch(`http://127.0.0.1:8080/v1/dokterjaga/poliklinik/${encodeURIComponent(selectedPoli)}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                }
-            })
-            .then(res => {
-                if (!res.ok) throw new Error(`Gagal fetch dokter: ${res.status}`);
-                return res.json();
-            })
-            .then(res => {
-                if (res.status === "success" && Array.isArray(res.data)) {
-                    const now = new Date();
-                    const currentDay = normalizeDay(now.toLocaleDateString("id-ID", {
-                        weekday: "long"
-                    }));
-
-                    let dokterAktifCount = 0;
-
-                    res.data.forEach(dokter => {
-                        const hariKerja = normalizeDay(dokter.hari_kerja);
-                        const jamMulai = padTime(dokter.jam_mulai);
-                        const jamSelesai = padTime(dokter.jam_selesai);
-                        const isActive = (hariKerja === currentDay) && isDoctorOnShiftTime(jamMulai, jamSelesai);
-
-                        if (isActive) {
-                            const opt = document.createElement("option");
-                            opt.value = dokter.kode_dokter;
-                            opt.textContent = dokter.nama_dokter;
-                            dokterSelect.appendChild(opt);
-                            dokterAktifCount++;
-                        }
-                    });
-
-                    if (dokterAktifCount === 0) {
-                        dokterSelect.innerHTML = '<option disabled selected value="">Tidak ada dokter aktif saat ini</option>';
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
                     }
-                } else {
-                    console.warn("⚠️ Format data tidak valid:", res);
-                }
-            })
-            .catch(err => {
-                console.error("❌ Gagal mengambil data dokter:", err);
-            });
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error(`Gagal fetch dokter: ${res.status}`);
+                    return res.json();
+                })
+                .then(res => {
+                    if (res.status === "success" && Array.isArray(res.data)) {
+                        const now = new Date();
+                        const currentDay = normalizeDay(now.toLocaleDateString("id-ID", {
+                            weekday: "long"
+                        }));
 
-        // Normalize hari (e.g., "Selasa ") → "selasa"
-        function normalizeDay(day) {
-            return day.trim().toLowerCase().replace(/[^a-z]/g, "");
-        }
+                        let dokterAktifCount = 0;
 
-        // Pad time (e.g., "8:0:0" → "08:00:00")
-        function padTime(timeStr) {
-            const [h = "0", m = "0", s = "0"] = timeStr.split(":");
-            return `${h.padStart(2, "0")}:${m.padStart(2, "0")}:${s.padStart(2, "0")}`;
-        }
+                        res.data.forEach(dokter => {
+                            const hariKerja = normalizeDay(dokter.hari_kerja);
+                            const jamMulai = padTime(dokter.jam_mulai);
+                            const jamSelesai = padTime(dokter.jam_selesai);
+                            const isActive = (hariKerja === currentDay) && isDoctorOnShiftTime(jamMulai, jamSelesai);
 
-        // Compare current time with jam_mulai and jam_selesai (supports overnight shifts)
-        function isDoctorOnShiftTime(startTime, endTime) {
-            const now = new Date();
-            const nowSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+                            if (isActive) {
+                                const opt = document.createElement("option");
+                                opt.value = dokter.kode_dokter;
+                                opt.textContent = dokter.nama_dokter;
+                                dokterSelect.appendChild(opt);
+                                dokterAktifCount++;
+                            }
+                        });
 
-            const [startH, startM, startS] = startTime.split(":").map(Number);
-            const [endH, endM, endS] = endTime.split(":").map(Number);
+                        if (dokterAktifCount === 0) {
+                            dokterSelect.innerHTML = '<option disabled selected value="">Tidak ada dokter aktif saat ini</option>';
+                        }
+                    } else {
+                        console.warn("⚠️ Format data tidak valid:", res);
+                    }
+                })
+                .catch(err => {
+                    console.error("❌ Gagal mengambil data dokter:", err);
+                });
 
-            const startSec = startH * 3600 + startM * 60 + startS;
-            const endSec = endH * 3600 + endM * 60 + endS;
+            // Normalize hari (e.g., "Selasa ") → "selasa"
+            function normalizeDay(day) {
+                return day.trim().toLowerCase().replace(/[^a-z]/g, "");
+            }
 
-            return startSec < endSec ?
-                nowSec >= startSec && nowSec <= endSec :
-                nowSec >= startSec || nowSec <= endSec;
-        }
-    })});
+            // Pad time (e.g., "8:0:0" → "08:00:00")
+            function padTime(timeStr) {
+                const [h = "0", m = "0", s = "0"] = timeStr.split(":");
+                return `${h.padStart(2, "0")}:${m.padStart(2, "0")}:${s.padStart(2, "0")}`;
+            }
+
+            // Compare current time with jam_mulai and jam_selesai (supports overnight shifts)
+            function isDoctorOnShiftTime(startTime, endTime) {
+                const now = new Date();
+                const nowSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+
+                const [startH, startM, startS] = startTime.split(":").map(Number);
+                const [endH, endM, endS] = endTime.split(":").map(Number);
+
+                const startSec = startH * 3600 + startM * 60 + startS;
+                const endSec = endH * 3600 + endM * 60 + endS;
+
+                return startSec < endSec ?
+                    nowSec >= startSec && nowSec <= endSec :
+                    nowSec >= startSec || nowSec <= endSec;
+            }
+        })
+    });
 
     document.addEventListener("DOMContentLoaded", async function() {
         const select = document.querySelector("select[name='poliklinik']");
@@ -328,61 +331,64 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         const nomorRMInput = document.querySelector('input[name="no_rkm_medis"]');
-        const token = "<?= session()->get('jwt_token') ?>"; // ensure this prints a token
+        const token = "<?= session()->get('jwt_token') ?>";
 
-        // ✅ Trigger API when input loses focus
-        nomorRMInput.addEventListener('blur', function() {
-            const nomorRM = nomorRMInput.value.trim();
-            if (!nomorRM) {
-                console.log("❌ No nomor RM entered.");
-                return;
-            }
+        async function fetchAndFillPasien(noRM) {
+            if (!noRM) return;
 
-            console.log("📡 Fetching data for RM:", nomorRM);
-
-            fetch(`http://127.0.0.1:8080/v1/pasien/${encodeURIComponent(nomorRM)}`, {
+            try {
+                const response = await fetch(`http://127.0.0.1:8080/v1/pasien/${encodeURIComponent(noRM)}`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
                         'Authorization': 'Bearer ' + token
                     }
-                })
-                .then(response => {
-                    console.log("🔁 HTTP status:", response.status);
-                    return response.json();
-                })
-                .then(data => {
-                    console.log("✅ API response:", data);
-                    if (data.status === 'success' && data.data) {
-                        const pasien = data.data;
-
-                        document.getElementById('nama_pasien').value = pasien.nm_pasien || '';
-                        document.getElementById('jenis_kelamin').value = pasien.jk || '';
-                        document.getElementById('umur').value = pasien.umur || '';
-                        document.getElementById('penanggung_jawab').value = pasien.namakeluarga || '';
-                        document.getElementById('alamat_pj').value = pasien.alamatpj || '';
-                        document.getElementById('no_telp').value = pasien.no_tlp || '';
-                        document.getElementById('hubungan_pj').value = pasien.keluarga || '';
-
-                        const statusSelect = document.querySelector('select[name="status_registrasi"]');
-                        if (statusSelect) {
-                            statusSelect.value = 'Lama';
-                        }
-
-                    } else {
-                        console.warn("⚠️ Data pasien tidak ditemukan atau format salah.");
-                    }
-                })
-                .catch(error => {
-                    console.error("❌ Error calling API:", error);
                 });
+
+                console.log("🔁 HTTP status:", response.status);
+                const result = await response.json();
+                console.log("✅ API response:", result);
+
+                if (result.status === 'success' && result.data) {
+                    const pasien = result.data;
+
+                    const normalize = str => (str || '').trim().toUpperCase();
+                    document.getElementById('nama_pasien').value = pasien.nm_pasien || '';
+                    document.getElementById('jenis_kelamin').value = pasien.jk || '';
+                    document.getElementById('umur').value = pasien.umur || '';
+                    document.getElementById('penanggung_jawab').value = pasien.namakeluarga || '';
+                    document.getElementById('alamat_pj').value = pasien.alamatpj || '';
+                    document.getElementById('no_telp').value = pasien.no_tlp || '';
+                    document.getElementById('hubungan_pj').value = pasien.keluarga || '';
+
+                    const statusSelect = document.querySelector('select[name="status_registrasi"]');
+                    if (statusSelect) {
+                        statusSelect.value = 'Lama';
+                    }
+                } else {
+                    console.warn("⚠️ Pasien tidak ditemukan.");
+                }
+            } catch (err) {
+                console.error("❌ Error fetching pasien:", err);
+            }
+        }
+
+        // Blur: input manual
+        nomorRMInput.addEventListener('blur', function() {
+            const nomorRM = nomorRMInput.value.trim();
+            if (!nomorRM) return;
+            fetchAndFillPasien(nomorRM);
         });
 
-        // ✅ Optional: auto-trigger if input already has value
+        // Auto-trigger saat form sudah terisi sebelumnya
         if (nomorRMInput.value.trim()) {
             nomorRMInput.dispatchEvent(new Event('blur'));
         }
+
+
     });
+
+
 
     fetch("http://127.0.0.1:8080/v1/registrasi/dokter")
         .then(res => res.json())

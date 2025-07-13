@@ -18,14 +18,14 @@
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Bayi<span class="text-red-600">*</span></label>
                 <input type="text" id="nm_pasien" name="nm_pasien"
                     value="<?= old('nm_pasien', $form_data['nm_pasien'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Nama Bayi wajib diisi.">
             </div>
 
             <!-- Jenis Kelamin dan Panjang Badan -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin<span class="text-red-600">*</span></label>
                 <select id="jk" name="jk"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Jenis Kelamin wajib dipilih.">
                     <option value="" disabled <?= old('jk', $form_data['jk'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
                     <option value="L" <?= old('jk', $form_data['jk'] ?? '') === 'L' ? 'selected' : '' ?>>Laki-laki</option>
                     <option value="P" <?= old('jk', $form_data['jk'] ?? '') === 'P' ? 'selected' : '' ?>>Perempuan</option>
@@ -34,7 +34,7 @@
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Panjang Badan (cm)<span class="text-red-600">*</span></label>
                 <input type="number" step="0.1" id="pb" name="pb"
                     value="<?= old('pb', $form_data['pb'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Panjang Badan wajib diisi.">
             </div>
 
             <!-- Berat Badan dan Lingkar Dada -->
@@ -42,12 +42,12 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Berat Badan (gram)<span class="text-red-600">*</span></label>
                 <input type="number" step="0.1" id="bb" name="bb"
                     value="<?= old('bb', $form_data['bb'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Berat Badan wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Lingkar Dada (cm)<span class="text-red-600">*</span></label>
                 <input type="number" step="0.1" id="lk_dada" name="lk_dada"
                     value="<?= old('lk_dada', $form_data['lk_dada'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Lingkar Dada wajib diisi.">
             </div>
 
             <!-- Lingkar Kepala dan Lingkar Perut -->
@@ -55,51 +55,52 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Lingkar Kepala (cm)<span class="text-red-600">*</span></label>
                 <input type="number" step="0.1" id="lk_kepala" name="lk_kepala"
                     value="<?= old('lk_kepala', $form_data['lk_kepala'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Lingkar Kepala wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Lingkar Perut (cm)<span class="text-red-600">*</span></label>
                 <input type="number" step="0.1" id="lk_perut" name="lk_perut"
                     value="<?= old('lk_perut', $form_data['lk_perut'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Lingkar Perut wajib diisi.">
             </div>
 
-            <!-- Tempat Lahir dan Tanggal Lahir -->
+            <!-- Tanggal dan Jam Lahir -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tempat Lahir<span class="text-red-600">*</span></label>
-                <input type="text" id="tmp_lahir" name="tmp_lahir"
-                    value="<?= old('tmp_lahir', $form_data['tmp_lahir'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tanggal Lahir<span class="text-red-600">*</span></label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Lahir<span class="text-red-600">*</span></label>
                 <input type="date" id="tgl_lahir" name="tgl_lahir"
                     value="<?= old('tgl_lahir', $form_data['tgl_lahir'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
-            </div>
-
-            <!-- Umur dan Jam Lahir -->
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Umur<span class="text-red-600">*</span></label>
-                <input type="text" id="umur" name="umur"
-                    value="<?= old('umur', $form_data['umur'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Tanggal Lahir wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam Lahir<span class="text-red-600">*</span></label>
                 <input type="time" id="jam" name="jam"
                     value="<?= old('jam', $form_data['jam'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Jam Lahir wajib diisi.">
             </div>
+
+            <!-- Tempat Lahir dan Umur -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tempat Lahir<span class="text-red-600">*</span></label>
+                <input type="text" id="tmp_lahir" name="tmp_lahir"
+                    value="<?= old('tmp_lahir', $form_data['tmp_lahir'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Tempat Lahir wajib diisi.">
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur<span class="text-red-600">*</span></label>
+                <input type="text" id="umur" name="umur"
+                    value="<?= old('umur', $form_data['umur'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
+            </div>
+
 
             <!-- Tanggal Daftar dan No. SKL -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Daftar<span class="text-red-600">*</span></label>
                 <input type="date" id="tgl_daftar" name="tgl_daftar"
                     value="<?= old('tgl_daftar', $form_data['tgl_daftar'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Tanggal Daftar wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">No. SKL<span class="text-red-600">*</span></label>
                 <input type="text" id="no_skl" name="no_skl"
                     value="<?= old('no_skl', $form_data['no_skl'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
             </div>
 
             <!-- Nama Ibu dan Umur Ibu -->
@@ -107,25 +108,25 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama Ibu<span class="text-red-600">*</span></label>
                 <input type="text" id="nm_ibu" name="nm_ibu"
                     value="<?= old('nm_ibu', $form_data['nm_ibu'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Nama Ibu wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur Ibu<span class="text-red-600">*</span></label>
                 <input type="number" id="umur_ibu" name="umur_ibu"
                     value="<?= old('umur_ibu', $form_data['umur_ibu'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Umur Ibu wajib diisi.">
             </div>
 
             <!-- Nama Ayah dan Umur Ayah -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama Ayah<span class="text-red-600">*</span></label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama Ayah</label>
                 <input type="text" id="nm_ayah" name="nm_ayah"
                     value="<?= old('nm_ayah', $form_data['nm_ayah'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur Ayah<span class="text-red-600">*</span></label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur Ayah</label>
                 <input type="number" id="umur_ayah" name="umur_ayah"
                     value="<?= old('umur_ayah', $form_data['umur_ayah'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <!-- Alamat Ibu -->
@@ -136,7 +137,7 @@
                 <textarea id="alamat" name="alamat"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
                     rows="2"
-                    required><?= old('alamat', $form_data['alamat'] ?? '') ?></textarea>
+                    required data-error="Alamat Ibu wajib diisi."><?= old('alamat', $form_data['alamat'] ?? '') ?></textarea>
             </div>
 
             <!-- Judul Keterangan -->
@@ -151,14 +152,12 @@
                 </label>
                 <input type="text" id="penolong" name="penolong"
                     value="<?= old('penolong', $form_data['penolong'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Nama Penolong wajib diisi.">
 
                 <label for="keterangan" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Keterangan<span class="text-red-600">*</span>
-                </label>
+                    Keterangan</label>
                 <textarea id="keterangan" name="keterangan" rows="2"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required><?= old('keterangan', $form_data['keterangan'] ?? '') ?></textarea>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"><?= old('keterangan', $form_data['keterangan'] ?? '') ?></textarea>
             </div>
 
 
@@ -167,25 +166,25 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Diagnosa<span class="text-red-600">*</span></label>
                 <input type="text" id="diagnosa" name="diagnosa"
                     value="<?= old('diagnosa', $form_data['diagnosa'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Diagnosa wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Ketuban<span class="text-red-600">*</span></label>
                 <input type="text" id="ketuban" name="ketuban"
                     value="<?= old('ketuban', $form_data['ketuban'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Ketuban wajib diisi.">
             </div>
 
             <!-- Penyulit dan proses kelahiran -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Penyulit Kehamilan<span class="text-red-600">*</span></label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Penyulit Kehamilan</label>
                 <input type="text" id="penyulit_kehamilan" name="penyulit_kehamilan"
                     value="<?= old('penyulit_kehamilan', $form_data['penyulit_kehamilan'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Proses Kelahiran<span class="text-red-600">*</span></label>
                 <input type="text" id="proses_lahir" name="proses_lahir"
                     value="<?= old('proses_lahir', $form_data['proses_lahir'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Proses Kelahiran wajib diisi.">
             </div>
 
             <!-- Kelahiran ke dan Gravida -->
@@ -193,12 +192,12 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kelahiran Ke<span class="text-red-600">*</span></label>
                 <input type="text" id="kelahiran_ke" name="kelahiran_ke"
                     value="<?= old('kelahiran_ke', $form_data['kelahiran_ke'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Kelahiran Ke wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Gravida<span class="text-red-600">*</span></label>
                 <input type="text" id="gravida" name="gravida"
                     value="<?= old('gravida', $form_data['gravida'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Gravida wajib diisi.">
             </div>
 
             <!-- Para dan Abortus -->
@@ -206,12 +205,12 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Para<span class="text-red-600">*</span></label>
                 <input type="text" id="para" name="para"
                     value="<?= old('para', $form_data['para'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Para wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Abortus<span class="text-red-600">*</span></label>
                 <input type="text" id="abortus" name="abortus"
                     value="<?= old('abortus', $form_data['abortus'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Abortus wajib diisi.">
             </div>
 
             <!-- Judul Nilai APGAR -->
@@ -259,9 +258,15 @@
                                 <?php foreach ($deskripsi as $d): ?>
                                     <td class="border border-gray-300 px-4 py-2 text-left"><?= $d ?></td>
                                 <?php endforeach; ?>
-                                <td class="border border-gray-300 p-2"><input type="number" name="<?= $id ?>1" id="<?= $id ?>1" min="0" max="2" value="<?= old($id . '1', $form_data[$id . '1'] ?? '') ?>" class="w-full p-1 text-sm border rounded"></td>
-                                <td class="border border-gray-300 p-2"><input type="number" name="<?= $id ?>5" id="<?= $id ?>5" min="0" max="2" value="<?= old($id . '5', $form_data[$id . '5'] ?? '') ?>" class="w-full p-1 text-sm border rounded"></td>
-                                <td class="border border-gray-300 p-2"><input type="number" name="<?= $id ?>10" id="<?= $id ?>10" min="0" max="2" value="<?= old($id . '10', $form_data[$id . '10'] ?? '') ?>" class="w-full p-1 text-sm border rounded"></td>
+                                <td class="border border-gray-300 p-2"><input type="number" name="<?= $id ?>1" id="<?= $id ?>1" min="0" max="2" value="<?= old($id . '1', $form_data[$id . '1'] ?? '') ?>" class="w-full p-1 text-sm border rounded" required data-error="Nilai APGAR N 1' wajib diisi.">
+                                    <small id="error-<?= $id ?>1" class="text-red-500 text-xs mt-1 hidden">Angka tidak valid</small>
+                                </td>
+                                <td class="border border-gray-300 p-2"><input type="number" name="<?= $id ?>5" id="<?= $id ?>5" min="0" max="2" value="<?= old($id . '5', $form_data[$id . '5'] ?? '') ?>" class="w-full p-1 text-sm border rounded">
+                                    <small id="error-<?= $id ?>5" class="text-red-500 text-xs mt-1 hidden">Angka tidak valid</small>
+                                </td>
+                                <td class="border border-gray-300 p-2"><input type="number" name="<?= $id ?>10" id="<?= $id ?>10" min="0" max="2" value="<?= old($id . '10', $form_data[$id . '10'] ?? '') ?>" class="w-full p-1 text-sm border rounded">
+                                    <small id="error-<?= $id ?>10" class="text-red-500 text-xs mt-1 hidden">Angka tidak valid</small>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
 
@@ -269,13 +274,13 @@
                         <tr style="background-color: #E6F2EF;" class="font-semibold text-gray-800">
                             <td colspan="4" class="border border-gray-300 px-4 py-2 text-left">Jumlah Nilai</td>
                             <td class="border border-gray-300 p-2">
-                                <input type="number" name="n1" id="n1" value="<?= old('n1', $form_data['n1'] ?? '') ?>" class="w-full p-1 text-sm border rounded text-gray-900">
+                                <input type="number" name="n1" id="n1" value="<?= old('n1', $form_data['n1'] ?? '') ?>" class="w-full p-1 text-sm border rounded text-gray-900" readonly>
                             </td>
                             <td class="border border-gray-300 p-2">
-                                <input type="number" name="n5" id="n5" value="<?= old('n5', $form_data['n5'] ?? '') ?>" class="w-full p-1 text-sm border rounded text-gray-900">
+                                <input type="number" name="n5" id="n5" value="<?= old('n5', $form_data['n5'] ?? '') ?>" class="w-full p-1 text-sm border rounded text-gray-900" readonly>
                             </td>
                             <td class="border border-gray-300 p-2">
-                                <input type="number" name="n10" id="n10" value="<?= old('n10', $form_data['n10'] ?? '') ?>" class="w-full p-1 text-sm border rounded text-gray-900">
+                                <input type="number" name="n10" id="n10" value="<?= old('n10', $form_data['n10'] ?? '') ?>" class="w-full p-1 text-sm border rounded text-gray-900" readonly>
                             </td>
                         </tr>
 
@@ -291,14 +296,14 @@
                 </label>
                 <input type="text" id="resusitas" name="resusitas"
                     value="<?= old('resusitas', $form_data['resusitas'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Resusitas wajib diisi.">
 
                 <label for="mikasi" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Mikasi<span class="text-red-600">*</span>
                 </label>
                 <input type="text" id="mikasi" name="mikasi"
                     value="<?= old('mikasi', $form_data['mikasi'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Mikasi wajib diisi.">
             </div>
 
             <!-- Obat Diberikan dan Mikonium -->
@@ -308,14 +313,14 @@
                 </label>
                 <textarea id="obat" name="obat" rows="2"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required><?= old('obat', $form_data['obat'] ?? '') ?></textarea>
+                    required data-error="Obat Diberikan wajib diisi."><?= old('obat', $form_data['obat'] ?? '') ?></textarea>
 
                 <label for="mikonium" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Mikonium<span class="text-red-600">*</span>
                 </label>
                 <input type="text" id="mikonium" name="mikonium"
                     value="<?= old('mikonium', $form_data['mikonium'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Mikonium wajib diisi.">
             </div>
 
 
@@ -336,20 +341,8 @@
     Nilai APGAR hanya boleh antara 0 sampai 2.
 </div>
 
+<script src="<?= base_url('js/form-validation.js') ?>"></script>
 <script>
-    function validateForm() {
-        const required = document.querySelectorAll('input[required], select[required]');
-        for (let field of required) {
-            if (!field.value.trim()) {
-                alert("Harap isi semua field wajib.");
-                return false;
-            }
-        }
-        document.getElementById('submitButton').disabled = true;
-        document.getElementById('submitButton').innerText = 'Menyimpan...';
-        return true;
-    }
-
     // Apgar Score Auto Update + Validasi Maksimum Nilai
     function updateApgarTotal(prefix) {
         const fields = ['f', 'u', 't', 'r', 'w'];
@@ -358,43 +351,44 @@
 
         fields.forEach(field => {
             const input = document.getElementById(field + prefix);
-            if (input && input.value !== '') {
+            if (input) {
+                const errorMsg = document.getElementById('error-' + input.id);
                 let val = parseInt(input.value);
-                if (isNaN(val)) val = 0;
 
-                if (val > 2 || val < 0) {
-                    input.classList.add('border-red-500');
+                if (input.value !== '' && (isNaN(val) || val < 0 || val > 2)) {
+                    // Input invalid
+                    hasInvalid = true;
+                    input.classList.add('border-red-500', 'ring-1', 'ring-red-500', 'focus:ring-red-500');
+                    if (errorMsg) errorMsg.classList.remove('hidden');
 
                     // Tampilkan toast
                     const toast = document.getElementById('toast-apgar');
                     toast.classList.remove('hidden');
                     toast.classList.add('opacity-100');
-
-                    // Sembunyikan otomatis setelah 3 detik
                     setTimeout(() => {
-                        toast.classList.remove('hidden', 'opacity-0');
-                        toast.classList.add('opacity-100');
-
+                        toast.classList.add('opacity-0');
+                        setTimeout(() => toast.classList.add('hidden'), 300);
                     }, 3000);
 
                     input.value = '';
-                    return;
                 } else {
-                    input.classList.remove('border-red-500');
-                    total += val;
+                    // Input valid
+                    input.classList.remove('border-red-500', 'ring-1', 'ring-red-500', 'focus:ring-red-500');
+                    if (errorMsg) errorMsg.classList.add('hidden');
+
+                    if (!isNaN(val)) {
+                        total += val;
+                    }
                 }
             }
         });
 
         const totalInput = document.getElementById('n' + prefix);
         if (totalInput) {
-            totalInput.value = total;
-        }
-
-        if (hasInvalid) {
-            alert('Nilai APGAR hanya boleh antara 0 sampai 2.');
+            totalInput.value = hasInvalid ? '' : total;
         }
     }
+
 
     ['1', '5', '10'].forEach(minute => {
         ['f', 'u', 't', 'r', 'w'].forEach(field => {
@@ -404,6 +398,7 @@
             }
         });
     });
+
 
     // Format Float dengan 2 desimal
     ['pb', 'lk_perut', 'lk_dada', 'lk_kepala'].forEach(id => {
@@ -469,14 +464,7 @@
             jamLahirInput.addEventListener('change', updateUmur);
         }
 
-        const form = document.getElementById('myForm');
-        const nomorRM = document.getElementById('no_rkm_medis')?.value;
-        if (form) {
-            form.reset();
-            if (nomorRM) {
-                document.getElementById('no_rkm_medis').value = nomorRM;
-            }
-        }
+
     });
 </script>
 

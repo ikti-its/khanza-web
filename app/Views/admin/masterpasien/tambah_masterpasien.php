@@ -5,7 +5,7 @@
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <?= view('components/form/judul', ['judul' => 'Tambah Pasien Manual']) ?>
+        <?= view('components/form/judul', ['judul' => 'Input Data Pasien']) ?>
 
         <form action="<?= base_url('/masterpasien/simpanTambah') ?>" method="post" id="myForm" onsubmit="return validateForm()">
             <?= csrf_field() ?>
@@ -89,7 +89,7 @@
                 <select id="keluarga" name="keluarga" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="" disabled <?= old('keluarga', $form_data['keluarga'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
                     <?php
-                    $options_keluarga = ['DIRI SENDIRI', 'AYAH', 'IBU', 'ISTRI', 'SUAMI', 'ANAK', 'KAKAK', 'ADIK', 'PAMAN', 'BIBI', 'KAKEK', 'NENEK', 'SAUDARA', 'LAIN-LAIN'];
+                    $options_keluarga = ['DIRI SENDIRI', 'AYAH', 'IBU', 'ISTRI', 'SUAMI', 'ANAK', 'SAUDARA', 'LAIN-LAIN'];
                     foreach ($options_keluarga as $opt): ?>
                         <option value="<?= $opt ?>" <?= old('keluarga', $form_data['keluarga'] ?? '') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
                     <?php endforeach; ?>
@@ -318,15 +318,6 @@
 <!-- Script Validasi -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // 🔁 Reset Form + Simpan Nomor RM
-        const form = document.getElementById('myForm');
-        const nomorRM = document.getElementById('no_rkm_medis')?.value;
-        if (form) {
-            form.reset();
-            if (nomorRM) {
-                document.getElementById('no_rkm_medis').value = nomorRM;
-            }
-        }
 
         // 📅 Auto Hitung Umur
         const tglLahirInput = document.getElementById('tgl_lahir');

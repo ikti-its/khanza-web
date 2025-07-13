@@ -1,5 +1,7 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
+<?= $this->include('components/modal/modalpasien') ?>
+
 
 <!-- Card Section -->
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
@@ -9,28 +11,6 @@
 
         <form action="<?= base_url('/pasienmeninggal/simpanTambah') ?>" method="post" id="myForm" onsubmit="return validateForm()">
             <?= csrf_field() ?>
-
-            <!-- Modal Pilih Pasien -->
-            <div id="modalPasien" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
-                <div class="bg-white rounded-xl px-6 py-4 w-full max-w-md max-h-[75vh] overflow-y-auto shadow-lg">
-                    <div class="flex justify-between items-center mb-3">
-                        <h2 class="text-base font-semibold text-gray-800">Pilih Pasien</h2>
-                        <button onclick="closeModalPasien()" class="text-gray-500 hover:text-red-600 text-xl font-bold">&times;</button>
-                    </div>
-                    <table class="w-full text-sm text-center text-gray-700 border border-gray-300">
-                        <thead style="background-color: #E6F2EF;">
-                            <tr>
-                                <th class="p-2 border">No. RM</th>
-                                <th class="p-2 border">Nama Pasien</th>
-                                <th class="p-2 border">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pasienTable">
-                            <!-- Data dari AJAX -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
             <!-- Nomor RM dan Nama -->
             <div class="mb-5 sm:block md:flex items-center">
@@ -44,7 +24,7 @@
                     <input type="text" id="no_rkm_medis" name="no_rkm_medis"
                         value="<?= old('no_rkm_medis', $form_data['no_rkm_medis'] ?? '') ?>"
                         class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white"
-                        readonly required>
+                        placeholder="Nomor RM" readonly required>
                     <button type="button" onclick="openModalPasien()" title="Pilih Pasien"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-blue-600">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
@@ -66,32 +46,40 @@
 
             <!-- Jenis Kelamin dan Golongan Darah -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin<span class="text-red-600">*</span></label>
-                <select id="jk" name="jk"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
-                    <option value="" disabled <?= old('jk', $form_data['jk'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
-                    <option value="L" <?= old('jk', $form_data['jk'] ?? '') === 'L' ? 'selected' : '' ?>>Laki-laki</option>
-                    <option value="P" <?= old('jk', $form_data['jk'] ?? '') === 'P' ? 'selected' : '' ?>>Perempuan</option>
-                </select>
+                <?php
+                $jk  = old('jk',  $form_data['jk']  ?? '');
+                $gd  = old('gol_darah', $form_data['gol_darah'] ?? '');
+                $jk_text = $jk === 'L' ? 'Laki-laki' : ($jk === 'P' ? 'Perempuan' : '');
+                ?>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Golongan Darah<span class="text-red-600">*</span></label>
-                <select id="gol_darah" name="gol_darah"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
-                    <option value="" disabled <?= old('gol_darah', $form_data['gol_darah'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
-                    <?php foreach (['A', 'B', 'AB', 'O'] as $gd): ?>
-                        <option value="<?= $gd ?>" <?= old('gol_darah', $form_data['gol_darah'] ?? '') === $gd ? 'selected' : '' ?>><?= $gd ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <!-- Jenis Kelamin -->
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Jenis Kelamin<span class="text-red-600">*</span>
+                </label>
+                <input type="text" id="jk_display"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    value="<?= $jk_text ?>" readonly required>
+                <input type="hidden" id="jk" name="jk" value="<?= $jk ?>">
+
+                <!-- Golongan Darah -->
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Golongan Darah<span class="text-red-600">*</span>
+                </label>
+                <input type="text" id="gd_display"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    value="<?= $gd ?>" readonly required>
+                <input type="hidden" id="gol_darah" name="gol_darah" value="<?= $gd ?>">
             </div>
+
 
             <!-- Tanggal Lahir dan Umur -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Lahir</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Lahir<span class="text-red-600">*</span></label>
                 <input type="date" id="tgl_lahir" name="tgl_lahir"
                     value="<?= old('tgl_lahir', $form_data['tgl_lahir'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur<span class="text-red-600">*</span></label>
                 <input type="text" id="umur" name="umur"
                     value="<?= old('umur', $form_data['umur'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
@@ -99,37 +87,49 @@
 
             <!-- Status Nikah dan Agama -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Status Pernikahan</label>
-                <select id="stts_nikah" name="stts_nikah"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
-                    <option value="" disabled <?= old('stts_nikah', $form_data['stts_nikah'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
-                    <?php foreach (['MENIKAH', 'BELUM MENIKAH', 'JANDA', 'DUDA'] as $opt): ?>
-                        <option value="<?= $opt ?>" <?= old('stts_nikah', $form_data['stts_nikah'] ?? '') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <?php
+                $stts_nikah = old('stts_nikah', $form_data['stts_nikah'] ?? '');
+                $agama = old('agama', $form_data['agama'] ?? '');
+                ?>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Agama</label>
-                <select id="agama" name="agama"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
-                    <option value="" disabled <?= old('agama', $form_data['agama'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
-                    <?php foreach (['ISLAM', 'KRISTEN', 'KATOLIK', 'HINDU', 'BUDHA', 'KONG HU CHU', '-'] as $opt): ?>
-                        <option value="<?= $opt ?>" <?= old('agama', $form_data['agama'] ?? '') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <!-- Status Pernikahan -->
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Status Pernikahan<span class="text-red-600">*</span></label>
+                <input type="text" id="stts_nikah_display"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    value="<?= $stts_nikah ?>" readonly required>
+                <input type="hidden" id="stts_nikah" name="stts_nikah" value="<?= $stts_nikah ?>">
+
+                <!-- Agama -->
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Agama<span class="text-red-600">*</span></label>
+                <input type="text" id="agama_display"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    value="<?= $agama ?>" readonly required>
+                <input type="hidden" id="agama" name="agama" value="<?= $agama ?>">
             </div>
 
             <!-- Tanggal & Jam Meninggal -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Meninggal</label>
+                <!-- Tanggal Meninggal -->
+                <label for="tanggal" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Tanggal Meninggal<span class="text-red-600">*</span>
+                </label>
                 <input type="date" id="tanggal" name="tanggal"
                     value="<?= old('tanggal', $form_data['tanggal'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required data-error="Tanggal meninggal wajib diisi.">
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam Meninggal</label>
+                <!-- Jam Meninggal -->
+                <label for="jam" class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Jam Meninggal<span class="text-red-600">*</span>
+                </label>
                 <input type="time" id="jam" name="jam"
                     value="<?= old('jam', $form_data['jam'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required data-error="Jam meninggal tidak boleh kosong.">
             </div>
+
 
             <!-- ICDX Utama dan Sebab Langsung -->
             <div class="mb-5 sm:block md:flex items-center">
@@ -166,15 +166,15 @@
 
             <!-- Dokter -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kode Dokter</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kode Dokter<span class="text-red-600">*</span></label>
                 <input type="text" id="kode_dokter" name="kode_dokter"
                     value="<?= old('kode_dokter', $form_data['kode_dokter'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Dokter</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Dokter<span class="text-red-600">*</span></label>
                 <input type="text" id="nama_dokter" name="nama_dokter"
                     value="<?= old('nama_dokter', $form_data['nama_dokter'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <!-- Button -->
@@ -194,116 +194,84 @@
 <!-- End Card Section -->
 
 <!-- Script Validasi -->
-<script>
-    function validateForm() {
-        const requiredFields = document.querySelectorAll('select[required], input[required]');
-        for (let i = 0; i < requiredFields.length; i++) {
-            if (!requiredFields[i].value) {
-                alert("Isi semua field.");
-                return false;
-            }
-        }
-        const submitButton = document.getElementById('submitButton');
-        submitButton.setAttribute('disabled', true);
-        submitButton.innerHTML = 'Menyimpan...';
-        return true;
-    }
+<script src="<?= base_url('js/form-validation.js') ?>"></script>
 
-    document.addEventListener('DOMContentLoaded', function() {
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
         const noRMInput = document.querySelector('input[name="no_rkm_medis"]');
+
+        // elemen readonly + hidden
+        const jkHidden = document.querySelector('input[name="jk"]');
+        const jkDisplay = document.getElementById('jk_display');
+        const gdHidden = document.querySelector('input[name="gol_darah"]');
+        const gdDisplay = document.getElementById('gd_display');
+
+        const sttsNikahHidden = document.querySelector('input[name="stts_nikah"]');
+        const sttsNikahDisplay = document.getElementById('stts_nikah_display');
+
+        const agamaHidden = document.querySelector('input[name="agama"]');
+        const agamaDisplay = document.getElementById('agama_display');
+
+        const token = "<?= session()->get('jwt_token') ?>";
+
+        const jkText = v =>
+            v === 'L' ? 'Laki-laki' :
+            v === 'P' ? 'Perempuan' : '';
 
         async function fetchPasienByRM() {
             const noRM = noRMInput.value.trim();
             if (!noRM) return;
 
             try {
-                const response = await fetch(`<?= base_url('index.php/api/fetch-pasien-by-rm') ?>?no_rkm_medis=${encodeURIComponent(noRM)}`);
-                const result = await response.json();
-                const pasien = result.data;
+                const res = await fetch(
+                    `http://127.0.0.1:8080/v1/pasien/${encodeURIComponent(noRM)}`, {
+                        headers: {
+                            Accept: 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        }
+                    }
+                );
+                const json = await res.json();
+                const p = json.data;
 
-                if (!pasien || !pasien.no_rkm_medis) {
-                    alert("Pasien tidak ditemukan.");
-                    return;
-                }
+                if (!p?.no_rkm_medis) return alert('Pasien tidak ditemukan.');
 
-                // Autofill field
-                document.querySelector('input[name="nm_pasien"]').value = pasien.nm_pasien || '';
-                document.querySelector('select[name="jk"]').value = pasien.jk || '';
-                document.querySelector('select[name="gol_darah"]').value = pasien.gol_darah || '';
-                document.querySelector('input[name="tgl_lahir"]').value = pasien.tgl_lahir?.split('T')[0] || '';
-                document.querySelector('input[name="umur"]').value = pasien.umur || '';
-                const normalize = str => (str || '').trim().toUpperCase();
-                document.querySelector('select[name="stts_nikah"]').value = normalize(pasien.stts_nikah);
-                document.querySelector('select[name="agama"]').value = normalize(pasien.agama);
+                document.querySelector('input[name="nm_pasien"]').value = p.nm_pasien || '';
 
+                jkHidden.value = p.jk || '';
+                jkDisplay.value = jkText(p.jk);
+
+                gdHidden.value = p.gol_darah || '';
+                gdDisplay.value = p.gol_darah || '';
+
+                document.querySelector('input[name="tgl_lahir"]').value = (p.tgl_lahir || '').split('T')[0];
+                document.querySelector('input[name="umur"]').value = p.umur || '';
+
+                sttsNikahHidden.value = p.stts_nikah || '';
+                sttsNikahDisplay.value = p.stts_nikah || '';
+
+                agamaHidden.value = p.agama || '';
+                agamaDisplay.value = p.agama || '';
 
             } catch (err) {
-                console.error('Gagal mengambil data pasien:', err);
+                console.error('❌ Gagal mengambil data pasien:', err);
             }
         }
 
-        // Trigger blur saat tekan Enter
-        noRMInput.addEventListener('keydown', function(e) {
+        noRMInput.addEventListener('keydown', e => {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 noRMInput.blur();
             }
         });
 
-        // Trigger autofill saat blur atau manual set
         noRMInput.addEventListener('blur', fetchPasienByRM);
-        noRMInput.addEventListener('change', fetchPasienByRM); // ← penting
+        noRMInput.addEventListener('change', fetchPasienByRM);
+
+        if (noRMInput.value.trim()) {
+            noRMInput.dispatchEvent(new Event('blur'));
+        }
     });
-
-    // ----------------- Modal -----------------
-    function openModalPasien() {
-        const modal = document.getElementById('modalPasien');
-        modal.classList.remove('hidden');
-        document.body.classList.add('overflow-hidden');
-
-        fetch("/pasienmeninggal/listpasien")
-            .then(res => res.json())
-            .then(data => {
-                const tbody = document.getElementById('pasienTable');
-                tbody.innerHTML = "";
-
-                if (data.data && Array.isArray(data.data)) {
-                    data.data.forEach(pasien => {
-                        const row = `
-                            <tr class="border-b">
-                                <td class="p-2 border">${pasien.no_rkm_medis}</td>
-                                <td class="p-2 border">${pasien.nm_pasien}</td>
-                                <td class="p-2 border text-center">
-                                    <button type="button" onclick="selectPasien('${pasien.no_rkm_medis}')" style="color:#0A2D27" class="hover:underline">Pilih</button>
-                                </td>
-                            </tr>`;
-                        tbody.insertAdjacentHTML('beforeend', row);
-                    });
-                } else {
-                    tbody.innerHTML = `<tr><td colspan="3" class="text-center p-2 text-red-500">Data tidak ditemukan</td></tr>`;
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('pasienTable').innerHTML =
-                    `<tr><td colspan="3" class="text-center p-2 text-red-500">Gagal memuat data</td></tr>`;
-            });
-    }
-
-    function closeModalPasien() {
-        document.getElementById('modalPasien').classList.add('hidden');
-        document.body.classList.remove('overflow-hidden');
-    }
-
-    function selectPasien(nomorRM) {
-        const inputRM = document.getElementById('no_rkm_medis');
-        inputRM.value = nomorRM;
-
-        // ✅ Trigger autofill fetch
-        inputRM.dispatchEvent(new Event('change'));
-
-        closeModalPasien();
-    }
 </script>
 
 

@@ -294,7 +294,6 @@ $routes->get('pasienmeninggal/tambah-pasien', 'MasterPasien\PasienMeninggal_tamb
 ]);
 $routes->post('pasienmeninggal/simpanTambah', 'MasterPasien\PasienMeninggal_tambah::simpanTambah');
 $routes->get('api/fetch-pasien-by-rm', 'MasterPasien\PasienMeninggal_tambah::fetchPasienByRM');
-$routes->get('/pasienmeninggal/listpasien', 'MasterPasien\PasienMeninggal_tambah::getListPasien');
 
 //kelahiranbayi/tambah-pasien
 $routes->get('kelahiranbayi/tambah-pasien', 'MasterPasien\KelahiranBayi_tambah::tambahPasien', [
@@ -651,6 +650,9 @@ $routes->group('diagnosa', ['filter' => 'auth'], function ($routes) {
     $routes->get('audit', 'Diagnosa::tampilAudit', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
 });
 
+//Modal Routes
+$routes->get('/modalpasien/list', 'Modal\ModalPasien::listPasien');
+
 //Fitur Penggajian
 $fiturs = [
     ['AturanPenggajian\\', 'aturan-penggajian/', [
@@ -666,7 +668,7 @@ $fiturs = [
         ['UPMK', 'upmk']
     ]],
     ['MasterPasien\\', '', [
-        ['PasienController', 'masterpasien'],
+        ['MasterPasien', 'masterpasien'],
         ['DokterController', 'datadokter'],
         ['Instansi', 'datainstansi'],
         ['PasienMeninggal', 'pasienmeninggal'],
