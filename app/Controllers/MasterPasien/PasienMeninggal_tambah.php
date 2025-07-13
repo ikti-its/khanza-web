@@ -55,6 +55,36 @@ class PasienMeninggal_tambah extends BaseController
         $jsonPayload = json_encode($postData);
         $url = $this->api_url . "/pasienmeninggal";
 
+        $tanggal_meninggal = $this->request->getPost('tanggal');
+        $now = date('Y-m-d');
+
+        if ($tanggal_meninggal > $now) {
+            return redirect()->back()->withInput()->with('error', 'Silakan periksa kembali. Tanggal kematian tidak valid');
+        }
+
+        $tanggal_meninggal = $this->request->getPost('tanggal');
+        $jam_meninggal = $this->request->getPost('jam');
+        $now = date('Y-m-d');
+        $currentTime = date('H:i');
+
+        // Cek jika tanggal meninggal di masa depan
+        if ($tanggal_meninggal > $now) {
+            return redirect()->back()->withInput()->with('error', 'Silakan periksa kembali. Tanggal kematian tidak valid');
+        }
+
+        // Cek jika tanggal kematian lebih awal dari tanggal lahir
+        $tgl_lahir = $this->request->getPost('tgl_lahir');
+        if ($tgl_lahir && strtotime($tanggal_meninggal) < strtotime($tgl_lahir)) {
+            return redirect()->back()->withInput()->with('error', 'Tanggal kematian tidak boleh lebih awal dari tanggal lahir.');
+        }
+
+        // Jika tanggal meninggal hari ini, validasi jam tidak boleh melebihi jam sekarang
+        if ($tanggal_meninggal == $now && $jam_meninggal > $currentTime) {
+            return redirect()->back()->withInput()->with('error', 'Jam kematian tidak boleh melebihi waktu saat ini.');
+        }
+
+
+
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
 
@@ -72,9 +102,9 @@ class PasienMeninggal_tambah extends BaseController
             curl_close($ch);
 
             if ($response && in_array($http_status, [200, 201])) {
-                return redirect()->to('/pasienmeninggal')->with('success', 'Data pasien berhasil ditambahkan.');
+                return redirect()->to('/pasienmeninggal')->with('success', 'Data pasien meninggal telah dicatat');
             } else {
-                return redirect()->back()->withInput()->with('error', "Gagal menambahkan pasien. HTTP: $http_status");
+                return redirect()->back()->withInput()->with('error', 'Data pasien tidak dapat disimpan. Pasien sudah pernah dicatat sebagai meninggal.');
             }
         } else {
             return redirect()->to('/login')->with('error', 'Harap login terlebih dahulu.');
@@ -84,11 +114,14 @@ class PasienMeninggal_tambah extends BaseController
     public function fetchPasienByRM()
     {
         $no_rkm_medis = $this->request->getGet('no_rkm_medis');
+        if (!$no_rkm_medis) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'No RM kosong']);
+        }
+
         $url = 'http://localhost:8080/v1/masterpasien/' . urlencode($no_rkm_medis);
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // ❌ Jangan kirim Authorization dulu
         $response = curl_exec($ch);
         $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);

@@ -3,6 +3,7 @@
 namespace App\Controllers\MasterPasien;
 
 use App\Controllers\BaseController;
+use App\Services\NomorGeneratorService;
 
 class MasterPasien_tambah extends BaseController
 {
@@ -11,15 +12,22 @@ class MasterPasien_tambah extends BaseController
         if (!session()->has('jwt_token')) {
             return redirect()->to('/login')->with('error', 'Harap login terlebih dahulu.');
         }
-        $lastRM = $this->getLastNoRM(); // e.g. RM000007
-        $nextRM = $this->generateNextNoRM($lastRM); // e.g. RM000008
+
+        helper('autonomor_helper'); // panggil helper
+
+        // 🔁 Panggil service
+        $nomorGen = new \App\Services\NomorGeneratorService();
+
+        // 🔁 Generate No. RM
+        $lastRM = $nomorGen->getLastNoRM();
+        $nextRM = generateNextNoRM($lastRM);
+
 
         return view('admin/masterpasien/tambah_masterpasien', [
-            'title' => 'Tambah Pasien Manual',
+            'title' => 'Input Data Pasien',
             'no_rkm_medis' => $nextRM
         ]);
     }
-
 
     public function simpanTambah()
     {
@@ -27,9 +35,11 @@ class MasterPasien_tambah extends BaseController
             return redirect()->to('/masterpasien/tambah-pasien');
         }
 
-        $tgl_lahir_raw = $this->request->getPost('tgl_lahir');
-        $tgl_lahir_iso = $tgl_lahir_raw ? date('Y-m-d\TH:i:sP', strtotime($tgl_lahir_raw)) : null;
-        $tgl_daftar_iso = date('Y-m-d\TH:i:sP');
+        $tgl_lahir_raw   = $this->request->getPost('tgl_lahir');
+        $tgl_daftar_raw  = $this->request->getPost('tgl_daftar');
+
+        $tgl_lahir_iso   = $tgl_lahir_raw ? date('Y-m-d\TH:i:sP', strtotime($tgl_lahir_raw)) : null;
+        $tgl_daftar_iso  = $tgl_daftar_raw ? date('Y-m-d\TH:i:sP', strtotime($tgl_daftar_raw)) : null;
 
         $postData = [
             'no_rkm_medis' => $this->request->getPost('no_rkm_medis'),
@@ -97,40 +107,5 @@ class MasterPasien_tambah extends BaseController
         } else {
             return redirect()->to('/login')->with('error', 'Harap login terlebih dahulu.');
         }
-    }
-
-    private function getLastNoRM()
-    {
-        if (!session()->has('jwt_token')) return null;
-
-        $token = session()->get('jwt_token');
-
-        $ch = curl_init($this->api_url . "/masterpasien?limit=1&sort=desc");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-            'Accept: application/json'
-        ]);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        if ($response) {
-            $data = json_decode($response, true);
-            $lastData = $data['data'][0]['no_rkm_medis'] ?? null;
-            return $lastData;
-        }
-
-        return null;
-    }
-
-    private function generateNextNoRM($lastNo)
-    {
-        if (!$lastNo || !preg_match('/^RM(\d{6})$/', $lastNo, $match)) {
-            return 'RM000001'; // Default kalau kosong / tidak cocok format
-        }
-
-        $lastNum = (int) $match[1];
-        $nextNum = $lastNum + 1;
-        return 'RM' . str_pad($nextNum, 6, '0', STR_PAD_LEFT);
     }
 }

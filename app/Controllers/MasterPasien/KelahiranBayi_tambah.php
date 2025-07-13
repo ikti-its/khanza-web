@@ -3,6 +3,8 @@
 namespace App\Controllers\MasterPasien;
 
 use App\Controllers\BaseController;
+use App\Services\NomorGeneratorService;
+
 
 class KelahiranBayi_tambah extends BaseController
 {
@@ -14,13 +16,27 @@ class KelahiranBayi_tambah extends BaseController
             return redirect()->to('/login')->with('error', 'Harap login terlebih dahulu.');
         }
 
-        $lastRM = $this->getLastNoRM(); // contoh: RM000007
-        $nextRM = $this->generateNextNoRM($lastRM); // contoh: RM000008
+        helper('autonomor_helper');
+
+        // 🔁 Panggil service
+        $nomorGen = new \App\Services\NomorGeneratorService();
+
+        // 🔁 Generate No. RM
+        $lastRM = $nomorGen->getLastNoRM();
+        $nextRM = generateNextNoRM($lastRM);
+
+        // 🔁 Generate No. SKL
+        $tgl_lahir = date('Y-m-d');
+        $bulan = date('m', strtotime($tgl_lahir));
+        $tahun = date('Y', strtotime($tgl_lahir));
+        $lastSKL = $nomorGen->getLastSKL($bulan, $tahun);
+        $nextSKL = generateNextSKL($lastSKL, $tgl_lahir);
 
         return view('admin/masterpasien/tambah_kelahiranbayi', [
             'title' => 'Form Tambah Kelahiran Bayi',
             'form_data' => [
-                'no_rkm_medis' => $nextRM
+                'no_rkm_medis' => $nextRM,
+                'no_skl' => $nextSKL
             ]
         ]);
     }
@@ -195,40 +211,5 @@ class KelahiranBayi_tambah extends BaseController
         } else {
             return redirect()->to('/login')->with('error', 'Harap login terlebih dahulu.');
         }
-    }
-
-    private function getLastNoRM()
-    {
-        if (!session()->has('jwt_token')) return null;
-
-        $token = session()->get('jwt_token');
-
-        $ch = curl_init($this->api_url . "/masterpasien?limit=1&sort=desc");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
-            'Accept: application/json'
-        ]);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        if ($response) {
-            $data = json_decode($response, true);
-            $lastData = $data['data'][0]['no_rkm_medis'] ?? null;
-            return $lastData;
-        }
-
-        return null;
-    }
-
-    private function generateNextNoRM($lastNo)
-    {
-        if (!$lastNo || !preg_match('/^RM(\d{6})$/', $lastNo, $match)) {
-            return 'RM000001';
-        }
-
-        $lastNum = (int) $match[1];
-        $nextNum = $lastNum + 1;
-        return 'RM' . str_pad($nextNum, 6, '0', STR_PAD_LEFT);
     }
 }

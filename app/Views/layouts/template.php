@@ -207,6 +207,9 @@
         <script src="<?= base_url('/css/preline/preline.js') ?>"></script>
     </div>
 
+    <!-- Script SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         window.openModal = function(modalId) {
             document.getElementById(modalId).style.display = 'block'
@@ -218,6 +221,9 @@
             document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
         }
     </script>
+
+    <!-- SweetAlert Flash Message -->
+    <?= view('components/alerts') ?>
 </body>
 
 </html>
