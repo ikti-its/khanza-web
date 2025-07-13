@@ -112,9 +112,6 @@ class auth extends BaseController
                         // Close the cURL session for user details
                         curl_close($user_details_ch);
 
-                        dd(session()->get('user_details'));
-
-
                         // Check if the user role is 2 or 1
                         if ($user_details['data']['role'] == 2 || $user_details['data']['role'] == 1) {
                             // If the user role is 2 or 1, make another API request
