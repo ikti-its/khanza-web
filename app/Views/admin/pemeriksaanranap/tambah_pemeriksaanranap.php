@@ -64,7 +64,7 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">GCS (E,V,M)<span class="text-red-600">*</span></label>
-                <input type="number" name="jumlah" min="3" step="1" max="15" name="gcs" placeholder="e.g., 15" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="number" name="gcs" min="3" step="1" max="15" name="gcs" placeholder="e.g., 15" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">TD (mmHg)<span class="text-red-600">*</span></label>
                 <input type="text" placeholder="e.g., 120/80"
                         pattern="^\d{2,3}/\d{2,3}$"
