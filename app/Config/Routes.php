@@ -560,10 +560,10 @@ $routes->group('stokobatpasien', ['filter' => 'auth'], function ($routes) {
 
 //Pemeriksaan Ranap
 $routes->group('pemeriksaanranap', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', 'PemeriksaanRanap::dataPemeriksaanRanap', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
-    $routes->get('by-rawat/(:segment)', 'PemeriksaanRanap::dataPemeriksaanRanapDetail/$1', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
+    $routes->get('/', 'PemeriksaanRanap::dataPemeriksaanRanap', ['filter' => 'checkpermission:1337,1,3,4001,4002,4003,4004']);
+    $routes->get('by-rawat/(:segment)', 'PemeriksaanRanap::dataPemeriksaanRanapDetail/$1', ['filter' => 'checkpermission:1337,1,3,4001,4002,4003,4004']);
     $routes->get('tambah', 'PemeriksaanRanap::tambahPemeriksaanRanap', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
-    $routes->get('tambah/(:any)', 'PemeriksaanRanap::tambahPemeriksaanRanap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
+    $routes->get('tambah/(:any)', 'PemeriksaanRanap::tambahPemeriksaanRanap/$1', ['filter' => 'checkpermission:1337,1,2,3,4,4001,4002,4003,4004']);
     $routes->post('submittambah', 'PemeriksaanRanap::submitTambahPemeriksaanRanap', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->get('edit/(:any)', 'PemeriksaanRanap::editPemeriksaanRanap/$1', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
     $routes->post('submitedit', 'PemeriksaanRanap::submitEditPemeriksaanRanap', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);

@@ -64,32 +64,53 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">GCS (E,V,M)<span class="text-red-600">*</span></label>
-                <input name="gcs" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="number" name="jumlah" min="3" step="1" max="15" name="gcs" placeholder="e.g., 15" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">TD (mmHg)<span class="text-red-600">*</span></label>
-                <input name="tensi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="text" placeholder="e.g., 120/80"
+                        pattern="^\d{2,3}/\d{2,3}$"
+                        title="Format harus dua atau tiga digit, garis miring, dua atau tiga digit (contohnya 120/80)" name="tensi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">HR (x/menit)<span class="text-red-600">*</span></label>
-                <input name="nadi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input  type="number" min="30"
+  max="250"
+  step="1"
+  placeholder="e.g., 75" name="nadi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">RR (x/menit)<span class="text-red-600">*</span></label>
-                <input name="respirasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input  type="number" min="8"
+  max="40"
+  step="1"
+  placeholder="e.g., 18" name="respirasi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Suhu (°C)<span class="text-red-600">*</span></label>
-                <input name="suhu_tubuh" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="number"  min="35"
+  max="42"
+  step="0.1"
+  placeholder="e.g., 37" name="suhu_tubuh" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">SpO2 (%)<span class="text-red-600">*</span></label>
-                <input name="spo2" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input type="number"  min="70"
+  max="100"
+  step="1"
+  placeholder="e.g., 98" name="spo2" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Tinggi (cm)<span class="text-red-600">*</span></label>
-                <input name="tinggi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input     min="30"
+    max="250"
+    step="1"
+    placeholder="e.g., 170"
+     name="tinggi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
                 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Berat (kg)<span class="text-red-600">*</span></label>
-                <input name="berat" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <input  type="number"   min="1"
+    max="300"
+    step="0.1"
+    placeholder="e.g., 65.5" name="berat" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">

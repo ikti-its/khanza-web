@@ -595,7 +595,7 @@
                     ['Unit Gawat Darurat', '/ugd', 'ugd', '', $petugasdokterrole, []],
                     ['Ambulans', '/ambulans', 'ambulans', '', $petugasrole, []],
                     ['Tindakan', '/tindakan', 'tindakan', '', $petugasrole, []],
-                    ['Pemeriksaan', '/pemeriksaanranap', 'pemeriksaan', '', $petugasrole, []],
+                    ['Pemeriksaan', '/pemeriksaanranap', 'pemeriksaan', '', $petugasdokterrole, []],
                     ['Dokter Jaga', '/dokterjaga', 'dokter_jaga', '', $petugasrole, []],
                     ['Resep Obat', '/resepobat', 'resep_obat', '', $petugasdokterrole, []],
                     ['Pemberian Obat', '/pemberianobat', 'pemberian_obat', '', $petugasrole, []],

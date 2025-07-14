@@ -245,11 +245,6 @@
                                     Tambah Observasi Rawat Inap Post Partum
                                 </a>
                             </li>
-                            <li>
-                                <a href="/diagnosa/from-rawatinap/<?= $baris['nomor_rawat'] ?>" class="block py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-neutral-800">
-                                    Tambah Diagnosa
-                                </a>
-                            </li>
                         </ul>
                     </div>
                 </div>

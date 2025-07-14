@@ -1,5 +1,10 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
+<!-- Tom Select CSS -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+
+<!-- Tom Select JS -->
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 
 <!-- Card Section -->
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
@@ -39,8 +44,9 @@
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label for="obat-select" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pilih Obat:</label>
-                <select id="obat-select" multiple class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-3/4 dark:border-gray-600 dark:text-white">
+            <label for="obat-select" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pilih Obat:</label>
+            <div class="w-full md:w-3/4">
+                <select id="obat-select" multiple class="w-full border border-gray-300 text-gray-900 text-sm rounded-lg dark:border-gray-600 dark:text-white">
                     <?php foreach ($obat_list as $obat): ?>
                         <?php if (isset($obat['kode_obat'], $obat['nama_obat'])): ?>
                             <option value="<?= $obat['kode_obat'] ?>" data-nama="<?= $obat['nama_obat'] ?>" data-kode="<?= $obat['kode_obat'] ?>">
@@ -50,6 +56,8 @@
                     <?php endforeach; ?>
                 </select>
             </div>
+        </div>
+
 
 
             <!-- Input fields will be injected here -->
@@ -110,6 +118,19 @@ async function loadDokterOptions() {
 }
 
 document.addEventListener("DOMContentLoaded", loadDokterOptions);
+document.addEventListener("DOMContentLoaded", function () {
+    // Initialize searchable multiselect
+    new TomSelect("#obat-select", {
+        maxItems: null,
+        plugins: ['remove_button'],
+        placeholder: 'Cari dan pilih obat...',
+        persist: false,
+        create: false
+    });
+
+    // Load dokter options
+    loadDokterOptions();
+});
 
 const obatSelect = document.getElementById("obat-select");
 const container = document.getElementById("obat-input-container");

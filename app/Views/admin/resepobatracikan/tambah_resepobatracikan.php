@@ -1,7 +1,11 @@
 @ -1,255 +1,276 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
+<!-- Tom Select CSS -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
 
+<!-- Tom Select JS -->
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 <!-- Card Section -->
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <!-- Card -->
@@ -58,21 +62,27 @@
                 <input name="keterangan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
-            <div class="mb-5 sm:block md:flex items-center">
-                <label for="obat-select" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Pilih Obat:</label>
-                <select id="obat-select" multiple class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-3/4 dark:border-gray-600 dark:text-white">
-                    <?php foreach ($obat_list as $obat): ?>
-                        <option 
-                            value="<?= $obat['kode_obat'] ?>"
-                            data-nama="<?= $obat['nama_obat'] ?>"
-                            data-stok="<?= $obat['stok'] ?? 0 ?>"
-                            data-kapasitas="<?= $obat['kapasitas'] ?? 0 ?>"
-                        >
-                            <?= $obat['nama_obat'] ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+<div class="mb-5 sm:block md:flex items-center">
+    <label for="obat-select" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+        Pilih Obat:
+    </label>
+    <div class="w-full md:w-3/4">
+        <select id="obat-select" multiple
+            class="w-full text-gray-900 text-sm rounded-lg p-2 dark:border-gray-600 dark:text-white">
+            <?php foreach ($obat_list as $obat): ?>
+                <option 
+                    value="<?= $obat['kode_obat'] ?>"
+                    data-nama="<?= $obat['nama_obat'] ?>"
+                    data-stok="<?= $obat['stok'] ?? 0 ?>"
+                    data-kapasitas="<?= $obat['kapasitas'] ?? 0 ?>"
+                >
+                    <?= $obat['nama_obat'] ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
 
 
             <!-- Input fields will be injected here -->
@@ -139,114 +149,117 @@ async function loadDokterOptions() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", loadDokterOptions);
+document.addEventListener("DOMContentLoaded", () => {
+  loadDokterOptions();
 
+  // ✅ Apply Tom Select for searchable multi-obat selection
+  new TomSelect("#obat-select", {
+    maxItems: null,
+    plugins: ['remove_button'],
+    placeholder: "Cari dan pilih obat...",
+    persist: false,
+    create: false
+  });
 
-sessionStorage.setItem('jwt_token', "<?= session('jwt_token') ?>");
+  sessionStorage.setItem('jwt_token', "<?= session('jwt_token') ?>");
 
-const obatSelect = document.getElementById("obat-select");
-const container = document.getElementById("obat-input-container");
+  const obatSelect = document.getElementById("obat-select");
+  const container = document.getElementById("obat-input-container");
 
-obatSelect.addEventListener("change", function () {
+  obatSelect.addEventListener("change", function () {
     const selectedValues = Array.from(obatSelect.selectedOptions).map(opt => opt.value);
 
     selectedValues.forEach(kode => {
-        const inputId = `group-${kode}`;
-        const existing = document.getElementById(inputId);
+      const inputId = `group-${kode}`;
+      const existing = document.getElementById(inputId);
 
-        if (!existing) {
-            const option = Array.from(obatSelect.options).find(opt => opt.value === kode);
-            const nama = option?.getAttribute("data-nama") || '';
+      if (!existing) {
+        const option = Array.from(obatSelect.options).find(opt => opt.value === kode);
+        const nama = option?.getAttribute("data-nama") || '';
 
-            fetch(`http://127.0.0.1:8080/v1/gudang-barang/${kode}`, {
-                headers: {
-                    "Authorization": `Bearer ${sessionStorage.getItem('token')}`,
-                    "Accept": "application/json"
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                console.log("📦 Response gudang-barang:", data);
-                console.log("➡️ kapasitas:", data?.data?.kapasitas);
-                console.log("📦 data.data:", data);
-                const stok = data?.data?.stok ?? '0';
-                const innerData = data?.data ?? {};
-                const kapasitas = innerData.kapasitas ?? '0';
+        fetch(`http://127.0.0.1:8080/v1/gudang-barang/${kode}`, {
+          headers: {
+            "Authorization": `Bearer ${sessionStorage.getItem('token')}`,
+            "Accept": "application/json"
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          const stok = data?.data?.stok ?? '0';
+          const kapasitas = data?.data?.kapasitas ?? '0';
 
-                const wrapper = document.createElement("div");
-                wrapper.id = `group-${kode}`;
-                wrapper.classList.add("mb-6", "border", "p-4", "rounded-xl", "shadow-sm");
+          const wrapper = document.createElement("div");
+          wrapper.id = `group-${kode}`;
+          wrapper.classList.add("mb-6", "border", "p-4", "rounded-xl", "shadow-sm");
 
-                wrapper.innerHTML = `
-                    <div class="flex items-center mb-2">
-                        <input type="checkbox" id="checkbox-${kode}" class="checkbox-kode mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded" checked>
-                        <label for="checkbox-${kode}" class="text-sm font-bold text-gray-900 dark:text-white">
-                            ${nama} <span class="text-xs text-gray-500">(Stok: ${stok})</span>
-                        </label>
-                    </div>
+          wrapper.innerHTML = `
+            <div class="flex items-center mb-2">
+              <input type="checkbox" id="checkbox-${kode}" class="checkbox-kode mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded" checked>
+              <label for="checkbox-${kode}" class="text-sm font-bold text-gray-900 dark:text-white">
+                ${nama} <span class="text-xs text-gray-500">(Stok: ${stok})</span>
+              </label>
+            </div>
 
-                    <!-- Row: Stok & Kapasitas -->
-                    <div class="mb-5 sm:block md:flex items-center">
-                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Stok</label>
-                        <input type="number" step="0.01" name="stok[${kode}]" value="${stok}" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" readonly>
+            <div class="mb-5 sm:block md:flex items-center">
+              <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Stok</label>
+              <input type="number" step="0.01" name="stok[${kode}]" value="${stok}" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" readonly>
 
-                        <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Kapasitas</label>
-                        <input type="number" step="0.01" name="kapasitas[${kode}]" value="${kapasitas}" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly>
-                    </div>
+              <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Kapasitas</label>
+              <input type="number" step="0.01" name="kapasitas[${kode}]" value="${kapasitas}" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly>
+            </div>
 
-                    <!-- Row: P1 & P2 -->
-                    <div class="mb-5 sm:block md:flex items-center">
-                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">P1/P2<span class="text-red-600">*</span></label>
-                        <div class="flex gap-4">
-                            <input type="text" name="p1[${kode}]" placeholder="P1" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-1/4 dark:border-gray-600 dark:text-white" required>
-                            /
-                            <input type="text" name="p2[${kode}]" placeholder="P2" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-1/4 dark:border-gray-600 dark:text-white" required>
-                        </div>
-                    </div>
+            <div class="mb-5 sm:block md:flex items-center">
+              <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">P1/P2<span class="text-red-600">*</span></label>
+              <div class="flex gap-4">
+                <input type="text" name="p1[${kode}]" placeholder="P1" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-1/4 dark:border-gray-600 dark:text-white" required>
+                /
+                <input type="text" name="p2[${kode}]" placeholder="P2" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-1/4 dark:border-gray-600 dark:text-white" required>
+              </div>
+            </div>
 
-                    <!-- Row: Kandungan & Jumlah -->
-                    <div class="mb-5 sm:block md:flex items-center">
-                        <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kandungan<span class="text-red-600">*</span></label>
-                        <input type="number" step="0.01" name="kandungan_input[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
+            <div class="mb-5 sm:block md:flex items-center">
+              <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kandungan<span class="text-red-600">*</span></label>
+              <input type="number" step="0.01" name="kandungan_input[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
 
-                        <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jumlah</label>
-                        <input type="number" step="0.01" name="jml_input[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly>
-                    </div>
+              <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jumlah</label>
+              <input type="number" step="0.01" name="jml_input[${kode}]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly>
+            </div>
 
-                    <input type="hidden" name="kode_barang[]" value="${kode}">
-                `;
+            <input type="hidden" name="kode_barang[]" value="${kode}">
+          `;
 
-                container.appendChild(wrapper);
+          container.appendChild(wrapper);
 
-                // Remove section if checkbox is unchecked
-                document.getElementById(`checkbox-${kode}`).addEventListener("change", function () {
-                    if (!this.checked) {
-                        document.getElementById(`group-${kode}`)?.remove();
-                    }
-                });
-            })
-            .catch(err => {
-                console.error(`Failed to fetch data for kode ${kode}:`, err);
-            });
-        }
+          document.getElementById(`checkbox-${kode}`).addEventListener("change", function () {
+            if (!this.checked) {
+              document.getElementById(`group-${kode}`)?.remove();
+              option.selected = false;
+              obatSelect.dispatchEvent(new Event('change'));
+            }
+          });
+        })
+        .catch(err => {
+          console.error(`Failed to fetch data for kode ${kode}:`, err);
+        });
+      }
     });
 
-    // Clean up removed options
+    // 🔄 Remove wrappers for unselected items
     Array.from(obatSelect.options).forEach(option => {
-        const kode = option.value;
-        if (!selectedValues.includes(kode)) {
-            const toRemove = document.getElementById(`group-${kode}`);
-            if (toRemove) toRemove.remove();
-        }
+      const kode = option.value;
+      if (!selectedValues.includes(kode)) {
+        document.getElementById(`group-${kode}`)?.remove();
+      }
     });
+  });
 });
 
 
 document.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("obat-input-container"); // ✅ make sure this is defined
     const jumlahRacikInput = document.querySelector('input[name="jml_dr"]');
 
     container.addEventListener("input", function (e) {
-        // Only trigger on kandungan, P1, or P2 input changes
         const name = e.target.name;
         if (!name.startsWith("kandungan_input") && !name.startsWith("p1[") && !name.startsWith("p2[")) return;
 
@@ -262,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const jumlahInput = document.querySelector(`input[name="jml_input[${kode}]"]`);
 
-        if (kapasitas > 0 && kandungan > 0 && jumlahRacik > 0 && p2 !== 0) {
+        if (jumlahInput && kapasitas > 0 && kandungan > 0 && jumlahRacik > 0 && p2 !== 0) {
             const jumlah = (kandungan / kapasitas) * jumlahRacik * (p1 / p2);
             jumlahInput.value = jumlah.toFixed(2);
         }
