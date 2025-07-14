@@ -11,16 +11,19 @@ class Instansi extends BaseController
         ['title' => 'User', 'icon' => 'user'],
         ['title' => 'Instansi', 'icon' => 'instansi'],
     ];
-    protected string $modul_path  = '/datainstansi';
-    protected string $api_path = '/datainstansi';
-    protected string $kolom_id = 'kode_instansi'; // harus sama persis dengan response
+    protected string $modul_path  = '/instansi';
+    protected string $api_path = '/instansi';
+    protected string $nama_tabel = 'data_instansi';
+    protected string $kolom_id = 'kode_instansi';
     protected array $aksi = [
+        'notif'    => false,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
-        'detail'   => false,
+        'detail'   => true,
         'ubah'     => true,
-        'hapus'    => true,
-        'pilih'    => true
+        'hapus'    => true
     ];
     protected array $konfig = [
         // [visible, Display, Kolom, Jenis, Required, *Opsi]

@@ -1,5 +1,6 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
+<?= $this->include('components/modal/modalinstansi') ?>
 
 <!-- Card Section -->
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
@@ -24,13 +25,13 @@
                 <input id="nm_pasien" name="nm_pasien"
                     value="<?= old('nm_pasien', $form_data['nm_pasien'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required>
+                    required data-error="Nama Pasien wajib diisi.">
             </div>
 
             <!-- Jenis Kelamin dan Golongan Darah -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin<span class="text-red-600">*</span></label>
-                <select id="jk" name="jk" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <select id="jk" name="jk" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Jenis Kelamin Wajib Dipilih.">
                     <option value="" disabled <?= old('jk', $form_data['jk'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
                     <option value="L" <?= old('jk', $form_data['jk'] ?? '') === 'L' ? 'selected' : '' ?>>Laki-laki</option>
                     <option value="P" <?= old('jk', $form_data['jk'] ?? '') === 'P' ? 'selected' : '' ?>>Perempuan</option>
@@ -51,13 +52,13 @@
                 <input type="text" id="tmp_lahir" name="tmp_lahir"
                     value="<?= old('tmp_lahir', $form_data['tmp_lahir'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required>
+                    required data-error="Tempat Lahir wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Tanggal Lahir<span class="text-red-600">*</span></label>
                 <input type="date" id="tgl_lahir" name="tgl_lahir"
                     value="<?= old('tgl_lahir', $form_data['tgl_lahir'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required>
+                    required data-error="Tanggal Lahir wajib diisi.">
             </div>
 
             <!-- Umur dan Pendidikan -->
@@ -68,8 +69,8 @@
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
                     readonly required>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pendidikan</label>
-                <select id="pnd" name="pnd" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pendidikan<span class="text-red-600">*</span></label>
+                <select id="pnd" name="pnd" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Pendidikan wajib dipilih.">
                     <option value="" disabled <?= old('pnd', $form_data['pnd'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
                     <?php foreach (['TS', 'TK', 'SD', 'SMP', 'SMA', 'SLTA/SEDERAJAT', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'] as $edu): ?>
                         <option value="<?= $edu ?>" <?= old('pnd', $form_data['pnd'] ?? '') === $edu ? 'selected' : '' ?>><?= $edu ?></option>
@@ -83,10 +84,10 @@
                 <input type="text" id="nm_ibu" name="nm_ibu"
                     value="<?= old('nm_ibu', $form_data['nm_ibu'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required>
+                    required data-error="Nama Ibu wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Penanggung Jawab<span class="text-red-600">*</span></label>
-                <select id="keluarga" name="keluarga" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <select id="keluarga" name="keluarga" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="PJ wajib dipilih.">
                     <option value="" disabled <?= old('keluarga', $form_data['keluarga'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
                     <?php
                     $options_keluarga = ['DIRI SENDIRI', 'AYAH', 'IBU', 'ISTRI', 'SUAMI', 'ANAK', 'SAUDARA', 'LAIN-LAIN'];
@@ -98,15 +99,15 @@
 
             <!-- Nama PJ dan Pekerjaan -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nama Penanggung Jawab</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nama Penanggung Jawab<span class="text-red-600">*</span></label>
                 <input type="text" id="namakeluarga" name="namakeluarga"
                     value="<?= old('namakeluarga', $form_data['namakeluarga'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Nama PJ wajib diisi.">
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pekerjaan</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pekerjaan<span class="text-red-600">*</span></label>
                 <input id="pekerjaan" name="pekerjaan"
                     value="<?= old('pekerjaan', $form_data['pekerjaan'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Pekerjaan wajib diisi.">
             </div>
 
             <!-- Suku/Bangsa dan Bahasa -->
@@ -115,13 +116,13 @@
                 <input type="text" id="suku_bangsa" name="suku_bangsa"
                     value="<?= old('suku_bangsa', $form_data['suku_bangsa'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required>
+                    required data-error="Suku/Bangsa wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Bahasa<span class="text-red-600">*</span></label>
                 <input id="bahasa_pasien" name="bahasa_pasien"
                     value="<?= old('bahasa_pasien', $form_data['bahasa_pasien'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required>
+                    required data-error="Bahasa Pasien wajib diisi.">
             </div>
 
             <!-- Cacat Fisik -->
@@ -130,13 +131,13 @@
                 <input type="text" id="cacat_fisik" name="cacat_fisik"
                     value="<?= old('cacat_fisik', $form_data['cacat_fisik'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required>
+                    required data-error="Cacat Fisik wajib diisi.">
             </div>
 
             <!-- Agama dan Status Pernikahan -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Agama<span class="text-red-600">*</span></label>
-                <select id="agama" name="agama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <select id="agama" name="agama" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="agama wajib dipilih.">
                     <option value="" disabled <?= old('agama', $form_data['agama'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
                     <?php foreach (['ISLAM', 'KRISTEN', 'KATOLIK', 'HINDU', 'BUDHA', 'KONG HU CHU', '-'] as $agama): ?>
                         <option value="<?= $agama ?>" <?= old('agama', $form_data['agama'] ?? '') === $agama ? 'selected' : '' ?>><?= $agama ?></option>
@@ -144,7 +145,7 @@
                 </select>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status Pernikahan<span class="text-red-600">*</span></label>
-                <select id="stts_nikah" name="stts_nikah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <select id="stts_nikah" name="stts_nikah" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Status Pernikahan wajib dipilih.">
                     <option value="" disabled <?= old('stts_nikah', $form_data['stts_nikah'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
                     <?php foreach (['MENIKAH', 'BELUM MENIKAH', 'JANDA', 'DUDA'] as $status): ?>
                         <option value="<?= $status ?>" <?= old('stts_nikah', $form_data['stts_nikah'] ?? '') === $status ? 'selected' : '' ?>><?= $status ?></option>
@@ -154,10 +155,10 @@
 
             <!-- Asuransi -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Asuransi</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Asuransi<span class="text-red-600">*</span></label>
                 <input type="text" id="kd_pj" name="kd_pj"
                     value="<?= old('kd_pj', $form_data['kd_pj'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Asuransi wajib diisi.">
             </div>
 
             <!-- No. Peserta dan Email -->
@@ -179,34 +180,34 @@
                 <input type="text" id="no_tlp" name="no_tlp"
                     value="<?= old('no_tlp', $form_data['no_tlp'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required>
+                    required data-error="No. Telepon wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pertama Daftar<span class="text-red-600">*</span></label>
                 <input type="date" id="tgl_daftar" name="tgl_daftar"
                     value="<?= old('tgl_daftar', $form_data['tgl_daftar'] ?? date('Y-m-d')) ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required>
+                    required data-error="Daftar wajib diisi.">
             </div>
 
             <!-- Pekerjaan PJ dan No. KTP/SIM -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Pekerjaan Penanggung Jawab</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Pekerjaan Penanggung Jawab<span class="text-red-600">*</span></label>
                 <input id="pekerjaanpj" name="pekerjaanpj"
                     value="<?= old('pekerjaanpj', $form_data['pekerjaanpj'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">No. KTP/SIM</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">No. KTP/SIM<span class="text-red-600">*</span></label>
                 <input id="no_ktp" name="no_ktp"
                     value="<?= old('no_ktp', $form_data['no_ktp'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="No. KTP/SIM wajib diisi.">
             </div>
 
             <!-- Alamat -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat Pasien</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat Pasien<span class="text-red-600"></span></label>
                 <input type="text" id="alamat" name="alamat"
                     value="<?= old('alamat', $form_data['alamat'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Alamat wajib diisi.">
             </div>
 
             <!-- Kelurahan dan Kecamatan -->
@@ -225,7 +226,7 @@
             <!-- Kabupaten dan Provinsi -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4"></label>
-                <input type="text" id="kd_kab" name="kd_kab" placeholder="Kabupaten"
+                <input type="text" id="kd_kab" name="kd_kab" placeholder="Kabupaten/Kota"
                     value="<?= old('kd_kab', $form_data['kd_kab'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
@@ -237,10 +238,27 @@
 
             <!-- Alamat PJ -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Alamat PJ</label>
-                <input type="text" id="alamatpj" name="alamatpj"
-                    value="<?= old('alamatpj', $form_data['alamatpj'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">
+                    Alamat PJ
+                </label>
+
+                <div class="relative w-full md:w-1/4">
+                    <input type="text" id="alamatpj" name="alamatpj"
+                        value="<?= old('alamatpj', $form_data['alamatpj'] ?? '') ?>"
+                        class="pr-10 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white">
+
+                    <!-- Tombol salin -->
+                    <button type="button" id="copyAlamatPJ"
+                        class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-black"
+                        title="Salin alamat dari pasien">
+                        <!-- Heroicon: Clipboard Document -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h3.5a.5.5 0 01.5.5V5a1 1 0 001 1h3a1 1 0 001-1v-.5a.5.5 0 01.5-.5H17a2 2 0 012 2v14a2 2 0 01-2 2z" />
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <!-- Kelurahan dan Kecamatan PJ -->
@@ -259,7 +277,7 @@
             <!-- Kabupaten dan Provinsi PJ -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4"></label>
-                <input type="text" id="kabupatenpj" name="kabupatenpj" placeholder="Kabupaten PJ"
+                <input type="text" id="kabupatenpj" name="kabupatenpj" placeholder="Kabupaten/Kota PJ"
                     value="<?= old('kabupatenpj', $form_data['kabupatenpj'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
@@ -273,31 +291,45 @@
             <!-- Instansi dan NIP/NRP -->
             <div class="mb-5 sm:block md:flex items-center">
                 <!-- Label Instansi -->
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Instansi Pasien</label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">
+                    Instansi Pasien
+                </label>
 
-                <!-- Input Instansi + Link -->
+                <!-- Input Instansi + Tombol Modal -->
                 <div class="relative w-full md:w-1/4">
-                    <input type="text" id="perusahaan_pasien" name="perusahaan_pasien"
-                        value="<?= esc($form_data['perusahaan_pasien'] ?? '') ?>"
-                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white" readonly>
-                    <a href="/datainstansi"
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-blue-600"
-                        title="Tambah Instansi">
+                    <!-- Hidden: dikirim ke backend (kode_instansi) -->
+                    <input type="hidden" name="perusahaan_pasien" id="perusahaan_pasien"
+                        value="<?= esc($form_data['perusahaan_pasien'] ?? '') ?>">
+
+                    <!-- Display: hanya tampilkan nama instansi ke user -->
+                    <input type="text" id="perusahaan_pasien_display"
+                        value="<?= esc($form_data['nama_instansi'] ?? '') ?>"
+                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white"
+                        readonly>
+
+                    <button type="button"
+                        onclick="openModalInstansi()"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-black cursor-pointer transition-colors duration-200"
+                        title="Pilih Instansi">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M18 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h6m5-3h5m0 0v5m0-5L10 14" />
                         </svg>
-                    </a>
+                    </button>
+
                 </div>
 
                 <!-- Label NIP -->
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">NIP/NRP</label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    NIP/NRP
+                </label>
 
                 <!-- Input NIP -->
                 <input id="nip" name="nip"
                     value="<?= old('nip', $form_data['nip'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
+
 
             <!-- Button -->
             <div class="mt-5 pt-5 border-t flex justify-end gap-x-2">
@@ -316,164 +348,30 @@
 <!-- End Card Section -->
 
 <!-- Script Validasi -->
+<script src="<?= base_url('js/form-validation.js') ?>"></script>
+<script src="<?= base_url('js/form-masterpasien.js') ?>"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const btn = document.getElementById('copyAlamatPJ');
+        if (btn) {
+            btn.addEventListener('click', function() {
+                console.log("📋 Tombol diklik!");
 
-        // 📅 Auto Hitung Umur
-        const tglLahirInput = document.getElementById('tgl_lahir');
-        const umurInput = document.getElementById('umur');
-        if (tglLahirInput && umurInput) {
-            tglLahirInput.addEventListener('change', function() {
-                const tglLahir = new Date(this.value);
-                const today = new Date();
+                const alamat = document.getElementById('alamat')?.value || '';
+                const kel = document.getElementById('kd_kel')?.value || '';
+                const kec = document.getElementById('kd_kec')?.value || '';
+                const kab = document.getElementById('kd_kab')?.value || '';
+                const prop = document.getElementById('kd_prop')?.value || '';
 
-                if (isNaN(tglLahir.getTime())) {
-                    umurInput.value = '';
-                    return;
-                }
-
-                let tahun = today.getFullYear() - tglLahir.getFullYear();
-                let bulan = today.getMonth() - tglLahir.getMonth();
-                let hari = today.getDate() - tglLahir.getDate();
-
-                if (hari < 0) {
-                    bulan--;
-                    hari += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
-                }
-
-                if (bulan < 0) {
-                    tahun--;
-                    bulan += 12;
-                }
-
-                umurInput.value = `${tahun} Th ${bulan} Bl ${hari} Hr`;
-            });
-
-            // 🔒 Lock field umur
-            umurInput.addEventListener('keydown', e => e.preventDefault());
-            umurInput.addEventListener('paste', e => e.preventDefault());
-        }
-
-        // 🔢 Validasi Angka
-        function onlyNumber(selector) {
-            const input = document.querySelector(selector);
-            if (input) {
-                input.addEventListener('input', function() {
-                    this.value = this.value.replace(/[^0-9]/g, '');
-                });
-            }
-        }
-        onlyNumber('#no_ktp');
-        onlyNumber('#no_tlp');
-        onlyNumber('#no_peserta');
-        onlyNumber('#nip');
-
-        // 👤 Autofill Nama, Alamat, dan Pekerjaan PJ jika DIRI SENDIRI
-        const pjSelect = document.getElementById('keluarga');
-        const namaPasien = document.getElementById('nm_pasien');
-        const namaPJ = document.getElementById('namakeluarga');
-
-        const pekerjaanPasien = document.getElementById('pekerjaan');
-        const pekerjaanPJ = document.getElementById('pekerjaanpj');
-
-        const alamatPasien = document.getElementById('alamat');
-        const kelurahanPasien = document.getElementById('kd_kel');
-        const kecamatanPasien = document.getElementById('kd_kec');
-        const kabupatenPasien = document.getElementById('kd_kab');
-        const provinsiPasien = document.getElementById('kd_prop');
-
-        const alamatPJ = document.getElementById('alamatpj');
-        const kelurahanPJ = document.getElementById('kelurahanpj');
-        const kecamatanPJ = document.getElementById('kecamatanpj');
-        const kabupatenPJ = document.getElementById('kabupatenpj');
-        const provinsiPJ = document.getElementById('propinsipj');
-
-        const fieldsToSync = [pekerjaanPasien, alamatPasien, kelurahanPasien, kecamatanPasien, kabupatenPasien, provinsiPasien];
-
-        fieldsToSync.forEach(field => {
-            if (field) {
-                field.addEventListener('input', function() {
-                    if (pjSelect.value === 'DIRI SENDIRI') {
-                        autofillPJ();
-                    }
-                });
-            }
-        });
-
-        function autofillPJ() {
-            if (pjSelect.value === 'DIRI SENDIRI') {
-                namaPJ.value = namaPasien.value;
-                pekerjaanPJ.value = pekerjaanPasien.value;
-                alamatPJ.value = alamatPasien.value;
-                kelurahanPJ.value = kelurahanPasien.value;
-                kecamatanPJ.value = kecamatanPasien.value;
-                kabupatenPJ.value = kabupatenPasien.value;
-                provinsiPJ.value = provinsiPasien.value;
-
-                namaPJ.readOnly = true;
-                pekerjaanPJ.readOnly = true;
-                alamatPJ.readOnly = true;
-                kelurahanPJ.readOnly = true;
-                kecamatanPJ.readOnly = true;
-                kabupatenPJ.readOnly = true;
-                provinsiPJ.readOnly = true;
-            } else {
-                namaPJ.readOnly = false;
-                pekerjaanPJ.readOnly = false;
-                alamatPJ.readOnly = false;
-                kelurahanPJ.readOnly = false;
-                kecamatanPJ.readOnly = false;
-                kabupatenPJ.readOnly = false;
-                provinsiPJ.readOnly = false;
-
-                namaPJ.value = '';
-                pekerjaanPJ.value = '';
-                alamatPJ.value = '';
-                kelurahanPJ.value = '';
-                kecamatanPJ.value = '';
-                kabupatenPJ.value = '';
-                provinsiPJ.value = '';
-            }
-        }
-
-        if (pjSelect && namaPasien && namaPJ) {
-            pjSelect.addEventListener('change', function() {
-                // Kasih delay sedikit biar autofill Chrome selesai
-                setTimeout(() => {
-                    autofillPJ();
-                }, 50); // 50ms udah cukup
-            });
-
-            namaPasien.addEventListener('input', function() {
-                if (pjSelect.value === 'DIRI SENDIRI') {
-                    namaPJ.value = this.value;
-                }
-            });
-
-            pekerjaanPasien.addEventListener('input', function() {
-                if (pjSelect.value === 'DIRI SENDIRI') {
-                    pekerjaanPJ.value = this.value;
-                }
+                document.getElementById('alamatpj').value = alamat;
+                document.getElementById('kelurahanpj').value = kel;
+                document.getElementById('kecamatanpj').value = kec;
+                document.getElementById('kabupatenpj').value = kab;
+                document.getElementById('propinsipj').value = prop;
             });
         }
-
-
-        // 📥 Ambil kode instansi dari localStorage
-        const kodeInstansi = localStorage.getItem('kode_instansi_terpilih');
-        if (kodeInstansi) {
-            const inputInstansi = document.getElementById('perusahaan_pasien');
-            if (inputInstansi) {
-                inputInstansi.value = kodeInstansi;
-                inputInstansi.setAttribute('readonly', true);
-            }
-            localStorage.removeItem('kode_instansi_terpilih');
-        }
-
-
-        console.log('[✔] All form scripts loaded.');
     });
 </script>
-
 
 
 <?= $this->endSection(); ?>

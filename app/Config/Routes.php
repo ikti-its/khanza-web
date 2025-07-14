@@ -652,6 +652,7 @@ $routes->group('diagnosa', ['filter' => 'auth'], function ($routes) {
 
 //Modal Routes
 $routes->get('/modalpasien/list', 'Modal\ModalPasien::listPasien');
+$routes->get('/modalinstansi/list', 'Modal\ModalInstansi::listInstansi');
 
 //Fitur Penggajian
 $fiturs = [
@@ -670,7 +671,7 @@ $fiturs = [
     ['MasterPasien\\', '', [
         ['MasterPasien', 'masterpasien'],
         ['DokterController', 'datadokter'],
-        ['Instansi', 'datainstansi'],
+        ['Instansi', 'instansi'],
         ['PasienMeninggal', 'pasienmeninggal'],
         ['KelahiranBayi', 'kelahiranbayi'],
     ]],

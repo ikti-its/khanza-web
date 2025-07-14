@@ -51,10 +51,6 @@ class PasienMeninggal_tambah extends BaseController
             'kode_dokter'      => $this->request->getPost('kode_dokter'),    // Kode dokter
         ];
 
-
-        $jsonPayload = json_encode($postData);
-        $url = $this->api_url . "/pasienmeninggal";
-
         $tanggal_meninggal = $this->request->getPost('tanggal');
         $now = date('Y-m-d');
 
@@ -83,6 +79,8 @@ class PasienMeninggal_tambah extends BaseController
             return redirect()->back()->withInput()->with('error', 'Jam kematian tidak boleh melebihi waktu saat ini.');
         }
 
+        $jsonPayload = json_encode($postData);
+        $url = $this->api_url . "/pasienmeninggal";
 
 
         if (session()->has('jwt_token')) {
