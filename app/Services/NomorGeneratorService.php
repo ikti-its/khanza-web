@@ -22,10 +22,25 @@ class NomorGeneratorService
 
     public function getLastSKL(string $bulan, string $tahun): ?string
     {
-        $url = $this->api_url . "/kelahiranbayi?bulan=$bulan&tahun=$tahun&limit=1&sort=desc";
+        $url = $this->api_url . "/kelahiranbayi?bulan=$bulan&tahun=$tahun";
         $response = $this->curlGet($url);
-        return $response['data'][0]['no_skl'] ?? null;
+
+        if (!$response || empty($response['data'])) return null;
+
+        // Urutkan manual berdasarkan nomor urut SKL
+        $data = $response['data'];
+
+        usort($data, function ($a, $b) {
+            // Ambil bagian nomor urut SKL (misal 0003 dari 0003/RM-SKL/07/2025)
+            preg_match('/^(\d{4})/', $a['no_skl'], $matchA);
+            preg_match('/^(\d{4})/', $b['no_skl'], $matchB);
+
+            return (int)($matchB[1] ?? 0) <=> (int)($matchA[1] ?? 0); // descending
+        });
+
+        return $data[0]['no_skl'] ?? null;
     }
+
 
     private function curlGet(string $url): ?array
     {

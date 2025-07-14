@@ -115,9 +115,81 @@ class KelahiranBayi_tambah extends BaseController
             'lk_dada'   => (float) str_replace(',', '.', $this->request->getPost('lk_dada')),
         ];
 
+        $angkaPositif = [
+            'bb' => 'Berat Badan',
+            'pb' => 'Panjang Badan',
+            'lk_kepala' => 'Lingkar Kepala',
+            'lk_perut'  => 'Lingkar Perut',
+            'lk_dada'   => 'Lingkar Dada',
+            'umur' => 'Umur Bayi',
+            'umur_ibu' => 'Umur Ibu',
+            'umur_ayah' => 'Umur Ayah',
+            'kelahiran_ke' => 'Kelahiran ke-',
+            'gravida' => 'Gravida',
+            'para' => 'Para',
+            'abortus' => 'Abortus'
+        ];
+
+        foreach ($angkaPositif as $field => $label) {
+            $value = (float) str_replace(',', '.', $this->request->getPost($field));
+            if ($value <= 0) {
+                return redirect()->back()->withInput()->with('error', "$label harus lebih dari 0.");
+            }
+        }
+        $gravida = (int) $this->request->getPost('gravida');
+        $para    = (int) $this->request->getPost('para');
+        $abortus = (int) $this->request->getPost('abortus');
+
+        // Cek nilai tidak negatif
+        if ($gravida < 1 || $para < 0 || $abortus < 0) {
+            return redirect()->back()->withInput()->with('error', 'Gravida minimal 1, dan Para/Abortus tidak boleh negatif.');
+        }
+
+        // Cek jumlah masuk akal
+        if (($para + $abortus) > $gravida) {
+            return redirect()->back()->withInput()->with('error', 'Jumlah Para dan Abortus tidak boleh melebihi Gravida.');
+        }
+
+        $tgl_lahir = $this->request->getPost('tgl_lahir');
+        $tgl_daftar = $this->request->getPost('tgl_daftar');
+        $jam_lahir = $this->request->getPost('jam');
+        $now = date('Y-m-d');
+        $currentTime = date('H:i');
+
+        // Validasi Huruf Nama
+        $namaFields = ['nm_pasien', 'nm_ibu', 'nm_ayah'];
+        foreach ($namaFields as $field) {
+            $nama = $this->request->getPost($field);
+            if (!preg_match('/^[a-zA-Z\s\'-]+$/u', $nama)) {
+                return redirect()->back()->withInput()->with('error', ucfirst(str_replace('_', ' ', $field)) . ' hanya boleh berisi huruf, spasi, tanda petik, atau strip.');
+            }
+        }
+
+        // Tanggal lahir tidak boleh di masa depan
+        if ($tgl_lahir > $now) {
+            return redirect()->back()->withInput()->with('error', 'Tanggal lahir tidak boleh di masa depan.');
+        }
+
+        // Tanggal daftar tidak boleh di masa depan
+        if ($tgl_daftar > $now) {
+            return redirect()->back()->withInput()->with('error', 'Tanggal daftar tidak boleh di masa depan.');
+        }
+
+        // Tanggal daftar tidak boleh lebih awal dari tanggal lahir
+        if ($tgl_daftar && $tgl_lahir && strtotime($tgl_daftar) < strtotime($tgl_lahir)) {
+            return redirect()->back()->withInput()->with('error', 'Tanggal daftar tidak boleh sebelum tanggal lahir.');
+        }
+
+        // Jika tanggal lahir hari ini, jam lahir tidak boleh melebihi waktu saat ini
+        if ($tgl_lahir == $now && strtotime($jam_lahir) > strtotime($currentTime)) {
+            return redirect()->back()->withInput()->with('error', 'Jam lahir tidak boleh melebihi waktu saat ini.');
+        }
+
 
         $jsonPayload = json_encode($postData);
         $url = $this->api_url . "/kelahiranbayi";
+
+
 
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');

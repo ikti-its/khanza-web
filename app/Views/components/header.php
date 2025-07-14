@@ -588,7 +588,7 @@
                         ['Riwayat Pasien', '/riwayatpasien', ''],
                         ['Kelahiran Bayi', '/kelahiranbayi', ''],
                         ['Pasien Meninggal', '/pasienmeninggal', ''],
-                        ['Instansi Pasien', '/datainstansi', ''],
+                        ['Instansi Pasien', '/instansi', ''],
                     ]],
                     ['Rawat Inap', '/rawatinap', 'rawat_inap', '', $petugasdokterrole, []],
                     ['Ruangan', '/kamar', 'kamar', '', $petugasrole, []],

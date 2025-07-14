@@ -80,6 +80,43 @@ class MasterPasien_tambah extends BaseController
             'propinsipj' => $this->request->getPost('propinsipj'),
         ];
 
+        //Validasi Tanggal Lahir
+        $tgl_lahir = $this->request->getPost('tgl_lahir');
+        $now = date('Y-m-d');
+        $batas_terlalu_tua = date('Y-m-d', strtotime('-110 years'));
+        $batas_terlalu_muda = date('Y-m-d', strtotime('-12 months'));
+
+        if ($tgl_lahir > $now) {
+            return redirect()->back()->withInput()->with('error', 'Tanggal lahir tidak boleh di masa depan.');
+        }
+
+        if ($tgl_lahir < $batas_terlalu_tua) {
+            return redirect()->back()->withInput()->with('error', 'Tanggal lahir terlalu lama. Maksimal umur 110 tahun.');
+        }
+
+        if ($tgl_lahir > $batas_terlalu_muda) {
+            return redirect()->back()->withInput()->with('error', 'Pasien terlalu muda. Silakan gunakan form kelahiran bayi.');
+        }
+
+        //Validasi Email
+        $email = $this->request->getPost('email');
+        if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return redirect()->back()->withInput()->with('error', 'Format email tidak valid.');
+        }
+
+        //Validasi Notelp
+        $no_tlp = $this->request->getPost('no_tlp');
+        if (!empty($no_tlp) && !preg_match('/^(\\+62|08)[0-9]{8,13}$/', $no_tlp)) {
+            return redirect()->back()->withInput()->with('error', 'Nomor telepon tidak valid. Gunakan format 08xxx atau +62xxx.');
+        }
+
+        //Validasi KTP
+        $no_ktp = $this->request->getPost('no_ktp');
+        if (!empty($no_ktp) && !preg_match('/^[0-9]{16}$/', $no_ktp)) {
+            return redirect()->back()->withInput()->with('error', 'No. KTP harus 16 digit angka.');
+        }
+
+
         $jsonPayload = json_encode($postData);
         $url = $this->api_url . "/masterpasien";
 
