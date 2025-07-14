@@ -1,20 +1,24 @@
 <?php
 
-namespace App\Controllers\MasterPasien;
+namespace App\Controllers\Dokter;
 
 use App\Controllers\BaseController;
 
-class DokterController extends BaseController
+class Dokter extends BaseController
 {
-    protected string $judul = 'Data Dokter';
+    protected string $judul = 'Daftar Dokter';
     protected array $breadcrumbs = [
-        ['title' => 'Admin', 'icon' => 'admin'],
+        ['title' => 'Admin', 'icon' => 'user'],
         ['title' => 'Dokter', 'icon' => 'dokter'],
     ];
-    protected string $modul_path = '/datadokter';
-    protected string $api_path = '/datadokter';
+    protected string $modul_path = '/dokter';
+    protected string $api_path = '/dokter';
+    protected string $nama_tabel = 'dokter';
     protected string $kolom_id = 'kode_dokter';
     protected array $aksi = [
+        'notif'    => false,
+        'tambah'   => true,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,

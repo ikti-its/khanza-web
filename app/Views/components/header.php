@@ -590,13 +590,16 @@
                         ['Pasien Meninggal', '/pasienmeninggal', ''],
                         ['Instansi Pasien', '/instansi', ''],
                     ]],
+                    ['Dokter', '', 'dokter_jaga', '', $petugasrole, [
+                        ['Daftar Dokter', '/dokter', ''],
+                        ['Dokter Jaga', '/dokterjaga', ''],
+                    ]],
                     ['Rawat Inap', '/rawatinap', 'rawat_inap', '', $petugasdokterrole, []],
                     ['Ruangan', '/kamar', 'kamar', '', $petugasrole, []],
                     ['Unit Gawat Darurat', '/ugd', 'ugd', '', $petugasdokterrole, []],
                     ['Ambulans', '/ambulans', 'ambulans', '', $petugasrole, []],
                     ['Tindakan', '/tindakan', 'tindakan', '', $petugasrole, []],
                     ['Pemeriksaan', '/pemeriksaanranap', 'pemeriksaan', '', $petugasrole, []],
-                    ['Dokter Jaga', '/dokterjaga', 'dokter_jaga', '', $petugasrole, []],
                     ['Resep Obat', '/resepobat', 'resep_obat', '', $petugasdokterrole, []],
                     ['Pemberian Obat', '/pemberianobat', 'pemberian_obat', '', $petugasrole, []],
                     ['Resep Pulang', '', 'resep_pulang', '', $petugasrole, [

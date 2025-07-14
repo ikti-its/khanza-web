@@ -670,10 +670,12 @@ $fiturs = [
     ]],
     ['MasterPasien\\', '', [
         ['MasterPasien', 'masterpasien'],
-        ['DokterController', 'datadokter'],
         ['Instansi', 'instansi'],
         ['PasienMeninggal', 'pasienmeninggal'],
         ['KelahiranBayi', 'kelahiranbayi'],
+    ]],
+    ['Dokter\\', '', [
+        ['Dokter', 'dokter'],
     ]],
 ];
 $filter = ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'];
