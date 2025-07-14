@@ -29,13 +29,23 @@ class Dokter extends BaseController
         [1, 'Kode Dokter', 'kode_dokter', 'indeks', 1],
         [1, 'Nama Dokter', 'nama_dokter', 'nama', 1],
         [1, 'Jenis Kelamin', 'jenis_kelamin', 'status', 1, [
-            ['L', 'Laki-laki'],
-            ['P', 'Perempuan']
+            ['Laki-Laki', 'L'],
+            ['Perempuan', 'P']
         ]],
-        [1, 'Alamat Tinggal', 'alamat_tinggal', 'teks', 0],
-        [1, 'No. Telepon', 'no_telp', 'teks', 0],
-        [1, 'Spesialis', 'spesialis', 'nama', 0],
-        [1, 'Izin Praktik', 'izin_praktik', 'teks', 0]
+        [1, 'Alamat Tinggal', 'alamat_tinggal', 'teks', 1],
+        [1, 'No. Telepon', 'no_telp', 'teks', 1],
+        [1, 'Spesialis', 'spesialis', 'status', 1, [
+            ['Jantung', 'Jantung'],
+            ['Anak', 'Anak'],
+            ['Penyakit Dalam', 'Penyakit Dalam'],
+            ['Gigi', 'Gigi'],
+            ['Kandungan', 'Kandungan'],
+            ['Kulit', 'Kulit'],
+            ['Saraf', 'Saraf'],
+            ['THT', 'THT'],
+            ['Umum', 'Umum']
+        ]],
+        [1, 'Izin Praktik', 'izin_praktik', 'teks', 1]
     ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 }
