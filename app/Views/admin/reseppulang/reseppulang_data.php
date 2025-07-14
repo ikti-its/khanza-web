@@ -65,7 +65,7 @@
                         $aksi = [
                             'cetak'    => false,
                             'tindakan' => false,
-                            'detail'   => true,
+                            'detail'   => false,
                             'ubah'     => true,
                             'hapus'    => true,
                         ];
@@ -77,11 +77,11 @@
                             [1, 'Pasien'       , 'nama_pasien', 'nama'],
                             [1, 'Obat'         , 'kode_brng'  , 'indeks'],
                             [1, 'Jumlah'       , 'jml_barang' , 'jumlah'],
-                            [0, 'Harga'        , 'harga'      , 'uang'],
-                            [0, 'Total'        , 'total'      , 'uang'],
-                            [0, 'Dosis'        , 'dosis'      , 'jumlah'], 
-                            [0, 'No. Batch'    , 'no_batch'   , 'indeks'],
-                            [0, 'No. Faktur'   , 'no_faktur'  , 'indeks'],
+                            [1, 'Harga'        , 'harga'      , 'uang'],
+                            [1, 'Total'        , 'total'      , 'uang'],
+                            [1, 'Dosis'        , 'dosis'      , 'jumlah'], 
+                            [1, 'No. Batch'    , 'no_batch'   , 'indeks'],
+                            [1, 'No. Faktur'   , 'no_faktur'  , 'indeks'],
                         ];
                         echo view('components/tabel/data', [
                             'modul_path' => $modul_path,
@@ -103,7 +103,7 @@
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     
                             <?php foreach ($reseppulang_data as $i => $reseppulang) : ?>
-                                <div id="hs-vertically-centered-scrollable-modal-<?= $reseppulang['no_rawat'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+                                <!-- <div id="hs-vertically-centered-scrollable-modal-<?= $reseppulang['no_rawat'] ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5 text-center inline-flex">
                                             <div class="px-3 py-1.5">
@@ -117,7 +117,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr> -->
                             <?php endforeach; ?>
                         </tbody>
                         <?php foreach ($reseppulang_data as $i => $reseppulang) : ?>

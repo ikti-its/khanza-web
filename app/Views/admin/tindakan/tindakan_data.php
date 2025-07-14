@@ -69,7 +69,7 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?php if (!empty($tindakan_data)) : ?>
+                            <!-- <?php if (!empty($tindakan_data)) : ?>
                                 <div>
                                     <a href='/tindakan/tambah/<?= $tindakan_data[0]['nomor_rawat'] ?>' class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                         <svg class="flex-shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" width="16" height="1" viewBox="0 0 16 16" fill="none">
@@ -78,7 +78,7 @@
                                         Tambah
                                     </a>
                                 </div>
-                            <?php endif; ?>
+                            <?php endif; ?> -->
                             <?= view('components/header/audit_button', [
                                 'link' => '/tindakan/audit'
                             ]) ?>

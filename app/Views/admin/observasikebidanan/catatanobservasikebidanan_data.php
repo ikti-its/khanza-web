@@ -78,8 +78,8 @@
                             'cetak'    => false,
                             'tindakan' => false,
                             'detail'   => true,
-                            'ubah'     => true,
-                            'hapus'    => true
+                            'ubah'     => false,
+                            'hapus'    => false
                         ];
                         $konfig = [
                             // [visible, Display, Kolom, Jenis, Required, *Opsi]
