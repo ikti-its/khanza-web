@@ -58,9 +58,9 @@
                                 </div>
                             </div>
                             <div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>
-                            <?= view('components/header/tambah_button', [
+                            <!-- <?= view('components/header/tambah_button', [
                                 'link' => '/catatanobservasiranap/tambah'
-                            ]) ?>
+                            ]) ?> -->
                             <?= view('components/header/audit_button', [
                                 'link' => '/catatanobservasiranap/audit'
                             ]) ?>
