@@ -115,10 +115,10 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Subjek<span class="text-red-600">*</span></label>
-                <input name="keluhan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <textarea name="keluhan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required></textarea>
                 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Objek<span class="text-red-600">*</span></label>
-                <input name="pemeriksaan" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <textarea name="pemeriksaan" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required></textarea>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -136,18 +136,18 @@ $kelas = strtolower($pemberianobat['kelas'] ?? 'dasar');
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Asesmen<span class="text-red-600">*</span></label>
-                <input name="penilaian" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <textarea name="penilaian" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required></textarea>
                 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Plan<span class="text-red-600">*</span></label>
-                <input name="rtl" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <textarea name="rtl" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required></textarea>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 text-sm text-gray-900 dark:text-white md:w-1/4">Instruksi</label>
-                <input name="instruksi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <textarea name="instruksi" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"></textarea>
                 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Evaluasi</label>
-                <input name="evaluasi" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+                <textarea name="evaluasi" id="totalObat" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"></textarea>
             </div>            
 
             <div class="mt-5 pt-5 border-t flex justify-end gap-x-2">

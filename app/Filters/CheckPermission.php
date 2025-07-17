@@ -33,7 +33,7 @@ class CheckPermission implements FilterInterface
         // Compare as strings to avoid int vs string mismatch
         if (!in_array((string) $userRole, array_map('strval', $arguments), true)) {
             log_message('error', "🚫 Access denied for role: $userRole");
-            // return redirect()->to('/error_403');
+            return redirect()->to('/error_403');
         }
 
         log_message('debug', "✅ Access granted for role: $userRole");

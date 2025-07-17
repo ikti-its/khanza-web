@@ -12,6 +12,9 @@
     $petugasrole       = [1337, 1, 2, 4001, 5001];
     $petugasdokterrole = [1337, 1, 2, 3, 4001, 5001];
     $dokterrole        = [1337, 1, 3, 4001, 5001];
+    $loginadmin        = [1337, 1];
+    $loginpetugas      = 2;
+    $logindokter       = 3;
 
     if (is_array($userDetails)) {
         $role  = $userDetails['role']  ?? null;
@@ -145,7 +148,20 @@
                         <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg p-2 dark:bg-gray-800 dark:border dark:border-gray-700" aria-labelledby="hs-dropdown-with-header">
                             <div class="py-3 px-5 -m-2 bg-gray-100 rounded-t-lg dark:bg-gray-700">
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Masuk sebagai</p>
-                                <p class="text-sm font-medium text-gray-800 dark:text-gray-300"><?= $email ?></p>
+                                <p class="text-sm font-medium text-gray-800 dark:text-gray-300">
+                                    <?= esc($email) ?>
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">
+                                    (<?= match ($role) {
+                                        1337 => 'Super Admin',
+                                        1    => 'Admin',
+                                        2    => 'Petugas',
+                                        3    => 'Dokter',
+                                        4001 => 'Role 4001',
+                                        5001 => 'Role 5001',
+                                        default => 'Guest'
+                                    } ?>)
+                                </p>
                             </div>
                             <div class="mt-2 py-2 first:pt-0 last:pb-0">
                                 <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300" href="#">

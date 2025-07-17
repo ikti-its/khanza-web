@@ -111,7 +111,7 @@ class auth extends BaseController
 
                         // Close the cURL session for user details
                         curl_close($user_details_ch);
-
+// dd($user_details);
                         // Check if the user role is 2 or 1
                         if ($user_details['data']['role'] == 2 || $user_details['data']['role'] == 1) {
                             // If the user role is 2 or 1, make another API request
@@ -136,7 +136,7 @@ class auth extends BaseController
                             if ($user_specific_response) {
                                 // Decode the JSON response
                                 $user_specific_data = json_decode($user_specific_response, true);
-
+// dd($user_specific_data);
                                 // Store the user specific data in session or handle it as needed
                                 session()->set('user_specific_data', $user_specific_data['data']);
                             } else {
