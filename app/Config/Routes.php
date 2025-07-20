@@ -668,6 +668,12 @@ $fiturs = [
         ['Pesangon', 'pesangon'],
         ['UPMK', 'upmk']
     ]],
+    ['DataPenggajian\\', 'data-penggajian/', [
+        ['Kepegawaian', 'kepegawaian'],
+        ['Penggajian', 'penggajian'],
+        ['THR', 'thr'],
+        ['PHK', 'phk']
+    ]],
     ['MasterPasien\\', '', [
         ['MasterPasien', 'masterpasien'],
         ['Instansi', 'instansi'],
