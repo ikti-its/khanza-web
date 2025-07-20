@@ -240,7 +240,8 @@ abstract class BaseController extends Controller
             // [1, 'Nomor Perubahan'  , 'change_id' , 'indeks'],
             [1, 'Nama'             , 'nama'      , 'teks'],
             [1, 'Aksi Perubahan'   , 'action'    , 'status'],
-            [1, 'IP Pengubah'      , 'user_ip'   , 'teks'],
+            [1, 'IP Address'       , 'user_ip'   , 'teks'],
+            [1, 'MAC Address'      , 'user_mac'  , 'teks'],
             // [1, 'Pengubah'         , 'changed_by', 'indeks'],
             [1, 'Tanggal Perubahan', 'changed_at', 'tanggal'],
         ];
