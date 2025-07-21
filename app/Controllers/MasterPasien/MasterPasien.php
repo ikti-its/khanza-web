@@ -13,6 +13,7 @@ class MasterPasien extends BaseController
     ];
     protected string $modul_path = '/masterpasien';
     protected string $api_path = '/masterpasien';
+    protected string $nama_tabel = 'pasien';
     protected string $kolom_id = 'no_rkm_medis';
     protected array $aksi = [
         'notif'    => false,
@@ -42,12 +43,8 @@ class MasterPasien extends BaseController
         [1, 'No. Telepon', 'no_tlp', 'teks'],
         [1, 'Umur', 'umur', 'teks'],
         [1, 'Pendidikan', 'pnd', 'status'],
-        [1, 'Penanggung Jawab', 'keluarga', 'status'],
-        [1, 'Nama PJ', 'namakeluarga', 'nama'],
         [1, 'Asuransi', 'kd_pj', 'teks'],
         [1, 'No. Peserta', 'no_peserta', 'teks'],
-        [1, 'Pekerjaan PJ', 'pekerjaanpj', 'teks'],
-        [1, 'Alamat PJ', 'alamatpj', 'teks'],
         [1, 'Suku', 'suku_bangsa', 'teks'],
         [1, 'Bahasa', 'bahasa_pasien', 'teks'],
         [1, 'Instansi Pasien', 'perusahaan_pasien', 'teks'],
@@ -57,11 +54,7 @@ class MasterPasien extends BaseController
         [1, 'Kode Kelurahan', 'kd_kel', 'teks'],
         [1, 'Kode Kecamatan', 'kd_kec', 'teks'],
         [1, 'Kode Kabupaten', 'kd_kab', 'teks'],
-        [1, 'Kelurahan PJ', 'kelurahanpj', 'teks'],
-        [1, 'Kecamatan PJ', 'kecamatanpj', 'teks'],
-        [1, 'Kabupaten PJ', 'kabupatenpj', 'teks'],
         [1, 'Kode Provinsi', 'kd_prop', 'teks'],
-        [1, 'Provinsi PJ', 'propinsipj', 'teks'],
     ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 

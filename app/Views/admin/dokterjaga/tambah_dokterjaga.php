@@ -1,5 +1,6 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
+<?= $this->include('components/modal/modaldokter') ?>
 
 <!-- Card Section -->
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
@@ -9,18 +10,41 @@
             'judul' => 'Tambah Dokter Jaga'
         ]) ?>
         <form action="/dokterjaga/submittambah/" id="myForm" onsubmit="return validateForm()" method="post">
-
             <?= csrf_field() ?>
-            <?php
-            $kodeDokter = 'D' . str_pad(mt_rand(0, 999), 3, '0', STR_PAD_LEFT);
-            ?>
-            <div class="mb-5 sm:block md:flex items-center">
-            <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kode Dokter</label>
-                <input name="kode_dokter" id="kode_dokter" value="<?= $kodeDokter ?>" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Dokter</label>
-                <input type="text" name="nama_dokter" id="namaDokterInput" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
+            <!-- Kode Dokter dan Nama Dokter -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <!-- Label Kode Dokter -->
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Kode Dokter<span class="text-red-600">*</span>
+                </label>
+
+                <!-- Input Kode Dokter + Tombol Modal -->
+                <div class="relative w-full md:w-1/4">
+                    <input type="text" id="kode_dokter" name="kode_dokter"
+                        value="<?= old('kode_dokter', $form_data['kode_dokter'] ?? '') ?>"
+                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white"
+                        placeholder="Pilih Dokter" readonly required>
+
+                    <button type="button" onclick="openModalDokter()"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-black cursor-pointer"
+                        title="Pilih Dokter">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M18 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h6m5-3h5m0 0v5m0-5L10 14" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Label Nama Dokter -->
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Nama Dokter<span class="text-red-600">*</span>
+                </label>
+
+                <input type="text" id="nama_dokter" name="nama_dokter"
+                    value="<?= old('nama_dokter', $form_data['nama_dokter'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    readonly required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -28,11 +52,11 @@
                 <select type="text" name="hari_kerja" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
                     <option value="">Pilih Hari</option>
                     <option value="Senin">Senin</option>
-                    <option value="Selasa" >Selasa</option>
-                    <option value="Rabu" >Rabu</option>
+                    <option value="Selasa">Selasa</option>
+                    <option value="Rabu">Rabu</option>
                     <option value="Kamis">Kamis</option>
-                    <option value="Jumat" >Jumat</option>
-                    <option value="Sabtu" >Sabtu</option>
+                    <option value="Jumat">Jumat</option>
+                    <option value="Sabtu">Sabtu</option>
                 </select>
             </div>
 
@@ -49,14 +73,14 @@
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Poliklinik</label>
                 <input type="text" name="poliklinik" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" maxlength="80" required>
-            
+
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Status</label>
                 <select type="time" name="status" step="1" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="aktif" >Aktif</option>
-                    <option value="tidak aktif" >Tidak Aktif</option>
+                    <option value="aktif">Aktif</option>
+                    <option value="tidak aktif">Tidak Aktif</option>
                 </select>
             </div>
-            
+
             <?= view('components/form/submit_button') ?>
         </form>
     </div>
@@ -64,11 +88,10 @@
 </div>
 <!-- End Card Section -->
 <script>
-
-    document.getElementById('kodeDokterSelect').addEventListener('change', function () {
-    const selectedOption = this.options[this.selectedIndex];
-    const namaDokter = selectedOption.getAttribute('data-nama');
-    document.getElementById('namaDokterInput').value = namaDokter || '';
+    document.getElementById('kodeDokterSelect').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const namaDokter = selectedOption.getAttribute('data-nama');
+        document.getElementById('namaDokterInput').value = namaDokter || '';
     });
 
     function validateForm() {

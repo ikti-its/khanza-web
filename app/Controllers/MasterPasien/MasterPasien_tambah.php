@@ -58,18 +58,11 @@ class MasterPasien_tambah extends BaseController
             'no_tlp' => $this->request->getPost('no_tlp'),
             'umur' => $this->request->getPost('umur'),
             'pnd' => $this->request->getPost('pnd'),
-            'keluarga' => $this->request->getPost('keluarga'),
-            'namakeluarga' => $this->request->getPost('namakeluarga'),
             'kd_pj' => $this->request->getPost('kd_pj'),
             'no_peserta' => $this->request->getPost('no_peserta'),
             'kd_kel' => $this->request->getPost('kd_kel'),
             'kd_kec' => $this->request->getPost('kd_kec'),
             'kd_kab' => $this->request->getPost('kd_kab'),
-            'pekerjaanpj' => $this->request->getPost('pekerjaanpj'),
-            'alamatpj' => $this->request->getPost('alamatpj'),
-            'kelurahanpj' => $this->request->getPost('kelurahanpj'),
-            'kecamatanpj' => $this->request->getPost('kecamatanpj'),
-            'kabupatenpj' => $this->request->getPost('kabupatenpj'),
             'perusahaan_pasien' => $this->request->getPost('perusahaan_pasien'),
             'suku_bangsa' => $this->request->getPost('suku_bangsa'),
             'bahasa_pasien' => $this->request->getPost('bahasa_pasien'),
@@ -77,7 +70,6 @@ class MasterPasien_tambah extends BaseController
             'email' => $this->request->getPost('email'),
             'nip' => $this->request->getPost('nip'),
             'kd_prop' => $this->request->getPost('kd_prop'),
-            'propinsipj' => $this->request->getPost('propinsipj'),
         ];
 
         //Validasi Tanggal Lahir

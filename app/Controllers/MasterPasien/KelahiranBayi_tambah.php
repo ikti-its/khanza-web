@@ -47,11 +47,39 @@ class KelahiranBayi_tambah extends BaseController
             return redirect()->to('/kelahiranbayi/tambah-pasien');
         }
 
+        // Ambil data form
         $tgl_lahir_raw   = $this->request->getPost('tgl_lahir');
         $tgl_daftar_raw  = $this->request->getPost('tgl_daftar');
 
+        // Format ISO dan validasi tanggal
         $tgl_lahir_iso   = $tgl_lahir_raw ? date('Y-m-d\TH:i:sP', strtotime($tgl_lahir_raw)) : null;
         $tgl_daftar_iso  = $tgl_daftar_raw ? date('Y-m-d\TH:i:sP', strtotime($tgl_daftar_raw)) : null;
+
+        $now = date('Y-m-d');
+        $jam_lahir = $this->request->getPost('jam');
+        $currentTime = date('H:i');
+
+        if ($tgl_lahir_raw > $now || $tgl_daftar_raw > $now || ($tgl_daftar_raw < $tgl_lahir_raw)) {
+            return redirect()->back()->withInput()->with('error', 'Tanggal tidak valid.');
+        }
+
+        if ($tgl_lahir_raw == $now && strtotime($jam_lahir) > strtotime($currentTime)) {
+            return redirect()->back()->withInput()->with('error', 'Jam lahir tidak boleh melebihi waktu sekarang.');
+        }
+
+        // Validasi nama huruf
+        foreach (['nm_pasien', 'nm_ibu', 'nm_ayah'] as $field) {
+            if (!preg_match('/^[a-zA-Z\s\'-]+$/u', $this->request->getPost($field))) {
+                return redirect()->back()->withInput()->with('error', "$field hanya boleh huruf, spasi, petik, strip.");
+            }
+        }
+
+        // Validasi angka > 0
+        $angkaPositif = ['bb', 'pb', 'lk_perut', 'lk_kepala', 'lk_dada', 'umur', 'umur_ibu', 'umur_ayah', 'kelahiran_ke', 'gravida', 'para', 'abortus'];
+        foreach ($angkaPositif as $f) {
+            $v = (float) str_replace(',', '.', $this->request->getPost($f));
+            if ($v <= 0) return redirect()->back()->withInput()->with('error', "$f harus lebih dari 0");
+        }
 
         $postData = [
             // String
@@ -115,173 +143,92 @@ class KelahiranBayi_tambah extends BaseController
             'lk_dada'   => (float) str_replace(',', '.', $this->request->getPost('lk_dada')),
         ];
 
-        $angkaPositif = [
-            'bb' => 'Berat Badan',
-            'pb' => 'Panjang Badan',
-            'lk_kepala' => 'Lingkar Kepala',
-            'lk_perut'  => 'Lingkar Perut',
-            'lk_dada'   => 'Lingkar Dada',
-            'umur' => 'Umur Bayi',
-            'umur_ibu' => 'Umur Ibu',
-            'umur_ayah' => 'Umur Ayah',
-            'kelahiran_ke' => 'Kelahiran ke-',
-            'gravida' => 'Gravida',
-            'para' => 'Para',
-            'abortus' => 'Abortus'
+        $token = session()->get('jwt_token');
+        $api_url = $this->api_url;
+
+        // Kirim ke kelahiranbayi API
+        $response1 = $this->sendToAPI("$api_url/kelahiranbayi", $postData, $token);
+        if (!$response1['success']) {
+            return redirect()->back()->withInput()->with('error', "Gagal simpan ke kelahiran bayi: {$response1['message']}");
+        }
+
+        // Siapkan data ke masterpasien
+        $pasienData = [
+            'no_rkm_medis' => $postData['no_rkm_medis'],
+            'nm_pasien'    => $postData['nm_pasien'],
+            'jk'           => $postData['jk'],
+            'tmp_lahir'    => $postData['tmp_lahir'],
+            'tgl_lahir'    => $tgl_lahir_iso,
+            'nm_ibu'       => $postData['nm_ibu'],
+            'alamat'       => $postData['alamat'],
+            'umur'         => $postData['umur'],
+            'tgl_daftar'   => $tgl_daftar_iso,
         ];
 
-        foreach ($angkaPositif as $field => $label) {
-            $value = (float) str_replace(',', '.', $this->request->getPost($field));
-            if ($value <= 0) {
-                return redirect()->back()->withInput()->with('error', "$label harus lebih dari 0.");
-            }
-        }
-        $gravida = (int) $this->request->getPost('gravida');
-        $para    = (int) $this->request->getPost('para');
-        $abortus = (int) $this->request->getPost('abortus');
-
-        // Cek nilai tidak negatif
-        if ($gravida < 1 || $para < 0 || $abortus < 0) {
-            return redirect()->back()->withInput()->with('error', 'Gravida minimal 1, dan Para/Abortus tidak boleh negatif.');
-        }
-
-        // Cek jumlah masuk akal
-        if (($para + $abortus) > $gravida) {
-            return redirect()->back()->withInput()->with('error', 'Jumlah Para dan Abortus tidak boleh melebihi Gravida.');
-        }
-
-        $tgl_lahir = $this->request->getPost('tgl_lahir');
-        $tgl_daftar = $this->request->getPost('tgl_daftar');
-        $jam_lahir = $this->request->getPost('jam');
-        $now = date('Y-m-d');
-        $currentTime = date('H:i');
-
-        // Validasi Huruf Nama
-        $namaFields = ['nm_pasien', 'nm_ibu', 'nm_ayah'];
-        foreach ($namaFields as $field) {
-            $nama = $this->request->getPost($field);
-            if (!preg_match('/^[a-zA-Z\s\'-]+$/u', $nama)) {
-                return redirect()->back()->withInput()->with('error', ucfirst(str_replace('_', ' ', $field)) . ' hanya boleh berisi huruf, spasi, tanda petik, atau strip.');
-            }
+        // Tambahkan semua field opsional default kosong
+        $opsional = [
+            'no_ktp',
+            'gol_darah',
+            'pekerjaan',
+            'stts_nikah',
+            'agama',
+            'no_tlp',
+            'pnd',
+            'kd_pj',
+            'no_peserta',
+            'kd_kel',
+            'kd_kec',
+            'kd_kab',
+            'pekerjaanpj',
+            'suku_bangsa',
+            'bahasa_pasien',
+            'perusahaan_pasien',
+            'nip',
+            'email',
+            'cacat_fisik',
+            'kd_prop',
+            'keluarga' // ← tambah ini
+        ];
+        foreach ($opsional as $field) {
+            $pasienData[$field] = '';
         }
 
-        // Tanggal lahir tidak boleh di masa depan
-        if ($tgl_lahir > $now) {
-            return redirect()->back()->withInput()->with('error', 'Tanggal lahir tidak boleh di masa depan.');
+        $response2 = $this->sendToAPI("$api_url/masterpasien", $pasienData, $token);
+        if (!$response2['success']) {
+            return redirect()->to('/kelahiranbayi')->with('warning', "Bayi berhasil ditambahkan, tapi gagal ke masterpasien: {$response2['message']}");
         }
 
-        // Tanggal daftar tidak boleh di masa depan
-        if ($tgl_daftar > $now) {
-            return redirect()->back()->withInput()->with('error', 'Tanggal daftar tidak boleh di masa depan.');
-        }
+        return redirect()->to('/kelahiranbayi')->with('success', 'Bayi & pasien berhasil ditambahkan.');
+    }
 
-        // Tanggal daftar tidak boleh lebih awal dari tanggal lahir
-        if ($tgl_daftar && $tgl_lahir && strtotime($tgl_daftar) < strtotime($tgl_lahir)) {
-            return redirect()->back()->withInput()->with('error', 'Tanggal daftar tidak boleh sebelum tanggal lahir.');
-        }
+    // Fungsi reusable untuk kirim ke API
+    private function sendToAPI($url, $data, $token)
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token,
+        ]);
 
-        // Jika tanggal lahir hari ini, jam lahir tidak boleh melebihi waktu saat ini
-        if ($tgl_lahir == $now && strtotime($jam_lahir) > strtotime($currentTime)) {
-            return redirect()->back()->withInput()->with('error', 'Jam lahir tidak boleh melebihi waktu saat ini.');
-        }
+        $res = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
+        curl_close($ch);
 
+        // Debug logging: tulis hasil ke log CodeIgniter
+        log_message('error', "[API DEBUG] POST to $url status: $status response: $res CURL error: $curlError");
 
-        $jsonPayload = json_encode($postData);
-        $url = $this->api_url . "/kelahiranbayi";
+        // Coba decode JSON (cek dulu valid)
+        $decoded = json_decode($res, true);
 
-
-
-        if (session()->has('jwt_token')) {
-            $token = session()->get('jwt_token');
-
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonPayload);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/json',
-                'Authorization: Bearer ' . $token,
-            ]);
-
-            $response = curl_exec($ch);
-            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-
-            if ($response && in_array($http_status, [200, 201])) {
-
-                $pasienData = [
-                    'no_rkm_medis' => $this->request->getPost('no_rkm_medis'),
-                    'nm_pasien'    => $this->request->getPost('nm_pasien'),
-                    'jk'           => $this->request->getPost('jk'),
-                    'tmp_lahir'    => $this->request->getPost('tmp_lahir'),
-                    'tgl_lahir'    => $tgl_lahir_iso,
-                    'nm_ibu'       => $this->request->getPost('nm_ibu'),
-                    'alamat'       => $this->request->getPost('alamat'),
-                    'umur'         => $this->request->getPost('umur'),
-                    'tgl_daftar'   => $tgl_daftar_iso,
-                ];
-
-                // Tambahkan semua field opsional kosong agar payload lengkap
-                $opsional = [
-                    'no_ktp',
-                    'gol_darah',
-                    'pekerjaan',
-                    'stts_nikah',
-                    'agama',
-                    'no_tlp',
-                    'pnd',
-                    'keluarga',
-                    'namakeluarga',
-                    'kd_pj',
-                    'no_peserta',
-                    'kd_kel',
-                    'kd_kec',
-                    'kd_kab',
-                    'pekerjaanpj',
-                    'alamatpj',
-                    'kelurahanpj',
-                    'kecamatanpj',
-                    'kabupatenpj',
-                    'suku_bangsa',
-                    'bahasa_pasien',
-                    'perusahaan_pasien',
-                    'nip',
-                    'email',
-                    'cacat_fisik',
-                    'kd_prop',
-                    'propinsipj'
-                ];
-                foreach ($opsional as $field) {
-                    $pasienData[$field] = "";
-                }
-
-                $pasienPayload = json_encode($pasienData);
-                $urlPasien = $this->api_url . "/pasien";
-
-                $ch2 = curl_init($urlPasien);
-                curl_setopt($ch2, CURLOPT_POST, 1);
-                curl_setopt($ch2, CURLOPT_POSTFIELDS, $pasienPayload);
-                curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch2, CURLOPT_HTTPHEADER, [
-                    'Content-Type: application/json',
-                    'Authorization: Bearer ' . $token,
-                ]);
-
-                $responsePasien = curl_exec($ch2);
-                $http_status_pasien = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-                curl_close($ch2);
-
-                // Optional: log atau tangani error jika $http_status_pasien != 201
-                return redirect()->to('/kelahiranbayi')->with('success', 'Data kelahiran bayi berhasil ditambahkan.');
-            } else {
-                // Coba decode response biar tau error detailnya
-                $responseData = json_decode($response, true);
-                $errorMsg = print_r($responseData, true); // cetak semua isi response
-
-                return redirect()->back()->withInput()->with('error', "Gagal menambahkan data. HTTP: $http_status - $errorMsg");
-            }
+        if (in_array($status, [200, 201])) {
+            return ['success' => true, 'status' => $status, 'data' => $decoded];
         } else {
-            return redirect()->to('/login')->with('error', 'Harap login terlebih dahulu.');
+            $error = $decoded['error'] ?? $res ?? 'Unknown error';
+            return ['success' => false, 'message' => $error];
         }
     }
 }

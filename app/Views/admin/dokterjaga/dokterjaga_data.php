@@ -43,8 +43,8 @@
                                                             <div>
                                                                 Ambulans <strong><?= esc($req['kode_dokter']) ?></strong> sedang diminta (<?= esc($req['status']) ?>)
                                                             </div>
-                                                            <a href="/ambulans/terima/<?= esc($req['kode_dokter']) ?>" 
-                                                            class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">
+                                                            <a href="/ambulans/terima/<?= esc($req['kode_dokter']) ?>"
+                                                                class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">
                                                                 Terima
                                                             </a>
                                                         </div>
@@ -70,39 +70,43 @@
 
                     <!-- End Header -->
                     <?php
-                        echo view('components/header/search_bar');
-                        
-                        $modul_path = '/dokterjaga';
-                        $tabel    = $dokterjaga_data;
-                        $kolom_id = 'kode_dokter';
-                        $aksi = [
-                            'cetak'    => false,
-                            'tindakan' => false,
-                            'detail'   => true,
-                            'ubah'     => true,
-                            'hapus'    => true
-                        ];
-                        $konfig = [
-                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
-                            [1, 'Kode Dokter', 'kode_dokter', 'indeks'],
-                            [1, 'Nama Dokter', 'nama_dokter', 'nama'],
-                            [1, 'Hari Kerja' , 'hari_kerja' , 'teks'], 
-                            [1, 'Jam Mulai'  , 'jam_mulai'  , 'jam'],
-                            [1, 'Jam Selesai', 'jam_selesai', 'jam'],
-                            [1, 'Poliklinik' , 'poliklinik' , 'status']
-                        ];
-                        echo view('components/tabel/data', [
-                            'modul_path' => $modul_path,
-                            'tabel'      => $tabel,
-                            'kolom_id'   => $kolom_id,
-                            'konfig'     => $konfig,
-                            'aksi'       => $aksi
-                        ]);
-                        
-                        echo view('components/footer/footer', [
-                            'meta_data'  => $meta_data,
-                            'modul_path' => $modul_path
-                        ]);      
+                    echo view('components/header/search_bar');
+
+                    $modul_path = '/dokterjaga';
+                    $api_path = '/dokterjaga';
+                    $tabel    = $dokterjaga_data;
+                    $kolom_id = 'kode_dokter';
+                    $aksi = [
+                        'notif'    => false,
+                        'tambah'   => true,
+                        'audit'    => true,
+                        'cetak'    => false,
+                        'tindakan' => false,
+                        'detail'   => true,
+                        'ubah'     => true,
+                        'hapus'    => true
+                    ];
+                    $konfig = [
+                        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                        [1, 'Kode Dokter', 'kode_dokter', 'indeks'],
+                        [1, 'Nama Dokter', 'nama_dokter', 'nama'],
+                        [1, 'Hari Kerja', 'hari_kerja', 'teks'],
+                        [1, 'Jam Mulai', 'jam_mulai', 'jam'],
+                        [1, 'Jam Selesai', 'jam_selesai', 'jam'],
+                        [1, 'Poliklinik', 'poliklinik', 'status']
+                    ];
+                    echo view('components/tabel/data', [
+                        'modul_path' => $modul_path,
+                        'tabel'      => $tabel,
+                        'kolom_id'   => $kolom_id,
+                        'konfig'     => $konfig,
+                        'aksi'       => $aksi
+                    ]);
+
+                    echo view('components/footer/footer', [
+                        'meta_data'  => $meta_data,
+                        'modul_path' => $modul_path
+                    ]);
                     ?>
                 </div>
             </div>
@@ -113,40 +117,40 @@
 
 <!-- End Table Section -->
 <script>
-function fetchAmbulansRequests() {
-  $.ajax({
-    url: "http://127.0.0.1:8080/v1/ambulans/request/pending",
-    method: "GET",
-    success: function (res) {
-      console.log("Ambulance response:", res); // Check if this logs in browser
-      let notifHtml = "";
+    function fetchAmbulansRequests() {
+        $.ajax({
+            url: "http://127.0.0.1:8080/v1/ambulans/request/pending",
+            method: "GET",
+            success: function(res) {
+                console.log("Ambulance response:", res); // Check if this logs in browser
+                let notifHtml = "";
 
-      if (res.data && res.data.length > 0) {
-        res.data
-        .filter(item => item.status === 'pending')
-        .forEach(function (item) {
-          notifHtml += `
+                if (res.data && res.data.length > 0) {
+                    res.data
+                        .filter(item => item.status === 'pending')
+                        .forEach(function(item) {
+                            notifHtml += `
             <div class="flex items-center justify-between p-4 hover:bg-gray-100 border-l-4 border-blue-500">
               🚑 Ambulans <strong>${item.kode_dokter}</strong> sedang diminta (${item.status})
               <a href="/ambulans/terima/${item.kode_dokter}" class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">Terima</a>
             </div>
           `;
+                        });
+                } else {
+                    notifHtml = ""; // Clear section if no data
+                }
+
+                $("#ambulansNotifSection").html(notifHtml);
+            },
+            error: function() {
+                $("#ambulansNotifSection").html(`<div class="text-red-500 p-2">Gagal memuat data permintaan ambulans.</div>`);
+            }
         });
-      } else {
-        notifHtml = ""; // Clear section if no data
-      }
-
-      $("#ambulansNotifSection").html(notifHtml);
-    },
-    error: function () {
-      $("#ambulansNotifSection").html(`<div class="text-red-500 p-2">Gagal memuat data permintaan ambulans.</div>`);
     }
-  });
-}
 
-// Call initially and every 10s
-fetchAmbulansRequests();
-setInterval(fetchAmbulansRequests, 10000);
+    // Call initially and every 10s
+    fetchAmbulansRequests();
+    setInterval(fetchAmbulansRequests, 10000);
     document.addEventListener('DOMContentLoaded', function() {
         var count_notif_stok = <?= isset($count_notif_stok) ? $count_notif_stok : 0 ?>;
         document.querySelector('#stok-tab svg text').textContent = count_notif_stok;
@@ -176,9 +180,9 @@ setInterval(fetchAmbulansRequests, 10000);
         document.getElementById('stok-tab').classList.remove('border-[#272727]');
     });
 
-    
 
-    document.addEventListener('DOMContentLoaded', function () {
+
+    document.addEventListener('DOMContentLoaded', function() {
         const notifText = document.querySelector('#stok-tab svg text');
         const count = <?= $count_notif_kamar ?? 0 ?>;
 
@@ -191,27 +195,26 @@ setInterval(fetchAmbulansRequests, 10000);
         }
     });
     document.querySelectorAll('.assign-room-btn').forEach(button => {
-    button.addEventListener('click', async () => {
-        const nomorReg = button.getAttribute('data-nomor-reg');
-        
-        try {
-            const response = await fetch(`http://127.0.0.1:8080/v1/registrasi/${nomorReg}/assign-room`, {
-                method: 'PUT',
-            });
+        button.addEventListener('click', async () => {
+            const nomorReg = button.getAttribute('data-nomor-reg');
 
-            const result = await response.json();
+            try {
+                const response = await fetch(`http://127.0.0.1:8080/v1/registrasi/${nomorReg}/assign-room`, {
+                    method: 'PUT',
+                });
 
-            if (response.ok) {
-                alert('✅ ' + result.message);
-                button.closest('div').remove(); // remove the item from list
-            } else {
-                alert('❌ Failed: ' + result.message);
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('✅ ' + result.message);
+                    button.closest('div').remove(); // remove the item from list
+                } else {
+                    alert('❌ Failed: ' + result.message);
+                }
+            } catch (err) {
+                alert('❌ Error: ' + err.message);
             }
-        } catch (err) {
-            alert('❌ Error: ' + err.message);
-        }
+        });
     });
-});
-
 </script>
 <?= $this->endSection(); ?>

@@ -78,31 +78,13 @@
                 </select>
             </div>
 
-            <!-- Nama Ibu dan Penanggung Jawab -->
+            <!-- Nama Ibu dan Pekerjaan -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nama Ibu<span class="text-red-600">*</span></label>
                 <input type="text" id="nm_ibu" name="nm_ibu"
                     value="<?= old('nm_ibu', $form_data['nm_ibu'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
                     required data-error="Nama Ibu wajib diisi.">
-
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Penanggung Jawab<span class="text-red-600">*</span></label>
-                <select id="keluarga" name="keluarga" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="PJ wajib dipilih.">
-                    <option value="" disabled <?= old('keluarga', $form_data['keluarga'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
-                    <?php
-                    $options_keluarga = ['DIRI SENDIRI', 'AYAH', 'IBU', 'ISTRI', 'SUAMI', 'ANAK', 'SAUDARA', 'LAIN-LAIN'];
-                    foreach ($options_keluarga as $opt): ?>
-                        <option value="<?= $opt ?>" <?= old('keluarga', $form_data['keluarga'] ?? '') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <!-- Nama PJ dan Pekerjaan -->
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nama Penanggung Jawab<span class="text-red-600">*</span></label>
-                <input type="text" id="namakeluarga" name="namakeluarga"
-                    value="<?= old('namakeluarga', $form_data['namakeluarga'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Nama PJ wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pekerjaan<span class="text-red-600">*</span></label>
                 <input id="pekerjaan" name="pekerjaan"
@@ -189,18 +171,15 @@
                     required data-error="Daftar wajib diisi.">
             </div>
 
-            <!-- Pekerjaan PJ dan No. KTP/SIM -->
+            <!-- No. KTP/SIM -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Pekerjaan Penanggung Jawab<span class="text-red-600">*</span></label>
-                <input id="pekerjaanpj" name="pekerjaanpj"
-                    value="<?= old('pekerjaanpj', $form_data['pekerjaanpj'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
-
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">No. KTP/SIM<span class="text-red-600">*</span></label>
+                <label class="block text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4 mb-2 md:mb-0">No. KTP/SIM<span class="text-red-600">*</span></label>
                 <input id="no_ktp" name="no_ktp"
                     value="<?= old('no_ktp', $form_data['no_ktp'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="No. KTP/SIM wajib diisi.">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required data-error="No. KTP/SIM wajib diisi.">
             </div>
+
 
             <!-- Alamat -->
             <div class="mb-5 sm:block md:flex items-center">
@@ -235,58 +214,6 @@
                     value="<?= old('kd_prop', $form_data['kd_prop'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
-
-            <!-- Alamat PJ -->
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">
-                    Alamat PJ
-                </label>
-
-                <div class="relative w-full md:w-1/4">
-                    <input type="text" id="alamatpj" name="alamatpj"
-                        value="<?= old('alamatpj', $form_data['alamatpj'] ?? '') ?>"
-                        class="pr-10 border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white">
-
-                    <!-- Tombol salin -->
-                    <button type="button" id="copyAlamatPJ"
-                        class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-black"
-                        title="Salin alamat dari pasien">
-                        <!-- Heroicon: Clipboard Document -->
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h3.5a.5.5 0 01.5.5V5a1 1 0 001 1h3a1 1 0 001-1v-.5a.5.5 0 01.5-.5H17a2 2 0 012 2v14a2 2 0 01-2 2z" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Kelurahan dan Kecamatan PJ -->
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4"></label>
-                <input type="text" id="kelurahanpj" name="kelurahanpj" placeholder="Kelurahan PJ"
-                    value="<?= old('kelurahanpj', $form_data['kelurahanpj'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
-
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5"></label>
-                <input id="kecamatanpj" name="kecamatanpj" placeholder="Kecamatan PJ"
-                    value="<?= old('kecamatanpj', $form_data['kecamatanpj'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
-            </div>
-
-            <!-- Kabupaten dan Provinsi PJ -->
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4"></label>
-                <input type="text" id="kabupatenpj" name="kabupatenpj" placeholder="Kabupaten/Kota PJ"
-                    value="<?= old('kabupatenpj', $form_data['kabupatenpj'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
-
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5"></label>
-                <input id="propinsipj" name="propinsipj" placeholder="Provinsi PJ"
-                    value="<?= old('propinsipj', $form_data['propinsipj'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
-            </div>
-
 
             <!-- Instansi dan NIP/NRP -->
             <div class="mb-5 sm:block md:flex items-center">

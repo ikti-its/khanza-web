@@ -15,11 +15,10 @@ class KelahiranBayi extends BaseController
     protected string $api_path    = '/kelahiranbayi';
     protected string $nama_tabel  = 'kelahiran_bayi';
     protected string $kolom_id    = 'no_rkm_medis';
-
     protected array $aksi = [
         'notif'    => false,
         'tambah'   => true,
-        'audit'    => false,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,

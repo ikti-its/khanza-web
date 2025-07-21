@@ -1,6 +1,7 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 <?= $this->include('components/modal/modalpasien') ?>
+<?= $this->include('components/modal/modaldokter') ?>
 
 
 <!-- Card Section -->
@@ -12,33 +13,29 @@
         <form action="<?= base_url('/pasienmeninggal/simpanTambah') ?>" method="post" id="myForm" onsubmit="return validateForm()">
             <?= csrf_field() ?>
 
-            <!-- Nomor RM dan Nama -->
+            <!-- Nomor Rekam Medis dan Nama -->
             <div class="mb-5 sm:block md:flex items-center">
-                <!-- Label No. RM -->
-                <label for="no_rkm_medis" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
-                    No. Rekam Medis <span class="text-red-600">*</span>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">
+                    Nomor Rekam Medis<span class="text-red-600">*</span>
                 </label>
-
-                <!-- Input RM + Icon Modal -->
                 <div class="relative w-full md:w-1/4">
                     <input type="text" id="no_rkm_medis" name="no_rkm_medis"
-                        value="<?= old('no_rkm_medis', $form_data['no_rkm_medis'] ?? '') ?>"
                         class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white"
-                        placeholder="Nomor RM" readonly required>
-                    <button type="button" onclick="openModalPasien()" title="Pilih Pasien"
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
+                        placeholder="Nomor RM" required>
+                    <button type="button" onclick="openModalPasien()"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-black cursor-pointer transition-colors duration-200"
+                        title="Pilih Pasien">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M18 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h6m5-3h5m0 0v5m0-5L10 14" />
                         </svg>
                     </button>
                 </div>
 
-                <!-- Label + Input Nama Pasien -->
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Pasien<span class="text-red-600">*</span></label>
-                <input type="text" id="nm_pasien" name="nm_pasien"
-                    value="<?= old('nm_pasien', $form_data['nm_pasien'] ?? '') ?>"
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Nama<span class="text-red-600">*</span>
+                </label>
+                <input id="nm_pasien" name="nm_pasien"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
                     readonly required>
             </div>
@@ -164,18 +161,43 @@
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white"><?= old('keterangan', $form_data['keterangan'] ?? '') ?></textarea>
             </div>
 
-            <!-- Dokter -->
+            <!-- Kode Dokter dan Nama Dokter -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Kode Dokter<span class="text-red-600">*</span></label>
-                <input type="text" id="kode_dokter" name="kode_dokter"
-                    value="<?= old('kode_dokter', $form_data['kode_dokter'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <!-- Label Kode Dokter -->
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Kode Dokter<span class="text-red-600">*</span>
+                </label>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Dokter<span class="text-red-600">*</span></label>
+                <!-- Input Kode Dokter + Tombol Modal -->
+                <div class="relative w-full md:w-1/4">
+                    <input type="text" id="kode_dokter" name="kode_dokter"
+                        value="<?= old('kode_dokter', $form_data['kode_dokter'] ?? '') ?>"
+                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white"
+                        placeholder="Pilih Dokter" readonly required>
+
+                    <button type="button" onclick="openModalDokter()"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-black cursor-pointer"
+                        title="Pilih Dokter">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M18 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h6m5-3h5m0 0v5m0-5L10 14" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Label Nama Dokter -->
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Nama Dokter<span class="text-red-600">*</span>
+                </label>
+
                 <input type="text" id="nama_dokter" name="nama_dokter"
                     value="<?= old('nama_dokter', $form_data['nama_dokter'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required>
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    readonly required>
             </div>
+
+            <!-- Hidden Spesialis -->
+            <input type="hidden" name="spesialis" id="spesialis" value="<?= esc($form_data['spesialis'] ?? '') ?>">
 
             <!-- Button -->
             <div class="mt-5 pt-5 border-t flex justify-end gap-x-2">
