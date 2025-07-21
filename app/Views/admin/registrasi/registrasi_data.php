@@ -28,14 +28,14 @@
                                 <div id="notif-popup" class="absolute right-0 mt-2 w-[30rem] overflow-y-auto z-[2] bg-white rounded-lg shadow-lg hidden">
                                     <div class="px-4">
                                         <?= view('components/notif/header') ?>
-                                        <div class="flex">                                    
+                                        <div class="flex">
                                         </div>
                                     </div>
                                     <div>
                                         <div id="stok-content" class="max-h-[15rem] overflow-y-auto">
-                                        <div id="kamarpenuh-content" class="max-h-[15rem] overflow-y-auto hidden">
-                                            <!-- This will be dynamically filled by JS -->
-                                        </div>
+                                            <div id="kamarpenuh-content" class="max-h-[15rem] overflow-y-auto hidden">
+                                                <!-- This will be dynamically filled by JS -->
+                                            </div>
                                         </div>
                                         <div class="flex justify-center items-center w-3/4">
                                             <button id="kamarpenuh-tab" class="flex items-center justify-center text-center w-full py-2 border-b-2">Kamar Penuh
@@ -48,19 +48,19 @@
                                             </button>
                                         </div>
                                         <script>
-                                        window.addEventListener("DOMContentLoaded", function () {
-                                            const container = document.getElementById("kamarpenuh-content");
-                                            const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
+                                            window.addEventListener("DOMContentLoaded", function() {
+                                                const container = document.getElementById("kamarpenuh-content");
+                                                const notifList = JSON.parse(localStorage.getItem("kamarPenuhList")) || [];
 
-                                            if (!container) return;
+                                                if (!container) return;
 
-                                            container.innerHTML = ""; // Clear previous content
+                                                container.innerHTML = ""; // Clear previous content
 
-                                            if (notifList.length === 0) {
-                                                container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
-                                            } else {
-                                                notifList.forEach(notif => {
-                                                    container.innerHTML += `
+                                                if (notifList.length === 0) {
+                                                    container.innerHTML = `<div class="p-4 text-gray-500">Tidak ada notifikasi kamar penuh.</div>`;
+                                                } else {
+                                                    notifList.forEach(notif => {
+                                                        container.innerHTML += `
                                                         <div class="p-4 mb-2 ml-2 border-b border-gray-200 rounded hover:bg-gray-50">
                                                             <div class="flex items-center gap-2">
                                                                 <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
@@ -75,9 +75,9 @@
                                                             </div>
                                                         </div>
                                                     `;
-                                                });
-                                            }
-                                        });
+                                                    });
+                                                }
+                                            });
                                         </script>
                                     </div>
                                 </div>
@@ -93,53 +93,54 @@
                     </div>
                     <!-- End Header -->
                     <?php
-                        echo view('components/header/search_bar');
-                        
-                        $modul_path = '/registrasi';
-                        $tabel    = $registrasi_data;
-                        $kolom_id = 'nomor_reg';
-                        $aksi = [
-                            'cetak'    => false,
-                            'tindakan' => true,
-                            'detail'   => false,
-                            'ubah'     => true,
-                            'hapus'    => true,
-                        ];
-                        $konfig = [
-                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
-                            [1, 'Nomor Registrasi' , 'nomor_reg'    , 'indeks'],
-                            [1, 'Nomor Rawat'      , 'nomor_rawat'  , 'indeks'],
-                            [1, 'Tanggal'          , 'tanggal'      , 'tanggal'],
-                            [1, 'Jam'              , 'jam'          , 'jam'],
-                            [1, 'Nomor Rekam Medis', 'nomor_rm'     , 'indeks'],
-                            [1, 'Nama'             , 'nama_pasien'  , 'nama'],
-                            [1, 'Jenis Kelamin'    , 'jenis_kelamin', 'status'],
-                            [1, 'Umur'             , 'umur'         , 'jumlah'],
-                            [1, 'Poliklinik'       , 'poliklinik'   , 'status'],
-                            [1, 'Dokter'           , 'nama_dokter'  , 'nama'],
-                            [1, 'Penanggung Jawab'         , 'penanggung_jawab', 'nama'],
-                            [1, 'Hubungan Penanggung Jawab', 'hubungan_pj'     , 'teks'],
-                            [1, 'Alamat Penanggung Jawab'  , 'alamat_pj'       , 'teks'],
-                            [1, 'Nomor Telepon'    , 'no_telepon'       , 'teks'],
-                            [1, 'Biaya Registrasi' , 'biaya_registrasi' , 'uang'],
-                            [1, 'Status Registrasi', 'status_registrasi', 'status'],
-                            [1, 'Status Rawat'     , 'status_rawat'     , 'status'], 
-                            [1, 'Status Poliklinik', 'status_poli'      , 'status'],
-                            [1, 'Jenis Bayar'      , 'jenis_bayar'      , 'status'],
-                            [1, 'Status Bayar'     , 'status_bayar'     , 'status'],
-                        ];
-                        echo view('components/tabel/data', [
-                            'modul_path' => $modul_path,
-                            'tabel'      => $tabel,
-                            'kolom_id'   => $kolom_id,
-                            'konfig'     => $konfig,
-                            'aksi'       => $aksi
-                        ]);
-                        
-                        echo view('components/footer/footer', [
-                            'meta_data'  => $meta_data,
-                            'modul_path' => $modul_path
-                        ]);      
+                    echo view('components/header/search_bar');
+
+                    $modul_path = '/registrasi';
+                    $tabel    = $registrasi_data;
+                    $kolom_id = 'nomor_reg';
+                    $aksi = [
+                        'cetak'    => false,
+                        'tindakan' => true,
+                        'detail'   => false,
+                        'ubah'     => true,
+                        'hapus'    => true,
+                    ];
+                    $konfig = [
+                        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+                        [1, 'Nomor Registrasi', 'nomor_reg', 'indeks'],
+                        [1, 'Nomor Rawat', 'nomor_rawat', 'indeks'],
+                        [1, 'Tanggal', 'tanggal', 'tanggal'],
+                        [1, 'Jam', 'jam', 'jam'],
+                        [1, 'No. RM', 'nomor_rm', 'indeks'],
+                        [1, 'Nama', 'nama_pasien', 'nama'],
+                        [1, 'Jenis Kelamin', 'jenis_kelamin', 'status'],
+                        [1, 'Umur', 'umur', 'jumlah'],
+                        [1, 'Poliklinik', 'poliklinik', 'status'],
+                        [1, 'Dokter', 'nama_dokter', 'nama'],
+                        [1, 'Penanggung Jawab', 'penanggung_jawab', 'nama'],
+                        [1, 'Hubungan Penanggung Jawab', 'hubungan_pj', 'teks'],
+                        [1, 'Alamat Penanggung Jawab', 'alamat_pj', 'teks'],
+                        [1, 'Nomor Telepon', 'no_telepon', 'teks'],
+                        [1, 'Biaya Registrasi', 'biaya_registrasi', 'uang'],
+                        [1, 'Status Registrasi', 'status_registrasi', 'status'],
+                        [1, 'Status Rawat', 'status_rawat', 'status'],
+                        [1, 'Status Poliklinik', 'status_poli', 'status'],
+                        [1, 'Jenis Bayar', 'jenis_bayar', 'status'],
+                        [1, 'No. Asuransi / Askes',  'no_asuransi', 'teks'],
+                        [1, 'Status Bayar', 'status_bayar', 'status'],
+                    ];
+                    echo view('components/tabel/data', [
+                        'modul_path' => $modul_path,
+                        'tabel'      => $tabel,
+                        'kolom_id'   => $kolom_id,
+                        'konfig'     => $konfig,
+                        'aksi'       => $aksi
+                    ]);
+
+                    echo view('components/footer/footer', [
+                        'meta_data'  => $meta_data,
+                        'modul_path' => $modul_path
+                    ]);
                     ?>
                     <!-- End Table -->
                 </div>
@@ -151,23 +152,22 @@
 
 <!-- End Table Section -->
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('[data-hs-overlay]').forEach(btn => {
-    btn.addEventListener('click', function () {
-      // Close all open modals
-      document.querySelectorAll('.hs-overlay').forEach(modal => {
-        modal.classList.add('hidden');
-      });
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('[data-hs-overlay]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Close all open modals
+                document.querySelectorAll('.hs-overlay').forEach(modal => {
+                    modal.classList.add('hidden');
+                });
 
-      // Then open the correct one
-      const selector = btn.getAttribute('data-hs-overlay');
-      const targetModal = document.querySelector(selector);
-      if (targetModal) {
-        targetModal.classList.remove('hidden');
-      }
+                // Then open the correct one
+                const selector = btn.getAttribute('data-hs-overlay');
+                const targetModal = document.querySelector(selector);
+                if (targetModal) {
+                    targetModal.classList.remove('hidden');
+                }
+            });
+        });
     });
-  });
-});
-    
 </script>
 <?= $this->endSection(); ?>

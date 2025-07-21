@@ -173,6 +173,7 @@ class Registrasi extends BaseController
             $kabupaten_pj = $this->request->getPost('kabupatenpj');
             $propinsi_pj = $this->request->getPost('propinsipj');
             $notelp_pj    = $this->request->getPost('notelp_pj');
+            $no_asuransi    = $this->request->getPost('no_asuransi');
 
             // Validate that dokter is not empty
             // if (empty($dokter)) {
@@ -184,6 +185,12 @@ class Registrasi extends BaseController
             // }
 
             // Prepare data to be inserted into PostgreSQL or passed to another system
+
+            $no_asuransi = $this->request->getPost('no_asuransi');
+            if (empty($no_asuransi)) {
+                $no_asuransi = '-';
+            }
+
             $postDataRegistrasi = [
                 'nomor_reg' => $nomor_reg,
                 'nomor_rawat' => $nomor_rawat,
@@ -212,6 +219,7 @@ class Registrasi extends BaseController
                 'kabupatenpj' => $kabupaten_pj,
                 'propinsipj'  => $propinsi_pj,
                 'notelp_pj'   => $notelp_pj,
+                'no_asuransi'   => $no_asuransi,
             ];
             // dd($postDataRegistrasi);
             // Example cURL or database insertion logic goes here to save this data in PostgreSQL
@@ -232,19 +240,18 @@ class Registrasi extends BaseController
             ]);
             $response_registrasi = curl_exec($ch_registrasi);
             $http_status_code_registrasi = curl_getinfo($ch_registrasi, CURLINFO_HTTP_CODE);
+            curl_close($ch_registrasi); // pastikan ditutup sebelum return
 
-            if ($http_status_code_registrasi === 201) {
-                return redirect()->to(base_url('registrasi'));
+            if ($response_registrasi && $http_status_code_registrasi === 201) {
+                return redirect()->to(base_url('registrasi'))->with('success', 'Data registrasi berhasil ditambahkan.');
             } else {
-                return $response_registrasi;
+                return redirect()->back()->withInput()->with(
+                    'error',
+                    'Gagal menambahkan registrasi. HTTP Status: ' . $http_status_code_registrasi
+                );
             }
-
-            curl_close($ch_registrasi);
-        } else {
-            return $this->renderErrorView(401);
         }
     }
-
 
     public function editRegistrasi($nomorReg)
     {
@@ -325,6 +332,7 @@ class Registrasi extends BaseController
             $kabupaten_pj = $this->request->getPost('kabupatenpj');
             $propinsi_pj  = $this->request->getPost('propinsipj');
             $notelp_pj    = $this->request->getPost('notelp_pj');
+            $no_asuransi    = $this->request->getPost('no_asuransi');
 
             // Prepare data to be updated
             $postDataRegistrasi = [
@@ -355,6 +363,7 @@ class Registrasi extends BaseController
                 'kabupatenpj' => $kabupaten_pj,
                 'propinsipj'  => $propinsi_pj,
                 'notelp_pj'   => $notelp_pj,
+                'no_asuransi'   => $no_asuransi,
             ];
 
             // cURL setup for PUT request

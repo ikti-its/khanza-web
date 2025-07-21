@@ -1,5 +1,6 @@
 <?php
 
+//AutoNomor untuk Nomor Rekam Medis (Saat ini dipake di masterpasien dan kelahiranbayi)
 if (!function_exists('generateNextNoRM')) {
     /**
      * Generate nomor rekam medis berikutnya berdasarkan input terakhir.
@@ -21,6 +22,7 @@ if (!function_exists('generateNextNoRM')) {
     }
 }
 
+//AutoNomor unuk No.SKL Kelahiran Bayi
 if (!function_exists('generateNextSKL')) {
     /**
      * Generate No. SKL dengan format: 0001/RM-SKL/07/2025

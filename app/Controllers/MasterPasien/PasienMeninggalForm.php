@@ -4,7 +4,7 @@ namespace App\Controllers\MasterPasien;
 
 use App\Controllers\BaseController;
 
-class PasienMeninggal_tambah extends BaseController
+class PasienMeninggalForm extends BaseController
 {
 
     protected $api_url = 'http://localhost:8080';

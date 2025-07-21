@@ -26,13 +26,10 @@
                         class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white"
                         placeholder="Pilih Dokter" readonly required>
 
-                    <button type="button" onclick="openModalDokter()"
+                    <button type="button" onclick="open_modalDokter()"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-black cursor-pointer"
                         title="Pilih Dokter">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M18 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h6m5-3h5m0 0v5m0-5L10 14" />
-                        </svg>
+                        <?= rendericon('openmodal') ?>
                     </button>
                 </div>
 

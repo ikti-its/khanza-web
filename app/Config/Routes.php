@@ -281,25 +281,34 @@ $routes->group('registrasi', ['filter' => 'auth'], function ($routes) {
     $routes->get('audit', 'Registrasi::tampilAudit', ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004']);
 });
 
+
 //masterpasien/tambah-pasien
-$routes->get('masterpasien/tambah-pasien', 'MasterPasien\MasterPasien_tambah::tambahPasien', [
+$routes->get('masterpasien/tambah-pasien', 'MasterPasien\MasterPasienForm::tampilTambah', [
     'filter' => 'checkpermission:1337,1,2,3'
 ]);
-$routes->post('masterpasien/simpanTambah', 'MasterPasien\MasterPasien_tambah::simpanTambah');
+$routes->post('masterpasien/simpanTambah', 'MasterPasien\MasterPasienForm::simpanTambah');
+
+//masterpasien/ubah-pasien
+$routes->get('masterpasien/ubah-pasien/(:segment)', 'MasterPasien\MasterPasienForm::tampilUbah/$1', [
+    'filter' => 'checkpermission:1337,1,2,3'
+]);
+$routes->get('masterpasien/ubah-pasien/(:any)', 'MasterPasien\MasterPasien::tampilUbah/$1');
+$routes->post('masterpasien/simpanUbah/(:segment)', 'MasterPasien\MasterPasienForm::simpanUbah/$1');
+
 
 
 //pasienmeninggal/tambah-pasien
-$routes->get('pasienmeninggal/tambah-pasien', 'MasterPasien\PasienMeninggal_tambah::tambahPasien', [
+$routes->get('pasienmeninggal/tambah-pasien', 'MasterPasien\PasienMeninggalForm::tambahPasien', [
     'filter' => 'checkpermission:1337,1,2,3'
 ]);
-$routes->post('pasienmeninggal/simpanTambah', 'MasterPasien\PasienMeninggal_tambah::simpanTambah');
-$routes->get('api/fetch-pasien-by-rm', 'MasterPasien\PasienMeninggal_tambah::fetchPasienByRM');
+$routes->post('pasienmeninggal/simpanTambah', 'MasterPasien\PasienMeninggalForm::simpanTambah');
+$routes->get('api/fetch-pasien-by-rm', 'MasterPasien\PasienMeninggalForm::fetchPasienByRM');
 
 //kelahiranbayi/tambah-pasien
-$routes->get('kelahiranbayi/tambah-pasien', 'MasterPasien\KelahiranBayi_tambah::tambahPasien', [
+$routes->get('kelahiranbayi/tambah-pasien', 'MasterPasien\KelahiranBayiForm::tambahPasien', [
     'filter' => 'checkpermission:1337,1,2,3'
 ]);
-$routes->post('kelahiranbayi/simpanTambah', 'MasterPasien\KelahiranBayi_tambah::simpanTambah');
+$routes->post('kelahiranbayi/simpanTambah', 'MasterPasien\KelahiranBayiForm::simpanTambah');
 
 
 
@@ -655,8 +664,9 @@ $routes->get('/modalpasien/list', 'Modal\ModalPasien::listPasien');
 $routes->get('/modalinstansi/list', 'Modal\ModalInstansi::listInstansi');
 $routes->get('/modaldokter/list', 'Modal\ModalDokter::listDokter');
 $routes->get('/modaldokterjaga/list', 'Modal\ModalDokterJaga::listDokterJaga');
+$routes->get('/modalasuransi/list', 'Modal\ModalAsuransi::listAsuransi');
 
-//Fitur Penggajian
+//Fitur Penggajian 
 $fiturs = [
     ['AturanPenggajian\\', 'aturan-penggajian/', [
         ['BPJS', 'bpjs'],
@@ -678,6 +688,9 @@ $fiturs = [
     ]],
     ['Dokter\\', '', [
         ['Dokter', 'dokter'],
+    ]],
+    ['Asuransi\\', '', [
+        ['Asuransi', 'asuransi'],
     ]],
 ];
 $filter = ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'];

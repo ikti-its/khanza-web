@@ -2,6 +2,7 @@
 <?= $this->section('content'); ?>
 <?= $this->include('components/modal/modalpasien') ?>
 <?= $this->include('components/modal/modaldokterjaga') ?>
+<?= $this->include('components/modal/modalasuransi') ?>
 
 <!-- Card Section -->
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
@@ -88,14 +89,11 @@
                 <div class="relative w-full md:w-1/4">
                     <input type="text" id="no_rkm_medis" name="no_rkm_medis"
                         class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white"
-                        placeholder="Nomor RM" required>
-                    <button type="button" onclick="openModalPasien()"
+                        placeholder="Pilih No. RM" required>
+                    <button type="button" onclick="open_modalPasien()"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-black cursor-pointer transition-colors duration-200"
                         title="Pilih Pasien">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M18 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h6m5-3h5m0 0v5m0-5L10 14" />
-                        </svg>
+                        <?= rendericon('openmodal') ?>
                     </button>
                 </div>
 
@@ -151,13 +149,10 @@
                         readonly required>
 
                     <!-- Tombol buka modal -->
-                    <button type="button" onclick="openModalDokterJaga()"
+                    <button type="button" onclick="open_modalDokterJaga()"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-black cursor-pointer transition-colors duration-200"
                         title="Pilih Dokter">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M18 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h6m5-3h5m0 0v5m0-5L10 14" />
-                        </svg>
+                        <?= rendericon('openmodal') ?>
                     </button>
                 </div>
 
@@ -175,8 +170,6 @@
 
             <!-- Hidden: kode dokter (yang dikirim ke backend) -->
             <input type="hidden" id="kode_dokter" name="kode_dokter" value="<?= esc($form_data['kode_dokter'] ?? '') ?>">
-
-
 
             <!-- Penanggung Jawab dan Hubungan -->
             <div class="mb-5 sm:block md:flex items-center">
@@ -292,24 +285,49 @@
                 </select>
             </div>
 
-            <!-- Jenis Bayar dan Status Bayar -->
+            <!-- Jenis Bayar dan No. Asuransi-->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">
                     Jenis Bayar<span class="text-red-600">*</span>
                 </label>
-                <select name="jenis_bayar"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required>
-                    <option value="BPJS">BPJS</option>
-                    <option value="non-BPJS">non-BPJS</option>
-                </select>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                <!-- Input Hidden: hanya untuk backend -->
+                <input type="hidden" id="jenis_bayar" name="jenis_bayar"
+                    value="<?= old('jenis_bayar', $form_data['jenis_bayar'] ?? '') ?>">
+
+                <!-- Input Display: untuk tampilkan nama asuransi -->
+                <div class="relative w-full md:w-1/4">
+                    <input type="text" id="jenis_bayar_display"
+                        value="<?= esc($form_data['jenis_bayar'] ?? '') ?>"
+                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 pr-10 w-full dark:border-gray-600 dark:text-white"
+                        placeholder="Pilih Asuransi" readonly required data-error="Asuransi wajib diisi.">
+
+                    <!-- Tombol buka modal -->
+                    <button type="button"
+                        onclick="open_modalAsuransi()"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-black cursor-pointer transition-colors duration-200"
+                        title="Pilih Asuransi">
+                        <?= rendericon('openmodal') ?>
+                    </button>
+                </div>
+
+                <!-- Nomor Asuransi / Askes -->
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">No. Asuransi / Polis</label>
+                <input type="text" id="no_asuransi" name="no_asuransi"
+                    value="<?= old('no_asuransi', $form_data['no_asuransi'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
+
+            </div>
+
+            <!-- Status Bayar -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">
                     Status Bayar<span class="text-red-600">*</span>
                 </label>
                 <select name="status_bayar"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
                     required>
+                    <option value="">-- Pilih --</option>
                     <option value="Belum Bayar">Belum Bayar</option>
                     <option value="Sudah Bayar">Sudah Bayar</option>
                 </select>
@@ -327,57 +345,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // ========== Bagian 1: Auto-Fill Pasien dari No RM ==========
-        const nomorRMInput = document.querySelector('input[name="no_rkm_medis"]');
-        const token = "<?= session()->get('jwt_token') ?>"; // Render token dari backend (PHP, dsb.)
-
-        async function fetchAndFillPasien(noRM) {
-            if (!noRM) return;
-
-            try {
-                const response = await fetch(`http://127.0.0.1:8080/v1/pasien/${encodeURIComponent(noRM)}`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    }
-                });
-
-                const result = await response.json();
-
-                if (result.status === 'success' && result.data) {
-                    const pasien = result.data;
-
-                    document.getElementById('nama_pasien').value = pasien.nm_pasien || '';
-                    document.getElementById('jenis_kelamin').value = pasien.jk || '';
-                    document.getElementById('umur').value = pasien.umur || '';
-                    document.getElementById('penanggung_jawab').value = pasien.namakeluarga || '';
-                    document.getElementById('alamat_pj').value = pasien.alamatpj || '';
-                    document.getElementById('no_telp').value = pasien.no_tlp || '';
-                    document.getElementById('hubungan_pj').value = pasien.keluarga || '';
-
-                    const statusSelect = document.querySelector('select[name="status_registrasi"]');
-                    if (statusSelect) {
-                        statusSelect.value = 'Lama';
-                    }
-                } else {
-                    console.warn("⚠️ Pasien tidak ditemukan.");
-                }
-            } catch (err) {
-                console.error("❌ Error fetching pasien:", err);
-            }
-        }
-
-        nomorRMInput.addEventListener('blur', function() {
-            const nomorRM = nomorRMInput.value.trim();
-            if (nomorRM) fetchAndFillPasien(nomorRM);
-        });
-
-        if (nomorRMInput.value.trim()) {
-            nomorRMInput.dispatchEvent(new Event('blur'));
-        }
-
-        // ========== Bagian 2: Hitung Harga Jual Otomatis ==========
+        // ========== Hitung Harga Jual Otomatis ==========
         const inputHargaBeli = document.querySelector('input[name="hargabeli"]');
         const hargaInputs = [
             'hargaralan', 'hargakelas1', 'hargakelas2', 'hargakelas3',

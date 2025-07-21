@@ -3783,3 +3783,15 @@ input[type="number"]::-webkit-inner-spin-button,
 .\[\&\:\:-webkit-scrollbar\]\:w-2::-webkit-scrollbar {
   width: 0.5rem;
 }
+
+/* efek highlight saat autofill */
+.autofill-flash {
+  animation: autofillGlow 0.8s ease-out;
+}
+
+@keyframes autofillGlow {
+  0%   { background-color: #d1fae5; }
+  100% { background-color: transparent; }
+}
+
+

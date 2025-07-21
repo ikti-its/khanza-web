@@ -5,8 +5,7 @@ namespace App\Controllers\MasterPasien;
 use App\Controllers\BaseController;
 use App\Services\NomorGeneratorService;
 
-
-class KelahiranBayi_tambah extends BaseController
+class KelahiranBayiForm extends BaseController
 {
     protected $api_url = 'http://localhost:8080';
 

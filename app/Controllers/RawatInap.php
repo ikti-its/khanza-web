@@ -8,46 +8,46 @@ use CodeIgniter\HTTP\ResponseInterface;
 class RawatInap extends BaseController
 {
 
-protected array $breadcrumbs = [];
+    protected array $breadcrumbs = [];
     protected string $judul = 'Rawat Inap';
     protected string $modul_path = '/rawatinap';
     protected string $api_path = '/rawatinap';
     protected string $kolom_id = 'nomor_rawat';
     protected string $nama_tabel = 'rawat_inap';
     protected array $aksi = [
-                            'cetak'    => false,
-                            'tindakan' => true,
-                            'detail'   => true,
-                            'ubah'     => true,
-                            'hapus'    => true,
-                        ];
+        'cetak'    => false,
+        'tindakan' => true,
+        'detail'   => true,
+        'ubah'     => true,
+        'hapus'    => true,
+    ];
     protected array $konfig = [
-                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
-                            [1, 'Nomor Rawat'      , 'nomor_rawat'   , 'indeks'],
-                            [0, 'Nomor Rekam Medis', 'nomor_rm'      , 'indeks'],
-                            [1, 'Nama Pasien'      , 'nama_pasien'   , 'nama'],
-                            [0, 'Alamat Pasien'    , 'alamat_pasien' , 'teks'],
-                            [0, 'Penanggung Jawab' , 'penanggung_jawab'   , 'nama'],
-                            [0, 'Hubungan Penanggung Jawab', 'hubungan_pj', 'teks'],
-                            [0, 'Jenis Bayar'      , 'jenis_bayar'   , 'status'],
-                            [0, 'Kamar'            , 'kamar'         , 'teks'],
-                            [0, 'Tarif Kamar'      , 'tarif_kamar'   , 'uang'],
-                            [1, 'Diagnosa Awal'    , 'diagnosa_awal' , 'teks'],
-                            [0, 'Diagnosa Akhir'   , 'diagnosa_akhir','teks'],
-                            [0, 'Tanggal Masuk'    , 'tanggal_masuk' , 'tanggal'],
-                            [0, 'Jam Masuk'        , 'jam_masuk'     , 'jam'],
-                            [0, 'Tanggal Keluar'   , 'tanggal_keluar', 'tanggal'],
-                            [0, 'Jam Keluar'       , 'jam_keluar'    , 'jam'],
-                            // [0, 'Total Biaya Kamar'      , 'total_biaya_kamar'   , 'uang'],
-                            // [0, 'Total Biaya Tindakan'      , 'total_biaya_tindakan'   , 'uang'],
-                            // [0, 'Total Biaya Obat'      , 'total_biaya_obat'   , 'uang'],
-                            [0, 'Total Biaya'      , 'total_biaya'   , 'uang'],
-                            [0, 'Status Pulang'    , 'status_pulang' , 'status'],
-                            [0, 'Lama'             , 'lama_ranap'    , 'teks'],
-                            [1, 'Dokter'           , 'dokter_pj'     , 'indeks'],
-                            [0, 'Status Bayar'     , 'status_bayar'  , 'status']
-                            
-                        ];
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Nomor Rawat', 'nomor_rawat', 'indeks'],
+        [0, 'Nomor Rekam Medis', 'nomor_rm', 'indeks'],
+        [1, 'Nama Pasien', 'nama_pasien', 'nama'],
+        [0, 'Alamat Pasien', 'alamat_pasien', 'teks'],
+        [0, 'Penanggung Jawab', 'penanggung_jawab', 'nama'],
+        [0, 'Hubungan Penanggung Jawab', 'hubungan_pj', 'teks'],
+        [0, 'Jenis Bayar', 'jenis_bayar', 'status'],
+        [0, 'Kamar', 'kamar', 'teks'],
+        [0, 'Tarif Kamar', 'tarif_kamar', 'uang'],
+        [1, 'Diagnosa Awal', 'diagnosa_awal', 'teks'],
+        [0, 'Diagnosa Akhir', 'diagnosa_akhir', 'teks'],
+        [0, 'Tanggal Masuk', 'tanggal_masuk', 'tanggal'],
+        [0, 'Jam Masuk', 'jam_masuk', 'jam'],
+        [0, 'Tanggal Keluar', 'tanggal_keluar', 'tanggal'],
+        [0, 'Jam Keluar', 'jam_keluar', 'jam'],
+        // [0, 'Total Biaya Kamar'      , 'total_biaya_kamar'   , 'uang'],
+        // [0, 'Total Biaya Tindakan'      , 'total_biaya_tindakan'   , 'uang'],
+        // [0, 'Total Biaya Obat'      , 'total_biaya_obat'   , 'uang'],
+        [0, 'Total Biaya', 'total_biaya', 'uang'],
+        [0, 'Status Pulang', 'status_pulang', 'status'],
+        [0, 'Lama', 'lama_ranap', 'teks'],
+        [1, 'Dokter', 'dokter_pj', 'indeks'],
+        [0, 'Status Bayar', 'status_bayar', 'status']
+
+    ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 
     public function dataRawatInap()
@@ -145,7 +145,7 @@ protected array $breadcrumbs = [];
 
             $pemberian_data = json_decode($pemberian_response, true);
             $pemberianList = $pemberian_data['data'] ?? [];
-    // dd($pemberianList);
+            // dd($pemberianList);
             if (isset($pemberianList['nomor_rawat'])) {
                 $pemberianList = [$pemberianList];
             }
@@ -154,7 +154,7 @@ protected array $breadcrumbs = [];
             foreach ($pemberianList as $obat) {
                 $totalBiayaObat += intval($obat['total'] ?? 0);
             }
-    // dd($totalBiayaObat);
+            // dd($totalBiayaObat);
             $ri['total_biaya'] = $totalBiayaKamar + $totalBiayaTindakan + $totalBiayaObat;
             $ri['total_biaya_kamar'] = $totalBiayaKamar;
             $ri['total_biaya_tindakan'] = $totalBiayaTindakan;
@@ -164,7 +164,7 @@ protected array $breadcrumbs = [];
         $this->addBreadcrumb('User', 'user');
         $this->addBreadcrumb('Rawat Inap', 'rawatinap');
         $breadcrumbs = $this->getBreadcrumbs();
-    // dd($rawatinapList);
+        // dd($rawatinapList);
         return view('/admin/rawatinap/rawatinap_data', [
             'rawatinap_data' => $rawatinapList,
             'title' => $title,
@@ -193,11 +193,11 @@ protected array $breadcrumbs = [];
             'diagnosa_awal' => $this->request->getPost('diagnosa_awal'),
             'kamar' => $this->request->getPost('kamar'),
             'tarif_kamar' => floatval(str_replace(',', '', $this->request->getPost('tarif_kamar'))),
-            'status_kamar' => $this->request->getPost('status_kamar'),
+
             'tanggal_masuk' => $this->request->getPost('tanggal_masuk'),
             'jam_masuk' => $this->request->getPost('jam_masuk') ?: date('H:i:s'),
         ];
-    // dd($postData);
+        //dd($postData);
         $ch = curl_init($this->api_url . '/rawatinap');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -245,10 +245,10 @@ protected array $breadcrumbs = [];
         if (!session()->has('jwt_token')) {
             return $this->renderErrorView(401);
         }
-    
+
         $token = session()->get('jwt_token');
         $registrasiUrl = $this->api_url . '/registrasi/' . $nomorReg;
-    
+
         $ch = curl_init($registrasiUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -259,19 +259,19 @@ protected array $breadcrumbs = [];
         curl_close($ch);
 
         // dd($response);
-    
+
         if ($httpStatus !== 200) {
             return $this->renderErrorView($httpStatus);
         }
-    
+
         $registrasi = json_decode($response, true)['data'];
-    
+
         $title = 'Tambah Rawat Inap';
         $breadcrumbs = [
             ['title' => 'Rawat Inap', 'url' => '/rawatinap'],
             ['title' => 'Tambah', 'url' => null]
         ];
-    
+
         return view('admin/rawatinap/tambah_rawatinapbaru', [
             'title' => $title,
             'breadcrumbs' => $breadcrumbs,
@@ -280,7 +280,7 @@ protected array $breadcrumbs = [];
             'jam_masuk' => date('H:i:s'),
         ]);
     }
-    
+
     public function editRawatInap($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
@@ -382,7 +382,7 @@ protected array $breadcrumbs = [];
         $this->addBreadcrumb('User', 'user');
         $this->addBreadcrumb('Rawat Inap', 'rawatinap');
         $this->addBreadcrumb('Edit', 'edit');
-    // dd($ri);
+        // dd($ri);
         return view('/admin/rawatinap/edit_rawatinap', [
             'rawatinap' => $ri,
             'title' => 'Edit Rawat Inap',
@@ -459,7 +459,7 @@ protected array $breadcrumbs = [];
         // Fallback to current time if input is empty
         $jamMasuk = $jamMasukInput ? date('H:i:s', strtotime($jamMasukInput)) : date('H:i:s');
         $jamKeluar = $jamKeluarInput ? date('H:i:s', strtotime($jamKeluarInput)) : date('H:i:s');
-    
+
         return [
             'nomor_rawat'       => $this->request->getPost('nomor_rawat'),
             'nomor_rm'          => $this->request->getPost('nomor_rm'),

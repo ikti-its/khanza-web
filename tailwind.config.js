@@ -9,4 +9,9 @@ module.exports = {
   plugins: [
     require('preline/plugin'),
   ],
+
+  safelist: [
+  'autofill-flash'
+]
+
 };

@@ -6,7 +6,7 @@ use App\Controllers\BaseController;
 
 class Instansi extends BaseController
 {
-    protected string $judul = 'Data Instansi/Perusahaan Pasien';
+    protected string $judul = 'Data Instansi / Perusahaan Pasien';
     protected array $breadcrumbs = [
         ['title' => 'User', 'icon' => 'user'],
         ['title' => 'Instansi', 'icon' => 'instansi'],
