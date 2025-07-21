@@ -1,5 +1,6 @@
 <!-- Table -->
-<div class="overflow-x-auto w-full">                       
+<div class="overflow-x-auto w-full"
+    style="max-height: 600px; overflow-y: auto;">                       
     <table id="myTable" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <?php 
             $VISIBLE = 0;

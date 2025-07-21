@@ -11,10 +11,10 @@ class Audit extends BaseController
 
         $db = \Config\Database::connect();
         $query = $db->query(
-            "SELECT * FROM sik." . $tabel . "_audit
+            "SELECT * FROM sik." . $tabel . "_audit_view
             LEFT OUTER JOIN 
             (SELECT id, nama FROM sik.pegawai) c
-            ON sik." . $tabel . "_audit.changed_by = c.id
+            ON sik." . $tabel . "_audit_view.changed_by = c.id
             ORDER BY changed_by DESC");
         $results = $query->getResult();
 
