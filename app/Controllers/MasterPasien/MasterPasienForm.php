@@ -273,7 +273,7 @@ class MasterPasienForm extends BaseController
         }
 
         $jsonPayload = json_encode($postData);
-        dd($jsonPayload);
+        //dd($jsonPayload);
         $url = $this->api_url . "/masterpasien/" . $no_rkm_medis;
 
         if (session()->has('jwt_token')) {
@@ -293,11 +293,11 @@ class MasterPasienForm extends BaseController
             $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
-            dd([
-                'http_status' => $http_status,
-                'curl_error' => $error,
-                'api_response' => $response
-            ]);
+            // dd([
+            //     'http_status' => $http_status,
+            //     'curl_error' => $error,
+            //     'api_response' => $response
+            // ]);
 
             if ($response && in_array($http_status, [200, 204])) {
                 return redirect()->to('/masterpasien')->with('success', 'Data pasien berhasil diperbarui.');

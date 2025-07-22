@@ -152,5 +152,25 @@ window.autofillFields = function (map = {}) {
   });
 };
 
+// Fungsi util global untuk format tanggal ke YYYY-MM-DD
+function formatToDateInput(val) {
+  if (!val) return '';
+
+  let date;
+
+  // Jika val sudah Date object
+  if (val instanceof Date) {
+    date = val;
+  } else {
+    // Coba parse dari string
+    date = new Date(val);
+    if (isNaN(date.getTime())) return ''; // invalid date
+  }
+
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
 window.initModalList = initModalList;

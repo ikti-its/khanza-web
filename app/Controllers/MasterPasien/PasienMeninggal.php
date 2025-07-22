@@ -18,14 +18,13 @@ class PasienMeninggal extends BaseController
     protected array $aksi = [
         'notif'    => false,
         'tambah'   => true,
-        'audit'    => false,
+        'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
         'detail'   => true,
         'ubah'     => true,
         'hapus'    => true
     ];
-
     protected array $konfig = [
         // [visible, Display, Kolom, Jenis, Required, *Opsi]
         [1, 'No. Rekam Medis', 'no_rkm_medis', 'indeks', 1],
@@ -67,5 +66,10 @@ class PasienMeninggal extends BaseController
     public function tampilTambah()
     {
         return redirect()->to('pasienmeninggal/tambah-pasien');
+    }
+
+    public function tampilUbah($id)
+    {
+        return redirect()->to("pasienmeninggal/ubah-pasien/$id");
     }
 }

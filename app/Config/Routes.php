@@ -292,17 +292,23 @@ $routes->post('masterpasien/simpanTambah', 'MasterPasien\MasterPasienForm::simpa
 $routes->get('masterpasien/ubah-pasien/(:segment)', 'MasterPasien\MasterPasienForm::tampilUbah/$1', [
     'filter' => 'checkpermission:1337,1,2,3'
 ]);
-$routes->get('masterpasien/ubah-pasien/(:any)', 'MasterPasien\MasterPasien::tampilUbah/$1');
+
 $routes->post('masterpasien/simpanUbah/(:segment)', 'MasterPasien\MasterPasienForm::simpanUbah/$1');
 
 
-
 //pasienmeninggal/tambah-pasien
-$routes->get('pasienmeninggal/tambah-pasien', 'MasterPasien\PasienMeninggalForm::tambahPasien', [
+$routes->get('pasienmeninggal/tambah-pasien', 'MasterPasien\PasienMeninggalForm::tampilTambah', [
     'filter' => 'checkpermission:1337,1,2,3'
 ]);
 $routes->post('pasienmeninggal/simpanTambah', 'MasterPasien\PasienMeninggalForm::simpanTambah');
-$routes->get('api/fetch-pasien-by-rm', 'MasterPasien\PasienMeninggalForm::fetchPasienByRM');
+
+//masterpasien/ubah-pasien
+$routes->get('pasienmeninggal/ubah-pasien/(:segment)', 'MasterPasien\PasienMeninggalForm::tampilUbah/$1', [
+    'filter' => 'checkpermission:1337,1,2,3'
+]);
+$routes->post('pasienmeninggal/simpanUbah/(:segment)', 'MasterPasien\PasienMeninggalForm::simpanUbah/$1');
+
+
 
 //kelahiranbayi/tambah-pasien
 $routes->get('kelahiranbayi/tambah-pasien', 'MasterPasien\KelahiranBayiForm::tambahPasien', [

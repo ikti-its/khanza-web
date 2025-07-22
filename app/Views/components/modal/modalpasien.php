@@ -31,14 +31,19 @@
                 autofillFields({
                     // general
                     no_rkm_medis: item.no_rkm_medis,
-                    nama_pasien: item.nm_pasien,
-                    jenis_kelamin: item.jk,
+                    nm_pasien: item.nm_pasien,
+                    jk: item.jk,
+                    tgl_lahir: formatToDateInput(item.tgl_lahir),
+                    gol_darah: item.gol_darah,
+                    stts_nikah: item.stts_nikah,
+                    agama: item.agama,
                     umur: item.umur,
-                    alamat_pj: item.alamatpj,
-                    no_telp: item.no_tlp,
                     no_asuransi: item.no_asuransi,
 
-                    // modal di registrasi
+                    // id di registrasi
+                    jenis_kelamin: item.jk,
+                    nama_pasien: item.nm_pasien,
+                    no_telp: item.no_tlp,
                     jenis_bayar: item.asuransi,
                     jenis_bayar_display: item.asuransi,
                 });

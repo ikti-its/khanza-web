@@ -296,6 +296,49 @@
 
 <!-- Script Validasi -->
 <script src="<?= base_url('js/form-validation.js') ?>"></script>
-<script src="<?= base_url('js/form-masterpasien.js') ?>"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 📅 Auto Hitung Umur
+        const tglLahirInput = document.getElementById('tgl_lahir');
+        const umurInput = document.getElementById('umur');
+
+        function hitungUmur(tanggal) {
+            const tgl = new Date(tanggal);
+            const now = new Date();
+            if (isNaN(tgl.getTime())) return '';
+            let tahun = now.getFullYear() - tgl.getFullYear();
+            let bulan = now.getMonth() - tgl.getMonth();
+            let hari = now.getDate() - tgl.getDate();
+            if (hari < 0) {
+                bulan--;
+                hari += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+            }
+            if (bulan < 0) {
+                tahun--;
+                bulan += 12;
+            }
+            return `${tahun} Th ${bulan} Bl ${hari} Hr`;
+        }
+
+        if (tglLahirInput && umurInput) {
+            tglLahirInput.addEventListener('change', () => {
+                umurInput.value = hitungUmur(tglLahirInput.value);
+            });
+            umurInput.addEventListener('keydown', e => e.preventDefault());
+            umurInput.addEventListener('paste', e => e.preventDefault());
+        }
+
+        // 🔢 Validasi Angka
+        function onlyNumber(selector) {
+            const input = document.querySelector(selector);
+            if (input) {
+                input.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                });
+            }
+        }
+        ['#no_ktp', '#no_tlp', '#nip'].forEach(sel => onlyNumber(sel));
+    });
+</script>
 
 <?= $this->endSection(); ?>
