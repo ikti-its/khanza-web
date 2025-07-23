@@ -35,14 +35,14 @@ class PasienMeninggal extends BaseController
         ]],
         [1, 'Tanggal Lahir', 'tgl_lahir', 'tanggal', 1],
         [1, 'Umur', 'umur', 'teks', 1],
-        [1, 'Gol. Darah', 'gol_darah', 'teks', 0],
-        [1, 'Status Nikah', 'stts_nikah', 'status', 0, [
+        [0, 'Gol. Darah', 'gol_darah', 'teks', 0],
+        [0, 'Status Nikah', 'stts_nikah', 'status', 0, [
             ['Menikah', 'Menikah'],
             ['Belum Menikah', 'Belum Menikah'],
             ['Duda', 'Duda'],
             ['Janda', 'Janda']
         ]],
-        [1, 'Agama', 'agama', 'status', 0, [
+        [0, 'Agama', 'agama', 'status', 0, [
             ['Islam', 'Islam'],
             ['Kristen', 'Kristen'],
             ['Katolik', 'Katolik'],
@@ -52,13 +52,13 @@ class PasienMeninggal extends BaseController
         ]],
         [1, 'Tanggal Meninggal', 'tanggal', 'tanggal', 1],
         [1, 'Jam Meninggal', 'jam', 'jam', 1],
-        [1, 'ICD-X Utama', 'icdx', 'teks', 1],
-        [1, 'ICD-X Antara 1', 'icdx_antara1', 'teks', 0],
-        [1, 'ICD-X Antara 2', 'icdx_antara2', 'teks', 0],
-        [1, 'ICD-X Langsung', 'icdx_langsung', 'teks', 0],
-        [1, 'Keterangan', 'keterangan', 'teks', 0],
-        [1, 'Kode Dokter', 'kode_dokter', 'teks', 0],
-        [1, 'Dokter Penanggung Jawab', 'nama_dokter', 'teks', 1],
+        [0, 'ICD-X Utama', 'icdx', 'teks', 1],
+        [0, 'ICD-X Antara 1', 'icdx_antara1', 'teks', 0],
+        [0, 'ICD-X Antara 2', 'icdx_antara2', 'teks', 0],
+        [0, 'ICD-X Langsung', 'icdx_langsung', 'teks', 0],
+        [0, 'Keterangan', 'keterangan', 'teks', 0],
+        [0, 'Kode Dokter', 'kode_dokter', 'teks', 0],
+        [0, 'Dokter Penanggung Jawab', 'nama_dokter', 'teks', 1],
     ];
 
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];

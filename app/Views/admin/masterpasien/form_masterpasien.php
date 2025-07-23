@@ -76,7 +76,7 @@
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pendidikan<span class="text-red-600">*</span></label>
                 <select id="pnd" name="pnd" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Pendidikan wajib dipilih.">
                     <option value="" disabled <?= old('pnd', $pasien['pnd'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
-                    <?php foreach (['TS', 'TK', 'SD', 'SMP', 'SMA', 'SLTA/SEDERAJAT', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'] as $edu): ?>
+                    <?php foreach (['Tidak Sekolah', 'TK', 'SD', 'SMP', 'SMA', 'SLTA/SEDERAJAT', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'] as $edu): ?>
                         <option value="<?= $edu ?>" <?= old('pnd', $pasien['pnd'] ?? '') === $edu ? 'selected' : '' ?>><?= $edu ?></option>
                     <?php endforeach; ?>
                 </select>
@@ -84,16 +84,16 @@
 
             <!-- Nama Ibu dan Pekerjaan -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nama Ibu<span class="text-red-600">*</span></label>
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Nama Ibu</label>
                 <input type="text" id="nm_ibu" name="nm_ibu"
                     value="<?= old('nm_ibu', $pasien['nm_ibu'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
                     required data-error="Nama Ibu wajib diisi.">
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pekerjaan<span class="text-red-600">*</span></label>
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Pekerjaan</label>
                 <input id="pekerjaan" name="pekerjaan"
                     value="<?= old('pekerjaan', $pasien['pekerjaan'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Pekerjaan wajib diisi.">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <!-- Suku/Bangsa dan Bahasa -->
@@ -165,9 +165,9 @@
                     </button>
                 </div>
 
-                <!-- Nomor Induk Instansi -->
+                <!-- Nomor Asuransi -->
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">No. Asuransi / Polis</label>
-                <input type="text" id="no_asuransi" name="no_asuransi"
+                <input type="text" id="no_asuransi" name="no_asuransi" placeholder="Opsional, diisi jika ada"
                     value="<?= old('no_asuransi', $pasien['no_asuransi'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
 
@@ -176,7 +176,8 @@
             <!-- Email -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4 mb-2 md:mb-0">Email</label>
-                <input id="email" name="email"
+                <input id="email" name="email" placeholder="Opsional, diisi jika ada"
+
                     value="<?= old('email', $pasien['email'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
@@ -198,11 +199,10 @@
 
             <!-- No. KTP/SIM -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4 mb-2 md:mb-0">No. KTP / SIM<span class="text-red-600">*</span></label>
+                <label class="block text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4 mb-2 md:mb-0">No. KTP / SIM</label>
                 <input id="no_ktp" name="no_ktp"
                     value="<?= old('no_ktp', $pasien['no_ktp'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
-                    required data-error="No. KTP/SIM wajib diisi.">
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
 
@@ -272,7 +272,7 @@
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Nomor Induk Instansi
                 </label>
-                <input id="nip" name="nip"
+                <input id="nip" name="nip" placeholder="Opsional, diisi jika ada"
                     value="<?= old('nip', $pasien['nip'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>

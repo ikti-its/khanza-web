@@ -310,12 +310,17 @@ $routes->post('pasienmeninggal/simpanUbah/(:segment)', 'MasterPasien\PasienMenin
 
 
 
-//kelahiranbayi/tambah-pasien
-$routes->get('kelahiranbayi/tambah-pasien', 'MasterPasien\KelahiranBayiForm::tambahPasien', [
+// kelahiranbayi/tambah-pasien
+$routes->get('kelahiranbayi/tambah-pasien', 'MasterPasien\KelahiranBayiForm::tampilTambah', [
     'filter' => 'checkpermission:1337,1,2,3'
 ]);
 $routes->post('kelahiranbayi/simpanTambah', 'MasterPasien\KelahiranBayiForm::simpanTambah');
 
+// kelahiranbayi/ubah-pasien
+$routes->get('kelahiranbayi/ubah-pasien/(:segment)', 'MasterPasien\KelahiranBayiForm::tampilUbah/$1', [
+    'filter' => 'checkpermission:1337,1,2,3'
+]);
+$routes->post('kelahiranbayi/simpanUbah/(:segment)', 'MasterPasien\KelahiranBayiForm::simpanUbah/$1');
 
 
 

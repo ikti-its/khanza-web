@@ -585,9 +585,9 @@
                     ['Registrasi', '/registrasi', 'registrasi', '', $petugasrole, []],
                     ['Data Pasien', '', 'olah_data_pasien', '', $petugasrole, [
                         ['Daftar Pasien', '/masterpasien', ''],
-                        ['Riwayat Pasien', '/riwayatpasien', ''],
                         ['Kelahiran Bayi', '/kelahiranbayi', ''],
                         ['Pasien Meninggal', '/pasienmeninggal', ''],
+                        ['Asuransi Pasien', '/asuransi', ''],
                         ['Instansi Pasien', '/instansi', ''],
                     ]],
                     ['Dokter', '', 'dokter_jaga', '', $petugasrole, [

@@ -23,7 +23,7 @@ class MasterPasienForm extends BaseController
         $nextRM = generateNextNoRM($lastRM);
 
 
-        return view('admin/masterpasien/tambah_masterpasien', [
+        return view('admin/masterpasien/form_masterpasien', [
             'title' => 'Input Data Pasien',
             'no_rkm_medis' => $nextRM
         ]);
@@ -47,20 +47,19 @@ class MasterPasienForm extends BaseController
         }
 
         $postData = [
-            'no_rkm_medis' => $this->request->getPost('no_rkm_medis'),
             'nm_pasien' => $this->request->getPost('nm_pasien'),
-            'no_ktp' => $this->request->getPost('no_ktp'),
+            'no_ktp' => $this->request->getPost('no_ktp') ?: '-',
             'jk' => $this->request->getPost('jk'),
             'tmp_lahir' => $this->request->getPost('tmp_lahir'),
             'tgl_lahir' => $tgl_lahir_iso,
             'nm_ibu' => $this->request->getPost('nm_ibu'),
-            'alamat' => $this->request->getPost('alamat'),
+            'alamat' => $this->request->getPost('alamat') ?: '-',
             'gol_darah' => $this->request->getPost('gol_darah'),
-            'pekerjaan' => $this->request->getPost('pekerjaan'),
+            'pekerjaan' => $this->request->getPost('pekerjaan') ?: '-',
             'stts_nikah' => $this->request->getPost('stts_nikah'),
             'agama' => $this->request->getPost('agama'),
             'tgl_daftar' => $tgl_daftar_iso,
-            'no_tlp' => $this->request->getPost('no_tlp'),
+            'no_tlp' => $this->request->getPost('no_tlp') ?: '-',
             'umur' => $this->request->getPost('umur'),
             'pnd' => $this->request->getPost('pnd'),
             'asuransi' => $this->request->getPost('asuransi'),
@@ -68,7 +67,7 @@ class MasterPasienForm extends BaseController
             'kd_kel' => $this->request->getPost('kd_kel'),
             'kd_kec' => $this->request->getPost('kd_kec'),
             'kd_kab' => $this->request->getPost('kd_kab'),
-            'perusahaan_pasien' => $this->request->getPost('perusahaan_pasien'),
+            'perusahaan_pasien' => $this->request->getPost('perusahaan_pasien') ?: '-',
             'suku_bangsa' => $this->request->getPost('suku_bangsa'),
             'bahasa_pasien' => $this->request->getPost('bahasa_pasien'),
             'cacat_fisik' => $this->request->getPost('cacat_fisik'),
@@ -183,7 +182,7 @@ class MasterPasienForm extends BaseController
 
             //dd($pasien);
 
-            return view('admin/masterpasien/tambah_masterpasien', [
+            return view('admin/masterpasien/form_masterpasien', [
                 'title'         => 'Ubah Data Pasien',
                 'no_rkm_medis'  => $no_rkm_medis,
                 'pasien'        => $pasien,         // ⬅️ pakai key 'pasien' yang lebih intuitif
@@ -211,26 +210,26 @@ class MasterPasienForm extends BaseController
 
         $postData = [
             'nm_pasien' => $this->request->getPost('nm_pasien'),
-            'no_ktp' => $this->request->getPost('no_ktp'),
+            'no_ktp' => $this->request->getPost('no_ktp') ?: '-',
             'jk' => $this->request->getPost('jk'),
             'tmp_lahir' => $this->request->getPost('tmp_lahir'),
             'tgl_lahir' => $tgl_lahir_iso,
             'nm_ibu' => $this->request->getPost('nm_ibu'),
-            'alamat' => $this->request->getPost('alamat'),
+            'alamat' => $this->request->getPost('alamat') ?: '-',
             'gol_darah' => $this->request->getPost('gol_darah'),
-            'pekerjaan' => $this->request->getPost('pekerjaan'),
+            'pekerjaan' => $this->request->getPost('pekerjaan') ?: '-',
             'stts_nikah' => $this->request->getPost('stts_nikah'),
             'agama' => $this->request->getPost('agama'),
             'tgl_daftar' => $tgl_daftar_iso,
-            'no_tlp' => $this->request->getPost('no_tlp'),
+            'no_tlp' => $this->request->getPost('no_tlp') ?: '-',
             'umur' => $this->request->getPost('umur'),
             'pnd' => $this->request->getPost('pnd'),
             'asuransi' => $this->request->getPost('asuransi'),
             'no_asuransi' => $this->request->getPost('no_asuransi') ?: '-',
             'kd_kel' => $this->request->getPost('kd_kel'),
             'kd_kec' => $this->request->getPost('kd_kec'),
-            'kd_kab' => $this->request->getPost('kd_kab') ?: '-',
-            'perusahaan_pasien' => $this->request->getPost('perusahaan_pasien'),
+            'kd_kab' => $this->request->getPost('kd_kab'),
+            'perusahaan_pasien' => $this->request->getPost('perusahaan_pasien') ?: '-',
             'suku_bangsa' => $this->request->getPost('suku_bangsa'),
             'bahasa_pasien' => $this->request->getPost('bahasa_pasien'),
             'cacat_fisik' => $this->request->getPost('cacat_fisik'),
@@ -247,29 +246,6 @@ class MasterPasienForm extends BaseController
 
         if ($tgl_lahir > $now) {
             return redirect()->back()->withInput()->with('error', 'Tanggal lahir tidak boleh di masa depan.');
-        }
-
-        if ($tgl_lahir < $batas_terlalu_tua) {
-            return redirect()->back()->withInput()->with('error', 'Tanggal lahir terlalu lama. Maksimal umur 110 tahun.');
-        }
-
-        if ($tgl_lahir > $batas_terlalu_muda) {
-            return redirect()->back()->withInput()->with('error', 'Pasien terlalu muda. Silakan gunakan form kelahiran bayi.');
-        }
-
-        $email = $this->request->getPost('email');
-        if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return redirect()->back()->withInput()->with('error', 'Format email tidak valid.');
-        }
-
-        $no_tlp = $this->request->getPost('no_tlp');
-        if (!empty($no_tlp) && !preg_match('/^(\\+62|08)[0-9]{8,13}$/', $no_tlp)) {
-            return redirect()->back()->withInput()->with('error', 'Nomor telepon tidak valid. Gunakan format 08xxx atau +62xxx.');
-        }
-
-        $no_ktp = $this->request->getPost('no_ktp');
-        if (!empty($no_ktp) && !preg_match('/^[0-9]{16}$/', $no_ktp)) {
-            return redirect()->back()->withInput()->with('error', 'No. KTP harus 16 digit angka.');
         }
 
         $jsonPayload = json_encode($postData);

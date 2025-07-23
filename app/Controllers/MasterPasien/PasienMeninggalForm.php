@@ -15,7 +15,7 @@ class PasienMeninggalForm extends BaseController
             return redirect()->to('/login')->with('error', 'Harap login terlebih dahulu.');
         }
 
-        return view('admin/masterpasien/tambah_pasienmeninggal', [
+        return view('admin/masterpasien/form_pasienmeninggal', [
             'title' => 'Input Data Pasien Meninggal'
         ]);
     }
@@ -149,7 +149,7 @@ class PasienMeninggalForm extends BaseController
             }
 
 
-            return view('admin/masterpasien/tambah_pasienmeninggal', [
+            return view('admin/masterpasien/form_pasienmeninggal', [
                 'title'         => 'Ubah Data Pasien Meninggal',
                 'no_rkm_medis'  => $no_rkm_medis,
                 'pasien'        => $pasien,

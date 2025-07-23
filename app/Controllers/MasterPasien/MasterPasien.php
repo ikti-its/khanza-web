@@ -31,7 +31,7 @@ class MasterPasien extends BaseController
         [1, 'Nama Pasien', 'nm_pasien', 'nama'],
         [0, 'No. KTP/SIM', 'no_ktp', 'indeks'],
         [1, 'Jenis Kelamin', 'jk', 'status'],
-        [0, 'Tempat Lahir', 'tmp_lahir', 'nama'],
+        [1, 'Tempat Lahir', 'tmp_lahir', 'nama'],
         [1, 'Tanggal Lahir', 'tgl_lahir', 'tanggal'],
         [0, 'Nama Ibu', 'nm_ibu', 'nama'],
         [0, 'Alamat Pasien', 'alamat', 'teks'],
