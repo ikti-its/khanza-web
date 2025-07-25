@@ -277,6 +277,25 @@
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
+            <!-- Status Pasien -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">Status Pasien<span class="text-red-600">*</span></label>
+                <select id="stts_pasien" name="stts_pasien"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    required data-error="Status Pasien wajib dipilih."
+                    <?= ($mode ?? 'tambah') === 'tambah' ? 'disabled' : '' ?>>
+                    <option value="Aktif" <?= ($mode ?? 'tambah') === 'tambah' || old('stts_pasien', $pasien['stts_pasien'] ?? '') === 'Aktif' ? 'selected' : '' ?>>Aktif</option>
+                    <?php if (($mode ?? 'tambah') === 'ubah'): ?>
+                        <option value="Nonaktif" <?= old('stts_pasien', $pasien['stts_pasien'] ?? '') === 'Nonaktif' ? 'selected' : '' ?>>Nonaktif</option>
+                        <option value="Meninggal" <?= old('stts_pasien', $pasien['stts_pasien'] ?? '') === 'Meninggal' ? 'selected' : '' ?>>Meninggal</option>
+                    <?php endif; ?>
+                </select>
+            </div>
+
+            <?php if (($mode ?? 'tambah') === 'tambah'): ?>
+                <input type="hidden" name="stts_pasien" value="Aktif">
+            <?php endif; ?>
+
 
             <!-- Button -->
             <div class="mt-5 pt-5 border-t flex justify-end gap-x-2">

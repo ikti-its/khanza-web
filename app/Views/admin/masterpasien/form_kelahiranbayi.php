@@ -1,5 +1,6 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
+<?= $this->include('components/modal/modalpasien') ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
@@ -15,12 +16,12 @@
             <!-- No. Rekam Medis dan Nama Bayi -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">No. Rekam Medis Bayi<span class="text-red-600">*</span></label>
-                <input type="text" id="no_rkm_medis" name="no_rkm_medis"
+                <input type="text" id="no_rm_bayi" name="no_rkm_medis"
                     value="<?= old('no_rkm_medis', $bayi['no_rkm_medis'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" <?= ($mode ?? 'tambah') === 'ubah' ? 'readonly' : '' ?> required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Nama Bayi<span class="text-red-600">*</span></label>
-                <input type="text" id="nm_pasien" name="nm_pasien"
+                <input type="text" id="nm_bayi" name="nm_pasien"
                     value="<?= old('nm_pasien', $bayi['nm_pasien'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Nama Bayi wajib diisi.">
             </div>
@@ -28,7 +29,7 @@
             <!-- JK dan Panjang Badan -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Jenis Kelamin<span class="text-red-600">*</span></label>
-                <select id="jk" name="jk"
+                <select id="jk_bayi" name="jk"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Jenis Kelamin wajib dipilih.">
                     <option value="" disabled <?= old('jk', $bayi['jk'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih --</option>
                     <option value="L" <?= old('jk', $bayi['jk'] ?? '') === 'L' ? 'selected' : '' ?>>Laki-laki</option>
@@ -70,12 +71,12 @@
             <!-- Tanggal dan Jam Lahir -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tanggal Lahir<span class="text-red-600">*</span></label>
-                <input type="date" id="tgl_lahir" name="tgl_lahir"
+                <input type="date" id="tgl_lahir_bayi" name="tgl_lahir"
                     value="<?= old('tgl_lahir', $bayi['tgl_lahir'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Tanggal Lahir wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Jam Lahir<span class="text-red-600">*</span></label>
-                <input type="time" id="jam" name="jam"
+                <input type="time" id="jam_bayi" name="jam"
                     value="<?= old('jam', $bayi['jam'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Jam Lahir wajib diisi.">
             </div>
@@ -83,12 +84,12 @@
             <!-- Tempat Lahir dan Umur -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Tempat Lahir<span class="text-red-600">*</span></label>
-                <input type="text" id="tmp_lahir" name="tmp_lahir"
+                <input type="text" id="tmp_lahir_bayi" name="tmp_lahir"
                     value="<?= old('tmp_lahir', $bayi['tmp_lahir'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Tempat Lahir wajib diisi.">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur<span class="text-red-600">*</span></label>
-                <input type="text" id="umur" name="umur"
+                <input type="text" id="umur_bayi" name="umur"
                     value="<?= old('umur', $bayi['umur'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
             </div>
@@ -107,15 +108,38 @@
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" readonly required>
             </div>
 
-            <!-- Nama Ibu dan Umur Ibu -->
+            <!-- Nomor RM Ibu dan Nama Ibu -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">Nama Ibu<span class="text-red-600">*</span></label>
-                <input type="text" id="nm_ibu" name="nm_ibu"
-                    value="<?= old('nm_ibu', $bayi['nm_ibu'] ?? '') ?>"
-                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Nama Ibu wajib diisi.">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">
+                    Nomor RM Ibu<span class="text-red-600">*</span>
+                </label>
+                <div class="relative w-full md:w-1/4">
+                    <input type="text" id="no_rm_ibu" name="no_rm_ibu"
+                        value="<?= old('no_rm_ibu', $bayi['no_rm_ibu'] ?? '') ?>"
+                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg pr-10 dark:border-gray-600 dark:text-white"
+                        placeholder="Nomor RM Ibu" required <?= ($mode ?? 'tambah') === 'ubah' ? 'readonly' : '' ?>>
+                    <?php if (($mode ?? 'tambah') !== 'ubah'): ?>
+                        <button type="button" onclick="open_modalPasien()"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-black cursor-pointer transition-colors duration-200"
+                            title="Pilih Ibu">
+                            <?= rendericon('openmodal') ?>
+                        </button>
+                    <?php endif; ?>
+                </div>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">Umur Ibu<span class="text-red-600">*</span></label>
-                <input type="number" id="umur_ibu" name="umur_ibu"
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Nama Ibu<span class="text-red-600">*</span>
+                </label>
+                <input id="nm_ibu" name="nm_ibu"
+                    value="<?= old('nm_ibu', $bayi['nm_ibu'] ?? '') ?>"
+                    class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
+                    readonly required>
+            </div>
+
+            <!-- Umur Ibu -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4 mb-2 md:mb-0">Umur Ibu<span class="text-red-600">*</span></label>
+                <input type="text" id="umur_ibu" name="umur_ibu"
                     value="<?= old('umur_ibu', $bayi['umur_ibu'] ?? '') ?>"
                     class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white" required data-error="Umur Ibu wajib diisi.">
             </div>
@@ -135,7 +159,7 @@
 
             <!-- Alamat Ibu -->
             <div class="mb-5 sm:block md:flex items-center">
-                <label for="alamat" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                <label for="alamat" class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white w-1/5 lg:w-1/4">
                     Alamat Ibu<span class="text-red-600">*</span>
                 </label>
                 <textarea id="alamat" name="alamat"
@@ -418,9 +442,9 @@
 
     // Auto Hitung Umur Bayi saat input tgl_lahir dan jam_lahir
     document.addEventListener('DOMContentLoaded', function() {
-        const tglLahirInput = document.getElementById('tgl_lahir');
-        const jamLahirInput = document.getElementById('jam');
-        const umurInput = document.getElementById('umur');
+        const tglLahirInput = document.getElementById('tgl_lahir_bayi');
+        const jamLahirInput = document.getElementById('jam_bayi');
+        const umurInput = document.getElementById('umur_bayi');
 
         function updateUmur() {
             const tanggal = tglLahirInput.value;

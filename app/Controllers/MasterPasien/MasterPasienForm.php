@@ -47,6 +47,7 @@ class MasterPasienForm extends BaseController
         }
 
         $postData = [
+            'no_rkm_medis' => $this->request->getPost('no_rkm_medis'),
             'nm_pasien' => $this->request->getPost('nm_pasien'),
             'no_ktp' => $this->request->getPost('no_ktp') ?: '-',
             'jk' => $this->request->getPost('jk'),
@@ -74,6 +75,7 @@ class MasterPasienForm extends BaseController
             'email' => $this->request->getPost('email') ?: '-',
             'nip' => $this->request->getPost('nip') ?: '-',
             'kd_prop' => $this->request->getPost('kd_prop'),
+            'stts_pasien' => $this->request->getPost('stts_pasien'),
         ];
 
         //Validasi Tanggal Lahir
@@ -236,6 +238,7 @@ class MasterPasienForm extends BaseController
             'email' => $this->request->getPost('email') ?: '-',
             'nip' => $this->request->getPost('nip') ?: '-',
             'kd_prop' => $this->request->getPost('kd_prop'),
+            'stts_pasien' => $this->request->getPost('stts_pasien'),
         ];
 
         // Validasi sama persis seperti tambah

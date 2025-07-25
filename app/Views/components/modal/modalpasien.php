@@ -40,6 +40,11 @@
                     umur: item.umur,
                     no_asuransi: item.no_asuransi,
 
+                    // id di kelahiranbayi
+                    no_rm_ibu: item.no_rkm_medis,
+                    nm_ibu: item.nm_pasien,
+                    umur_ibu: item.umur,
+
                     // id di registrasi
                     jenis_kelamin: item.jk,
                     nama_pasien: item.nm_pasien,

@@ -38,6 +38,7 @@ class KelahiranBayi extends BaseController
         [1, 'Jam Lahir', 'jam', 'jam', 1],
         [1, 'Umur', 'umur', 'teks', 1],
         [0, 'Tanggal Daftar', 'tgl_daftar', 'tanggal', 1],
+        [1, 'No. RM Ibu', 'no_rm_ibu', 'teks', 1],
         [1, 'Nama Ibu', 'nm_ibu', 'nama', 1],
         [0, 'Umur Ibu', 'umur_ibu', 'teks', 1],
         [0, 'Nama Ayah', 'nm_ayah', 'nama', 1],

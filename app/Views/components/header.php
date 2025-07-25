@@ -607,7 +607,7 @@
                         ['Resep Pulang', '/reseppulang', ''],
                     ]],
                     ['Rekam Medis', '', 'rekam_medis', '', $dokterrole, [
-                        ['Daftar Rekam Medis', '/pasien', ''],
+                        ['Daftar Rekam Medis', '/rekam-medis', ''],
                         ['Observasi Rawat Inap', '/catatanobservasiranap', ''],
                         ['Observasi Rawat Inap Kebidanan', '/catatanobservasikebidanan', ''],
                         ['Observasi Rawat Inap Post Partum', '/catatanobservasipostpartum', ''],

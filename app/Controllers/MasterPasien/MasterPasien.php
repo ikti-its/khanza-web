@@ -21,8 +21,8 @@ class MasterPasien extends BaseController
         'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
-        'detail'   => true,
         'ubah'     => true,
+        'detail'   => true,
         'hapus'    => true
     ];
     protected array $konfig = [
@@ -55,6 +55,7 @@ class MasterPasien extends BaseController
         [0, 'Kode Kecamatan', 'kd_kec', 'teks'],
         [0, 'Kode Kabupaten', 'kd_kab', 'teks'],
         [0, 'Kode Provinsi', 'kd_prop', 'teks'],
+        [1, 'Status Pasien', 'stts_pasien', 'status'],
     ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 

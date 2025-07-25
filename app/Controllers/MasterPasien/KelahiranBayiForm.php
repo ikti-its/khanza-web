@@ -90,6 +90,7 @@ class KelahiranBayiForm extends BaseController
             'jam'                => (string) $this->request->getPost('jam'),
             'umur'               => (string) $this->request->getPost('umur'),
             'tgl_daftar'         => $tgl_daftar_iso,
+            'no_rm_ibu'          => (string) $this->request->getPost('no_rm_ibu'),
             'nm_ibu'             => (string) $this->request->getPost('nm_ibu'),
             'umur_ibu'           => (string) $this->request->getPost('umur_ibu'),
             'nm_ayah'            => (string) $this->request->getPost('nm_ayah'),
@@ -147,6 +148,10 @@ class KelahiranBayiForm extends BaseController
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
             $ch = curl_init($url);
+
+            // Log isi payload
+            // log_message('debug', 'Payload simpanUbah: ' . json_encode($postData));
+
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -158,6 +163,8 @@ class KelahiranBayiForm extends BaseController
             $response = curl_exec($ch);
             $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
+
+            // dd($response, $http_status);
 
             if ($response && in_array($http_status, [200, 201])) {
                 return redirect()->to('/kelahiranbayi')->with('success', 'Bayi berhasil ditambahkan.');
@@ -267,6 +274,7 @@ class KelahiranBayiForm extends BaseController
             'jam'                => (string) $this->request->getPost('jam'),
             'umur'               => (string) $this->request->getPost('umur'),
             'tgl_daftar'         => $tgl_daftar_iso,
+            'no_rm_ibu'          => (string) $this->request->getPost('no_rm_ibu'),
             'nm_ibu'             => (string) $this->request->getPost('nm_ibu'),
             'umur_ibu'           => (string) $this->request->getPost('umur_ibu'),
             'nm_ayah'            => (string) $this->request->getPost('nm_ayah'),
