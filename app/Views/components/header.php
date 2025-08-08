@@ -601,9 +601,9 @@
                     ['Registrasi', '/registrasi', 'registrasi', '', $petugasrole, []],
                     ['Data Pasien', '', 'olah_data_pasien', '', $petugasrole, [
                         ['Daftar Pasien', '/masterpasien', ''],
-                        ['Riwayat Pasien', '/riwayatpasien', ''],
                         ['Kelahiran Bayi', '/kelahiranbayi', ''],
                         ['Pasien Meninggal', '/pasienmeninggal', ''],
+                        ['Asuransi Pasien', '/asuransi', ''],
                         ['Instansi Pasien', '/instansi', ''],
                     ]],
                     ['Dokter', '', 'dokter_jaga', '', $petugasrole, [
@@ -623,7 +623,7 @@
                         ['Resep Pulang', '/reseppulang', ''],
                     ]],
                     ['Rekam Medis', '', 'rekam_medis', '', $dokterrole, [
-                        ['Daftar Rekam Medis', '/pasien', ''],
+                        ['Daftar Rekam Medis', '/rekam-medis', ''],
                         ['Observasi Rawat Inap', '/catatanobservasiranap', ''],
                         ['Observasi Rawat Inap Kebidanan', '/catatanobservasikebidanan', ''],
                         ['Observasi Rawat Inap Post Partum', '/catatanobservasipostpartum', ''],

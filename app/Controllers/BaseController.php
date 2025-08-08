@@ -87,7 +87,7 @@ abstract class BaseController extends Controller
 
     protected function setBreadcrumbs($array): void
     {
-        foreach($array as $elem){
+        foreach ($array as $elem) {
             $this->addBreadcrumb($elem, strtolower($elem));
         }
     }
@@ -105,7 +105,7 @@ abstract class BaseController extends Controller
         }
 
         $token = session()->get('jwt_token');
-        $full_url = $this->api_url . $path;
+        $full_url = ($custom_base_url ?? $this->api_url) . $path;
         $ch = curl_init($full_url);
 
         $headers = [
@@ -155,18 +155,19 @@ abstract class BaseController extends Controller
         ];
     }
 
-    private function getPostData(){
+    private function getPostData()
+    {
         $KOLOM = 2;
         $JENIS = 3;
         $postData = [];
-        foreach($this->konfig as $k){
+        foreach ($this->konfig as $k) {
             $kolom = $k[$KOLOM];
             $jenis = $k[$JENIS];
             $raw_data = $this->request->getPost($kolom);
-            if(in_array($jenis, ['jumlah', 'uang', 'suhu'])){
+            if (in_array($jenis, ['jumlah', 'uang', 'suhu'])) {
                 $raw_data = floatval($raw_data);
             }
-            $postData[$kolom] = $raw_data; 
+            $postData[$kolom] = $raw_data;
         }
         return $postData;
     }
@@ -220,9 +221,9 @@ abstract class BaseController extends Controller
 
         return view('errors/html/general_error', $data);
     }
-    
+
     public function tampilData()
-    {               
+    {
         $tabel = $this->fetchDataUsingCurl('GET', $this->api_path)['data']['data'];
         return view('/layouts/data', [
             'judul'       => $this->judul,
@@ -231,23 +232,24 @@ abstract class BaseController extends Controller
             'modul_path'  => $this->modul_path,
             'kolom_id'    => $this->kolom_id,
             'konfig'      => $this->konfig,
-            'aksi'        => $this->aksi, 
+            'aksi'        => $this->aksi,
             'tabel'       => $tabel,
         ]);
     }
-    public function tampilAudit(){
+    public function tampilAudit()
+    {
         $audit_konfig = [
             // [1, 'Nomor Perubahan'  , 'change_id' , 'indeks'],
-            [1, 'Nama'             , 'nama'      , 'teks'],
-            [1, 'Aksi Perubahan'   , 'action'    , 'status'],
-            [1, 'IP Pengubah'      , 'user_ip'   , 'teks'],
+            [1, 'Nama', 'nama', 'teks'],
+            [1, 'Aksi Perubahan', 'action', 'status'],
+            [1, 'IP Address', 'user_ip', 'teks'],
+            [1, 'MAC Address', 'user_mac', 'teks'],
             // [1, 'Pengubah'         , 'changed_by', 'indeks'],
             [1, 'Tanggal Perubahan', 'changed_at', 'tanggal'],
         ];
         $breadcrumbs = [
             ['title' => 'Audit', 'icon', 'audit']
-        ];
-        ;
+        ];;
         return view('/layouts/audit', [
             'judul'       => 'Audit ' . $this->judul,
             'breadcrumbs' => array_merge($this->getBreadcrumbs(), $breadcrumbs),
@@ -258,7 +260,8 @@ abstract class BaseController extends Controller
             'tabel'       => Audit::GetAuditData($this->nama_tabel)
         ]);
     }
-    public function tampilTambah(){
+    public function tampilTambah()
+    {
         $breadcrumbs = [
             ['title' => 'Tambah', 'icon', 'tambah']
         ];
@@ -271,7 +274,8 @@ abstract class BaseController extends Controller
             'form_action' => '/submittambah/',
         ]);
     }
-    public function tampilUbah($id){
+    public function tampilUbah($id)
+    {
         $breadcrumbs = [
             ['title' => 'Ubah', 'icon', 'Ubah']
         ];
@@ -287,7 +291,7 @@ abstract class BaseController extends Controller
         ]);
     }
     public function simpanTambah()
-    {   
+    {
         $postData = $this->getPostData();
         return $this->fetchDataUsingCurl('POST', $this->api_path, $postData, $this->modul_path);
     }
@@ -299,6 +303,6 @@ abstract class BaseController extends Controller
 
     public function hapusData($id)
     {
-        return $this->fetchDataUsingCurl('DELETE', $this->api_path . '/' . $id, null, $this->modul_path, $this->judul . ' berhasil dihapus.' );
+        return $this->fetchDataUsingCurl('DELETE', $this->api_path . '/' . $id, null, $this->modul_path, $this->judul . ' berhasil dihapus.');
     }
 }

@@ -6,7 +6,7 @@
             'modul_path' => $modul_path,
             'baris'      => $baris
         ];
-        $aksi_list = ['notif', 'tambah', 'audit', 'cetak', 'tindakan', 'detail', 'ubah', 'hapus', 'validasi', 'ambulans', 'pilih'];
+        $aksi_list = ['notif', 'tambah', 'audit', 'cetak', 'tindakan', 'detail', 'detail2', 'ubah', 'hapus', 'validasi', 'ambulans', 'pilih'];
         if (ENVIRONMENT === 'development') {
             foreach ($aksi as $key => $value) {
                 if (!in_array($key, $aksi_list)) {
@@ -69,6 +69,9 @@
         }
         if (isset($aksi['hapus'])  && $aksi['hapus']  === true) {
             echo view('components/aksi/hapus',  $data);
+        }
+        if (isset($aksi['detail2']) && $aksi['detail2'] === true) {
+            echo view('components/aksi/detail2', $data);
         }
         ?>
     </div>

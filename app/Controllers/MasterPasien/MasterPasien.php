@@ -13,6 +13,7 @@ class MasterPasien extends BaseController
     ];
     protected string $modul_path = '/masterpasien';
     protected string $api_path = '/masterpasien';
+    protected string $nama_tabel = 'pasien';
     protected string $kolom_id = 'no_rkm_medis';
     protected array $aksi = [
         'notif'    => false,
@@ -20,48 +21,41 @@ class MasterPasien extends BaseController
         'audit'    => true,
         'cetak'    => false,
         'tindakan' => false,
-        'detail'   => true,
         'ubah'     => true,
+        'detail'   => true,
         'hapus'    => true
     ];
     protected array $konfig = [
         // [visible, Display, Kolom, Jenis, Required, *Opsi]
         [1, 'No. Rekam Medis', 'no_rkm_medis', 'indeks'],
         [1, 'Nama Pasien', 'nm_pasien', 'nama'],
-        [1, 'No. KTP/SIM', 'no_ktp', 'indeks'],
+        [0, 'No. KTP/SIM', 'no_ktp', 'indeks'],
         [1, 'Jenis Kelamin', 'jk', 'status'],
         [1, 'Tempat Lahir', 'tmp_lahir', 'nama'],
         [1, 'Tanggal Lahir', 'tgl_lahir', 'tanggal'],
-        [1, 'Nama Ibu', 'nm_ibu', 'nama'],
-        [1, 'Alamat Pasien', 'alamat', 'teks'],
-        [1, 'Golongan Darah', 'gol_darah', 'status'],
-        [1, 'Pekerjaan', 'pekerjaan', 'nama'],
-        [1, 'Status Pernikahan', 'stts_nikah', 'status'],
-        [1, 'Agama', 'agama', 'status'],
-        [1, 'Tanggal Daftar', 'tgl_daftar', 'tanggal'],
-        [1, 'No. Telepon', 'no_tlp', 'teks'],
+        [0, 'Nama Ibu', 'nm_ibu', 'nama'],
+        [0, 'Alamat Pasien', 'alamat', 'teks'],
+        [0, 'Golongan Darah', 'gol_darah', 'status'],
+        [0, 'Pekerjaan', 'pekerjaan', 'nama'],
+        [0, 'Status Pernikahan', 'stts_nikah', 'status'],
+        [0, 'Agama', 'agama', 'status'],
+        [0, 'Tanggal Daftar', 'tgl_daftar', 'tanggal'],
+        [0, 'No. Telepon', 'no_tlp', 'teks'],
         [1, 'Umur', 'umur', 'teks'],
-        [1, 'Pendidikan', 'pnd', 'status'],
-        [1, 'Penanggung Jawab', 'keluarga', 'status'],
-        [1, 'Nama PJ', 'namakeluarga', 'nama'],
-        [1, 'Asuransi', 'kd_pj', 'teks'],
-        [1, 'No. Peserta', 'no_peserta', 'teks'],
-        [1, 'Pekerjaan PJ', 'pekerjaanpj', 'teks'],
-        [1, 'Alamat PJ', 'alamatpj', 'teks'],
-        [1, 'Suku', 'suku_bangsa', 'teks'],
-        [1, 'Bahasa', 'bahasa_pasien', 'teks'],
-        [1, 'Instansi Pasien', 'perusahaan_pasien', 'teks'],
-        [1, 'NIP/NRP', 'nip', 'teks'],
-        [1, 'Email', 'email', 'teks'],
-        [1, 'Cacat Fisik', 'cacat_fisik', 'teks'],
-        [1, 'Kode Kelurahan', 'kd_kel', 'teks'],
-        [1, 'Kode Kecamatan', 'kd_kec', 'teks'],
-        [1, 'Kode Kabupaten', 'kd_kab', 'teks'],
-        [1, 'Kelurahan PJ', 'kelurahanpj', 'teks'],
-        [1, 'Kecamatan PJ', 'kecamatanpj', 'teks'],
-        [1, 'Kabupaten PJ', 'kabupatenpj', 'teks'],
-        [1, 'Kode Provinsi', 'kd_prop', 'teks'],
-        [1, 'Provinsi PJ', 'propinsipj', 'teks'],
+        [0, 'Pendidikan', 'pnd', 'status'],
+        [0, 'Asuransi', 'asuransi', 'teks'],
+        [0, 'No. Asuransi / Polis', 'no_asuransi', 'teks'],
+        [0, 'Suku', 'suku_bangsa', 'teks'],
+        [0, 'Bahasa', 'bahasa_pasien', 'teks'],
+        [0, 'Instansi Pasien', 'perusahaan_pasien', 'teks'],
+        [0, 'NIP/NRP', 'nip', 'teks'],
+        [0, 'Email', 'email', 'teks'],
+        [0, 'Cacat Fisik', 'cacat_fisik', 'teks'],
+        [0, 'Kode Kelurahan', 'kd_kel', 'teks'],
+        [0, 'Kode Kecamatan', 'kd_kec', 'teks'],
+        [0, 'Kode Kabupaten', 'kd_kab', 'teks'],
+        [0, 'Kode Provinsi', 'kd_prop', 'teks'],
+        [1, 'Status Pasien', 'stts_pasien', 'status'],
     ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 
@@ -72,6 +66,6 @@ class MasterPasien extends BaseController
 
     public function tampilUbah($id)
     {
-        return redirect()->to('masterpasien/ubah-pasien');
+        return redirect()->to("masterpasien/ubah-pasien/$id");
     }
 }

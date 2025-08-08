@@ -6,7 +6,7 @@ use App\Controllers\BaseController;
 
 class Instansi extends BaseController
 {
-    protected string $judul = 'Data Instansi/Perusahaan Pasien';
+    protected string $judul = 'Data Instansi / Perusahaan Pasien';
     protected array $breadcrumbs = [
         ['title' => 'User', 'icon' => 'user'],
         ['title' => 'Instansi', 'icon' => 'instansi'],
@@ -29,9 +29,9 @@ class Instansi extends BaseController
         // [visible, Display, Kolom, Jenis, Required, *Opsi]
         [1, 'Kode Instansi', 'kode_instansi', 'indeks', 1],
         [1, 'Nama Instansi', 'nama_instansi', 'nama', 1],
-        [1, 'Alamat Instansi', 'alamat_instansi', 'teks', 0],
+        [0, 'Alamat Instansi', 'alamat_instansi', 'teks', 0],
         [1, 'Kota', 'kota', 'teks', 0],
-        [1, 'No. Telepon', 'no_telp', 'teks', 0],
+        [0, 'No. Telepon', 'no_telp', 'teks', 0],
     ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 }
