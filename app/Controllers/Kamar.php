@@ -39,7 +39,10 @@ protected array $breadcrumbs = [];
         // Check if the user has a valid session with JWT token
         if (session()->has('jwt_token')) {
             $token = session()->get('jwt_token');
-            $kamar_url = $this->api_url . '/kamar';  // Adjusted to use /kamar endpoint
+            $page = (int) ($this->request->getGet('page') ?? 1);
+$size = (int) ($this->request->getGet('size') ?? 10);
+
+$kamar_url = $this->api_url . "/kamar?page={$page}&size={$size}";  // Adjusted to use /kamar endpoint
         
             // Initialize cURL to fetch Kamar data from Go API
             $ch_kamar = curl_init($kamar_url);

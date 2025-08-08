@@ -367,7 +367,7 @@ $routes->group('ambulans', ['filter' => 'auth'], function ($routes) {
     $routes->delete('hapus/(:segment)', 'Ambulans::hapusAmbulans/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     $routes->get('panggil/(:any)', 'Ambulans::panggilAmbulans/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
     $routes->get('terima/(:any)', 'Ambulans::terimaAmbulans/$1', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
-    $routes->get('audit', 'Ambulans::tampilAudit', ['filter' => 'checkpermission:1337,1,2,4001,4002']);
+    $routes->get('audit', 'Ambulans::tampilAudit', ['filter' => 'checkpermission:1337,1,4001,4002']);
     $routes->get('audit', 'Ambulans::tampilAudit', ['filter' => 'checkpermission:1337,1,4001,4002,4003,4004']);
 });
 

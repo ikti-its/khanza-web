@@ -101,7 +101,7 @@
                         $aksi = [
                             'cetak'    => false,
                             'tindakan' => true,
-                            'detail'   => false,
+                            'detail'   => true,
                             'ubah'     => true,
                             'hapus'    => true,
                         ];
@@ -113,10 +113,10 @@
                             [1, 'Jam'              , 'jam'          , 'jam'],
                             [0, 'Nomor Rekam Medis', 'nomor_rm'     , 'indeks'],
                             [1, 'Nama'             , 'nama_pasien'  , 'nama'],
-                            [1, 'Jenis Kelamin'    , 'jenis_kelamin', 'status'],
-                            [1, 'Umur'             , 'umur'         , 'jumlah'],
+                            [0, 'Jenis Kelamin'    , 'jenis_kelamin', 'status'],
+                            [0, 'Umur'             , 'umur'         , 'jumlah'],
                             [1, 'Poliklinik'       , 'poliklinik'   , 'status'],
-                            [1, 'Dokter'           , 'nama_dokter'  , 'nama'],
+                            [0, 'Dokter'           , 'nama_dokter'  , 'nama'],
                             [0, 'Penanggung Jawab'         , 'penanggung_jawab', 'nama'],
                             [0, 'Hubungan Penanggung Jawab', 'hubungan_pj'     , 'teks'],
                             [0, 'Alamat Penanggung Jawab'  , 'alamat_pj'       , 'teks'],

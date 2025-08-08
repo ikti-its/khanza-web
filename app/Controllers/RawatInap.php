@@ -51,127 +51,131 @@ protected array $breadcrumbs = [];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 
     public function dataRawatInap()
-    {
-        $title = 'Data Rawat Inap';
+{
+    $title = 'Data Rawat Inap';
 
-        if (!session()->has('jwt_token')) {
-            return $this->renderErrorView(401);
+    if (!session()->has('jwt_token')) {
+        return $this->renderErrorView(401);
+    }
+
+    $token = session()->get('jwt_token');
+    $page  = $this->request->getGet('page') ?? 1;
+    $size  = 10;
+    $page = $this->request->getGet('page') ?? 1;
+$size = 10; // force page size
+$url  = $this->api_url . "/rawatinap?page={$page}&size={$size}";
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $token,
+        'Accept: application/json'
+    ]);
+    $response = curl_exec($ch);
+    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($http_status !== 200) {
+        return $this->renderErrorView($http_status);
+    }
+
+    $data = json_decode($response, true);
+    if (!isset($data['data'])) {
+        return $this->renderErrorView(500);
+    }
+
+    $rawatinapList = $data['data'];
+
+    foreach ($rawatinapList as &$ri) {
+        $tanggalMasuk = is_array($ri['tanggal_masuk']) ? $ri['tanggal_masuk']['date'] ?? null : $ri['tanggal_masuk'];
+        $tanggalKeluar = is_array($ri['tanggal_keluar']) ? $ri['tanggal_keluar']['date'] ?? null : $ri['tanggal_keluar'];
+        $tarifKamar = floatval($ri['tarif_kamar'] ?? 0);
+
+        if ($tanggalMasuk) {
+            $tanggalKeluar = ($tanggalKeluar === '0001-01-01' || empty($tanggalKeluar))
+                ? date('Y-m-d') : $tanggalKeluar;
+
+            try {
+                $start = new \DateTime($tanggalMasuk);
+                $end   = new \DateTime($tanggalKeluar);
+                $interval = $start->diff($end);
+                $lamaRanap = max($interval->days, 1);
+            } catch (\Exception $e) {
+                $lamaRanap = 1;
+            }
+
+            $ri['lama_ranap'] = $lamaRanap;
+            $totalBiayaKamar = $lamaRanap * $tarifKamar;
+        } else {
+            $ri['lama_ranap'] = 0;
+            $totalBiayaKamar = 0;
         }
 
-        $token = session()->get('jwt_token');
-        $url = $this->api_url . '/rawatinap';
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        // ✅ Biaya Tindakan
+        $nomorRawat = $ri['nomor_rawat'];
+        $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
+        $ct = curl_init($tindakan_url);
+        curl_setopt($ct, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ct, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $token,
             'Accept: application/json'
         ]);
-        $response = curl_exec($ch);
-        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+        $tindakan_response = curl_exec($ct);
+        curl_close($ct);
 
-        if ($http_status !== 200) {
-            return $this->renderErrorView($http_status);
+        $tindakan_data = json_decode($tindakan_response, true);
+        $tindakanList = $tindakan_data['data'] ?? [];
+        if (isset($tindakanList['nomor_rawat'])) {
+            $tindakanList = [$tindakanList];
         }
 
-        $data = json_decode($response, true);
-        if (!isset($data['data'])) {
-            return $this->renderErrorView(500);
+        $totalBiayaTindakan = 0;
+        foreach ($tindakanList as $tindakan) {
+            $totalBiayaTindakan += intval($tindakan['biaya'] ?? 0);
         }
 
-        $rawatinapList = $data['data'];
-
-        foreach ($rawatinapList as &$ri) {
-            $tanggalMasuk = $ri['tanggal_masuk'] ?? null;
-            $tarifKamar = floatval($ri['tarif_kamar'] ?? 0);
-
-            if ($tanggalMasuk) {
-                $tanggalKeluar = ($ri['tanggal_keluar'] === '0001-01-01' || empty($ri['tanggal_keluar']))
-                    ? date('Y-m-d') : $ri['tanggal_keluar'];
-
-                try {
-                    $start = new \DateTime($tanggalMasuk);
-                    $end = new \DateTime($tanggalKeluar);
-                    $interval = $start->diff($end);
-                    $lamaRanap = max($interval->days, 1);
-                } catch (\Exception $e) {
-                    $lamaRanap = 1;
-                }
-
-                $ri['lama_ranap'] = $lamaRanap;
-                $totalBiayaKamar = $lamaRanap * $tarifKamar;
-            } else {
-                $ri['lama_ranap'] = 0;
-                $totalBiayaKamar = 0;
-            }
-
-            // ✅ Fetch biaya from tindakan
-            $nomorRawat = $ri['nomor_rawat'];
-            $tindakan_url = $this->api_url . '/tindakan/' . $nomorRawat;
-
-            $ct = curl_init($tindakan_url);
-            curl_setopt($ct, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ct, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-                'Accept: application/json'
-            ]);
-            $tindakan_response = curl_exec($ct);
-            curl_close($ct);
-
-            $tindakan_data = json_decode($tindakan_response, true);
-            $tindakanList = $tindakan_data['data'] ?? [];
-
-            // Normalize to array if single object
-            if (isset($tindakanList['nomor_rawat'])) {
-                $tindakanList = [$tindakanList];
-            }
-
-            $totalBiayaTindakan = 0;
-            foreach ($tindakanList as $tindakan) {
-                $totalBiayaTindakan += intval($tindakan['biaya'] ?? 0);
-            }
-
-            // ✅ Fetch biaya from pemberian obat
-            $pemberian_url = $this->api_url . '/pemberian-obat/' . $nomorRawat;
-            $cp = curl_init($pemberian_url);
-            curl_setopt($cp, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($cp, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $token,
-                'Accept: application/json'
-            ]);
-            $pemberian_response = curl_exec($cp);
-            curl_close($cp);
-
-            $pemberian_data = json_decode($pemberian_response, true);
-            $pemberianList = $pemberian_data['data'] ?? [];
-    // dd($pemberianList);
-            if (isset($pemberianList['nomor_rawat'])) {
-                $pemberianList = [$pemberianList];
-            }
-
-            $totalBiayaObat = 0;
-            foreach ($pemberianList as $obat) {
-                $totalBiayaObat += intval($obat['total'] ?? 0);
-            }
-    // dd($totalBiayaObat);
-            $ri['total_biaya'] = $totalBiayaKamar + $totalBiayaTindakan + $totalBiayaObat;
-            $ri['total_biaya_kamar'] = $totalBiayaKamar;
-            $ri['total_biaya_tindakan'] = $totalBiayaTindakan;
-            $ri['total_biaya_obat'] = $totalBiayaObat;
-        }
-
-        $this->addBreadcrumb('User', 'user');
-        $this->addBreadcrumb('Rawat Inap', 'rawatinap');
-        $breadcrumbs = $this->getBreadcrumbs();
-    // dd($rawatinapList);
-        return view('/admin/rawatinap/rawatinap_data', [
-            'rawatinap_data' => $rawatinapList,
-            'title' => $title,
-            'breadcrumbs' => $breadcrumbs,
-            'meta_data' => $data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1]
+        // ✅ Biaya Obat
+        $pemberian_url = $this->api_url . '/pemberian-obat/' . $nomorRawat;
+        $cp = curl_init($pemberian_url);
+        curl_setopt($cp, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($cp, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $token,
+            'Accept: application/json'
         ]);
+        $pemberian_response = curl_exec($cp);
+        curl_close($cp);
+
+        $pemberian_data = json_decode($pemberian_response, true);
+        $pemberianList = $pemberian_data['data'] ?? [];
+        if (isset($pemberianList['nomor_rawat'])) {
+            $pemberianList = [$pemberianList];
+        }
+
+        $totalBiayaObat = 0;
+        foreach ($pemberianList as $obat) {
+            $totalBiayaObat += intval($obat['total'] ?? 0);
+        }
+
+        // Total
+        $ri['total_biaya_kamar']    = $totalBiayaKamar;
+        $ri['total_biaya_tindakan'] = $totalBiayaTindakan;
+        $ri['total_biaya_obat']     = $totalBiayaObat;
+        $ri['total_biaya']          = $totalBiayaKamar + $totalBiayaTindakan + $totalBiayaObat;
     }
+
+    // Breadcrumbs
+    $this->addBreadcrumb('User', 'user');
+    $this->addBreadcrumb('Rawat Inap', 'rawatinap');
+    $breadcrumbs = $this->getBreadcrumbs();
+
+    return view('/admin/rawatinap/rawatinap_data', [
+        'rawatinap_data' => $rawatinapList,
+        'title'          => $title,
+        'breadcrumbs'    => $breadcrumbs,
+        'meta_data'      => $data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
+    ]);
+}
+
 
     public function submitTambahRawatInap()
     {

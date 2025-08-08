@@ -45,6 +45,7 @@ protected array $breadcrumbs = [];
                 'Authorization: Bearer ' . $token,
                 'Accept: application/json'
             ]);
+
             $response = curl_exec($ch);
             $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
@@ -65,6 +66,8 @@ protected array $breadcrumbs = [];
             curl_setopt($ch2, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $token,
             ]);
+                        curl_setopt($ch2, CURLOPT_TIMEOUT, 10);           // max total waktu
+curl_setopt($ch2, CURLOPT_CONNECTTIMEOUT, 5);     // max waktu koneksi
             $jenis_response = curl_exec($ch2);
             curl_close($ch2);
     
@@ -383,6 +386,8 @@ protected array $breadcrumbs = [];
         curl_setopt($ch2, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $token,
         ]);
+        curl_setopt($ch2, CURLOPT_TIMEOUT, 10);           // max total waktu
+        curl_setopt($ch2, CURLOPT_CONNECTTIMEOUT, 5);     // max waktu koneksi
         $jenis_response = curl_exec($ch2);
         curl_close($ch2);
 
