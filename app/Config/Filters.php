@@ -30,6 +30,7 @@ class Filters extends BaseConfig
         'ijin' => \App\Filters\Ijin::class,
         'checkFotoData' => \App\Filters\CheckFotoData::class,
       
+        'checkpermission' => \App\Filters\CheckPermission::class,
     ];
 
     /**

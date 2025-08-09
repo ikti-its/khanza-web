@@ -163,7 +163,7 @@
                                             <?php if ($ketersediaanEntry['available'] !== false) : ?>
                                                 <div class="mb-2 invisible">
                                                     <div class="text-red-500 text-sm text-center">
-                                                        Placeholder
+                                                        <!-- Placeholder -->
                                                     </div>
                                                 </div>
                                             <?php endif; ?>

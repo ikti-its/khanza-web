@@ -13,12 +13,10 @@ class Ijin extends BaseController implements FilterInterface
     {
 
         $role = session()->get('user_details')['role'];
-        
         if ($role == 2){
             return redirect()->to('/test-403');
         }
 
-       
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)

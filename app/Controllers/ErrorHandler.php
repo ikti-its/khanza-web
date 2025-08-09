@@ -51,5 +51,3 @@ class ErrorHandler extends Controller
         return view('errors/html/error_500');
     }
 }
-
-

@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
-  content: ["./app/Views/**/*.php",'node_modules/preline/dist/*.js'],
+  content: ["./app/Views/**/*.php", 'node_modules/preline/dist/*.js'],
   theme: {
     extend: {
       fontFamily: {
@@ -13,4 +13,9 @@ module.exports = {
   plugins: [
     require('preline/plugin'),
   ],
+
+  safelist: [
+  'autofill-flash'
+]
+
 };

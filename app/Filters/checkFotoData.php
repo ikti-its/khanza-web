@@ -20,7 +20,6 @@ class CheckFotoData implements FilterInterface
             // Redirect to dashboard or any other route you prefer
             return redirect()->to('/dashboard');
         }
-        
         return $request;
     }
 

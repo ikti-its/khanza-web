@@ -4,14 +4,20 @@
 
 
 @font-face {
-    font-family: 'Gilroy-Regular';
-    src: url('../fonts/gilroy/Gilroy-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Gilroy-Regular';
+  src: url('../fonts/gilroy/Gilroy-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@layer base {
+  html {
+    font-family: Gilroy-Regular, sans-serif;
   }
 
-  @layer base {
-    html {
-      font-family: Gilroy-Regular, sans-serif;
-    }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
+}

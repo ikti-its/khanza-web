@@ -22,27 +22,9 @@
                                     Catatan Cuti
                                 </h2>
                             </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-gray-200 dark:border-neutral-700">
-                        <div class="sm:col-span-1">
-                            <label for="hs-as-table-product-review-search" class="sr-only">Search</label>
-                            <div class="relative">
-                                <input type="text" id="myInput" onkeyup="myFunction()" class="py-2 px-4 ps-11 block border w-full xl:w-96 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Search">
-                                <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
-                                    <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                                    </svg>
-                                </div>
-                            </div>
                         </div>
                     </div>
-
-
-
+                    <?= view('components/header/search_bar') ?>
                     <!-- Table -->
                     <div class="overflow-x-auto">
                         <table id="myTable" class="min-w-full divide-y divide-gray-50 dark:divid e-neutral-700 text-xs">
@@ -284,12 +266,7 @@
                             </tbody>
                         </table>
                     </div>
-
                     <!-- End Table -->
-
-
-
-
                 </div>
             </div>
         </div>
@@ -304,32 +281,6 @@ function updateStatus(status) {
         document.getElementById('status_input').value = status;
     }
 
-    function myFunction() {
-        var input, filter, table, tr, td, i, j, txtValue, found;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-
-        for (i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
-            tr[i].style.display = "none"; // Hide the row initially
-            td = tr[i].getElementsByTagName("td");
-            found = false;
-            for (j = 0; j < td.length; j++) {
-                if (td[j]) {
-                    txtValue = td[j].textContent || td[j].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            if (found) {
-                tr[i].style.display = "";
-            }
-        }
-    }
-
     function validateForm() {
     var submitButton = document.getElementById('submitButton');
     submitButton.disabled = true; // Disable the button
@@ -338,6 +289,5 @@ function updateStatus(status) {
     return true; // Return true to allow form submission
 }
 </script>
-
 
 <?= $this->endSection(); ?>
