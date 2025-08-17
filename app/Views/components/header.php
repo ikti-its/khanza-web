@@ -126,7 +126,7 @@
                     });
                 </script>
 
-                <script>
+                <!-- <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         const searchInput = document.getElementById('search');
                         const suggestionsContainer = document.getElementById('suggestions');
@@ -136,39 +136,39 @@
                                 name: 'Akun',
                                 url: '/profile'
                             },
-                            <?php if (session('user_specific_data')['status'] === false) : ?> {
+                            <?php //if (session('user_specific_data')['status'] === false) : ?> {
                                     name: 'Presensi Masuk',
                                     url: '/menukehadiran'
                                 },
-                            <?php else : ?> {
+                            <?php //else : ?> {
                                     name: 'Presensi Pulang',
-                                    url: '/absenpulang/<?php echo session('user_specific_data')['pegawai'] ?>'
+                                    url: '/absenpulang/<?php //echo session('user_specific_data')['pegawai'] ?>'
                                 },
-                            <?php endif; ?> {
+                            <?php //endif; ?> {
                                 name: 'Pengajuan Izin Cuti',
                                 url: '/izincuti'
                             },
                             {
                                 name: 'Peninjauan Catatan Kehadiran',
-                                url: '/catatankehadiran/<?php echo session('user_specific_data')['pegawai'] ?>'
+                                url: '/catatankehadiran/<?php //echo session('user_specific_data')['pegawai'] ?>'
                             },
                             {
                                 name: 'Peninjauan Jadwal Kerja',
-                                url: '/lihatjadwal/<?php echo session('user_specific_data')['pegawai'] ?>'
+                                url: '/lihatjadwal/<?php //echo session('user_specific_data')['pegawai'] ?>'
                             },
                             {
                                 name: 'Peninjauan Daftar Pengajuan Cuti',
-                                url: '/lihatizincuti/<?php echo session('user_specific_data')['pegawai'] ?>'
+                                url: '/lihatizincuti/<?php //echo session('user_specific_data')['pegawai'] ?>'
                             },
-                            <?php if (session('user_details')['role'] === 1) : ?> {
+                            <?php //if (session('user_details')['role'] === 1) : ?> {
                                     name: 'Data Pegawai',
                                     url: '/datauserpegawai'
                                 }
-                            <?php else : ?> {
+                            <?php //else : ?> {
                                     name: 'Data Pegawai',
-                                    url: '/detailberkaspegawai/<?php echo session('user_specific_data')['pegawai'] ?>'
+                                    url: '/detailberkaspegawai/<?php //echo session('user_specific_data')['pegawai'] ?>'
                                 }
-                            <?php endif; ?>
+                            <?php //endif; ?>
                         ];
 
                         searchInput.addEventListener('input', function() {
@@ -210,7 +210,7 @@
                             }
                         });
                     });
-                </script>
+                </script> -->
 
                 <div class="flex flex-row items-center justify-end gap-2">
 
@@ -280,7 +280,7 @@
                     <div class="hs-dropdown relative inline-flex [--placement:bottom-right]">
 
                         <button id="hs-dropdown-with-header" type="button" class="w-[2.375rem] h-[2.375rem] inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                            <img class="inline-block size-[38px] rounded-full ring-2 ring-white dark:ring-gray-800" src="<?php echo session('user_specific_data')['profil'] ?>" alt="Image Description">
+                            <img class="inline-block size-[38px] rounded-full ring-2 ring-white dark:ring-gray-800" src="<?php //echo session('user_specific_data')['profil'] ?>" alt="Image Description">
                         </button>
 
                         <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg p-2 dark:bg-gray-800 dark:border dark:border-gray-700" aria-labelledby="hs-dropdown-with-header">
@@ -663,7 +663,7 @@
                     <div id="account-accordion-content" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
                         <ul class="pt-2 ps-2">
                             <li>
-                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/detailberkaspegawai/<?php echo session('user_specific_data')['pegawai'] ?>">
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/detailberkaspegawai/<?php echo session('user_specific_data')//['pegawai'] ?>">
                                     Data Pegawai
                                 </a>
                             </li>
