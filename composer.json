@@ -15,9 +15,12 @@
         "dompdf/dompdf": "^3.0"
     },
     "require-dev": {
+        "codeigniter/phpstan-codeigniter": "^1.5",
         "fakerphp/faker": "^1.9",
         "kint-php/kint": "^6.0",
         "mikey179/vfsstream": "^1.6",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^9.1"
     },
     "autoload": {
@@ -33,7 +36,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     },
     "scripts": {
         "test": "phpunit"
