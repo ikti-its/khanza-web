@@ -1,0 +1,32 @@
+parameters:
+    # Analysis strictness (0 = loose, 9 = strict, max = everything)
+    level: max
+
+    # Directories to analyze
+    paths:
+        - app/Controllers
+        - tests
+
+    # Bootstrap CodeIgniter system files so PHPStan knows about them
+    #bootstrapFiles:
+    #   - vendor/codeigniter4/framework/system/bootstrap.php
+
+    # Directories PHPStan should scan for function definitions (helpers etc.)
+    scanDirectories:
+        - vendor/codeigniter4/framework/system/Helpers
+
+    # Enforce stricter checks
+    # checkMissingIterableValueType: true
+    #checkGenericClassInNonGenericObjectType: true
+    #checkMissingVarTagTypehint: true
+    #checkUninitializedProperties: true
+
+    # Ignore known false positives
+    #ignoreErrors:
+    #   - '#Call to unknown function base_url#'
+    #   - '#Call to unknown function site_url#'
+    #   - '#Access to an undefined property CodeIgniter\\Config\\BaseConfig::\$.*#'
+    #   - '#Undefined variable: \$routes#'
+
+    # Memory limit for large projects
+    #memoryLimit: 512M
