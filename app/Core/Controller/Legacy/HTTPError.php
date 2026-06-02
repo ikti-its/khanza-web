@@ -28,6 +28,11 @@ final readonly class HTTPError
                 $data['errorTitle'] = 'Akses terbatas';
                 $data['message'] ??= 'Anda harus login untuk mengakses halaman ini';
                 break;
+            case 402:
+                $data['title'] = 'Unauthorized';
+                $data['errorTitle'] = 'Akses terbatas';
+                $data['message'] ??= 'Anda harus login untuk mengakses halaman ini';
+                break;
             case 403:
                 $data['title'] = 'Forbidden';
                 $data['errorTitle'] = 'Access ditolak';
@@ -41,16 +46,38 @@ final readonly class HTTPError
                     Periksa URL atau kembali ke halaman utama';
                 break;
             case 405:
-                $data['title'] = 'Method Not Allowed ';
+                $data['title'] = 'Method Not Allowed';
                 $data['errorTitle'] = 'Method HTTP yang Anda gunakan tidak tersedia';
                 $data['message'] ??= 'Kami tidak menyediakan method HTTP tersebut. 
                     Periksa kembali URL dan method http Anda';
+                break;
+            case 408:
+                $data['title'] = 'Timeout';
+                $data['errorTitle'] = 'Waktu habis';
+                $data['message'] ??= 'Permintaan Anda memakan waktu terlalu lama untuk diproses. Silakan coba lagi nanti.';
                 break;
             case 500:
                 $data['title'] = 'Internal Server Error';
                 $data['errorTitle'] = 'Kesalahan Server';
                 $data['message'] ??= 'Terjadi masalah pada server kami. 
                 Silakan coba lagi nanti atau hubungi dukungan teknis jika masalah berlanjut';
+                break;
+            case 501:
+                $data['title'] = 'Not available yet';
+                $data['errorTitle'] = 'Fitur belum tersedia';
+                $data['message'] ??= 'Fitur yang Anda minta belum tersedia. 
+                    Silakan coba lagi nanti atau hubungi dukungan untuk 
+                    informasi lebih lanjut';
+                break;
+            case 502:
+                $data['title'] = 'Network';
+                $data['errorTitle'] = 'Kesalahan jaringan';
+                $data['message'] ??= 'Kami mengalami masalah dengan jaringan kami. Silakan coba lagi nanti';
+                break;
+            case 503:
+                $data['title'] = 'Unavailable';
+                $data['errorTitle'] = 'Layanan tidak tersedia';
+                $data['message'] ??= 'Layanan kami sedang tidak tersedia saat ini. Silakan coba lagi nanti';
                 break;
             default:
                 $data['title'] = 'Error';
