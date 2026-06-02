@@ -36,8 +36,6 @@ class Filters extends BaseFilters
         'performance'   => PerformanceMetrics::class,
 
         'auth'            => \App\Filters\Auth::class,
-        'noauth'          => \App\Filters\NoAuth::class,
-        'noauth2'         => \App\Filters\NoAuth::class,
         'ijin'            => \App\Filters\Ijin::class,
         'checkFotoData'   => \App\Filters\CheckFotoData::class,
         'checkpermission' => \App\Filters\CheckPermission::class,
