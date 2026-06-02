@@ -6,7 +6,6 @@ namespace App\Core\Controller;
 enum ActionType: string
 {
     case READ = 'baca';
-    case DETAIL = 'detail';
     case CREATE = 'tambah';
     case UPDATE = 'ubah';
     case DELETE = 'hapus';
