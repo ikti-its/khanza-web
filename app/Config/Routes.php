@@ -173,22 +173,6 @@ $routes->post('/submiteditserkom/(:segment)', 'berkas::submitEditSerkom/$1', ['f
 
 $routes->get('/hapusberkas/(:segment)', 'berkas::hapusBerkas/$1', ['filter' => 'auth']);
 
-$routes->group('', ['namespace' => 'App\s'], function ($routes) {
-    $routes->get('error/400', 'ErrorHandler::show400');
-    $routes->get('error/401', 'ErrorHandler::show401');
-    $routes->get('error/403', 'ErrorHandler::show403');
-    $routes->get('error/500', 'ErrorHandler::show500');
-});
-
-$routes->get('/error_403', 'ErrorHandler::show403');
-
-
-
-
-
-
-
-
 
 //=============================================================================
 
@@ -1020,3 +1004,22 @@ foreach ($features as $feature) {
         });
     }
 }
+//============================ ERROR HANDLING ==================================
+$routes->group('error', ['namespace' => 'App\s'], function ($routes) {
+    $routes->get('400', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(400);});
+    $routes->get('401', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(401);});
+    $routes->get('402', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(402);});
+    $routes->get('403', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(403);});
+    $routes->get('404', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(404);});
+    $routes->get('405', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(405);});
+    $routes->get('408', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(408);});
+    $routes->get('500', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(500);});
+    $routes->get('501', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(501);});
+    $routes->get('501', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(502);});
+    $routes->get('502', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(503);});
+    $routes->get('503', function () {return \App\Core\Controller\Legacy\HTTPError::renderErrorView(504);});
+});
+
+$routes->set404Override(function () {
+    return \App\Core\Controller\Legacy\HTTPError::renderErrorView(404);
+});

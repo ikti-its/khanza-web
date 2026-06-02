@@ -20,7 +20,7 @@ class CheckStatusPesanan implements FilterInterface
         $status = $user_data['status_pesanan'];
         foreach ($status as $s) {
             if($s !== '3'){
-                return redirect()->to('/error_403');
+                return redirect()->to('/error/403');
             }
         }
         return null;
