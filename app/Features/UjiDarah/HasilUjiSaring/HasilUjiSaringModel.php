@@ -24,7 +24,9 @@ final class HasilUjiSaringModel extends ModelTemplate
             [
                 'id_pengambilan_darah' => ['nomor_pengambilan', 'no_bag'],
                 'id_metode_uji'        => ['nama_metode'],
-                'id_petugas'           => [''],
+                'id_petugas'           => [
+                    'id_orang' => ['nama']
+                ],
             ],
         );
     }

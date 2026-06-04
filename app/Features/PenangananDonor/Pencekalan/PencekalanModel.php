@@ -22,7 +22,9 @@ final class PencekalanModel extends ModelTemplate
                 'id_kunjungan'        => ['nomor_kunjungan'],
                 'id_jenis_pencekalan' => ['nama_jenis_pencekalan'],
                 'id_shift'            => ['nama_shift'],
-                'id_petugas'          => [''],
+                'id_petugas'          => [
+                    'id_orang' => ['nama']
+                ],
             ],
         );
     }

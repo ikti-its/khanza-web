@@ -19,7 +19,9 @@ final class PemisahanKomponenModel extends ModelTemplate
             [
                 'id_pengambilan_darah' => ['nomor_pengambilan'],
                 'id_shift'             => ['nama_shift'],
-                'id_petugas'           => [''],
+                'id_petugas'           => [
+                    'id_orang' => ['nama']
+                ],
             ],
         );
     }
