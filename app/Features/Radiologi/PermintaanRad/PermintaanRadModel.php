@@ -15,17 +15,15 @@ final class PermintaanRadModel extends ModelTemplate
             [
                 'id_permintaan'        => V::DEFAULT(),
                 'no_permintaan'        => V::DEFAULT(),
-                'nomor_reg'            => V::DEFAULT(),
-                'kode_dokter_perujuk'  => V::DEFAULT(),
                 'tgl_jam_permintaan'   => V::DEFAULT(),
                 'informasi_tambahan'   => V::DEFAULT(),
                 'indikasi_klinis'      => V::DEFAULT(),
-                'id_status_permintaan' => V::DEFAULT(),
-                'id_item_rad'          => V::DEFAULT(),
             ],
             [
                 'nomor_reg'            => ['nomor_rawat'],
-                'kode_dokter_perujuk'  => [],
+                'kode_dokter_perujuk'  => [
+                    'id_orang'  => ['nama'],
+                ],
                 'id_status_permintaan' => ['nama_status'],
                 'id_item_rad'          => ['kode_periksa', 'nama_pemeriksaan', 'tarif_dasar'],
             ],

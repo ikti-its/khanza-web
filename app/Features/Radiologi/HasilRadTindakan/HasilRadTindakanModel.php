@@ -14,8 +14,6 @@ final class HasilRadTindakanModel extends ModelTemplate
             new HasilRadTindakanDatabase(),
             [
                 'id_hasil_tindakan'       => V::DEFAULT(),
-                'id_hasil_rad'            => V::DEFAULT(),
-                'id_item_rad'             => V::DEFAULT(),
                 'proyeksi'                => V::DEFAULT(),
                 'kilovoltage_kv'          => V::DEFAULT(),
                 'milliampere_second_mas'  => V::DEFAULT(),
@@ -25,7 +23,6 @@ final class HasilRadTindakanModel extends ModelTemplate
                 'jumlah_penyinaran'       => V::DEFAULT(),
                 'dosis_radiasi'           => V::DEFAULT(),
                 'hasil_ekspertise'        => V::DEFAULT(),
-                'id_template_rad'         => V::DEFAULT(),
             ],
             [
                 'id_hasil_rad'    => [],
