@@ -88,13 +88,17 @@ class ControllerTemplate extends Controller
     {
         $postData = [];
         foreach ($this->fields as $f) {
-            [$_required, $_name, $column, $type, $_show] = $f;
+            [$_show, $_name, $column, $type, $_required] = $f;
 
             if ($column === $this->primary_key) continue;
 
             $raw_data = $this->request->getPost($column);
             if (in_array($type, ['jumlah', 'uang', 'suhu'])) {
                 $raw_data = floatval($raw_data);
+            }
+
+            if (!$_required && ($raw_data === '' || $raw_data === null)) {
+                $raw_data = null;
             }
             $postData[$column] = $raw_data;
         }
@@ -357,19 +361,23 @@ class ControllerTemplate extends Controller
         return $result;
     }
 
-    public function create_page(): string
+    private function create_view(array $baris = []): string
     {
-        $breadcrumbs = [
-            ['title' => 'Tambah', 'icon', 'tambah']
-        ];
+        $breadcrumbs = [['title' => 'Tambah', 'icon', 'tambah']];
         return view('/layouts/tambah_ubah', [
             'judul'       => 'Tambah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->primary_key,
             'konfig'      => $this->get_fields_with_options(false, true),
+            'baris'       => $baris,
             'form_action' => '/submittambah/',
         ]);
+    }
+
+    public function create_page(): string
+    {
+        return $this->create_view();
     }
 
     public function update_page(int|string $id): string
@@ -409,27 +417,15 @@ class ControllerTemplate extends Controller
 
     public function create(): string|RedirectResponse
     {
-        /** @var array<string, scalar|null> $postData */
         $postData = $this->get_post_data();
         try {
             $this->model->insert($postData);
-        } catch(\ReflectionException $e){
-            session()->setFlashdata('error', $e->getMessage());
-            return redirect()->to($this->get_uri_path() . '/data');
-        } catch(DatabaseException $e){
-            $errMsg = $this->friendly_db_error($e);
-            session()->setFlashdata('error', $errMsg);
-            $breadcrumbs = [
-                ['title' => 'Tambah', 'icon', 'tambah']
-            ];
-            return view('/layouts/tambah_ubah', [
-                'judul'       => 'Tambah ' . $this->title,
-                'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
-                'modul_path'  => $this->get_uri_path(),
-                'kolom_id'    => $this->primary_key,
-                'konfig'      => $this->get_fields_with_options(false, true),
-                'form_action' => '/submittambah/',
-            ]);
+        } catch (\ReflectionException | DatabaseException $e) {
+            $msg = $e instanceof DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
+            session()->setFlashdata('error', $msg);
+            return $this->create_view($postData);
         }
 
         return redirect()->to($this->get_uri_path() . '/data');
