@@ -21,7 +21,9 @@ final class MedisRusakModel extends ModelTemplate
             ],
             [
                 'id_barang'  => ['kode_barang', 'nama'],
-                'id_petugas' => [''],
+                'id_petugas' => [
+                    'id_orang' => ['nama']
+                ],
             ],
         );
     }

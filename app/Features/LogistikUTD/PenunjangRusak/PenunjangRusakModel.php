@@ -21,7 +21,9 @@ final class PenunjangRusakModel extends ModelTemplate
             ],
             [
                 'id_barang'  => ['kode_barang', 'nama_barang'],
-                'id_petugas' => [''],
+                'id_petugas' => [
+                    'id_orang' => ['nama']
+                ],
             ],
         );
     }
