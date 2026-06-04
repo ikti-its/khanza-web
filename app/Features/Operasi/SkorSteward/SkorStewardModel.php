@@ -14,13 +14,7 @@ final class SkorStewardModel extends ModelTemplate
             new SkorStewardDatabase(),
             [
                 'id_skor_steward'    => V::DEFAULT(),
-                'nomor_reg'          => V::DEFAULT(),
                 'waktu_penilaian'    => V::DEFAULT(),
-                'id_petugas'         => V::DEFAULT(),
-                'id_dokter_anestesi' => V::DEFAULT(),
-                'skor_kesadaran'     => V::DEFAULT(),
-                'skor_respirasi'     => V::DEFAULT(),
-                'skor_motorik'       => V::DEFAULT(),
                 // 'total_skor'            => V::DEFAULT(),
                 'is_boleh_pindah' => V::DEFAULT(),
                 'catatan_keluar'  => V::DEFAULT(),

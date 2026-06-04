@@ -14,8 +14,6 @@ final class PengkajianPreopModel extends ModelTemplate
             new PengkajianPreopDatabase(),
             [
                 'id_pengkajian_pre'      => V::DEFAULT(),
-                'nomor_reg'              => V::DEFAULT(),
-                'kode_dokter_bedah'      => V::DEFAULT(),
                 'waktu_pengkajian'       => V::DEFAULT(),
                 'ringkasan_klinik'       => V::DEFAULT(),
                 'pemeriksaan_fisik'      => V::DEFAULT(),

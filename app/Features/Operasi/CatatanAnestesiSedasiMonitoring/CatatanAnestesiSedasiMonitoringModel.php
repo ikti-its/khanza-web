@@ -14,8 +14,6 @@ final class CatatanAnestesiSedasiMonitoringModel extends ModelTemplate
             new CatatanAnestesiSedasiMonitoringDatabase(),
             [
                 'id_monitoring_catatan' => V::DEFAULT(),
-                'id_catatan_anestesi'   => V::DEFAULT(),
-                'id_monitoring'         => V::DEFAULT(),
                 'is_digunakan'          => V::DEFAULT(),
                 'keterangan'            => V::DEFAULT(),
             ],

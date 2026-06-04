@@ -14,11 +14,7 @@ final class SkorBromageModel extends ModelTemplate
             new SkorBromageDatabase(),
             [
                 'id_skor_bromage'    => V::DEFAULT(),
-                'nomor_reg'          => V::DEFAULT(),
                 'waktu_penilaian'    => V::DEFAULT(),
-                'id_petugas'         => V::DEFAULT(),
-                'id_dokter_anestesi' => V::DEFAULT(),
-                'skor_bromage'       => V::DEFAULT(),
                 'is_boleh_pindah'    => V::DEFAULT(),
                 'catatan_keluar'     => V::DEFAULT(),
                 'instruksi_rr'       => V::DEFAULT(),

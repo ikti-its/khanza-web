@@ -14,8 +14,6 @@ final class PermintaanOperasiModel extends ModelTemplate
             new PermintaanOperasiDatabase(),
             [
                 'id_permintaan' => V::DEFAULT(),
-                'nomor_reg'     => V::DEFAULT(),
-                'kode_dokter'   => V::DEFAULT(),
                 'tanggal_minta' => V::DEFAULT(),
                 'is_cito'       => V::DEFAULT(),
             ],

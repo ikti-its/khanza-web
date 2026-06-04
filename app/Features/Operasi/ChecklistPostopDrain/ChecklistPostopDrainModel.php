@@ -14,8 +14,6 @@ final class ChecklistPostopDrainModel extends ModelTemplate
             new ChecklistPostopDrainDatabase(),
             [
                 'id_drain'          => V::DEFAULT(),
-                'id_checklist_post' => V::DEFAULT(),
-                'id_ketersediaan'   => V::DEFAULT(),
                 'jumlah'            => V::DEFAULT(),
                 'letak'             => V::DEFAULT(),
                 'warna'             => V::DEFAULT(),

@@ -14,8 +14,6 @@ final class PenyerahanPasienPeralatanModel extends ModelTemplate
             new PenyerahanPasienPeralatanDatabase(),
             [
                 'id'            => V::DEFAULT(),
-                'id_penyerahan' => V::DEFAULT(),
-                'id_peralatan'  => V::DEFAULT(),
                 'keterangan'    => V::DEFAULT(),
             ],
             [

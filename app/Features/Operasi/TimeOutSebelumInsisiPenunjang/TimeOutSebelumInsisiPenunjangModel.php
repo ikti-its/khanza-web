@@ -14,9 +14,6 @@ final class TimeOutSebelumInsisiPenunjangModel extends ModelTemplate
             new TimeOutSebelumInsisiPenunjangDatabase(),
             [
                 'id_penunjang'       => V::DEFAULT(),
-                'id_timeout'         => V::DEFAULT(),
-                'id_jenis_penunjang' => V::DEFAULT(),
-                'id_status'          => V::DEFAULT(),
             ],
             [
                 'id_timeout'         => [],

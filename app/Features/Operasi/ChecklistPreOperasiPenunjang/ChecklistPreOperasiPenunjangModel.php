@@ -14,9 +14,6 @@ final class ChecklistPreOperasiPenunjangModel extends ModelTemplate
             new ChecklistPreOperasiPenunjangDatabase(),
             [
                 'id_penunjang'       => V::DEFAULT(),
-                'id_checklist'       => V::DEFAULT(),
-                'id_jenis_penunjang' => V::DEFAULT(),
-                'id_ketersediaan'    => V::DEFAULT(),
                 'keterangan'         => V::DEFAULT(),
             ],
             [

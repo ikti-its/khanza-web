@@ -14,8 +14,6 @@ final class CatatanPaskaOperasiModel extends ModelTemplate
             new CatatanPaskaOperasiDatabase(),
             [
                 'id_catatan_paska'        => V::DEFAULT(),
-                'nomor_reg'               => V::DEFAULT(),
-                'kode_dokter_bedah'       => V::DEFAULT(),
                 'waktu_penilaian'         => V::DEFAULT(),
                 'instruksi_rawat'         => V::DEFAULT(),
                 'instruksi_cairan'        => V::DEFAULT(),

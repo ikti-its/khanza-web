@@ -14,9 +14,6 @@ final class ChecklistPostopPenunjangModel extends ModelTemplate
             new ChecklistPostopPenunjangDatabase(),
             [
                 'id_penunjang'       => V::DEFAULT(),
-                'id_checklist_post'  => V::DEFAULT(),
-                'id_jenis_penunjang' => V::DEFAULT(),
-                'id_ketersediaan'    => V::DEFAULT(),
                 'keterangan'         => V::DEFAULT(),
             ],
             [
