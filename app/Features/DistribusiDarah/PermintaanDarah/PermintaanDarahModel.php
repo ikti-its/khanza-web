@@ -19,7 +19,9 @@ final class PermintaanDarahModel extends ModelTemplate
             ],
             [
                 'id_rawat_inap'        => ['nomor_rawat', 'nomor_rm', 'nama_pasien'],
-                'id_dokter_pengirim'   => [''],
+                'id_dokter_pengirim'   => [
+                    'id_orang' => ['nama']
+                ],
                 'id_status_permintaan' => ['nama_status_permintaan'],
             ],
         );

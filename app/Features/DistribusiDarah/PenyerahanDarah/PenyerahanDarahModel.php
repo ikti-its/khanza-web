@@ -24,10 +24,14 @@ final class PenyerahanDarahModel extends ModelTemplate
             [
                 'id_permintaan'        => ['no_permintaan'],
                 'id_shift'             => ['nama_shift'],
-                'id_petugas_cross'     => [''],
+                'id_petugas_cross'     => [
+                    'id_orang' => ['nama']
+                ],
                 'id_status_pembayaran' => ['nama_status_pembayaran'],
                 'id_rekening'          => ['nama_akun'],
-                'id_penanggung_jawab'  => [''],
+                'id_penanggung_jawab'  => [
+                    'id_orang' => ['nama']
+                ],
             ],
         );
     }
