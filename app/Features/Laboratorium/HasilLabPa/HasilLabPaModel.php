@@ -14,13 +14,7 @@ final class HasilLabPaModel extends ModelTemplate
             new HasilLabPaDatabase(),
             [
                 'id_hasil_pa'         => V::DEFAULT(),
-                'id_permintaan_lab'   => V::DEFAULT(),
-                'nomor_reg'           => V::DEFAULT(),
-                'kode_dokter_pj'      => V::DEFAULT(),
-                'id_petugas_lab'      => V::DEFAULT(),
-                'kode_dokter_perujuk' => V::DEFAULT(),
                 'tgl_jam_hasil'       => V::DEFAULT(),
-                'id_item_pemeriksaan' => V::DEFAULT(),
                 'diagnosa_klinis'     => V::DEFAULT(),
                 'makroskopik'         => V::DEFAULT(),
                 'mikroskopik'         => V::DEFAULT(),

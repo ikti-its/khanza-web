@@ -14,14 +14,7 @@ final class HasilLabMbModel extends ModelTemplate
             new HasilLabMbDatabase(),
             [
                 'id_hasil_mb'              => V::DEFAULT(),
-                'id_permintaan_lab'        => V::DEFAULT(),
-                'nomor_reg'                => V::DEFAULT(),
-                'kode_dokter_pj'           => V::DEFAULT(),
-                'id_petugas_lab'           => V::DEFAULT(),
-                'kode_dokter_perujuk'      => V::DEFAULT(),
                 'tgl_jam_hasil'            => V::DEFAULT(),
-                'id_item_pemeriksaan'      => V::DEFAULT(),
-                'id_parameter_pemeriksaan' => V::DEFAULT(),
                 'nilai_hasil'              => V::DEFAULT(),
                 'keterangan_hasil'         => V::DEFAULT(),
             ],
@@ -39,7 +32,7 @@ final class HasilLabMbModel extends ModelTemplate
                     /*BINGUNG*/
                 ],
                 'id_item_pemeriksaan'      => ['kode_periksa', 'nama_item', 'tarif'],
-                'id_parameter_pemeriksaan' => ['nama_parameter', 'satuan', 'nilai_rujukan', 'keterangan', 'biaya_item'],
+                'id_parameter_pemeriksaan' => ['nama_parameter', 'satuan', 'nilai_rujukan', 'biaya_item'],
             ],
         );
     }

@@ -14,14 +14,11 @@ final class PermintaanLabMbModel extends ModelTemplate
             new PermintaanLabMbDatabase(),
             [
                 'id_permintaan_mb'         => V::DEFAULT(),
-                'id_permintaan_lab'        => V::DEFAULT(),
-                'id_item_pemeriksaan'      => V::DEFAULT(),
-                'id_parameter_pemeriksaan' => V::DEFAULT(),
             ],
             [
                 'id_permintaan_lab'        => [],
                 'id_item_pemeriksaan'      => ['kode_periksa', 'nama_item', 'tarif'],
-                'id_parameter_pemeriksaan' => ['nama_parameter', 'satuan', 'nilai_rujukan', 'keterangan', 'biaya_item'],
+                'id_parameter_pemeriksaan' => ['nama_parameter', 'satuan', 'nilai_rujukan', 'biaya_item'],
             ],
         );
     }

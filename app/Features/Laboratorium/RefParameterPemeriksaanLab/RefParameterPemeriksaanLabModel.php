@@ -14,7 +14,6 @@ final class RefParameterPemeriksaanLabModel extends ModelTemplate
             new RefParameterPemeriksaanLabDatabase(),
             [
                 'id_parameter'   => V::DEFAULT(),
-                'id_item_lab'    => V::DEFAULT(),
                 'nama_parameter' => V::DEFAULT(),
                 'satuan'         => V::DEFAULT(),
                 'nilai_rujukan'  => V::DEFAULT(),

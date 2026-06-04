@@ -15,13 +15,9 @@ final class PermintaanLabHeaderModel extends ModelTemplate
             [
                 'id_permintaan'        => V::DEFAULT(),
                 'no_permintaan'        => V::DEFAULT(),
-                'nomor_reg'            => V::DEFAULT(),
-                'id_kategori_lab'      => V::DEFAULT(),
-                'kode_dokter_perujuk'  => V::DEFAULT(),
                 'tgl_permintaan'       => V::DEFAULT(),
                 'indikasi_klinis'      => V::DEFAULT(),
                 'informasi_tambahan'   => V::DEFAULT(),
-                'id_status_permintaan' => V::DEFAULT(),
             ],
             [
                 'nomor_reg'            => ['nomor_rawat'],

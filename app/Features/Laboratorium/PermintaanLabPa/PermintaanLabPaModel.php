@@ -14,7 +14,6 @@ final class PermintaanLabPaModel extends ModelTemplate
             new PermintaanLabPaDatabase(),
             [
                 'id_permintaan_pa'            => V::DEFAULT(),
-                'id_permintaan_lab'           => V::DEFAULT(),
                 'tgl_pengambilan_bahan'       => V::DEFAULT(),
                 'metode_diperoleh'            => V::DEFAULT(),
                 'lokasi_jaringan'             => V::DEFAULT(),
@@ -23,7 +22,6 @@ final class PermintaanLabPaModel extends ModelTemplate
                 'riwayat_tgl_sebelumnya'      => V::DEFAULT(),
                 'riwayat_no_pa_sebelumnya'    => V::DEFAULT(),
                 'riwayat_diagnosa_sebelumnya' => V::DEFAULT(),
-                'id_item_pemeriksaan'         => V::DEFAULT(),
             ],
             [
                 'id_permintaan_lab'   => [],

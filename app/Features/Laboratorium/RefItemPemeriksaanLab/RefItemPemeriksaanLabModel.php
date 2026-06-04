@@ -14,7 +14,6 @@ final class RefItemPemeriksaanLabModel extends ModelTemplate
             new RefItemPemeriksaanLabDatabase(),
             [
                 'id_item_lab'  => V::DEFAULT(),
-                'id_kategori'  => V::DEFAULT(),
                 'kode_periksa' => V::DEFAULT(),
                 'nama_item'    => V::DEFAULT(),
                 'tarif'        => V::DEFAULT(),
