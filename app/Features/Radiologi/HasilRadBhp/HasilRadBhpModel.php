@@ -14,8 +14,6 @@ final class HasilRadBhpModel extends ModelTemplate
             new HasilRadBhpDatabase(),
             [
                 'id_rad_bhp'      => V::DEFAULT(),
-                'id_hasil_rad'    => V::DEFAULT(),
-                'id_barang_medis' => V::DEFAULT(),
                 'jumlah_pakai'    => V::DEFAULT(),
             ],
             [
