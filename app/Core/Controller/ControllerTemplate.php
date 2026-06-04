@@ -121,14 +121,14 @@ class ControllerTemplate extends Controller
             'total' => $total_pages,
         ];
 
-        $konfig_kolom = $this->get_fields_with_options(true);
+        $konfig_kolom = $this->build_modular_columns();
         $data_tabel = $this->model->findAll($size, $offset);
 
         foreach ($data_tabel as $index_baris => $baris) {
             foreach ($konfig_kolom as $kolom) {
                 $nama_field_data = $kolom[2];
                 if (!array_key_exists($nama_field_data, $baris)) {
-                    $data_tabel[$index_baris][$nama_field_data] = "";
+                    $data_tabel[$index_baris][$nama_field_data] = '';
                 }
             }
         }
@@ -143,6 +143,53 @@ class ControllerTemplate extends Controller
             'aksi'        => $this->actions,
             'tabel'       => $data_tabel,  
         ]);
+    }
+
+    private function build_modular_columns(): array
+    {
+        $join_specs   = $this->model->join;
+        $fields_lokal = $this->get_fields_with_options(false, false);
+        $konfig_kolom = [];
+ 
+        foreach ($fields_lokal as $field) {
+            $column = $field[2];
+ 
+            if (isset($join_specs[$column])) {
+                $leaf_cols = $this->extract_leaf_columns($join_specs[$column]);
+                foreach ($leaf_cols as $leaf) {
+                    $konfig_kolom[] = $this->make_join_column_config($leaf);
+                }
+            } else {
+                $konfig_kolom[] = $field;
+            }
+        }
+ 
+        return $konfig_kolom;
+    }
+
+    private function make_join_column_config(string $col_name): array
+    {
+        $label = ucwords(str_replace('_', ' ', $col_name));
+        $type  = str_contains($col_name, 'tanggal') ? 'tanggal' : 'teks';
+
+        return [1, $label, $col_name, $type, 0];
+    }
+
+    /**
+    * @param array<int|string, mixed> $spec
+    * @return list<string>
+    */
+    private function extract_leaf_columns(array $spec): array
+    {
+        $cols = [];
+        foreach ($spec as $k => $v) {
+            if (is_int($k) && is_string($v)) {
+                $cols[] = $v;
+            } elseif (is_string($k) && is_array($v)) {
+                $cols = array_merge($cols, $this->extract_leaf_columns($v));
+            }
+        }
+        return $cols;
     }
 
     final public function audit(): string
@@ -175,181 +222,12 @@ class ControllerTemplate extends Controller
         $all_options = $this->model->get_all_options();
         $result = [];
 
-        $fk_lookup = [];
-        if (isset($this->model->database) && isset($this->model->database->foreign_keys)) {
-            foreach ($this->model->database->foreign_keys as $fk) {
-                $fields = $fk[0];
-                $ref_class = $fk[1];
-                $locals = is_string($fields) ? [$fields] : $fields;
-                foreach ($locals as $local) {
-                    $fk_lookup[$local] = $ref_class;
-                }
-            }
-        }
-
-        $parse_join_fields_recursive = function(
-            array $specs, 
-            string $current_fk, 
-            ?string $current_db_class,
-            string $fallback_label,
-            bool $is_single_column_join
-        ) use (&$parse_join_fields_recursive, &$result): void {
-
-            $ref_controller_class = null;
-            if ($current_db_class !== null) {
-                $ref_controller_class = str_replace(['Model', 'Database'], 'Controller', $current_db_class);
-                if (!str_contains($ref_controller_class, 'Controller')) {
-                    $ref_controller_class .= 'Controller';
-                }
-            }
-
-            $source_fields = [];
-            if ($ref_controller_class !== null && class_exists($ref_controller_class)) {
-                try {
-                    $controller_instance = \CodeIgniter\Config\Factories::controllers($ref_controller_class);
-                    if ($controller_instance !== null) {
-                        if (property_exists($controller_instance, 'field')) {
-                            $source_fields = $controller_instance->field;
-                        } elseif (property_exists($controller_instance, 'fields')) {
-                            $source_fields = $controller_instance->fields;
-                        }
-                    }
-                } catch (\Exception $e) {
-                    $source_fields = [];
-                }
-            }
-
-            foreach ($specs as $k => $v) {
-                if (is_string($k)) {
-                    $next_fk = $k;
-                    $next_specs = is_array($v) ? $v : [$v];
-                    $next_db_class = null;
-
-                    if (count($specs) === 1) {
-                        $next_fallback_label = $fallback_label;
-                    } else {
-                        $next_fallback_label = ucwords(str_replace('_', ' ', $next_fk));
-
-                        foreach ($source_fields as $f) {
-                            if (isset($f[2]) && $f[2] === $next_fk && isset($f[1])) {
-                                $next_fallback_label = $f[1];
-                                break;
-                            }
-                        }
-                    }
-
-                    if ($current_db_class !== null && class_exists($current_db_class)) {
-                        try {
-                            $db_instance = new $current_db_class();
-                            if (isset($db_instance->foreign_keys) && is_array($db_instance->foreign_keys)) {
-                                foreach ($db_instance->foreign_keys as $sub_fk) {
-                                    $sub_fields = $sub_fk[0];
-                                    $sub_locals = is_string($sub_fields) ? [$sub_fields] : $sub_fields;
-                                    if (in_array($next_fk, $sub_locals)) {
-                                        $next_db_class = $sub_fk[1]; 
-                                        break;
-                                    }
-                                }
-                            }
-                        } catch (\Exception $ex) {}
-                    }
-
-                    $next_is_single = (count($next_specs) === 1);
-                    $parse_join_fields_recursive($next_specs, $next_fk, $next_db_class, $next_fallback_label, $next_is_single);
-
-                } else {
-                    $col_name = $v;
-                    $found = false;
-
-                    foreach ($source_fields as $f) {
-                        $target_col = $f[3] ?? null;
-
-                        if ($target_col === $col_name) {
-                            if ((int)$f[0] === 0) {
-                                $found = true;
-                                break;
-                            }
-
-                            $input_type = isset($f[2]) ? (is_object($f[2]) ? $f[2]->value : $f[2]) : 'teks';
-                            $required_status = $f[1] ?? 1;
-
-                            if ($is_single_column_join) {
-                                $display_name = $fallback_label;
-                            } else {
-                                $display_name = (isset($f[4]) && is_string($f[4])) ? $f[4] : ucwords(str_replace('_', ' ', $col_name));
-                            }
-
-                            $result[] = [
-                                (int)$f[0],
-                                $display_name,
-                                $col_name,
-                                $input_type,
-                                $required_status
-                            ];
-                            $found = true;
-                            break;
-                        }
-                    }
-
-                    if (!$found) {
-                        $display_name = $is_single_column_join ? $fallback_label : ucwords(str_replace('_', ' ', $col_name));
-                        $default_type = 'teks';
-                        if (str_contains($col_name, 'tanggal') || str_contains($col_name, 'tgl')) {
-                            $default_type = 'tanggal';
-                        }
-
-                        $result[] = [
-                            1,
-                            $display_name,
-                            $col_name,
-                            $default_type,
-                            1
-                        ];
-                    }
-                }
-            }
-        };
-
         foreach ($this->fields as $field) {
             [$visible, $display, $column, $type] = $field;
 
-            if (isset($this->model->join) && array_key_exists($column, $this->model->join)) {
-                $display_cols = $this->model->join[$column];
-                $specs = is_array($display_cols) ? $display_cols : [$display_cols];
-
-                $is_single_column_join = (count($specs) === 1 && !is_string(array_key_first($specs)));
-                $fallback_label = !empty($display) ? $display : ucwords(str_replace('_', ' ', $column));
-
-                $initial_db = $fk_lookup[$column] ?? null;
-
-                if ($is_form) {
-                    $options = $all_options[$column] ?? [];
-                    $result[] = [
-                        (int)$visible,
-                        $display,
-                        $column,
-                        'status',
-                        $field[4] ?? 1,
-                        $options
-                    ];
-                } else {
-                    $parse_join_fields_recursive(
-                        $specs, $column, $initial_db,
-                        $fallback_label, $is_single_column_join
-                    );
-                }
-
+            if ($visible === 0 && !($include_pk && $column === $this->primary_key)) {
                 continue;
             }
-
-            if ((int)$visible === 0 && !($include_pk && $column === $this->primary_key)) {
-                continue;
-            }
-
-            if (is_object($type) && isset($type->value)) {
-                $type = $type->value;
-            }
-            $field[3] = $type;
 
             if ($type === 'status' && isset($all_options[$column])) {
                 $field[5] = $all_options[$column];
