@@ -869,18 +869,9 @@
                         ['Sumber Darah', '/sumber-darah', ''],
                         ['Tarif Komponen', '/tarif-komponen', '']
                     ]],
-                    ['Pemusnahan Darah', '', 'pemusnahan_darah', '/pemusnahan-darah', $petugasrole, [
-                        ['Pemusnahan', '/pemusnahan', ''],
-                        ['Pemusnahan Detail', '/pemusnahan-detail', ''],
-                        ['Alasan Pemusnahan', '/alasan-pemusnahan', '']
-                    ]],
                     ['Uji Darah', '', 'uji_darah', '/uji-darah', $petugasrole, [
                         ['Hasil Uji Saring', '/hasil-uji-saring', ''],
-                        ['Hasil Diagnostik', '/hasil-diagnostik', ''],
-                        ['Hasil Diagnostik Detail', '/hasil-diagnostik-detail', ''],
-                        ['Metode Uji', '/metode-uji', ''],
-                        ['Parameter Uji', '/parameter-uji', ''],
-                        ['Nilai Diagnostik', '/nilai-diagnostik', '']
+                        ['Metode Uji', '/metode-uji', '']
                     ]],
                     ['Pelayanan Darah', '', 'pelayanan_darah', '/pelayanan-darah', $petugasrole, [
                         ['Permintaan Darah', '/permintaan-darah', ''],
@@ -905,14 +896,7 @@
                     ['Penanganan Donor', '', 'penanganan_donor', '/penanganan-donor', $petugasrole, [
                         ['Pencekalan', '/pencekalan', ''],
                         ['Kasus Reaktif', '/kasus-reaktif', ''],
-                        ['Konseling', '/konseling', ''],
-                        ['Jawaban Konseling', '/jawaban-konseling', ''],
-                        ['Rujukan', '/rujukan', ''],
-                        ['Jenis Pencekalan', '/jenis-pencekalan', ''],
-                        ['Status Kasus', '/status-kasus', ''],
-                        ['Pertanyaan Konseling', '/pertanyaan-konseling', ''],
-                        ['Pilihan Jawaban', '/pilihan-jawaban', ''],
-                        ['Fasyankes Rujukan', '/fasyankes-rujukan', '']
+                        ['Jenis Pencekalan', '/jenis-pencekalan', '']
                     ]],
                     ['Laboratorium', '', 'laboratorium', '/laboratorium', $petugasrole, [
                         // Permintaan Lab
