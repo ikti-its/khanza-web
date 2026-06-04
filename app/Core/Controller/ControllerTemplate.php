@@ -121,14 +121,14 @@ class ControllerTemplate extends Controller
             'total' => $total_pages,
         ];
 
-        $konfig_kolom = $this->get_fields_with_options(true);
+        $konfig_kolom = $this->build_modular_columns();
         $data_tabel = $this->model->findAll($size, $offset);
 
         foreach ($data_tabel as $index_baris => $baris) {
             foreach ($konfig_kolom as $kolom) {
                 $nama_field_data = $kolom[2];
                 if (!array_key_exists($nama_field_data, $baris)) {
-                    $data_tabel[$index_baris][$nama_field_data] = "";
+                    $data_tabel[$index_baris][$nama_field_data] = '';
                 }
             }
         }
@@ -143,6 +143,53 @@ class ControllerTemplate extends Controller
             'aksi'        => $this->actions,
             'tabel'       => $data_tabel,  
         ]);
+    }
+
+    private function build_modular_columns(): array
+    {
+        $join_specs   = $this->model->join;
+        $fields_lokal = $this->get_fields_with_options(false, false);
+        $konfig_kolom = [];
+ 
+        foreach ($fields_lokal as $field) {
+            $column = $field[2];
+ 
+            if (isset($join_specs[$column])) {
+                $leaf_cols = $this->extract_leaf_columns($join_specs[$column]);
+                foreach ($leaf_cols as $leaf) {
+                    $konfig_kolom[] = $this->make_join_column_config($leaf);
+                }
+            } else {
+                $konfig_kolom[] = $field;
+            }
+        }
+ 
+        return $konfig_kolom;
+    }
+
+    private function make_join_column_config(string $col_name): array
+    {
+        $label = ucwords(str_replace('_', ' ', $col_name));
+        $type  = str_contains($col_name, 'tanggal') ? 'tanggal' : 'teks';
+
+        return [1, $label, $col_name, $type, 0];
+    }
+
+    /**
+    * @param array<int|string, mixed> $spec
+    * @return list<string>
+    */
+    private function extract_leaf_columns(array $spec): array
+    {
+        $cols = [];
+        foreach ($spec as $k => $v) {
+            if (is_int($k) && is_string($v)) {
+                $cols[] = $v;
+            } elseif (is_string($k) && is_array($v)) {
+                $cols = array_merge($cols, $this->extract_leaf_columns($v));
+            }
+        }
+        return $cols;
     }
 
     final public function audit(): string

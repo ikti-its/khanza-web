@@ -16,6 +16,8 @@ class ModelTemplate extends Model
     /** @var array<non-empty-string, ValidationType> */
     public private(set) array $fields = [];
     public private(set) array $join = [];
+    /** @var array<string, true> */
+    private array $selected_aliases = [];
     protected function __construct(
         DatabaseTemplate $database,
         /** @var array<non-empty-string, ValidationType> */
@@ -113,6 +115,18 @@ class ModelTemplate extends Model
         return $lookup;
     }
 
+    private function select_once(
+        \CodeIgniter\Database\BaseBuilder $builder,
+        string $table_alias,
+        string $col_name,
+    ): void {
+        if (isset($this->selected_aliases[$col_name])) {
+            return;
+        }
+        $this->selected_aliases[$col_name] = true;
+        $builder->select("{$table_alias}.{$col_name} AS {$col_name}");
+    }
+
     /** @param array<int|string, mixed> $spec */
     private function apply_join_spec(
         \CodeIgniter\Database\BaseBuilder $builder,
@@ -140,10 +154,12 @@ class ModelTemplate extends Model
         );
 
         foreach ($spec as $k => $v) {
-            if (is_string($k)) {
-                $this->apply_join_spec($builder, $k, $v, $ref_alias, $ref_db, $idx);
+            if (is_int($k)) {
+                assert(is_string($v), "Leaf value di join spec harus string, dapat: " . gettype($v));
+                $this->select_once($builder, $ref_alias, $v);
             } else {
-                $builder->select("{$ref_alias}.{$v} AS {$v}");
+                assert(is_array($v), "Nested join spec untuk key '{$k}' harus array");
+                $this->apply_join_spec($builder, $k, $v, $ref_alias, $ref_db, $idx);
             }
         }
     }
@@ -230,18 +246,18 @@ class ModelTemplate extends Model
             return parent::findAll($limit, $offset);
         }
 
+        $this->selected_aliases = [];
+
         $main    = 'm';
         $builder = $this->db->table("{$this->table} {$main}");
         $builder->select("{$main}.*");
 
-        if (!empty($this->join)) {
-            $idx = 0;
-            foreach ($this->join as $fk_col => $spec) {
-                $this->apply_join_spec($builder, $fk_col, $spec, $main, $this->database, $idx);
-            }
+        $idx = 0;
+        foreach ($this->join as $fk_col => $spec) {
+            $this->apply_join_spec($builder, $fk_col, $spec, $main, $this->database, $idx);
         }
 
-        if ($limit > 0) {
+        if ($limit !== null && $limit > 0) {
             $builder->limit($limit, $offset);
         }
 
