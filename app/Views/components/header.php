@@ -662,7 +662,7 @@
                                         Pada 1 menu, DISARANKAN submenu memiliki icon seluruhnya atau 
                                         tidak memiliki icon seluruhnya supaya tampilan terlihat rapi
                         */
-                    ['Aturan', '', 'aturan_penggajian', '/aturan-penggajian', $petugasrole, [
+                    ['Aturan Penggajian', '', 'aturan_penggajian', '/aturan-penggajian', $petugasrole, [
                         ['Golongan Pegawai', '/golongan', ''],
                         ['Jabatan Pegawai', '/jabatan', ''],
                         ['Upah Minimum Provinsi', '/ump', ''],
@@ -676,7 +676,14 @@
                         ['Uang Penghargaan Masa Kerja', '/upmk', ''],
                     ]],
                     // ['Data Penggajian', '', 'data_penggajian', '/data-penggajian', $petugasrole, [
-                        
+                    ['Finansial', '', 'finansial', '/finansial', $petugasrole, [
+                        ['Bank', '/bank', ''],
+                        ['Pemilik', '/pemilik-bank', ''],
+                        ['Prinsip', '/prinsip-bank', ''],
+                        ['Metode Pembayaran', '/metode-pembayaran', ''],
+                        ['Rekening', '/rekening', ''],
+                        ['Transaksi', '/transaksi', ''],
+                    ]],
                     // ]],
                     ['Inventaris Medis', '', 'inventaris_medis', '',  $petugasrole, [
                         ['Data', '/datamedis', ''],

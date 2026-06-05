@@ -730,6 +730,14 @@ $features = [
         ['Pesangon', 'pesangon'],
         ['UangPenghargaanMasaKerja', 'upmk']
     ]],
+    ['Finansial', 'finansial/', [
+        ['Bank', 'bank'],
+        ['PemilikBank', 'pemilik-bank'],
+        ['PrinsipBank', 'prinsip-bank'],
+        ['MetodePembayaran', 'metode-pembayaran'],
+        ['Rekening', 'rekening'],
+        ['Transaksi', 'transaksi'],
+    ]],
     ['Role', 'role/', [
         ['Dokter', 'dokter'],
         ['Pasien', 'pasien'],
