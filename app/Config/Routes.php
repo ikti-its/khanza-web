@@ -16,7 +16,7 @@ $routes->post('/submiteditprofil/(:segment)', 'userPegawai::submitEditProfil/$1'
 $routes->get('/datauserpegawai', 'userPegawai::lihatPegawai', ['filter' => 'auth']);
 $routes->get('/detailberkaspegawai/(:segment)', 'userPegawai::detailBerkasPegawai/$1', ['filter' => 'auth']);
 
-$routes->post('/kirimnotifikasi', 'userAdminController::submitKirimNotifikasi');
+$routes->post('/kirimnotifikasi', 'userAdmin::submitKirimNotifikasi');
 $routes->get('/kirimnotifikasi', 'auth::dashboard', ['filter' => 'auth']);
 
 $routes->get('/izincuti', 'userPegawaiController::tambahCuti', ['filter' => 'auth']);
@@ -32,8 +32,8 @@ $routes->add('/presensi', 'userPegawaiController::tambahPresensi', ['filter' => 
 $routes->get('/swafoto', 'userPegawaiController::tambahSwafoto', ['filter' => 'auth']);
 $routes->get('/menukehadiran', 'userPegawaiController::lihatOpsiHadir', ['filter' => 'auth']);
 
-$routes->get('/lihatstatuscuti', 'userAdminController::lihatStatusCuti', ['filter' => 'auth']);
-$routes->post('/submiteditstatuscuti/(:segment)', 'userAdminController::submitEditStatusCuti/$1', ['filter' => 'auth']);
+$routes->get('/lihatstatuscuti', 'userAdmin::lihatStatusCuti', ['filter' => 'auth']);
+$routes->post('/submiteditstatuscuti/(:segment)', 'userAdmin::submitEditStatusCuti/$1', ['filter' => 'auth']);
 
 $routes->get('/kehadiranmanual', 'userPegawaiController::LihatAbsen', ['filter' => 'auth']);
 $routes->get('/absenmasuk/(:segment)', 'userPegawaiController::LihatAbsenMasuk/$1', ['filter' => 'checkFotoData']);
@@ -83,9 +83,6 @@ $routes->get('/tampilkutitugas/(:segment)', 'userPegawai::tampilCuti/$1', ['filt
 $routes->get('/tampiljadwal/(:segment)', 'userPegawai::tampilJadwal/$1', ['filter' => 'auth']);
 $routes->get('/tampiljadwalpenuh', 'userPegawai::tampilJadwalPenuh', ['filter' => 'auth']);
 
-$routes->post('/kirimnotifikasi', 'userAdmin::submitKirimNotifikasi');
-$routes->get('/kirimnotifikasi', 'auth::dashboard', ['filter' => 'auth']);
-
 $routes->get('/izincuti', 'userPegawai::tambahCuti', ['filter' => 'auth']);
 $routes->get('/lihatizincuti/(:segment)', 'userPegawai::tampilCuti/$1', ['filter' => 'auth']);
 $routes->post('/submittambahcuti', 'userPegawai::submitTambahCuti', ['filter' => 'auth']);
@@ -98,9 +95,6 @@ $routes->get('/statusizin', 'userPegawai::tampilStatusIzin', ['filter' => 'auth'
 $routes->add('/presensi', 'userPegawai::tambahPresensi', ['filter' => 'auth']);
 $routes->get('/swafoto', 'userPegawai::tambahSwafoto', ['filter' => 'auth']);
 $routes->get('/menukehadiran', 'userPegawai::lihatOpsiHadir', ['filter' => 'auth']);
-
-$routes->get('/lihatstatuscuti', 'userAdmin::lihatStatusCuti', ['filter' => 'auth']);
-$routes->post('/submiteditstatuscuti/(:segment)', 'userAdmin::submitEditStatusCuti/$1', ['filter' => 'auth']);
 
 $routes->get('/kehadiranmanual', 'userPegawai::LihatAbsen', ['filter' => 'auth']);
 $routes->get('/absenmasuk/(:segment)', 'userPegawai::LihatAbsenMasuk/$1', ['filter' => 'checkFotoData']);
