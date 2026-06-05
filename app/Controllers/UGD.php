@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class UGD extends ControllerTemplateLegacy
 {
@@ -49,7 +49,7 @@ protected array $breadcrumbs = [];
         $title = 'Data UGD';
     
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     
         $token = session()->get('jwt_token');
@@ -69,13 +69,13 @@ protected array $breadcrumbs = [];
 
         if ($status !== 200 || !$response) {
             log_message('error', "UGD API error: status {$status}, response: " . $response);
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
     
         $ugd_data = json_decode($response, true);
         if (json_last_error() !== JSON_ERROR_NONE || !isset($ugd_data['data'])) {
             log_message('error', 'JSON decode error: ' . json_last_error_msg());
-            return HTTPError::renderErrorView(500);
+            return ErrorController::renderErrorView(500);
         }
     
         $this->addBreadcrumb('User', 'user');
@@ -104,14 +104,14 @@ protected array $breadcrumbs = [];
                 'breadcrumbs' => $this->breadcrumbs,
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
     public function submitTambahUGD()
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -215,7 +215,7 @@ protected array $breadcrumbs = [];
     public function editUGD($nomorReg)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -232,7 +232,7 @@ protected array $breadcrumbs = [];
 
 
         if ($status !== 200) {
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
 
         $ugd_data = json_decode($response, true);
@@ -251,7 +251,7 @@ protected array $breadcrumbs = [];
     public function submitEditUGD($nomorReg)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -301,7 +301,7 @@ protected array $breadcrumbs = [];
     public function hapusUGD($nomorReg)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -321,7 +321,7 @@ protected array $breadcrumbs = [];
         if ($status === 200 || $status === 204) {
             return redirect()->to(base_url('ugd'))->with('success', 'Data UGD berhasil dihapus.');
         } else {
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
     }
 }

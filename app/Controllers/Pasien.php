@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class Pasien extends ControllerTemplateLegacy
 {
@@ -182,7 +182,7 @@ class Pasien extends ControllerTemplateLegacy
     public function editPasien($no_rkm_medis)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -201,7 +201,7 @@ class Pasien extends ControllerTemplateLegacy
 
 
         if ($http_status !== 200 || !$response) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
 
         $data = json_decode($response, true);
@@ -220,7 +220,7 @@ class Pasien extends ControllerTemplateLegacy
     public function submitEditPasien($no_rkm_medis)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -287,14 +287,14 @@ class Pasien extends ControllerTemplateLegacy
         if ($http_status === 200) {
             return redirect()->to('/pasien')->with('success', 'Data pasien berhasil diperbarui.');
         } else {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
     }
 
     public function hapusPasien($no_rkm_medis)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -315,7 +315,7 @@ class Pasien extends ControllerTemplateLegacy
         if ($http_status === 200) {
             return redirect()->to('/pasien')->with('success', 'Pasien berhasil dihapus.');
         } else {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class userPegawaiController extends ControllerTemplateLegacy
 {
@@ -36,13 +36,13 @@ class userPegawaiController extends ControllerTemplateLegacy
                     session()->set('user_specific_data', $akun_data['data']);
                     return view('/user/homeUser', ['akun_data' => $akun_data['data'], 'title' => $title]);
                 } else {
-                    return HTTPError::renderErrorView($http_status_code_akun);
+                    return ErrorController::renderErrorView($http_status_code_akun);
                 }
             } else {
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -119,18 +119,18 @@ class userPegawaiController extends ControllerTemplateLegacy
                         return redirect()->to(base_url('profile'));
                     } else {
                         // Error response from the API
-                        return HTTPError::renderErrorView($http_status_code);
+                        return ErrorController::renderErrorView($http_status_code);
                     }
                 } else {
                     // Error sending request to the API
-                    return HTTPError::renderErrorView(500);
+                    return ErrorController::renderErrorView(500);
                 }
 
 
 
             } else {
                 // User not logged in
-                return HTTPError::renderErrorView(401);
+                return ErrorController::renderErrorView(401);
             }
         }
     }
@@ -190,7 +190,7 @@ class userPegawaiController extends ControllerTemplateLegacy
                 if ($response_lokasi === false) {
                     $error_message = curl_error($ch_lokasi);
 
-                    return HTTPError::renderErrorView(500, 'Error fetching location data: ' . $error_message);
+                    return ErrorController::renderErrorView(500, 'Error fetching location data: ' . $error_message);
                 }
 
                 // Get HTTP status code for location request
@@ -237,16 +237,16 @@ class userPegawaiController extends ControllerTemplateLegacy
             } else {
                 // Error fetching ketersediaan data
 
-                return HTTPError::renderErrorView($http_status_code_ketersediaan);
+                return ErrorController::renderErrorView($http_status_code_ketersediaan);
             }
         } else {
             // Error fetching ketersediaan data
 
-            return HTTPError::renderErrorView(500); // Assume 500 for cURL error
+            return ErrorController::renderErrorView(500); // Assume 500 for cURL error
         }
     } else {
         // User not logged in
-        return HTTPError::renderErrorView(401);
+        return ErrorController::renderErrorView(401);
     }
 }
 
@@ -324,26 +324,26 @@ class userPegawaiController extends ControllerTemplateLegacy
                             return view('/user/berkasPegawai', ['userData' => $userData['data'], 'berkasData' => $berkasData['data'], 'pegawaiId' => $pegawaiId, 'title' => 'Edit Pegawai']);
                         } else {
                             // Error fetching file data
-                            return HTTPError::renderErrorView($http_status_berkas);
+                            return ErrorController::renderErrorView($http_status_berkas);
                         }
                     } else {
                         // Error fetching file data
-                        return HTTPError::renderErrorView(500); // Assume 500 for cURL error
+                        return ErrorController::renderErrorView(500); // Assume 500 for cURL error
                     }
                 } else {
                     // Error fetching user data
-                    return HTTPError::renderErrorView($http_status_code);
+                    return ErrorController::renderErrorView($http_status_code);
                 }
             } else {
                 // Error fetching file data
-                return HTTPError::renderErrorView(500); // Assume 500 for cURL error
+                return ErrorController::renderErrorView(500); // Assume 500 for cURL error
             }
 
             //Close the cURL session for user data
 
         } else {
             // User not logged in
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -387,16 +387,16 @@ class userPegawaiController extends ControllerTemplateLegacy
                     return  view('/user/tampilCatatanKehadiran', ['kehadiran_data' => $kehadiran_data['data'], 'title' => $title, 'breadcrumbs' => $this->breadcrumbs]);
                 } else {
                     // Error fetching kehadiran data
-                    return HTTPError::renderErrorView($http_status_code_kehadiran);
+                    return ErrorController::renderErrorView($http_status_code_kehadiran);
                 }
             } else {
                 // Error fetching kehadiran data
-                return HTTPError::renderErrorView(500); // Assume 500 for cURL error
+                return ErrorController::renderErrorView(500); // Assume 500 for cURL error
             }
 
         } else {
             // User not logged in
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -446,16 +446,16 @@ class userPegawaiController extends ControllerTemplateLegacy
                     return  view('/user/tampilCatatanCuti', ['cuti_data' => $cuti_data['data'], 'title' => $title, 'breadcrumbs' => $this->breadcrumbs]);
                 } else {
                     // Error fetching cuti data
-                    return HTTPError::renderErrorView($http_status_code_cuti);
+                    return ErrorController::renderErrorView($http_status_code_cuti);
                 }
             } else {
                 // Error fetching cuti data
-                return HTTPError::renderErrorView(500); // Assume 500 for cURL error
+                return ErrorController::renderErrorView(500); // Assume 500 for cURL error
             }
 
         } else {
             // User not logged in
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -506,16 +506,16 @@ class userPegawaiController extends ControllerTemplateLegacy
                     return  view('/user/tampilJadwalPegawai', ['kehadiran_data' => $jadwal_data['data'], 'title' => $title, 'breadcrumbs' => $this->breadcrumbs]);
                 } else {
                     // Error fetching jadwal data
-                    return HTTPError::renderErrorView($http_status_code_jadwal);
+                    return ErrorController::renderErrorView($http_status_code_jadwal);
                 }
             } else {
                 // Error fetching jadwal data
-                return HTTPError::renderErrorView(500); // Assume 500 for cURL error
+                return ErrorController::renderErrorView(500); // Assume 500 for cURL error
             }
 
         } else {
             // User not logged in
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -606,24 +606,24 @@ class userPegawaiController extends ControllerTemplateLegacy
                             ]);
                         } else {
                             // Error fetching pegawai data
-                            return HTTPError::renderErrorView($http_status_code_pegawai);
+                            return ErrorController::renderErrorView($http_status_code_pegawai);
                         }
                     } else {
                         // Error fetching pegawai data
-                        return HTTPError::renderErrorView(500); // Assume 500 for cURL error
+                        return ErrorController::renderErrorView(500); // Assume 500 for cURL error
                     }
 
                 } else {
                     // Error fetching jadwal data
-                    return HTTPError::renderErrorView($http_status_code_jadwal);
+                    return ErrorController::renderErrorView($http_status_code_jadwal);
                 }
             } else {
                 // Error fetching jadwal data
-                return HTTPError::renderErrorView(500); // Assume 500 for cURL error
+                return ErrorController::renderErrorView(500); // Assume 500 for cURL error
             }
         } else {
             // User not logged in
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -708,11 +708,11 @@ class userPegawaiController extends ControllerTemplateLegacy
                         return redirect()->to(base_url('izincuti'));
                     } else {
                         // Error response from the API
-                        return HTTPError::renderErrorView($http_status_code);
+                        return ErrorController::renderErrorView($http_status_code);
                     }
                 } else {
                     // Error sending request to the API
-                    return HTTPError::renderErrorView(500);
+                    return ErrorController::renderErrorView(500);
                 }
 
 
@@ -765,7 +765,7 @@ class userPegawaiController extends ControllerTemplateLegacy
             // Handle cURL error
             $error_message = curl_error($user_specific_ch);
             // Log the error or return an appropriate response
-            return HTTPError::renderErrorView(500, 'Failed to fetch user specific data: ' . $error_message);
+            return ErrorController::renderErrorView(500, 'Failed to fetch user specific data: ' . $error_message);
         }
 
         // Get HTTP status code
@@ -777,7 +777,7 @@ class userPegawaiController extends ControllerTemplateLegacy
         // Check HTTP status code
         if ($http_status_code !== 200) {
             // Handle non-200 HTTP status code
-            return HTTPError::renderErrorView($http_status_code);
+            return ErrorController::renderErrorView($http_status_code);
         }
 
         // Decode the JSON response
@@ -789,11 +789,11 @@ class userPegawaiController extends ControllerTemplateLegacy
             return view('/dashboard/dashboard', ['title' => $title]);
         } else {
             // Handle unexpected API response format
-            return HTTPError::renderErrorView(500);
+            return ErrorController::renderErrorView(500);
         }
     } else {
         // User not logged in
-        return HTTPError::renderErrorView(401);
+        return ErrorController::renderErrorView(401);
     }
 }
 
@@ -810,7 +810,7 @@ public function tambahPresensi()
 
     // Check if the user is logged in
     if (!$jwtToken) {
-        return HTTPError::renderErrorView(401); // Unauthorized
+        return ErrorController::renderErrorView(401); // Unauthorized
     }
 
     // Get central latitude and longitude from POST data
@@ -838,7 +838,7 @@ public function tambahPresensi()
     if ($response_lokasi === false) {
         $error_message = curl_error($ch_lokasi);
 
-        return HTTPError::renderErrorView(500, 'Error fetching location data: ' . $error_message);
+        return ErrorController::renderErrorView(500, 'Error fetching location data: ' . $error_message);
     }
 
     // Get HTTP status code for location request
@@ -878,7 +878,7 @@ public function tambahPresensi()
 
         // Check if the distance is within the radius
         if ($distanceInMeters > $radius) {
-            return HTTPError::renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap berada pada area rumah sakit'); // Forbidden with custom message
+            return ErrorController::renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap berada pada area rumah sakit'); // Forbidden with custom message
         }
 
         // User's IP address (local IP simulated for testing)
@@ -889,7 +889,7 @@ public function tambahPresensi()
 
         // Check if the IP address starts with '10.183'
         if (strpos($ipAddress, '10.183') !== 0) {
-            return HTTPError::renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap gunakan jaringan internal rumah sakit'); // Forbidden with custom message
+            return ErrorController::renderErrorView(403, 'Anda tidak memiliki izin untuk melakukan presensi, harap gunakan jaringan internal rumah sakit'); // Forbidden with custom message
         }
 
         // Initialize cURL session to get employee photo data
@@ -909,7 +909,7 @@ public function tambahPresensi()
         if ($response_foto === false) {
             $error_message = curl_error($ch_foto);
 
-            return HTTPError::renderErrorView(500, 'Error fetching employee photo data: ' . $error_message);
+            return ErrorController::renderErrorView(500, 'Error fetching employee photo data: ' . $error_message);
         }
 
         // Get HTTP status code for employee photo request
@@ -920,7 +920,7 @@ public function tambahPresensi()
 
         // Check HTTP status for employee photo request
         if ($http_status_response_foto !== 200) {
-            return HTTPError::renderErrorView($http_status_response_foto, 'Error fetching employee photo data');
+            return ErrorController::renderErrorView($http_status_response_foto, 'Error fetching employee photo data');
         }
 
         // Parse JSON response for employee photo data
@@ -980,23 +980,23 @@ public function tambahPresensi()
                         ]);
                     } else {
                         // No schedule found for today
-                        return HTTPError::renderErrorView(404, 'No schedule found for today');
+                        return ErrorController::renderErrorView(404, 'No schedule found for today');
                     }
                 } else {
                     // Error fetching jadwal data
-                    return HTTPError::renderErrorView($http_status_code_jadwal, 'Error fetching jadwal data');
+                    return ErrorController::renderErrorView($http_status_code_jadwal, 'Error fetching jadwal data');
                 }
             } else {
                 // Error fetching jadwal data
-                return HTTPError::renderErrorView(500, 'Error fetching jadwal data'); // Assume 500 for cURL error
+                return ErrorController::renderErrorView(500, 'Error fetching jadwal data'); // Assume 500 for cURL error
             }
 
         } else {
             // User not logged in
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     } else {
-        return HTTPError::renderErrorView($http_status_response_lokasi, 'Error fetching location data');
+        return ErrorController::renderErrorView($http_status_response_lokasi, 'Error fetching location data');
     }
 }
 
@@ -1034,7 +1034,7 @@ public function tambahPresensi()
         if ($response_foto === false) {
             $error_message = curl_error($ch_foto);
 
-            return HTTPError::renderErrorView(500, 'Error fetching employee photo data: ' . $error_message);
+            return ErrorController::renderErrorView(500, 'Error fetching employee photo data: ' . $error_message);
         }
 
         // Get HTTP status code for employee photo request
@@ -1048,7 +1048,7 @@ public function tambahPresensi()
 
         // Check if the request was successful
         if ($http_status_response_foto !== 200 || !isset($foto_data['data']['foto'])) {
-            return HTTPError::renderErrorView($http_status_response_foto, 'Error fetching employee photo data.');
+            return ErrorController::renderErrorView($http_status_response_foto, 'Error fetching employee photo data.');
         }
 
         // Pass the photo data to the view
@@ -1136,20 +1136,20 @@ public function tambahPresensi()
                         ]);
                     } else {
                         // No schedule found for today
-                        return HTTPError::renderErrorView(404); // Replace with appropriate error code
+                        return ErrorController::renderErrorView(404); // Replace with appropriate error code
                     }
                 } else {
                     // Error fetching jadwal data
-                    return HTTPError::renderErrorView($http_status_code_jadwal);
+                    return ErrorController::renderErrorView($http_status_code_jadwal);
                 }
             } else {
                 // Error fetching jadwal data
-                return HTTPError::renderErrorView(500); // Assume 500 for cURL error
+                return ErrorController::renderErrorView(500); // Assume 500 for cURL error
             }
 
         } else {
             // User not logged in
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -1247,11 +1247,11 @@ public function tambahPresensi()
                         return redirect()->to(base_url('dashboard'));
                     } else {
                         // Error response from the API
-                        return HTTPError::renderErrorView($http_status_code);
+                        return ErrorController::renderErrorView($http_status_code);
                     }
                 } else {
                     // Error sending request to the API
-                    return HTTPError::renderErrorView(500);
+                    return ErrorController::renderErrorView(500);
                 }
 
 
@@ -1318,20 +1318,20 @@ public function tambahPresensi()
                         ]);
                     } else {
                         // No schedule found for today
-                        return HTTPError::renderErrorView(404); // Replace with appropriate error code
+                        return ErrorController::renderErrorView(404); // Replace with appropriate error code
                     }
                 } else {
                     // Error fetching jadwal data
-                    return HTTPError::renderErrorView($http_status_code_jadwal);
+                    return ErrorController::renderErrorView($http_status_code_jadwal);
                 }
             } else {
                 // Error fetching jadwal data
-                return HTTPError::renderErrorView(500); // Assume 500 for cURL error
+                return ErrorController::renderErrorView(500); // Assume 500 for cURL error
             }
 
         } else {
             // User not logged in
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -1398,11 +1398,11 @@ public function tambahPresensi()
                         return redirect()->to(base_url('dashboard'));
                     } else {
                         // Error response from the API
-                        return HTTPError::renderErrorView($http_status_code);
+                        return ErrorController::renderErrorView($http_status_code);
                     }
                 } else {
                     // Error sending request to the API
-                    return HTTPError::renderErrorView(500);
+                    return ErrorController::renderErrorView(500);
                 }
 
 

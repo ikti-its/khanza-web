@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class CatatanObservasiKebidanan extends ControllerTemplateLegacy
 {
@@ -48,7 +48,7 @@ class CatatanObservasiKebidanan extends ControllerTemplateLegacy
         $title = 'Catatan Observasi Ranap Kebidanan';
 
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -64,12 +64,12 @@ class CatatanObservasiKebidanan extends ControllerTemplateLegacy
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if ($status !== 200 || !$response) {
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
 
         $data = json_decode($response, true);
         if (!isset($data['data']) || !is_array($data['data'])) {
-            return HTTPError::renderErrorView(500);
+            return ErrorController::renderErrorView(500);
         }
 
         $list = $data['data'];
@@ -150,7 +150,7 @@ class CatatanObservasiKebidanan extends ControllerTemplateLegacy
                 'breadcrumbs' => $this->breadcrumbs
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -196,7 +196,7 @@ class CatatanObservasiKebidanan extends ControllerTemplateLegacy
                 return $response;
             }
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -205,7 +205,7 @@ class CatatanObservasiKebidanan extends ControllerTemplateLegacy
     public function editCatatanObservasiKebidanan($noRawat)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -223,7 +223,7 @@ class CatatanObservasiKebidanan extends ControllerTemplateLegacy
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if ($status !== 200) {
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
 
         $data = json_decode($response, true);
@@ -303,7 +303,7 @@ class CatatanObservasiKebidanan extends ControllerTemplateLegacy
     public function submitEditCatatanObservasiKebidanan($noRawat)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -372,10 +372,10 @@ class CatatanObservasiKebidanan extends ControllerTemplateLegacy
             if ($http_status === 200 || $http_status === 204) {
                 return redirect()->to(base_url('catatanobservasikebidanan'))->with('success', 'Data observasi kebidanan berhasil dihapus.');
             } else {
-                return HTTPError::renderErrorView($http_status);
+                return ErrorController::renderErrorView($http_status);
             }
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -469,7 +469,7 @@ class CatatanObservasiKebidanan extends ControllerTemplateLegacy
         $title = 'Catatan Observasi Ranap Kebidanan';
 
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -485,12 +485,12 @@ class CatatanObservasiKebidanan extends ControllerTemplateLegacy
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if ($status !== 200 || !$response) {
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
 
         $data = json_decode($response, true);
         if (!isset($data['data']) || !is_array($data['data'])) {
-            return HTTPError::renderErrorView(500);
+            return ErrorController::renderErrorView(500);
         }
 
         // Filter hanya data dengan no_rawat yang cocok

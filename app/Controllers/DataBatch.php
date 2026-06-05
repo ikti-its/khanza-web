@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class DataBatch extends ControllerTemplateLegacy
 {
@@ -63,19 +63,19 @@ class DataBatch extends ControllerTemplateLegacy
 
 
             if ($http_status_code_ruangan !== 201) {
-                return HTTPError::renderErrorView($http_status_code_ruangan);
+                return ErrorController::renderErrorView($http_status_code_ruangan);
             }
             if ($http_status_code_satuan !== 201) {
-                return HTTPError::renderErrorView($http_status_code_satuan);
+                return ErrorController::renderErrorView($http_status_code_satuan);
             }
             if ($http_status_code_gudang !== 200) {
-                return HTTPError::renderErrorView($http_status_code_gudang);
+                return ErrorController::renderErrorView($http_status_code_gudang);
             }
             if ($http_status_code_batch !== 200) {
-                return HTTPError::renderErrorView($http_status_code_batch);
+                return ErrorController::renderErrorView($http_status_code_batch);
             }
             if ($http_status_code_barang !== 200) {
-                return HTTPError::renderErrorView($http_status_code_barang);
+                return ErrorController::renderErrorView($http_status_code_barang);
             }
 
             $this->addBreadcrumb('Inventaris', 'inventarismedis');
@@ -97,7 +97,7 @@ class DataBatch extends ControllerTemplateLegacy
                 'breadcrumbs' => $this->breadcrumbs
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -147,16 +147,16 @@ class DataBatch extends ControllerTemplateLegacy
 
 
             if ($http_status_code_ruangan !== 201) {
-                return HTTPError::renderErrorView($http_status_code_ruangan);
+                return ErrorController::renderErrorView($http_status_code_ruangan);
             }
             if ($http_status_code_satuan !== 201) {
-                return HTTPError::renderErrorView($http_status_code_satuan);
+                return ErrorController::renderErrorView($http_status_code_satuan);
             }
             if ($http_status_code_gudang !== 200) {
-                return HTTPError::renderErrorView($http_status_code_gudang);
+                return ErrorController::renderErrorView($http_status_code_gudang);
             }
             if ($http_status_code_barang !== 200) {
-                return HTTPError::renderErrorView($http_status_code_barang);
+                return ErrorController::renderErrorView($http_status_code_barang);
             }
 
             $this->addBreadcrumb('Inventaris', 'inventarismedis');
@@ -177,7 +177,7 @@ class DataBatch extends ControllerTemplateLegacy
                 'breadcrumbs' => $this->breadcrumbs
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
     public function submitTambah()
@@ -252,7 +252,7 @@ class DataBatch extends ControllerTemplateLegacy
                 return $response_batch;
             }
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
     public function editDataBatch($batch, $faktur, $barang)
@@ -312,19 +312,19 @@ class DataBatch extends ControllerTemplateLegacy
 
 
             if ($http_status_code_ruangan !== 201) {
-                return HTTPError::renderErrorView($http_status_code_ruangan);
+                return ErrorController::renderErrorView($http_status_code_ruangan);
             }
             if ($http_status_code_satuan !== 201) {
-                return HTTPError::renderErrorView($http_status_code_satuan);
+                return ErrorController::renderErrorView($http_status_code_satuan);
             }
             if ($http_status_code_gudang !== 200) {
-                return HTTPError::renderErrorView($http_status_code_gudang);
+                return ErrorController::renderErrorView($http_status_code_gudang);
             }
             if ($http_status_code_batch !== 200) {
-                return HTTPError::renderErrorView($http_status_code_batch);
+                return ErrorController::renderErrorView($http_status_code_batch);
             }
             if ($http_status_code_barang !== 200) {
-                return HTTPError::renderErrorView($http_status_code_barang);
+                return ErrorController::renderErrorView($http_status_code_barang);
             }
 
             $this->addBreadcrumb('Inventaris', 'inventarismedis');
@@ -347,7 +347,7 @@ class DataBatch extends ControllerTemplateLegacy
                 'breadcrumbs' => $this->breadcrumbs
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
     public function submitEdit($batch, $faktur, $barang)
@@ -421,7 +421,7 @@ class DataBatch extends ControllerTemplateLegacy
                 return $response_batch;
             }
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
     public function hapus($batch, $faktur, $barang)
@@ -445,7 +445,7 @@ class DataBatch extends ControllerTemplateLegacy
                 return $response_batch;
             }
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 }

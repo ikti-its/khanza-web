@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 use App\Core\Controller\Legacy\CURL;
 
 class Ambulans extends ControllerTemplateLegacy
@@ -51,7 +51,7 @@ class Ambulans extends ControllerTemplateLegacy
                 'breadcrumbs' => $this->breadcrumbs
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 

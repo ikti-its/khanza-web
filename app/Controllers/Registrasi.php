@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class Registrasi extends ControllerTemplateLegacy
 {
@@ -76,7 +76,7 @@ class Registrasi extends ControllerTemplateLegacy
 
             // Check API response status
             if ($http_status_code_registrasi !== 200) {
-                return HTTPError::renderErrorView($http_status_code_registrasi);
+                return ErrorController::renderErrorView($http_status_code_registrasi);
             }
 
             // Decode JSON response
@@ -86,7 +86,7 @@ class Registrasi extends ControllerTemplateLegacy
 
             // Ensure we have valid data
             if (!isset($registrasi_data['data'])) {
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
 
             // Set up breadcrumbs (for UI navigation)
@@ -113,7 +113,7 @@ class Registrasi extends ControllerTemplateLegacy
             ]);
         } else {
             // If no JWT token, return unauthorized error
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -133,7 +133,7 @@ class Registrasi extends ControllerTemplateLegacy
                 'breadcrumbs' => $this->breadcrumbs
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -253,7 +253,7 @@ class Registrasi extends ControllerTemplateLegacy
     public function editRegistrasi($nomorReg)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -270,7 +270,7 @@ class Registrasi extends ControllerTemplateLegacy
 
 
         if ($http_status !== 200) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
 
         $registrasi_data = json_decode($response, true);
@@ -386,7 +386,7 @@ class Registrasi extends ControllerTemplateLegacy
 
 
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -412,10 +412,10 @@ class Registrasi extends ControllerTemplateLegacy
             if ($http_status === 200 || $http_status === 204) {
                 return redirect()->to(base_url('registrasi'))->with('success', 'Data registrasi berhasil dihapus.');
             } else {
-                return HTTPError::renderErrorView($http_status);
+                return ErrorController::renderErrorView($http_status);
             }
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 

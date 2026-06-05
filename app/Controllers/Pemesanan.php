@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 require_once FCPATH . '../vendor/autoload.php';
 
@@ -979,7 +979,7 @@ class Pemesanan extends ControllerTemplateLegacy
                                 $http_status_code_pesanan = curl_getinfo($ch_put_pesanan, CURLINFO_HTTP_CODE);
                             }
                             if ($http_status_code_pesanan !== 200) {
-                                return HTTPError::renderErrorView($http_status_code_pesanan);
+                                return ErrorController::renderErrorView($http_status_code_pesanan);
                             }
                             // Data berhasil ditambahkan ke obat_url
                             $ch_delete_pemesanan = curl_init($pemesanan_url);

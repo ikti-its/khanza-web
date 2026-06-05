@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class userAdminController extends ControllerTemplateLegacy
 {
@@ -95,16 +95,16 @@ class userAdminController extends ControllerTemplateLegacy
                     ]);
                 } else {
                     // Error fetching cuti data
-                    return HTTPError::renderErrorView($http_status_code_cuti);
+                    return ErrorController::renderErrorView($http_status_code_cuti);
                 }
             } else {
                 // Error fetching cuti data
-                return HTTPError::renderErrorView(500); // Assume 500 for cURL error
+                return ErrorController::renderErrorView(500); // Assume 500 for cURL error
             }
 
         } else {
             // User not logged in
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -175,18 +175,18 @@ class userAdminController extends ControllerTemplateLegacy
                     } else {
                         // Error response from the API
                         var_dump($postData);
-                        return HTTPError::renderErrorView($http_status_code);
+                        return ErrorController::renderErrorView($http_status_code);
                     }
                 } else {
                     // Error sending request to the API
-                    return HTTPError::renderErrorView(500);
+                    return ErrorController::renderErrorView(500);
                 }
 
 
 
             } else {
                 // User not logged in
-                return HTTPError::renderErrorView(401);
+                return ErrorController::renderErrorView(401);
             }
         }
     }
@@ -222,7 +222,7 @@ class userAdminController extends ControllerTemplateLegacy
                     $error_message = curl_error($ch_pegawai);
 
                     log_message('error', 'cURL Error: ' . $error_message);
-                    return HTTPError::renderErrorView(500); // Exit method on cURL error
+                    return ErrorController::renderErrorView(500); // Exit method on cURL error
                 }
 
 
@@ -281,11 +281,11 @@ class userAdminController extends ControllerTemplateLegacy
                                 return view('/dashboard/dashboard', ['title' => 'Dashboard pegawai']); // Redirect to desired page
                             } else {
                                 // Error response from the API
-                                return HTTPError::renderErrorView($http_status_code);
+                                return ErrorController::renderErrorView($http_status_code);
                             }
                         } else {
                             // Error sending request to the API
-                            return HTTPError::renderErrorView(500);
+                            return ErrorController::renderErrorView(500);
                         }
 
 
@@ -293,12 +293,12 @@ class userAdminController extends ControllerTemplateLegacy
                     } else {
                         // Log or handle the error
                         log_message('error', 'id_akun not found in the response: ' . print_r($pegawai_data, true));
-                        return HTTPError::renderErrorView(404);
+                        return ErrorController::renderErrorView(404);
                     }
                 } else {
                     // Error response from the employee details API
                     log_message('error', 'HTTP Error: ' . $pegawai_http_status_code);
-                    return HTTPError::renderErrorView($pegawai_http_status_code);
+                    return ErrorController::renderErrorView($pegawai_http_status_code);
                 }
             } else {
                 // User is not logged in

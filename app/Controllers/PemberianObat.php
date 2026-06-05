@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class PemberianObat extends ControllerTemplateLegacy
 {
@@ -53,12 +53,12 @@ class PemberianObat extends ControllerTemplateLegacy
 
     
             if ($http_status !== 200) {
-                return HTTPError::renderErrorView($http_status);
+                return ErrorController::renderErrorView($http_status);
             }
     
             $obat_data = json_decode($response, true);
             if (!isset($obat_data['data'])) {
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
     
             // ✅ Breadcrumbs
@@ -74,14 +74,14 @@ class PemberianObat extends ControllerTemplateLegacy
                 'meta_data' => $obat_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
     public function tambahPemberianObat($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -134,7 +134,7 @@ class PemberianObat extends ControllerTemplateLegacy
     public function submitTambahPemberianObat()
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -155,12 +155,12 @@ class PemberianObat extends ControllerTemplateLegacy
 
 
         if ($status !== 200) {
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
 
         $gudangData = json_decode($getResponse, true)['data'];
         if (!$gudangData) {
-            return HTTPError::renderErrorView(500);
+            return ErrorController::renderErrorView(500);
         }
     // dd($gudangData);
         // Step 2: Update stok
@@ -196,7 +196,7 @@ class PemberianObat extends ControllerTemplateLegacy
     log_message('error', "PUT Response: " . $putResponse);
     log_message('error', "PUT Status: " . $putStatus);
         if ($putStatus !== 200) {
-            return HTTPError::renderErrorView($putStatus);
+            return ErrorController::renderErrorView($putStatus);
         }
 
         // Step 3: Submit pemberian obat
@@ -236,7 +236,7 @@ class PemberianObat extends ControllerTemplateLegacy
         if ($status === 200 || $status === 201) {
             return redirect()->to(base_url('pemberianobat/' . $postData['nomor_rawat']));
         } else {
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
     }
 
@@ -244,7 +244,7 @@ class PemberianObat extends ControllerTemplateLegacy
     public function editPemberianObat($nomorRawat, $jamBeri)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -304,7 +304,7 @@ $selectedObat = $item;
     public function submitEditPemberianObat($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -352,7 +352,7 @@ $selectedObat = $item;
     public function hapusPemberianObat($nomor_rawat, $jam_beri)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -372,7 +372,7 @@ $selectedObat = $item;
 
 
         if ($http_status !== 200) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
 
         return redirect()->to('/pemberianobat')->with('success', 'Pemberian Obat deleted');
@@ -397,13 +397,13 @@ $selectedObat = $item;
 
 
             if ($http_status !== 200) {
-                return HTTPError::renderErrorView($http_status);
+                return ErrorController::renderErrorView($http_status);
             }
 
             $obat_data = json_decode($response, true);
 
             if (!isset($obat_data['data'])) {
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
 
             $data = $obat_data['data'];
@@ -423,7 +423,7 @@ $selectedObat = $item;
                 'meta_data' => $obat_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 

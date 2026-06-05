@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class StokKeluar extends ControllerTemplateLegacy
 {
@@ -108,7 +108,7 @@ class StokKeluar extends ControllerTemplateLegacy
 
 
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -186,7 +186,7 @@ class StokKeluar extends ControllerTemplateLegacy
 
 
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
     public function submitTambahStokKeluarMedis()
@@ -327,7 +327,7 @@ class StokKeluar extends ControllerTemplateLegacy
                     return "Error sending request to the API.";
                 }
             } else {
-                return HTTPError::renderErrorView(401);
+                return ErrorController::renderErrorView(401);
             }
         } else {
             return "Data is required.";
@@ -408,7 +408,7 @@ class StokKeluar extends ControllerTemplateLegacy
 
 
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -638,7 +638,7 @@ $gudangUrl = $this->api_url . '/inventory/gudang/' . $gudang['id'];
             }
         }
 
-        return HTTPError::renderErrorView(401);
+        return ErrorController::renderErrorView(401);
     }
 }
 

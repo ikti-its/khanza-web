@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class DokterJaga extends ControllerTemplateLegacy
 {
@@ -51,7 +51,7 @@ protected array $breadcrumbs = [];
 
 
             if ($http_status !== 200) {
-                return HTTPError::renderErrorView($http_status);
+                return ErrorController::renderErrorView($http_status);
             }
 
             $dokterjaga_data = json_decode($response, true);
@@ -66,7 +66,7 @@ protected array $breadcrumbs = [];
             }
 
             if (!isset($dokterjaga_data['data'])) {
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
 
             $this->addBreadcrumb('User', 'user');
@@ -81,7 +81,7 @@ protected array $breadcrumbs = [];
                 'meta_data' => $meta_data
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -119,7 +119,7 @@ protected array $breadcrumbs = [];
                 'dokterjaga' => $data['dokterjaga']
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -157,15 +157,15 @@ protected array $breadcrumbs = [];
 
             return ($status === 201)
                 ? redirect()->to(base_url('dokterjaga'))
-                : HTTPError::renderErrorView($status);
+                : ErrorController::renderErrorView($status);
         }
 
-        return HTTPError::renderErrorView(401);
+        return ErrorController::renderErrorView(401);
     }
 
     public function editDokterJaga($kodeDokter)
     {
-        if (!session()->has('jwt_token')) return HTTPError::renderErrorView(401);
+        if (!session()->has('jwt_token')) return ErrorController::renderErrorView(401);
 
         $token = session()->get('jwt_token');
 
@@ -180,7 +180,7 @@ protected array $breadcrumbs = [];
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 
-        if ($status !== 200) return HTTPError::renderErrorView($status);
+        if ($status !== 200) return ErrorController::renderErrorView($status);
 
         $dokterJagaData = json_decode($response, true);
 
@@ -241,18 +241,18 @@ protected array $breadcrumbs = [];
 
             return ($status === 200)
                 ? redirect()->to(base_url('dokterjaga'))->with('success', 'Data dokter jaga berhasil diperbarui.')
-                : HTTPError::renderErrorView($status);
+                : ErrorController::renderErrorView($status);
         }
 
-        return HTTPError::renderErrorView(401);
+        return ErrorController::renderErrorView(401);
     }
 
     public function hapusDokterJaga($kodeDokter)
     {
-        if (!session()->has('jwt_token')) return HTTPError::renderErrorView(401);
+        if (!session()->has('jwt_token')) return ErrorController::renderErrorView(401);
 
         $hariKerja = $this->request->getGet('hari_kerja'); // passed as query param
-        if (!$hariKerja) return HTTPError::renderErrorView(400); // Bad request if missing
+        if (!$hariKerja) return ErrorController::renderErrorView(400); // Bad request if missing
 
         $token = session()->get('jwt_token');
         $url = $this->api_url . '/dokterjaga/' . $kodeDokter . '?hari_kerja=' . urlencode($hariKerja);
@@ -269,13 +269,13 @@ protected array $breadcrumbs = [];
 
         return ($status === 200 || $status === 204)
             ? redirect()->to(base_url('dokterjaga'))->with('success', 'Data dokter jaga berhasil dihapus.')
-            : HTTPError::renderErrorView($status);
+            : ErrorController::renderErrorView($status);
     }
 
     public function panggilDokter($kodeDokter)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -292,7 +292,7 @@ protected array $breadcrumbs = [];
 
 
         if ($http_status !== 200) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
 
         $dokter_data = json_decode($response, true);
@@ -311,11 +311,11 @@ protected array $breadcrumbs = [];
     public function terimaDokter($kodeDokter)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $hariKerja = $this->request->getGet('hari_kerja'); // use query param to identify shift
-        if (!$hariKerja) return HTTPError::renderErrorView(400);
+        if (!$hariKerja) return ErrorController::renderErrorView(400);
 
         $token = session()->get('jwt_token');
         $url = $this->api_url . '/dokterjaga/update-status';
@@ -343,7 +343,7 @@ protected array $breadcrumbs = [];
         if ($http_status === 200) {
             return redirect()->to(base_url('dokterjaga'))->with('success', 'Status dokter jaga berhasil diperbarui.');
         } else {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
     }
 }

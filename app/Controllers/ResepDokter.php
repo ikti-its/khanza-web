@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class ResepDokter extends ControllerTemplateLegacy
 {
@@ -51,12 +51,12 @@ protected array $breadcrumbs = [];
 
 
             if ($http_status !== 200) {
-                return HTTPError::renderErrorView($http_status);
+                return ErrorController::renderErrorView($http_status);
             }
 
             $resep_data = json_decode($response, true);
             if (!isset($resep_data['data'])) {
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
 
             // ✅ Breadcrumbs
@@ -70,14 +70,14 @@ protected array $breadcrumbs = [];
                 'meta_data' => $resep_data['meta_data'] ?? ['page' => 1, 'size' => 10, 'total' => 1],
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
     public function tambahResepDokter($noResep = null)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -141,17 +141,17 @@ protected array $breadcrumbs = [];
             if ($status === 201 || $status === 200) {
                 return redirect()->to(base_url('resepdokter/' . $postData['no_resep']));
             } else {
-                return HTTPError::renderErrorView($status);
+                return ErrorController::renderErrorView($status);
             }
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
     public function editResepDokter($noResep, $kodeBarang)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -225,7 +225,7 @@ $selectedResep = $item;
     public function submitEditResepDokter($noResep)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     
         $token = session()->get('jwt_token');
@@ -256,14 +256,14 @@ $selectedResep = $item;
         if ($http_status === 200) {
             return redirect()->to(base_url('resepdokter/' . $noResep));
         } else {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
     }
     
     public function hapusResepDokter($noResep, $kodeBarang)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     
         $token = session()->get('jwt_token');
@@ -283,7 +283,7 @@ $selectedResep = $item;
 
     
         if ($http_status !== 200) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
     
         return redirect()->to('/resepdokter')->with('success', 'Resep dokter deleted');
@@ -294,7 +294,7 @@ $selectedResep = $item;
         $title = 'Detail Resep Dokter';
 
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -312,20 +312,20 @@ $selectedResep = $item;
 
 
         if ($http_status !== 200) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
 
         $resep_data = json_decode($response, true);
         // dd($resep_data);
         if (!isset($resep_data['data'])) {
-            return HTTPError::renderErrorView(500);
+            return ErrorController::renderErrorView(500);
         }
 
         $data = $resep_data['data'];
 
         if (!is_array($data)) {
             log_message('error', 'Invalid or missing data in /resep-dokter/' . $noResep);
-            return HTTPError::renderErrorView(404); // or 204 No Content, depending on your policy
+            return ErrorController::renderErrorView(404); // or 204 No Content, depending on your policy
         }
         if (isset($data['no_resep'])) {
             $data = [$data]; // make single object into array

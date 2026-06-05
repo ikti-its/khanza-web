@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class Penerimaan extends ControllerTemplateLegacy
 {
@@ -113,7 +113,7 @@ class Penerimaan extends ControllerTemplateLegacy
 
 
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -303,19 +303,19 @@ class Penerimaan extends ControllerTemplateLegacy
             $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
             $http_status_code_supplier = curl_getinfo($ch_supplier, CURLINFO_HTTP_CODE);
             if ($http_status_code_pegawai !== 200) {
-                return HTTPError::renderErrorView($http_status_code_pegawai);
+                return ErrorController::renderErrorView($http_status_code_pegawai);
             }
             if ($http_status_code_barang_medis !== 200) {
-                return HTTPError::renderErrorView($http_status_code_barang_medis);
+                return ErrorController::renderErrorView($http_status_code_barang_medis);
             }
             if ($http_status_code_ruangan !== 201) {
-                return HTTPError::renderErrorView($http_status_code_ruangan);
+                return ErrorController::renderErrorView($http_status_code_ruangan);
             }
             if ($http_status_code_satuan !== 201) {
-                return HTTPError::renderErrorView($http_status_code_satuan);
+                return ErrorController::renderErrorView($http_status_code_satuan);
             }
             if ($http_status_code_supplier !== 201) {
-                return HTTPError::renderErrorView($http_status_code_supplier);
+                return ErrorController::renderErrorView($http_status_code_supplier);
             }
             $pegawai_data = json_decode($response_pegawai, true);
             $medis_data = json_decode($response_barang_medis, true);
@@ -333,7 +333,7 @@ class Penerimaan extends ControllerTemplateLegacy
                 'title' => $title
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -439,7 +439,7 @@ class Penerimaan extends ControllerTemplateLegacy
 
 
                         if (!$response_detail || $http_status_code_detail !== 201) {
-                            return HTTPError::renderErrorView($http_status_code_detail);
+                            return ErrorController::renderErrorView($http_status_code_detail);
                         }
 
                         if ($ubah_master_value === "1") {
@@ -502,10 +502,10 @@ class Penerimaan extends ControllerTemplateLegacy
 
 
                                 if ($http_status_code_medis_put !== 200) {
-                                    return HTTPError::renderErrorView($http_status_code_medis_put);
+                                    return ErrorController::renderErrorView($http_status_code_medis_put);
                                 }
                             } else {
-                                return HTTPError::renderErrorView($http_status_code_medis);
+                                return ErrorController::renderErrorView($http_status_code_medis);
                             }
                         }
 
@@ -522,7 +522,7 @@ class Penerimaan extends ControllerTemplateLegacy
 
 
                         if ($http_status_code_gudang !== 200) {
-                            return HTTPError::renderErrorView($http_status_code_gudang);
+                            return ErrorController::renderErrorView($http_status_code_gudang);
                         }
 
                         foreach ($gudang_data['data'] as $gudang) {
@@ -553,16 +553,16 @@ $gudang_put_url = $this->api_url . '/inventory/gudang/' . $gudang['id'];
 
 
                                 if ($http_status_code_gudang_put !== 200) {
-                                    return HTTPError::renderErrorView($http_status_code_gudang_put);
+                                    return ErrorController::renderErrorView($http_status_code_gudang_put);
                                 }
                         }
                     }
                     return redirect()->to(base_url('penerimaanmedis'));
                 } else {
-                    return HTTPError::renderErrorView($http_status_code_penerimaan);
+                    return ErrorController::renderErrorView($http_status_code_penerimaan);
                 }
             } else {
-                return HTTPError::renderErrorView(401);
+                return ErrorController::renderErrorView(401);
             }
         } else {
             return "Data is required.";
@@ -637,25 +637,25 @@ $gudang_put_url = $this->api_url . '/inventory/gudang/' . $gudang['id'];
             $http_status_code_supplier = curl_getinfo($ch_supplier, CURLINFO_HTTP_CODE);
 
             if ($http_status_code_penerimaan !== 200) {
-                return HTTPError::renderErrorView($http_status_code_penerimaan);
+                return ErrorController::renderErrorView($http_status_code_penerimaan);
             }
             if ($http_status_code_detail !== 200) {
-                return HTTPError::renderErrorView($http_status_code_detail);
+                return ErrorController::renderErrorView($http_status_code_detail);
             }
             if ($http_status_code_pegawai !== 200) {
-                return HTTPError::renderErrorView($http_status_code_pegawai);
+                return ErrorController::renderErrorView($http_status_code_pegawai);
             }
             if ($http_status_code_barang_medis !== 200) {
-                return HTTPError::renderErrorView($http_status_code_barang_medis);
+                return ErrorController::renderErrorView($http_status_code_barang_medis);
             }
             if ($http_status_code_ruangan !== 201) {
-                return HTTPError::renderErrorView($http_status_code_ruangan);
+                return ErrorController::renderErrorView($http_status_code_ruangan);
             }
             if ($http_status_code_satuan !== 201) {
-                return HTTPError::renderErrorView($http_status_code_satuan);
+                return ErrorController::renderErrorView($http_status_code_satuan);
             }
             if ($http_status_code_supplier !== 201) {
-                return HTTPError::renderErrorView($http_status_code_supplier);
+                return ErrorController::renderErrorView($http_status_code_supplier);
             }
             $penerimaan_data = json_decode($response_penerimaan, true);
             $detail_data = json_decode($response_detail, true);
@@ -677,7 +677,7 @@ $gudang_put_url = $this->api_url . '/inventory/gudang/' . $gudang['id'];
                 'title' => $title
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -780,7 +780,7 @@ $gudang_put_url = $this->api_url . '/inventory/gudang/' . $gudang['id'];
 
 
                         if (!$response_detail || $http_status_code_detail !== 200) {
-                            return HTTPError::renderErrorView($http_status_code_detail);
+                            return ErrorController::renderErrorView($http_status_code_detail);
                         }
 
                         if ($ubah_master_value === "1") {
@@ -842,10 +842,10 @@ $gudang_put_url = $this->api_url . '/inventory/gudang/' . $gudang['id'];
 
 
                                 if ($http_status_code_medis_put !== 200) {
-                                    return HTTPError::renderErrorView($http_status_code_medis_put);
+                                    return ErrorController::renderErrorView($http_status_code_medis_put);
                                 }
                             } else {
-                                return HTTPError::renderErrorView($http_status_code_medis);
+                                return ErrorController::renderErrorView($http_status_code_medis);
                             }
                         }
 
@@ -862,7 +862,7 @@ $gudang_put_url = $this->api_url . '/inventory/gudang/' . $gudang['id'];
 
 
                         if ($http_status_code_gudang !== 200) {
-                            return HTTPError::renderErrorView($http_status_code_gudang);
+                            return ErrorController::renderErrorView($http_status_code_gudang);
                         }
 
                         foreach ($gudang_data['data'] as $gudang) {
@@ -893,16 +893,16 @@ $gudang_put_url = $this->api_url . '/inventory/gudang/' . $gudang['id'];
 
 
                                 if ($http_status_code_gudang_put !== 200) {
-                                    return HTTPError::renderErrorView($http_status_code_gudang_put);
+                                    return ErrorController::renderErrorView($http_status_code_gudang_put);
                                 }
                         }
                     }
                     return redirect()->to(base_url('penerimaanmedis'));
                 } else {
-                    return HTTPError::renderErrorView($http_status_code_penerimaan);
+                    return ErrorController::renderErrorView($http_status_code_penerimaan);
                 }
             } else {
-                return HTTPError::renderErrorView(401);
+                return ErrorController::renderErrorView(401);
             }
         } else {
             return "Data is required.";
@@ -1030,6 +1030,6 @@ $gudangUrl = $this->api_url . '/inventory/gudang/' . $gudang['id'];
                 return "Error deleting penerimaan_keluar: " . $responsePenerimaanDelete;
             }
         }
-        return HTTPError::renderErrorView(401);
+        return ErrorController::renderErrorView(401);
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class RawatInap extends ControllerTemplateLegacy
 {
@@ -55,7 +55,7 @@ protected array $breadcrumbs = [];
     $title = 'Data Rawat Inap';
 
     if (!session()->has('jwt_token')) {
-        return HTTPError::renderErrorView(401);
+        return ErrorController::renderErrorView(401);
     }
 
     $token = session()->get('jwt_token');
@@ -76,12 +76,12 @@ $url  = $this->api_url . "/rawatinap?page={$page}&size={$size}";
 
 
     if ($http_status !== 200) {
-        return HTTPError::renderErrorView($http_status);
+        return ErrorController::renderErrorView($http_status);
     }
 
     $data = json_decode($response, true);
     if (!isset($data['data'])) {
-        return HTTPError::renderErrorView(500);
+        return ErrorController::renderErrorView(500);
     }
 
     $rawatinapList = $data['data'];
@@ -179,7 +179,7 @@ $url  = $this->api_url . "/rawatinap?page={$page}&size={$size}";
     public function submitTambahRawatInap()
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -219,14 +219,14 @@ $url  = $this->api_url . "/rawatinap?page={$page}&size={$size}";
             return redirect()->to('/rawatinap')->with('success', 'Rawat Inap berhasil ditambahkan.');
         }
 
-        return HTTPError::renderErrorView($httpStatus);
+        return ErrorController::renderErrorView($httpStatus);
     }
 
 
     public function tambahRawatInap()
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $title = 'Tambah Rawat Inap';
@@ -244,7 +244,7 @@ $url  = $this->api_url . "/rawatinap?page={$page}&size={$size}";
     public function tambahRawatInapBaru($nomorReg)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     
         $token = session()->get('jwt_token');
@@ -262,7 +262,7 @@ $url  = $this->api_url . "/rawatinap?page={$page}&size={$size}";
         // dd($response);
     
         if ($httpStatus !== 200) {
-            return HTTPError::renderErrorView($httpStatus);
+            return ErrorController::renderErrorView($httpStatus);
         }
     
         $registrasi = json_decode($response, true)['data'];
@@ -285,7 +285,7 @@ $url  = $this->api_url . "/rawatinap?page={$page}&size={$size}";
     public function editRawatInap($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -301,7 +301,7 @@ $url  = $this->api_url . "/rawatinap?page={$page}&size={$size}";
 
 
         if ($status !== 200) {
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
 
         $data = json_decode($response, true);
@@ -395,7 +395,7 @@ $url  = $this->api_url . "/rawatinap?page={$page}&size={$size}";
     public function submitEditRawatInap($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -427,7 +427,7 @@ $url  = $this->api_url . "/rawatinap?page={$page}&size={$size}";
     public function hapusRawatInap($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -448,7 +448,7 @@ $url  = $this->api_url . "/rawatinap?page={$page}&size={$size}";
             return redirect()->to(base_url('rawatinap'))->with('success', 'Data rawat inap berhasil dihapus.');
         }
 
-        return HTTPError::renderErrorView($status);
+        return ErrorController::renderErrorView($status);
     }
 
     private function getRawatInapPostData(): array

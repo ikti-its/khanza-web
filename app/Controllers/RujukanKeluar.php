@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class RujukanKeluar extends ControllerTemplateLegacy
 {
@@ -76,13 +76,13 @@ protected array $breadcrumbs = [];
 
 
             if ($http_status !== 200) {
-                return HTTPError::renderErrorView($http_status);
+                return ErrorController::renderErrorView($http_status);
             }
 
             $rujukan_data = json_decode($response, true);
 
             if (!isset($rujukan_data['data'])) {
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
 
             $this->addBreadcrumb('User', 'user');
@@ -99,13 +99,13 @@ protected array $breadcrumbs = [];
             ]);
         }
 
-        return HTTPError::renderErrorView(401);
+        return ErrorController::renderErrorView(401);
     }
 
     public function tambahRujukanKeluar()
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $title = 'Tambah Rujukan Keluar';
@@ -122,7 +122,7 @@ protected array $breadcrumbs = [];
     public function submitTambahRujukanKeluar()
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -174,7 +174,7 @@ protected array $breadcrumbs = [];
     public function editRujukanKeluar($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -191,7 +191,7 @@ protected array $breadcrumbs = [];
 
 
         if ($http_status !== 200) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
 
         $rujukan_data = json_decode($response, true);
@@ -210,7 +210,7 @@ protected array $breadcrumbs = [];
     public function submitEditRujukanKeluar($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -253,7 +253,7 @@ protected array $breadcrumbs = [];
     public function hapusRujukanKeluar($nomorRawat)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -275,13 +275,13 @@ protected array $breadcrumbs = [];
             return redirect()->to(base_url('rujukankeluar'))->with('success', 'Data rujukan keluar berhasil dihapus.');
         }
 
-        return HTTPError::renderErrorView($http_status);
+        return ErrorController::renderErrorView($http_status);
     }
 
     public function cetak($nomor_rawat)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -438,7 +438,7 @@ protected array $breadcrumbs = [];
     public function panggilAmbulans($noAmbulans)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -464,7 +464,7 @@ protected array $breadcrumbs = [];
         if ($status === 200 || $status === 201) {
             return redirect()->to(base_url('rujukankeluar'))->with('success', 'Permintaan ambulans berhasil dikirim.');
         } else {
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
     }
 

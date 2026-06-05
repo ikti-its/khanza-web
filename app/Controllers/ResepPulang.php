@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class ResepPulang extends ControllerTemplateLegacy
 {
@@ -42,7 +42,7 @@ protected array $breadcrumbs = [];
         $title = 'Data Resep Pulang';
     
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     
         $token = session()->get('jwt_token');
@@ -60,12 +60,12 @@ protected array $breadcrumbs = [];
 
     
         if ($http_status !== 200) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
     
         $resep_data = json_decode($response, true);
         if (!isset($resep_data['data']) || !is_array($resep_data['data'])) {
-            return HTTPError::renderErrorView(500);
+            return ErrorController::renderErrorView(500);
         }
     
         $reseppulang_data = $resep_data['data'];
@@ -107,7 +107,7 @@ protected array $breadcrumbs = [];
     public function tambahResepPulang()
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -192,7 +192,7 @@ protected array $breadcrumbs = [];
     public function tambahResepPulangFromPermintaan($noPermintaan)
 {
     if (!session()->has('jwt_token')) {
-        return HTTPError::renderErrorView(401);
+        return ErrorController::renderErrorView(401);
     }
 
     $token = session()->get('jwt_token');
@@ -311,7 +311,7 @@ if ($noPermintaan) {
     public function submitTambahResepPulang()
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -347,7 +347,7 @@ if ($noPermintaan) {
 
         if ($status !== 200 && $status !== 201) {
             log_message('error', 'Failed to insert resep_pulang: ' . $response);
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
 
         return redirect()->to(base_url('reseppulang'))
@@ -357,7 +357,7 @@ if ($noPermintaan) {
 // public function tambahResepPulangFromPermintaan($no_rawat, $kode_brng, $tanggal, $jam)
 // {
 //     if (!session()->has('jwt_token')) {
-//         return HTTPError::renderErrorView(401);
+//         return ErrorController::renderErrorView(401);
 //     }
 
 //     $token = session()->get('jwt_token');
@@ -408,7 +408,7 @@ if ($noPermintaan) {
 public function editResepPulang($no_rawat, $kode_brng, $tanggal, $jam)
 {
     if (!session()->has('jwt_token')) {
-        return HTTPError::renderErrorView(401);
+        return ErrorController::renderErrorView(401);
     }
 
     $token = session()->get('jwt_token');
@@ -463,7 +463,7 @@ public function editResepPulang($no_rawat, $kode_brng, $tanggal, $jam)
     public function submitEditResepPulang($no_rawat, $kode_brng, $tanggal, $jam)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -497,14 +497,14 @@ public function editResepPulang($no_rawat, $kode_brng, $tanggal, $jam)
         if ($http_status === 200) {
             return redirect()->to(base_url('reseppulang'))->with('success', 'Resep pulang berhasil diupdate.');
         } else {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
     }
 
     public function hapusResepPulang($no_rawat, $kode_brng, $tanggal, $jam)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -523,7 +523,7 @@ public function editResepPulang($no_rawat, $kode_brng, $tanggal, $jam)
 
 
         if ($http_status !== 200) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
 
         return redirect()->to('/reseppulang')->with('success', 'Resep pulang berhasil dihapus.');

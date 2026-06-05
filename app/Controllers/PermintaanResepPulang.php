@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class PermintaanResepPulang extends ControllerTemplateLegacy
 {
@@ -39,7 +39,7 @@ protected array $breadcrumbs = [];
         $title = 'Data Permintaan Resep Pulang';
 
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -57,12 +57,12 @@ protected array $breadcrumbs = [];
 
 
         if ($http_status !== 200) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
 
         $permintaan_data = json_decode($response, true);
         if (!isset($permintaan_data['data'])) {
-            return HTTPError::renderErrorView(500);
+            return ErrorController::renderErrorView(500);
         }
 
         $permintaan_list = $permintaan_data['data'];
@@ -109,7 +109,7 @@ protected array $breadcrumbs = [];
     public function tambahPermintaanResepPulang()
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     
         $token = session()->get('jwt_token');
@@ -193,7 +193,7 @@ protected array $breadcrumbs = [];
     public function submitTambahPermintaanResepPulang()
 {
     if (!session()->has('jwt_token')) {
-        return HTTPError::renderErrorView(401);
+        return ErrorController::renderErrorView(401);
     }
 
     $token = session()->get('jwt_token');
@@ -238,7 +238,7 @@ protected array $breadcrumbs = [];
 
     if ($status !== 200 && $status !== 201) {
         log_message('error', '❌ Gagal insert permintaan_resep_pulang: ' . $response);
-        return HTTPError::renderErrorView($status);
+        return ErrorController::renderErrorView($status);
     }
 
     return redirect()->to(base_url('permintaanreseppulang'))
@@ -249,7 +249,7 @@ protected array $breadcrumbs = [];
     public function editPermintaanResepPulang($noPermintaan)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -303,7 +303,7 @@ protected array $breadcrumbs = [];
     public function submitEditPermintaanResepPulang($noPermintaan)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -337,14 +337,14 @@ protected array $breadcrumbs = [];
         if ($http_status === 200) {
             return redirect()->to(base_url('permintaanreseppulang'))->with('success', 'Permintaan resep pulang updated');
         } else {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
     }
 
     public function hapusPermintaanResepPulang($noPermintaan)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -363,7 +363,7 @@ protected array $breadcrumbs = [];
 
 
         if ($http_status !== 200) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
 
         return redirect()->to('/permintaanreseppulang')->with('success', 'Permintaan resep pulang deleted');

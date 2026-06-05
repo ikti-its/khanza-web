@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
 use App\Core\Controller\Legacy\CURL;
 
 class auth extends ControllerTemplateLegacy

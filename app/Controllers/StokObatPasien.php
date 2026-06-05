@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class StokObatPasien extends ControllerTemplateLegacy
 {
@@ -12,7 +12,7 @@ class StokObatPasien extends ControllerTemplateLegacy
         $title = 'Data Stok Obat Pasien';
 
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -30,12 +30,12 @@ class StokObatPasien extends ControllerTemplateLegacy
 
         // Handle connection failure or non-200 status
         if ($httpStatus !== 200 || !$response) {
-            return HTTPError::renderErrorView($httpStatus);
+            return ErrorController::renderErrorView($httpStatus);
         }
 
         $decoded = json_decode($response, true);
         if (!isset($decoded['data']) || !is_array($decoded['data'])) {
-            return HTTPError::renderErrorView(500);
+            return ErrorController::renderErrorView(500);
         }
 
         $stokObatData = $decoded['data'];
@@ -62,7 +62,7 @@ $item['nama_brng'] = '';
     public function tambahStokObatPasien()
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -115,7 +115,7 @@ $item['nama_brng'] = '';
     public function submitTambahStokObatPasien()
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -156,7 +156,7 @@ $item['nama_brng'] = '';
 
         if ($status !== 200 && $status !== 201) {
             log_message('error', 'Failed to insert stok_obat_pasien: ' . $response);
-            return HTTPError::renderErrorView($status);
+            return ErrorController::renderErrorView($status);
         }
 
         return redirect()->to(base_url('stokobatpasien'))
@@ -166,7 +166,7 @@ $item['nama_brng'] = '';
     public function editStokObatPasien($noPermintaan)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -198,7 +198,7 @@ $item['nama_brng'] = '';
     public function submitEditStokObatPasien($noPermintaan)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -241,14 +241,14 @@ $item['nama_brng'] = '';
         if ($http_status === 200) {
             return redirect()->to(base_url('stokobatpasien'))->with('success', 'Stok obat pasien berhasil diperbarui.');
         } else {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
     }
 
     public function hapusStokObatPasien($noPermintaan)
     {
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -266,7 +266,7 @@ $item['nama_brng'] = '';
 
 
         if ($http_status !== 200) {
-            return HTTPError::renderErrorView($http_status);
+            return ErrorController::renderErrorView($http_status);
         }
 
         return redirect()->to('/stokobatpasien')->with('success', 'Stok obat pasien berhasil dihapus.');
@@ -277,7 +277,7 @@ $item['nama_brng'] = '';
         $title = 'Detail Stok Obat Pasien';
 
         if (!session()->has('jwt_token')) {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
 
         $token = session()->get('jwt_token');
@@ -298,14 +298,14 @@ $item['nama_brng'] = '';
             log_message('error', 'StokObatPasienData HTTP Status: ' . $http_status);
 
             if ($http_status !== 200) {
-                return HTTPError::renderErrorView($http_status);
+                return ErrorController::renderErrorView($http_status);
             }
 
             $stok_data = json_decode($response, true);
 
             if (!isset($stok_data['data'])) {
                 log_message('error', 'StokObatPasienData: data key not found');
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
 
             $data = $stok_data['data'];
@@ -322,7 +322,7 @@ $item['nama_brng'] = '';
 
         } catch (\Throwable $e) {
             log_message('critical', 'StokObatPasienData Exception: ' . $e->getMessage());
-            return HTTPError::renderErrorView(500);
+            return ErrorController::renderErrorView(500);
         }
     }
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
-use App\Core\Controller\Legacy\HTTPError;
+use App\Core\Controller\ErrorController;
 
 class Pengajuan extends ControllerTemplateLegacy
 {
@@ -57,16 +57,16 @@ class Pengajuan extends ControllerTemplateLegacy
                 $http_status_code_pengajuan_tanpa_params = curl_getinfo($ch_pengajuan_tanpa_params, CURLINFO_HTTP_CODE);
 
                 if ($http_status_code_pengajuan !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_pengajuan);
+                    return ErrorController::renderErrorView($http_status_code_pengajuan);
                 }
                 if ($http_status_code_pemesanan !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_pemesanan);
+                    return ErrorController::renderErrorView($http_status_code_pemesanan);
                 }
                 if ($http_status_code_penerimaan !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_penerimaan);
+                    return ErrorController::renderErrorView($http_status_code_penerimaan);
                 }
                 if ($http_status_code_pengajuan_tanpa_params !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_pengajuan_tanpa_params);
+                    return ErrorController::renderErrorView($http_status_code_pengajuan_tanpa_params);
                 }
                 $pengajuan_data = json_decode($response_pengajuan, true);
                 $pemesanan_data = json_decode($response_pemesanan, true);
@@ -86,10 +86,10 @@ class Pengajuan extends ControllerTemplateLegacy
                     'breadcrumbs' => $this->breadcrumbs
                 ]);
             } else {
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
     public function dataPengajuanMedis()
@@ -175,25 +175,25 @@ class Pengajuan extends ControllerTemplateLegacy
 
              
                 if ($http_status_code_pengajuan !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_pengajuan);
+                    return ErrorController::renderErrorView($http_status_code_pengajuan);
                 }
                 if ($http_status_code_pengajuan_tanpa_params !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_pengajuan_tanpa_params);
+                    return ErrorController::renderErrorView($http_status_code_pengajuan_tanpa_params);
                 }
                 if ($http_status_code_pesanan !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_pesanan);
+                    return ErrorController::renderErrorView($http_status_code_pesanan);
                 }
                 if ($http_status_code_persetujuan !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_persetujuan);
+                    return ErrorController::renderErrorView($http_status_code_persetujuan);
                 }
                 if ($http_status_code_barang_medis !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_barang_medis);
+                    return ErrorController::renderErrorView($http_status_code_barang_medis);
                 }
                 if ($http_status_code_satuan !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_satuan);
+                    return ErrorController::renderErrorView($http_status_code_satuan);
                 }
                 if ($http_status_code_pegawai !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_pegawai);
+                    return ErrorController::renderErrorView($http_status_code_pegawai);
                 }
                
                 $pengajuan_medis_data = json_decode($response_pengajuan, true);
@@ -225,7 +225,7 @@ class Pengajuan extends ControllerTemplateLegacy
                 ]);
             } else {
               
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
 
 
@@ -234,7 +234,7 @@ class Pengajuan extends ControllerTemplateLegacy
 
 
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -286,16 +286,16 @@ class Pengajuan extends ControllerTemplateLegacy
             $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
 
             if ($http_status_code_pengajuan !== 200) {
-                return HTTPError::renderErrorView($http_status_code_pengajuan);
+                return ErrorController::renderErrorView($http_status_code_pengajuan);
             }
             if ($http_status_code_pegawai !== 200) {
-                return HTTPError::renderErrorView($http_status_code_pegawai);
+                return ErrorController::renderErrorView($http_status_code_pegawai);
             }
             if ($http_status_code_barang_medis !== 200) {
-                return HTTPError::renderErrorView($http_status_code_barang_medis);
+                return ErrorController::renderErrorView($http_status_code_barang_medis);
             }
             if ($http_status_code_satuan !== 200) {
-                return HTTPError::renderErrorView($http_status_code_satuan);
+                return ErrorController::renderErrorView($http_status_code_satuan);
             }
             $pengajuan_data = json_decode($response_pengajuan, true);
             $pegawai_data = json_decode($response_pegawai, true);
@@ -316,7 +316,7 @@ class Pengajuan extends ControllerTemplateLegacy
                 'breadcrumbs' => $this->breadcrumbs
             ]);
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -370,7 +370,7 @@ class Pengajuan extends ControllerTemplateLegacy
                 if ($response_pengajuan) {
                     $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
                     if ($http_status_code_pengajuan !== 201) {
-                        return HTTPError::renderErrorView($http_status_code_pengajuan);
+                        return ErrorController::renderErrorView($http_status_code_pengajuan);
                     }
                     $id_pengajuan = $decode_response_pengajuan['data']['id'];
                     for ($i = 0; $i < count($idbrgmedis); $i++) {
@@ -415,10 +415,10 @@ class Pengajuan extends ControllerTemplateLegacy
                         $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
                         $http_status_code_persetujuan = curl_getinfo($ch_persetujuan, CURLINFO_HTTP_CODE);
                         if ($http_status_code_pesanan !== 201) {
-                            return HTTPError::renderErrorView($http_status_code_pesanan);
+                            return ErrorController::renderErrorView($http_status_code_pesanan);
                         }
                         if ($http_status_code_persetujuan !== 201) {
-                            return HTTPError::renderErrorView($http_status_code_persetujuan);
+                            return ErrorController::renderErrorView($http_status_code_persetujuan);
                         }
 
                         return redirect()->to(base_url('pengajuanmedis'));
@@ -427,13 +427,13 @@ class Pengajuan extends ControllerTemplateLegacy
 
 
                     } else {
-                        return HTTPError::renderErrorView(500);
+                        return ErrorController::renderErrorView(500);
                     }
                 } else {
-                    return HTTPError::renderErrorView(500);
+                    return ErrorController::renderErrorView(500);
                 }
             } else {
-                return HTTPError::renderErrorView(401);
+                return ErrorController::renderErrorView(401);
             }
         } else {
             return "Data is required.";
@@ -494,19 +494,19 @@ class Pengajuan extends ControllerTemplateLegacy
                 $http_status_code_satuan = curl_getinfo($ch_satuan, CURLINFO_HTTP_CODE);
 
                 if ($http_status_code_pengajuan !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_pengajuan);
+                    return ErrorController::renderErrorView($http_status_code_pengajuan);
                 }
                 if ($http_status_code_pesanan !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_pesanan);
+                    return ErrorController::renderErrorView($http_status_code_pesanan);
                 }
                 if ($http_status_code_barang_medis !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_barang_medis);
+                    return ErrorController::renderErrorView($http_status_code_barang_medis);
                 }
                 if ($http_status_code_pegawai !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_pegawai);
+                    return ErrorController::renderErrorView($http_status_code_pegawai);
                 }
                 if ($http_status_code_satuan !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_satuan);
+                    return ErrorController::renderErrorView($http_status_code_satuan);
                 }
 
                 $pengajuan_data = json_decode($response_pengajuan, true);
@@ -537,12 +537,12 @@ class Pengajuan extends ControllerTemplateLegacy
                     'breadcrumbs' => $this->breadcrumbs
                 ]);
             } else {
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
 
 
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -594,7 +594,7 @@ class Pengajuan extends ControllerTemplateLegacy
             if ($response_pengajuan) {
                 $http_status_code_pengajuan = curl_getinfo($ch_pengajuan, CURLINFO_HTTP_CODE);
                 if ($http_status_code_pengajuan !== 200) {
-                    return HTTPError::renderErrorView($http_status_code_pengajuan);
+                    return ErrorController::renderErrorView($http_status_code_pengajuan);
                 }
 
                 for ($i = 0; $i < count($idbrgmedis); $i++) {
@@ -627,20 +627,20 @@ class Pengajuan extends ControllerTemplateLegacy
                 if ($response) {
                     $http_status_code_pesanan = curl_getinfo($ch_pesanan, CURLINFO_HTTP_CODE);
                     if ($http_status_code_pesanan !== 200) {
-                        return HTTPError::renderErrorView($http_status_code_pesanan);
+                        return ErrorController::renderErrorView($http_status_code_pesanan);
                     }
                     return redirect()->to(base_url('pengajuanmedis'));
                 } else {
 
-                    return HTTPError::renderErrorView(500);
+                    return ErrorController::renderErrorView(500);
                 }
 
 
             } else {
-                return HTTPError::renderErrorView(500);
+                return ErrorController::renderErrorView(500);
             }
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 
@@ -684,15 +684,15 @@ class Pengajuan extends ControllerTemplateLegacy
             $http_status_code_pengajuan = curl_getinfo($ch_delete_pengajuan, CURLINFO_HTTP_CODE);
 
             if ($http_status_code_pesanan !== 204) {
-                return HTTPError::renderErrorView($http_status_code_pesanan);
+                return ErrorController::renderErrorView($http_status_code_pesanan);
             }
             if ($http_status_code_pengajuan !== 204) {
-                return HTTPError::renderErrorView($http_status_code_pengajuan);
+                return ErrorController::renderErrorView($http_status_code_pengajuan);
             }
 
             return redirect()->to(base_url('pengajuanmedis'));
         } else {
-            return HTTPError::renderErrorView(401);
+            return ErrorController::renderErrorView(401);
         }
     }
 }
