@@ -19,31 +19,8 @@ $routes->get('/detailberkaspegawai/(:segment)', 'userPegawai::detailBerkasPegawa
 $routes->post('/kirimnotifikasi', 'userAdmin::submitKirimNotifikasi');
 $routes->get('/kirimnotifikasi', 'auth::dashboard', ['filter' => 'auth']);
 
-$routes->get('/izincuti', 'userPegawaiController::tambahCuti', ['filter' => 'auth']);
-$routes->get('/lihatizincuti/(:segment)', 'userPegawaiController::tampilCuti/$1', ['filter' => 'auth']);
-$routes->post('/submittambahcuti', 'userPegawaiController::submitTambahCuti', ['filter' => 'auth']);
-
-$routes->get('/lihatjadwal/(:segment)', 'userPegawaiController::tampilJadwal/$1', ['filter' => 'auth']);
-$routes->get('/lihatjadwal', 'userPegawaiController::tampilJadwalPenuh', ['filter' => 'auth']);
-
-$routes->get('/catatankehadiran/(:segment)', 'userPegawaiController::tampilCatatanKehadiran/$1', ['filter' => 'auth']);
-$routes->get('/statusizin', 'userPegawaiController::tampilStatusIzin', ['filter' => 'auth']);
-$routes->add('/presensi', 'userPegawaiController::tambahPresensi', ['filter' => 'auth']);
-$routes->get('/swafoto', 'userPegawaiController::tambahSwafoto', ['filter' => 'auth']);
-$routes->get('/menukehadiran', 'userPegawaiController::lihatOpsiHadir', ['filter' => 'auth']);
-
 $routes->get('/lihatstatuscuti', 'userAdmin::lihatStatusCuti', ['filter' => 'auth']);
 $routes->post('/submiteditstatuscuti/(:segment)', 'userAdmin::submitEditStatusCuti/$1', ['filter' => 'auth']);
-
-$routes->get('/kehadiranmanual', 'userPegawaiController::LihatAbsen', ['filter' => 'auth']);
-$routes->get('/absenmasuk/(:segment)', 'userPegawaiController::LihatAbsenMasuk/$1', ['filter' => 'checkFotoData']);
-$routes->post('/submittambahabsenmasuk', 'userPegawaiController::submitTambahAbsenMasuk', ['filter' => 'auth']);
-
-$routes->post('/submittambahabsenswafoto', 'userPegawaiController::submitPresensiSwafoto', ['filter' => 'auth']);
-
-// $routes->post('/absenpulang', 'userPegawaiController::submitAbsenPulang', ['filter' => 'auth']);
-$routes->get('/absenpulang/(:segment)', 'userPegawaiController::LihatAbsenPulang/$1', ['filter' => 'auth']);
-$routes->post('/submittambahabsenpulang', 'userPegawaiController::submitTambahAbsenPulang', ['filter' => 'auth']);
 
 $routes->get('/admin', 'auth::dashboard', ['filter' => 'auth']);
 $routes->post('/admin', 'auth::login');
@@ -111,7 +88,6 @@ $routes->post('/admin', 'auth::login');
 
 $routes->post('/setFaceRecognized', 'FaceRecognition::setFaceRecognized');
 
-$routes->get('/catatankehadiran/(:segment)', 'userPegawai::tampilCatatanKehadiran/$1', ['filter' => 'auth']);
 $routes->get('/listizin', 'userPegawai::tampilListIzin', ['filter' => 'auth']);
 $routes->get('/presensi', 'userPegawai::tambahPresensi', ['filter' => 'auth']);
 $routes->get('/swafoto', 'userPegawai::tambahSwafoto', ['filter' => 'auth']);
