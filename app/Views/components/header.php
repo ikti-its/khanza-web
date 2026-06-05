@@ -846,6 +846,12 @@
                         ['Observasi Rawat Inap Kebidanan', '/catatanobservasikebidanan', ''],
                         ['Observasi Rawat Inap Post Partum', '/catatanobservasipostpartum', ''],
                     ]],
+                    ['Pendidikan', '', 'pendidikan', '/pendidikan', $petugasrole, [
+                        ['Jenjang Pendidikan', '/jenjang-pendidikan', ''],
+                        ['Jenis Pendidikan', '/jenis-pendidikan', ''],
+                        ['Sekolah', '/sekolah', ''],
+                        ['Gelar', '/gelar', ''],
+                    ]],
                     ['Person', '', 'person', '/person', $petugasrole, [
                         ['Orang', '/orang', ''],
                         ['Agama', '/agama', ''],
