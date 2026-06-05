@@ -14,10 +14,11 @@ final class EmailModel extends ModelTemplate
             new EmailDatabase(),
             [
                 'id_email'     => V::DEFAULT(),
-                'id_orang'     => V::DEFAULT(),
                 'alamat_email' => V::DEFAULT(),
             ],
-            [],
+            [
+                'id_orang' => ['nama']
+            ],
         );
     }
 }
