@@ -701,7 +701,6 @@
                         ['Transaksi Stok', '/transaksi-stok', ''],
                         ['Barang', '/barang', ''],
                         ['Jenis Barang', '/jenis-barang', ''],
-                        ['Lokasi Penyimpanan', '/lokasi-penyimpanan', ''],
                         ['Suplier', '/suplier', ''],
                         ['Satuan', '/satuan', ''],
                         ['Unit', '/unit', ''],

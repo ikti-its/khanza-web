@@ -24,7 +24,8 @@
                             'tabel'      => $tabel,
                             'kolom_id'   => $kolom_id,
                             'konfig'     => $konfig,
-                            'aksi'       => $aksi
+                            'aksi'       => $aksi,
+                            'row_alert'  => $row_alert ?? [],
                         ]);
                         
                         echo view('components/footer/footer', [

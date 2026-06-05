@@ -23,8 +23,6 @@ final class BarangModel extends ModelTemplate
             [
                 'id_satuan'                 => ['nama_satuan'],
                 'id_jenis_barang'           => ['nama_jenis_barang'],
-                'id_lokasi_penyimpanan'     => ['nama_lokasi_penyimpanan'],
-                'id_suplier'                => ['nama_suplier'],
             ],
         );
     }

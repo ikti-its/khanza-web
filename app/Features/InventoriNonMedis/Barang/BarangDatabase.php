@@ -19,8 +19,6 @@ final class BarangDatabase extends DatabaseTemplate
                 'nama_barang'           => T::NAME(100),
                 'id_satuan'             => T::FK_AUTO(),
                 'id_jenis_barang'       => T::FK_AUTO(),
-                'id_lokasi_penyimpanan' => T::FK_AUTO(),
-                'id_suplier'            => T::FK_AUTO(),
                 'stok'                  => T::QTY(0, 1_000_000),
                 'stok_minimum'          => T::QTY(0, 1_000_000)->nullable(),
                 'harga_satuan'          => T::MONEY()->nullable(),
@@ -34,19 +32,9 @@ final class BarangDatabase extends DatabaseTemplate
                     'id_jenis_barang',
                 ],
                 [
-                    'id_suplier',
-                    \App\Features\InventoriNonMedis\Suplier\SuplierDatabase::class,
-                    'id_suplier',
-                ],
-                [
                     'id_satuan',
                     \App\Features\InventoriNonMedis\Satuan\SatuanDatabase::class,
                     'id_satuan',
-                ],
-                [
-                    'id_lokasi_penyimpanan',
-                    \App\Features\InventoriNonMedis\LokasiPenyimpanan\LokasiPenyimpananDatabase::class,
-                    'id_lokasi_penyimpanan',
                 ],
             ],
             true,

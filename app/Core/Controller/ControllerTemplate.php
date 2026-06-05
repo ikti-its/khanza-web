@@ -37,6 +37,9 @@ class ControllerTemplate extends Controller
     public private(set) array $meta_data;
     public private(set) string $primary_key;
 
+    /** @var array{value: string, threshold: string}|array{} */
+    protected array $row_alert = [];
+
     public function __construct(
         ModelTemplate $model,
         /** @var list<list<string>> */
@@ -91,6 +94,7 @@ class ControllerTemplate extends Controller
             [$_show, $_name, $column, $type, $_required] = $f;
 
             if ($column === $this->primary_key) continue;
+            if ($_show === TABLE_ONLY) continue;
 
             $raw_data = $this->request->getPost($column);
             if (in_array($type, ['jumlah', 'uang', 'suhu'])) {
@@ -141,7 +145,8 @@ class ControllerTemplate extends Controller
             'kolom_id'    => $this->primary_key,
             'konfig'      => $konfig_kolom,
             'aksi'        => $this->actions,
-            'tabel'       => $data_tabel,  
+            'tabel'       => $data_tabel,
+            'row_alert'   => $this->row_alert,
         ]);
     }
 
@@ -226,9 +231,11 @@ class ControllerTemplate extends Controller
         foreach ($this->fields as $field) {
             [$visible, $display, $column, $type] = $field;
 
-            if ($visible === 0 && !($include_pk && $column === $this->primary_key)) {
+            if ($visible === HIDE && !($include_pk && $column === $this->primary_key)) {
                 continue;
             }
+            if ($is_form  && $visible === TABLE_ONLY) continue;
+            if (!$is_form && $visible === FORM_ONLY)  continue;
 
             if ($type === 'status' && isset($all_options[$column])) {
                 $field[5] = $all_options[$column];
@@ -294,9 +301,12 @@ class ControllerTemplate extends Controller
         return $msg;
     }
 
+    protected function before_create(array &$postData): void {}
+
     public function create(): string|RedirectResponse
     {
         $postData = $this->get_post_data();
+        $this->before_create($postData);
         try {
             $this->model->insert($postData);
         } catch (\ReflectionException | DatabaseException $e) {

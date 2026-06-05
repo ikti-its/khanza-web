@@ -21,7 +21,7 @@ final class BarangController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],
@@ -30,13 +30,19 @@ final class BarangController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,   'kode_barang',              'Kode Barang'],
                 [SHOW, REQUIRED, I::NAME,   'nama_barang',              'Nama Barang'],
                 [SHOW, REQUIRED, I::SELECT, 'id_satuan',                'Satuan'],
-                [SHOW, REQUIRED, I::SELECT, 'id_jenis_barang',          'Jenis Barang'],
-                [SHOW, OPTIONAL, I::SELECT, 'id_lokasi_penyimpanan',    'Lokasi Penyimpanan'],
-                [SHOW, OPTIONAL, I::SELECT, 'id_suplier',               'Suplier'],
-                [SHOW, OPTIONAL, I::NUMBER, 'stok',                     'Stok'],
-                [SHOW, OPTIONAL, I::NUMBER, 'stok_minimum',             'Stok Minimum'],
+                [SHOW, REQUIRED, I::SELECT, 'id_jenis_barang',          'Jenis'],
+                [TABLE_ONLY, OPTIONAL, I::NUMBER, 'stok',          'Stok'],
+                [FORM_ONLY,  OPTIONAL, I::NUMBER, 'stok_minimum', 'Stok Minimum'],
                 [SHOW, OPTIONAL, I::MONEY,  'harga_satuan',             'Harga Satuan'],
             ],
         );
+    }
+
+    protected array $row_alert = ['value' => 'stok', 'threshold' => 'stok_minimum'];
+
+    /** @param array<string, scalar|null> $postData */
+    protected function before_create(array &$postData): void
+    {
+        $postData['stok'] = 0;
     }
 }

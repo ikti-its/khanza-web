@@ -79,7 +79,9 @@ defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9);      // lowest au
 defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest automatically-assigned error code
 
 
-define('SHOW', 1);
-define('HIDE', 0);
-define('REQUIRED', 1);
-define('OPTIONAL', 0);
+define('SHOW',       1); // visible in table and form
+define('HIDE',       0); // hidden in table and form
+define('TABLE_ONLY', 2); // visible in table only, hidden in form
+define('FORM_ONLY',  3); // visible in form only, hidden in table
+define('REQUIRED', 1); // field is required
+define('OPTIONAL', 0); // field is optional

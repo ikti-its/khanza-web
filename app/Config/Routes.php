@@ -775,7 +775,6 @@ $features = [
     ['InventoriNonMedis', 'inventori-non-medis/', [
         ['Barang', 'barang'],
         ['JenisBarang', 'jenis-barang'],
-        ['LokasiPenyimpanan', 'lokasi-penyimpanan'],
         ['PengadaanBarang', 'pengadaan-barang'],
         ['PengadaanBarangDetail', 'pengadaan-barang-detail'],
         ['PengajuanBarang', 'pengajuan-barang'],
