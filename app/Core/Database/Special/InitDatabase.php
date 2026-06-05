@@ -24,7 +24,7 @@ final class InitDatabase extends DatabaseTemplate
         $db = \Config\Database::connect($config);
         $path = APPPATH . 'Core/Database/Backup/';
         
-        foreach(['migration', 'seeder', 'function'] as $type) {
+        foreach(['migration', 'function'] as $type) {
             $file = $path . $type . '.sql';
             assert(file_exists($file), "SQL file for '{$type}' not found at '{$file}'");
             $sql = (string) file_get_contents($file);

@@ -23,7 +23,7 @@ final class AkunDatabase extends DatabaseTemplate
             ],
             [],
             true,
-            'auth.csv'
+            'akun.csv'
         );
     }
 }
