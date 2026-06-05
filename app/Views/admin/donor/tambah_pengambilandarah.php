@@ -2,6 +2,7 @@
 <?= $this->section('content'); ?>
 
 <?= $this->include('components/modal/modalkunjungan') ?>
+<?= $this->include('components/modal/modalpetugas') ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
@@ -162,22 +163,22 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Petugas<span class="text-red-600">*</span>
                 </label>
-                <select name="id_petugas" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="">-- Pilih --</option>
-                    <?php 
-                    $optionsPetugas = [];
-                    foreach ($konfig as $field) {
-                        if ($field[2] === 'id_petugas') {
-                            $optionsPetugas = $field[5] ?? [];
-                            break;
-                        }
-                    }
-                    foreach ($optionsPetugas as $opt) : 
-                        $selected = ((string)($baris['id_petugas'] ?? '') === (string)$opt[1]) ? 'selected' : '';
-                    ?>
-                        <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <input type="hidden" name="id_petugas" id="id_petugas" value="<?= $baris['id_petugas'] ?? '' ?>" required>
+                
+                <div class="w-full lg:w-1/4 flex gap-x-2">
+                    <input type="text" id="nama_petugas" name="nama_petugas" readonly required
+                           value="<?= $baris['nama'] ?? '' ?>"
+                           placeholder="Klik cari..."
+                           onclick="open_modalPetugas()"
+                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50">
+                    
+                    <button type="button" onclick="open_modalPetugas()"
+                            class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                </div>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Status Pengambilan
@@ -265,7 +266,7 @@
                 nama: "<?= $baris['nama'] ?? '' ?>"
             };
 
-            autofillFields(savedItem);
+            autofillKunjungan(savedItem);
         }
     });
 
@@ -366,7 +367,7 @@
         }
     }
 
-    function autofillFields(item) {
+    function autofillKunjungan(item) {
         document.getElementById('id_kunjungan').value = item.id_kunjungan;
         document.getElementById('nomor_kunjungan').value = item.nomor_kunjungan;
         document.getElementById('nomor_pendonor').value = item.nomor_pendonor;
@@ -381,6 +382,11 @@
             
             inputNomorPengambilan.value = `${tahun}/${bulan}/${komponenIdentik}`;
         }
+    }
+
+    function autofillPetugas(item) {
+        document.getElementById('id_petugas').value = item.id_petugas;
+        document.getElementById('nama_petugas').value = item.nama;
     }
 
     function validateForm() {

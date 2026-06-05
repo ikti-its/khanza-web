@@ -25,7 +25,7 @@
             },
             rowsPerPage: 10,
             onSelect: (item) => {
-                autofillFields({
+                autofillKunjungan({
                     id_kunjungan: item.id_kunjungan,
                     nomor_kunjungan: item.nomor_kunjungan,
                     nomor_pendonor: item.nomor_pendonor,
