@@ -15,39 +15,39 @@ class PemeriksaanRanap extends ControllerTemplateLegacy
     protected string $kolom_id = 'no_rawat';
     protected string $nama_tabel = 'pemeriksaan_ranap';
     protected array $aksi = [
-                            'cetak'    => false,
-                            'tindakan' => false,
-                            'detail'   => true,
-                            'ubah'     => true,
-                            'hapus'    => false,
-                        ];
+        'cetak'    => false,
+        'tindakan' => false,
+        'detail'   => true,
+        'ubah'     => true,
+        'hapus'    => false,
+    ];
     protected array $konfig = [
-                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
-                            [1, 'Nomor Rawat'  , 'no_rawat'    , 'indeks'],
-                            // [1, 'Nomor RM'     , 'nomor_rm'    , 'indeks'],
-                            // [1, 'Nama Pasien'  , 'nama_pasien' , 'nama'],
-                            // [1, 'Tanggal Rawat', 'tanggal'     , 'tanggal'],
-                            // [1, 'Jam'          , 'jam'         , 'jam'],
-                            [1, 'Suhu'         , 'suhu_tubuh'  , 'suhu'],
-                            [0, 'TD (mmHG)'    , 'tensi'       , 'teks'],
-                            [0, 'HR (x/menit)' , 'nadi'        , 'jumlah'],
-                            [0, 'RR (x/menit)' , 'respirasi'   , 'jumlah'],
-                            [0, 'Tinggi (cm)'  , 'tinggi'      , 'teks'],
-                            [0, 'Berat (kg)'   , 'berat'       , 'teks'],
-                            [0, 'SpO2(%)'      , 'spo2'        , 'teks'],
-                            [0, 'GCS (E, V, M)', 'gcs'         , 'teks'],
-                            [0, 'Kesadaran'    , 'kesadaran'   , 'teks'],
-                            [0, 'Alergi'       , 'alergi'      , 'teks'],
-                            [0, 'Subjek'       , 'keluhan'     , 'teks'],
-                            [0, 'Objek'        , 'pemeriksaan' , 'teks'],
-                            [0, 'Asesmen'      , 'penilaian'   , 'teks'],
-                            [0, 'Plan'         , 'rtl'         , 'teks'],
-                            [0, 'Instruksi'    , 'instruksi'   , 'teks'],
-                            [0, 'Evaluasi'     , 'evaluasi'    , 'teks'],
-                            [0, 'NIP'          , 'nip'         , 'teks'],
-                            // [0, 'Nama Petugas' , 'nama_petugas', 'teks'],
-                            // [0, 'Profesi'      , 'nama_petugas', 'teks']
-                        ];
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Nomor Rawat'  , 'no_rawat'    , 'indeks'],
+        // [1, 'Nomor RM'     , 'nomor_rm'    , 'indeks'],
+        // [1, 'Nama Pasien'  , 'nama_pasien' , 'nama'],
+        // [1, 'Tanggal Rawat', 'tanggal'     , 'tanggal'],
+        // [1, 'Jam'          , 'jam'         , 'jam'],
+        [1, 'Suhu'         , 'suhu_tubuh'  , 'suhu'],
+        [0, 'TD (mmHG)'    , 'tensi'       , 'teks'],
+        [0, 'HR (x/menit)' , 'nadi'        , 'jumlah'],
+        [0, 'RR (x/menit)' , 'respirasi'   , 'jumlah'],
+        [0, 'Tinggi (cm)'  , 'tinggi'      , 'teks'],
+        [0, 'Berat (kg)'   , 'berat'       , 'teks'],
+        [0, 'SpO2(%)'      , 'spo2'        , 'teks'],
+        [0, 'GCS (E, V, M)', 'gcs'         , 'teks'],
+        [0, 'Kesadaran'    , 'kesadaran'   , 'teks'],
+        [0, 'Alergi'       , 'alergi'      , 'teks'],
+        [0, 'Subjek'       , 'keluhan'     , 'teks'],
+        [0, 'Objek'        , 'pemeriksaan' , 'teks'],
+        [0, 'Asesmen'      , 'penilaian'   , 'teks'],
+        [0, 'Plan'         , 'rtl'         , 'teks'],
+        [0, 'Instruksi'    , 'instruksi'   , 'teks'],
+        [0, 'Evaluasi'     , 'evaluasi'    , 'teks'],
+        [0, 'NIP'          , 'nip'         , 'teks'],
+        // [0, 'Nama Petugas' , 'nama_petugas', 'teks'],
+        // [0, 'Profesi'      , 'nama_petugas', 'teks']
+    ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 
     public function dataPemeriksaanRanap()

@@ -15,21 +15,21 @@ protected array $breadcrumbs = [];
     protected string $kolom_id = 'kode_dokter';
     protected string $nama_tabel = 'dokter_jaga';
     protected array $aksi = [
-                            'cetak'    => false,
-                            'tindakan' => false,
-                            'detail'   => true,
-                            'ubah'     => true,
-                            'hapus'    => true,
-                        ];
+        'cetak'    => false,
+        'tindakan' => false,
+        'detail'   => true,
+        'ubah'     => true,
+        'hapus'    => true,
+    ];
     protected array $konfig = [
-                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
-                            [1, 'Kode Dokter', 'kode_dokter', 'indeks'],
-                            [1, 'Nama Dokter', 'nama_dokter', 'nama'],
-                            [1, 'Hari Kerja' , 'hari_kerja' , 'teks'], 
-                            [1, 'Jam Mulai'  , 'jam_mulai'  , 'jam'],
-                            [1, 'Jam Selesai', 'jam_selesai', 'jam'],
-                            [1, 'Poliklinik' , 'poliklinik' , 'status']
-                        ];
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Kode Dokter', 'kode_dokter', 'indeks'],
+        [1, 'Nama Dokter', 'nama_dokter', 'nama'],
+        [1, 'Hari Kerja' , 'hari_kerja' , 'teks'], 
+        [1, 'Jam Mulai'  , 'jam_mulai'  , 'jam'],
+        [1, 'Jam Selesai', 'jam_selesai', 'jam'],
+        [1, 'Poliklinik' , 'poliklinik' , 'status']
+    ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 
     public function dataDokterJaga()

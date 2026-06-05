@@ -15,12 +15,12 @@ protected array $breadcrumbs = [];
     protected string $kolom_id = 'nomor_rujuk';
     protected string $nama_tabel = 'rujukan_masuk';
     protected array $aksi = [
-                            'cetak'    => false,
-                            'tindakan' => false,
-                            'detail'   => true,
-                            'ubah'     => true,
-                            'hapus'    => true,
-                        ];
+        'cetak'    => false,
+        'tindakan' => false,
+        'detail'   => true,
+        'ubah'     => true,
+        'hapus'    => true,
+    ];
     protected array $konfig = [
                             // [visible, Display, Kolom, Jenis, Required, *Opsi]
                             [1, 'Nomor Rujuk'      , 'nomor_rujuk'   , 'indeks'],

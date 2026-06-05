@@ -7,7 +7,6 @@ use App\Core\Controller\ErrorController;
 
 class userAdminController extends ControllerTemplateLegacy
 {
-
     public function lihatStatusCuti()
     {
         $title = 'Tampil Status Cuti';

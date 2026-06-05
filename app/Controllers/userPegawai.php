@@ -7,10 +7,7 @@ use App\Core\Controller\ErrorController;
 
 class userPegawai extends ControllerTemplateLegacy
 {
-
-
-
-public function lihatProfil()
+    public function lihatProfil()
     {
         $title = 'Data Akun';
         date_default_timezone_set('Asia/Bangkok');

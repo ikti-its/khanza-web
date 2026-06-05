@@ -15,22 +15,21 @@ class PemberianObat extends ControllerTemplateLegacy
     protected string $kolom_id = 'nomor_rawat';
     protected string $nama_tabel = 'pemberian_obat';
     protected array $aksi = [
-                            'cetak'    => false,
-                            'tindakan' => false,
-                            'detail'   => true,
-                            'ubah'     => true,
-                            'hapus'    => true,
-                        ];
+        'cetak'    => false,
+        'tindakan' => false,
+        'detail'   => true,
+        'ubah'     => true,
+        'hapus'    => true,
+    ];
     protected array $konfig = [
-                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
-                            [1, 'Tanggal Beri', 'tanggal_beri', 'tanggal'],
-                            [1, 'Jam Beri'    , 'jam_beri'    , 'jam'],
-                            [1, 'Kode Obat'   , 'kode_obat'   , 'indeks'],
-                            [1, 'Nama Obat'   , 'nama_obat'   , 'teks'],
-                            [1, 'Jumlah'      , 'jumlah'      , 'jumlah'],
-                            [1, 'Biaya'       , 'total'       , 'uang']
-
-                        ];
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Tanggal Beri', 'tanggal_beri', 'tanggal'],
+        [1, 'Jam Beri'    , 'jam_beri'    , 'jam'],
+        [1, 'Kode Obat'   , 'kode_obat'   , 'indeks'],
+        [1, 'Nama Obat'   , 'nama_obat'   , 'teks'],
+        [1, 'Jumlah'      , 'jumlah'      , 'jumlah'],
+        [1, 'Biaya'       , 'total'       , 'uang']
+    ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 
     public function dataPemberianObat()

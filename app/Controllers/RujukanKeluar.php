@@ -15,28 +15,28 @@ protected array $breadcrumbs = [];
     protected string $kolom_id = 'nomor_rujuk';
     protected string $nama_tabel = 'rujukan_keluar';
     protected array $aksi = [
-                            'cetak'    => true,
-                            'tindakan' => false,
-                            'detail'   => true,
-                            'ubah'     => true,
-                            'hapus'    => false,
-                            'ambulans' => true
-                        ];
+        'cetak'    => true,
+        'tindakan' => false,
+        'detail'   => true,
+        'ubah'     => true,
+        'hapus'    => false,
+        'ambulans' => true
+    ];
     protected array $konfig = [
-                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
-                            [1, 'Nomor Rujuk'        , 'nomor_rujuk', 'indeks'],
-                            [0, 'Nomor Rawat'        , 'nomor_rawat', 'indeks'],
-                            [0, 'Nomor Rekam Medis'  , 'nomor_rm'   , 'indeks'],
-                            [1, 'Nama Pasien'        , 'nama_pasien', 'indeks'],
-                            [1, 'Tempat Rujuk'       , 'tempat_rujuk', 'teks'],
-                            [0, 'Tanggal Rujuk'      , 'tanggal_rujuk', 'tanggal'],
-                            [0, 'Jam Rujuk'          , 'jam_rujuk', 'jam'],
-                            [0, 'Keterangan Diagnosa', 'keterangan_diagnosa', 'teks'],
-                            [0, 'Dokter Perujuk'     , 'dokter_perujuk', 'nama'],
-                            [1, 'Kategori Rujuk'     , 'kategori_rujuk', 'status'],
-                            [1, 'Pengantaran'        , 'pengantaran', 'teks'],
-                            [0, 'Keterangan'         , 'keterangan', 'teks'],
-                        ];
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Nomor Rujuk'        , 'nomor_rujuk', 'indeks'],
+        [0, 'Nomor Rawat'        , 'nomor_rawat', 'indeks'],
+        [0, 'Nomor Rekam Medis'  , 'nomor_rm'   , 'indeks'],
+        [1, 'Nama Pasien'        , 'nama_pasien', 'indeks'],
+        [1, 'Tempat Rujuk'       , 'tempat_rujuk', 'teks'],
+        [0, 'Tanggal Rujuk'      , 'tanggal_rujuk', 'tanggal'],
+        [0, 'Jam Rujuk'          , 'jam_rujuk', 'jam'],
+        [0, 'Keterangan Diagnosa', 'keterangan_diagnosa', 'teks'],
+        [0, 'Dokter Perujuk'     , 'dokter_perujuk', 'nama'],
+        [1, 'Kategori Rujuk'     , 'kategori_rujuk', 'status'],
+        [1, 'Pengantaran'        , 'pengantaran', 'teks'],
+        [0, 'Keterangan'         , 'keterangan', 'teks'],
+    ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 
     public function dataRujukanKeluar()

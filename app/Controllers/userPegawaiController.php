@@ -7,9 +7,6 @@ use App\Core\Controller\ErrorController;
 
 class userPegawaiController extends ControllerTemplateLegacy
 {
-
-
-
     public function lihatProfil()
     {
         $title = 'Data Akun';

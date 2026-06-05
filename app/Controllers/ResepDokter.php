@@ -14,21 +14,21 @@ protected array $breadcrumbs = [];
     protected string $api_path = '/resepdokter';
     protected string $kolom_id = 'no_resep';
     protected array $aksi = [
-                            'cetak'    => false,
-                            'tindakan' => false,
-                            'detail'   => true,
-                            'ubah'     => false,
-                            'hapus'    => false,
-                        ];
+        'cetak'    => false,
+        'tindakan' => false,
+        'detail'   => true,
+        'ubah'     => false,
+        'hapus'    => false,
+    ];
     protected array $konfig = [
-                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
-                            [1, 'No Racik'    , 'no_resep'    , 'indeks'],
-                            [1, 'Kode Obat'   , 'kode_barang' , 'indeks'],
-                            // [1, 'Nama Obat'   , 'nama_obat'   , 'teks'],
-                            [1, 'Jumlah'      , 'jumlah'      , 'jumlah'], 
-                            [1, 'Aturan Pakai', 'aturan_pakai', 'teks'],
-                            // [1, 'Biaya'       , 'harga'       , 'uang'],
-                        ];
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'No Racik'    , 'no_resep'    , 'indeks'],
+        [1, 'Kode Obat'   , 'kode_barang' , 'indeks'],
+        // [1, 'Nama Obat'   , 'nama_obat'   , 'teks'],
+        [1, 'Jumlah'      , 'jumlah'      , 'jumlah'], 
+        [1, 'Aturan Pakai', 'aturan_pakai', 'teks'],
+        // [1, 'Biaya'       , 'harga'       , 'uang'],
+    ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 
     public function dataResepDokter()

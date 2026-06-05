@@ -14,21 +14,21 @@ protected array $breadcrumbs = [];
     protected string $api_path = '/tindakan';
     protected string $kolom_id = 'nomor_rawat';
     protected array $aksi = [
-                            'cetak'    => false,
-                            'tindakan' => false,
-                            'detail'   => true,
-                            'ubah'     => true,
-                            'hapus'    => false,
-                        ];
+        'cetak'    => false,
+        'tindakan' => false,
+        'detail'   => true,
+        'ubah'     => true,
+        'hapus'    => false,
+    ];
     protected array $konfig = [
-                            // [visible, Display, Kolom, Jenis, Required, *Opsi]
-                            [1, 'Tindakan', 'tindakan'     , 'teks'],
-                            [1, 'Dokter'  , 'nama_dokter'  , 'nama'],
-                            [1, 'Petugas' , 'nama_petugas' , 'nama'],
-                            [1, 'Tanggal' , 'tanggal_rawat', 'tanggal'],
-                            [1, 'Jam'     , 'jam_rawat'    , 'jam'],
-                            [1, 'Biaya'   , 'biaya'        , 'uang'],
-                        ];
+        // [visible, Display, Kolom, Jenis, Required, *Opsi]
+        [1, 'Tindakan', 'tindakan'     , 'teks'],
+        [1, 'Dokter'  , 'nama_dokter'  , 'nama'],
+        [1, 'Petugas' , 'nama_petugas' , 'nama'],
+        [1, 'Tanggal' , 'tanggal_rawat', 'tanggal'],
+        [1, 'Jam'     , 'jam_rawat'    , 'jam'],
+        [1, 'Biaya'   , 'biaya'        , 'uang'],
+    ];
     protected array $meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
 
     public function dataTindakan()
