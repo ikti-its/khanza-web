@@ -18,7 +18,7 @@ final class SekolahModel extends ModelTemplate
             ],
             [
                 'id_jenis'  => ['nama_jenis'],
-                'alamat_id' => [],
+                'alamat_id' => ['alamat_lengkap'],
             ],
         );
     }
