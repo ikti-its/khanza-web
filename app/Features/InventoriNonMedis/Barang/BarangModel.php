@@ -21,10 +21,10 @@ final class BarangModel extends ModelTemplate
                 'harga_satuan' => V::DEFAULT(),
             ],
             [
-                'id_satuan'             => ['nama_satuan'],
-                'id_kategori'           => ['nama_kategori_barang'],
-                'id_lokasi_penyimpanan' => ['nama_lokasi_penyimpanan'],
-                'id_suplier'            => ['nama_suplier'],
+                'id_satuan'                 => ['nama_satuan'],
+                'id_jenis_barang'           => ['nama_jenis_barang'],
+                'id_lokasi_penyimpanan'     => ['nama_lokasi_penyimpanan'],
+                'id_suplier'                => ['nama_suplier'],
             ],
         );
     }

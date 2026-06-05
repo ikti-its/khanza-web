@@ -1,4 +1,4 @@
-id_barang,kode_barang,nama_barang,id_satuan,id_kategori,id_lokasi_penyimpanan,id_suplier,stok,stok_minimum,harga_satuan
+id_barang,kode_barang,nama_barang,id_satuan,id_jenis_barang,id_lokasi_penyimpanan,id_suplier,stok,stok_minimum,harga_satuan
 0,-,-,0,0,0,0,0,,
 1,ATK-001,Pulpen Hitam,1,1,2,1,80,20,5000
 2,ATK-002,Kertas A4,3,1,2,1,50,10,45000

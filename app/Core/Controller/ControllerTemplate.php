@@ -155,9 +155,10 @@ class ControllerTemplate extends Controller
             $column = $field[2];
  
             if (isset($join_specs[$column])) {
-                $leaf_cols = $this->extract_leaf_columns($join_specs[$column]);
-                foreach ($leaf_cols as $leaf) {
-                    $konfig_kolom[] = $this->make_join_column_config($leaf);
+                $leaf_cols    = $this->extract_leaf_columns($join_specs[$column]);
+                $parent_label = $field[1];
+                foreach ($leaf_cols as $i => $leaf) {
+                    $konfig_kolom[] = $this->make_join_column_config($leaf, $i === 0 ? $parent_label : null);
                 }
             } else {
                 $konfig_kolom[] = $field;
@@ -167,9 +168,9 @@ class ControllerTemplate extends Controller
         return $konfig_kolom;
     }
 
-    private function make_join_column_config(string $col_name): array
+    private function make_join_column_config(string $col_name, ?string $label = null): array
     {
-        $label = ucwords(str_replace('_', ' ', $col_name));
+        $label ??= ucwords(str_replace('_', ' ', $col_name));
         $type  = str_contains($col_name, 'tanggal') ? 'tanggal' : 'teks';
 
         return [1, $label, $col_name, $type, 0];

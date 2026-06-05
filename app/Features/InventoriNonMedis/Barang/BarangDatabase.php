@@ -18,7 +18,7 @@ final class BarangDatabase extends DatabaseTemplate
                 'kode_barang'           => T::CODE(10),
                 'nama_barang'           => T::NAME(100),
                 'id_satuan'             => T::FK_AUTO(),
-                'id_kategori'           => T::FK_AUTO(),
+                'id_jenis_barang'       => T::FK_AUTO(),
                 'id_lokasi_penyimpanan' => T::FK_AUTO(),
                 'id_suplier'            => T::FK_AUTO(),
                 'stok'                  => T::QTY(0, 1_000_000),
@@ -29,9 +29,9 @@ final class BarangDatabase extends DatabaseTemplate
             ['kode_barang'],
             [
                 [
-                    'id_kategori',
-                    \App\Features\InventoriNonMedis\KategoriBarang\KategoriBarangDatabase::class,
-                    'id_kategori',
+                    'id_jenis_barang',
+                    \App\Features\InventoriNonMedis\JenisBarang\JenisBarangDatabase::class,
+                    'id_jenis_barang',
                 ],
                 [
                     'id_suplier',

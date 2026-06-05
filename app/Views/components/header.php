@@ -700,7 +700,7 @@
                         ['Stok Opname Detail', '/stok-opname-detail', ''],
                         ['Transaksi Stok', '/transaksi-stok', ''],
                         ['Barang', '/barang', ''],
-                        ['Kategori Barang', '/kategori-barang', ''],
+                        ['Jenis Barang', '/jenis-barang', ''],
                         ['Lokasi Penyimpanan', '/lokasi-penyimpanan', ''],
                         ['Suplier', '/suplier', ''],
                         ['Satuan', '/satuan', ''],

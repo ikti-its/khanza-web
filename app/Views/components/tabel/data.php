@@ -16,9 +16,9 @@
             //     'kolom' => array_column($data_visible, $DISPLAY)
             // ]);
             
-            echo view('components/tabel/thead',[
-                'kolom' => array_merge(array_column($data_visible, $DISPLAY), ['Aksi'])
-            ]);
+            $kolom_header = array_column($data_visible, $DISPLAY);
+            if (!empty($aksi)) $kolom_header[] = 'Aksi';
+            echo view('components/tabel/thead', ['kolom' => $kolom_header]);
         
             echo '<tbody class="divide-y divide-gray-200 dark:divide-gray-700">';
                 if(gettype($tabel) === 'array'){
@@ -47,7 +47,7 @@
                                 'kolom'    => array_column($data_visible, $KOLOM),
                                 'jenis'    => array_column($data_visible, $JENIS), 
                             ]);
-                            echo view('components/aksi/aksi', [
+                            if (!empty($aksi)) echo view('components/aksi/aksi', [
                                 'modul_path' => $modul_path,
                                 'id'         => $id,
                                 'aksi'       => $aksi,
