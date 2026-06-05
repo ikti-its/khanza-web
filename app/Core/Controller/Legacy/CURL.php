@@ -2,10 +2,15 @@
 declare(strict_types=1);
 
 namespace App\Core\Controller\Legacy;
+use App\Core\Controller\ErrorController;
 
 /** @deprecated "Migrate to ControllerTemplate inheritence" */
 final readonly class CURL
 {
+    /**
+     * @param 'GET'|'POST'|'PUT'|'DELETE' $method
+     * @return array{data: array|null, kode: int}
+     */
     public static function call(
         string $method, 
         string $path, 
@@ -14,11 +19,11 @@ final readonly class CURL
         
         $allowed_methods = ['GET', 'POST', 'PUT', 'DELETE'];
         if (!in_array($method, $allowed_methods, true)) {
-            echo HTTPError::renderErrorView(405);
+            echo ErrorController::renderErrorView(405);
         }
 
         if (!session()->has('jwt_token')) {
-            echo HTTPError::renderErrorView(401);
+            echo ErrorController::renderErrorView(401);
         }
 
         /** @var string */
@@ -62,13 +67,11 @@ final readonly class CURL
         
         $http_success_codes = [200, 201, 204];
         if (!in_array($http_status_code, $http_success_codes, true)) {
-            // log_message('error', $path . ' API error. Status: ' . $http_status_code . ', response: ' . $response);
-            echo HTTPError::renderErrorView($http_status_code);
+            echo ErrorController::renderErrorView($http_status_code);
         }
 
         if (json_last_error() !== JSON_ERROR_NONE || !isset($return_data['data'])) {
-            // log_message('error', 'JSON decode error: ' . json_last_error_msg());
-            echo HTTPError::renderErrorView(status_code: 500);
+            echo ErrorController::renderErrorView(status_code: 500);
         }
         return [
             'data' => $return_data,
