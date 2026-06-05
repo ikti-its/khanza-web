@@ -762,6 +762,15 @@ $features = [
         ['Telepon', 'telepon'],
         ['Email', 'email'],
     ]],
+    ['Lokasi', 'lokasi/', [
+        ['Negara', 'negara'],
+        ['Pulau', 'pulau'],
+        ['Provinsi', 'provinsi'],
+        ['Kota', 'kota'],
+        ['Kecamatan', 'kecamatan'],
+        ['Desa', 'desa'],
+        ['Alamat', 'alamat'],
+    ]],
     ['Darah', 'darah/', [
         ['GolonganDarah', 'golongan-darah'],
         ['KomponenDarah', 'komponen-darah'],
