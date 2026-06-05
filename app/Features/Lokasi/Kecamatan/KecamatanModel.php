@@ -14,12 +14,13 @@ final class KecamatanModel extends ModelTemplate
             new KecamatanDatabase(),
             [
                 'id_kecamatan'   => V::DEFAULT(),
-                'id_provinsi'    => V::DEFAULT(),
-                'id_kota_lokal'  => V::DEFAULT(),
                 'id_kec_lokal'   => V::DEFAULT(),
                 'nama_kecamatan' => V::DEFAULT(),
             ],
-            [],
+            [
+                'id_provinsi'   => ['nama_provinsi'],
+                'id_kota_lokal' => ['nama_kota'],
+            ],
         );
     }
 }

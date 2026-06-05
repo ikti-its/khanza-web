@@ -49,6 +49,11 @@ final class KecamatanDatabase extends DatabaseTemplate
                     \App\Features\Lokasi\Kota\KotaDatabase::class,
                     ['id_provinsi', 'id_kota_lokal'],
                 ],
+                [
+                    'id_provinsi',
+                    \App\Features\Lokasi\Provinsi\ProvinsiDatabase::class,
+                    'id_provinsi',
+                ],
             ],
             true,
             'kecamatan.csv',
