@@ -864,6 +864,12 @@
                         ['Dokter', '/dokter', ''],
                         ['Petugas', '/petugas', '']
                     ]],
+                    ['Kontak', '', 'kontak', '/kontak', $petugasrole, [
+                        ['Jenis Telepon', '/jenis-telepon', ''],
+                        ['Provider', '/provider', ''],
+                        ['Telepon', '/telepon', ''],
+                        ['Email', '/email', ''],
+                    ]],
                     ['Darah', '', 'darah', '/darah', $petugasrole, [
                         ['Golongan Darah', '/golongan-darah', ''],
                         ['Komponen Darah', '/komponen-darah', ''],
