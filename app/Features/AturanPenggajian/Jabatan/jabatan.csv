@@ -1,1 +1,17 @@
 no_jabatan,jenis_jabatan,nama_jabatan,jenjang,tunjangan
+1,Fungsional,Dokter,Ahli Pertama,3000000
+2,Fungsional,Dokter,Muda,5000000
+3,Fungsional,Dokter,Madya,7000000
+4,Fungsional,Dokter,Utama,9000000
+5,Fungsional,Dokter Gigi,Ahli Pertama,3000000
+6,Fungsional,Dokter Gigi,Muda,5000000
+7,Fungsional,Dokter Gigi,Madya,7000000
+8,Fungsional,Dokter Gigi,Utama,9000000
+9,Fungsional,Apoteker,Ahli Pertama,2000000
+10,Fungsional,Apoteker,Muda,3500000
+11,Fungsional,Apoteker,Madya,5000000
+12,Fungsional,Apoteker,Utama,6500000
+13,Fungsional,Perawat,Pemula,2000000
+14,Fungsional,Perawat,Mahir,3500000
+15,Fungsional,Perawat,Penyelia,5000000
+16,Fungsional,Perawat,Ahli,6500000

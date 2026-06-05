@@ -72,10 +72,6 @@ b9b1ad6c-c41b-446a-b00e-f56684663c56	3210223456789012	Bandung	1994-02-02	Kristen
 933568d5-982a-43c3-a4aa-3177bab10f07	3210334567890123	Surabaya	1993-03-03	Hindu	D3	ktp_eric.pdf	kk_eric.pdf	npwp_eric.pdf	bpjs_eric.pdf	ijazah_eric.pdf	skck_eric.pdf	str_eric.pdf	serkom_eric.pdf	2025-05-19 22:27:04.917087+07	2025-05-19 22:27:04.917087+07	\N	933568d5-982a-43c3-a4aa-3177bab10f07
 \.
 
-COPY sik.bpjs (no_bpjs, nama_program, penyelenggara, tarif, batas_bawah, batas_atas) FROM stdin;
-10	JKN	BPJS Kesehatan	50	1000000	5000000
-\.
-
 COPY sik.cuti (id, id_pegawai, tanggal_mulai, tanggal_selesai, id_alasan_cuti, status, created_at, updated_at, deleted_at, updater) FROM stdin;
 cb38e8cb-cbbe-4708-b9fe-8fb2cb06d7b0	bd0b4833-510c-4c29-a3a4-e08e9a0a5955	2025-05-16	2025-05-17	S	Ditolak	2025-05-15 23:07:43.915708+07	2025-06-01 17:25:17.032598+07	\N	bd0b4833-510c-4c29-a3a4-e08e9a0a5955
 fda80261-207d-4afc-bc9f-e8cd0d49771e	bd0b4833-510c-4c29-a3a4-e08e9a0a5955	2025-06-02	2025-06-03	CT	Diproses	2025-06-01 17:26:20.331472+07	2025-06-01 17:26:20.331472+07	\N	\N
@@ -110,26 +106,6 @@ COPY sik.golongan_barang_medis (id, nama, created_at, updated_at) FROM stdin;
 3000	Antijamur	2025-03-17 19:59:47.012224+07	2025-03-17 19:59:47.012224+07
 4000	Antivirus	2025-03-17 19:59:47.012224+07	2025-03-17 19:59:47.012224+07
 5000	Antasida	2025-03-17 19:59:47.012224+07	2025-03-17 19:59:47.012224+07
-\.
-
-COPY sik.golongan (no_golongan, kode_golongan, nama_golongan, pendidikan, gaji_pokok) FROM stdin;
-1	Ia	Juru Muda	SD/SMP	1000000
-2	Ib	Juru Muda Tingkat I	SD/SMP	1500000
-3	Ic	Juru	SD/SMP	2000000
-4	Id	Juru Tingkat I	SD/SMP	2500000
-5	IIa	Pengatur Muda	SMA/SMK	3000000
-6	IIb	Pengatur Muda Tingkat I	SMA/SMK	3500000
-7	IIc	Pengatur	SMA/SMK	4000000
-8	IId	Pengatur Tingkat I	SMA/SMK	4500000
-9	IIIa	Penata Muda	S1/D4	5000000
-10	IIIb	Penata Muda Tingkat I	S1/D4	6000000
-11	IIIc	Penata	S1/D4	7000000
-12	IIId	Penata Tingkat I	S1/D4	8000000
-13	IVa	Pembina	S2/S3	10000000
-14	IVb	Pembina Tingkat I	S2/S3	12000000
-15	IVc	Pembina Utama Muda	S2/S3	14000000
-16	IVd	Pembina Utama Madya	S2/S3	16000000
-17	IVe	Pembina Utama	S2/S3	18000000
 \.
 
 COPY sik.gudang_barang (id, id_barang_medis, id_ruangan, stok, no_batch, no_faktur) FROM stdin;
@@ -2149,25 +2125,6 @@ d3545eba-6474-456e-81d3-9808f58708fc	B000000611	1000	1000	BATCH001	FAKTUR001
 
 COPY sik.industri_farmasi (id, kode, nama, alamat, kota, telepon, created_at, updated_at) FROM stdin;
 1000	KLBF	Kalbe Farma	Jln. jalan	Jakarta	0812312312	2025-03-17 19:59:47.012224+07	2025-03-17 19:59:47.012224+07
-\.
-
-COPY sik.jabatan_pegawai (no_jabatan, jenis_jabatan, nama_jabatan, jenjang, tunjangan) FROM stdin;
-1	Fungsional	Dokter	Ahli Pertama	3000000
-2	Fungsional	Dokter	Muda	5000000
-3	Fungsional	Dokter	Madya	7000000
-4	Fungsional	Dokter	Utama	9000000
-5	Fungsional	Dokter Gigi	Ahli Pertama	3000000
-6	Fungsional	Dokter Gigi	Muda	5000000
-7	Fungsional	Dokter Gigi	Madya	7000000
-8	Fungsional	Dokter Gigi	Utama	9000000
-9	Fungsional	Apoteker	Ahli Pertama	2000000
-10	Fungsional	Apoteker	Muda	3500000
-11	Fungsional	Apoteker	Madya	5000000
-12	Fungsional	Apoteker	Utama	6500000
-13	Fungsional	Perawat	Pemula	2000000
-14	Fungsional	Perawat	Mahir	3500000
-15	Fungsional	Perawat	Penyelia	5000000
-16	Fungsional	Perawat	Ahli	6500000
 \.
 
 COPY sik.jadwal_pegawai (id, id_pegawai, id_hari, id_shift, created_at, updated_at, deleted_at, updater) FROM stdin;
@@ -5570,17 +5527,6 @@ COPY sik.kategori_barang_medis (id, nama, created_at, updated_at) FROM stdin;
 COPY sik.kepegawaian (no_pegawai, status, golongan, jabatan, jkn, jkk, jkm, jht, jp, jkp, ptkp, bank, rekening) FROM stdin;
 \.
 
-COPY sik.lembur (no_lembur, jenis_lembur, jam_lembur, pengali_upah) FROM stdin;
-1	Lembur Hari Biasa	1	1.5
-2	Lembur Hari Biasa	2	2.0
-3	Lembur Hari Biasa	3	2.0
-4	Lembur Hari Biasa	4	2.0
-5	Lembur Hari Libur	1	3.0
-6	Lembur Hari Libur	2	4.0
-7	Lembur Hari Libur	3	4.0
-8	Libur Nasional	4	4
-\.
-
 COPY sik.mutasi_barang (id, id_barang_medis, jumlah, harga, id_ruangandari, id_ruanganke, tanggal, keterangan, no_batch, no_faktur) FROM stdin;
 \.
 
@@ -5639,41 +5585,7 @@ SOP202505316071	2025-05-31	00:03:50	202505284371	D004	Belum	\N	\N
 SOP202506011656	2025-06-01	15:21:57	202504164239	D001	Belum	2025-06-01	15:22:22
 \.
 
-COPY sik.pesangon (no_pesangon, masa_kerja, pengali_upah) FROM stdin;
-1	1	2
-2	2	3
-3	3	4
-4	4	5
-5	5	6
-6	6	7
-7	7	8
-8	8	9
-\.
-
-COPY sik.pph21 (no_pph21, pkp_bawah, pkp_atas, tarif_pajak) FROM stdin;
-1	0	60000000	5
-2	60000000	250000000	15
-3	250000000	500000000	25
-4	500000000	5000000000	30
-5	5000000000	1000000000000000000	35
-\.
-
 COPY sik.presensi (id, id_pegawai, id_jadwal_pegawai, tanggal, jam_masuk, jam_pulang, keterangan, foto, created_at, updated_at, deleted_at, updater) FROM stdin;
-\.
-
-COPY sik.ptkp (no_ptkp, kode_ptkp, perkawinan, tanggungan, nilai_ptkp) FROM stdin;
-1	TK/0	Tidak kawin	0	54000000
-2	TK/1	Tidak kawin	1	58500000
-3	TK/2	Tidak kawin	2	63000000
-4	TK/3	Tidak kawin	3	67500000
-5	K/0	Tidak kawin	0	58500000
-6	K/1	Kawin	1	63000000
-7	K/2	Kawin	2	67500000
-8	K/3	Kawin	3	72000000
-9	K/I/0	Kawin (harta digabung)	0	112500000
-10	K/I/1	Kawin (harta digabung)	1	117000000
-11	K/I/2	Kawin (harta digabung)	2	121500000
-12	K/I/3	Kawin (harta digabung)	3	126000000
 \.
 
 COPY sik.rawat_inap (nomor_rawat, nomor_rm, nama_pasien, alamat_pasien, penanggung_jawab, hubungan_pj, jenis_bayar, kamar, tarif_kamar, diagnosa_awal, diagnosa_akhir, tanggal_masuk, tanggal_keluar, jam_keluar, total_biaya, status_pulang, lama_ranap, dokter_pj, status_bayar, jam_masuk) FROM stdin;
@@ -5829,21 +5741,6 @@ COPY sik.supplier_barang_medis (id, nama, alamat, no_telp, kota, nama_bank, no_r
 COPY sik.tarif_tindakan (kode, nama_perawatan, kategori_perawatan, tarif, kelas) FROM stdin;
 \.
 
-COPY sik.thr (no_thr, masa_kerja, pengali_upah) FROM stdin;
-1	1	0.08333333333333333333
-2	2	0.16666666666666666667
-3	3	0.25000000000000000000
-4	4	0.33333333333333333333
-5	5	0.41666666666666666667
-6	6	0.50000000000000000000
-7	7	0.58333333333333333333
-8	8	0.66666666666666666667
-9	9	0.75000000000000000000
-10	10	0.83333333333333333333
-11	11	0.91666666666666666667
-12	12	1.00000000000000000000
-\.
-
 COPY sik.transaksi_keluar_barang_medis (id, id_stok_keluar, id_barang_medis, no_batch, no_faktur, jumlah_keluar) FROM stdin;
 \.
 
@@ -5853,23 +5750,6 @@ COPY sik.tukar_jadwal (id, id_sender, id_recipient, id_hari, id_shift_sender, id
 COPY sik.ugd (nomor_reg, nomor_rawat, tanggal, jam, kode_dokter, dokter_dituju, nomor_rm, nama_pasien, jenis_kelamin, umur, poliklinik, penanggung_jawab, alamat_pj, hubungan_pj, biaya_registrasi, status, jenis_bayar, status_rawat, status_bayar) FROM stdin;
 1	20250412256	2025-04-12	20:20:20	D001	Dr. Ahmad	1	Aziz	L	22	Poli Jantung	Jaya	Keputih	Diri Sendiri	100000	Lama	BPJS	Belum	Belum Bayar
 UGD1001	RW1001	2025-04-12	14:00:00	D001	dr. Rina	RM1001	Andi	L	35	Poli Umum	Budi	Jl. Merpati	Suami	50000		Tunai	rawat	belum
-\.
-
-COPY sik.umr (no_umr, provinsi, kotakab, jenis, upah_minimum) FROM stdin;
-1	Jawa Timur	Surabaya	UMK	49000000
-2	Jawa Timur	Sidoarjo	UMK	350000000
-\.
-
-COPY sik.upmk (no_upmk, masa_kerja, pengali_upah) FROM stdin;
-1	3	2
-2	6	3
-3	9	4
-4	12	5
-5	15	6
-6	18	7
-7	21	8
-8	24	9
-9	27	10
 \.
 
 COPY sik.data_instansi (kode_instansi, nama_instansi, alamat_instansi, kota, no_telp) FROM stdin;

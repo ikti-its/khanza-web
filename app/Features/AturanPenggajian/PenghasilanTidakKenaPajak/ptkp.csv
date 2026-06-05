@@ -1,1 +1,13 @@
 no_ptkp,kode_ptkp,perkawinan,tanggungan,nilai_ptkp
+1,TK/0,Tidak kawin,0,54000000
+2,TK/1,Tidak kawin,1,58500000
+3,TK/2,Tidak kawin,2,63000000
+4,TK/3,Tidak kawin,3,67500000
+5,K/0,Tidak kawin,0,58500000
+6,K/1,Kawin,1,63000000
+7,K/2,Kawin,2,67500000
+8,K/3,Kawin,3,72000000
+9,K/I/0,Kawin (harta digabung),0,112500000
+10,K/I/1,Kawin (harta digabung),1,117000000
+11,K/I/2,Kawin (harta digabung),2,121500000
+12,K/I/3,Kawin (harta digabung),3,126000000

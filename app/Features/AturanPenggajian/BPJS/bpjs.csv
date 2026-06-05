@@ -1,3 +1,4 @@
 no_bpjs,nama_program,penyelenggara,tarif,batas_atas,batas_bawah
 1,Program 1,Penyelenggara 1,1.5,1000000,500000
 2,Program 2,Penyelenggara 2,2.0,1500000,750000
+3,JKN,BPJS Kesehatan,0.5,1000000,5000000

@@ -1,1 +1,18 @@
-no_golongan,kode_golongan,nama_golongan,gaji_pokok    
+no_golongan,kode_golongan,nama_golongan,pendidikan,gaji_pokok    
+1,Ia,Juru Muda,SD/SMP,1000000
+2,Ib,Juru Muda Tingkat I,SD/SMP,1500000
+3,Ic,Juru,SD/SMP,2000000
+4,Id,Juru Tingkat I,SD/SMP,2500000
+5,IIa,Pengatur Muda,SMA/SMK,3000000
+6,IIb,Pengatur Muda Tingkat I,SMA/SMK,3500000
+7,IIc,Pengatur,SMA/SMK,4000000
+8,IId,Pengatur Tingkat I,SMA/SMK,4500000
+9,IIIa,Penata Muda,S1/D4,5000000
+10,IIIb,Penata Muda Tingkat I,S1/D4,6000000
+11,IIIc,Penata,S1/D4,7000000
+12,IIId,Penata Tingkat I,S1/D4,8000000
+13,IVa,Pembina,S2/S3,10000000
+14,IVb,Pembina Tingkat I,S2/S3,12000000
+15,IVc,Pembina Utama Muda,S2/S3,14000000
+16,IVd,Pembina Utama Madya,S2/S3,16000000
+17,IVe,Pembina Utama,S2/S3,18000000
