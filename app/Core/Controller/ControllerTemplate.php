@@ -84,6 +84,11 @@ class ControllerTemplate extends Controller
         return '/' . implode('/', $segments);
     }
 
+    protected function home(): RedirectResponse
+    {
+        return redirect()->to($this->get_uri_path() . '/data');
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -318,12 +323,12 @@ class ControllerTemplate extends Controller
             return $this->create_view($postData);
         }
 
-        return redirect()->to($this->get_uri_path() . '/data');
+        return $this->home();
     }
 
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return redirect()->to($this->get_uri_path() . '/data');
+        if ($id == 0) return $this->home();
 
         /** @var array<string, scalar|null> $postData */
         $postData = $this->get_post_data();
@@ -332,7 +337,7 @@ class ControllerTemplate extends Controller
             $this->model->update($id, $postData);
         } catch(\ReflectionException $e){
             session()->setFlashdata('error', $e->getMessage());
-            return redirect()->to($this->get_uri_path() . '/data');
+            return $this->home();
         } catch(DatabaseException $e){
             $errMsg = $this->friendly_db_error($e);
             session()->setFlashdata('error', $errMsg);
@@ -351,12 +356,12 @@ class ControllerTemplate extends Controller
             ]);
         }
 
-        return redirect()->to($this->get_uri_path() . '/data');
+        return $this->home();
     }
 
     final public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return redirect()->to($this->get_uri_path() . '/data');
+        if ($id == 0) return $this->home();
 
         try {
             $this->model->delete($id);
@@ -364,7 +369,7 @@ class ControllerTemplate extends Controller
             session()->setFlashdata('error', $this->friendly_db_error($e));
         }
 
-        return redirect()->to($this->get_uri_path() . '/data');
+        return $this->home();
     }
 
     public function print(int|string $id): string
