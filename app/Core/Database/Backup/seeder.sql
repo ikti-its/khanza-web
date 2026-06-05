@@ -1,6 +1,0 @@
-INSERT INTO sik.akun (id, email, password, foto, role, created_at, updated_at, deleted_at, updater) VALUES
-('83e0f2ba-9b19-439e-a448-97338eea7ff8',	'admin123@fathoor.dev',	'$2a$10$LcvwwjdpGUz3LmKLOa9Yy.Oqs0DAsquurYYMAWA8n0eO3uPX0ibrW',	'/img/default.png',	1,	    '2025-03-17 20:35:20.555048+07',	'2025-03-17 20:35:20.555048+07',	NULL,	NULL),
-('933568d5-982a-43c3-a4aa-3177bab10f07',	'eric@fathoor.dev',	    '$2a$12$GmKnyhdJVTC424cvJFgiC.fiQjFm18IN587OIq/puCLg5ab1abnEm',	'/img/default.png',	2,	    '2025-05-15 18:28:32.325395+07',	'2025-05-15 18:28:32.325395+07',	NULL,	'933568d5-982a-43c3-a4aa-3177bab10f07'),
-('9de502cb-2cd5-46cb-a717-97f2bb1f85c5',	'fathoor@fathoor.dev',	'$2a$10$Yg78XjsfHtvpiZHzxjhtBeauNRpK928c1zKSXjPdV.jOE0q21qXgq',	'/img/default.png',	1337,	'2025-03-17 20:07:40.473102+07',	'2025-03-17 20:07:40.473102+07',	NULL,	NULL),
-('b9b1ad6c-c41b-446a-b00e-f56684663c56',	'aziz@fathoor.dev',	    '$2a$12$GmKnyhdJVTC424cvJFgiC.fiQjFm18IN587OIq/puCLg5ab1abnEm',	'/img/default.png',	3,	    '2025-05-15 18:28:32.325395+07',	'2025-05-15 18:28:32.325395+07',	NULL,	'b9b1ad6c-c41b-446a-b00e-f56684663c56'),
-('bd0b4833-510c-4c29-a3a4-e08e9a0a5955',	'admin@fathoor.dev',	'$2a$10$8jI.qKrVbXQjNzYX6KOIvukkYkNcmfYyPWiv9tuHE8vdg5EhjQBzy',	'/img/default.png',	1,	    '2025-03-17 20:07:40.473102+07',	'2025-03-17 20:07:40.473102+07',	NULL,	'bd0b4833-510c-4c29-a3a4-e08e9a0a5955')

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\Akun\Auth;
+namespace App\Features\Auth\Akun;
 use App\Core\Database\Template\DatabaseTemplate;
 use App\Core\Database\Template\SemanticType as T;
 
-final class AuthDatabase extends DatabaseTemplate
+final class AkunDatabase extends DatabaseTemplate
 {
     public function __construct(){
         parent::__construct(

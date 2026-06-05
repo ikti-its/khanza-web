@@ -10,7 +10,7 @@ use CodeIgniter\HTTP\RedirectResponse;
 final class AuthController extends Controller
 {
     public function __construct(
-        private ModelTemplate $model = new \App\Features\Akun\Auth\AuthModel(),
+        private ModelTemplate $model = new \App\Features\Auth\Akun\AkunModel(),
     ){}
 
     public function index(): string|RedirectResponse
