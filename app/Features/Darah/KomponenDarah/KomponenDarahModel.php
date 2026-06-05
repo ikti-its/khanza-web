@@ -17,6 +17,11 @@ final class KomponenDarahModel extends ModelTemplate
                 'kode_komponen'     => V::DEFAULT(),
                 'nama_komponen'     => V::DEFAULT(),
                 'masa_berlaku_hari' => V::DEFAULT(),
+                'jasa_sarana'       => V::DEFAULT(),
+                'paket_bhp'         => V::DEFAULT(),
+                'kso'               => V::DEFAULT(),
+                'manajemen'         => V::DEFAULT(),
+                'pembatalan'        => V::DEFAULT(),
             ],
             [],
         );

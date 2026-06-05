@@ -30,6 +30,11 @@ final class KomponenDarahController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,   'kode_komponen',     'Kode'],
                 [SHOW, REQUIRED, I::TEXT,   'nama_komponen',     'Nama Komponen'],
                 [SHOW, REQUIRED, I::NUMBER, 'masa_berlaku_hari', 'Masa Berlaku (Hari)'],
+                [SHOW, REQUIRED, I::MONEY, 'jasa_sarana',        'Jasa Sarana'],
+                [SHOW, REQUIRED, I::MONEY, 'paket_bhp',          'Paket BHP'],
+                [SHOW, REQUIRED, I::MONEY, 'kso',                'KSO'],
+                [SHOW, REQUIRED, I::MONEY, 'manajemen',          'Manajemen'],
+                [SHOW, REQUIRED, I::MONEY, 'pembatalan',         'Pembatalan'],
             ],
         );
     }

@@ -1,7 +1,7 @@
-﻿id_komponen,kode_komponen,nama_komponen,masa_berlaku_hari
-1,WB,Whole Blood,28
-2,PRC,Packed Red Cells,28
-3,PRP,Platelet-Rich Plasma,5
-4,FFP,Fresh Frozen Plasma,365
-5,TC,Thrombocyte Concentrate,5
-6,AHF,Cryoprecipitate,365
+﻿id_komponen,kode_komponen,nama_komponen,masa_berlaku_hari,jasa_sarana,paket_bhp,kso,manajemen,pembatalan
+1,WB,Whole Blood,28,150000,180000,0,30000,0
+2,PRC,Packed Red Cells,28,180000,110000,40000,30000,0
+3,PRP,Platelet-Rich Plasma,5,160000,200000,50000,40000,0
+4,FFP,Fresh Frozen Plasma,365,150000,95000,35000,20000,0
+5,TC,Thrombocyte Concentrate,5,165000,100000,45000,25000,0
+6,AHF,Cryoprecipitate,365,180000,220000,40000,40000,0
