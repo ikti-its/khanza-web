@@ -13,16 +13,17 @@ final class AlamatModel extends ModelTemplate
         parent::__construct(
             new AlamatDatabase(),
             [
-                'id_alamat'          => V::DEFAULT(),
-                'id_provinsi'        => V::DEFAULT(),
-                'id_kota_lokal'      => V::DEFAULT(),
-                'id_kecamatan_lokal' => V::DEFAULT(),
-                'id_desa_lokal'      => V::DEFAULT(),
-                'rw'                 => V::DEFAULT(),
-                'rt'                 => V::DEFAULT(),
-                'alamat_lengkap'     => V::DEFAULT(),
+                'id_alamat'      => V::DEFAULT(),
+                'rw'             => V::DEFAULT(),
+                'rt'             => V::DEFAULT(),
+                'alamat_lengkap' => V::DEFAULT(),
             ],
-            [],
+            [
+                'id_provinsi'   => ['nama_provinsi'], 
+                'id_kota_lokal' => ['nama_kota'],
+                'id_kec_lokal'  => ['nama_kecamatan'],
+                'id_desa_lokal' => ['nama_desa'],
+            ],
         );
     }
 }
