@@ -13,11 +13,13 @@ final class ProvinsiModel extends ModelTemplate
         parent::__construct(
             new ProvinsiDatabase(),
             [
-                'id_pulau'      => V::DEFAULT(),
                 'id_provinsi'   => V::DEFAULT(),
                 'nama_provinsi' => V::DEFAULT(),
+                'kode_provinsi' => V::DEFAULT(),
             ],
-            [],
+            [
+                'id_pulau' => ['nama_pulau'],
+            ],
         );
     }
 }
