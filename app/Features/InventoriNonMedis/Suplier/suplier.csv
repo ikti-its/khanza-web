@@ -1,7 +1,7 @@
-id_suplier,nama_suplier,no_telp,id_alamat
-0,-,,0
-1,PT Sinar ATK Nusantara,081234567890,0
-2,CV Bersih Jaya,082145678901,0
-3,PT Lab Utama Sejahtera,083256789012,0
-4,PT Teknologi Kantor Indonesia,084367890123,0
-5,CV Umum Sentosa,085478901234,0
+id_suplier,kode_suplier,nama_suplier,no_telp,id_kota,alamat,id_rekening
+0,-,-,-,0,-,0
+1,S0001,PT Sinar ATK Nusantara,081234567890,0,-,0
+2,S0002,CV Bersih Jaya,082145678901,0,-,0
+3,S0003,PT Lab Utama Sejahtera,083256789012,0,-,0
+4,S0004,PT Teknologi Kantor Indonesia,084367890123,0,-,0
+5,S0005,CV Umum Sentosa,085478901234,0,-,0

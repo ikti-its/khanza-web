@@ -29,7 +29,7 @@
             return;
         }
         
-        if ($row !== [] && $column !== '' && !isset($row[$column])) {
+        if ($row !== [] && $column !== '' && !array_key_exists($column, $row)) {
             echo "Tidak ditemukan kolom: " . $column . " pada baris";
             return;
         }

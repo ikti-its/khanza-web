@@ -14,11 +14,17 @@ final class SuplierModel extends ModelTemplate
             new SuplierDatabase(),
             [
                 'id_suplier'   => V::DEFAULT(),
+                'kode_suplier' => V::DEFAULT(),
                 'nama_suplier' => V::DEFAULT(),
                 'no_telp'      => V::DEFAULT(),
+                'alamat'       => V::DEFAULT(),
             ],
             [
-                'id_alamat' => ['alamat_lengkap'],
+                'id_kota'     => ['nama_kota'],
+                'id_rekening' => [
+                    'nomor_rekening',
+                    'bank' => ['nama_bank'],
+                ],
             ],
         );
     }

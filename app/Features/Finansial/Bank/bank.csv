@@ -1,5 +1,5 @@
 id_bank,kode_bank,nama_bank,sebutan,pemilik_id,prinsip_id,is_bank_devisa,mobile_app,link_playstore
-0,000,NON BANK,Internal,0,0,FALSE,-,-
+0,000,-,Internal,0,0,FALSE,-,-
 1,002,BANK RAKYAT INDONESIA,BRI,1,1,TRUE,BRImo,https://play.google.com/store/apps/details?id=id.co.bri.brimo&hl=id
 2,008,BANK MANDIRI,Mandiri,1,1,TRUE,Livin' by Mandiri,https://play.google.com/store/apps/details?id=id.bmri.livin&hl=id
 3,009,BANK NEGARA INDONESIA,BNI,1,1,TRUE,wondr by BNI,https://play.google.com/store/apps/details?id=id.bni.wondr&hl=id

@@ -302,6 +302,7 @@ class ControllerTemplate extends Controller
     }
 
     protected function before_create(array &$postData): void {}
+    protected function before_update(array &$postData, int|string $id): void {}
 
     public function create(): string|RedirectResponse
     {
@@ -326,6 +327,7 @@ class ControllerTemplate extends Controller
 
         /** @var array<string, scalar|null> $postData */
         $postData = $this->get_post_data();
+        $this->before_update($postData, $id);
         try {
             $this->model->update($id, $postData);
         } catch(\ReflectionException $e){
