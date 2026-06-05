@@ -738,6 +738,12 @@ $features = [
         ['Rekening', 'rekening'],
         ['Transaksi', 'transaksi'],
     ]],
+    ['Person', 'person/', [
+        ['Orang', 'orang'],
+        ['Agama', 'agama'],
+        ['Pernikahan', 'pernikahan'],
+        ['JenisKelamin', 'jenis-kelamin'],
+    ]],
     ['Role', 'role/', [
         ['Dokter', 'dokter'],
         ['Pasien', 'pasien'],
