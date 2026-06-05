@@ -21,7 +21,7 @@ final class JabatanDatabase extends DatabaseTemplate
                 'tunjangan'     => T::MONEY(),
             ],
             'no_jabatan',
-            ['nama_jabatan'],
+            [],
             [],
             true,
             'jabatan.csv',

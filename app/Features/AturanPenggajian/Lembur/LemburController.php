@@ -26,10 +26,10 @@ final class LemburController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [SHOW, REQUIRED, I::INDEX, 'Nomor', 'no_lembur'],
-                [SHOW, REQUIRED, I::TEXT, 'Jenis', 'jenis_lembur'],
-                [SHOW, REQUIRED, I::NUMBER, 'Jam', 'jam_lembur'],
-                [SHOW, REQUIRED, I::FLOAT, 'Pengali', 'pengali_upah'],
+                [SHOW, REQUIRED, I::INDEX,  'no_lembur',    'Nomor'],
+                [SHOW, REQUIRED, I::TEXT,   'jenis_lembur', 'Jenis'],
+                [SHOW, REQUIRED, I::NUMBER, 'jam_lembur',   'Jam'],
+                [SHOW, REQUIRED, I::FLOAT,  'pengali_upah', 'Pengali'],
             ],
         );
     }
