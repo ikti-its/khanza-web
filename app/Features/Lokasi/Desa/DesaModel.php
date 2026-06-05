@@ -14,13 +14,14 @@ final class DesaModel extends ModelTemplate
             new DesaDatabase(),
             [
                 'id_desa'       => V::DEFAULT(),
-                'id_provinsi'   => V::DEFAULT(),
-                'id_kota_lokal' => V::DEFAULT(),
-                'id_kec_lokal'  => V::DEFAULT(),
                 'id_desa_lokal' => V::DEFAULT(),
                 'nama_desa'     => V::DEFAULT(),
             ],
-            [],
+            [
+                'id_provinsi'   => ['nama_provinsi'],
+                'id_kota_lokal' => ['nama_kota'],
+                'id_kec_lokal'  => ['nama_kecamatan'],
+            ],
         );
     }
 }

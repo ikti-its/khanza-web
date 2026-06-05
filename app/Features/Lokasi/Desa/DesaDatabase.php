@@ -53,6 +53,16 @@ final class DesaDatabase extends DatabaseTemplate
                     \App\Features\Lokasi\Kecamatan\KecamatanDatabase::class,
                     ['id_provinsi', 'id_kota_lokal', 'id_kec_lokal'],
                 ],
+                [
+                    ['id_provinsi', 'id_kota_lokal'],
+                    \App\Features\Lokasi\Kota\KotaDatabase::class,
+                    ['id_provinsi', 'id_kota_lokal'],
+                ],
+                [
+                    'id_provinsi',
+                    \App\Features\Lokasi\Provinsi\ProvinsiDatabase::class,
+                    'id_provinsi',
+                ],
             ],
             true,
             'desa.csv',
