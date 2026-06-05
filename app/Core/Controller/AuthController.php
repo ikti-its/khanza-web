@@ -15,7 +15,7 @@ final class AuthController extends Controller
 
     public function index(): string|RedirectResponse
     {
-        if(session()->has('jwt_token')){
+        if(session()->has('user')){
             return redirect()->to('/dashboard');
         }
         return view('layouts/login');
@@ -33,7 +33,7 @@ final class AuthController extends Controller
         }
             
 
-        $user = $this->model->where('email',$login_data['email'])->first();
+        $user = $this->model->where('email', $login_data['email'])->first();
         
         if(!$user){
             return redirect()->back()->withInput()
@@ -47,7 +47,7 @@ final class AuthController extends Controller
             &&!password_verify($login_data['password'], $user['password'])) 
         {
             return redirect()->back()->withInput()
-            ->with('error', 'Password salah, mohon dicoba kembali');
+                ->with('error', 'Password salah, mohon dicoba kembali');
         }
 
         if (isset($user['id'], $user['email'], $user['role'])) {
@@ -58,9 +58,8 @@ final class AuthController extends Controller
             ];
         }
             
-
         session()->set('user', $user);
-        session()->set('user_specific_data', 'Akun not found');
+        // session()->set('user_specific_data', 'Akun not found');
 
         return redirect()->to('/dashboard')
             ->with('title', 'Dashboard')
@@ -69,8 +68,7 @@ final class AuthController extends Controller
 
     public function logout() : RedirectResponse
     {
-        $session = session();
-        $session->destroy();
+        session()->destroy();
         return redirect()->to(base_url("/login"));
     }
 
