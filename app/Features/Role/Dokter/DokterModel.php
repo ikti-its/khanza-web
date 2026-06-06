@@ -13,8 +13,9 @@ final class DokterModel extends ModelTemplate
         parent::__construct(
             new DokterDatabase(),
             [
-                'id_dokter' => V::DEFAULT(),
-                'spesialis' => V::DEFAULT(),
+                'id_dokter'   => V::DEFAULT(),
+                'kode_dokter' => V::DEFAULT(),   
+                'spesialis'   => V::DEFAULT(),
             ],
             [
                 'id_orang' => ['nik', 'nama', 'tanggal_lahir'],
