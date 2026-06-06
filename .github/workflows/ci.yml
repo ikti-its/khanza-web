@@ -31,6 +31,8 @@ jobs:
         with:
           path: vendor
           key: vendor-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            vendor-${{ runner.os }}-
 
       - name: Install Dependencies
         if: steps.vendor-cache.outputs.cache-hit != 'true'
