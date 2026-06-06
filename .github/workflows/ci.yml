@@ -9,46 +9,59 @@ on:
         default: 'Pengecekan rutin kode CI4'
 
 jobs:
-  ci4-code-check:
+  quality:
+    name: PHP 8.5 / Code Quality
     runs-on: ubuntu-latest
 
+    timeout-minutes: 10
+
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Setup PHP Environment
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.5'
-        extensions: intl, mbstring, xml, ctype, iconv, json, gd, dom, pdo_pgsql
-        coverage: none
-    
-    - name: Download and Setup FrankenPHP Binary
-      run: |
-        curl -L https://github.com/dunglas/frankenphp/releases/latest/download/frankenphp-linux-x86_64 -o frankenphp
-        chmod +x frankenphp
-        sudo mv frankenphp /usr/local/bin/
-        frankenphp version
+      - name: Setup PHP 8.5
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          coverage: none
+          extensions: intl, mbstring, gd, pdo_pgsql
+          tools: composer:v2
 
-    - name: Validate Composer File
-      run: composer validate --strict
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-    - name: Install All Dependencies
-      run: composer install --prefer-dist --no-progress
-    
-    - name: Log Trigger Reason
-      run: echo "Pipeline dijalankan secara manual dengan alasan -> ${{ github.event.inputs.reason }}"
+      - name: Cache Composer Packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            composer-${{ runner.os }}-
 
-    - name: Run Mago Guard
-      run: vendor/bin/mago --config .config/mago.toml guard
-      
-    - name: Run Mago Static Analyzer
-      run: vendor/bin/mago --config .config/mago.toml analyze
+      - name: Validate composer.json
+        run: composer validate --strict
 
-    - name: Run Mago Linter
-      run: vendor/bin/mago --config .config/mago.toml lint
-    
-    - name: Run Mago Formatter
-      run: vendor/bin/mago --config .config/mago.toml fmt
+      - name: Install Dependencies
+        run: |
+          composer install \
+            --prefer-dist \
+            --no-progress \
+            --no-interaction \
+            --optimize-autoloader
 
-   
+      - name: Verify Platform Requirements
+        run: composer check-platform-reqs
+
+      - name: Run Mago Guard
+        run: vendor/bin/mago --config .config/mago.toml guard
+
+      - name: Run Mago Static Analysis
+        run: vendor/bin/mago --config .config/mago.toml analyze
+
+      - name: Run Mago Linter
+        run: vendor/bin/mago --config .config/mago.toml lint
+
+      - name: Verify Formatting
+        run: vendor/bin/mago --config .config/mago.toml fmt --check
