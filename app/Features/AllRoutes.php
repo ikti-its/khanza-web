@@ -12,6 +12,7 @@ final class AllRoutes extends RouteGroup
             [
                 \App\Features\AturanPenggajian\AturanPenggajianRoutes::class,
                 \App\Features\Finansial\FinansialRoutes::class,
+                \App\Features\InventoriNonMedis\InventoriNonMedisRoutes::class,
                 \App\Features\Lokasi\LokasiRoutes::class,
             ]
         );

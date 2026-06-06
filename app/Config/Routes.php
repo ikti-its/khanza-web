@@ -747,24 +747,6 @@ $features = [
         ['KomponenDarah', 'komponen-darah'],
         ['Rhesus', 'rhesus'],
     ]],
-    ['InventoriNonMedis', 'inventori-non-medis/', [
-        ['Barang', 'barang'],
-        ['JenisBarang', 'jenis-barang'],
-        ['PengadaanBarang', 'pengadaan-barang'],
-        ['PengadaanBarangDetail', 'pengadaan-barang-detail'],
-        ['PengajuanBarang', 'pengajuan-barang'],
-        ['PengajuanBarangDetail', 'pengajuan-barang-detail'],
-        ['PenerimaanBarang', 'penerimaan-barang'],
-        ['PenerimaanBarangDetail', 'penerimaan-barang-detail'],
-        ['PermintaanBarang', 'permintaan-barang'],
-        ['PermintaanBarangDetail', 'permintaan-barang-detail'],
-        ['StokOpname', 'stok-opname'],
-        ['StokOpnameDetail', 'stok-opname-detail'],
-        ['Suplier', 'suplier'],
-        ['TransaksiStok', 'transaksi-stok'],
-        ['Satuan', 'satuan'],
-        ['Unit',   'unit']
-    ]],
     ['Laboratorium', 'laboratorium/', [
         // Hasil Lab
         ['HasilLabMb', 'hasil-lab-mb'],
