@@ -764,17 +764,6 @@ $features = [
         ['RefParameterPemeriksaanLab', 'ref-parameter-pemeriksaan-lab'],
         ['RefStatusPermintaan', 'ref-status-permintaan'],
     ]],
-    ['Radiologi', 'radiologi/', [
-        // Permintaan & Hasil
-        ['PermintaanRad',        'permintaan-rad'],
-        ['HasilRad',             'hasil-rad'],
-        ['HasilRadBhp',          'hasil-rad-bhp'],
-        ['HasilRadTindakan',     'hasil-rad-tindakan'],
-        // Referensi
-        ['RefItemRad',               'ref-item-rad'],
-        ['RefStatusPermintaanRad',   'ref-status-permintaan-rad'],
-        ['RefTemplateRad',           'ref-template-rad'],
-    ]],
     ['Donor', 'donor/', [
         ['HasilAnamnesis', 'hasil-anamnesis'],
         ['JenisBag', 'jenis-bag'],

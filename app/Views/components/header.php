@@ -889,17 +889,6 @@
                         ['Referensi Parameter Pemeriksaan', '/ref-parameter-pemeriksaan-lab', ''],
                         ['Referensi Status Permintaan', '/ref-status-permintaan', ''],
                     ]],
-                    ['Radiologi', '', 'x-ray', '/radiologi', $petugasrole, [
-                        // Permintaan & Hasil
-                        ['Permintaan Radiologi',          '/permintaan-rad',          ''],
-                        ['Hasil Radiologi',               '/hasil-rad',               ''],
-                        ['Hasil Radiologi BHP',           '/hasil-rad-bhp',           ''],
-                        ['Hasil Radiologi Tindakan',      '/hasil-rad-tindakan',      ''],
-                        // Referensi
-                        ['Referensi Item Radiologi',      '/ref-item-rad',            ''],
-                        ['Referensi Status Permintaan',   '/ref-status-permintaan-rad', ''],
-                        ['Referensi Template Radiologi',  '/ref-template-rad',        ''],
-                    ]],
                 ];
                 echo view('components/menu/menu', ['menu_list' => $menu_list]);
 
