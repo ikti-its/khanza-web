@@ -748,14 +748,6 @@
                         ['Telepon', '/telepon', ''],
                         ['Email', '/email', ''],
                     ]],
-                    ['Inventaris Darah', '', 'inventaris_darah', '/inventaris-darah', $petugasrole, [
-                        ['Pemisahan Komponen', '/pemisahan-komponen', ''],
-                        ['Pemisahan Komponen Detail', '/pemisahan-komponen-detail', ''],
-                        ['Stok Darah', '/stok-darah', ''],
-                        ['Status Stok', '/status-stok', ''],
-                        ['Sumber Darah', '/sumber-darah', ''],
-                        ['Tarif Komponen', '/tarif-komponen', '']
-                    ]],
                     ['Uji Darah', '', 'uji_darah', '/uji-darah', $petugasrole, [
                         ['Hasil Uji Saring', '/hasil-uji-saring', ''],
                         ['Metode Uji', '/metode-uji', '']

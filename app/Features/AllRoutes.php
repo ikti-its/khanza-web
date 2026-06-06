@@ -15,6 +15,7 @@ final class AllRoutes extends RouteGroup
                 \App\Features\InventoriNonMedis\InventoriNonMedisRoutes::class,
                 \App\Features\Darah\DarahRoutes::class,
                 \App\Features\Donor\DonorRoutes::class,
+                \App\Features\InventoriDarah\InventoriDarahRoutes::class,
                 \App\Features\DistribusiDarah\DistribusiDarahRoutes::class,
                 \App\Features\SkriningRawatJalan\SkriningRawatJalanRoutes::class,
                 \App\Features\Operasi\OperasiRoutes::class,
