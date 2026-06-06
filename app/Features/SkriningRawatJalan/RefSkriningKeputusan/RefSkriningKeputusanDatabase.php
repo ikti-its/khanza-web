@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\RawatJalan\SkriningRJ\RefSkriningKeputusan;
+namespace App\Features\SkriningRawatJalan\RefSkriningKeputusan;
 
 use App\Core\Database\Template\DatabaseTemplate;
 use App\Core\Database\Template\SemanticType as T;

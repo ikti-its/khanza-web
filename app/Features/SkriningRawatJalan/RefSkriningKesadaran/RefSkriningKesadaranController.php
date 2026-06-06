@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\RawatJalan\SkriningRJ\RefSkriningKesadaran;
+namespace App\Features\SkriningRawatJalan\RefSkriningKesadaran;
 
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;

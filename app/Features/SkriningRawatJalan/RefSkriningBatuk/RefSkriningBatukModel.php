@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\RawatJalan\SkriningRJ\RefSkriningBatuk;
+namespace App\Features\SkriningRawatJalan\RefSkriningBatuk;
 
 use App\Core\Model\ModelTemplate;
 use App\Core\Model\ValidationType as V;

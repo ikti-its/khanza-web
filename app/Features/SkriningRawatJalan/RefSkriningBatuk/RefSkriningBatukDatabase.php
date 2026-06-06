@@ -1,27 +1,27 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\RawatJalan\SkriningRJ\RefSkriningKesadaran;
+namespace App\Features\SkriningRawatJalan\RefSkriningBatuk;
 
 use App\Core\Database\Template\DatabaseTemplate;
 use App\Core\Database\Template\SemanticType as T;
 
-final class RefSkriningKesadaranDatabase extends DatabaseTemplate
+final class RefSkriningBatukDatabase extends DatabaseTemplate
 {
     public function __construct()
     {
         parent::__construct(
             'skrining_rj',
-            'ref_skrining_kesadaran',
+            'ref_skrining_batuk',
             [
-                'id_kesadaran' => T::ID(10),
-                'kesadaran'    => T::TEXT(),
+                'id_batuk'       => T::ID(5),
+                'kategori_batuk' => T::TEXT(),
             ],
-            'id_kesadaran',
+            'id_batuk',
             [],
             [],
             true,
-            'skrining_kesadaran.csv',
+            'skrining_batuk.csv',
         );
     }
 }

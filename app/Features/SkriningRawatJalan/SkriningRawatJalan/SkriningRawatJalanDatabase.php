@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\RawatJalan\SkriningRJ\SkriningRawatJalan;
+namespace App\Features\SkriningRawatJalan\SkriningRawatJalan;
 
 use App\Core\Database\Template\DatabaseTemplate;
 use App\Core\Database\Template\SemanticType as T;
@@ -38,32 +38,32 @@ final class SkriningRawatJalanDatabase extends DatabaseTemplate
                 ],
                 [
                     ['id_kesadaran'],
-                    \App\Features\RawatJalan\SkriningRJ\RefSkriningKesadaran\RefSkriningKesadaranDatabase::class,
+                    \App\Features\SkriningRawatJalan\RefSkriningKesadaran\RefSkriningKesadaranDatabase::class,
                     ['id_kesadaran'],
                 ],
                 [
                     ['id_pernafasan'],
-                    \App\Features\RawatJalan\SkriningRJ\RefSkriningPernafasan\RefSkriningPernafasanDatabase::class,
+                    \App\Features\SkriningRawatJalan\RefSkriningPernafasan\RefSkriningPernafasanDatabase::class,
                     ['id_pernafasan'],
                 ],
                 [
                     ['id_skala_nyeri'],
-                    \App\Features\RawatJalan\SkriningRJ\RefSkriningSkalaNyeri\RefSkriningSkalaNyeriDatabase::class,
+                    \App\Features\SkriningRawatJalan\RefSkriningSkalaNyeri\RefSkriningSkalaNyeriDatabase::class,
                     ['id_skala_nyeri'],
                 ],
                 [
                     ['id_nyeri_dada'],
-                    \App\Features\RawatJalan\SkriningRJ\RefSkriningNyeriDada\RefSkriningNyeriDadaDatabase::class,
+                    \App\Features\SkriningRawatJalan\RefSkriningNyeriDada\RefSkriningNyeriDadaDatabase::class,
                     ['id_nyeri_dada'],
                 ],
                 [
                     ['id_batuk'],
-                    \App\Features\RawatJalan\SkriningRJ\RefSkriningBatuk\RefSkriningBatukDatabase::class,
+                    \App\Features\SkriningRawatJalan\RefSkriningBatuk\RefSkriningBatukDatabase::class,
                     ['id_batuk'],
                 ],
                 [
                     ['id_keputusan'],
-                    \App\Features\RawatJalan\SkriningRJ\RefSkriningKeputusan\RefSkriningKeputusanDatabase::class,
+                    \App\Features\SkriningRawatJalan\RefSkriningKeputusan\RefSkriningKeputusanDatabase::class,
                     ['id_keputusan'],
                 ],
                 [
