@@ -41,13 +41,13 @@ class ControllerTemplate extends Controller
     protected array $row_alert = [];
 
     public function __construct(
-        ModelTemplate $model,
+        ?ModelTemplate $model = null,
         /** @var list<list<string>> */
-        array $breadcrumbs,
+        array $breadcrumbs = [],
         /** @var non-empty-string */
-        string $title,
+        string $title = '',
         /** @var  list<ActionType> */
-        array $actions,
+        array $actions = [],
         /** @var array<int, array{
          *  0: 0|1,
          *  1: 0|1,
@@ -55,7 +55,7 @@ class ControllerTemplate extends Controller
          *  3: string,
          *  4: string,
          * }> */
-        array $fields,
+        array $fields = [],
         
     ) {
         $this->model = $model;
