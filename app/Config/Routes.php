@@ -762,15 +762,7 @@ $features = [
         ['Telepon', 'telepon'],
         ['Email', 'email'],
     ]],
-    ['Lokasi', 'lokasi/', [
-        ['Negara', 'negara'],
-        ['Pulau', 'pulau'],
-        ['Provinsi', 'provinsi'],
-        ['Kota', 'kota'],
-        ['Kecamatan', 'kecamatan'],
-        ['Desa', 'desa'],
-        ['Alamat', 'alamat'],
-    ]],
+    
     ['Darah', 'darah/', [
         ['GolonganDarah', 'golongan-darah'],
         ['KomponenDarah', 'komponen-darah'],
@@ -1024,3 +1016,11 @@ $routes->group('error', ['namespace' => 'App\s'], function ($routes) {
 $routes->set404Override(function () {
     return \App\Core\Controller\ErrorController::renderErrorView(404);
 });
+
+
+//======================== Route Templates =====================================
+use App\Features\AllRoutes;
+
+$r = new AllRoutes();
+$r->create_routes($routes);
+

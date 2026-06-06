@@ -870,15 +870,6 @@
                         ['Telepon', '/telepon', ''],
                         ['Email', '/email', ''],
                     ]],
-                    ['Lokasi', '', 'lokasi', '/lokasi', $petugasrole, [
-                        ['Negara', '/negara', ''],
-                        ['Pulau', '/pulau', ''],
-                        ['Provinsi', '/provinsi', ''],
-                        ['Kota', '/kota', ''], 
-                        ['Kecamatan', '/kecamatan', ''],
-                        ['Desa', '/desa', ''],
-                        ['Alamat', '/alamat', ''],
-                    ]],
                     ['Darah', '', 'darah', '/darah', $petugasrole, [
                         ['Golongan Darah', '/golongan-darah', ''],
                         ['Komponen Darah', '/komponen-darah', ''],
@@ -961,6 +952,9 @@
                     ]],
                 ];
                 echo view('components/menu/menu', ['menu_list' => $menu_list]);
+
+                $new_menu_list = new \App\Features\AllRoutes()->create_header();
+                echo view('components/menu/menu', ['menu_list' => $new_menu_list]);
                 ?>
             </ul>
         </nav>

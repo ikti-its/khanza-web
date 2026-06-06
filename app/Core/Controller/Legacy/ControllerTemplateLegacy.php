@@ -12,7 +12,7 @@ use CodeIgniter\HTTP\RedirectResponse;
  */
 class ControllerTemplateLegacy extends Controller
 {
-    protected string $api_url;
+    protected $api_url;
 
     public function __construct(
         protected ModelTemplate|null $model = null,
@@ -102,7 +102,7 @@ class ControllerTemplateLegacy extends Controller
             'tabel'       => Audit::GetAuditData($this->nama_tabel)
         ]);
     }
-    public function tampilTambah(): string
+    public function tampilTambah()
     {
         $breadcrumbs = [
             ['title' => 'Tambah', 'icon', 'tambah']
@@ -116,7 +116,7 @@ class ControllerTemplateLegacy extends Controller
             'form_action' => '/submittambah/',
         ]);
     }
-    public function tampilUbah(int|string $id): string
+    public function tampilUbah($id)
     {
         $breadcrumbs = [
             ['title' => 'Ubah', 'icon', 'Ubah']
@@ -134,13 +134,13 @@ class ControllerTemplateLegacy extends Controller
             'form_action' => '/submitedit/' . $baris[$this->kolom_id],
         ]);
     }
-    public function simpanTambah(): RedirectResponse
+    public function simpanTambah()
     {
         $postData = $this->getPostData();
         $_response = CURL::call('POST', $this->api_path, $postData);
         return redirect()->to(base_url($this->modul_path))->with('success', 'Berhasil');    
     }
-    public function simpanUbah(int|string $id): RedirectResponse
+    public function simpanUbah($id)
     {
         $postData = $this->getPostData();
         $_response = CURL::call('PUT', $this->api_path . '/' . $id, $postData);
@@ -148,7 +148,7 @@ class ControllerTemplateLegacy extends Controller
         
     }
 
-    final public function hapusData(int|string $id): RedirectResponse
+    final public function hapusData($id)
     {
         $_response = CURL::call('DELETE', $this->api_path . '/' . $id);
         return redirect()->to(base_url($this->modul_path))->with('success', $this->judul . ' berhasil dihapus.');   
