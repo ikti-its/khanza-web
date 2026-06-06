@@ -1024,3 +1024,11 @@ $routes->group('error', ['namespace' => 'App\s'], function ($routes) {
 $routes->set404Override(function () {
     return \App\Core\Controller\ErrorController::renderErrorView(404);
 });
+
+
+//======================== Route Templates =====================================
+use App\Features\AllRoutes;
+
+$r = new AllRoutes();
+$r->create_routes($routes);
+
