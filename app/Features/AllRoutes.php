@@ -15,6 +15,7 @@ final class AllRoutes extends RouteGroup
                 \App\Features\InventoriNonMedis\InventoriNonMedisRoutes::class,
                 \App\Features\SkriningRawatJalan\SkriningRawatJalanRoutes::class,
                 \App\Features\Radiologi\RadiologiRoutes::class,
+                \App\Features\Laboratorium\LaboratoriumRoutes::class,
                 \App\Features\Lokasi\LokasiRoutes::class,
             ]
         );

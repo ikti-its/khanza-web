@@ -872,23 +872,6 @@
                         ['Kasus Reaktif', '/kasus-reaktif', ''],
                         ['Jenis Pencekalan', '/jenis-pencekalan', '']
                     ]],
-                    ['Laboratorium', '', 'laboratorium', '/laboratorium', $petugasrole, [
-                        // Permintaan Lab
-                        ['Permintaan Lab', '/permintaan-lab', ''],
-                        ['Permintaan Lab MB', '/permintaan-lab-mb', ''],
-                        ['Permintaan Lab PA', '/permintaan-lab-pa', ''],
-                        ['Permintaan Lab PK', '/permintaan-lab-pk', ''],
-                        // Hasil Lab
-                        ['Hasil Lab MB', '/hasil-lab-mb', ''],
-                        ['Hasil Lab PA', '/hasil-lab-pa', ''],
-                        ['Hasil Lab PK', '/hasil-lab-pk', ''],
-                        // Referensi
-                        ['Referensi Item Pemeriksaan', '/ref-item-pemeriksaan-lab', ''],
-                        ['Referensi Kategori Lab', '/ref-kategori-lab', ''],
-                        ['Referensi Kategori Usia', '/ref-kategori-usia-lab', ''],
-                        ['Referensi Parameter Pemeriksaan', '/ref-parameter-pemeriksaan-lab', ''],
-                        ['Referensi Status Permintaan', '/ref-status-permintaan', ''],
-                    ]],
                 ];
                 echo view('components/menu/menu', ['menu_list' => $menu_list]);
 
