@@ -176,7 +176,7 @@ final class PengambilanDarahController extends ControllerTemplate
             }
         }
 
-        if (empty($this->request->getPost('status_pengambilan'))) {
+        if (empty($this->request->getPost('id_status_pengambilan'))) {
             $dataPengambilan['id_status_pengambilan'] = null;
         }
 
@@ -405,5 +405,103 @@ final class PengambilanDarahController extends ControllerTemplate
             'saved_non_medis'   => $savedBhpNonMedis,
             'form_action'       => '/submitedit/' . $id,
         ]);
+    }
+
+    /**
+     * OVERRIDE: Mengeksekusi Simpan Perubahan Data Pengambilan Darah & Penggunaan BHP
+     */
+    #[\Override]
+    public function update(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->index();
+
+        $rawPost = $this->request->getPost();
+
+        $bhpMedisUpdate      = $this->request->getPost('id_medis_donor');
+        $hargaMedis          = $this->request->getPost('harga_medis');
+        $bhpPenunjangUpdate  = $this->request->getPost('id_penunjang_donor');
+        $hargaPenunjang      = $this->request->getPost('harga_penunjang');
+
+        $dataPengambilan = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataPengambilan[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+
+        if (empty($this->request->getPost('id_status_pengambilan'))) {
+            $dataPengambilan['id_status_pengambilan'] = null;
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $this->model->update($id, $dataPengambilan);
+
+            $modelMedisDonor = new \App\Features\LogistikUTD\MedisDonor\MedisDonorModel();
+
+            $modelMedisDonor->where('id_pengambilan_darah', $id)->delete();
+
+            if (!empty($bhpMedisUpdate) && is_array($bhpMedisUpdate)) {
+                foreach ($bhpMedisUpdate as $idBarang => $jumlah) {
+                    if ((int)$jumlah <= 0) continue;
+
+                    $modelMedisDonor->insert([
+                        'id_pengambilan_darah' => $id,
+                        'id_barang'            => $idBarang,
+                        'jumlah'               => (int)$jumlah,
+                        'harga'                => (float)($hargaMedis[$idBarang] ?? 0),
+                    ]);
+                }
+            }
+
+            $modelPenunjangDonor = new \App\Features\LogistikUTD\PenunjangDonor\PenunjangDonorModel();
+
+            $modelPenunjangDonor->where('id_pengambilan_darah', $id)->delete();
+
+            if (!empty($bhpPenunjangUpdate) && is_array($bhpPenunjangUpdate)) {
+                foreach ($bhpPenunjangUpdate as $idBarang => $jumlah) {
+                    if ((int)$jumlah <= 0) continue;
+
+                    $modelPenunjangDonor->insert([
+                        'id_pengambilan_darah' => $id,
+                        'id_barang'            => $idBarang,
+                        'jumlah'               => (int)$jumlah,
+                        'harga'                => (float)($hargaPenunjang[$idBarang] ?? 0),
+                    ]);
+                }
+            }
+
+            if (!empty($dataPengambilan['id_kunjungan']) && (int)($dataPengambilan['id_status_pengambilan'] ?? 0) === 1) {
+                $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
+                $kunjunganRow   = $modelKunjungan->find($dataPengambilan['id_kunjungan']);
+
+                if (!empty($kunjunganRow['id_pendonor'])) {
+                    $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+                    
+                    $modelPendonor->update($kunjunganRow['id_pendonor'], [
+                        'tanggal_donor_terakhir' => $dataPengambilan['tanggal_pengambilan'] ?? date('Y-m-d')
+                    ]);
+                }
+            }
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException("Gagal memperbarui data pengambilan darah dan logistik BHP.");
+            }
+
+            session()->setFlashdata('success', 'Data pengambilan darah dan penggunaan BHP berhasil diperbarui.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
+                ? $this->friendly_db_error($e) 
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 }
