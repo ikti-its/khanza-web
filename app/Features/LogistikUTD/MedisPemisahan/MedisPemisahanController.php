@@ -17,7 +17,7 @@ final class MedisPemisahanController extends ControllerTemplate
                 ['Logistik UTD',        'logistik_utd'],
                 ['BHP Medis Pemisahan', 'bhp_medis_pemisahan'],
             ],
-            'Penggunaan BHP Medis Pemisahan',
+            'BHP Medis Pemisahan',
             [
                 A::READ,
                 A::CREATE,

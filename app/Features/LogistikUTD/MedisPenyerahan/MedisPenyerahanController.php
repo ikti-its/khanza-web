@@ -17,7 +17,7 @@ final class MedisPenyerahanController extends ControllerTemplate
                 ['Logistik UTD',         'logistik_utd'],
                 ['BHP Medis Penyerahan', 'bhp_medis_penyerahan'],
             ],
-            'Penggunaan BHP Medis Penyerahan',
+            'BHP Medis Penyerahan',
             [
                 A::READ,
                 A::CREATE,

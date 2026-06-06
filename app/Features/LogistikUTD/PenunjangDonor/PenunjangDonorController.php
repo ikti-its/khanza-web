@@ -17,7 +17,7 @@ final class PenunjangDonorController extends ControllerTemplate
                 ['Logistik UTD',        'logistik_utd'],
                 ['BHP Non Medis Donor', 'bhp_non_medis_donor'],
             ],
-            'Penggunaan BHP Non Medis Donor',
+            'BHP Non Medis Donor',
             [
                 A::READ,
                 A::CREATE,

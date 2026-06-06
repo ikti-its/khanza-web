@@ -17,7 +17,7 @@ final class PenunjangPenyerahanController extends ControllerTemplate
                 ['Logistik UTD',             'logistik_utd'],
                 ['BHP Non Medis Penyerahan', 'bhp_non_medis_penyerahan'],
             ],
-            'Penggunaan BHP Non Medis Penyerahan',
+            'BHP Non Medis Penyerahan',
             [
                 A::READ,
                 A::CREATE,

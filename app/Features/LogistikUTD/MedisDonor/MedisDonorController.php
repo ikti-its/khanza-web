@@ -17,7 +17,7 @@ final class MedisDonorController extends ControllerTemplate
                 ['Logistik UTD',    'logistik_utd'],
                 ['BHP Medis Donor', 'bhp_medis_donor'],
             ],
-            'Penggunaan BHP Medis Donor',
+            'BHP Medis Donor',
             [
                 A::READ,
                 A::CREATE,
