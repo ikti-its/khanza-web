@@ -770,14 +770,6 @@
                         ['Hasil Uji Saring', '/hasil-uji-saring', ''],
                         ['Metode Uji', '/metode-uji', '']
                     ]],
-                    ['Pelayanan Darah', '', 'pelayanan_darah', '/pelayanan-darah', $petugasrole, [
-                        ['Permintaan Darah', '/permintaan-darah', ''],
-                        ['Permintaan Darah Detail', '/permintaan-darah-detail', ''],
-                        ['Penyerahan Darah', '/penyerahan-darah', ''],
-                        ['Penyerahan Darah Detail', '/penyerahan-darah-detail', ''],
-                        ['Status Permintaan', '/status-permintaan', ''],
-                        ['Status Pembayaran', '/status-pembayaran', '']
-                    ]],
                     ['Logistik UTD', '', 'logistik_utd', '/logistik-utd', $petugasrole, [
                         ['BHP Medis Donor', '/medis-donor', ''],
                         ['BHP Non Medis Donor', '/non-medis-donor', ''],

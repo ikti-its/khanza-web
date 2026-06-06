@@ -767,14 +767,6 @@ $features = [
         ['NilaiDiagnostik', 'nilai-diagnostik'],
         ['ParameterUji', 'parameter-uji']
     ]],
-    ['DistribusiDarah', 'pelayanan-darah/', [
-        ['PenyerahanDarah', 'penyerahan-darah'],
-        ['PenyerahanDarahDetail', 'penyerahan-darah-detail'],
-        ['PermintaanDarah', 'permintaan-darah'],
-        ['PermintaanDarahDetail', 'permintaan-darah-detail'],
-        ['StatusPembayaran', 'status-pembayaran'],
-        ['StatusPermintaan', 'status-permintaan'],
-    ]],
     ['PenangananDonor', 'penanganan-donor/', [
         ['FasyankesRujukan', 'fasyankes-rujukan'],
         ['JawabanKonseling', 'jawaban-konseling'],
