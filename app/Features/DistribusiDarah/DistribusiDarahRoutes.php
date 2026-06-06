@@ -12,12 +12,12 @@ final class DistribusiDarahRoutes extends RouteTemplate
         parent::__construct(
             'Pelayanan Darah',
             [
-                \App\Features\DistribusiDarah\PenyerahanDarah\PenyerahanDarahController::class,
-                \App\Features\DistribusiDarah\PenyerahanDarahDetail\PenyerahanDarahDetailController::class,
                 \App\Features\DistribusiDarah\PermintaanDarah\PermintaanDarahController::class,
                 \App\Features\DistribusiDarah\PermintaanDarahDetail\PermintaanDarahDetailController::class,
-                \App\Features\DistribusiDarah\StatusPembayaran\StatusPembayaranController::class,
+                \App\Features\DistribusiDarah\PenyerahanDarah\PenyerahanDarahController::class,
+                \App\Features\DistribusiDarah\PenyerahanDarahDetail\PenyerahanDarahDetailController::class,
                 \App\Features\DistribusiDarah\StatusPermintaan\StatusPermintaanController::class,
+                \App\Features\DistribusiDarah\StatusPembayaran\StatusPembayaranController::class,
             ],
             'pelayanan_darah.svg',
         );
