@@ -167,7 +167,7 @@
                 
                 <div class="w-full lg:w-1/4 flex gap-x-2">
                     <input type="text" id="nama_petugas" name="nama_petugas" readonly required
-                           value="<?= $baris['nama'] ?? '' ?>"
+                           value="<?= $baris['nama_petugas'] ?? '' ?>"
                            placeholder="Klik cari..."
                            onclick="open_modalPetugas()"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50">
@@ -257,6 +257,8 @@
     document.addEventListener("DOMContentLoaded", function() {
         populateBhpDropdown(masterMedis);
 
+        const currentEditId = "<?= $baris['id_pengambilan_darah'] ?? '' ?>";
+
         const kunjunganId = "<?= $baris['id_kunjungan'] ?? '' ?>";
         if (kunjunganId !== '') {
             const savedItem = {
@@ -267,6 +269,76 @@
             };
 
             autofillKunjungan(savedItem);
+        }
+
+        const petugasId = "<?= $baris['id_petugas'] ?? '' ?>";
+        if (petugasId !== '') {
+            const savedItem = {
+                id_petugas: petugasId,
+                nama: "<?= $baris['nama_petugas'] ?? '' ?>"
+            };
+
+            autofillPetugas(savedItem);
+        }
+
+        const savedMedisItems = <?= json_encode($saved_medis ?? []) ?>;
+        if (savedMedisItems.length > 0) {
+            const tbody = document.getElementById('bhpTableBody');
+            
+            savedMedisItems.forEach(item => {
+                if (String(item.id_pengambilan_darah) !== String(currentEditId)) {
+                    return;
+                }
+
+                const emptyRow = document.getElementById('emptyBhpRow');
+                if (emptyRow) emptyRow.remove();
+
+                const row = document.createElement('tr');
+                row.className = "border-b text-sm dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800/30";
+                row.innerHTML = `
+                    <td class="p-3 font-medium text-gray-900 dark:text-white">
+                        ${item.nama_barang}
+                        <input type="hidden" name="harga_medis[${item.id_barang}]" value="${item.harga}">
+                    </td>
+                    <td class="p-3 text-center">
+                        <input type="number" name="id_medis_donor[${item.id_barang}]" data-id="${item.id_barang}" data-type="medis" value="${item.jumlah}" min="1" class="w-16 text-center border border-gray-300 rounded p-1 dark:bg-slate-900 dark:text-white dark:border-gray-700">
+                    </td>
+                    <td class="p-3 text-center">
+                        <button type="button" onclick="removeBhpItem(this)" class="text-red-600 font-semibold hover:underline dark:text-red-400">Hapus</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        const savedNonMedisItems = <?= json_encode($saved_non_medis ?? []) ?>;
+        if (savedNonMedisItems.length > 0) {
+            const tbody = document.getElementById('bhpTableBody');
+
+            savedNonMedisItems.forEach(item => {
+                if (String(item.id_pengambilan_darah) !== String(currentEditId)) {
+                    return;
+                }
+
+                const emptyRow = document.getElementById('emptyBhpRow');
+                if (emptyRow) emptyRow.remove();
+
+                const row = document.createElement('tr');
+                row.className = "border-b text-sm dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800/30";
+                row.innerHTML = `
+                    <td class="p-3 font-medium text-gray-900 dark:text-white">
+                        ${item.nama_barang}
+                        <input type="hidden" name="harga_penunjang[${item.id_barang}]" value="${item.harga}">
+                    </td>
+                    <td class="p-3 text-center">
+                        <input type="number" name="id_penunjang_donor[${item.id_barang}]" data-id="${item.id_barang}" data-type="nonmedis" value="${item.jumlah}" min="1" class="w-16 text-center border border-gray-300 rounded p-1 dark:bg-slate-900 dark:text-white dark:border-gray-700">
+                    </td>
+                    <td class="p-3 text-center">
+                        <button type="button" onclick="removeBhpItem(this)" class="text-red-600 font-semibold hover:underline dark:text-red-400">Hapus</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
         }
     });
 

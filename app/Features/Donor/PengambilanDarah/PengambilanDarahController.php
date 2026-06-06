@@ -29,17 +29,17 @@ final class PengambilanDarahController extends ControllerTemplate
                 A::TEST,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_pengambilan_darah',  'ID Pengambilan Darah'],
-                [SHOW, REQUIRED, I::TEXT,   'nomor_pengambilan',     'Nomor Pengambilan'],
-                [HIDE, REQUIRED, I::INDEX,  'id_kunjungan',          'ID Kunjungan'],
-                [SHOW, REQUIRED, I::DATE,   'tanggal_pengambilan',   'Tanggal Pengambilan'],
+                [HIDE, OPTIONAL, I::INDEX,   'id_pengambilan_darah',  'ID Pengambilan Darah'],
+                [SHOW, REQUIRED, I::TEXT,    'nomor_pengambilan',     'Nomor Pengambilan'],
+                [SHOW, REQUIRED, I::INDEX,   'id_kunjungan',          'ID Kunjungan'],
+                [SHOW, REQUIRED, I::DATE,    'tanggal_pengambilan',   'Tanggal Pengambilan'],
                 [SHOW, REQUIRED, I::SELECT,  'id_shift',              'Shift'],
-                [SHOW, REQUIRED, I::TEXT,   'no_bag',                'Nomor Bag'],
-                [HIDE, REQUIRED, I::SELECT,  'id_jenis_bag',          'Jenis Bag'],
-                [HIDE, REQUIRED, I::SELECT,  'id_jenis_donor',        'Jenis Donor'],
-                [HIDE, REQUIRED, I::SELECT,  'id_lokasi_pengambilan', 'Lokasi Pengambilan'],
-                [HIDE, REQUIRED, I::SELECT,  'id_petugas',            'Petugas'],
-                [SHOW, OPTIONAL, I::SELECT, 'id_status_pengambilan', 'Status Pengambilan'],
+                [SHOW, REQUIRED, I::TEXT,    'no_bag',                'Nomor Bag'],
+                [SHOW, REQUIRED, I::SELECT,  'id_jenis_bag',          'Jenis Bag'],
+                [SHOW, REQUIRED, I::SELECT,  'id_jenis_donor',        'Jenis Donor'],
+                [SHOW, REQUIRED, I::SELECT,  'id_lokasi_pengambilan', 'Lokasi Pengambilan'],
+                [SHOW, REQUIRED, I::INDEX,   'id_petugas',            'ID Petugas'],
+                [SHOW, OPTIONAL, I::SELECT,  'id_status_pengambilan', 'Status Pengambilan'],
             ],
         );
     }
@@ -235,5 +235,175 @@ final class PengambilanDarahController extends ControllerTemplate
             session()->setFlashdata('error', $e->getMessage());
             return redirect()->to($this->get_uri_path() . '/data');
         }
+    }
+    
+    /**
+     * OVERRIDE: Menampilkan Halaman Ubah Data Pengambilan Darah & Penggunaan BHP
+     */
+    #[\Override]
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataPengambilan = $this->model->find($id);
+        if (!$dataPengambilan) {
+            $dataPengambilan = [];
+        }
+
+        $dataKunjungan = [];
+        $dataPendonor  = [];
+        $dataOrang     = [];
+        $dataPetugasMedis = [];
+
+        if (!empty($dataPengambilan['id_kunjungan'])) {
+            $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
+            $dataKunjungan  = $modelKunjungan->find($dataPengambilan['id_kunjungan']) ?? [];
+
+            if (!empty($dataKunjungan['id_pendonor'])) {
+                $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+                $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']) ?? [];
+
+                if (!empty($dataPendonor['id_orang'])) {
+                    $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                    $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                }
+            }
+        }
+
+        if (!empty($dataPengambilan['id_petugas'])) {
+            $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
+            $petugasRow   = $modelPetugas->find($dataPengambilan['id_petugas']) ?? [];
+
+            if (!empty($petugasRow['id_orang'])) {
+                $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
+                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+                
+                if (isset($orangPetugasRow['nama'])) {
+                    $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
+                }
+            }
+        }
+
+        $modelMedisDonor    = new \App\Features\LogistikUTD\MedisDonor\MedisDonorModel();
+        $modelPenunjangDonor = new \App\Features\LogistikUTD\PenunjangDonor\PenunjangDonorModel();
+
+        $savedBhpMedis = $modelMedisDonor->findAll();
+        $savedBhpNonMedis = $modelPenunjangDonor->findAll();
+
+        $modelMasterMedis = new \App\Features\InventoriMedis\DataBarang\DataBarangModel();
+        foreach ($savedBhpMedis as $k => $v) {
+            $masterItem = $modelMasterMedis->find($v['id_barang']);
+            $savedBhpMedis[$k]['nama_barang'] = $masterItem['nama'] ?? 'Barang Medis';
+        }
+
+        $modelMasterPenunjang = new \App\Features\InventoriNonMedis\Barang\BarangModel();
+        foreach ($savedBhpNonMedis as $k => $v) {
+            $masterItem = $modelMasterPenunjang->find($v['id_barang']);
+            $savedBhpNonMedis[$k]['nama_barang'] = $masterItem['nama_barang'] ?? 'Barang Penunjang';
+        }
+
+        $baris = array_merge($dataOrang, $dataPendonor, $dataKunjungan, $dataPetugasMedis, $dataPengambilan);
+
+        $controllerKunjungan = new \App\Features\Donor\Kunjungan\KunjunganController();
+        $controllerPendonor  = new \App\Features\Role\Pendonor\PendonorController();
+        $controllerOrang     = new \App\Features\Person\Orang\OrangController();
+
+        $konfigPengambilan = $this->get_fields_with_options(false, true);
+        $konfigKunjungan   = $controllerKunjungan->get_fields_with_options(false, true);
+        $konfigPendonor    = $controllerPendonor->get_fields_with_options(false, true);
+        $konfigOrang       = $controllerOrang->get_fields_with_options(false, true);
+
+        $modelBhpMedis    = new \App\Features\LogistikUTD\PengambilanMedis\PengambilanMedisModel();
+        $modelBhpNonMedis = new \App\Features\LogistikUTD\PengambilanPenunjang\PengambilanPenunjangModel();
+
+        $rawMedis    = $modelBhpMedis->get_katalog_dan_stok_ruangan();
+        $rawPenunjang = $modelBhpNonMedis->get_katalog_dan_stok_ruangan();
+
+        $masterBhpMedis = [];
+        foreach ($rawMedis as $row) {
+            $sisaStok = (int)$row['total_masuk'] - (int)$row['total_terpakai_donor'] - (int)$row['total_terpakai_pemisahan'] - (int)$row['total_terpakai_penyerahan'] - (int)$row['total_rusak'];
+            if ((int)$row['total_masuk'] > 0) {
+                $masterBhpMedis[] = [
+                    'id_barang'   => $row['id_barang'],
+                    'nama_barang' => $row['nama_barang'],
+                    'harga'       => $row['harga'],
+                    'stok'        => $sisaStok
+                ];
+            }
+        }
+
+        $masterBhpNonMedis = [];
+        foreach ($rawPenunjang as $row) {
+            $sisaStokNon = (int)$row['total_masuk'] - (int)$row['total_terpakai_donor'] - (int)$row['total_terpakai_pemisahan'] - (int)$row['total_terpakai_penyerahan'] - (int)$row['total_rusak'];
+            if ((int)$row['total_masuk'] > 0) {
+                $masterBhpNonMedis[] = [
+                    'id_barang'   => $row['id_barang'],
+                    'nama_barang' => $row['nama_barang'],
+                    'harga'       => $row['harga'],
+                    'stok'        => $sisaStokNon
+                ];
+            }
+        }
+
+        $konfigGabungan = [];
+
+        foreach ($konfigPengambilan as $fieldPengambilan) {
+            $columnPengambilan = $fieldPengambilan[2];
+
+            if ($columnPengambilan === 'id_pengambilan_darah') {
+                continue;
+            }
+
+            if ($columnPengambilan === 'id_kunjungan') {
+                foreach ($konfigKunjungan as $fieldKunjungan) {
+                    if ($fieldKunjungan[2] === 'nomor_kunjungan') {
+                        $konfigGabungan[] = $fieldKunjungan;
+                        break;
+                    }
+                }
+
+                foreach ($konfigPendonor as $fieldPendonor) {
+                    if ($fieldPendonor[2] === 'nomor_pendonor') {
+                        $konfigGabungan[] = $fieldPendonor;
+                        break;
+                    }
+                }
+
+                foreach ($konfigOrang as $fieldOrang) {
+                    if ($fieldOrang[2] === 'nama') {
+                        $konfigGabungan[] = $fieldOrang;
+                        break;
+                    }
+                }
+                continue;
+            }
+
+            $konfigGabungan[] = $fieldPengambilan;
+        }
+
+        foreach ($konfigGabungan as $field) {
+            $namaKolom = $field[2];
+            if (($baris[$namaKolom] ?? null) === null) {
+                $baris[$namaKolom] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Ubah', 'icon' => 'Ubah']
+        ];
+
+        return view('/admin/donor/tambah_pengambilandarah', [
+            'judul'             => 'Ubah ' . $this->title,
+            'breadcrumbs'       => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'        => $this->get_uri_path(),
+            'kolom_id'          => $this->model->primaryKey,
+            'konfig'            => $konfigGabungan,
+            'baris'             => $baris,
+            'bhp_medis_options' => $masterBhpMedis,
+            'bhp_non_options'   => $masterBhpNonMedis,
+            'saved_medis'       => $savedBhpMedis,
+            'saved_non_medis'   => $savedBhpNonMedis,
+            'form_action'       => '/submitedit/' . $id,
+        ]);
     }
 }
