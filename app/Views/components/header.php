@@ -748,18 +748,6 @@
                         ['Telepon', '/telepon', ''],
                         ['Email', '/email', ''],
                     ]],
-                    ['Logistik UTD', '', 'logistik_utd', '/logistik-utd', $petugasrole, [
-                        ['BHP Medis Donor', '/medis-donor', ''],
-                        ['BHP Non Medis Donor', '/non-medis-donor', ''],
-                        ['BHP Medis Pemisahan', '/medis-pemisahan', ''],
-                        ['BHP Non Medis Pemisahan', '/non-medis-pemisahan', ''],
-                        ['BHP Medis Penyerahan', '/medis-penyerahan', ''],
-                        ['BHP Non Medis Penyerahan', '/non-medis-penyerahan', ''],
-                        ['BHP Medis Rusak', '/medis-rusak', ''],
-                        ['BHP Non Medis Rusak', '/non-medis-rusak', ''],
-                        ['Pengambilan BHP Medis', '/pengambilan-medis', ''],
-                        ['Pengambilan BHP Non Medis', '/pengambilan-non-medis', '']
-                    ]],
                     ['Penanganan Donor', '', 'penanganan_donor', '/penanganan-donor', $petugasrole, [
                         ['Pencekalan', '/pencekalan', ''],
                         ['Kasus Reaktif', '/kasus-reaktif', ''],

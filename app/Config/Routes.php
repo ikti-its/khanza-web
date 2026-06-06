@@ -769,18 +769,6 @@ $features = [
         ['TriasePemeriksaan', 'triase-pemeriksaan'],
         ['TriaseSkala', 'triase-skala'],
     ]],
-    ['LogistikUTD', 'logistik-utd/', [
-        ['MedisDonor', 'medis-donor'],
-        ['MedisPemisahan', 'medis-pemisahan'],
-        ['MedisPenyerahan', 'medis-penyerahan'],
-        ['MedisRusak', 'medis-rusak'],
-        ['PengambilanMedis', 'pengambilan-medis'],
-        ['PengambilanPenunjang', 'pengambilan-non-medis'],
-        ['PenunjangDonor', 'non-medis-donor'],
-        ['PenunjangPemisahan', 'non-medis-pemisahan'],
-        ['PenunjangPenyerahan', 'non-medis-penyerahan'],
-        ['PenunjangRusak', 'non-medis-rusak'],
-    ]],
     ['PemusnahanDarah', 'pemusnahan-darah/', [
         ['AlasanPemusnahan', 'alasan-pemusnahan'],
         ['Pemusnahan', 'pemusnahan'],
