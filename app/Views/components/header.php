@@ -663,14 +663,6 @@
                                         tidak memiliki icon seluruhnya supaya tampilan terlihat rapi
                         */
                     // ['Data Penggajian', '', 'data_penggajian', '/data-penggajian', $petugasrole, [
-                    ['Finansial', '', 'finansial', '/finansial', $petugasrole, [
-                        ['Bank', '/bank', ''],
-                        ['Pemilik', '/pemilik-bank', ''],
-                        ['Prinsip', '/prinsip-bank', ''],
-                        ['Metode Pembayaran', '/metode-pembayaran', ''],
-                        ['Rekening', '/rekening', ''],
-                        ['Transaksi', '/transaksi', ''],
-                    ]],
                     // ]],
                     ['Inventaris Medis', '', 'inventaris_medis', '',  $petugasrole, [
                         ['Data', '/datamedis', ''],

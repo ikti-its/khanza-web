@@ -11,6 +11,7 @@ final class AllRoutes extends RouteGroup
         parent::__construct(
             [
                 \App\Features\AturanPenggajian\AturanPenggajianRoutes::class,
+                \App\Features\Finansial\FinansialRoutes::class,
                 \App\Features\Lokasi\LokasiRoutes::class,
             ]
         );
