@@ -961,6 +961,9 @@
                     ]],
                 ];
                 echo view('components/menu/menu', ['menu_list' => $menu_list]);
+
+                $new_menu_list = new \App\Features\AllRoutes()->create_header();
+                echo view('components/menu/menu', ['menu_list' => $new_menu_list]);
                 ?>
             </ul>
         </nav>

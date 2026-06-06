@@ -46,7 +46,7 @@ class RouteGroup
 
     final public function create_routes(RouteCollection &$routes): void {
         $filter = ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'];
-        $all_routes = $this->get_controler_classes();;
+        $all_routes = $this->get_controler_classes();
         foreach ($all_routes as $group => $features) {
             $group_path = self::create_path_from_name($group);
 
@@ -69,5 +69,45 @@ class RouteGroup
                 });
             }
         }
+    }
+
+    private function get_icons(): array {
+        /** @var array<string, string> */
+        $all_icons = [];
+        foreach($this->routes as $route){
+            $r = new $route();
+            $all_icons[$r->feature_group] = $r->icon;
+        }
+        return $all_icons;
+    }
+    final public function create_header()
+    {
+        $persetujuanrole   = [1337, 1, 2, 4001, 5001];
+        $petugasrole       = [1337, 1, 2, 4001, 5001];
+        $petugasdokterrole = [1337, 1, 2, 3, 4001, 5001];
+        $dokterrole        = [1337, 1, 3, 4001, 5001];
+        $loginadmin        = [1337, 1];
+        $loginpetugas      = 2;
+        $logindokter       = 3;
+
+        $all_routes = $this->get_controler_classes();
+        $all_icons  = $this->get_icons();
+        $all_header = [];
+
+        foreach ($all_routes as $group => $features) {
+            $group_path = self::create_path_from_name($group);
+            $icon = $all_icons[$group];
+            $header = [$group, '', $icon, '/' . $group_path, $petugasrole];
+
+            foreach ($features as $f) {
+                $title = new $f()->title;
+                $feature_path = self::create_path_from_name($title);;
+
+                $header[5][] = [$title, '/' . $feature_path, ''];
+            }
+            $all_header[] = $header;
+        }
+
+        return $all_header;
     }
 }
