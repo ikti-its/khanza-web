@@ -10,6 +10,7 @@ final class AllRoutes extends RouteGroup
     public function __construct(){
         parent::__construct(
             [
+                \App\Features\AturanPenggajian\AturanPenggajianRoutes::class,
                 \App\Features\Lokasi\LokasiRoutes::class,
             ]
         );

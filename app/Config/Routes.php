@@ -717,19 +717,6 @@ foreach ($fiturs as $fitur) {
 // Abaikan kode di atas baris ini. Isi routing di bawah ini 
 // Features Routes
 $features = [
-    ['AturanPenggajian', 'aturan-penggajian/', [
-        ['Golongan', 'golongan'],
-        ['Jabatan', 'jabatan'],
-        ['UpahMinimumProvinsi', 'ump'],
-        ['UpahMinimumKotakab', 'umk'],
-        ['Lembur', 'lembur'],
-        ['BPJS', 'bpjs'],
-        ['PenghasilanTidakKenaPajak', 'ptkp'],
-        ['PajakPenghasilan', 'pph21'],
-        ['TunjanganHariRaya', 'thr'],
-        ['Pesangon', 'pesangon'],
-        ['UangPenghargaanMasaKerja', 'upmk']
-    ]],
     ['Finansial', 'finansial/', [
         ['Bank', 'bank'],
         ['PemilikBank', 'pemilik-bank'],

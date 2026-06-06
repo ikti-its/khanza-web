@@ -662,19 +662,6 @@
                                         Pada 1 menu, DISARANKAN submenu memiliki icon seluruhnya atau 
                                         tidak memiliki icon seluruhnya supaya tampilan terlihat rapi
                         */
-                    ['Aturan Penggajian', '', 'aturan_penggajian', '/aturan-penggajian', $petugasrole, [
-                        ['Golongan Pegawai', '/golongan', ''],
-                        ['Jabatan Pegawai', '/jabatan', ''],
-                        ['Upah Minimum Provinsi', '/ump', ''],
-                        ['Upah Minimum Kota/Kabupaten', '/umk', ''],
-                        ['Jaminan Sosial', '/bpjs', ''],
-                        ['Uang Lembur', '/lembur', ''],
-                        ['Pajak Penghasilan', '/pph21', ''],
-                        ['Penghasilan Tidak Kena Pajak', '/ptkp', ''],
-                        ['Tunjangan Hari Raya', '/thr', ''],
-                        ['Uang Pesangon', '/pesangon', ''],
-                        ['Uang Penghargaan Masa Kerja', '/upmk', ''],
-                    ]],
                     // ['Data Penggajian', '', 'data_penggajian', '/data-penggajian', $petugasrole, [
                     ['Finansial', '', 'finansial', '/finansial', $petugasrole, [
                         ['Bank', '/bank', ''],
