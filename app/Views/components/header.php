@@ -736,12 +736,6 @@
                         ['Pernikahan', '/pernikahan', ''],
                         ['Jenis Kelamin', '/jenis-kelamin', ''],
                     ]],
-                    ['Role', '', 'role', '/role', $petugasrole, [
-                        ['Pasien', '/pasien', ''],
-                        ['Pendonor', '/pendonor', ''],
-                        ['Dokter', '/dokter', ''],
-                        ['Petugas', '/petugas', '']
-                    ]],
                     ['Kontak', '', 'kontak', '/kontak', $petugasrole, [
                         ['Jenis Telepon', '/jenis-telepon', ''],
                         ['Provider', '/provider', ''],
