@@ -741,12 +741,6 @@ $features = [
         ['Telepon', 'telepon'],
         ['Email', 'email'],
     ]],
-    
-    ['Darah', 'darah/', [
-        ['GolonganDarah', 'golongan-darah'],
-        ['KomponenDarah', 'komponen-darah'],
-        ['Rhesus', 'rhesus'],
-    ]],
     ['Donor', 'donor/', [
         ['HasilAnamnesis', 'hasil-anamnesis'],
         ['JenisBag', 'jenis-bag'],

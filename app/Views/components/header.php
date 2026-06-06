@@ -748,11 +748,6 @@
                         ['Telepon', '/telepon', ''],
                         ['Email', '/email', ''],
                     ]],
-                    ['Darah', '', 'darah', '/darah', $petugasrole, [
-                        ['Golongan Darah', '/golongan-darah', ''],
-                        ['Komponen Darah', '/komponen-darah', ''],
-                        ['Rhesus', '/rhesus', '']
-                    ]],
                     ['Donor', '', 'donor', '/donor', $petugasrole, [
                         ['Kunjungan', '/kunjungan', ''],
                         ['Skrining Donor', '/skrining-donor', ''],
