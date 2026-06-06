@@ -124,11 +124,11 @@
                 nama: "<?= $baris['nama'] ?? '' ?>"
             };
             
-            autofillFields(savedItem);
+            autofillKunjungan(savedItem);
         }
     });
     
-    function autofillFields(item) {
+    function autofillKunjungan(item) {
         document.getElementById('id_kunjungan').value = item.id_kunjungan;
         document.getElementById('nomor_kunjungan').value = item.nomor_kunjungan;
         document.getElementById('nomor_pendonor').value = item.nomor_pendonor;
