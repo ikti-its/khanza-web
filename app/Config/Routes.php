@@ -741,18 +741,6 @@ $features = [
         ['Telepon', 'telepon'],
         ['Email', 'email'],
     ]],
-    ['PenangananDonor', 'penanganan-donor/', [
-        ['FasyankesRujukan', 'fasyankes-rujukan'],
-        ['JawabanKonseling', 'jawaban-konseling'],
-        ['JenisPencekalan', 'jenis-pencekalan'],
-        ['KasusReaktif', 'kasus-reaktif'],
-        ['Konseling', 'konseling'],
-        ['Pencekalan', 'pencekalan'],
-        ['PertanyaanKonseling', 'pertanyaan-konseling'],
-        ['PilihanJawaban', 'pilihan-jawaban'],
-        ['Rujukan', 'rujukan'],
-        ['StatusKasus', 'status-kasus']
-    ]],
     ['TriaseUGD', 'triase-ugd/', [
         ['AlasanKedatangan', 'alasan-kedatangan'],
         ['AlatTransportasi', 'alat-transportasi'],

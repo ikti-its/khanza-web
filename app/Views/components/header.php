@@ -748,11 +748,6 @@
                         ['Telepon', '/telepon', ''],
                         ['Email', '/email', ''],
                     ]],
-                    ['Penanganan Donor', '', 'penanganan_donor', '/penanganan-donor', $petugasrole, [
-                        ['Pencekalan', '/pencekalan', ''],
-                        ['Kasus Reaktif', '/kasus-reaktif', ''],
-                        ['Jenis Pencekalan', '/jenis-pencekalan', '']
-                    ]],
                 ];
                 echo view('components/menu/menu', ['menu_list' => $menu_list]);
 

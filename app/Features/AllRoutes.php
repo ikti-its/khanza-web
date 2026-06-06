@@ -19,6 +19,7 @@ final class AllRoutes extends RouteGroup
                 \App\Features\UjiDarah\UjiDarahRoutes::class,
                 \App\Features\DistribusiDarah\DistribusiDarahRoutes::class,
                 \App\Features\LogistikUTD\LogistikUTDRoutes::class,
+                \App\Features\PenangananDonor\PenangananDonorRoutes::class,
                 \App\Features\SkriningRawatJalan\SkriningRawatJalanRoutes::class,
                 \App\Features\Operasi\OperasiRoutes::class,
                 \App\Features\Radiologi\RadiologiRoutes::class,
