@@ -38,8 +38,6 @@ final class PermintaanLabMbDatabase extends DatabaseTemplate
                     ['id_parameter'],
                 ],
             ],
-            false,
-            'permintaan_lab_mb.csv',
         );
     }
 }

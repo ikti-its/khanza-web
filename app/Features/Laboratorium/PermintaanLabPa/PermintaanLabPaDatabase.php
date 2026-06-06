@@ -40,8 +40,6 @@ final class PermintaanLabPaDatabase extends DatabaseTemplate
                     ['id_item_lab'],
                 ],
             ],
-            false,
-            'permintaan_lab_pa.csv',
         );
     }
 }

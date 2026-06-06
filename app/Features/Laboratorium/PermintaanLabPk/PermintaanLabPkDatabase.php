@@ -38,8 +38,6 @@ final class PermintaanLabPkDatabase extends DatabaseTemplate
                     ['id_parameter'],
                 ],
             ],
-            false,
-            'permintaan_lab_pk.csv',
         );
     }
 }

@@ -62,8 +62,6 @@ final class HasilLabPaDatabase extends DatabaseTemplate
                     ['id_item_lab'],
                 ],
             ],
-            false,
-            'hasil_lab_pa.csv',
         );
     }
 }

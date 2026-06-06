@@ -65,8 +65,6 @@ final class HasilLabMbDatabase extends DatabaseTemplate
                     ['id_parameter'],
                 ],
             ],
-            false,
-            'hasil_lab_mb.csv',
         );
     }
 }

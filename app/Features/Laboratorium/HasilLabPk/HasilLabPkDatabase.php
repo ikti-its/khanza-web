@@ -71,8 +71,6 @@ final class HasilLabPkDatabase extends DatabaseTemplate
                     ['id_parameter'],
                 ],
             ],
-            false,
-            'hasil_lab_pk.csv',
         );
     }
 }

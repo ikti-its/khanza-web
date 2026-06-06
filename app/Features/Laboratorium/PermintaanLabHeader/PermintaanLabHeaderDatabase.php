@@ -48,8 +48,6 @@ final class PermintaanLabHeaderDatabase extends DatabaseTemplate
                     ['id_status'],
                 ],
             ],
-            false,
-            'permintaan_lab_header.csv',
         );
     }
 }
