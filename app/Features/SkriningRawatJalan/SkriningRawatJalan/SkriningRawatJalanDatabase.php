@@ -11,7 +11,7 @@ final class SkriningRawatJalanDatabase extends DatabaseTemplate
     public function __construct()
     {
         parent::__construct(
-            'skrining_rj',
+            'skrining_rawat_jalan',
             'skrining_rawat_jalan',
             [
                 'id_skrining'      => T::ID(100_000_000),

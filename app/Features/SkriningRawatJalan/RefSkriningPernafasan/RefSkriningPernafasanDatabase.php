@@ -11,7 +11,7 @@ final class RefSkriningPernafasanDatabase extends DatabaseTemplate
     public function __construct()
     {
         parent::__construct(
-            'skrining_rj',
+            'skrining_rawat_jalan',
             'ref_skrining_pernafasan',
             [
                 'id_pernafasan' => T::ID(10),
