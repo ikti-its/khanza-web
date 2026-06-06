@@ -748,10 +748,6 @@
                         ['Telepon', '/telepon', ''],
                         ['Email', '/email', ''],
                     ]],
-                    ['Uji Darah', '', 'uji_darah', '/uji-darah', $petugasrole, [
-                        ['Hasil Uji Saring', '/hasil-uji-saring', ''],
-                        ['Metode Uji', '/metode-uji', '']
-                    ]],
                     ['Logistik UTD', '', 'logistik_utd', '/logistik-utd', $petugasrole, [
                         ['BHP Medis Donor', '/medis-donor', ''],
                         ['BHP Non Medis Donor', '/non-medis-donor', ''],
