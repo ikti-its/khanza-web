@@ -14,7 +14,7 @@ final class RefSkriningKeputusanController extends ControllerTemplate
         parent::__construct(
             new RefSkriningKeputusanModel(),
             [
-                ['Rawat Jalan',                  'rawat_jalan'],
+                ['Skrining Rawat Jalan',         'skrining_rawat_jalan'],
                 ['Referensi Skrining Keputusan', 'ref_skrining_keputusan'],
             ],
             'Referensi Skrining Keputusan',

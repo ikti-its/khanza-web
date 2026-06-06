@@ -14,7 +14,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
         parent::__construct(
             new SkriningRawatJalanModel(),
             [
-                ['Rawat Jalan',          'rawat_jalan'],
+                ['Skrining Rawat Jalan', 'skrining_rawat_jalan'],
                 ['Skrining Rawat Jalan', 'skrining_rawat_jalan'],
             ],
             'Skrining Rawat Jalan',
