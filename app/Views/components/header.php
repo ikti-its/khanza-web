@@ -870,15 +870,6 @@
                         ['Telepon', '/telepon', ''],
                         ['Email', '/email', ''],
                     ]],
-                    ['Lokasi', '', 'lokasi', '/lokasi', $petugasrole, [
-                        ['Negara', '/negara', ''],
-                        ['Pulau', '/pulau', ''],
-                        ['Provinsi', '/provinsi', ''],
-                        ['Kota', '/kota', ''], 
-                        ['Kecamatan', '/kecamatan', ''],
-                        ['Desa', '/desa', ''],
-                        ['Alamat', '/alamat', ''],
-                    ]],
                     ['Darah', '', 'darah', '/darah', $petugasrole, [
                         ['Golongan Darah', '/golongan-darah', ''],
                         ['Komponen Darah', '/komponen-darah', ''],
