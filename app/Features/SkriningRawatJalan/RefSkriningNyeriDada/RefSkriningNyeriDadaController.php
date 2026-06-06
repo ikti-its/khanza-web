@@ -14,7 +14,7 @@ final class RefSkriningNyeriDadaController extends ControllerTemplate
         parent::__construct(
             new RefSkriningNyeriDadaModel(),
             [
-                ['Rawat Jalan',                   'rawat_jalan'],
+                ['Skrining Rawat Jalan',          'skrining_rawat_jalan'],
                 ['Referensi Skrining Nyeri Dada', 'ref_skrining_nyeri_dada'],
             ],
             'Referensi Skrining Nyeri Dada',
