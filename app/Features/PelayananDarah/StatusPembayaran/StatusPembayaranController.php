@@ -1,23 +1,23 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\DistribusiDarah\StatusPermintaan;
+namespace App\Features\PelayananDarah\StatusPembayaran;
 
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 
-final class StatusPermintaanController extends ControllerTemplate
+final class StatusPembayaranController extends ControllerTemplate
 {
     public function __construct()
     {
         parent::__construct(
-            new StatusPermintaanModel(),
+            new StatusPembayaranModel(),
             [
                 ['Pelayanan Darah',   'pelayanan_darah'],
-                ['Status Permintaan', 'status_permintaan'],
+                ['Status Pembayaran', 'status_pembayaran'],
             ],
-            'Status Permintaan',
+            'Status Pembayaran',
             [
                 A::READ,
                 // A::CREATE,
@@ -26,8 +26,8 @@ final class StatusPermintaanController extends ControllerTemplate
                 // A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_status_permintaan',   'ID Status Permintaan'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_status_permintaan', 'Nama Status Permintaan'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_status_pembayaran',   'ID Status Pembayaran'],
+                [SHOW, REQUIRED, I::TEXT,  'nama_status_pembayaran', 'Nama Status Pembayaran'],
             ],
         );
     }

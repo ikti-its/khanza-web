@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\DistribusiDarah\StatusPermintaan;
+namespace App\Features\PelayananDarah\StatusPermintaan;
 
 use App\Core\Model\ModelTemplate;
 use App\Core\Model\ValidationType as V;

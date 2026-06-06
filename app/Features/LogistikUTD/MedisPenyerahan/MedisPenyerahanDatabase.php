@@ -25,7 +25,7 @@ final class MedisPenyerahanDatabase extends DatabaseTemplate
             [
                 [
                     'id_penyerahan',
-                    \App\Features\DistribusiDarah\PenyerahanDarah\PenyerahanDarahDatabase::class,
+                    \App\Features\PelayananDarah\PenyerahanDarah\PenyerahanDarahDatabase::class,
                     'id_penyerahan',
                 ],
                 [

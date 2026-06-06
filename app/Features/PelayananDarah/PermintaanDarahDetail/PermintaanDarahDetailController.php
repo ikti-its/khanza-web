@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\DistribusiDarah\PermintaanDarahDetail;
+namespace App\Features\PelayananDarah\PermintaanDarahDetail;
 
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;

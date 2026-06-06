@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\DistribusiDarah\PermintaanDarahDetail;
+namespace App\Features\PelayananDarah\PermintaanDarahDetail;
 
 use App\Core\Database\Template\DatabaseTemplate;
 use App\Core\Database\Template\SemanticType as T;
@@ -11,7 +11,7 @@ final class PermintaanDarahDetailDatabase extends DatabaseTemplate
     public function __construct()
     {
         parent::__construct(
-            'distribusi_darah',
+            'pelayanan_darah',
             'permintaan_darah_detail',
             [
                 'id_permintaan_detail' => T::ID(100_000_000),
@@ -28,7 +28,7 @@ final class PermintaanDarahDetailDatabase extends DatabaseTemplate
             [
                 [
                     'id_permintaan',
-                    \App\Features\DistribusiDarah\PermintaanDarah\PermintaanDarahDatabase::class,
+                    \App\Features\PelayananDarah\PermintaanDarah\PermintaanDarahDatabase::class,
                     'id_permintaan',
                 ],
                 [
