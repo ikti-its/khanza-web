@@ -14,8 +14,6 @@ final class PengajuanBarangDetailModel extends ModelTemplate
             new PengajuanBarangDetailDatabase(),
             [
                 'id_detail'        => V::DEFAULT(),
-                'id_pengajuan'     => V::DEFAULT(),
-                'id_barang'        => V::DEFAULT(),
                 'nama_barang_baru' => V::DEFAULT(),
                 'qty'              => V::DEFAULT(),
                 'harga_estimasi'   => V::DEFAULT(),

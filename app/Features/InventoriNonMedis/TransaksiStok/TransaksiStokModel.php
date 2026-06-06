@@ -14,13 +14,8 @@ final class TransaksiStokModel extends ModelTemplate
             new TransaksiStokDatabase(),
             [
                 'id_transaksi'           => V::DEFAULT(),
-                'id_barang'              => V::DEFAULT(),
-                'id_tipe_transaksi_stok' => V::DEFAULT(),
                 'qty'                    => V::DEFAULT(),
                 'tanggal'                => V::DEFAULT(),
-                'id_penerimaan'          => V::DEFAULT(),
-                'id_permintaan'          => V::DEFAULT(),
-                'id_opname'              => V::DEFAULT(),
                 'catatan'                => V::DEFAULT(),
             ],
             [

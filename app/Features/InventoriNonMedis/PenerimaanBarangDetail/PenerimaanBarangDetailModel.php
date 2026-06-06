@@ -14,8 +14,6 @@ final class PenerimaanBarangDetailModel extends ModelTemplate
             new PenerimaanBarangDetailDatabase(),
             [
                 'id_detail'     => V::DEFAULT(),
-                'id_penerimaan' => V::DEFAULT(),
-                'id_barang'     => V::DEFAULT(),
                 'qty_diterima'  => V::DEFAULT(),
                 'harga_satuan'  => V::DEFAULT(),
             ],

@@ -14,10 +14,7 @@ final class PengadaanBarangModel extends ModelTemplate
             new PengadaanBarangDatabase(),
             [
                 'id_pengadaan'               => V::DEFAULT(),
-                'id_pengajuan'               => V::DEFAULT(),
-                'id_suplier'                 => V::DEFAULT(),
                 'tanggal'                    => V::DEFAULT(),
-                'id_status_pengadaan_barang' => V::DEFAULT(),
                 'catatan'                    => V::DEFAULT(),
             ],
             [

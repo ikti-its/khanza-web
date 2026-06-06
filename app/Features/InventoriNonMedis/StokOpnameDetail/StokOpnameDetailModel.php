@@ -14,8 +14,6 @@ final class StokOpnameDetailModel extends ModelTemplate
             new StokOpnameDetailDatabase(),
             [
                 'id_detail'   => V::DEFAULT(),
-                'id_opname'   => V::DEFAULT(),
-                'id_barang'   => V::DEFAULT(),
                 'stok_sistem' => V::DEFAULT(),
                 'stok_fisik'  => V::DEFAULT(),
                 'selisih'     => V::DEFAULT(),

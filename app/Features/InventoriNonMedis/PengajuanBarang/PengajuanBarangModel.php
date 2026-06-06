@@ -14,9 +14,7 @@ final class PengajuanBarangModel extends ModelTemplate
             new PengajuanBarangDatabase(),
             [
                 'id_pengajuan'               => V::DEFAULT(),
-                'id_permintaan'              => V::DEFAULT(),
                 'tanggal'                    => V::DEFAULT(),
-                'id_status_pengajuan_barang' => V::DEFAULT(),
                 'catatan'                    => V::DEFAULT(),
                 'catatan_atasan'             => V::DEFAULT(),
             ],
