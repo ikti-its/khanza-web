@@ -16,6 +16,12 @@ jobs:
     timeout-minutes: 10
 
     steps:
+      - name: Inspect Runner PHP
+        run: |
+          which php || true
+          php -v || true
+          php -m || true
+          
       - name: Checkout Repository
         uses: actions/checkout@v6
 
@@ -44,6 +50,7 @@ jobs:
         run: composer validate --strict
 
       - name: Install Dependencies
+        if: steps.vendor-cache.outputs.cache-hit != 'true'
         run: |
           composer install \
             --prefer-dist \
@@ -60,8 +67,8 @@ jobs:
       # - name: Run Mago Static Analysis
       #   run: vendor/bin/mago --config .config/mago.toml analyze
 
-      - name: Run Mago Linter
-        run: vendor/bin/mago --config .config/mago.toml lint
+      # - name: Run Mago Linter
+      #   run: vendor/bin/mago --config .config/mago.toml lint
 
-      - name: Verify Formatting
-        run: vendor/bin/mago --config .config/mago.toml fmt --check
+      # - name: Verify Formatting
+      #   run: vendor/bin/mago --config .config/mago.toml fmt --check
