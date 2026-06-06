@@ -775,17 +775,6 @@ $features = [
         ['RefStatusPermintaanRad',   'ref-status-permintaan-rad'],
         ['RefTemplateRad',           'ref-template-rad'],
     ]],
-    ['RawatJalan\SkriningRJ', 'rawat-jalan/', [
-        // Skrining Rawat Jalan
-        ['SkriningRawatJalan', 'skrining-rawat-jalan'],
-        // Referensi Skrining
-        ['RefSkriningBatuk',       'ref-skrining-batuk'],
-        ['RefSkriningKeputusan',   'ref-skrining-keputusan'],
-        ['RefSkriningKesadaran',   'ref-skrining-kesadaran'],
-        ['RefSkriningNyeriDada',   'ref-skrining-nyeri-dada'],
-        ['RefSkriningPernafasan',  'ref-skrining-pernafasan'],
-        ['RefSkriningSkalaNyeri',  'ref-skrining-skala-nyeri'],
-    ]],
     ['Donor', 'donor/', [
         ['HasilAnamnesis', 'hasil-anamnesis'],
         ['JenisBag', 'jenis-bag'],

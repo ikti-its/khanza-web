@@ -691,17 +691,6 @@
                         ['Dokter Jaga', '/dokterjaga', ''],
                     ]],
                     ['Rawat Inap', '/rawatinap', 'rawat_inap', '', $petugasdokterrole, []],
-                    ['Rawat Jalan', '', 'rawat_jalan', '/rawat-jalan', $petugasrole, [
-                        // Skrining Rawat Jalan
-                        ['Skrining Rawat Jalan',          '/skrining-rawat-jalan',      ''],
-                        // Referensi Skrining
-                        ['Referensi Batuk',               '/ref-skrining-batuk',        ''],
-                        ['Referensi Keputusan',           '/ref-skrining-keputusan',    ''],
-                        ['Referensi Kesadaran',           '/ref-skrining-kesadaran',    ''],
-                        ['Referensi Nyeri Dada',          '/ref-skrining-nyeri-dada',   ''],
-                        ['Referensi Pernafasan',          '/ref-skrining-pernafasan',   ''],
-                        ['Referensi Skala Nyeri',         '/ref-skrining-skala-nyeri',  ''],
-                    ]],
                     ['Ruangan', '/kamar', 'kamar', '', $petugasrole, []],
                     ['Unit Gawat Darurat', '/ugd', 'ugd', '', $petugasdokterrole, []],
                     ['Triase UGD', '', 'triase_ugd', '/triase-ugd', $petugasrole, [
