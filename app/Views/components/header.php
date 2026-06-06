@@ -748,16 +748,6 @@
                         ['Telepon', '/telepon', ''],
                         ['Email', '/email', ''],
                     ]],
-                    ['Donor', '', 'donor', '/donor', $petugasrole, [
-                        ['Kunjungan', '/kunjungan', ''],
-                        ['Skrining Donor', '/skrining-donor', ''],
-                        ['Pengambilan Darah', '/pengambilan-darah', ''],
-                        ['Hasil Anamnesis', '/hasil-anamnesis', ''],
-                        ['Jenis Bag', '/jenis-bag', ''],
-                        ['Jenis Donor', '/jenis-donor', ''],
-                        ['Lokasi Pengambilan Darah', '/lokasi-pengambilan-darah', ''],
-                        ['Status Pengambilan', '/status-pengambilan', '']
-                    ]],
                     ['Inventaris Darah', '', 'inventaris_darah', '/inventaris-darah', $petugasrole, [
                         ['Pemisahan Komponen', '/pemisahan-komponen', ''],
                         ['Pemisahan Komponen Detail', '/pemisahan-komponen-detail', ''],
