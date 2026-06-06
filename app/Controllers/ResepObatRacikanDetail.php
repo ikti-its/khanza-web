@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Core\Controller\Legacy\ControllerTemplateLegacy;
 use App\Core\Controller\ErrorController;
 
-class ResepObatRacikan extends ControllerTemplateLegacy
+class ResepObatRacikanDetail extends ControllerTemplateLegacy
 {
     public function dataResepObatRacikanDetail($noResep)
     {

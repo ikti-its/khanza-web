@@ -42,7 +42,7 @@ final class PermintaanBarangController extends ControllerTemplate
     }
 
     /** @param array<string, scalar|null> $postData */
-    protected function before_update(int|string $id, array &$postData): void
+    protected function before_update(array &$postData,int|string $id): void
     {
         unset($postData['id_status_permintaan_barang']);
     }
