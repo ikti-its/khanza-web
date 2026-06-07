@@ -4,8 +4,8 @@
     'headers'      => ['No. RM', 'Nama Pasien', 'NIK'],
     'tableId'      => 'pasienRoleTable',
     'searchInputs' => [
-        ['id' => 'searchNoRM',   'placeholder' => 'Cari No. RM...'],
-        ['id' => 'searchNama',   'placeholder' => 'Cari nama pasien...'],
+        ['id' => 'searchNoRM', 'placeholder' => 'Cari No. RM...'],
+        ['id' => 'searchNama', 'placeholder' => 'Cari nama pasien...'],
     ],
     'actions' => [
         ['type' => 'button', 'text' => 'Refresh', 'onclick' => 'open_modalPasienRole()', 'icon' => 'refresh'],
@@ -26,12 +26,11 @@
             },
             rowsPerPage: 10,
             onSelect: (item) => {
-                document.getElementById('no_rm').value         = item.nomor_rm ?? '';
-                document.getElementById('no_rm_display').value = item.nomor_rm ?? '';
-                document.getElementById('card_nm_pasien').innerText = item.nama          ?? '-';
-                document.getElementById('card_nik').innerText       = item.nik           ?? '-';
-                document.getElementById('card_tgl_lahir').innerText = item.tanggal_lahir ?? '-';
-                document.getElementById('cardPasien').classList.remove('hidden');
+                document.getElementById('no_rm').value         = item.nomor_rm      ?? '';
+                document.getElementById('no_rm_display').value = item.nomor_rm      ?? '';
+                document.getElementById('nm_pasien').value     = item.nama          ?? '';
+                document.getElementById('tgl_lahir').value     = item.tanggal_lahir ?? '';
+                document.getElementById('jenis_kelamin').value = item.jenis_kelamin ?? '';
             }
         });
     });
