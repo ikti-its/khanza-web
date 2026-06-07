@@ -1,0 +1,22 @@
+id_poliklinik,kode_poliklinik,nama_poliklinik,biaya_registrasi_baru,biaya_registrasi_lama
+1,PL-0001,Poliklinik Umum,50000,25000
+2,PL-0002,Poliklinik Gigi dan Mulut,75000,50000
+3,PL-0003,Poliklinik Penyakit Dalam,100000,75000
+4,PL-0004,Poliklinik Anak,100000,75000
+5,PL-0005,Poliklinik Kebidanan dan Kandungan,100000,75000
+6,PL-0006,Poliklinik Bedah Umum,100000,75000
+7,PL-0007,Poliklinik Mata,100000,75000
+8,PL-0008,Poliklinik THT-KL,100000,75000
+9,PL-0009,Poliklinik Saraf,100000,75000
+10,PL-0010,Poliklinik Jantung dan Pembuluh Darah,150000,100000
+11,PL-0011,Poliklinik Paru,100000,75000
+12,PL-0012,Poliklinik Kulit dan Kelamin,100000,75000
+13,PL-0013,Poliklinik Jiwa,100000,75000
+14,PL-0014,Poliklinik Bedah Tulang dan Traumatologi,100000,75000
+15,PL-0015,Poliklinik Bedah Urologi,100000,75000
+16,PL-0016,Poliklinik Bedah Saraf,150000,100000
+17,PL-0017,Poliklinik Bedah Plastik dan Estetik,150000,100000
+18,PL-0018,Poliklinik Bedah Anak,100000,75000
+19,PL-0019,Poliklinik Bedah Thoraks Kardiak dan Vaskular,150000,100000
+20,PL-0020,Poliklinik Rehabilitasi Medik,100000,75000
+21,PL-0021,Poliklinik Kedokteran Jiwa Anak dan Remaja,100000,75000

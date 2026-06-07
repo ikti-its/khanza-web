@@ -27,6 +27,7 @@ final class AllRoutes extends RouteGroup
                 \App\Features\Radiologi\RadiologiRoutes::class,
                 \App\Features\Laboratorium\LaboratoriumRoutes::class,
                 \App\Features\Lokasi\LokasiRoutes::class,
+                \App\Features\Poliklinik\PoliklinikRoutes::class,
             ]
         );
     }
