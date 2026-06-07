@@ -12,7 +12,7 @@
             <input type="hidden" name="no_rm" id="no_rm" value="<?= esc($baris['no_rm'] ?? '') ?>" required>
 
             <?php 
-            $readonlyClass  = 'bg-gray-100 cursor-not-allowed';
+            $readonlyClass  = 'border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed';
             $pasienNama     = esc($data_pasien['nama'] ?? '');
             $pasienTglLahir = esc($data_pasien['tanggal_lahir'] ?? '');
             $pasienJK       = esc($data_pasien['jenis_kelamin'] ?? '');
@@ -35,16 +35,19 @@
                     </button>
                 </div>
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Nama Pasien</label>
+                    Nama Pasien
+                </label>
                 <input type="text" id="nm_pasien" value="<?= $pasienNama ?>" readonly placeholder="Terisi otomatis..." class="<?= $readonlyClass ?> lg:w-1/4">
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
-                    Tanggal Lahir</label>
+                    Tanggal Lahir
+                </label>
                 <input type="text" id="tgl_lahir" value="<?= $pasienTglLahir ?>" readonly placeholder="Terisi otomatis..." class="<?= $readonlyClass ?> lg:w-1/4">
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Jenis Kelamin</label>
+                    Jenis Kelamin
+                </label>
                 <input type="text" id="jenis_kelamin" value="<?= $pasienJK ?>" readonly placeholder="Terisi otomatis..." class="<?= $readonlyClass ?> lg:w-1/4">
             </div>
 
