@@ -206,14 +206,6 @@ class DatabaseTemplate extends Migration
         foreach($fks as $fk){
             [$fields, $ref_table_name, $ref_fields] = $fk;
 
-            foreach ($fields as $field) {
-                $field_def = $this->fields[$field];
-                assert($field_def['type'] === ST::FK_AUTO()->definition()['type'],
-                    'Foreign key field must be of type T::FK_AUTO' . 
-                    "Schema : {$this->schema}, table : {$this->table}",
-                );
-            }
-
             if (!isset(self::$ref_class_cache[$ref_table_name])) {
                 self::$ref_class_cache[$ref_table_name] = new $ref_table_name();
             }
