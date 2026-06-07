@@ -3,10 +3,11 @@
 2,11,DKT-0002,Spesialis Anak
 3,1,DKT-0003,Spesialis Jantung
 4,4,DKT-0004,Spesialis Penyakit Dalam
-5,12,DKT-0005,Spesialis Mata
-6,12,DKT-0006,Spesialis Saraf
+5,16,DKT-0005,Spesialis Mata
+6,17,DKT-0006,Spesialis Saraf
 7,2,DKT-0007,Spesialis THT
-8,1,DKT-0008,Spesialis Kulit dan Kelamin
-9,11,DKT-0009,Spesialis Kandungan
+8,14,DKT-0008,Spesialis Kulit dan Kelamin
+9,13,DKT-0009,Spesialis Kandungan
 10,5,DKT-0010,Spesialis Kejiwaan
-11,1,DKT-0011,Spesialis Orthopedi
+11,15,DKT-0011,Spesialis Orthopedi
+12,18,DKT-0012,Spesialis Anak
