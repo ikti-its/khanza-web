@@ -92,8 +92,9 @@ final class SkriningRawatJalanController extends ControllerTemplate
         if (!empty($baris['no_rm'])) {
             $dataPasien = $this->model->db
                 ->table('role.pasien p')
-                ->select('p.nomor_rm, o.nama, o.nik, o.tanggal_lahir')
+                ->select('p.nomor_rm, o.nama, o.nik, o.tanggal_lahir, jk.nama_jenis_kelamin as jenis_kelamin')
                 ->join('person.orang o', 'o.id_orang = p.id_orang')
+                ->join('person.jenis_kelamin jk', 'jk.id_jenis_kelamin = o.id_jenis_kelamin', 'left')
                 ->where('p.nomor_rm', $baris['no_rm'])
                 ->get()
                 ->getRowArray();
