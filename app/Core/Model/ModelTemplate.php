@@ -303,7 +303,6 @@ class ModelTemplate extends Model
 
             $builder->select("{$main}.{$ref_id_col} AS option_value");
             $builder->select("{$display_alias}.{$display_col} AS display_value");
-            $builder->orderBy("{$display_alias}.{$display_col}", 'ASC');
 
             $query = $builder->get();
             assert($query instanceof BaseResult,
