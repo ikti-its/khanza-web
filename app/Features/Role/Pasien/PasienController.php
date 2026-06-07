@@ -37,8 +37,9 @@ final class PasienController extends ControllerTemplate
     {
         $builder = $this->model->db
             ->table('role.pasien p')
-            ->select('p.nomor_rm, o.nama, o.nik, o.tanggal_lahir')
-            ->join('person.orang o', 'o.id_orang = p.id_orang');
+            ->select('p.nomor_rm, o.nama, o.nik, o.tanggal_lahir, jk.nama_jenis_kelamin as jenis_kelamin')
+            ->join('person.orang o', 'o.id_orang = p.id_orang')
+            ->join('person.jenis_kelamin jk', 'jk.id_jenis_kelamin = o.id_jenis_kelamin', 'left');
 
         $data = $builder->get()->getResultArray();
 
