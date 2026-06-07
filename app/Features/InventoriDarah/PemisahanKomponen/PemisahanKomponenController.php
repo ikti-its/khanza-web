@@ -6,6 +6,7 @@ namespace App\Features\InventoriDarah\PemisahanKomponen;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class PemisahanKomponenController extends ControllerTemplate
 {
@@ -29,8 +30,8 @@ final class PemisahanKomponenController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX, 'id_pemisahan',         'ID Pemisahan'],
                 [SHOW, REQUIRED, I::INDEX, 'id_pengambilan_darah', 'ID Pengambilan Darah'],
                 [SHOW, REQUIRED, I::DATE,  'tanggal_pemisahan',    'Tanggal Pemisahan'],
-                [SHOW, REQUIRED, I::SELECT, 'id_shift',             'Shift'],
-                [SHOW, REQUIRED, I::INDEX, 'id_petugas',           'ID Petugas'],
+                [SHOW, REQUIRED, I::SELECT,'id_shift',             'Shift'],
+                [SHOW, REQUIRED, I::INDEX, 'id_petugas',           'Petugas'],
             ],
         );
     }
@@ -138,5 +139,110 @@ final class PemisahanKomponenController extends ControllerTemplate
             'bhp_non_options'   => $masterBhpNonMedis,
             'form_action'       => '/submittambah',
         ]);
+    }
+
+    /**
+     * OVERRIDE: Memproses simpan data pemisahan komponen & penggunaan BHP
+     */
+    #[\Override]
+    final public function create(): string|RedirectResponse
+    {
+        $rawPost = $this->request->getPost();
+
+        $komponenTerpilih  = $this->request->getPost('id_komponen');
+        $nomorPengambilan  = $this->request->getPost('nomor_pengambilan');
+        
+        $bhpMedis          = $this->request->getPost('id_medis_donor');
+        $hargaMedis        = $this->request->getPost('harga_medis');
+        $bhpNonMedis       = $this->request->getPost('id_penunjang_donor');
+        $hargaNonMedis     = $this->request->getPost('harga_penunjang');
+
+        $dataPemisahan = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataPemisahan[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $this->model->insert($dataPemisahan);
+            $idPemisahan = $this->model->getInsertID();
+
+            if (!empty($komponenTerpilih) && is_array($komponenTerpilih)) {
+                $modelKompDetail   = new \App\Features\InventoriDarah\PemisahanKomponenDetail\PemisahanKomponenDetailModel(); 
+                $modelMasterKomp   = new \App\Features\Darah\KomponenDarah\KomponenDarahModel();
+
+                $idPengambilan      = $dataPemisahan['id_pengambilan_darah'];
+                $modelPengambilan   = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
+                $dataPengambilan    = $modelPengambilan->find($idPengambilan);
+
+                $tanggalPengambilan = $dataPengambilan['tanggal_pengambilan'] ?? date('Y-m-d');
+
+                foreach ($komponenTerpilih as $idKomponen) {
+                    $masterKomp = $modelMasterKomp->find($idKomponen);
+                    if (!$masterKomp) continue;
+                    
+                    $lamaHari   = (int)($masterKomp['masa_berlaku_hari']);
+                    $tanggalKadaluarsa = date('Y-m-d', strtotime($tanggalPengambilan . ' + ' . $lamaHari . ' days'));
+
+                    $modelKompDetail->insert([
+                        'id_pemisahan'       => $idPemisahan,
+                        'no_kantong'         => $masterKomp['kode_komponen'] . $nomorPengambilan,
+                        'id_komponen'        => $idKomponen,
+                        'tanggal_kadaluarsa' => $tanggalKadaluarsa,
+                    ]);
+                }
+            }
+
+            if (!empty($bhpMedis) && is_array($bhpMedis)) {
+                $modelMedisPemisahan = new \App\Features\LogistikUTD\MedisPemisahan\MedisPemisahanModel();
+
+                foreach ($bhpMedis as $idBarang => $jumlah) {
+                    if ((int)$jumlah <= 0) continue;
+
+                    $modelMedisPemisahan->insert([
+                        'id_pemisahan' => $idPemisahan,
+                        'id_barang'    => $idBarang,
+                        'jumlah'       => (int)$jumlah,
+                        'harga'        => (float)($hargaMedis[$idBarang] ?? 0),
+                    ]);
+                }
+            }
+
+            if (!empty($bhpNonMedis) && is_array($bhpNonMedis)) {
+                $modelPenunjangPemisahan = new \App\Features\LogistikUTD\PenunjangPemisahan\PenunjangPemisahanModel();
+
+                foreach ($bhpNonMedis as $idBarang => $jumlah) {
+                    if ((int)$jumlah <= 0) continue;
+
+                    $modelPenunjangPemisahan->insert([
+                        'id_pemisahan' => $idPemisahan,
+                        'id_barang'    => $idBarang,
+                        'jumlah'       => (int)$jumlah,
+                        'harga'        => (float)($hargaNonMedis[$idBarang] ?? 0),
+                    ]);
+                }
+            }
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException("Gagal menyimpan data pemisahan komponen dan penggunaan BHP.");
+            }
+
+            session()->setFlashdata('success', 'Data pemisahan komponen dan penggunaan BHP berhasil disimpan.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
+                ? $this->friendly_db_error($e) 
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 }
