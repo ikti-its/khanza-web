@@ -97,14 +97,20 @@ class RouteGroup
         foreach ($all_routes as $group => $features) {
             $group_path = self::create_path_from_name($group);
             $icon = $all_icons[$group];
-            $header = [$group, '', $icon, '/' . $group_path, $petugasrole];
 
-            foreach ($features as $f) {
-                $title = new $f()->title;
-                $feature_path = self::create_path_from_name($title);;
-
-                $header[5][] = [$title, '/' . $feature_path, ''];
+            if (count($features) === 1) {
+                $title = new $features[0]()->title;
+                $feature_path = self::create_path_from_name($title);
+                $header = [$group, '/' . $group_path . '/' . $feature_path . '/data', $icon, '', $petugasrole, []];
+            } else {
+                $header = [$group, '', $icon, '/' . $group_path, $petugasrole];
+                foreach ($features as $f) {
+                    $title = new $f()->title;
+                    $feature_path = self::create_path_from_name($title);
+                    $header[5][] = [$title, '/' . $feature_path, ''];
+                }
             }
+            
             $all_header[] = $header;
         }
 
