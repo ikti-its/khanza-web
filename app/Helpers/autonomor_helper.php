@@ -43,3 +43,32 @@ if (!function_exists('generateNextSKL')) {
         return "{$nomorStr}/RM-SKL/{$bulan}/{$tahun}";
     }
 }
+
+// AutoNomor untuk No. Permintaan Radiologi
+if (!function_exists('generateNextNoPermintaanRad')) {
+    /**
+     * Generate nomor permintaan radiologi berikutnya.
+     *
+     * Format: RAD-[YYYYMMDD]-[4digit urutan]
+     * Contoh: RAD-20260607-0001
+     *
+     * @param string|null $lastNo  Nomor terakhir pada tanggal yang sama (dari DB)
+     * @param string|null $tanggal Tanggal permintaan format 'Y-m-d', default hari ini
+     */
+    function generateNextNoPermintaanRad(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'RAD-' . date('Ymd', $tgl);
+ 
+        /** @var list<bool> $match */
+        $match = [];
+        if (!$lastNo || !preg_match('/^RAD-' . date('Ymd', $tgl) . '-(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+ 
+        return $prefix . '-' . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
