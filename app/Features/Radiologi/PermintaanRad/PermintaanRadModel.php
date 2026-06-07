@@ -25,7 +25,6 @@ final class PermintaanRadModel extends ModelTemplate
                     'id_orang'  => ['nama'],
                 ],
                 'id_status_permintaan' => ['nama_status'],
-                'id_item_rad'          => ['kode_periksa', 'nama_pemeriksaan', 'tarif_dasar'],
             ],
         );
     }
