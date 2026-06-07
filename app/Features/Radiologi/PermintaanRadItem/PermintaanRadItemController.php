@@ -20,7 +20,7 @@ final class PermintaanRadItemController extends ControllerTemplate
             'Permintaan Rad Item',
             [
                 A::READ,
-                A::CREATE,
+                // A::CREATE,
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
