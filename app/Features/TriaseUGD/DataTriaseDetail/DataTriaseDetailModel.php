@@ -16,7 +16,7 @@ final class DataTriaseDetailModel extends ModelTemplate
                 'id_triase_detail' => V::DEFAULT(),
             ],
             [
-                'id_triase' => [''],
+                'id_triase' => ['nomor_reg'],
                 'id_skala'  => ['pengkajian'],
             ],
         );

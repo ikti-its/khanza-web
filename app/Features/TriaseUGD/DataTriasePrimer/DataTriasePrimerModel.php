@@ -19,10 +19,12 @@ final class DataTriasePrimerModel extends ModelTemplate
                 'tanggal_triase'   => V::DEFAULT(),
             ],
             [
-                'id_triase'           => [''],
+                'id_triase'           => ['nomor_reg'],
                 'id_kebutuhan_khusus' => ['nama_kebutuhan'],
                 'id_plan_primer'      => ['nama_plan_primer'],
-                'id_petugas'          => [''],
+                'id_petugas'          => [
+                    'id_orang' => ['nama']
+                ],
             ],
         );
     }
