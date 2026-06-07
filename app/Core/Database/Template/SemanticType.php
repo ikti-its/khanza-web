@@ -43,5 +43,5 @@ final readonly class SemanticType
     public static function NOTE(): FT { return PT::TEXT();}
     public static function DESCR(): FT { return PT::TEXT();}
     public static function NAME(int $len): FT { return PT::VARCHAR($len);}
-    public static function CODE(int $len): FT { return PT::CHAR($len);}
+    public static function CODE(int $len): FT { return PT::VARCHAR($len);}
 }
