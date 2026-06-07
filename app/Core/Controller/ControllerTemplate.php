@@ -359,7 +359,7 @@ class ControllerTemplate extends Controller
         return $this->home();
     }
 
-    final public function delete(int|string $id): string|RedirectResponse
+    public function delete(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->home();
 
