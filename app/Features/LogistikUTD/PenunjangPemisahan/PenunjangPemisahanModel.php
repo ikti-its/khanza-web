@@ -18,7 +18,7 @@ final class PenunjangPemisahanModel extends ModelTemplate
                 'harga'                  => V::DEFAULT(),
             ],
             [
-                'id_pemisahan' => [''],
+                'id_pemisahan' => ['tanggal_pemisahan'],
                 'id_barang'    => ['kode_barang', 'nama_barang'],
             ],
         );
