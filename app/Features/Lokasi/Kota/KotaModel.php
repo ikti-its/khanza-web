@@ -14,7 +14,6 @@ final class KotaModel extends ModelTemplate
             new KotaDatabase(),
             [
                 'id_kota'       => V::DEFAULT(),
-                'id_provinsi'   => V::DEFAULT(),
                 'id_kota_lokal' => V::DEFAULT(),
                 'nama_kota'     => V::DEFAULT(),
             ],
