@@ -13,12 +13,16 @@ final class PermintaanBarangModel extends ModelTemplate
         parent::__construct(
             new PermintaanBarangDatabase(),
             [
-                'id_permintaan'               => V::DEFAULT(),
-                'tanggal'                     => V::DEFAULT(),
-                'catatan'                     => V::DEFAULT(),
+                'id_permintaan' => V::DEFAULT(),
+                'no_permintaan' => V::DEFAULT(),
+                'tanggal'       => V::DEFAULT(),
+                'catatan'       => V::DEFAULT(),
             ],
             [
-                'id_unit'                     => ['nama_unit'],
+                'petugas'        => [
+                    'id_orang' => ['nama'],
+                ],
+                'master_ruangan'              => ['nama_ruangan'],
                 'id_status_permintaan_barang' => ['nama_status_permintaan_barang'],
             ],
         );

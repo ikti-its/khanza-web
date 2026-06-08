@@ -1,4 +1,5 @@
 id_ruangan,kode_ruangan,nama_ruangan,jenis_instalasi
+0,-,-,-
 1,GD-01,Ruang Triase,Gawat Darurat (IGD)
 2,GD-02,Ruang Resusitasi,Gawat Darurat (IGD)
 3,GD-03,Ruang Tindakan Bedah,Gawat Darurat (IGD)

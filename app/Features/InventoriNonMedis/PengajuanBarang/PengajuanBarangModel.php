@@ -20,7 +20,6 @@ final class PengajuanBarangModel extends ModelTemplate
             ],
             [
                 'id_permintaan' => [
-                    'tanggal',
                     'id_tipe_permintaan_barang' => ['nama_tipe_permintaan_barang'],
                 ],
                 'id_status_pengajuan_barang' => ['nama_status_pengajuan_barang'],

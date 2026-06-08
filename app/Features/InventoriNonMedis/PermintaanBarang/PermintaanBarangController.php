@@ -21,15 +21,17 @@ final class PermintaanBarangController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_permintaan',               'ID'],
+                [SHOW, REQUIRED, I::TEXT,   'no_permintaan',               'No.Permintaan'],
                 [SHOW, REQUIRED, I::DATE,   'tanggal',                     'Tanggal'],
-                [SHOW, REQUIRED, I::SELECT, 'id_unit',                     'Unit Pemohon'],
-                [HIDE, OPTIONAL, I::SELECT, 'id_status_permintaan_barang', 'Status'],
+                [SHOW, REQUIRED, I::SELECT, 'petugas',                     'Petugas'],
+                [SHOW, REQUIRED, I::SELECT, 'master_ruangan',              'Ruangan'],
+                [TABLE_ONLY, OPTIONAL, I::SELECT, 'id_status_permintaan_barang', 'Status'],
                 [SHOW, OPTIONAL, I::TEXT,   'catatan',                     'Catatan'],
             ],
         );

@@ -26,14 +26,14 @@ final class BarangController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_barang',                'ID Barang'],
-                [SHOW, REQUIRED, I::TEXT,   'kode_barang',              'Kode Barang'],
-                [SHOW, REQUIRED, I::NAME,   'nama_barang',              'Nama Barang'],
-                [SHOW, REQUIRED, I::SELECT, 'id_satuan',                'Satuan'],
-                [SHOW, REQUIRED, I::SELECT, 'id_jenis_barang',          'Jenis'],
-                [TABLE_ONLY, OPTIONAL, I::NUMBER, 'stok',          'Stok'],
-                [FORM_ONLY,  OPTIONAL, I::NUMBER, 'stok_minimum', 'Stok Minimum'],
-                [SHOW, OPTIONAL, I::MONEY,  'harga_satuan',             'Harga Satuan'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_barang',       'ID Barang'],
+                [SHOW,       REQUIRED, I::TEXT,   'kode_barang',     'Kode Barang'],
+                [SHOW,       REQUIRED, I::NAME,   'nama_barang',     'Nama Barang'],
+                [SHOW,       REQUIRED, I::SELECT, 'id_satuan',       'Satuan'],
+                [SHOW,       REQUIRED, I::SELECT, 'id_jenis_barang', 'Jenis'],
+                [TABLE_ONLY, OPTIONAL, I::NUMBER, 'stok',            'Stok'],
+                [FORM_ONLY,  OPTIONAL, I::NUMBER, 'stok_minimum',    'Stok Minimum'],
+                [SHOW,       OPTIONAL, I::MONEY,  'harga_satuan',    'Harga Satuan'],
             ],
         );
     }

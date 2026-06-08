@@ -1,7 +1,7 @@
-id_permintaan,tanggal,id_unit,id_status_permintaan_barang,catatan
-0,1000-10-10 00:00:00,0,0,
-1,2026-04-02 08:00:00,1,1,
-2,2026-04-02 09:30:00,1,1,
-3,2026-04-03 10:15:00,1,1,
-4,2026-04-03 11:00:00,1,1,
-5,2026-04-03 13:45:00,1,1,
+id_permintaan,no_permintaan,tanggal,petugas,master_ruangan,id_status_permintaan_barang,catatan
+0,-,1000-10-10,0,0,0,
+1,PRM002,2026-04-02,1,1,1,
+2,PRM003,2026-04-02,1,1,1,
+3,PRM004,2026-04-03,1,1,1,
+4,PRM005,2026-04-03,1,1,1,
+5,PRM006,2026-04-03,1,1,1,

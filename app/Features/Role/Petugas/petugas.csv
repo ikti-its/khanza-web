@@ -1,4 +1,5 @@
 ﻿id_petugas,id_orang,deskripsi
+0,0,-
 1,3,Kepala UTD
 2,4,Petugas UTD
 3,5,Petugas UTD
@@ -7,3 +8,6 @@
 6,8,Petugas UTD
 7,9,Petugas UGD
 8,11,Petugas Gudang Penunjang
+9,12,Petugas Gudang
+10,1,IT
+11,2,Atasan Logistik
