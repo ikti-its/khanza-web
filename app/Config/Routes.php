@@ -723,12 +723,6 @@ $features = [
         ['Sekolah', 'sekolah'],
         ['Gelar', 'gelar'],
     ]],
-    ['Person', 'person/', [
-        ['Orang', 'orang'],
-        ['Agama', 'agama'],
-        ['Pernikahan', 'pernikahan'],
-        ['JenisKelamin', 'jenis-kelamin'],
-    ]],
     ['Kontak', 'kontak/', [
         ['JenisTelepon', 'jenis-telepon'],
         ['Provider', 'provider'],
