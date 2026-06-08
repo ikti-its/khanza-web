@@ -27,12 +27,29 @@ final class PetugasController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_petugas', 'ID Petugas'],
-                [HIDE, OPTIONAL, I::INDEX, 'id_orang',   'ID Orang'],
-                [SHOW, REQUIRED, I::TEXT,  'nik',        'NIK'],
-                [SHOW, REQUIRED, I::TEXT,  'nama',       'Nama'],
-                [SHOW, REQUIRED, I::DATE,  'tanggal_lahir', 'Tanggal Lahir'],
+                [SHOW, REQUIRED, I::INDEX, 'id_orang',   'ID Orang'],
                 [SHOW, OPTIONAL, I::TEXT,  'deskripsi',  'Deskripsi'],
             ],
         );
+    }
+
+    /**
+     * Menampilkan data modal petugas
+     */
+    public function list()
+    {
+        $data = $this->model->builder()
+            ->select('
+                role.petugas.id_petugas,
+                role.petugas.deskripsi,
+                person.orang.nama
+            ')
+            ->join('person.orang', 'person.orang.id_orang = role.petugas.id_orang', 'inner')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON([
+            'data' => $data
+        ]);
     }
 }
