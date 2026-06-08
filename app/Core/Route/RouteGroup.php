@@ -50,7 +50,10 @@ class RouteGroup
         foreach ($all_routes as $group => $features) {
             $group_path = self::create_path_from_name($group);
 
-            foreach ($features as $f) {
+            foreach ($features as $f => $show) {
+                if($show !== 'HIDE'){
+                    $f = $show;
+                }
                 $title = new $f()->title;
                 $feature_path = self::create_path_from_name($title);;
                 $path = "{$group_path}/{$feature_path}/";
@@ -104,8 +107,15 @@ class RouteGroup
                 $header = [$group, '/' . $group_path . '/' . $feature_path . '/data', $icon, '', $petugasrole, []];
             } else {
                 $header = [$group, '', $icon, '/' . $group_path, $petugasrole];
-                foreach ($features as $f) {
-                    $title = new $f()->title;
+                foreach ($features as $feature => $show) {
+                    if($show !== 'HIDE'){
+                        $feature = $show;
+                    } else {
+                        continue;
+                    }
+
+                    $f = new $feature();
+                    $title = $f->title;
                     $feature_path = self::create_path_from_name($title);
                     $header[5][] = [$title, '/' . $feature_path, ''];
                 }
