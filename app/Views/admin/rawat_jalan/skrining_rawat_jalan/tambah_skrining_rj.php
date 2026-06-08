@@ -1,6 +1,7 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 <?= $this->include('components/modal/modalpasienrole') ?>
+<?= $this->include('components/modal/modalpetugas') ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
@@ -50,8 +51,26 @@
                 </label>
                 <input type="text" id="jenis_kelamin" value="<?= $pasienJK ?>" readonly placeholder="Terisi otomatis..." class="<?= $readonlyClass ?> lg:w-1/4">
             </div>
+                
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Petugas<span class="text-red-600">*</span>
+                </label>
+                <div class="w-full lg:w-1/4 flex gap-x-2">
+                    <input type="hidden" name="id_petugas" id="id_petugas" value="">
+                    <input type="text" name="nama_petugas" id="nama_petugas"
+                           placeholder="Klik cari petugas..." onclick="open_modalPetugas()"
+                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50">
+                    <button type="button" onclick="open_modalPetugas()"
+                            class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
 
-            <?php $konfigTanpaRM = array_values(array_filter($konfig, fn($f) => $f[2] !== 'no_rm' && $f[2] !== 'id_skrining')); ?>
+            <?php $konfigTanpaRM = array_values(array_filter($konfig, fn($f) => $f[2] !== 'no_rm' && $f[2] !== 'id_skrining' && $f[2] !== 'id_petugas')); ?>
             <?= view('components/form/isian', ['konfig' => $konfigTanpaRM, 'baris' => $baris]) ?>
 
             <div class="flex justify-end gap-x-2 mt-8 border-t border-gray-100 pt-4 dark:border-gray-700">
@@ -82,6 +101,11 @@
             submitButton.innerHTML = 'Menyimpan...';
         }
         return true;
+    }
+
+    function autofillPetugas(item) {
+        document.getElementById('id_petugas').value   = item.id_petugas ?? '';
+        document.getElementById('nama_petugas').value = item.nama       ?? '';
     }
 </script>
 
