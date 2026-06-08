@@ -717,12 +717,6 @@ foreach ($fiturs as $fitur) {
 // Abaikan kode di atas baris ini. Isi routing di bawah ini 
 // Features Routes
 $features = [
-    ['Pendidikan', 'pendidikan/', [
-        ['JenjangPendidikan', 'jenjang-pendidikan'],
-        ['JenisPendidikan', 'jenis-pendidikan'],
-        ['Sekolah', 'sekolah'],
-        ['Gelar', 'gelar'],
-    ]],
     ['Kontak', 'kontak/', [
         ['JenisTelepon', 'jenis-telepon'],
         ['Provider', 'provider'],
