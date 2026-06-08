@@ -18,5 +18,6 @@ enum InputType: string
     case TEMP = 'suhu';
     case NUMBER = 'jumlah';
     case SELECT = 'status';
-    case PASSW = 'password';
+    case PASSW    = 'password';
+    case READONLY = 'readonly';
 }

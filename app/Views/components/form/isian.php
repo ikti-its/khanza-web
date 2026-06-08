@@ -12,7 +12,7 @@
 
     $row = (isset($baris) && is_array($baris)) ? $baris : [];
 
-    $allowed_type = ['indeks', 'tanggal', 'jam', 'uang', 'status', 'nama', 'teks', 'jumlah', 'suhu', 'kosong', 'desimal', 'tanggal_jam', 'bool'];
+    $allowed_type = ['indeks', 'tanggal', 'jam', 'uang', 'status', 'nama', 'teks', 'jumlah', 'suhu', 'kosong', 'desimal', 'tanggal_jam', 'bool', 'readonly'];
     $len = sizeof($konfig);
     if ($len % 2 !== 0) {
         array_push($konfig, [0, '', '', 'kosong', 0, []]);
@@ -30,8 +30,10 @@
         }
         
         if ($row !== [] && $column !== '' && !array_key_exists($column, $row)) {
-            echo "Tidak ditemukan kolom: " . $column . " pada baris";
-            return;
+            if ($_visible !== FORM_ONLY) {
+                echo "Tidak ditemukan kolom: " . $column . " pada baris";
+                return;
+            }
         }
 
         if (!in_array($type, $allowed_type)) {

@@ -32,7 +32,6 @@ final class PermintaanBarangController extends ControllerTemplate
                 [SHOW, REQUIRED, I::SELECT, 'petugas',                     'Petugas'],
                 [SHOW, REQUIRED, I::SELECT, 'master_ruangan',              'Ruangan'],
                 [TABLE_ONLY, OPTIONAL, I::SELECT, 'id_status_permintaan_barang', 'Status'],
-                [SHOW, OPTIONAL, I::TEXT,   'catatan',                     'Catatan'],
             ],
             child_path: '/inventori-non-medis/detail-permintaan-barang',
             child_fk: 'id_permintaan',

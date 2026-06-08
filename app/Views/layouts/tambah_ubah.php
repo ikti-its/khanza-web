@@ -36,6 +36,22 @@
 </div>
 <!-- End Card Section -->
 <script>
+    // Autofill: select[data-autofill-target] → input[name=target]
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('select[data-autofill-target]').forEach(function (sel) {
+            var target = sel.getAttribute('data-autofill-target');
+            var key    = sel.getAttribute('data-autofill-key');
+            var input  = document.querySelector('[name="' + target + '"]');
+            if (!input || !key) return;
+            function sync() {
+                var opt = sel.options[sel.selectedIndex];
+                input.value = opt ? (opt.getAttribute('data-' + key) || '') : '';
+            }
+            sel.addEventListener('change', sync);
+            sync();
+        });
+    });
+
     function validateForm() {
         var requiredFields = document.querySelectorAll('select[required], input[required]');
         for (var i = 0; i < requiredFields.length; i++) {

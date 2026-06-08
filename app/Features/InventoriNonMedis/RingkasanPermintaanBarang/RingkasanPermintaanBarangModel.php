@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\InventoriNonMedis\PermintaanBarang;
+namespace App\Features\InventoriNonMedis\RingkasanPermintaanBarang;
 
 use App\Core\Model\ModelTemplate;
 use App\Core\Model\ValidationType as V;
+use App\Features\InventoriNonMedis\PermintaanBarang\PermintaanBarangDatabase;
 
-final class PermintaanBarangModel extends ModelTemplate
+final class RingkasanPermintaanBarangModel extends ModelTemplate
 {
     public function __construct()
     {
@@ -18,9 +19,7 @@ final class PermintaanBarangModel extends ModelTemplate
                 'tanggal'       => V::DEFAULT(),
             ],
             [
-                'petugas'        => [
-                    'id_orang' => ['nama'],
-                ],
+                'petugas'                     => ['id_orang' => ['nama']],
                 'master_ruangan'              => ['nama_ruangan'],
                 'id_status_permintaan_barang' => ['nama_status_permintaan_barang'],
             ],

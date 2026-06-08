@@ -20,7 +20,6 @@ final class PermintaanBarangDatabase extends DatabaseTemplate
                 'petugas'                     => T::FK_AUTO(),
                 'master_ruangan'              => T::FK_AUTO(),
                 'id_status_permintaan_barang' => T::FK_AUTO(),
-                'catatan'                     => T::NOTE()->nullable(),
             ],
             'id_permintaan',
             [],
