@@ -35,7 +35,7 @@ final class PermintaanBarangDetailController extends ControllerTemplate
                 [SHOW, OPTIONAL, I::NUMBER, 'qty_disetujui',    'Qty Disetujui'],
                 [SHOW, OPTIONAL, I::TEXT,   'catatan',          'Catatan'],
             ],
-            $parent_fk = 'id_permintaan',
+            parent_fk: 'id_permintaan',
         );
     }
 

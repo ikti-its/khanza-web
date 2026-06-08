@@ -9,9 +9,7 @@ use App\Core\Controller\InputType as I;
 
 final class PengadaanBarangController extends ControllerTemplate
 {
-    protected ?string $child_path = '/inventori-non-medis/detail-pengadaan-barang';
-    protected ?string $child_fk   = 'id_pengadaan';
-
+    
     public function __construct()
     {
         parent::__construct(
@@ -19,23 +17,25 @@ final class PengadaanBarangController extends ControllerTemplate
             [
                 ['Inventori Non Medis', 'inventori_non_medis'],
                 ['Pengadaan Barang',    'pengadaan_barang'],
-            ],
-            'Pengadaan Barang',
-            [
-                A::READ,
-                A::CREATE,
-                // A::AUDIT,
-                A::UPDATE,
-                A::DELETE,
-            ],
-            [
-                [HIDE, OPTIONAL, I::INDEX,  'id_pengadaan',               'ID Pengadaan'],
-                [HIDE, OPTIONAL, I::INDEX,  'id_pengajuan',               'ID Pengajuan'],
-                [SHOW, REQUIRED, I::SELECT, 'id_suplier',                 'Suplier'],
-                [SHOW, REQUIRED, I::DATE,   'tanggal',                    'Tanggal'],
-                [SHOW, OPTIONAL, I::SELECT, 'id_status_pengadaan_barang', 'Status'],
-                [SHOW, OPTIONAL, I::TEXT,   'catatan',                    'Catatan'],
-            ],
+                ],
+                'Pengadaan Barang',
+                [
+                    A::READ,
+                    A::CREATE,
+                    // A::AUDIT,
+                    A::UPDATE,
+                    A::DELETE,
+                    ],
+                    [
+                        [HIDE, OPTIONAL, I::INDEX,  'id_pengadaan',               'ID Pengadaan'],
+                        [HIDE, OPTIONAL, I::INDEX,  'id_pengajuan',               'ID Pengajuan'],
+                        [SHOW, REQUIRED, I::SELECT, 'id_suplier',                 'Suplier'],
+                        [SHOW, REQUIRED, I::DATE,   'tanggal',                    'Tanggal'],
+                        [SHOW, OPTIONAL, I::SELECT, 'id_status_pengadaan_barang', 'Status'],
+                        [SHOW, OPTIONAL, I::TEXT,   'catatan',                    'Catatan'],
+                    ],
+                    $child_path = '/inventori-non-medis/detail-pengadaan-barang',
+                    $child_fk   = 'id_pengadaan',
         );
     }
 }

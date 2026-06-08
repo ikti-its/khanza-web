@@ -9,9 +9,6 @@ use App\Core\Controller\InputType as I;
 
 final class PenerimaanBarangController extends ControllerTemplate
 {
-    protected ?string $child_path = '/inventori-non-medis/penerimaan-barang-detail';
-    protected ?string $child_fk   = 'id_penerimaan';
-
     public function __construct()
     {
         parent::__construct(
@@ -24,9 +21,9 @@ final class PenerimaanBarangController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                // A::AUDIT,
+                A::AUDIT,
                 A::UPDATE,
-                A::DELETE,
+                // A::DELETE,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_penerimaan', 'ID'],
@@ -34,6 +31,8 @@ final class PenerimaanBarangController extends ControllerTemplate
                 [SHOW, REQUIRED, I::DATE,   'tanggal',       'Tanggal Terima'],
                 [SHOW, OPTIONAL, I::TEXT,   'catatan',       'Catatan'],
             ],
+            child_path: '/inventori-non-medis/penerimaan-barang-detail',
+            child_fk: 'id_penerimaan',
         );
     }
 }
