@@ -42,9 +42,10 @@ class ControllerTemplate extends Controller
 
     protected ?string $child_path  = null;
     protected ?string $child_fk    = null;
-    protected ?string $parent_fk   = null;
+    protected ?string $parent_fk    = null;
+    protected bool    $hide_zero_id = true;
     /** @var array<string, mixed> */
-    protected array   $home_params = [];
+    protected array   $home_params  = [];
 
     public function __construct(
         ?ModelTemplate $model = null,
@@ -156,6 +157,7 @@ class ControllerTemplate extends Controller
 
         $this->before_read();
         $this->fk_from_get();
+        if ($this->hide_zero_id) $this->model->exclude_zero_pk();
 
         $total_rows  = $this->model->count_filtered();
         $total_pages = ($total_rows > 0) ? (int) ceil($total_rows / $size) : 1;

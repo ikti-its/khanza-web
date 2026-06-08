@@ -20,7 +20,8 @@ class ModelTemplate extends Model
     private array $selected_aliases = [];
 
     /** @var array<string, mixed> */
-    private array $runtime_filters = [];
+    private array $runtime_filters  = [];
+    private bool  $exclude_zero_pk  = false;
 
     public function set_filter(string $col, mixed $val): static
     {
@@ -28,14 +29,23 @@ class ModelTemplate extends Model
         return $this;
     }
 
+    public function exclude_zero_pk(): static
+    {
+        $this->exclude_zero_pk = true;
+        return $this;
+    }
+
     public function count_filtered(): int
     {
-        if (empty($this->runtime_filters)) {
+        if (empty($this->runtime_filters) && !$this->exclude_zero_pk) {
             return (int) $this->countAll();
         }
         $builder = $this->db->table($this->table);
         foreach ($this->runtime_filters as $col => $val) {
             $builder->where($col, $val);
+        }
+        if ($this->exclude_zero_pk) {
+            $builder->where($this->primaryKey . ' !=', 0);
         }
         return (int) $builder->countAllResults();
     }
@@ -267,6 +277,9 @@ class ModelTemplate extends Model
             foreach ($this->runtime_filters as $col => $val) {
                 $this->where($col, $val);
             }
+            if ($this->exclude_zero_pk) {
+                $this->where($this->primaryKey . ' !=', 0);
+            }
             /** @var list<array<string, mixed>> */
             return parent::findAll($limit, $offset);
         }
@@ -284,6 +297,9 @@ class ModelTemplate extends Model
 
         foreach ($this->runtime_filters as $col => $val) {
             $builder->where("{$main}.{$col}", $val);
+        }
+        if ($this->exclude_zero_pk) {
+            $builder->where("{$main}.{$this->primaryKey} !=", 0);
         }
 
         if ($limit !== null && $limit > 0) {
