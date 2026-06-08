@@ -17,7 +17,7 @@
         initModalList({
             modalId: 'modalKunjungan',
             tableId: 'kunjunganTable',
-            url: '<?= base_url('donor/kunjungan/modal/list') ?>',
+            url:     '<?= site_url('donor/kunjungan/modal/list') ?>',
             fields: ['nomor_kunjungan', 'nomor_pendonor', 'nama'],
             searchIds: {
                 searchNoKunjungan: 'nomor_kunjungan',

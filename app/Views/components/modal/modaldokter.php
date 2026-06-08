@@ -29,7 +29,7 @@
         initModalList({
             modalId:    'modalDokter',
             tableId:    'dokterTable',
-            url:        '/radiologi/permintaan-radiologi/modal/list',
+            url:        '<?= site_url('radiologi/permintaan-radiologi/modal/list') ?>',
             fields:     ['kode_dokter', 'nama_dokter', 'spesialis'],
             searchIds: {
                 searchKodeDokter: 'kode_dokter',

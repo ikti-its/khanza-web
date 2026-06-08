@@ -22,7 +22,7 @@
         initModalList({
             modalId: 'modalPetugas',
             tableId: 'petugasTable',
-            url: '<?= base_url('role/petugas/modal/list') ?>',
+            url:     '<?= site_url('role/petugas/modal/list') ?>',
             fields: ['nama', 'deskripsi'],
             searchIds: {
                 searchNamaPetugas: 'nama',

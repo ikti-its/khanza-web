@@ -18,7 +18,7 @@
         initModalList({
             modalId: 'modalAsuransi',
             tableId: 'asuransiTable',
-            url: '/modalasuransi/list',
+            url:     '<?= site_url('role/asuransi/modal/list') ?>',
             fields: ['kode_asuransi', 'tipe_asuransi', 'nama_asuransi'],
             searchIds: {
                 searchKodeAsuransi: 'kode_asuransi',

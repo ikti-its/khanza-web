@@ -18,7 +18,7 @@
         initModalList({
             modalId:     'modalPasienRole',
             tableId:     'pasienRoleTable',
-            url:         '/role/pasien/modal/list',
+            url:         '<?= site_url('role/pasien/modal/list') ?>',
             fields:      ['nomor_rm', 'nama', 'nik'],
             searchIds: {
                 searchNoRM:  'nomor_rm',

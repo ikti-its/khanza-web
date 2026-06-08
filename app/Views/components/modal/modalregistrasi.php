@@ -22,7 +22,7 @@
         initModalList({
             modalId:     'modalRegistrasi',
             tableId:     'registrasiTable',
-            url:         '/radiologi/permintaan-radiologi/modal/list',
+            url:         '<?= site_url('radiologi/permintaan-radiologi/modal/list') ?>',
             fields:      ['nomor_reg', 'nama', 'nomor_rm', 'datetime'],
             searchIds: {
                 searchNomorReg:   'nomor_reg',

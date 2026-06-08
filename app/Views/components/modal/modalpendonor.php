@@ -22,7 +22,7 @@
         initModalList({
             modalId: 'modalPendonor',
             tableId: 'pendonorTable',
-            url: '<?= base_url('role/pendonor/modal/list') ?>',
+            url:     '<?= site_url('role/pendonor/modal/list') ?>',
             fields: ['nomor_pendonor', 'nama', 'nik', 'tanggal_lahir'],
             searchIds: {
                 searchNoPendonor: 'nomor_pendonor',
