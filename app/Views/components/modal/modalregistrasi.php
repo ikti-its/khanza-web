@@ -1,0 +1,40 @@
+<?= view('components/modal/modal-table', [
+    'modalId'      => 'modalRegistrasi',
+    'modalTitle'   => 'Pilih Registrasi Pasien',
+    'headers'      => ['No. Registrasi', 'Nama Pasien', 'No. RM', 'Tanggal'],
+    'tableId'      => 'registrasiTable',
+    'searchInputs' => [
+        ['id' => 'searchNomorReg',   'placeholder' => 'Cari No. Registrasi...'],
+        ['id' => 'searchNamaPasReg', 'placeholder' => 'Cari nama pasien...'],
+    ],
+    'actions' => [
+        [
+            'type'    => 'button',
+            'text'    => 'Refresh',
+            'onclick' => 'open_modalRegistrasi()',
+            'icon'    => 'refresh',
+        ],
+    ],
+]) ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        initModalList({
+            modalId:     'modalRegistrasi',
+            tableId:     'registrasiTable',
+            url:         '/radiologi/permintaan-radiologi/modal/list',
+            fields:      ['nomor_reg', 'nama', 'nomor_rm', 'datetime'],
+            searchIds: {
+                searchNomorReg:   'nomor_reg',
+                searchNamaPasReg: 'nama',
+            },
+            rowsPerPage: 10,
+            onSelect: (item) => {
+                if (typeof autofillRegistrasi === 'function') {
+                    autofillRegistrasi(item);
+                }
+                document.getElementById('modalRegistrasi').classList.add('hidden');
+            }
+        });
+    });
+</script>
