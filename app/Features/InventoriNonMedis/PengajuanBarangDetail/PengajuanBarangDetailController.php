@@ -9,8 +9,6 @@ use App\Core\Controller\InputType as I;
 
 final class PengajuanBarangDetailController extends ControllerTemplate
 {
-    protected ?string $parent_fk = 'id_pengajuan';
-
     public function __construct()
     {
         parent::__construct(
@@ -36,6 +34,7 @@ final class PengajuanBarangDetailController extends ControllerTemplate
                 [SHOW, REQUIRED, I::NUMBER, 'qty',              'Qty'],
                 [SHOW, OPTIONAL, I::MONEY,  'harga_estimasi',   'Harga Estimasi'],
             ],
+            $parent_fk = 'id_pengajuan',
         );
     }
 
