@@ -63,8 +63,13 @@ class ControllerTemplate extends Controller
          *  4: string,
          * }> */
         array $fields = [],
-        
+        ?string $child_path = null,
+        ?string $child_fk   = null,
+        ?string $parent_fk  = null,
     ) {
+        $this->child_path  = $child_path;
+        $this->child_fk    = $child_fk;
+        $this->parent_fk   = $parent_fk;
         $this->model = $model;
         $this->title = $title;
         $this->primary_key = $this->model->primaryKey;
