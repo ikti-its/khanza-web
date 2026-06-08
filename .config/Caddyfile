@@ -1,20 +1,20 @@
 {
     frankenphp {
-        num_threads 16
+        num_threads 4
     }
 
     # Aktifkan admin API (opsional, untuk reload config tanpa restart)
     admin localhost:2019
 }
 
-http://localhost {
+https://localhost {
     root * public/
 
     # Kompresi response
     encode zstd br gzip
 
     # Gunakan CA internal Caddy untuk self-signed cert (lokal)
-    # tls internal
+    tls internal
 
     # PHP server (FrankenPHP)
     php_server
