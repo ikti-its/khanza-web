@@ -8,13 +8,10 @@
                 </a>
             </div>
 
-            <div class="w-full flex items-center justify-end ms-auto sm:justify-between sm:gap-x-3 sm:order-3">
-                
+            <div class="w-full flex items-center justify-end ms-auto sm:justify-end sm:gap-x-3 sm:order-3">
                 <div class="flex flex-row items-center justify-end gap-2">
-
                     <?= $this->include('components/notif') ?>
                     <?= $this->include('components/profile') ?>
-
                 </div>
             </div>
         </nav>
