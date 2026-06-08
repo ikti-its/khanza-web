@@ -9,11 +9,11 @@ class ModalDokter extends ControllerTemplateLegacy
     public function listDokter()
     {
         if (!session()->has('jwt_token')) {
-            return $this->response->setStatusCode(401)->setJSON(['error' => 'Unauthorized']);
+            return $this->listDokterFromDb();
         }
 
         $token = session()->get('jwt_token');
-        $url = $this->api_url . "/dokter"; // ganti dengan endpoint yang sesuai di API Go
+        $url = $this->api_url . "/dokter";
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -24,12 +24,26 @@ class ModalDokter extends ControllerTemplateLegacy
 
         $response = curl_exec($ch);
         $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
 
         if ($http_status === 200 && $response) {
             $data = json_decode($response, true);
             return $this->response->setJSON($data);
         }
 
-        return $this->response->setStatusCode($http_status)->setJSON(['error' => 'Gagal mengambil data dokter']);
+        return $this->listDokterFromDb();
+    }
+
+    private function listDokterFromDb()
+    {
+        $db   = \Config\Database::connect();
+        $rows = $db->table('role.dokter d')
+            ->select(['d.kode_dokter', 'o.nama AS nama_dokter', 'd.spesialis'])
+            ->join('person.orang o', 'o.id_orang = d.id_orang')
+            ->orderBy('o.nama', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
     }
 }
