@@ -188,12 +188,17 @@ final class PemisahanKomponenController extends ControllerTemplate
                     $lamaHari   = (int)($masterKomp['masa_berlaku_hari']);
                     $tanggalKadaluarsa = date('Y-m-d', strtotime($tanggalPengambilan . ' + ' . $lamaHari . ' days'));
 
+                    $kodeKomponen = $masterKomp['kode_komponen'];
+                    $noKantong    = $kodeKomponen . $nomorPengambilan;
+
                     $modelKompDetail->insert([
                         'id_pemisahan'       => $idPemisahan,
-                        'no_kantong'         => $masterKomp['kode_komponen'] . $nomorPengambilan,
+                        'no_kantong'         => $noKantong,
                         'id_komponen'        => $idKomponen,
                         'tanggal_kadaluarsa' => $tanggalKadaluarsa,
                     ]);
+
+                    $this->stok_karantina($noKantong, $idKomponen, $tanggalPengambilan, $tanggalKadaluarsa, $dataPengambilan);
                 }
             }
 
@@ -244,5 +249,52 @@ final class PemisahanKomponenController extends ControllerTemplate
         }
 
         return redirect()->to($this->get_uri_path() . '/data');
+    }
+
+    /**
+     * HELPER: Penyimpanan stok darah dengan status karantina
+     */
+    private function stok_karantina(string $noKantong, $idKomponen, string $tanggalPengambilan, string $tanggalKadaluarsa, ?array $dataPengambilan): void
+    {
+        $modelStokDarah = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
+
+        $idGolonganDarah = null;
+        $idRhesus        = null;
+        $idSumberDarah   = 1;
+        $idStatusStok    = 1;
+
+        if (!empty($dataPengambilan['id_kunjungan'])) {
+            $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
+            $dataKunjungan  = $modelKunjungan->find($dataPengambilan['id_kunjungan']);
+
+            if (!empty($dataKunjungan['id_pendonor'])) {
+                $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+                $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']);
+
+                if (!empty($dataPendonor)) {
+                    $idRhesus = $dataPendonor['id_rhesus'] ?? null;
+
+                    if (!empty($dataPendonor['id_orang'])) {
+                        $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                        $dataOrang  = $modelOrang->find($dataPendonor['id_orang']);
+
+                        if (!empty($dataOrang)) {
+                            $idGolonganDarah = $dataOrang['id_golongan_darah'] ?? null;
+                        }
+                    }
+                }
+            }
+        }
+
+        $modelStokDarah->insert([
+            'no_kantong'          => $noKantong,
+            'id_komponen'         => $idKomponen,
+            'id_golongan_darah'   => $idGolonganDarah,
+            'id_rhesus'           => $idRhesus,
+            'tanggal_pengambilan' => $tanggalPengambilan,
+            'tanggal_kadaluarsa'  => $tanggalKadaluarsa,
+            'id_sumber_darah'     => $idSumberDarah,
+            'id_status_stok'      => $idStatusStok,
+        ]);
     }
 }
