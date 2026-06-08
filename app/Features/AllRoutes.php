@@ -10,6 +10,7 @@ final class AllRoutes extends RouteGroup
     public function __construct(){
         parent::__construct(
             [
+                \App\Features\Auth\AuthRoutes::class,
                 \App\Features\AturanPenggajian\AturanPenggajianRoutes::class,
                 \App\Features\Finansial\FinansialRoutes::class,
                 \App\Features\InventoriNonMedis\InventoriNonMedisRoutes::class,
