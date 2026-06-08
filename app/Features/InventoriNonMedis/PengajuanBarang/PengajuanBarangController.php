@@ -33,8 +33,8 @@ final class PengajuanBarangController extends ControllerTemplate
                 [SHOW, OPTIONAL, I::TEXT,   'catatan',                    'Catatan'],
                 [SHOW, OPTIONAL, I::TEXT,   'catatan_atasan',             'Catatan Atasan'],
             ],
-            $child_path = '/inventori-non-medis/detail-pengajuan-barang',
-            $child_fk   = 'id_pengajuan'
+            child_path: '/inventori-non-medis/detail-pengajuan-barang',
+            child_fk:   'id_pengajuan',
         );
     }
 }

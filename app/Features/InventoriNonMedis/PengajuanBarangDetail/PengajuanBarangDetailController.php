@@ -34,7 +34,8 @@ final class PengajuanBarangDetailController extends ControllerTemplate
                 [SHOW, REQUIRED, I::NUMBER, 'qty',              'Qty'],
                 [SHOW, OPTIONAL, I::MONEY,  'harga_estimasi',   'Harga Estimasi'],
             ],
-            $parent_fk = 'id_pengajuan',
+            parent_fk: 'id_pengajuan',
+
         );
     }
 
