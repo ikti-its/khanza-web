@@ -24,9 +24,9 @@ final class PengadaanBarangController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
-                // A::DELETE,
+                A::DELETE,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_pengadaan',               'ID Pengadaan'],
