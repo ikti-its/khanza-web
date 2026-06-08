@@ -18,18 +18,21 @@
 
     <nav class="hs-accordion-group p-6 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
         <ul class="space-y-1.5">
-            <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/dashboard">
-                <img src="<?= base_url('svg/icons/beranda.svg') ?>">
-                Beranda
-            </a>
+            <li>
+                <?= $this->include('components/search_feature') ?>
             </li>
-
+            
+            <li>
+                <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/dashboard">
+                    <img src="<?= base_url('svg/icons/beranda.svg') ?>">
+                    Beranda
+                </a>
+            </li>
             <li>
                 <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/profile">
                     <img src="<?= base_url('svg/icons/akun.svg') ?>">
                     Akun
                 </a>
-
             </li>
 
             <li class="hs-accordion" id="account-accordion">

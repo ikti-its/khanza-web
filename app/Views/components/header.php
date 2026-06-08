@@ -9,8 +9,6 @@
             </div>
 
             <div class="w-full flex items-center justify-end ms-auto sm:justify-between sm:gap-x-3 sm:order-3">
-
-                <?= $this->include('components/search_feature') ?>
                 
                 <div class="flex flex-row items-center justify-end gap-2">
 
@@ -24,15 +22,8 @@
     <!-- ========== END HEADER ========== -->
 
     <!-- ========== MAIN CONTENT ========== -->
-    <!-- Sidebar Toggle -->
-
-    </div>
-    </div>
-    <!-- End Sidebar Toggle -->
 
     <?= $this->include('components/navbar') ?>
 
-
-    <!-- End Content -->
     <!-- ========== END MAIN CONTENT ========== -->
 </body>

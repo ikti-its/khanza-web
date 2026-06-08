@@ -1,11 +1,11 @@
 <div class="">
     <label for="icon" class="sr-only">Search</label>
     <div class="relative">
-        <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-4">
+        <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-10 ps-4">
             <img src="<?= base_url('svg/search_bar_icon.svg') ?>">
         </div>
-        <input type="text" id="search" name="search" class="py-2 px-4 ps-11 block w-full xl:w-96 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Cari">
-        <div id="suggestions" class="absolute z-10 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 w-full max-h-60 overflow-y-auto hidden dark:bg-slate-900 dark:border-gray-700">
+        <input type="text" id="search" name="search" class="py-2 px-4 ps-11 block w-full xl:w-64 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-teal-500 focus:ring-teal-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Cari">
+        <div id="suggestions" class="absolute z-10 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 w-full max-h-20 overflow-y-auto hidden dark:bg-slate-900 dark:border-gray-700">
             <!-- Suggestions will be injected here -->
         </div>
     </div>
