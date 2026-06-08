@@ -9,6 +9,9 @@ use App\Core\Controller\InputType as I;
 
 final class StokOpnameController extends ControllerTemplate
 {
+    protected ?string $child_path = '/inventori-non-medis/detail-stok-opname';
+    protected ?string $child_fk   = 'id_opname';
+
     public function __construct()
     {
         parent::__construct(
@@ -21,7 +24,7 @@ final class StokOpnameController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],

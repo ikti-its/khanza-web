@@ -23,9 +23,9 @@ final class PenerimaanBarangDetailController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
-                // A::DELETE,
+                A::DELETE,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_detail',     'ID'],

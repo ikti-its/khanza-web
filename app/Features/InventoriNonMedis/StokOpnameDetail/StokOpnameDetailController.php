@@ -9,6 +9,8 @@ use App\Core\Controller\InputType as I;
 
 final class StokOpnameDetailController extends ControllerTemplate
 {
+    protected ?string $parent_fk = 'id_opname';
+
     public function __construct()
     {
         parent::__construct(
@@ -22,7 +24,7 @@ final class StokOpnameDetailController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],
