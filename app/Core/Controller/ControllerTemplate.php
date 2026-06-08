@@ -40,6 +40,12 @@ class ControllerTemplate extends Controller
     /** @var array{value: string, threshold: string}|array{} */
     protected array $row_alert = [];
 
+    protected ?string $child_path  = null;
+    protected ?string $child_fk    = null;
+    protected ?string $parent_fk   = null;
+    /** @var array<string, mixed> */
+    protected array   $home_params = [];
+
     public function __construct(
         ?ModelTemplate $model = null,
         /** @var list<list<string>> */
@@ -86,7 +92,36 @@ class ControllerTemplate extends Controller
 
     protected function home(): RedirectResponse
     {
-        return redirect()->to($this->get_uri_path() . '/data');
+        $qs = !empty($this->home_params) ? '?' . http_build_query($this->home_params) : '';
+        return redirect()->to($this->get_uri_path() . '/data' . $qs);
+    }
+
+    private function fk_from_get(): void
+    {
+        if ($this->parent_fk === null) return;
+        $id = $this->request->getGet($this->parent_fk);
+        if ($id !== null) {
+            $this->model->set_filter($this->parent_fk, (int) $id);
+            $this->home_params = [$this->parent_fk => (int) $id];
+        }
+    }
+
+    private function fk_from_post(): void
+    {
+        if ($this->parent_fk === null) return;
+        $id = $this->request->getPost($this->parent_fk);
+        if ($id !== null) {
+            $this->home_params = [$this->parent_fk => (int) $id];
+        }
+    }
+
+    private function fk_from_row(int|string $id): void
+    {
+        if ($this->parent_fk === null) return;
+        $row = $this->model->find($id);
+        if (is_array($row) && isset($row[$this->parent_fk])) {
+            $this->home_params = [$this->parent_fk => (int) $row[$this->parent_fk]];
+        }
     }
 
     /**
@@ -119,7 +154,10 @@ class ControllerTemplate extends Controller
         $page = max(1, (int) ($this->request->getGet('page') ?? 1));
         $size = max(1, (int) ($this->request->getGet('size') ?? $this->meta_data['size']));
 
-        $total_rows  = $this->model->countAll();
+        $this->before_read();
+        $this->fk_from_get();
+
+        $total_rows  = $this->model->count_filtered();
         $total_pages = ($total_rows > 0) ? (int) ceil($total_rows / $size) : 1;
         $page = min($page, $total_pages);
 
@@ -142,6 +180,16 @@ class ControllerTemplate extends Controller
             }
         }
 
+        $child_link = ($this->child_path !== null && $this->child_fk !== null)
+            ? ['path' => $this->child_path, 'fk' => $this->child_fk]
+            : null;
+
+        $extra_params = array_diff_key(
+            $this->request->getGet() ?? [],
+            ['page' => null, 'size' => null]
+        );
+        $query_string = !empty($extra_params) ? http_build_query($extra_params) : '';
+
         return view('/layouts/data', [
             'judul'       => $this->title,
             'breadcrumbs' => $this->breadcrumbs,
@@ -149,9 +197,11 @@ class ControllerTemplate extends Controller
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->primary_key,
             'konfig'      => $konfig_kolom,
-            'aksi'        => $this->actions,
-            'tabel'       => $data_tabel,
-            'row_alert'   => $this->row_alert,
+            'aksi'         => $this->actions,
+            'tabel'        => $data_tabel,
+            'row_alert'    => $this->row_alert,
+            'child_link'   => $child_link,
+            'query_string' => $query_string,
         ]);
     }
 
@@ -306,6 +356,7 @@ class ControllerTemplate extends Controller
         return $msg;
     }
 
+    protected function before_read(): void {}
     protected function before_create(array &$postData): void {}
     protected function before_update(array &$postData, int|string $id): void {}
 
@@ -313,6 +364,7 @@ class ControllerTemplate extends Controller
     {
         $postData = $this->get_post_data();
         $this->before_create($postData);
+        $this->fk_from_post();
         try {
             $this->model->insert($postData);
         } catch (\ReflectionException | DatabaseException $e) {
@@ -333,6 +385,7 @@ class ControllerTemplate extends Controller
         /** @var array<string, scalar|null> $postData */
         $postData = $this->get_post_data();
         $this->before_update($postData, $id);
+        $this->fk_from_post();
         try {
             $this->model->update($id, $postData);
         } catch(\ReflectionException $e){
@@ -363,6 +416,7 @@ class ControllerTemplate extends Controller
     {
         if ($id == 0) return $this->home();
 
+        $this->fk_from_row($id);
         try {
             $this->model->delete($id);
         } catch(DatabaseException $e){

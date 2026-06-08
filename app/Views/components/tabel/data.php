@@ -13,8 +13,10 @@
 
             $data_visible = array_filter($konfig, fn($input) => $input[$VISIBLE]);
 
+            $has_child_link = isset($child_link) && $child_link !== null;
+
             $kolom_header = array_column($data_visible, $DISPLAY);
-            if (!empty($aksi))   $kolom_header[] = 'Aksi';
+            if (!empty($aksi) || $has_child_link) $kolom_header[] = 'Aksi';
             echo view('components/tabel/thead', ['kolom' => $kolom_header]);
 
             echo '<tbody class="divide-y divide-gray-200 dark:divide-gray-700">';
@@ -52,11 +54,12 @@
                                 'kolom'    => array_column($data_visible, $KOLOM),
                                 'jenis'    => array_column($data_visible, $JENIS),
                             ]);
-                            if (!empty($aksi)) echo view('components/aksi/aksi', [
+                            if (!empty($aksi) || $has_child_link) echo view('components/aksi/aksi', [
                                 'modul_path' => $modul_path,
                                 'id'         => $id,
                                 'aksi'       => $aksi,
-                                'baris'      => $baris
+                                'baris'      => $baris,
+                                'child_link' => $child_link ?? null,
                             ]);
                         echo '</tr>';
                     }

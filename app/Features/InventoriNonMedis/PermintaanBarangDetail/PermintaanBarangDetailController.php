@@ -9,6 +9,8 @@ use App\Core\Controller\InputType as I;
 
 final class PermintaanBarangDetailController extends ControllerTemplate
 {
+    protected ?string $parent_fk = 'id_permintaan';
+
     public function __construct()
     {
         parent::__construct(
@@ -37,4 +39,5 @@ final class PermintaanBarangDetailController extends ControllerTemplate
             ],
         );
     }
+
 }

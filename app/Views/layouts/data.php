@@ -13,9 +13,10 @@
                 <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
                     <?php
                         echo view('components/header/data',[
-                            'judul'      => $judul,
-                            'modul_path' => $modul_path,
-                            'aksi'       => $aksi,
+                            'judul'        => $judul,
+                            'modul_path'   => $modul_path,
+                            'aksi'         => $aksi,
+                            'query_string' => $query_string ?? '',
                         ]);
                         echo view('components/header/search_bar');
                         
@@ -26,6 +27,7 @@
                             'konfig'     => $konfig,
                             'aksi'       => $aksi,
                             'row_alert'  => $row_alert ?? [],
+                            'child_link' => $child_link ?? null,
                         ]);
                         
                         echo view('components/footer/footer', [

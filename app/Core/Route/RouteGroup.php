@@ -29,7 +29,7 @@ class RouteGroup
             $value
         );
         $value = strtolower($value ?? '');
-        // echo($value);
+        $value = str_replace(' ', '-', $value);
         return $value;
     }
 

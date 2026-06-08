@@ -13,7 +13,7 @@ final class InventoriNonMedisRoutes extends RouteTemplate
             'Inventori Non-Medis',
             [
                 \App\Features\InventoriNonMedis\PermintaanBarang\PermintaanBarangController::class,
-                \App\Features\InventoriNonMedis\PermintaanBarangDetail\PermintaanBarangDetailController::class => 'HIDE',
+                \App\Features\InventoriNonMedis\PermintaanBarangDetail\PermintaanBarangDetailController::class,
                 \App\Features\InventoriNonMedis\PengajuanBarang\PengajuanBarangController::class,
                 \App\Features\InventoriNonMedis\PengajuanBarangDetail\PengajuanBarangDetailController::class,
                 \App\Features\InventoriNonMedis\PengadaanBarang\PengadaanBarangController::class,

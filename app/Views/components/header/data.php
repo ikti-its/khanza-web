@@ -16,8 +16,9 @@
                 echo '<div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>';
             }
             if(isset($aksi['tambah']) && $aksi['tambah'] === true){
+                $qs = (!empty($query_string)) ? '?' . $query_string : '';
                 echo view('components/header/tambah_button', [
-                    'link' => $modul_path . '/tambah'
+                    'link' => $modul_path . '/tambah' . $qs
                 ]);
             }
             if(isset($aksi['audit']) && $aksi['audit'] === true){

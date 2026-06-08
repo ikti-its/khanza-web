@@ -6,6 +6,10 @@
             'modul_path' => $modul_path,
             'baris'      => $baris
         ];
+        if (isset($child_link) && $child_link !== null) {
+            $child_url = $child_link['path'] . '/data?' . $child_link['fk'] . '=' . urlencode((string) $id);
+            echo '<div class="px-3 py-1.5"><a href="' . $child_url . '" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:text-blue-400">Detail</a></div>';
+        }
         $aksi_list = ['notif', 'tambah', 'audit', 'cetak', 'tindakan', 'detail', 'detail2', 'ubah', 'hapus', 'validasi', 'ambulans', 'pilih', 'pisah', 'uji'];
         if (ENVIRONMENT === 'development') {
             foreach ($aksi as $key => $value) {

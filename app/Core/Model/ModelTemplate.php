@@ -18,6 +18,28 @@ class ModelTemplate extends Model
     public private(set) array $join = [];
     /** @var array<string, true> */
     private array $selected_aliases = [];
+
+    /** @var array<string, mixed> */
+    private array $runtime_filters = [];
+
+    public function set_filter(string $col, mixed $val): static
+    {
+        $this->runtime_filters[$col] = $val;
+        return $this;
+    }
+
+    public function count_filtered(): int
+    {
+        if (empty($this->runtime_filters)) {
+            return (int) $this->countAll();
+        }
+        $builder = $this->db->table($this->table);
+        foreach ($this->runtime_filters as $col => $val) {
+            $builder->where($col, $val);
+        }
+        return (int) $builder->countAllResults();
+    }
+
     protected function __construct(
         DatabaseTemplate $database,
         /** @var array<non-empty-string, ValidationType> */
@@ -242,6 +264,9 @@ class ModelTemplate extends Model
     public function findAll(int|null $limit = 10, int $offset = 0): array
     {
         if ($this->join === []) {
+            foreach ($this->runtime_filters as $col => $val) {
+                $this->where($col, $val);
+            }
             /** @var list<array<string, mixed>> */
             return parent::findAll($limit, $offset);
         }
@@ -255,6 +280,10 @@ class ModelTemplate extends Model
         $idx = 0;
         foreach ($this->join as $fk_col => $spec) {
             $this->apply_join_spec($builder, $fk_col, $spec, $main, $this->database, $idx);
+        }
+
+        foreach ($this->runtime_filters as $col => $val) {
+            $builder->where("{$main}.{$col}", $val);
         }
 
         if ($limit !== null && $limit > 0) {

@@ -9,6 +9,9 @@ use App\Core\Controller\InputType as I;
 
 final class PenerimaanBarangController extends ControllerTemplate
 {
+    protected ?string $child_path = '/inventori-non-medis/penerimaan-barang-detail';
+    protected ?string $child_fk   = 'id_penerimaan';
+
     public function __construct()
     {
         parent::__construct(
