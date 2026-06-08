@@ -9,9 +9,6 @@ use App\Core\Controller\InputType as I;
 
 final class PermintaanBarangController extends ControllerTemplate
 {
-    protected ?string $child_path = '/inventori-non-medis/detail-permintaan-barang';
-    protected ?string $child_fk   = 'id_permintaan';
-
     public function __construct()
     {
         parent::__construct(
@@ -37,6 +34,8 @@ final class PermintaanBarangController extends ControllerTemplate
                 [TABLE_ONLY, OPTIONAL, I::SELECT, 'id_status_permintaan_barang', 'Status'],
                 [SHOW, OPTIONAL, I::TEXT,   'catatan',                     'Catatan'],
             ],
+            $child_path = '/inventori-non-medis/detail-permintaan-barang',
+            $child_fk   = 'id_permintaan',
         );
     }
 
