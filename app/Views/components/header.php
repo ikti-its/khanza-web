@@ -20,7 +20,7 @@
 
     <!-- ========== MAIN CONTENT ========== -->
 
-    <?= $this->include('components/navbar') ?>
+    <?= $this->include('components/sidebar') ?>
 
     <!-- ========== END MAIN CONTENT ========== -->
 </body>
