@@ -29,6 +29,9 @@ final class TransaksiStokDetailController extends ControllerTemplate
                 [TABLE_ONLY, OPTIONAL, I::TEXT,   'kode_barang',  'Kode'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,   'nama_satuan',  'Satuan'],
                 [SHOW,       REQUIRED, I::NUMBER, 'qty',          'Qty'],
+                [TABLE_ONLY, OPTIONAL, I::MONEY,  'harga_satuan', 'Harga Satuan'],
+                [TABLE_ONLY, OPTIONAL, I::NUMBER, 'stok_sebelum', 'Stok Sebelum'],
+                [TABLE_ONLY, OPTIONAL, I::NUMBER, 'stok_sesudah', 'Stok Sesudah'],
             ],
             parent_fk: 'id_transaksi',
         );

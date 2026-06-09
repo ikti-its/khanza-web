@@ -13,8 +13,11 @@ final class TransaksiStokDetailModel extends ModelTemplate
         parent::__construct(
             new TransaksiStokDetailDatabase(),
             [
-                'id_detail' => V::DEFAULT(),
-                'qty'       => V::DEFAULT(),
+                'id_detail'    => V::DEFAULT(),
+                'qty'          => V::DEFAULT(),
+                'harga_satuan' => V::DEFAULT(),
+                'stok_sebelum' => V::DEFAULT(),
+                'stok_sesudah' => V::DEFAULT(),
             ],
             [
                 'id_barang' => [

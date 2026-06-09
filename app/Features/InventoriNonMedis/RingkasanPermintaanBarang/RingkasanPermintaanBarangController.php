@@ -143,11 +143,12 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
             ($row['nama'] ?? '')         !== '' ? 'oleh ' . $row['nama']            : '',
         ])));
 
-        $details = $db->table('inventori_non_medis.permintaan_barang_detail')
-            ->select('id_barang, qty_disetujui')
-            ->where('id_permintaan', $id)
-            ->where('id_barang >', 0)
-            ->where('qty_disetujui >', 0)
+        $details = $db->table('inventori_non_medis.permintaan_barang_detail pbd')
+            ->join('inventori_non_medis.barang b', 'pbd.id_barang = b.id_barang', 'left')
+            ->select('pbd.id_barang, pbd.qty_disetujui, b.stok, b.harga_satuan')
+            ->where('pbd.id_permintaan', $id)
+            ->where('pbd.id_barang >', 0)
+            ->where('pbd.qty_disetujui >', 0)
             ->get()->getResultArray();
 
         $now = date('Y-m-d H:i:s');
@@ -159,14 +160,18 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
             'id_permintaan'          => $id,
             'keterangan'             => $keterangan,
         ]);
-        $id_transaksi = $db->insertID();
+        $id_transaksi = (int) $db->insertID();
 
         foreach ($details as $d) {
-            $qty = (int) round((float) $d['qty_disetujui']);
+            $qty          = (int) round((float) $d['qty_disetujui']);
+            $stok_sebelum = (int) ($d['stok'] ?? 0);
             $db->table('inventori_non_medis.transaksi_stok_detail')->insert([
                 'id_transaksi' => $id_transaksi,
                 'id_barang'    => (int) $d['id_barang'],
                 'qty'          => $qty,
+                'harga_satuan' => isset($d['harga_satuan']) && (float) $d['harga_satuan'] > 0 ? $d['harga_satuan'] : null,
+                'stok_sebelum' => $stok_sebelum,
+                'stok_sesudah' => $stok_sebelum - $qty,
             ]);
             $db->table('inventori_non_medis.barang')
                 ->where('id_barang', (int) $d['id_barang'])

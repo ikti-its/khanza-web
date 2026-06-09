@@ -184,11 +184,12 @@ final class PenerimaanBarangController extends ControllerTemplate
             ($row['nama_suplier'] ?? '') !== '' ? 'Suplier ' . $row['nama_suplier'] : '',
         ])));
 
-        $details = $db->table('inventori_non_medis.penerimaan_barang_detail')
-            ->select('id_barang, qty_diterima')
-            ->where('id_penerimaan', $id)
-            ->where('id_barang >', 0)
-            ->where('qty_diterima >', 0)
+        $details = $db->table('inventori_non_medis.penerimaan_barang_detail pbd')
+            ->join('inventori_non_medis.barang b', 'pbd.id_barang = b.id_barang', 'left')
+            ->select('pbd.id_barang, pbd.qty_diterima, pbd.harga_satuan, b.stok')
+            ->where('pbd.id_penerimaan', $id)
+            ->where('pbd.id_barang >', 0)
+            ->where('pbd.qty_diterima >', 0)
             ->get()->getResultArray();
 
         $now = date('Y-m-d H:i:s');
@@ -203,11 +204,15 @@ final class PenerimaanBarangController extends ControllerTemplate
         $id_transaksi = (int) $db->insertID();
 
         foreach ($details as $d) {
-            $qty = (int) round((float) $d['qty_diterima']);
+            $qty          = (int) round((float) $d['qty_diterima']);
+            $stok_sebelum = (int) ($d['stok'] ?? 0);
             $db->table('inventori_non_medis.transaksi_stok_detail')->insert([
                 'id_transaksi' => $id_transaksi,
                 'id_barang'    => (int) $d['id_barang'],
                 'qty'          => $qty,
+                'harga_satuan' => isset($d['harga_satuan']) && (float) $d['harga_satuan'] > 0 ? $d['harga_satuan'] : null,
+                'stok_sebelum' => $stok_sebelum,
+                'stok_sesudah' => $stok_sebelum + $qty,
             ]);
             $db->table('inventori_non_medis.barang')
                 ->where('id_barang', (int) $d['id_barang'])
