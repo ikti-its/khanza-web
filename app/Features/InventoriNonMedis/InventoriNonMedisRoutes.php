@@ -32,7 +32,6 @@ final class InventoriNonMedisRoutes extends RouteTemplate
                 \App\Features\InventoriNonMedis\JenisBarang\JenisBarangController::class,
                 \App\Features\InventoriNonMedis\Suplier\SuplierController::class,
                 \App\Features\InventoriNonMedis\Satuan\SatuanController::class,
-                \App\Features\InventoriNonMedis\Unit\UnitController::class
             ],
             'inventaris_non_medis.svg',
         );

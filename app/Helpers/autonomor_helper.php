@@ -117,7 +117,7 @@ if (!function_exists('generateNextNoPenerimaanBarang')) {
     }
 }
 
-// AutoNomor untuk No.Keluar (Saat ini dipake di fitur Transaksi Stok)
+// AutoNomor untuk No.Keluar (Saat ini dipake di fitur Ringkasan Permintaan Barang)
 if (!function_exists('generateNextNoKeluarBarang')) {
     /** Generate nomor keluar stok non medis berikutnya.
      * Format: SKYYYYMMDDXXXX
@@ -141,7 +141,7 @@ if (!function_exists('generateNextNoKeluarBarang')) {
     }
 }
 
-// AutoNomor untuk No.Masuk (Saat ini dipake di fitur Transaksi Stok)
+// AutoNomor untuk No.Masuk (Saat ini dipake di fitur Penerimaan Barang)
 if (!function_exists('generateNextNoMasukBarang')) {
     /** Generate nomor masuk stok non medis berikutnya.
      * Format: SMYYYYMMDDXXXX
