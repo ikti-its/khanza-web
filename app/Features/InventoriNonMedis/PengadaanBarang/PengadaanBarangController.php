@@ -20,19 +20,20 @@ final class PengadaanBarangController extends ControllerTemplate
             'Pengadaan Barang',
             [
                 A::READ,
-                A::CREATE,
                 A::UPDATE,
                 A::DELETE,
                 A::PRINT,
             ],
             [
-                [HIDE,       OPTIONAL, I::INDEX,  'id_pengadaan',               'ID Pengadaan'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_pengadaan',               'ID'],
                 [HIDE,       OPTIONAL, I::INDEX,  'id_pengajuan',               'ID Pengajuan'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,   'no_pengadaan',               'No. Pengadaan'],
-                [SHOW,       REQUIRED, I::SELECT, 'id_suplier',                 'Suplier'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'no_pengajuan',               'No. Pengajuan'],
+                [SHOW,       OPTIONAL, I::SELECT, 'id_suplier',                 'Suplier'],
                 [SHOW,       REQUIRED, I::DATE,   'tanggal',                    'Tanggal'],
                 [SHOW,       OPTIONAL, I::SELECT, 'id_status_pengadaan_barang', 'Status'],
                 [SHOW,       OPTIONAL, I::TEXT,   'catatan',                    'Catatan'],
+                [TABLE_ONLY, OPTIONAL, I::MONEY,  'total_harga',                'Total Harga'],
             ],
             child_path: '/inventori-non-medis/detail-pengadaan-barang',
             child_fk:   'id_pengadaan',
@@ -43,7 +44,8 @@ final class PengadaanBarangController extends ControllerTemplate
     {
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.pengadaan_barang', 'no_pengadaan', 'id_pengadaan');
-        $postData['no_pengadaan'] = generateNextNoPengadaanBarang($lastNo, $postData['tanggal'] ?? null);
+        $postData['no_pengadaan']               = generateNextNoPengadaanBarang($lastNo, $postData['tanggal'] ?? null);
+        $postData['id_status_pengadaan_barang'] = 1;
     }
 
     public function print(int|string $id): string
@@ -52,8 +54,15 @@ final class PengadaanBarangController extends ControllerTemplate
 
         $header = $db->table('inventori_non_medis.pengadaan_barang pb')
             ->join('inventori_non_medis.suplier s',           'pb.id_suplier = s.id_suplier',       'left')
+            ->join('finansial.rekening r',                    's.id_rekening = r.id_rekening',       'left')
+            ->join('finansial.bank bk',                       'r.bank = bk.id_bank',                'left')
             ->join('inventori_non_medis.pengajuan_barang pj', 'pb.id_pengajuan = pj.id_pengajuan',   'left')
-            ->select('pb.no_pengadaan, pb.tanggal, pb.catatan, s.nama_suplier, s.no_telp, s.alamat, pj.no_pengajuan')
+            ->join('role.petugas pt',                         'pj.petugas_gudang = pt.id_petugas',  'left')
+            ->join('person.orang o',                          'pt.id_orang = o.id_orang',            'left')
+            ->select('pb.no_pengadaan, pb.tanggal, pb.catatan,
+                      s.nama_suplier, s.no_telp, s.alamat,
+                      r.nomor_rekening, r.nama_akun, bk.nama_bank,
+                      pj.no_pengajuan, o.nama AS nama_petugas')
             ->where('pb.id_pengadaan', (int) $id)
             ->get()->getRowArray();
 

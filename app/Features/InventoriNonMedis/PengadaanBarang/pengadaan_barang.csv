@@ -1,2 +1,2 @@
-id_pengadaan,no_pengadaan,id_pengajuan,id_suplier,tanggal,id_status_pengadaan_barang,catatan
-0,,0,0,2026-01-01 00:00:00,0,
+id_pengadaan,no_pengadaan,id_pengajuan,id_suplier,tanggal,id_status_pengadaan_barang,catatan,total_harga
+0,,0,0,2026-01-01 00:00:00,0,,0

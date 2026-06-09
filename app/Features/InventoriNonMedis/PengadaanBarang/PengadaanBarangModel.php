@@ -17,12 +17,10 @@ final class PengadaanBarangModel extends ModelTemplate
                 'no_pengadaan'               => V::DEFAULT(),
                 'tanggal'                    => V::DEFAULT(),
                 'catatan'                    => V::DEFAULT(),
+                'total_harga'               => V::DEFAULT(),
             ],
             [
-                'id_pengajuan' => [
-                    'tanggal',
-                    'id_status_pengajuan_barang' => ['nama_status_pengajuan_barang'],
-                ],
+                'id_pengajuan'               => ['no_pengajuan'],
                 'id_suplier'                 => ['nama_suplier'],
                 'id_status_pengadaan_barang' => ['nama_status_pengadaan_barang'],
             ],

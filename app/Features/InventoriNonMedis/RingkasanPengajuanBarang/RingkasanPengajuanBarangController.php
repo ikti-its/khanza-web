@@ -74,6 +74,70 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
             }
         }
 
-        return parent::update($id);
+        $result = parent::update($id);
+
+        if ($result instanceof RedirectResponse && $is_new_approval) {
+            try {
+                $this->auto_create_pengadaan((int) $id);
+            } catch (\Throwable $e) {
+                log_message('error', '[RingkasanPengajuan] auto_create_pengadaan: ' . $e->getMessage());
+                session()->setFlashdata('info', 'Pengajuan disetujui, namun gagal membuat data pengadaan otomatis: ' . $e->getMessage());
+            }
+        }
+
+        return $result;
+    }
+
+    private function auto_create_pengadaan(int $id_pengajuan): void
+    {
+        $db = $this->get_db();
+
+        $exists = $db->table('inventori_non_medis.pengadaan_barang')
+            ->where('id_pengajuan', $id_pengajuan)
+            ->countAllResults() > 0;
+        if ($exists) return;
+
+        helper('autonomor');
+        $lastNo       = $this->get_last('inventori_non_medis.pengadaan_barang', 'no_pengadaan', 'id_pengadaan');
+        $no_pengadaan = generateNextNoPengadaanBarang($lastNo);
+        $now          = date('Y-m-d H:i:s');
+
+        $db->table('inventori_non_medis.pengadaan_barang')->insert([
+            'no_pengadaan'               => $no_pengadaan,
+            'id_pengajuan'               => $id_pengajuan,
+            'id_suplier'                 => 0,
+            'tanggal'                    => $now,
+            'id_status_pengadaan_barang' => 1,
+        ]);
+        $id_pengadaan = (int) $db->insertID();
+
+        $items = $db->table('inventori_non_medis.pengajuan_barang_detail')
+            ->where('id_pengajuan', $id_pengajuan)
+            ->where('id_barang >', 0)
+            ->where('qty_disetujui >', 0)
+            ->get()->getResultArray();
+
+        $total = 0.0;
+        foreach ($items as $item) {
+            $harga    = (float) ($item['harga'] ?? 0);
+            $qty      = (float) ($item['qty_disetujui'] ?? 0);
+            $subtotal = $harga * $qty;
+            $total   += $subtotal;
+
+            $db->table('inventori_non_medis.pengadaan_barang_detail')->insert([
+                'id_pengadaan' => $id_pengadaan,
+                'id_barang'    => (int) $item['id_barang'],
+                'qty'          => $qty,
+                'harga_satuan' => $harga > 0 ? $harga : null,
+                'subtotal'     => $subtotal > 0 ? $subtotal : null,
+            ]);
+        }
+
+        if ($total > 0) {
+            $db->table('inventori_non_medis.pengadaan_barang')
+                ->where('id_pengadaan', $id_pengadaan)
+                ->set('total_harga', $total)
+                ->update();
+        }
     }
 }

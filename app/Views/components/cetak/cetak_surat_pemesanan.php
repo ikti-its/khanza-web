@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Surat Pemesanan <?= esc($header['no_pengadaan'] ?? '') ?></title>
+  <link rel="icon" type="image/jpeg" href="<?= base_url('img/omnia.jpeg') ?>">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -57,7 +58,7 @@
       gap: 4px 24px;
       margin-bottom: 16px;
     }
-    .info-baris { display: flex; gap: 6px; }
+    .info-baris { display: flex; gap: 6px; font-size: 12px; }
     .info-label { min-width: 110px; }
     .info-titik { flex-shrink: 0; }
 
@@ -78,10 +79,26 @@
       font-weight: bold;
       font-size: 12px;
     }
-    table.barang td { vertical-align: top; }
+    table.barang td { vertical-align: top; font-size: 12px; }
     table.barang td.center { text-align: center; }
     table.barang td.right  { text-align: right; }
     table.barang tfoot td  { font-weight: bold; background: #fafafa; }
+
+    /* === REKENING === */
+    .rekening-area {
+      margin-top: 10px;
+      font-size: 12px;
+      border: 1px dashed #aaa;
+      border-radius: 4px;
+      padding: 8px 12px;
+      background: #fafafa;
+    }
+    .rekening-area .rek-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: #333;
+    }
 
     /* === CATATAN === */
     .catatan-area {
@@ -93,17 +110,19 @@
     /* === TTD === */
     .ttd-area {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       margin-top: 32px;
+      gap: 16px;
     }
     .ttd-box {
       text-align: center;
-      width: 200px;
+      flex: 1;
     }
     .ttd-box .ttd-garis {
       margin-top: 60px;
       border-top: 1px solid #000;
       padding-top: 4px;
+      font-size: 12px;
     }
 
     /* === TOMBOL CETAK === */
@@ -161,6 +180,13 @@
         <span><?= esc($header['no_pengajuan']) ?></span>
       </div>
       <?php endif; ?>
+      <?php if (!empty($header['nama_petugas'])): ?>
+      <div class="info-baris">
+        <span class="info-label">Petugas Gudang</span>
+        <span class="info-titik">:</span>
+        <span><?= esc($header['nama_petugas']) ?></span>
+      </div>
+      <?php endif; ?>
     </div>
     <div>
       <div class="info-baris">
@@ -186,9 +212,7 @@
   </div>
 
   <!-- TABEL BARANG -->
-  <?php
-    $total = 0;
-  ?>
+  <?php $total = 0; ?>
   <table class="barang">
     <thead>
       <tr>
@@ -231,6 +255,40 @@
     </tfoot>
   </table>
 
+  <!-- INFORMASI PEMBAYARAN -->
+  <?php
+    $no_rek   = $header['nomor_rekening'] ?? '';
+    $nm_akun  = $header['nama_akun'] ?? '';
+    $nm_bank  = $header['nama_bank'] ?? '';
+    $has_rek  = ($no_rek !== '' && $no_rek !== '-') || ($nm_bank !== '');
+  ?>
+  <?php if ($has_rek): ?>
+  <div class="rekening-area">
+    <div class="rek-title">Informasi Pembayaran</div>
+    <?php if ($nm_bank !== ''): ?>
+    <div class="info-baris">
+      <span class="info-label">Bank</span>
+      <span class="info-titik">:</span>
+      <span><?= esc($nm_bank) ?></span>
+    </div>
+    <?php endif; ?>
+    <?php if ($no_rek !== '' && $no_rek !== '-'): ?>
+    <div class="info-baris">
+      <span class="info-label">No. Rekening</span>
+      <span class="info-titik">:</span>
+      <span><strong><?= esc($no_rek) ?></strong></span>
+    </div>
+    <?php endif; ?>
+    <?php if ($nm_akun !== '' && $nm_akun !== '-'): ?>
+    <div class="info-baris">
+      <span class="info-label">Atas Nama</span>
+      <span class="info-titik">:</span>
+      <span><?= esc($nm_akun) ?></span>
+    </div>
+    <?php endif; ?>
+  </div>
+  <?php endif; ?>
+
   <!-- CATATAN -->
   <?php if (!empty($header['catatan'])): ?>
   <div class="catatan-area">
@@ -240,6 +298,10 @@
 
   <!-- TTD -->
   <div class="ttd-area">
+    <div class="ttd-box">
+      <div>Mengetahui,</div>
+      <div class="ttd-garis">Bagian Keuangan</div>
+    </div>
     <div class="ttd-box">
       <div>Hormat Kami,</div>
       <div class="ttd-garis">Kepala Gudang</div>

@@ -21,6 +21,7 @@ final class PengadaanBarangDatabase extends DatabaseTemplate
                 'tanggal'                    => T::DTIME(),
                 'id_status_pengadaan_barang' => T::FK_AUTO(),
                 'catatan'                    => T::NOTE()->nullable(),
+                'total_harga'               => T::MONEY()->nullable(),
             ],
             'id_pengadaan',
             [],
