@@ -13,15 +13,13 @@ final class PengajuanBarangModel extends ModelTemplate
         parent::__construct(
             new PengajuanBarangDatabase(),
             [
-                'id_pengajuan'               => V::DEFAULT(),
-                'no_pengajuan'               => V::DEFAULT(),
-                'tanggal'                    => V::DEFAULT(),
-                'catatan'                    => V::DEFAULT(),
-                'catatan_atasan'             => V::DEFAULT(),
+                'id_pengajuan' => V::DEFAULT(),
+                'no_pengajuan' => V::DEFAULT(),
+                'tanggal'      => V::DEFAULT(),
             ],
             [
-                'id_permintaan' => [
-                    'id_tipe_permintaan_barang' => ['nama_tipe_permintaan_barang'],
+                'petugas_gudang' => [
+                    'id_orang' => ['nama'],
                 ],
                 'id_status_pengajuan_barang' => ['nama_status_pengajuan_barang'],
             ],

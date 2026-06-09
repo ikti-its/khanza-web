@@ -18,14 +18,18 @@ if ($opsi === null) {
 }
 
 // Deteksi autofill metadata dari elemen ke-3 option
-$autofill_target = null;
-$autofill_key    = null;
+// Format baru: _autofill => ['target_field' => 'data_key', ...]
+// Format lama: _target, _key (backward compat)
+$autofill_map = [];
 foreach ($opsi as $o) {
-    if (isset($o[2]['_target'], $o[2]['_key'])) {
-        $autofill_target = $o[2]['_target'];
-        $autofill_key    = $o[2]['_key'];
-        break;
+    if (!isset($o[2]) || !is_array($o[2])) continue;
+    $meta = $o[2];
+    if (isset($meta['_autofill']) && is_array($meta['_autofill'])) {
+        $autofill_map = $meta['_autofill'];
+    } elseif (isset($meta['_target'], $meta['_key'])) {
+        $autofill_map[$meta['_target']] = $meta['_key'];
     }
+    if (!empty($autofill_map)) break;
 }
 ?>
 <select
@@ -33,7 +37,7 @@ foreach ($opsi as $o) {
     name="<?= $column ?>"
     class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full md:w-1/4 dark:border-gray-600 dark:text-white"
     <?= $req === 1 ? 'required' : '' ?>
-    <?= $autofill_target ? 'data-autofill-target="' . esc($autofill_target) . '" data-autofill-key="' . esc($autofill_key) . '"' : '' ?>>
+    <?= !empty($autofill_map) ? 'data-autofill-map=\'' . json_encode($autofill_map, JSON_HEX_APOS) . '\'' : '' ?>>
 
     <?php
         array_unshift($opsi, ["-- Pilih --", '']);

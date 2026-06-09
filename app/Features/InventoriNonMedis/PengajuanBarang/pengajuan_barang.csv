@@ -1,2 +1,2 @@
-id_pengajuan,no_pengajuan,id_permintaan,tanggal,id_status_pengajuan_barang,catatan,catatan_atasan
-0,,0,2026-01-01 00:00:00,0,,
+id_pengajuan,no_pengajuan,id_permintaan,tanggal,petugas_gudang,id_status_pengajuan_barang,atasan_logistik,tanggal_disetujui,total_harga
+0,,0,2026-01-01 00:00:00,0,0,0,,0

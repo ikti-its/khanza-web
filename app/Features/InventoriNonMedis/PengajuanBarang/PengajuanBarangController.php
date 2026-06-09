@@ -25,13 +25,13 @@ final class PengajuanBarangController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE,       OPTIONAL, I::INDEX,  'id_pengajuan',               'ID Pengajuan'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_pengajuan',               'ID'],
                 [HIDE,       OPTIONAL, I::INDEX,  'id_permintaan',              'ID Permintaan'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,   'no_pengajuan',               'No. Pengajuan'],
                 [SHOW,       REQUIRED, I::DATE,   'tanggal',                    'Tanggal'],
-                [SHOW,       OPTIONAL, I::SELECT, 'id_status_pengajuan_barang', 'Status'],
-                [SHOW,       OPTIONAL, I::TEXT,   'catatan',                    'Catatan'],
-                [SHOW,       OPTIONAL, I::TEXT,   'catatan_atasan',             'Catatan Atasan'],
+                [SHOW,       REQUIRED, I::SELECT, 'petugas_gudang',             'Petugas'],
+                [TABLE_ONLY, OPTIONAL, I::SELECT, 'id_status_pengajuan_barang', 'Status'],
+                [TABLE_ONLY, OPTIONAL, I::MONEY,  'total_harga',               'Total Harga'],
             ],
             child_path: '/inventori-non-medis/detail-pengajuan-barang',
             child_fk:   'id_pengajuan',
@@ -42,6 +42,12 @@ final class PengajuanBarangController extends ControllerTemplate
     {
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.pengajuan_barang', 'no_pengajuan', 'id_pengajuan');
-        $postData['no_pengajuan'] = generateNextNoPengajuanBarang($lastNo, $postData['tanggal'] ?? null);
+        $postData['no_pengajuan']               = generateNextNoPengajuanBarang($lastNo, $postData['tanggal'] ?? null);
+        $postData['id_status_pengajuan_barang'] = 1;
+    }
+
+    protected function before_update(array &$postData, int|string $id): void
+    {
+        unset($postData['id_status_pengajuan_barang']);
     }
 }

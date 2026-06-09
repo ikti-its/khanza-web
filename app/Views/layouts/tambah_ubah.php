@@ -36,16 +36,17 @@
 </div>
 <!-- End Card Section -->
 <script>
-    // Autofill: select[data-autofill-target] → input[name=target]
+    // Autofill: select[data-autofill-map] → multiple inputs
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('select[data-autofill-target]').forEach(function (sel) {
-            var target = sel.getAttribute('data-autofill-target');
-            var key    = sel.getAttribute('data-autofill-key');
-            var input  = document.querySelector('[name="' + target + '"]');
-            if (!input || !key) return;
+        document.querySelectorAll('select[data-autofill-map]').forEach(function (sel) {
+            var map = {};
+            try { map = JSON.parse(sel.getAttribute('data-autofill-map')); } catch (e) {}
             function sync() {
                 var opt = sel.options[sel.selectedIndex];
-                input.value = opt ? (opt.getAttribute('data-' + key) || '') : '';
+                for (var target in map) {
+                    var input = document.querySelector('[name="' + target + '"]');
+                    if (input) input.value = opt ? (opt.getAttribute('data-' + map[target]) || '') : '';
+                }
             }
             sel.addEventListener('change', sync);
             sync();
