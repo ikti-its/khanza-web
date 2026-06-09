@@ -1,6 +1,2 @@
 id_detail,id_pengadaan,id_barang,qty,harga_satuan
 0,0,0,0,0
-1,1,1,100,5000
-2,1,2,50,45000
-3,2,3,30,25000
-4,3,5,200,15000
