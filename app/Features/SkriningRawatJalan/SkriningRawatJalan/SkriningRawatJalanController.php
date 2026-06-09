@@ -69,7 +69,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
             fn($f) => $f[2] !== 'id_skrining' && $f[2] !== 'no_rm'
         ));
 
-        return view('admin/rawat_jalan/skrining_rawat_jalan/tambah_skrining_rj', [
+        return view('admin/skrining_rawat_jalan/tambah_skrining_rj', [
             'judul'       => 'Tambah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
@@ -105,7 +105,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
             fn($f) => $f[2] !== 'id_skrining' && $f[2] !== 'no_rm'
         ));
 
-        return view('admin/rawat_jalan/skrining_rawat_jalan/tambah_skrining_rj', [
+        return view('admin/skrining_rawat_jalan/tambah_skrining_rj', [
             'judul'       => 'Ubah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
