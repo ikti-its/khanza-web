@@ -17,24 +17,22 @@ final class PengadaanBarangDetailController extends ControllerTemplate
                 ['Inventori Non Medis', 'inventori_non_medis'],
                 ['Pengadaan Barang',    'pengadaan_barang'],
                 ['Detail',              'detail'],
-                ],
-                'Detail Pengadaan Barang',
-                [
-                    A::READ,
-                    A::CREATE,
-                    // A::AUDIT,
-                    A::UPDATE,
-                    A::DELETE,
-                    ],
-                    [
-                        [HIDE, OPTIONAL, I::INDEX,  'id_detail',    'ID Detail'],
-                        [HIDE, OPTIONAL, I::INDEX,  'id_pengadaan', 'ID Pengadaan'],
-                        [SHOW, REQUIRED, I::SELECT, 'id_barang',    'Barang'],
-                        [SHOW, REQUIRED, I::NUMBER, 'qty',          'Qty'],
-                        [SHOW, OPTIONAL, I::MONEY,  'harga_satuan', 'Harga Satuan'],
-                    ],
-                        parent_fk: 'id_pengadaan',
+            ],
+            'Detail Pengadaan Barang',
+            [
+                A::READ,
+                A::CREATE,
+                A::UPDATE,
+                A::DELETE,
+            ],
+            [
+                [HIDE, OPTIONAL, I::INDEX,  'id_detail',    'ID Detail'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_pengadaan', 'ID Pengadaan'],
+                [SHOW, REQUIRED, I::SELECT, 'id_barang',    'Barang'],
+                [SHOW, REQUIRED, I::NUMBER, 'qty',          'Qty'],
+                [SHOW, OPTIONAL, I::MONEY,  'harga_satuan', 'Harga Satuan'],
+            ],
+            parent_fk: 'id_pengadaan',
         );
     }
-
 }

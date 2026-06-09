@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Core\Controller;
 use App\Core\Model\ModelTemplate;
 use CodeIgniter\Controller;
+use CodeIgniter\Database\BaseConnection;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\HTTP\RedirectResponse;
 
@@ -148,7 +149,7 @@ class ControllerTemplate extends Controller
             }
 
             if (!$_required && ($raw_data === '' || $raw_data === null)) {
-                $raw_data = null;
+                $raw_data = $type === InputType::SELECT->value ? 0 : null;
             }
             $postData[$column] = $raw_data;
         }
@@ -361,6 +362,23 @@ class ControllerTemplate extends Controller
             return 'Ada kolom wajib yang belum diisi.';
         }
         return $msg;
+    }
+
+    protected function get_db(): BaseConnection
+    {
+        $config             = (new \Config\Database())->default;
+        $config['database'] = env('database.default.khanza_db');
+        return \Config\Database::connect($config);
+    }
+
+    protected function get_last(string $table, string $column, string $pk): mixed
+    {
+        return $this->get_db()
+            ->table($table)
+            ->select($column)
+            ->orderBy($pk, 'DESC')
+            ->limit(1)
+            ->get()->getRowArray()[$column] ?? null;
     }
 
     protected function before_read(): void {}

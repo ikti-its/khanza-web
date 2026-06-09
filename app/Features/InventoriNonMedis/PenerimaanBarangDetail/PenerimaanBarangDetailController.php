@@ -14,26 +14,25 @@ final class PenerimaanBarangDetailController extends ControllerTemplate
         parent::__construct(
             new PenerimaanBarangDetailModel(),
             [
-                ['Inventori Non Medis',      'inventori_non_medis'],
-                ['Penerimaan Barang Detail', 'penerimaan_barang_detail'],
+                ['Inventori Non Medis',  'inventori_non_medis'],
+                ['Penerimaan Barang',    'penerimaan_barang'],
+                ['Detail',               'detail'],
             ],
             'Penerimaan Barang Detail',
             [
                 A::READ,
                 A::CREATE,
-                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_detail',     'ID'],
-                [SHOW, REQUIRED, I::SELECT, 'id_penerimaan', 'No. Penerimaan'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_penerimaan', 'ID Penerimaan'],
                 [SHOW, REQUIRED, I::SELECT, 'id_barang',     'Barang'],
                 [SHOW, REQUIRED, I::NUMBER, 'qty_diterima',  'Qty Diterima'],
                 [SHOW, OPTIONAL, I::MONEY,  'harga_satuan',  'Harga Satuan'],
-                ],
-                $parent_fk = 'id_penerimaan',
-            );
-            }
-
+            ],
+            parent_fk: 'id_penerimaan',
+        );
+    }
 }

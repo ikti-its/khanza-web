@@ -6,7 +6,6 @@ namespace App\Features\InventoriNonMedis\Suplier;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
-use CodeIgniter\Database\BaseConnection;
 
 final class SuplierController extends ControllerTemplate
 {
@@ -40,19 +39,12 @@ final class SuplierController extends ControllerTemplate
         );
     }
 
-    private function khanza_db(): BaseConnection
-    {
-        $config             = (new \Config\Database())->default;
-        $config['database'] = env('database.default.khanza_db');
-        return \Config\Database::connect($config);
-    }
-
     protected function get_fields_with_options(bool $include_pk = false, bool $is_form = false): array
     {
         $fields = parent::get_fields_with_options($include_pk, $is_form);
         if (!$is_form) return $fields;
 
-        $banks = $this->khanza_db()
+        $banks = $this->get_db()
             ->query("SELECT id_bank, nama_bank FROM finansial.bank WHERE id_bank > 0 ORDER BY nama_bank")
             ->getResultArray();
 
@@ -81,7 +73,7 @@ final class SuplierController extends ControllerTemplate
             $data += ['id_bank' => null, 'nomor_rekening' => null, 'nama_akun' => null];
 
             if (!empty($data['id_rekening'])) {
-                $rekening = $this->khanza_db()
+                $rekening = $this->get_db()
                     ->query(
                         "SELECT bank AS id_bank, nomor_rekening, nama_akun
                          FROM finansial.rekening WHERE id_rekening = ?",
@@ -109,7 +101,7 @@ final class SuplierController extends ControllerTemplate
 
     private function generate_kode(): string
     {
-        $row = $this->khanza_db()
+        $row = $this->get_db()
             ->query(
                 "SELECT MAX(CAST(SUBSTRING(TRIM(kode_suplier) FROM 2) AS INTEGER)) AS max_num
                  FROM inventori_non_medis.suplier
@@ -149,7 +141,7 @@ final class SuplierController extends ControllerTemplate
 
         if (!$id_bank || !$nomor_rekening || !$nama_akun) return;
 
-        $db = $this->khanza_db();
+        $db = $this->get_db();
         $db->table('finansial.rekening')->insert([
             'bank'           => $id_bank,
             'nomor_rekening' => $nomor_rekening,
@@ -171,7 +163,7 @@ final class SuplierController extends ControllerTemplate
         $suplier     = $this->model->find($id);
         $id_rekening = $suplier['id_rekening'] ?? null;
 
-        $db = $this->khanza_db();
+        $db = $this->get_db();
 
         if ($id_rekening) {
             $db->table('finansial.rekening')
