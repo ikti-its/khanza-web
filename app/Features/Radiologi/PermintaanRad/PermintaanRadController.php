@@ -47,7 +47,7 @@ final class PermintaanRadController extends ControllerTemplate
         $lastNo = $this->model->db
             ->table('radiologi.permintaan_rad')
             ->select('no_permintaan')
-            ->like('no_permintaan', 'RAD-' . date('Ymd'), 'after')
+            ->like('no_permintaan', 'RAD' . date('Ymd'), 'after')
             ->orderBy('no_permintaan', 'DESC')
             ->limit(1)
             ->get()
@@ -68,7 +68,7 @@ final class PermintaanRadController extends ControllerTemplate
  
         $breadcrumbs = [['title' => 'Tambah', 'icon' => 'tambah']];
  
-        return view('admin/radiologi/permintaan_rad/tambah_permintaan_rad', [
+        return view('admin/radiologi/tambah_permintaan_rad', [
             'judul'         => 'Tambah ' . $this->title,
             'breadcrumbs'   => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'    => $this->get_uri_path(),
@@ -82,34 +82,29 @@ final class PermintaanRadController extends ControllerTemplate
  
     public function list()
     {
-        $nomorReg = $this->request->getGet('nomor_reg') ?? '';
-        $nama     = $this->request->getGet('nama')      ?? '';
-
-        $builder = $this->model->db
-            ->table('rekam_medis.registrasi r')
+        $rows = $this->model->db
+            ->table('radiologi.permintaan_rad pr')
             ->select([
-                'r.nomor_reg',
-                'r.nomor_rawat',
-                'r.datetime',
+                'pr.id_permintaan',
+                'pr.no_permintaan',
+                'pr.nomor_reg',
+                'pr.kode_dokter_perujuk',
+                'pr.tgl_jam_permintaan',
                 'p.nomor_rm',
                 'o.nama',
-                'd.kode_dokter',
-                'od.nama AS nama_dokter',
-                'r.id_dokter',
+                'd.id_dokter AS id_dokter_perujuk',
+                'od.nama AS nama_dokter_perujuk',
+                's.nama_status',
             ])
-            ->join('role.pasien p',   'p.id_pasien = r.id_pasien')
-            ->join('person.orang o',  'o.id_orang  = p.id_orang')
-            ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
-            ->join('person.orang od', 'od.id_orang = d.id_orang',  'left');
-
-        if ($nomorReg !== '') {
-            $builder->like('r.nomor_reg', $nomorReg);
-        }
-        if ($nama !== '') {
-            $builder->like('o.nama', $nama);
-        }
-
-        $rows = $builder->orderBy('r.datetime', 'ASC')->get()->getResultArray();
+            ->join('rekam_medis.registrasi r',  'r.nomor_reg   = pr.nomor_reg')
+            ->join('role.pasien p',             'p.id_pasien   = r.id_pasien')
+            ->join('person.orang o',            'o.id_orang    = p.id_orang')
+            ->join('role.dokter d',             'd.kode_dokter = pr.kode_dokter_perujuk', 'left')
+            ->join('person.orang od',           'od.id_orang   = d.id_orang', 'left')
+            ->join('radiologi.ref_status_permintaan_rad s', 's.id_status = pr.id_status_permintaan', 'left')
+            ->orderBy('pr.tgl_jam_permintaan', 'DESC')
+            ->get()
+            ->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }
@@ -130,7 +125,7 @@ final class PermintaanRadController extends ControllerTemplate
             $lastNo = $this->model->db
                 ->table('radiologi.permintaan_rad')
                 ->select('no_permintaan')
-                ->like('no_permintaan', 'RAD-' . date('Ymd'), 'after')
+                ->like('no_permintaan', 'RAD' . date('Ymd'), 'after')
                 ->orderBy('no_permintaan', 'DESC')
                 ->limit(1)
                 ->get()
@@ -219,7 +214,7 @@ final class PermintaanRadController extends ControllerTemplate
                     'p.nomor_rm',
                     'o.nama',
                     'd.kode_dokter',
-                    'od.nama AS nama_dokter',
+                    'od.nama AS nama_dokter_perujuk',
                 ])
                 ->join('role.pasien p',   'p.id_pasien = r.id_pasien')
                 ->join('person.orang o',  'o.id_orang  = p.id_orang')
@@ -272,7 +267,7 @@ final class PermintaanRadController extends ControllerTemplate
             ], true)
         ));
 
-        return view('admin/radiologi/permintaan_rad/tambah_permintaan_rad', [
+        return view('admin/radiologi/tambah_permintaan_rad', [
             'judul'         => 'Ubah ' . $this->title,
             'breadcrumbs'   => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'    => $this->get_uri_path(),

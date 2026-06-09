@@ -32,4 +32,18 @@ final class PermintaanRadItemController extends ControllerTemplate
             ],
         );
     }
+    public function list()
+    {
+        $idPermintaan = $this->request->getGet('id_permintaan');
+
+        $rows = $this->model->db
+            ->table('radiologi.permintaan_rad_item pri')
+            ->select(['pri.id_item', 'r.kode_periksa', 'r.nama_pemeriksaan', 'r.tarif_dasar'])
+            ->join('radiologi.ref_item_rad r', 'r.id_item = pri.id_item')
+            ->where('pri.id_permintaan', $idPermintaan)
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
+    }
 }

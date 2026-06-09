@@ -33,4 +33,16 @@ final class DokterController extends ControllerTemplate
             ],
         );
     }
+    public function list()
+    {
+        $rows = $this->model->db
+            ->table('role.dokter')
+            ->select(['role.dokter.id_dokter', 'role.dokter.kode_dokter', 'person.orang.nama AS nama_dokter', 'role.dokter.spesialis'])
+            ->join('person.orang', 'person.orang.id_orang = role.dokter.id_orang')
+            ->orderBy('person.orang.nama', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
+    }
 }
