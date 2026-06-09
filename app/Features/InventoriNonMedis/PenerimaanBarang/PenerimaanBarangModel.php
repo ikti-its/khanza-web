@@ -22,12 +22,8 @@ final class PenerimaanBarangModel extends ModelTemplate
                 'tanggal_diterima'           => V::DEFAULT(),
             ],
             [
-                'id_pengadaan' => [
-                    'id_status_pengadaan_barang' => ['nama_status_pengadaan_barang'],
-                ],
-                'id_status_penerimaan_barang' => [
-                    'nama_status_penerimaan_barang',
-                ],
+                'id_pengadaan'               => ['no_pengadaan'],
+                'id_status_penerimaan_barang' => ['nama_status_penerimaan_barang'],
             ],
         );
     }
