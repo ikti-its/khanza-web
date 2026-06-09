@@ -6,6 +6,7 @@ namespace App\Features\UjiDarah\HasilUjiSaring;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class HasilUjiSaringController extends ControllerTemplate
 {
@@ -103,5 +104,69 @@ final class HasilUjiSaringController extends ControllerTemplate
             'baris'          => $mockBaris,
             'form_action'    => '/submittambah',
         ]);
+    }
+
+    /**
+     * OVERRIDE: Memproses simpan data hasil uji saring
+     */
+    #[\Override]
+    public function create(): string|RedirectResponse
+    {
+        $rawPost = $this->request->getPost();
+
+        $dataUjiSaring = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataUjiSaring[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+
+        if (!isset($rawPost['malaria']) || $rawPost['malaria'] === '') {
+            $dataUjiSaring['malaria'] = null;
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $this->model->insert($dataUjiSaring);
+            $idUjiSaring = $this->model->getInsertID();
+
+            $isHbsagReaktif  = (isset($rawPost['hbsag']) && (string)$rawPost['hbsag'] === '1');
+            $isHcvReaktif    = (isset($rawPost['hcv']) && (string)$rawPost['hcv'] === '1');
+            $isHivReaktif    = (isset($rawPost['hiv']) && (string)$rawPost['hiv'] === '1');
+            $isSifilisReaktif = (isset($rawPost['sifilis']) && (string)$rawPost['sifilis'] === '1');
+            $isMalariaReaktif = (isset($rawPost['malaria']) && (string)$rawPost['malaria'] === '1');
+
+            if ($isHbsagReaktif || $isHcvReaktif || $isHivReaktif || $isSifilisReaktif || $isMalariaReaktif) {
+                $modelKasusReaktif = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
+
+                $tanggalDitetapkan = date('Y-m-d');
+                $idStatusKasus     = 1;
+
+                $modelKasusReaktif->insert([
+                    'id_uji_saring'      => $idUjiSaring,
+                    'tanggal_ditetapkan' => $tanggalDitetapkan,
+                    'id_status_kasus'    => $idStatusKasus,
+                ]);
+            }
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException("Gagal menyimpan data hasil uji saring.");
+            }
+
+            session()->setFlashdata('success', 'Data hasil uji saring berhasil disimpan.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
+                ? $this->friendly_db_error($e) 
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 }
