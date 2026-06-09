@@ -1,7 +1,7 @@
 <?= view('components/modal/modal-table', [
     'modalId'      => 'modalRegistrasi',
     'modalTitle'   => 'Pilih Registrasi Pasien',
-    'headers'      => ['No. Registrasi', 'Nama Pasien', 'No. RM', 'Tanggal'],
+    'headers'      => ['No. Registrasi', 'No. RM', 'Nama Pasien', 'Tanggal'],
     'tableId'      => 'registrasiTable',
     'searchInputs' => [
         ['id' => 'searchNomorReg',   'placeholder' => 'Cari No. Registrasi...'],
@@ -23,7 +23,7 @@
             modalId:     'modalRegistrasi',
             tableId:     'registrasiTable',
             url:         '<?= site_url('rekam-medis/registrasi/modal/list') ?>',
-            fields:      ['nomor_reg', 'nama', 'nomor_rm', 'datetime'],
+            fields:      ['nomor_reg', 'nomor_rm', 'nama', 'datetime'],
             searchIds: {
                 searchNomorReg:   'nomor_reg',
                 searchNamaPasReg: 'nama',
