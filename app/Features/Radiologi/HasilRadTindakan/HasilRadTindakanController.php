@@ -37,7 +37,7 @@ final class HasilRadTindakanController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,   'inaktivasi',              'Inaktivasi'],
                 [SHOW, REQUIRED, I::NUMBER, 'jumlah_penyinaran',       'Jumlah Penyinaran'],
                 [SHOW, REQUIRED, I::TEXT,   'dosis_radiasi',           'Dosis Radiasi'],
-                [SHOW, REQUIRED, I::TEXT,   'hasil_ekspertise',        'Hasil Ekspertise'],
+                [SHOW, OPTIONAL, I::TEXT,   'hasil_ekspertise',        'Hasil Ekspertise'],
                 [HIDE, OPTIONAL, I::INDEX,  'id_template_rad',         'ID Template Rad'],
             ],
         );
