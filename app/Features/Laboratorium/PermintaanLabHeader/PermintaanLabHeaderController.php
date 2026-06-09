@@ -29,7 +29,7 @@ final class PermintaanLabHeaderController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX,  'id_permintaan',        'ID Permintaan'],
                 [SHOW, REQUIRED, I::TEXT,   'no_permintaan',        'No. Permintaan'],
                 [SHOW, REQUIRED, I::TEXT,   'nomor_reg',            'Nomor Registrasi'],
-                [SHOW, REQUIRED, I::INDEX,  'id_kategori_lab',      'Kategori Lab'],
+                [HIDE, REQUIRED, I::INDEX,  'id_kategori_lab',      'Kategori Lab'],
                 [SHOW, REQUIRED, I::TEXT,   'kode_dokter_perujuk',  'Kode Dokter Perujuk'],
                 [SHOW, REQUIRED, I::DATE,   'tgl_permintaan',       'Tanggal Permintaan'],
                 [SHOW, REQUIRED, I::TEXT,   'indikasi_klinis',      'Indikasi Klinis'],
