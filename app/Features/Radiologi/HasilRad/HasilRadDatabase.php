@@ -16,10 +16,9 @@ final class HasilRadDatabase extends DatabaseTemplate
             [
                 'id_hasil_rad'        => T::ID(100_000_000),
                 'id_permintaan_rad'   => T::FK_AUTO(),
-                'nomor_reg'           => T::FK_AUTO(),
-                'kode_dokter_pj'      => T::FK_AUTO(),
+                'id_dokter_pj'        => T::FK_AUTO(),
                 'id_petugas_rad'      => T::FK_AUTO(),
-                'kode_dokter_perujuk' => T::FK_AUTO(),
+                'id_dokter_perujuk'   => T::FK_AUTO(),
                 'tgl_jam_hasil'       => T::DTIME(),
                 'catatan'             => T::NOTE(),
             ],
@@ -32,12 +31,7 @@ final class HasilRadDatabase extends DatabaseTemplate
                     ['id_permintaan'],
                 ],
                 [
-                    'nomor_reg',
-                    \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
-                    'nomor_reg',
-                ],
-                [
-                    'kode_dokter_pj',
+                    'id_dokter_pj',
                     \App\Features\Role\Dokter\DokterDatabase::class,
                     'id_dokter',
                 ],
@@ -47,7 +41,7 @@ final class HasilRadDatabase extends DatabaseTemplate
                     'id_petugas',
                 ],
                 [
-                    'kode_dokter_perujuk',
+                    'id_dokter_perujuk',
                     \App\Features\Role\Dokter\DokterDatabase::class,
                     'id_dokter',
                 ],
