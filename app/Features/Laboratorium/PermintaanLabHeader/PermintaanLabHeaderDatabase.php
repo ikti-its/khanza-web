@@ -40,7 +40,7 @@ final class PermintaanLabHeaderDatabase extends DatabaseTemplate
                 [
                     ['kode_dokter_perujuk'],
                     \App\Features\Role\Dokter\DokterDatabase::class,
-                    ['kode_dokter'],
+                    ['id_dokter'],
                 ],
                 [
                     ['id_status_permintaan'],
