@@ -22,7 +22,9 @@ final class PermintaanLabHeaderModel extends ModelTemplate
             [
                 'nomor_reg'            => ['nomor_rawat'],
                 'id_kategori_lab'      => ['nama_kategori'],
-                'kode_dokter_perujuk'  => [],
+                'kode_dokter_perujuk'  => [
+                    'id_orang'  => ['nama']
+                ],
                 'id_status_permintaan' => ['nama_status'],
             ],
         );
