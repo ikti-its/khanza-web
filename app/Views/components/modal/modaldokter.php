@@ -16,9 +16,8 @@
         ],
         [
             'type'    => 'link',
-            'text'    => 'Cek Daftar Dokter',
+            'text'    => 'Tambah Daftar Dokter',
             'href'    => '/dokter',
-            'icon'    => 'search'
         ]
     ]
 ]) ?>
@@ -29,7 +28,7 @@
         initModalList({
             modalId:    'modalDokter',
             tableId:    'dokterTable',
-            url:        '<?= site_url('radiologi/permintaan-radiologi/modal/list') ?>',
+            url:        '<?= site_url('role/dokter/modal/list') ?>',
             fields:     ['kode_dokter', 'nama_dokter', 'spesialis'],
             searchIds: {
                 searchKodeDokter: 'kode_dokter',
@@ -40,7 +39,6 @@
                 autofillFields({
                     kode_dokter:          item.kode_dokter,
                     nama_dokter:          item.nama_dokter,
-                    kode_dokter_perujuk:  item.kode_dokter,
                 });
             }
         });
