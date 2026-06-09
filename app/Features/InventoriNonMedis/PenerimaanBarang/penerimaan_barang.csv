@@ -1,4 +1,2 @@
-id_penerimaan,id_pengadaan,tanggal,status,catatan
-0,0,2026-01-01 00:00:00,-,
-1,1,2026-04-10 09:00:00,selesai,
-2,2,2026-04-11 14:00:00,selesai,Barang diterima lengkap
+id_penerimaan,id_pengadaan,tanggal,status,catatan,id_status_penerimaan_barang,no_penerimaan,no_masuk,tanggal_diterima
+0,0,2026-01-01 00:00:00,-,,0,,,

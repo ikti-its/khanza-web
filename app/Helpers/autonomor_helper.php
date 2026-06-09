@@ -1,6 +1,6 @@
 <?php
 
-//AutoNomor untuk Nomor Rekam Medis (Saat ini dipake di masterpasien dan kelahiranbayi)
+// AutoNomor untuk Nomor Rekam Medis (Saat ini dipake di masterpasien dan kelahiranbayi)
 if (!function_exists('generateNextNoRM')) {
     /**
      * Generate nomor rekam medis berikutnya berdasarkan input terakhir.
@@ -21,7 +21,151 @@ if (!function_exists('generateNextNoRM')) {
     }
 }
 
-//AutoNomor unuk No.SKL Kelahiran Bayi
+// AutoNomor untuk No.Permintaan (Saat ini dipake di fitur Permintaan Barang)
+if (!function_exists('generateNextNoPermintaanBarang')) {
+    /** Generate nomor permintaan barang berikutnya.
+     * Format: PRMYYYYMMDDXXXX
+     * Contoh: PRM202506070001
+     */
+    function generateNextNoPermintaanBarang(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'PRM' . date('Ymd', $tgl);
+
+        /** @var list<bool> */
+        $match = [];
+        if (!$lastNo || !preg_match('/^PRM' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
+
+// AutoNomor untuk No.Pengajuan (Saat ini dipake di fitur Pengajuan Barang)
+if (!function_exists('generateNextNoPengajuanBarang')) {
+    /** Generate nomor pengajuan barang berikutnya.
+     * Format: PGJYYYYMMDDXXXX
+     * Contoh: PGJ202506070001
+     */
+    function generateNextNoPengajuanBarang(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'PGJ' . date('Ymd', $tgl);
+
+        /** @var list<bool> */
+        $match = [];
+        if (!$lastNo || !preg_match('/^PGJ' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
+
+// AutoNomor untuk No.Pengadaan (Saat ini dipake di fitur Pengadaan Barang)
+if (!function_exists('generateNextNoPengadaanBarang')) {
+    /** Generate nomor pengadaan barang berikutnya.
+     * Format: PGDYYYYMMDDXXXX
+     * Contoh: PGD202506070001
+     */
+    function generateNextNoPengadaanBarang(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'PGD' . date('Ymd', $tgl);
+
+        /** @var list<bool> */
+        $match = [];
+        if (!$lastNo || !preg_match('/^PGD' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
+
+// AutoNomor untuk No.Penerimaan (Saat ini dipake di fitur Penerimaan Barang)
+if (!function_exists('generateNextNoPenerimaanBarang')) {
+    /** Generate nomor penerimaan barang berikutnya.
+     * Format: PNRYYYYMMDDXXXX
+     * Contoh: PNR202506070001
+     */
+    function generateNextNoPenerimaanBarang(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'PNR' . date('Ymd', $tgl);
+
+        /** @var list<bool> */
+        $match = [];
+        if (!$lastNo || !preg_match('/^PNR' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
+
+// AutoNomor untuk No.Keluar (Saat ini dipake di fitur Transaksi Stok)
+if (!function_exists('generateNextNoKeluarBarang')) {
+    /** Generate nomor keluar stok non medis berikutnya.
+     * Format: SKYYYYMMDDXXXX
+     * Contoh: SK202506070001
+     */
+    function generateNextNoKeluarBarang(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'SK' . date('Ymd', $tgl);
+
+        /** @var list<bool> */
+        $match = [];
+        if (!$lastNo || !preg_match('/^SK' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
+
+// AutoNomor untuk No.Masuk (Saat ini dipake di fitur Transaksi Stok)
+if (!function_exists('generateNextNoMasukBarang')) {
+    /** Generate nomor masuk stok non medis berikutnya.
+     * Format: SMYYYYMMDDXXXX
+     * Contoh: SM202506070001
+     */
+    function generateNextNoMasukBarang(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'SM' . date('Ymd', $tgl);
+
+        /** @var list<bool> */
+        $match = [];
+        if (!$lastNo || !preg_match('/^SM' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
+
+// AutoNomor untuk No.SKL Kelahiran Bayi
 if (!function_exists('generateNextSKL')) {
     /** Generate No. SKL dengan format: 0001/RM-SKL/07/2025 */
     function generateNextSKL(?string $lastSKL, string $tgl_lahir): string
@@ -48,9 +192,8 @@ if (!function_exists('generateNextSKL')) {
 if (!function_exists('generateNextNoPermintaanRad')) {
     /**
      * Generate nomor permintaan radiologi berikutnya.
-     *
-     * Format: RAD-[YYYYMMDD]-[4digit urutan]
-     * Contoh: RAD-20260607-0001
+     * Format: RADYYYYMMDDXXXX
+     * Contoh: RAD202606070001
      *
      * @param string|null $lastNo  Nomor terakhir pada tanggal yang sama (dari DB)
      * @param string|null $tanggal Tanggal permintaan format 'Y-m-d', default hari ini
@@ -59,16 +202,16 @@ if (!function_exists('generateNextNoPermintaanRad')) {
     {
         $tgl    = $tanggal ? strtotime($tanggal) : time();
         assert(is_int($tgl));
-        $prefix = 'RAD-' . date('Ymd', $tgl);
- 
+        $prefix = 'RAD' . date('Ymd', $tgl);
+
         /** @var list<bool> $match */
         $match = [];
-        if (!$lastNo || !preg_match('/^RAD-' . date('Ymd', $tgl) . '-(\d{4})$/', $lastNo, $match)) {
+        if (!$lastNo || !preg_match('/^RAD' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
             $nomor = 1;
         } else {
             $nomor = (int) $match[1] + 1;
         }
- 
-        return $prefix . '-' . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
     }
 }

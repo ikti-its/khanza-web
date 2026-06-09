@@ -13,15 +13,20 @@ final class PenerimaanBarangModel extends ModelTemplate
         parent::__construct(
             new PenerimaanBarangDatabase(),
             [
-                'id_penerimaan' => V::DEFAULT(),
-                'tanggal'       => V::DEFAULT(),
-                'status'        => V::DEFAULT(),
-                'catatan'       => V::DEFAULT(),
+                'id_penerimaan'              => V::DEFAULT(),
+                'tanggal'                    => V::DEFAULT(),
+                'status'                     => V::DEFAULT(),
+                'catatan'                    => V::DEFAULT(),
+                'no_penerimaan'              => V::DEFAULT(),
+                'no_masuk'                   => V::DEFAULT(),
+                'tanggal_diterima'           => V::DEFAULT(),
             ],
             [
                 'id_pengadaan' => [
-                    'tanggal',
                     'id_status_pengadaan_barang' => ['nama_status_pengadaan_barang'],
+                ],
+                'id_status_penerimaan_barang' => [
+                    'nama_status_penerimaan_barang',
                 ],
             ],
         );

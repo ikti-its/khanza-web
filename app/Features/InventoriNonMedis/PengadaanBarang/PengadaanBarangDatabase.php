@@ -15,6 +15,7 @@ final class PengadaanBarangDatabase extends DatabaseTemplate
             'pengadaan_barang',
             [
                 'id_pengadaan'               => T::ID(50_000),
+                'no_pengadaan'               => T::CODE(20)->nullable(),
                 'id_pengajuan'               => T::FK_AUTO(),
                 'id_suplier'                 => T::FK_AUTO(),
                 'tanggal'                    => T::DTIME(),
