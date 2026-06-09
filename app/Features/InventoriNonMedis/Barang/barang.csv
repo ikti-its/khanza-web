@@ -5,3 +5,5 @@ id_barang,kode_barang,nama_barang,id_satuan,id_jenis_barang,stok,stok_minimum,ha
 3,KBR-001,Cairan Pembersih Lantai,4,2,30,5,25000
 4,ELK-001,Printer Epson L3210,47,4,30,10,2500000
 5,LAB-001,Sarung Tangan Latex,6,3,30,50,15000
+6,LAB-002,Film Radiologi,23,7,30,50,40800
+7,LAB-003,Map Radiologi,6,7,30,50,4662
