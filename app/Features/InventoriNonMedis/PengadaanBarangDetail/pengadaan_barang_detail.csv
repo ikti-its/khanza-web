@@ -1,2 +1,2 @@
-id_detail,id_pengadaan,id_barang,qty,harga_satuan
-0,0,0,0,0
+id_detail,id_pengadaan,id_barang,qty,harga_satuan,subtotal
+0,0,0,0,0,0

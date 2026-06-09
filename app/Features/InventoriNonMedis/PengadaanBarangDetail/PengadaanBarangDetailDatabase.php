@@ -19,6 +19,7 @@ final class PengadaanBarangDetailDatabase extends DatabaseTemplate
                 'id_barang'    => T::FK_AUTO(),
                 'qty'          => T::QTY(0, 100_000),
                 'harga_satuan' => T::MONEY()->nullable(),
+                'subtotal'     => T::MONEY()->nullable(),
             ],
             'id_detail',
             [],
