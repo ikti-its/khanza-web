@@ -12,6 +12,7 @@ final class RoleRoutes extends RouteTemplate
         parent::__construct(
             'Role',
             [
+                \App\Features\Role\Dokter\DokterController::class,
                 \App\Features\Role\Pasien\PasienController::class,
                 \App\Features\Role\Pendonor\PendonorController::class,
                 \App\Features\Role\Petugas\PetugasController::class,
