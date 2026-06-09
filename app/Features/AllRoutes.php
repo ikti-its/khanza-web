@@ -28,6 +28,7 @@ final class AllRoutes extends RouteGroup
                 \App\Features\SkriningRawatJalan\SkriningRawatJalanRoutes::class,
                 \App\Features\TriaseUGD\TriaseUGDRoutes::class,
                 \App\Features\Operasi\OperasiRoutes::class,
+                \App\Features\RekamMedis\RekamMedisRoutes::class,
                 \App\Features\Radiologi\RadiologiRoutes::class,
                 \App\Features\Laboratorium\LaboratoriumRoutes::class,
                 \App\Features\Lokasi\LokasiRoutes::class,
