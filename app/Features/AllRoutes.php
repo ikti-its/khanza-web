@@ -11,6 +11,7 @@ final class AllRoutes extends RouteGroup
         parent::__construct(
             [
                 \App\Features\Auth\AuthRoutes::class,
+                \App\Features\RekamMedis\RekamMedisRoutes::class,
                 \App\Features\AturanPenggajian\AturanPenggajianRoutes::class,
                 \App\Features\Finansial\FinansialRoutes::class,
                 \App\Features\InventoriNonMedis\InventoriNonMedisRoutes::class,
@@ -28,7 +29,6 @@ final class AllRoutes extends RouteGroup
                 \App\Features\SkriningRawatJalan\SkriningRawatJalanRoutes::class,
                 \App\Features\TriaseUGD\TriaseUGDRoutes::class,
                 \App\Features\Operasi\OperasiRoutes::class,
-                \App\Features\RekamMedis\RekamMedisRoutes::class,
                 \App\Features\Radiologi\RadiologiRoutes::class,
                 \App\Features\Laboratorium\LaboratoriumRoutes::class,
                 \App\Features\Lokasi\LokasiRoutes::class,
