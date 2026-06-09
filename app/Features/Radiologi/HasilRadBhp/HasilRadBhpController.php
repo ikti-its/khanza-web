@@ -27,8 +27,8 @@ final class HasilRadBhpController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_rad_bhp',      'ID Radiologi BHP'],
-                [SHOW, REQUIRED, I::INDEX,  'id_hasil_rad',    'ID Hasil Rad'],
-                [SHOW, REQUIRED, I::INDEX,  'id_barang_medis', 'ID Barang Medis'],
+                [HIDE, REQUIRED, I::INDEX,  'id_hasil_rad',    'Hasil Radiologi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_barang',       'BHP Radiologi'],
                 [SHOW, REQUIRED, I::NUMBER, 'jumlah_pakai',    'Jumlah Pakai'],
             ],
         );

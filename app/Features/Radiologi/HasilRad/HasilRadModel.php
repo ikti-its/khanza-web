@@ -18,11 +18,21 @@ final class HasilRadModel extends ModelTemplate
                 'catatan'             => V::DEFAULT(),
             ],
             [
-                'id_permintaan_rad'   => [],
-                'nomor_reg'           => ['nomor_rawat'],
-                'kode_dokter_pj'      => [],
-                'id_petugas_rad'      => [],
-                'kode_dokter_perujuk' => [],
+                'id_permintaan_rad' => [
+                    'no_permintaan',
+                    'nomor_reg' => [
+                        
+                    ]
+                ],
+                'id_dokter_pj'      => [
+                    'id_orang' => ['nama']
+                ],
+                'id_petugas_rad'    => [
+                    'id_orang' => ['nama']
+                ],
+                'id_dokter_perujuk' => [
+                    'id_orang' => ['nama']
+                ],
             ],
         );
     }

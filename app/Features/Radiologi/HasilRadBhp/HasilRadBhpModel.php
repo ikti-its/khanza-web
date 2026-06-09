@@ -18,7 +18,11 @@ final class HasilRadBhpModel extends ModelTemplate
             ],
             [
                 'id_hasil_rad'    => [],
-                'id_barang_medis' => ['kode_barang', 'nama', 'kode_sat'],
+                'id_barang'       => [
+                    'kode_barang',
+                    'nama_barang',
+                    'id_satuan' =>['nama_satuan']
+                ],
             ],
         );
     }

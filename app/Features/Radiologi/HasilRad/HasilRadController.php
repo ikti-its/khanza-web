@@ -27,12 +27,12 @@ final class HasilRadController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_hasil_rad',        'ID Hasil Radiologi'],
-                [SHOW, REQUIRED, I::INDEX, 'id_permintaan_rad',   'ID Permintaan Rad'],
-                [SHOW, REQUIRED, I::TEXT,  'id_dokter_pj',        'ID Dokter PJ'],
-                [SHOW, REQUIRED, I::TEXT,  'id_petugas_rad',      'ID Petugas Rad'],
-                [SHOW, REQUIRED, I::TEXT,  'id_dokter_perujuk',   'ID Dokter Perujuk'],
-                [SHOW, REQUIRED, I::DATE,  'tgl_jam_hasil',       'Tanggal & Jam Hasil'],
-                [SHOW, REQUIRED, I::TEXT,  'catatan',             'Catatan'],
+                [SHOW, REQUIRED, I::INDEX, 'id_permintaan_rad',   'No. Permintaan'],
+                [SHOW, REQUIRED, I::TEXT,  'id_dokter_pj',        'Dokter PJ'],
+                [SHOW, REQUIRED, I::TEXT,  'id_petugas_rad',      'Petugas Rad'],
+                [SHOW, REQUIRED, I::TEXT,  'id_dokter_perujuk',   'Dokter Perujuk'],
+                [SHOW, REQUIRED, I::DTIME, 'tgl_jam_hasil',       'Tanggal & Jam Hasil'],
+                [SHOW, OPTIONAL, I::TEXT,  'catatan',             'Catatan'],
             ],
         );
     }

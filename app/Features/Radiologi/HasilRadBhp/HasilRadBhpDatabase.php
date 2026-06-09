@@ -16,7 +16,7 @@ final class HasilRadBhpDatabase extends DatabaseTemplate
             [
                 'id_rad_bhp'      => T::ID(100_000_000),
                 'id_hasil_rad'    => T::FK_AUTO(),
-                'id_barang_medis' => T::FK_AUTO(),
+                'id_barang'       => T::FK_AUTO(),
                 'jumlah_pakai'    => T::QTY(0, 1_000_000),
             ],
             'id_rad_bhp',
@@ -28,9 +28,9 @@ final class HasilRadBhpDatabase extends DatabaseTemplate
                     ['id_hasil_rad'],
                 ],
                 [
-                    'id_barang_medis',
-                    \App\Features\InventoriMedis\DataBarang\DataBarangDatabase::class,
-                    'id_barang',
+                    ['id_barang'],
+                    \App\Features\InventoriNonMedis\Barang\BarangDatabase::class,
+                    ['id_barang'],
                 ],
             ],
         );
