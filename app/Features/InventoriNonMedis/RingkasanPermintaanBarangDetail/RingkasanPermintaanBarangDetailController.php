@@ -6,6 +6,7 @@ namespace App\Features\InventoriNonMedis\RingkasanPermintaanBarangDetail;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class RingkasanPermintaanBarangDetailController extends ControllerTemplate
 {
@@ -35,5 +36,19 @@ final class RingkasanPermintaanBarangDetailController extends ControllerTemplate
             ],
             parent_fk: 'id_permintaan',
         );
+    }
+
+    public function update(int|string $id): string|RedirectResponse
+    {
+        $row = $this->model->find($id);
+        if (is_array($row)) {
+            $qty_disetujui = (float) ($this->request->getPost('qty_disetujui') ?? 0);
+            $qty_max       = (float) ($row['qty'] ?? 0);
+            if ($qty_disetujui > $qty_max) {
+                session()->setFlashdata('error', "Qty disetujui tidak boleh melebihi qty permintaan ({$qty_max}).");
+                return $this->home();
+            }
+        }
+        return parent::update($id);
     }
 }

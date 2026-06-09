@@ -51,7 +51,15 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
 
     public function update(int|string $id): string|RedirectResponse
     {
-        $row    = $this->model->find($id);
+        $row = $this->model->find($id);
+        if (is_array($row)) {
+            $qty_disetujui = (float) ($this->request->getPost('qty_disetujui') ?? 0);
+            $qty_max       = (float) ($row['qty'] ?? 0);
+            if ($qty_disetujui > $qty_max) {
+                session()->setFlashdata('error', "Qty disetujui tidak boleh melebihi qty pengajuan ({$qty_max}).");
+                return $this->home();
+            }
+        }
         $result = parent::update($id);
         if ($result instanceof RedirectResponse && is_array($row)) {
             $id_pengajuan = (int) ($row['id_pengajuan'] ?? 0);
