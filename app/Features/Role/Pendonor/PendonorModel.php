@@ -15,6 +15,7 @@ final class PendonorModel extends ModelTemplate
             [
                 'id_pendonor'            => V::DEFAULT(),
                 'nomor_pendonor'         => V::DEFAULT(),
+                'nomor_telepon'          => V::DEFAULT(),
                 'tanggal_donor_terakhir' => V::DEFAULT(),
             ],
             [

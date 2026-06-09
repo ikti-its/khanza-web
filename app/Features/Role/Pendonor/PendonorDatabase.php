@@ -18,6 +18,7 @@ final class PendonorDatabase extends DatabaseTemplate
                 'id_orang'               => T::FK_AUTO(),
                 'nomor_pendonor'         => T::RECORD(20),
                 'id_rhesus'              => T::FK_AUTO()->nullable(),
+                'nomor_telepon'          => T::TEXT(),
                 'tanggal_donor_terakhir' => T::DATE()->nullable(),
             ],
             'id_pendonor',

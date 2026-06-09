@@ -16,10 +16,28 @@
       background-color: #ffffff;
       border: 1px solid #999999;
       box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.15);
-      padding: 40px;
-      margin: 30px auto;
+      padding: 15px 30px;
+      margin: 20px auto;
       box-sizing: border-box;
       position: relative;
+    }
+
+    .header {
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .header strong {
+      font-size: 17px;
+      display: inline-block;
+      padding-bottom: 2px;
+    }
+
+    .divider {
+      border-top: 2px solid #1e4b4d;
+      margin: 6px 0;
     }
 
     .info-table {
@@ -48,12 +66,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 25px;
-      padding-top: 10px;
+      margin-top: 10px;
+      padding-top: 5px;
     }
 
     .blood-type {
-      font-size: 36px;
+      font-size: 35px;
       font-weight: bold;
       color: #000000;
       font-family: Arial, sans-serif;
@@ -91,6 +109,15 @@
 <body>
 
   <div class="card-container">
+    <div class="header">
+      <strong>RS Bhayangkara</strong><br>
+      Jl. Arif Rahman Hakim No. 213, Keputih, Sukolilo,<br>
+      Surabaya, Jawa Timur<br>
+      Telp (0821)123456789
+    </div>
+
+    <div class="divider"></div>
+
     <table class="info-table">
       <tr>
         <td class="label">No. Pendonor</td>
