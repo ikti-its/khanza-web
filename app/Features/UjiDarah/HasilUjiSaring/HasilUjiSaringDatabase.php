@@ -23,7 +23,7 @@ final class HasilUjiSaringDatabase extends DatabaseTemplate
                 'hcv'                  => T::BOOL(),
                 'hiv'                  => T::BOOL(),
                 'sifilis'              => T::BOOL(),
-                'malaria'              => T::BOOL(),
+                'malaria'              => T::BOOL()->nullable(),
             ],
             'id_uji_saring',
             ['id_pengambilan_darah'],
