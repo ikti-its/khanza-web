@@ -18,10 +18,10 @@
             'type'    => 'link',
             'text'    => 'Tambah Daftar Dokter',
             'href'    => '/dokter',
+            'icon'    => 'plus'
         ]
     ]
 ]) ?>
-
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -37,6 +37,7 @@
             rowsPerPage: 10,
             onSelect: (item) => {
                 autofillFields({
+                    id_dokter:            item.id_dokter,
                     kode_dokter:          item.kode_dokter,
                     nama_dokter:          item.nama_dokter,
                 });
