@@ -67,7 +67,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="<?= $labelLeft ?>">
-                    Kode Dokter <span class="text-red-500">*</span>
+                    Kode Dokter Perujuk <span class="text-red-500">*</span>
                 </label>
                 <div class="flex gap-x-2 lg:w-1/4">
                     <input type="text" id="kode_dokter"
@@ -81,7 +81,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                     </button>
                 </div>
 
-                <label class="<?= $labelRight ?>">Nama Dokter</label>
+                <label class="<?= $labelRight ?>">Nama Dokter Perujuk</label>
                 <input type="text" id="nama_dokter"
                        value="<?= esc($baris['nama_dokter'] ?? '') ?>"
                        readonly placeholder="Terisi otomatis..."
