@@ -215,3 +215,88 @@ if (!function_exists('generateNextNoPermintaanRad')) {
         return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
     }
 }
+
+// AutoNomor untuk No. Permintaan Laboratorium
+// Laboratorium — Patologi Anatomi (PA)
+if (!function_exists('generateNextNoPermintaanPk')) {
+    /**
+     * Generate nomor permintaan lab Patologi Klinik berikutnya.
+     * Format: PKYYYYMMDDXXXX
+     * Contoh: PK202606070001
+     *
+     * @param string|null $lastNo  Nomor terakhir pada tanggal yang sama (dari DB)
+     * @param string|null $tanggal Tanggal permintaan format 'Y-m-d', default hari ini
+     */
+    function generateNextNoPermintaanPk(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'PK' . date('Ymd', $tgl);
+ 
+        /** @var list<bool> $match */
+        $match = [];
+        if (!$lastNo || !preg_match('/^PK' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+ 
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
+ 
+// Laboratorium — Patologi Anatomi (PA)
+if (!function_exists('generateNextNoPermintaanPa')) {
+    /**
+     * Generate nomor permintaan lab Patologi Anatomi berikutnya.
+     * Format: PAYYYYMMDDXXXX
+     * Contoh: PA202606070001
+     *
+     * @param string|null $lastNo  Nomor terakhir pada tanggal yang sama (dari DB)
+     * @param string|null $tanggal Tanggal permintaan format 'Y-m-d', default hari ini
+     */
+    function generateNextNoPermintaanPa(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'PA' . date('Ymd', $tgl);
+ 
+        /** @var list<bool> $match */
+        $match = [];
+        if (!$lastNo || !preg_match('/^PA' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+ 
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
+ 
+// Laboratorium — Mikrobiologi (MB)
+if (!function_exists('generateNextNoPermintaanMb')) {
+    /**
+     * Generate nomor permintaan lab Mikrobiologi berikutnya.
+     * Format: MBYYYYMMDDXXXX
+     * Contoh: MB202606070001
+     *
+     * @param string|null $lastNo  Nomor terakhir pada tanggal yang sama (dari DB)
+     * @param string|null $tanggal Tanggal permintaan format 'Y-m-d', default hari ini
+     */
+    function generateNextNoPermintaanMb(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'MB' . date('Ymd', $tgl);
+ 
+        /** @var list<bool> $match */
+        $match = [];
+        if (!$lastNo || !preg_match('/^MB' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+ 
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
