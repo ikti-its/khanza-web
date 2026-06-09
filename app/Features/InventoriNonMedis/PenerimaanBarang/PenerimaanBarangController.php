@@ -6,9 +6,12 @@ namespace App\Features\InventoriNonMedis\PenerimaanBarang;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class PenerimaanBarangController extends ControllerTemplate
 {
+    private bool $pending_masuk = false;
+
     public function __construct()
     {
         parent::__construct(
@@ -23,16 +26,139 @@ final class PenerimaanBarangController extends ControllerTemplate
                 A::CREATE,
                 A::AUDIT,
                 A::UPDATE,
-                // A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_penerimaan', 'ID'],
-                [SHOW, REQUIRED, I::SELECT, 'id_pengadaan',  'No. Pengadaan'],
-                [SHOW, REQUIRED, I::DATE,   'tanggal',       'Tanggal Terima'],
-                [SHOW, OPTIONAL, I::TEXT,   'catatan',       'Catatan'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_penerimaan',               'ID'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'no_penerimaan',               'No. Penerimaan'],
+                [SHOW,       REQUIRED, I::SELECT, 'id_pengadaan',                'No. Pengadaan'],
+                [SHOW,       REQUIRED, I::DATE,   'tanggal',                     'Tanggal Terima'],
+                [SHOW,       REQUIRED, I::SELECT, 'id_status_penerimaan_barang', 'Status'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'no_masuk',                    'No. Masuk'],
+                [TABLE_ONLY, OPTIONAL, I::DATE,   'tanggal_diterima',            'Tgl. Diterima'],
+                [SHOW,       OPTIONAL, I::TEXT,   'catatan',                     'Catatan'],
             ],
             child_path: '/inventori-non-medis/penerimaan-barang-detail',
-            child_fk: 'id_penerimaan',
+            child_fk:   'id_penerimaan',
         );
+    }
+
+    protected function before_create(array &$postData): void
+    {
+        helper('autonomor');
+        $lastNo = $this->get_last('inventori_non_medis.penerimaan_barang', 'no_penerimaan', 'id_penerimaan');
+        $postData['no_penerimaan']               = generateNextNoPenerimaanBarang($lastNo, $postData['tanggal'] ?? null);
+        $postData['id_status_penerimaan_barang'] = 1;
+    }
+
+    protected function before_update(array &$postData, int|string $id): void
+    {
+        $new_status = (int) ($postData['id_status_penerimaan_barang'] ?? 0);
+        if ($new_status !== 2) return;
+
+        $current = $this->model->find($id);
+        if (!is_array($current)) return;
+        if ((int) ($current['id_status_penerimaan_barang'] ?? 0) === 2) return;
+
+        helper('autonomor');
+        $lastNo = $this->get_last('inventori_non_medis.penerimaan_barang', 'no_masuk', 'id_penerimaan');
+        $postData['no_masuk']         = generateNextNoMasukBarang($lastNo);
+        $postData['tanggal_diterima'] = date('Y-m-d H:i:s');
+        $this->pending_masuk          = true;
+    }
+
+    public function update(int|string $id): string|RedirectResponse
+    {
+        $new_status = (int) ($this->request->getPost('id_status_penerimaan_barang') ?? 0);
+        $current    = $this->model->find((int) $id);
+        $is_new_lengkap = $new_status === 2
+            && is_array($current)
+            && (int) ($current['id_status_penerimaan_barang'] ?? 0) !== 2;
+
+        if ($is_new_lengkap) {
+            $error = $this->validate_penerimaan((int) $id);
+            if ($error !== null) {
+                session()->setFlashdata('error', $error);
+                return $this->home();
+            }
+        }
+
+        $result = parent::update($id);
+
+        if ($this->pending_masuk) {
+            $this->pending_masuk = false;
+            $saved = $this->model->find((int) $id);
+            if (is_array($saved) && !empty($saved['no_masuk'])) {
+                try {
+                    $this->create_transaksi_stok_masuk((int) $id, (string) $saved['no_masuk']);
+                } catch (\Throwable $e) {
+                    log_message('error', '[Penerimaan] create_transaksi_stok_masuk: ' . $e->getMessage());
+                    session()->setFlashdata('error', 'Status berhasil diubah, namun gagal membuat transaksi stok: ' . $e->getMessage());
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    private function validate_penerimaan(int $id): ?string
+    {
+        $has_items = $this->get_db()
+            ->table('inventori_non_medis.penerimaan_barang_detail')
+            ->where('id_penerimaan', $id)
+            ->where('id_barang >', 0)
+            ->where('qty_diterima >', 0)
+            ->countAllResults() > 0;
+
+        return $has_items ? null : 'Isi detail penerimaan terlebih dahulu sebelum mengubah status menjadi Lengkap.';
+    }
+
+    private function create_transaksi_stok_masuk(int $id, string $no_masuk): void
+    {
+        $db = $this->get_db();
+
+        $row = $db->table('inventori_non_medis.penerimaan_barang pb')
+            ->join('inventori_non_medis.pengadaan_barang pg', 'pb.id_pengadaan = pg.id_pengadaan', 'left')
+            ->join('inventori_non_medis.suplier s',           'pg.id_suplier = s.id_suplier',       'left')
+            ->select('s.nama_suplier')
+            ->where('pb.id_penerimaan', $id)
+            ->get()->getRowArray();
+
+        $keterangan = trim(implode(', ', array_filter([
+            $no_masuk,
+            ($row['nama_suplier'] ?? '') !== '' ? 'Suplier ' . $row['nama_suplier'] : '',
+        ])));
+
+        $details = $db->table('inventori_non_medis.penerimaan_barang_detail')
+            ->select('id_barang, qty_diterima')
+            ->where('id_penerimaan', $id)
+            ->where('id_barang >', 0)
+            ->where('qty_diterima >', 0)
+            ->get()->getResultArray();
+
+        $now = date('Y-m-d H:i:s');
+        $db->transBegin();
+
+        $db->table('inventori_non_medis.transaksi_stok')->insert([
+            'id_tipe_transaksi_stok' => 1,
+            'tanggal'                => $now,
+            'id_penerimaan'          => $id,
+            'keterangan'             => $keterangan,
+        ]);
+        $id_transaksi = $db->insertID();
+
+        foreach ($details as $d) {
+            $qty = (int) round((float) $d['qty_diterima']);
+            $db->table('inventori_non_medis.transaksi_stok_detail')->insert([
+                'id_transaksi' => $id_transaksi,
+                'id_barang'    => (int) $d['id_barang'],
+                'qty'          => $qty,
+            ]);
+            $db->table('inventori_non_medis.barang')
+                ->where('id_barang', (int) $d['id_barang'])
+                ->set('stok', 'stok + ' . $qty, false)
+                ->update();
+        }
+
+        $db->transCommit();
     }
 }

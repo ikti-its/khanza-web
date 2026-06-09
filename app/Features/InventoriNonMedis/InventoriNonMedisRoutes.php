@@ -25,6 +25,7 @@ final class InventoriNonMedisRoutes extends RouteTemplate
                 \App\Features\InventoriNonMedis\StokOpname\StokOpnameController::class,
                 \App\Features\InventoriNonMedis\StokOpnameDetail\StokOpnameDetailController::class => 'HIDE',
                 \App\Features\InventoriNonMedis\TransaksiStok\TransaksiStokController::class,
+                \App\Features\InventoriNonMedis\TransaksiStokDetail\TransaksiStokDetailController::class => 'HIDE',
                 \App\Features\InventoriNonMedis\Barang\BarangController::class,
                 \App\Features\InventoriNonMedis\JenisBarang\JenisBarangController::class,
                 \App\Features\InventoriNonMedis\Suplier\SuplierController::class,

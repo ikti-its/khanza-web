@@ -21,7 +21,7 @@ final class RingkasanPermintaanBarangDetailModel extends ModelTemplate
                 'catatan'          => V::DEFAULT(),
             ],
             [
-                'id_permintaan' => ['tanggal'],
+                'id_permintaan' => ['tanggal', 'no_keluar'],
                 'id_barang'     => [
                     'nama_barang',
                     'kode_barang',

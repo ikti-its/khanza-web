@@ -14,12 +14,14 @@ final class RingkasanPermintaanBarangModel extends ModelTemplate
         parent::__construct(
             new PermintaanBarangDatabase(),
             [
-                'id_permintaan' => V::DEFAULT(),
-                'no_permintaan' => V::DEFAULT(),
-                'tanggal'       => V::DEFAULT(),
+                'id_permintaan'     => V::DEFAULT(),
+                'no_permintaan'     => V::DEFAULT(),
+                'tanggal'           => V::DEFAULT(),
+                'no_keluar'         => V::DEFAULT(),
+                'tanggal_disetujui' => V::DEFAULT(),
             ],
             [
-                'petugas'                     => ['id_orang' => ['nama']],
+                'petugas_gudang'              => ['id_orang' => ['nama']],
                 'master_ruangan'              => ['nama_ruangan'],
                 'id_status_permintaan_barang' => ['nama_status_permintaan_barang'],
             ],

@@ -24,8 +24,9 @@ final class RingkasanPermintaanBarangDetailController extends ControllerTemplate
                 A::UPDATE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_detail',        'ID Detail'],
-                [HIDE, OPTIONAL, I::INDEX,  'id_permintaan',    'ID Permintaan'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_detail',        'ID Detail'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_permintaan',    'ID Permintaan'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'no_keluar',        'No. Keluar'],
                 [TABLE_ONLY, OPTIONAL, I::SELECT, 'id_barang',        'Barang'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,   'nama_barang_baru', 'Nama Barang Baru'],
                 [TABLE_ONLY, REQUIRED, I::NUMBER, 'qty',              'Qty Diminta'],

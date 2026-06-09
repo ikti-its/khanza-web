@@ -20,22 +20,19 @@ final class TransaksiStokController extends ControllerTemplate
             'Transaksi Stok',
             [
                 A::READ,
-                A::CREATE,
                 A::AUDIT,
-                // A::UPDATE,
-                // A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_transaksi',           'ID Transaksi'],
-                [SHOW, REQUIRED, I::SELECT, 'id_barang',              'Barang'],
-                [SHOW, REQUIRED, I::SELECT, 'id_tipe_transaksi_stok', 'Tipe Transaksi'],
-                [SHOW, REQUIRED, I::NUMBER, 'qty',                    'Qty'],
-                [SHOW, REQUIRED, I::DATE,   'tanggal',                'Tanggal'],
-                [SHOW, REQUIRED, I::SELECT, 'id_penerimaan',          'Penerimaan'],
-                [SHOW, REQUIRED, I::SELECT, 'id_permintaan',          'Permintaan'],
-                [SHOW, REQUIRED, I::SELECT, 'id_opname',              'Opname'],
-                [SHOW, OPTIONAL, I::TEXT,   'catatan',                'Catatan'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_transaksi',             'ID'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'nama_tipe_transaksi_stok', 'Tipe'],
+                [SHOW,       REQUIRED, I::DATE,   'tanggal',                  'Tanggal'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'no_permintaan',            'No. Permintaan'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'no_keluar',                'No. Keluar'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'no_masuk',                 'No. Masuk'],
+                [SHOW,       OPTIONAL, I::TEXT,   'keterangan',               'Keterangan'],
             ],
+            child_path: '/inventori-non-medis/transaksi-stok-detail',
+            child_fk:   'id_transaksi',
         );
     }
 }
