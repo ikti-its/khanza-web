@@ -14,6 +14,12 @@
             'onclick' => 'open_modalRegistrasi()',
             'icon'    => 'refresh',
         ],
+        [
+            'type'    => 'link',
+            'text'    => 'Registrasi Pasien',
+            'href'    => 'rekam-medis/registrasi',
+            'icon'    => 'plus'
+        ]
     ],
 ]) ?>
 

@@ -49,4 +49,37 @@ final class RegistrasiController extends ControllerTemplate
             ],
         );
     }
+    public function list()
+    {
+        $nomorReg = $this->request->getGet('nomor_reg') ?? '';
+        $nama     = $this->request->getGet('nama')      ?? '';
+
+        $builder = $this->model->db
+            ->table('rekam_medis.registrasi r')
+            ->select([
+                'r.nomor_reg',
+                'r.nomor_rawat',
+                'r.datetime',
+                'p.nomor_rm',
+                'o.nama',
+                'd.kode_dokter',
+                'od.nama AS nama_dokter',
+                'r.id_dokter',
+            ])
+            ->join('role.pasien p',   'p.id_pasien = r.id_pasien')
+            ->join('person.orang o',  'o.id_orang  = p.id_orang')
+            ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang',  'left');
+
+        if ($nomorReg !== '') {
+            $builder->like('r.nomor_reg', $nomorReg);
+        }
+        if ($nama !== '') {
+            $builder->like('o.nama', $nama);
+        }
+
+        $rows = $builder->orderBy('r.datetime', 'ASC')->get()->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
+    }
 }
