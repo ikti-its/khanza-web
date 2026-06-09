@@ -28,7 +28,7 @@ final class PoliklinikDatabase extends DatabaseTemplate
             ],
             [],
             false,
-            '/poliklinik.csv'
+            'poliklinik.csv'
         );
     }
 }

@@ -65,7 +65,7 @@ final class RegistrasiDatabase extends DatabaseTemplate
                 ],
             ],
             false,
-            '/registrasi.csv'
+            'registrasi.csv'
         );
     }
 }
