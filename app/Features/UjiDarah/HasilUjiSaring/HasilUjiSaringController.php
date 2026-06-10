@@ -385,4 +385,60 @@ final class HasilUjiSaringController extends ControllerTemplate
 
         return redirect()->to($this->get_uri_path() . '/data');
     }
+
+    /**
+     * OVERRIDE: Menghapus data hasil uji saring
+     */
+    #[\Override]
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->home();
+
+        $dataUjiSaring = $this->model->find($id);
+        if (!$dataUjiSaring) {
+            session()->setFlashdata('error', 'Gagal menghapus. Data hasil uji saring tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $idPengambilanDarah = $dataUjiSaring['id_pengambilan_darah'] ?? null;
+        $nomorPengambilan   = '';
+
+        if ($idPengambilanDarah) {
+            $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
+            $dataPengambilan  = $modelPengambilan->find($idPengambilanDarah);
+            if ($dataPengambilan) {
+                $nomorPengambilan = $dataPengambilan['nomor_pengambilan'] ?? '';
+            }
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $modelKasusReaktif = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
+            $modelStokDarah    = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
+
+            $modelKasusReaktif->where('id_uji_saring', $id)->delete();
+
+            if (!empty($nomorPengambilan)) {
+                $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
+                               ->set(['id_status_stok' => 1])
+                               ->update();
+            }
+
+            $this->model->delete($id);
+
+            $this->model->db->transComplete();
+
+            session()->setFlashdata('success', 'Data hasil uji saring berhasil dihapus.');
+
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $this->friendly_db_error($e));
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $e->getMessage());
+        }
+
+        return $this->home();
+    }
 }
