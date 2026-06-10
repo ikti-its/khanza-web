@@ -126,6 +126,17 @@ final class HasilUjiSaringController extends ControllerTemplate
             $dataUjiSaring['malaria'] = null;
         }
 
+        $idPengambilanDarah = $dataUjiSaring['id_pengambilan_darah'] ?? null;
+        $nomorPengambilan   = '';
+
+        if ($idPengambilanDarah) {
+            $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
+            $dataPengambilan  = $modelPengambilan->find($idPengambilanDarah);
+            if ($dataPengambilan) {
+                $nomorPengambilan = $dataPengambilan['nomor_pengambilan'] ?? '';
+            }
+        }
+
         $this->model->db->transStart();
 
         try {
@@ -138,6 +149,8 @@ final class HasilUjiSaringController extends ControllerTemplate
             $isSifilisReaktif = (isset($rawPost['sifilis']) && (string)$rawPost['sifilis'] === '1');
             $isMalariaReaktif = (isset($rawPost['malaria']) && (string)$rawPost['malaria'] === '1');
 
+            $modelStokDarah = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
+
             if ($isHbsagReaktif || $isHcvReaktif || $isHivReaktif || $isSifilisReaktif || $isMalariaReaktif) {
                 $modelKasusReaktif = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
 
@@ -149,6 +162,18 @@ final class HasilUjiSaringController extends ControllerTemplate
                     'tanggal_ditetapkan' => $tanggalDitetapkan,
                     'id_status_kasus'    => $idStatusKasus,
                 ]);
+
+                if (!empty($nomorPengambilan)) {
+                    $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
+                                   ->set(['id_status_stok' => 3])
+                                   ->update();
+                }
+            } else {
+                if (!empty($nomorPengambilan)) {
+                    $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
+                                   ->set(['id_status_stok' => 2])
+                                   ->update();
+                }
             }
 
             $this->model->db->transComplete();
