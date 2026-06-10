@@ -194,4 +194,102 @@ final class HasilUjiSaringController extends ControllerTemplate
 
         return redirect()->to($this->get_uri_path() . '/data');
     }
+
+    /**
+     * OVERRIDE: Menampilkan Halaman Ubah Data Hasil Uji Saring
+     */
+    #[\Override]
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataUjiSaring = $this->model->find($id);
+        if (!$dataUjiSaring) {
+            $dataUjiSaring = [];
+        }
+
+        $dataPengambilan  = [];
+        $dataPetugasMedis = [];
+
+        if (!empty($dataUjiSaring['id_pengambilan_darah'])) {
+            $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
+            $pengambilanRow   = $modelPengambilan->find($dataUjiSaring['id_pengambilan_darah']);
+            
+            if ($pengambilanRow) {
+                $dataPengambilan['nomor_pengambilan'] = $pengambilanRow['nomor_pengambilan'] ?? '';
+            }
+        }
+
+        if (!empty($dataUjiSaring['id_petugas'])) {
+            $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
+            $petugasRow   = $modelPetugas->find($dataUjiSaring['id_petugas']) ?? [];
+
+            if (!empty($petugasRow['id_orang'])) {
+                $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
+                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+                
+                if (isset($orangPetugasRow['nama'])) {
+                    $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
+                }
+            }
+        }
+
+        $baris = array_merge($dataPengambilan, $dataPetugasMedis, $dataUjiSaring);
+
+        $kolomUji = ['hbsag', 'hcv', 'hiv', 'sifilis', 'malaria'];
+        foreach ($kolomUji as $kolom) {
+            if (array_key_exists($kolom, $baris) && $baris[$kolom] !== null && $baris[$kolom] !== '') {
+                $isTrue = ($baris[$kolom] === true || $baris[$kolom] == 1 || $baris[$kolom] === 't');
+                $baris[$kolom] = $isTrue ? '1' : '0';
+            }
+        }
+
+        $controllerPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahController();
+        
+        $konfigUjiSaring   = $this->get_fields_with_options(false, true);
+        $konfigPengambilan = $controllerPengambilan->get_fields_with_options(false, true);
+
+        $konfigGabungan = [];
+
+        foreach ($konfigUjiSaring as $field) {
+            $namaKolom = $field[2];
+
+            if ($namaKolom === 'id_uji_saring') {
+                continue;
+            }
+
+            if ($namaKolom === 'id_pengambilan_darah') {
+                foreach ($konfigPengambilan as $fPengambilan) {
+                    if ($fPengambilan[2] === 'nomor_pengambilan') {
+                        $konfigGabungan[] = $fPengambilan;
+                        break;
+                    }
+                }
+                continue;
+            }
+
+            $konfigGabungan[] = $field;
+        }
+
+        foreach ($konfigGabungan as $field) {
+            $namaKolom = $field[2];
+            if (($baris[$namaKolom] ?? null) === null) {
+                $baris[$namaKolom] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Ubah', 'icon' => 'Ubah']
+        ];
+
+        return view('admin/ujidarah/tambah_ujisaring', [
+            'judul'       => 'Ubah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->model->primaryKey,
+            'konfig'      => $konfigGabungan,
+            'baris'       => $baris,
+            'form_action' => '/submitedit/' . $id,
+        ]);
+    }
 }
