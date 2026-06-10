@@ -26,16 +26,16 @@ final class OrangController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_orang',          'ID Orang'],
-                [SHOW, REQUIRED, I::TEXT,  'nik',               'NIK'],
-                [SHOW, REQUIRED, I::NAME,  'nama',              'Nama'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_orang',          'ID Orang'],
+                [SHOW, REQUIRED, I::TEXT,   'nik',               'NIK'],
+                [SHOW, REQUIRED, I::NAME,   'nama',              'Nama'],
                 [SHOW, REQUIRED, I::SELECT, 'id_jenis_kelamin',  'Jenis Kelamin'],
-                [HIDE, REQUIRED, I::SELECT, 'id_agama',          'Agama'],
-                [HIDE, REQUIRED, I::SELECT, 'id_pernikahan',     'Pernikahan'],
+                [SHOW, REQUIRED, I::SELECT, 'id_agama',          'Agama'],
+                [SHOW, REQUIRED, I::SELECT, 'id_pernikahan',     'Pernikahan'],
                 [SHOW, REQUIRED, I::SELECT, 'id_golongan_darah', 'Golongan Darah'],
-                [HIDE, REQUIRED, I::SELECT, 'id_alamat',         'Alamat'],
+                [SHOW, REQUIRED, I::SELECT, 'id_alamat',         'Alamat'],
                 [SHOW, REQUIRED, I::SELECT, 'tempat_lahir_kota', 'Tempat Lahir'],
-                [SHOW, REQUIRED, I::DATE,  'tanggal_lahir',     'Tanggal Lahir'],
+                [SHOW, REQUIRED, I::DATE,   'tanggal_lahir',     'Tanggal Lahir'],
             ],
         );
     }
