@@ -13,13 +13,13 @@ final class StokOpnameModel extends ModelTemplate
         parent::__construct(
             new StokOpnameDatabase(),
             [
-                'id_opname'             => V::DEFAULT(),
-                'tanggal'               => V::DEFAULT(),
-                'catatan'               => V::DEFAULT(),
-                'catatan_atasan'        => V::DEFAULT(),
+                'id_opname' => V::DEFAULT(),
+                'tanggal'   => V::DEFAULT(),
+                'catatan'   => V::DEFAULT(),
             ],
             [
                 'id_status_stok_opname' => ['nama_status_stok_opname'],
+                'id_petugas'            => ['id_orang' => ['nama']],
             ],
         );
     }

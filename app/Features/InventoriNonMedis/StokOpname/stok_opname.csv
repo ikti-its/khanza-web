@@ -1,3 +1,1 @@
-id_opname,tanggal,id_status_stok_opname,catatan,catatan_atasan
-0,2026-01-01 00:00:00,0,,
-1,2026-04-05 09:00:00,2,Opname rutin mingguan gudang utama,
+id_opname,tanggal,id_status_stok_opname,id_petugas,catatan
