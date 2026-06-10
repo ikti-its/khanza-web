@@ -292,4 +292,97 @@ final class HasilUjiSaringController extends ControllerTemplate
             'form_action' => '/submitedit/' . $id,
         ]);
     }
+
+    /**
+     * OVERRIDE: Mengeksekusi simpan perubahan data hasil uji saring
+     */
+    #[\Override]
+    public function update(int|string $id): RedirectResponse
+    {
+        $rawPost = $this->request->getPost();
+
+        $dataUjiSaring = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataUjiSaring[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+
+        if (!isset($dataUjiSaring['malaria']) || $dataUjiSaring['malaria'] === '') {
+            $dataUjiSaring['malaria'] = null;
+        }
+
+        $idPengambilanDarah = $dataUjiSaring['id_pengambilan_darah'] ?? null;
+        $nomorPengambilan   = '';
+
+        if ($idPengambilanDarah) {
+            $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
+            $dataPengambilan  = $modelPengambilan->find($idPengambilanDarah);
+            if ($dataPengambilan) {
+                $nomorPengambilan = $dataPengambilan['nomor_pengambilan'] ?? '';
+            }
+        }
+
+        if (empty($nomorPengambilan)) {
+            session()->setFlashdata('error', 'Gagal memperbarui data. Nomor pengambilan darah tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $this->model->update($id, $dataUjiSaring);
+
+            $isHbsagReaktif  = (isset($rawPost['hbsag']) && (string)$rawPost['hbsag'] === '1');
+            $isHcvReaktif    = (isset($rawPost['hcv']) && (string)$rawPost['hcv'] === '1');
+            $isHivReaktif    = (isset($rawPost['hiv']) && (string)$rawPost['hiv'] === '1');
+            $isSifilisReaktif = (isset($rawPost['sifilis']) && (string)$rawPost['sifilis'] === '1');
+            $isMalariaReaktif = (isset($rawPost['malaria']) && (string)$rawPost['malaria'] === '1');
+
+            $modelStokDarah    = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
+            $modelKasusReaktif = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
+
+            $kasusLama = $modelKasusReaktif->where('id_uji_saring', $id)->first();
+
+            if ($isHbsagReaktif || $isHcvReaktif || $isHivReaktif || $isSifilisReaktif || $isMalariaReaktif) {
+                if (!$kasusLama) {
+                    $modelKasusReaktif->insert([
+                        'id_uji_saring'      => $id,
+                        'tanggal_ditetapkan' => date('Y-m-d'),
+                        'id_status_kasus'    => 1,
+                    ]);
+                }
+
+                $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
+                               ->set(['id_status_stok' => 3])
+                               ->update();
+            } else {
+                if ($kasusLama) {
+                    $modelKasusReaktif->where('id_uji_saring', $id)->delete();
+                }
+
+                $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
+                               ->set(['id_status_stok' => 2])
+                               ->update();
+            }
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException("Gagal memperbarui data hasil uji saring.");
+            }
+
+            session()->setFlashdata('success', 'Data hasil uji saring berhasil diperbarui.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
+                ? $this->friendly_db_error($e) 
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
+    }
 }
