@@ -1,7 +1,1 @@
-id_detail,id_opname,id_barang,stok_sistem,stok_fisik,selisih,keterangan
-0,0,0,0,0,0,-
-1,1,1,80,78,-2,2 pcs pulpen rusak/hilang
-2,1,2,50,50,0,
-3,1,3,20,20,0,
-4,1,4,10,10,0,
-5,1,5,150,148,-2,2 pcs sarung tangan robek saat pemeriksaan
+id_detail,id_opname,id_barang,stok_sistem,stok_fisik,selisih,catatan

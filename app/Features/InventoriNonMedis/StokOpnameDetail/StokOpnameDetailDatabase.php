@@ -20,7 +20,7 @@ final class StokOpnameDetailDatabase extends DatabaseTemplate
                 'stok_sistem' => T::QTY(0, 1_000_000),
                 'stok_fisik'  => T::QTY(0, 1_000_000),
                 'selisih'     => T::QTY(-1_000_000, 1_000_000),
-                'keterangan'  => T::NOTE()->nullable(),
+                'catatan'     => T::NOTE()->nullable(),
             ],
             'id_detail',
             [],
