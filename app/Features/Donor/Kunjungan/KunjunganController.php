@@ -29,8 +29,8 @@ final class KunjunganController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX, 'id_kunjungan',      'ID Kunjungan'],
                 [SHOW, REQUIRED, I::TEXT,  'nomor_antrian',     'Nomor Antrian'],
                 [SHOW, REQUIRED, I::TEXT,  'nomor_kunjungan',   'Nomor Kunjungan'],
-                [SHOW, REQUIRED, I::DTIME,  'tanggal_kunjungan', 'Tanggal Kunjungan'],
-                [HIDE, REQUIRED, I::INDEX, 'id_pendonor',       'ID Pendonor'],
+                [SHOW, REQUIRED, I::DTIME, 'tanggal_kunjungan', 'Tanggal Kunjungan'],
+                [SHOW, REQUIRED, I::INDEX, 'id_pendonor',       'ID Pendonor'],
             ],
         );
     }
