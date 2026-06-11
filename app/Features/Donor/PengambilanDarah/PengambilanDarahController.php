@@ -504,4 +504,48 @@ final class PengambilanDarahController extends ControllerTemplate
 
         return redirect()->to($this->get_uri_path() . '/data');
     }
+
+    /**
+     * OVERRIDE: Menghapus data pengambilan darah & penggunaan BHP
+     */
+    #[\Override]
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->home();
+        
+        $dataPengambilan = $this->model->find($id);
+        if (!$dataPengambilan) {
+            session()->setFlashdata('error', 'Gagal menghapus. Data pengambilan darah tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $modelMedisDonor    = new \App\Features\LogistikUTD\MedisDonor\MedisDonorModel();
+            $modelPenunjangDonor = new \App\Features\LogistikUTD\PenunjangDonor\PenunjangDonorModel();
+
+            $modelMedisDonor->where('id_pengambilan_darah', $id)->delete();
+            $modelPenunjangDonor->where('id_pengambilan_darah', $id)->delete();
+
+            $this->model->delete($id);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \CodeIgniter\Database\Exceptions\DatabaseException('violates foreign key constraint');
+            }
+
+            session()->setFlashdata('success', 'Data pengambilan darah dan penggunaan BHP berhasil dihapus.');
+
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $this->friendly_db_error($e));
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $e->getMessage());
+        }
+
+        return $this->home();
+    }
 }

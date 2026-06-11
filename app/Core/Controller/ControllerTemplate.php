@@ -353,7 +353,7 @@ class ControllerTemplate extends Controller
     {
         $msg = $e->getMessage();
         if (str_contains($msg, 'violates foreign key constraint')) {
-            return 'Data tidak dapat dihapus atau diubah karena masih digunakan oleh data lain.';
+            return 'Data tidak dapat dihapus karena masih digunakan oleh data lain.';
         }
         if (str_contains($msg, 'duplicate key') || str_contains($msg, 'unique constraint')) {
             return 'Data sudah ada. Gunakan nilai yang berbeda.';
