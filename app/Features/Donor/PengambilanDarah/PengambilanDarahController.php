@@ -108,7 +108,8 @@ final class PengambilanDarahController extends ControllerTemplate
                 continue;
             }
 
-            $mockBaris[$columnPengambilan] = '';
+            $isTanggal = ($fieldPengambilan[3] === 'tanggal' || str_contains($columnPengambilan, 'tanggal'));
+            $mockBaris[$columnPengambilan] = $isTanggal ? date('Y-m-d') : '';
 
             if ($columnPengambilan === 'id_kunjungan') {
                 foreach ($konfigKunjungan as $fieldKunjungan) {
@@ -517,6 +518,8 @@ final class PengambilanDarahController extends ControllerTemplate
 
             $modelMedisDonor->where('id_pengambilan_darah', $id)->delete();
             $modelPenunjangDonor->where('id_pengambilan_darah', $id)->delete();
+
+            $this->sync_tanggal_donor_terakhir(0, $dataPengambilan, $id);
 
             $this->model->delete($id);
 
