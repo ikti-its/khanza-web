@@ -32,7 +32,7 @@ final class PencekalanController extends ControllerTemplate
                 [SHOW, REQUIRED, I::DATE,   'tanggal_mulai',       'Tanggal Mulai'],
                 [SHOW, OPTIONAL, I::DATE,   'tanggal_selesai',     'Tanggal Selesai'],
                 [SHOW, REQUIRED, I::SELECT, 'id_shift',            'Shift'],
-                [SHOW, REQUIRED, I::INDEX,  'id_petugas',          'ID Petugas'],
+                [SHOW, REQUIRED, I::INDEX,  'id_petugas',          'Petugas'],
                 [SHOW, REQUIRED, I::TEXT,   'keterangan',          'Keterangan'],
             ],
         );
@@ -108,6 +108,122 @@ final class PencekalanController extends ControllerTemplate
             'konfig'         => $konfigGabungan,
             'baris'          => $mockBaris,
             'form_action'    => '/submittambah',
+        ]);
+    }
+
+    /**
+     * OVERRIDE: Menampilkan Halaman Ubah Data Pencekalan
+     */
+    #[\Override]
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataPencekalan = $this->model->find($id);
+        if (!$dataPencekalan) {
+            $dataPencekalan = [];
+        }
+
+        $dataKunjungan = [];
+        $dataPendonor  = [];
+        $dataOrang     = [];
+        $dataPetugasMedis = [];
+
+        if (!empty($dataPencekalan['id_kunjungan'])) {
+            $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
+            $dataKunjungan  = $modelKunjungan->find($dataPencekalan['id_kunjungan']) ?? [];
+
+            if (!empty($dataKunjungan['id_pendonor'])) {
+                $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+                $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']) ?? [];
+
+                if (!empty($dataPendonor['id_orang'])) {
+                    $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                    $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                }
+            }
+        }
+
+        if (!empty($dataPencekalan['id_petugas'])) {
+            $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
+            $petugasRow   = $modelPetugas->find($dataPencekalan['id_petugas']) ?? [];
+
+            if (!empty($petugasRow['id_orang'])) {
+                $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
+                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+                
+                if (isset($orangPetugasRow['nama'])) {
+                    $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
+                }
+            }
+        }
+
+        $baris = array_merge($dataOrang, $dataPendonor, $dataKunjungan, $dataPetugasMedis, $dataPencekalan);
+
+        $controllerKunjungan = new \App\Features\Donor\Kunjungan\KunjunganController();
+        $controllerPendonor  = new \App\Features\Role\Pendonor\PendonorController();
+        $controllerOrang     = new \App\Features\Person\Orang\OrangController();
+
+        $konfigPencekalan = $this->get_fields_with_options(false, true);
+        $konfigKunjungan  = $controllerKunjungan->fields;
+        $konfigPendonor   = $controllerPendonor->fields;
+        $konfigOrang      = $controllerOrang->fields;
+
+        $konfigGabungan = [];
+
+        foreach ($konfigPencekalan as $fieldPencekalan) {
+            $columnPencekalan = $fieldPencekalan[2];
+
+            if ($columnPencekalan === 'id_pencekalan') {
+                continue;
+            }
+
+            if ($columnPencekalan === 'id_kunjungan') {
+                foreach ($konfigKunjungan as $fieldKunjungan) {
+                    if ($fieldKunjungan[2] === 'nomor_kunjungan') {
+                        $konfigGabungan[] = $fieldKunjungan;
+                        break;
+                    }
+                }
+
+                foreach ($konfigPendonor as $fieldPendonor) {
+                    if ($fieldPendonor[2] === 'nomor_pendonor') {
+                        $konfigGabungan[] = $fieldPendonor;
+                        break;
+                    }
+                }
+
+                foreach ($konfigOrang as $fieldOrang) {
+                    if ($fieldOrang[2] === 'nama') {
+                        $konfigGabungan[] = $fieldOrang;
+                        break;
+                    }
+                }
+                continue;
+            }
+
+            $konfigGabungan[] = $fieldPencekalan;
+        }
+
+        foreach ($konfigGabungan as $field) {
+            $namaKolom = $field[2];
+            if (($baris[$namaKolom] ?? null) === null) {
+                $baris[$namaKolom] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Ubah', 'icon' => 'Ubah']
+        ];
+
+        return view('admin/penanganandonor/tambah_pencekalan', [
+            'judul'          => 'Ubah ' . $this->title,
+            'breadcrumbs'    => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'     => $this->get_uri_path(),
+            'kolom_id'       => $this->model->primaryKey,
+            'konfig'         => $konfigGabungan,
+            'baris'          => $baris,
+            'form_action'    => '/submitedit/' . $id,
         ]);
     }
 }
