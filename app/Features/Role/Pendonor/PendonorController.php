@@ -390,6 +390,51 @@ final class PendonorController extends ControllerTemplate
     }
 
     /**
+     * OVERRIDE: Menghapus data pendonor
+     */
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->home();
+        
+        $pendonor = $this->model->find($id);
+        if (!$pendonor) {
+            session()->setFlashdata('error', 'Data pendonor tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $idOrang = $pendonor['id_orang'] ?? null;
+
+        $this->model->db->transStart();
+
+        try {
+            $modelOrang = new \App\Features\Person\Orang\OrangModel();
+
+            $this->model->delete($id);
+
+            if (!empty($idOrang)) {
+                $modelOrang->delete($idOrang);
+            }
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \CodeIgniter\Database\Exceptions\DatabaseException('violates foreign key constraint');
+            }
+
+            session()->setFlashdata('success', 'Data pendonor berhasil dihapus.');
+
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $this->friendly_db_error($e));
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $e->getMessage());
+        }
+
+        return $this->home();
+    }
+
+    /**
      * Menampilkan data modal pendonor
      */
     public function list()
