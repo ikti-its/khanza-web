@@ -252,6 +252,69 @@ final class PemisahanKomponenController extends ControllerTemplate
     }
 
     /**
+     * OVERRIDE: Menghapus data pemisahan komponen & penggunaan BHP
+     */
+    #[\Override]
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->home();
+
+        $dataPemisahan = $this->model->find($id);
+        if (!$dataPemisahan) {
+            session()->setFlashdata('error', 'Gagal menghapus. Data pemisahan komponen tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $idPengambilanDarah = $dataPemisahan['id_pengambilan_darah'] ?? null;
+        $nomorPengambilan   = '';
+
+        if ($idPengambilanDarah) {
+            $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
+            $dataPengambilan  = $modelPengambilan->find($idPengambilanDarah);
+            if ($dataPengambilan) {
+                $nomorPengambilan = $dataPengambilan['nomor_pengambilan'] ?? '';
+            }
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $modelMedisPemisahan     = new \App\Features\LogistikUTD\MedisPemisahan\MedisPemisahanModel();
+            $modelPenunjangPemisahan = new \App\Features\LogistikUTD\PenunjangPemisahan\PenunjangPemisahanModel();
+            $modelKompDetail         = new \App\Features\InventoriDarah\PemisahanKomponenDetail\PemisahanKomponenDetailModel();
+            $modelStokDarah          = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
+
+            $modelMedisPemisahan->where('id_pemisahan', $id)->delete();
+            $modelPenunjangPemisahan->where('id_pemisahan', $id)->delete();
+
+            $modelKompDetail->where('id_pemisahan', $id)->delete();
+
+            if (!empty($nomorPengambilan)) {
+                $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')->delete();
+            }
+
+            $this->model->delete($id);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus data pemisahan komponen dan penggunaan BHP.');
+            }
+
+            session()->setFlashdata('success', 'Data pemisahan komponen dan penggunaan BHP berhasil dihapus.');
+
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $this->friendly_db_error($e));
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $e->getMessage());
+        }
+
+        return $this->home();
+    }
+
+    /**
      * HELPER: Penyimpanan stok darah dengan status karantina
      */
     private function stok_karantina(string $noKantong, $idKomponen, string $tanggalPengambilan, string $tanggalKadaluarsa, ?array $dataPengambilan): void
