@@ -473,18 +473,8 @@ final class PengambilanDarahController extends ControllerTemplate
                 }
             }
 
-            if (!empty($dataPengambilan['id_kunjungan']) && (int)($dataPengambilan['id_status_pengambilan'] ?? 0) === 1) {
-                $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
-                $kunjunganRow   = $modelKunjungan->find($dataPengambilan['id_kunjungan']);
-
-                if (!empty($kunjunganRow['id_pendonor'])) {
-                    $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
-                    
-                    $modelPendonor->update($kunjunganRow['id_pendonor'], [
-                        'tanggal_donor_terakhir' => $dataPengambilan['tanggal_pengambilan'] ?? date('Y-m-d')
-                    ]);
-                }
-            }
+            $idStatus = (int)($dataPengambilan['id_status_pengambilan'] ?? 0);
+            $this->sync_tanggal_donor_terakhir($idStatus, $dataPengambilan, $id);
 
             $this->model->db->transComplete();
 
@@ -547,5 +537,51 @@ final class PengambilanDarahController extends ControllerTemplate
         }
 
         return $this->home();
+    }
+
+    /**
+     * HELPER: Menyinkronkan ulang tanggal donor terakhir pada data Pendonor
+     */
+    private function sync_tanggal_donor_terakhir(int $idStatusPengambilan, array $dataPengambilan, string|int $idPengambilanDarah): void
+    {
+        $idKunjungan = $dataPengambilan['id_kunjungan'] ?? null;
+
+        if (empty($idKunjungan)) {
+            return;
+        }
+
+        $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
+        $kunjunganRow   = $modelKunjungan->find($idKunjungan);
+
+        if (empty($kunjunganRow['id_pendonor'])) {
+            return;
+        }
+
+        $idPendonor    = $kunjunganRow['id_pendonor'];
+        $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+
+        if ($idStatusPengambilan === 1) {
+            $modelPendonor->update($idPendonor, [
+                'tanggal_donor_terakhir' => $dataPengambilan['tanggal_pengambilan'] ?? date('Y-m-d')
+            ]);
+        }
+        else {
+            $riwayatSuksesTerakhir = $this->model->builder()
+                ->select('donor.pengambilan_darah.tanggal_pengambilan')
+                ->join('donor.kunjungan', 'donor.kunjungan.id_kunjungan = donor.pengambilan_darah.id_kunjungan', 'inner')
+                ->where('donor.kunjungan.id_pendonor', $idPendonor)
+                ->where('donor.pengambilan_darah.id_status_pengambilan', 1)
+                ->where('donor.pengambilan_darah.id_pengambilan_darah !=', $idPengambilanDarah)
+                ->orderBy('donor.pengambilan_darah.tanggal_pengambilan', 'DESC')
+                ->limit(1)
+                ->get()
+                ->getRowArray();
+
+            $tanggalRollback = $riwayatSuksesTerakhir ? $riwayatSuksesTerakhir['tanggal_pengambilan'] : null;
+
+            $modelPendonor->update($idPendonor, [
+                'tanggal_donor_terakhir' => $tanggalRollback
+            ]);
+        }
     }
 }
