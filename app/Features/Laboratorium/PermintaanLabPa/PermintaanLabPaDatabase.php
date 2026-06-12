@@ -24,7 +24,6 @@ final class PermintaanLabPaDatabase extends DatabaseTemplate
                 'riwayat_tgl_sebelumnya'      => T::DATE(),
                 'riwayat_no_pa_sebelumnya'    => T::TEXT(),
                 'riwayat_diagnosa_sebelumnya' => T::TEXT(),
-                'id_item_pemeriksaan'         => T::FK_AUTO(),
             ],
             'id_permintaan_pa',
             [],
@@ -33,11 +32,6 @@ final class PermintaanLabPaDatabase extends DatabaseTemplate
                     ['id_permintaan_lab'],
                     \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderDatabase::class,
                     ['id_permintaan'],
-                ],
-                [
-                    ['id_item_pemeriksaan'],
-                    \App\Features\Laboratorium\RefItemPemeriksaanLab\RefItemPemeriksaanLabDatabase::class,
-                    ['id_item_lab'],
                 ],
             ],
         );

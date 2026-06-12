@@ -16,7 +16,7 @@ final class PermintaanLabHeaderDatabase extends DatabaseTemplate
             [
                 'id_permintaan'        => T::ID(100_000_000),
                 'no_permintaan'        => T::CODE(14),
-                'id_registrasi'        => T::FK_AUTO(),
+                'nomor_reg'            => T::FK_AUTO(),
                 'id_kategori_lab'      => T::FK_AUTO(),
                 'id_dokter_perujuk'    => T::FK_AUTO(),
                 'tgl_permintaan'       => T::DTIME(),
@@ -28,9 +28,9 @@ final class PermintaanLabHeaderDatabase extends DatabaseTemplate
             [],
             [
                 [
-                    'id_registrasi',
+                    'nomor_reg',
                     \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
-                    'id_registrasi',
+                    'nomor_reg',
                 ],
                 [
                     ['id_kategori_lab'],

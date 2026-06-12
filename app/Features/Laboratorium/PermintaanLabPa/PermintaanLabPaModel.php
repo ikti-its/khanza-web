@@ -25,7 +25,6 @@ final class PermintaanLabPaModel extends ModelTemplate
             ],
             [
                 'id_permintaan_lab'   => [],
-                'id_item_pemeriksaan' => ['kode_periksa', 'nama_item', 'tarif'],
             ],
         );
     }
