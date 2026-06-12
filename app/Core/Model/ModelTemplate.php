@@ -20,7 +20,7 @@ class ModelTemplate extends Model
     private array $selected_aliases = [];
 
     /** @var array<string, mixed> */
-    private array $runtime_filters  = [];
+    protected array $runtime_filters  = [];
     private bool  $exclude_zero_pk  = false;
 
     public function set_filter(string $col, mixed $val): static
