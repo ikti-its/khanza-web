@@ -86,6 +86,7 @@ class ControllerTemplate extends Controller
         for($i = 0; $i < count($fields); $i++){
             [$show, $required, $type, $column, $name] = $fields[$i];
             $this->fields[$i] = [$show, $name, $column, $type->value, $required];
+            if (isset($fields[$i][5])) $this->fields[$i][5] = $fields[$i][5];
         }
     }
 

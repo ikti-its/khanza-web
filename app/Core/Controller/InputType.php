@@ -20,4 +20,5 @@ enum InputType: string
     case SELECT = 'status';
     case PASSW    = 'password';
     case READONLY = 'readonly';
+    case MODAL    = 'modal';
 }

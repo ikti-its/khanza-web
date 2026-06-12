@@ -35,6 +35,18 @@
     <!-- End Card -->
 </div>
 <!-- End Card Section -->
+
+<?php
+$included_modals = [];
+foreach ($konfig as $field) {
+    if (!isset($field[5]['modal'])) continue;
+    $modal_name = $field[5]['modal'];
+    if (in_array($modal_name, $included_modals, true)) continue;
+    $included_modals[] = $modal_name;
+    echo view('components/modal/' . $modal_name);
+}
+?>
+
 <script>
     // Autofill: select[data-autofill-map] → multiple inputs
     document.addEventListener('DOMContentLoaded', function () {
