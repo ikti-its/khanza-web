@@ -32,35 +32,4 @@ final class StokOpnameDetailModel extends ModelTemplate
             ],
         );
     }
-
-    public function get_all_options(): array
-    {
-        $options = parent::get_all_options();
-
-        $rows = $this->db
-            ->table('inventori_non_medis.barang b')
-            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-            ->select('b.id_barang, b.nama_barang, b.kode_barang, b.stok, s.nama_satuan')
-            ->get()->getResultArray();
-
-        $options['id_barang'] = array_map(
-            fn($row) => [
-                $row['nama_barang'],
-                (string) $row['id_barang'],
-                [
-                    '_autofill'   => [
-                        'kode_barang' => 'kode_barang',
-                        'nama_satuan' => 'nama_satuan',
-                        'stok_sistem' => 'stok_sistem',
-                    ],
-                    'kode_barang' => $row['kode_barang'] ?? '',
-                    'nama_satuan' => $row['nama_satuan'] ?? '',
-                    'stok_sistem' => (string) ($row['stok'] ?? '0'),
-                ],
-            ],
-            $rows
-        );
-
-        return $options;
-    }
 }
