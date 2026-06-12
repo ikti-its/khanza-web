@@ -29,7 +29,8 @@ final class PengajuanBarangDetailController extends ControllerTemplate
             [
                 [HIDE,       OPTIONAL, I::INDEX,    'id_detail',        'ID Detail'],
                 [HIDE,       OPTIONAL, I::INDEX,    'id_pengajuan',     'ID Pengajuan'],
-                [SHOW,       OPTIONAL, I::SELECT,   'id_barang',        'Barang'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,     'nama_barang',      'Barang'],
+                [FORM_ONLY,  OPTIONAL, I::MODAL,    'id_barang',        'Barang',  ['modal' => 'modalBarang', 'display_column' => 'nama_barang']],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_satuan',      'Satuan'],
                 [SHOW,       OPTIONAL, I::TEXT,     'nama_barang_baru', 'Nama Barang Baru'],
                 [SHOW,       REQUIRED, I::NUMBER,   'qty',              'Qty'],
