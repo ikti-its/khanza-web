@@ -29,7 +29,8 @@ final class PenerimaanBarangDetailController extends ControllerTemplate
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_detail',     'ID'],
                 [HIDE, OPTIONAL, I::INDEX,  'id_penerimaan', 'ID Penerimaan'],
-                [SHOW, REQUIRED, I::SELECT, 'id_barang',     'Barang'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,  'nama_barang', 'Barang'],
+                [FORM_ONLY,  REQUIRED, I::MODAL, 'id_barang',   'Barang', ['modal' => 'modalBarang', 'display_column' => 'nama_barang']],
                 [SHOW, REQUIRED, I::NUMBER, 'qty_diterima',  'Qty Diterima'],
                 [SHOW, OPTIONAL, I::MONEY,  'harga_satuan',  'Harga Satuan'],
             ],
