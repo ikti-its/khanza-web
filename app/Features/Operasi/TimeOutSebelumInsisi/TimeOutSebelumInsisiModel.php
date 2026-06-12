@@ -15,8 +15,6 @@ final class TimeOutSebelumInsisiModel extends ModelTemplate
             [
                 'id_timeout'              => V::DEFAULT(),
                 'waktu_timeout'           => V::DEFAULT(),
-                'sn_cn'                   => V::DEFAULT(),
-                'tindakan'                => V::DEFAULT(),
                 'is_identitas_sesuai'     => V::DEFAULT(),
                 'is_tindakan_sesuai'      => V::DEFAULT(),
                 'is_area_insisi_sesuai'   => V::DEFAULT(),
@@ -31,12 +29,22 @@ final class TimeOutSebelumInsisiModel extends ModelTemplate
                 'is_verifikasi_preop'     => V::DEFAULT(),
             ],
             [
-                'nomor_reg'            => ['nomor_rawat'],
-                'kode_dokter_bedah'    => [],
-                'kode_dokter_anestesi' => [],
+                'id_jadwal'            => [],
+                'id_tindakan'          => [],
+                'id_sn_cn'             => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_bedah'      => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_anestesi'   => [
+                    'id_orang'  => ['nama']
+                ],
                 'id_penandaan_area'    => ['nama_ketersediaan'],
                 'id_hal_khusus'        => ['nama_ketersediaan'],
-                'id_perawat_ok'        => [],
+                'id_perawat_ok'        => [
+                    'id_orang'  => ['nama']
+                ],
             ],
         );
     }

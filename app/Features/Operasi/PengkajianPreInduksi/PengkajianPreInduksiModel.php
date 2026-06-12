@@ -45,8 +45,10 @@ final class PengkajianPreInduksiModel extends ModelTemplate
                 'hasil'                     => V::DEFAULT(),
             ],
             [
-                'nomor_reg'      => [],
-                'kode_dokter'    => [],
+                'id_jadwal'          => [],
+                'id_dokter_anestesi' => [
+                    'id_orang'  => ['nama']
+                ],
                 'id_posisi'      => ['nama_posisi'],
                 'id_premedikasi' => ['nama_premedikasi'],
                 'id_induksi'     => ['nama_induksi'],

@@ -16,7 +16,6 @@ final class CatatanAnestesiSedasiModel extends ModelTemplate
                 'id_catatan_anestesi'  => V::DEFAULT(),
                 'waktu_catatan'        => V::DEFAULT(),
                 'diagnosa_pra_bedah'   => V::DEFAULT(),
-                'tindakan'             => V::DEFAULT(),
                 'diagnosa_paska_bedah' => V::DEFAULT(),
                 'jam_pengkajian'       => V::DEFAULT(),
                 'sistolik'             => V::DEFAULT(),
@@ -50,11 +49,20 @@ final class CatatanAnestesiSedasiModel extends ModelTemplate
                 'alasan_batal'         => V::DEFAULT(),
             ],
             [
-                'nomor_reg'           => ['nomor_rawat'],
-                'kode_dpjp_anestesi'  => [],
-                'kode_dpjp_bedah'     => [],
-                'id_perawat_anestesi' => [],
-                'id_perawat_bedah'    => [],
+                'id_jadwal'           => [],
+                'id_tindakan'         => [],
+                'id_dokter_anestesi'  => [
+                    'id_orang' => ['nama'],
+                ],
+                'id_dokter_bedah'     => [
+                    'id_orang' => ['nama'],
+                ],
+                'id_perawat_anestesi' => [
+                    'id_orang' => ['nama'],
+                ],
+                'id_perawat_bedah'    => [
+                    'id_orang' => ['nama'],
+                ],
                 'id_kesadaran'        => ['nama_kesadaran'],
                 'id_golongan_darah'   => ['nama_golongan_darah'],
                 'id_rhesus'           => ['kode_rhesus'],

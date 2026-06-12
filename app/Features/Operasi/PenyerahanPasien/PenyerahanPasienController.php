@@ -27,7 +27,7 @@ final class PenyerahanPasienController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_penyerahan',            'ID Penyerahan'],
-                [SHOW, REQUIRED, I::TEXT,   'nomor_reg',                'Nomor Registrasi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_jadwal',                'Jadwal Operasi'],
                 [SHOW, REQUIRED, I::DATE,   'waktu_masuk_asal',         'Waktu Masuk Asal'],
                 [SHOW, REQUIRED, I::DATE,   'waktu_pindah',             'Waktu Pindah'],
                 [SHOW, REQUIRED, I::INDEX,  'id_indikasi',              'Indikasi'],
@@ -57,8 +57,8 @@ final class PenyerahanPasienController extends ControllerTemplate
                 [SHOW, REQUIRED, I::NUMBER, 'tiba_respiratory_rate',    'Respiratory Rate Tiba'],
                 [SHOW, REQUIRED, I::TEMP,   'tiba_suhu',                'Suhu Tiba'],
                 [SHOW, REQUIRED, I::TEXT,   'tiba_keluhan',             'Keluhan Tiba'],
-                [SHOW, REQUIRED, I::TEXT,   'id_perawat_menyerahkan',   'Perawat Menyerahkan'],
-                [SHOW, REQUIRED, I::TEXT,   'id_perawat_menerima',      'Perawat Menerima'],
+                [SHOW, REQUIRED, I::INDEX,  'id_perawat_menyerahkan',   'Perawat Menyerahkan'],
+                [SHOW, REQUIRED, I::INDEX,  'id_perawat_menerima',      'Perawat Menerima'],
             ],
         );
     }

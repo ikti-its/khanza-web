@@ -27,10 +27,10 @@ final class SkorAldretteController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_skor_aldrette',   'ID Skor Aldrette'],
-                [SHOW, REQUIRED, I::TEXT,   'nomor_reg',          'Nomor Registrasi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_jadwal',          'Jadwal Operasi'],
                 [SHOW, REQUIRED, I::DATE,   'waktu_penilaian',    'Waktu Penilaian'],
-                [SHOW, REQUIRED, I::TEXT,   'id_petugas',         'ID Petugas'],
-                [SHOW, REQUIRED, I::TEXT,   'id_dokter_anestesi', 'Dokter Anestesi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_petugas',         'Petugas'],
+                [SHOW, REQUIRED, I::INDEX,  'id_dokter_anestesi', 'Dokter Anestesi'],
                 [SHOW, REQUIRED, I::NUMBER, 'skor_aktivitas',     'Skor Aktivitas'],
                 [SHOW, REQUIRED, I::NUMBER, 'skor_respirasi',     'Skor Respirasi'],
                 [SHOW, REQUIRED, I::NUMBER, 'skor_tekanan_darah', 'Skor Tekanan Darah'],

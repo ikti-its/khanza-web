@@ -20,9 +20,13 @@ final class SkorBromageModel extends ModelTemplate
                 'instruksi_rr'       => V::DEFAULT(),
             ],
             [
-                'nomor_reg'          => ['nomor_rawat'],
-                'id_petugas'         => [],
-                'id_dokter_anestesi' => [],
+                'id_jadwal'          => [],
+                'id_petugas'         => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_anestesi' => [
+                    'id_orang'  => ['nama']
+                ],
                 'skor_bromage'       => ['nama_skala', 'tingkat_blok', 'nilai', 'gambar'],
             ],
         );

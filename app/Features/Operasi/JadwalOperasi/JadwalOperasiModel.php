@@ -22,8 +22,12 @@ final class JadwalOperasiModel extends ModelTemplate
                 'id_permintaan'        => [],
                 'id_ruangan'           => ['kode_ruangan', 'nama_ruangan'],
                 'id_tindakan'          => [],
-                'kode_dokter_bedah'    => [],
-                'kode_dokter_anestesi' => [],
+                'id_dokter_bedah'      => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_anestesi'   => [
+                    'id_orang'  => ['nama']
+                ],
                 'id_status'            => ['nama_status'],
             ],
         );

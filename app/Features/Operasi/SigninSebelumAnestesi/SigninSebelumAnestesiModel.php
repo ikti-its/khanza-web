@@ -15,8 +15,6 @@ final class SigninSebelumAnestesiModel extends ModelTemplate
             [
                 'id_signin'                 => V::DEFAULT(),
                 'waktu_signin'              => V::DEFAULT(),
-                'sn_cn'                     => V::DEFAULT(),
-                'tindakan'                  => V::DEFAULT(),
                 'is_identitas_sesuai'       => V::DEFAULT(),
                 'alergi'                    => V::DEFAULT(),
                 'is_resiko_aspirasi'        => V::DEFAULT(),
@@ -27,12 +25,22 @@ final class SigninSebelumAnestesiModel extends ModelTemplate
                 'rencana_kesiapan_anestesi' => V::DEFAULT(),
             ],
             [
-                'nomor_reg'            => ['nomor_rawat'],
-                'kode_dokter_bedah'    => [],
-                'kode_dokter_anestesi' => [],
+                'id_jadwal'            => [],
+                'id_tindakan'          => [],
+                'id_sn_cn'             => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_bedah'      => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_anestesi'   => [
+                    'id_orang'  => ['nama']
+                ],
                 'id_penandaan_area'    => ['nama_ketersediaan'],
                 'id_kesiapan_anestesi' => ['nama_kesiapan'],
-                'id_perawat_ok'        => [],
+                'id_perawat_ok'        => [
+                    'id_orang'  => ['nama']
+                ],
             ],
         );
     }

@@ -27,10 +27,10 @@ final class SkorBromageController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_skor_bromage',    'ID Skor Bromage'],
-                [SHOW, REQUIRED, I::TEXT,   'nomor_reg',          'Nomor Registrasi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_jadwal',          'Jadwal Operasi'],
                 [SHOW, REQUIRED, I::DATE,   'waktu_penilaian',    'Waktu Penilaian'],
-                [SHOW, REQUIRED, I::TEXT,   'id_petugas',         'ID Petugas'],
-                [SHOW, REQUIRED, I::TEXT,   'id_dokter_anestesi', 'Dokter Anestesi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_petugas',         'Petugas'],
+                [SHOW, REQUIRED, I::INDEX,  'id_dokter_anestesi', 'Dokter Anestesi'],
                 [SHOW, REQUIRED, I::NUMBER, 'skor_bromage',       'Skor Bromage'],
                 [SHOW, REQUIRED, I::SELECT, 'is_boleh_pindah',    'Boleh Pindah'],
                 [SHOW, REQUIRED, I::TEXT,   'catatan_keluar',     'Catatan Keluar'],

@@ -26,9 +26,9 @@ final class PengkajianPreopController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_pengkajian',          'ID Pengkajian'],
-                [SHOW, REQUIRED, I::TEXT,  'nomor_reg',              'Nomor Registrasi'],
-                [SHOW, REQUIRED, I::TEXT,  'kode_dokter_bedah',      'Kode Dokter Bedah'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_pengkajian_pre',      'ID Pengkajian Pre'],
+                [SHOW, REQUIRED, I::INDEX, 'id_jadwal',              'Jadwal Operasi'],
+                [SHOW, REQUIRED, I::INDEX, 'id_dokter_bedah',        'Dokter Bedah'],
                 [SHOW, REQUIRED, I::TIME,  'waktu_pengkajian',       'Waktu Pengkajian'],
                 [SHOW, REQUIRED, I::TEXT,  'ringkasan_klinik',       'Ringkasan Klinik'],
                 [SHOW, REQUIRED, I::TEXT,  'pemeriksaan_fisik',      'Pemeriksaan Fisik'],

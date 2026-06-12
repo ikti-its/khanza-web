@@ -27,8 +27,8 @@ final class CatatanPaskaOperasiController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_catatan_paska',        'ID Catatan Paska'],
-                [SHOW, REQUIRED, I::TEXT,  'nomor_reg',               'Nomor Registrasi'],
-                [SHOW, REQUIRED, I::TEXT,  'kode_dokter_bedah',       'Kode Dokter Bedah'],
+                [SHOW, REQUIRED, I::INDEX, 'id_jadwal',               'Jadwal Operasi'],
+                [SHOW, REQUIRED, I::INDEX, 'id_dokter_bedah',         'Dokter Bedah'],
                 [SHOW, REQUIRED, I::DATE,  'waktu_penilaian',         'Waktu Penilaian'],
                 [SHOW, REQUIRED, I::TEXT,  'instruksi_rawat',         'Instruksi Rawat'],
                 [SHOW, REQUIRED, I::TEXT,  'instruksi_cairan',        'Instruksi Cairan'],

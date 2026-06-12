@@ -24,8 +24,10 @@ final class PengkajianPreopModel extends ModelTemplate
                 'terapi_pre_operasi'     => V::DEFAULT(),
             ],
             [
-                'nomor_reg'         => [],
-                'kode_dokter_bedah' => [],
+                'id_jadwal'       => [],
+                'id_dokter_bedah' => [
+                    'id_orang'  => ['nama']
+                ],
             ],
         );
     }

@@ -15,8 +15,8 @@ final class CatatanPaskaOperasiDatabase extends DatabaseTemplate
             'catatan_paska_operasi',
             [
                 'id_catatan_paska'        => T::ID(300_000_000),
-                'nomor_reg'               => T::FK_AUTO(),
-                'kode_dokter_bedah'       => T::FK_AUTO(),
+                'id_jadwal'               => T::FK_AUTO(),
+                'id_dokter_bedah'         => T::FK_AUTO(),
                 'waktu_penilaian'         => T::DTIME(),
                 'instruksi_rawat'         => T::TEXT(),
                 'instruksi_cairan'        => T::TEXT(),
@@ -32,12 +32,12 @@ final class CatatanPaskaOperasiDatabase extends DatabaseTemplate
             [],
             [
                 [
-                    ['nomor_reg'],
-                    \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
-                    ['id_registrasi'],
+                    ['id_jadwal'],
+                    \App\Features\Operasi\JadwalOperasi\JadwalOperasiDatabase::class,
+                    ['id_jadwal'],
                 ],
                 [
-                    ['kode_dokter_bedah'],
+                    ['id_dokter_bedah'],
                     \App\Features\Role\Dokter\DokterDatabase::class,
                     ['id_dokter'],
                 ],

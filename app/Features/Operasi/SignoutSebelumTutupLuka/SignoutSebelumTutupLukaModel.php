@@ -15,8 +15,6 @@ final class SignoutSebelumTutupLukaModel extends ModelTemplate
             [
                 'id_signout'              => V::DEFAULT(),
                 'waktu_signout'           => V::DEFAULT(),
-                'sn_cn'                   => V::DEFAULT(),
-                'tindakan'                => V::DEFAULT(),
                 'is_nama_tindakan_sesuai' => V::DEFAULT(),
                 'is_kasa_lengkap'         => V::DEFAULT(),
                 'is_instrumen_lengkap'    => V::DEFAULT(),
@@ -27,12 +25,22 @@ final class SignoutSebelumTutupLukaModel extends ModelTemplate
                 'catatan_pemulihan'       => V::DEFAULT(),
             ],
             [
-                'nomor_reg'            => [],
-                'kode_dokter_bedah'    => [],
-                'kode_dokter_anestesi' => [],
+                'id_jadwal'            => [],
+                'id_tindakan'          => [],
+                'id_sn_cn'             => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_bedah'      => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_anestesi'   => [
+                    'id_orang'  => ['nama']
+                ],
                 'id_label_spesimen'    => ['nama_status'],
                 'id_formulir_spesimen' => ['nama_status'],
-                'id_perawat_ok'        => [],
+                'id_perawat_ok'        => [
+                    'id_orang'  => ['nama']
+                ],
             ],
         );
     }

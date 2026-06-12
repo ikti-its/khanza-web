@@ -27,12 +27,12 @@ final class ChecklistPostopController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_checklist_post',    'ID Checklist Post'],
-                [SHOW, REQUIRED, I::TEXT,   'nomor_reg',            'Nomor Registrasi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_jadwal',            'Jadwal Operasi'],
                 [SHOW, REQUIRED, I::DATE,   'waktu_checklist',      'Waktu Checklist'],
-                [SHOW, REQUIRED, I::TEXT,   'sn_cn',                'SN/CN'],
-                [SHOW, REQUIRED, I::TEXT,   'kode_dokter_bedah',    'Kode Dokter Bedah'],
-                [SHOW, REQUIRED, I::TEXT,   'kode_dokter_anestesi', 'Kode Dokter Anestesi'],
-                [SHOW, REQUIRED, I::TEXT,   'tindakan',             'Tindakan'],
+                [SHOW, REQUIRED, I::INDEX,  'id_sn_cn',             'SN/CN'],
+                [SHOW, REQUIRED, I::INDEX,  'id_dokter_bedah',      'Dokter Bedah'],
+                [SHOW, REQUIRED, I::INDEX,  'id_dokter_anestesi',   'Dokter Anestesi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_tindakan',          'Tindakan'],
                 [SHOW, REQUIRED, I::INDEX,  'id_kesadaran_pascaop', 'Kesadaran Pasca Op'],
                 [SHOW, REQUIRED, I::TEXT,   'jenis_cairan_infus',   'Jenis Cairan Infus'],
                 [SHOW, REQUIRED, I::INDEX,  'id_jaringan_pa_vc',    'Jaringan PA/VC'],
@@ -41,8 +41,8 @@ final class ChecklistPostopController extends ControllerTemplate
                 [SHOW, REQUIRED, I::INDEX,  'id_warna_urine',       'Warna Urine'],
                 [SHOW, REQUIRED, I::NUMBER, 'jumlah_urine_cc',      'Jumlah Urine (cc)'],
                 [SHOW, REQUIRED, I::TEXT,   'catatan_luka_operasi', 'Catatan Luka Operasi'],
-                [SHOW, REQUIRED, I::TEXT,   'id_petugas_anestesi',  'ID Petugas Anestesi'],
-                [SHOW, REQUIRED, I::TEXT,   'id_petugas_ok',        'ID Petugas OK'],
+                [SHOW, REQUIRED, I::INDEX,  'id_petugas_anestesi',  'Petugas Anestesi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_petugas_ok',        'Petugas OK'],
             ],
         );
     }

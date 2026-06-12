@@ -27,8 +27,8 @@ final class PengkajianPreInduksiController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_pengkajian',             'ID Pengkajian'],
-                [SHOW, REQUIRED, I::TEXT,   'nomor_reg',                 'Nomor Registrasi'],
-                [SHOW, REQUIRED, I::TEXT,   'kode_dokter',               'Kode Dokter'],
+                [SHOW, REQUIRED, I::INDEX,  'id_jadwal',                 'Jadwal Operasi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_dokter_anestesi',        'Dokter Anestesi'],
                 [SHOW, REQUIRED, I::DATE,   'waktu_pengkajian',          'Waktu Pengkajian'],
                 [SHOW, REQUIRED, I::NUMBER, 'sistolik',                  'Sistolik'],
                 [SHOW, REQUIRED, I::NUMBER, 'diastolik',                 'Diastolik'],

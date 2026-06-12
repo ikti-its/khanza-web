@@ -15,8 +15,8 @@ final class PengkajianPreInduksiDatabase extends DatabaseTemplate
             'pengkajian_pre_induksi',
             [
                 'id_pengkajian'             => T::ID(300_000_000),
-                'nomor_reg'                 => T::FK_AUTO(),
-                'kode_dokter'               => T::FK_AUTO(),
+                'id_jadwal'                 => T::FK_AUTO(),
+                'id_dokter_anestesi'        => T::FK_AUTO(),
                 'waktu_pengkajian'          => T::DTIME(),
                 'sistolik'                  => T::VITAL(0, 300),
                 'diastolik'                 => T::VITAL(0, 200),
@@ -54,12 +54,12 @@ final class PengkajianPreInduksiDatabase extends DatabaseTemplate
             [],
             [
                 [
-                    ['nomor_reg'],
-                    \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
-                    ['id_registrasi'],
+                    ['id_jadwal'],
+                    \App\Features\Operasi\JadwalOperasi\JadwalOperasiDatabase::class,
+                    ['id_jadwal'],
                 ],
                 [
-                    ['kode_dokter'],
+                    ['id_dokter_anestesi'],
                     \App\Features\Role\Dokter\DokterDatabase::class,
                     ['id_dokter'],
                 ],

@@ -38,16 +38,20 @@ final class PenyerahanPasienModel extends ModelTemplate
                 'tiba_keluhan'             => V::DEFAULT(),
             ],
             [
-                'nomor_reg'              => ['nomor_rewat'],
+                'id_jadwal'              => [],
                 'id_indikasi'            => ['nama_indikasi'],
                 'id_ruang_asal'          => ['kode_ruangan', 'nama_ruangan'],
-                'id_ruang_selanjutnya'   => [],
+                'id_ruang_selanjutnya'   => ['kode_ruangan', 'nama_ruangan'],
                 'id_metode'              => ['nama_metode'],
                 'id_hubungan'            => ['nama_hubungan'],
                 'asal_id_keadaan'        => ['nama_keadaan'],
                 'tiba_id_keadaan'        => ['nama_keadaan'],
-                'id_perawat_menyerahkan' => [],
-                'id_perawat_menerima'    => [],
+                'id_perawat_menyerahkan' => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_perawat_menerima'    => [
+                    'id_orang'  => ['nama']
+                ],
             ],
         );
     }

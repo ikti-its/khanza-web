@@ -15,7 +15,7 @@ final class PenyerahanPasienDatabase extends DatabaseTemplate
             'penyerahan_pasien',
             [
                 'id_penyerahan'            => T::ID(300_000_000),
-                'nomor_reg'                => T::FK_AUTO(),
+                'id_jadwal'                => T::FK_AUTO(),
                 'waktu_masuk_asal'         => T::DTIME(),
                 'waktu_pindah'             => T::DTIME(),
                 'id_indikasi'              => T::FK_AUTO(),
@@ -52,9 +52,9 @@ final class PenyerahanPasienDatabase extends DatabaseTemplate
             [],
             [
                 [
-                    ['nomor_reg'],
-                    \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
-                    ['id_registrasi'],
+                    ['id_jadwal'],
+                    \App\Features\Operasi\JadwalOperasi\JadwalOperasiDatabase::class,
+                    ['id_jadwal'],
                 ],
                 [
                     ['id_indikasi'],

@@ -27,8 +27,8 @@ final class PengkajianPreAnestesiController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_pre_anestesi',      'ID Pre Anestesi'],
-                [SHOW, REQUIRED, I::TEXT,   'nomor_reg',            'Nomor Registrasi'],
-                [SHOW, REQUIRED, I::TEXT,   'kode_dokter',          'Kode Dokter'],
+                [SHOW, REQUIRED, I::INDEX,  'id_jadwal',            'Jadwal Operasi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_dokter_anestesi',   'Dokter Anestesi'],
                 [SHOW, REQUIRED, I::DATE,   'waktu_pengkajian',     'Waktu Pengkajian'],
                 [SHOW, REQUIRED, I::TEXT,   'diagnosa',             'Diagnosa'],
                 [SHOW, REQUIRED, I::TEXT,   'rencana_tindakan',     'Rencana Tindakan'],

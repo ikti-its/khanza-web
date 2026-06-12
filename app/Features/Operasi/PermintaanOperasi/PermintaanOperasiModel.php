@@ -19,7 +19,9 @@ final class PermintaanOperasiModel extends ModelTemplate
             ],
             [
                 'nomor_reg'   => ['nomor_rawat'],
-                'kode_dokter' => [],
+                'kode_dokter' => [
+                    'id_orang'  => ['nama']
+                ],
             ],
         );
     }

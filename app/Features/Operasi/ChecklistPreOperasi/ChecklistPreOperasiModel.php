@@ -15,24 +15,34 @@ final class ChecklistPreOperasiModel extends ModelTemplate
             [
                 'id_checklist'           => V::DEFAULT(),
                 'waktu_checklist'        => V::DEFAULT(),
-                'sn_cn'                  => V::DEFAULT(),
-                'tindakan'               => V::DEFAULT(),
                 'is_identitas_sesuai'    => V::DEFAULT(),
                 'is_ijin_bedah'          => V::DEFAULT(),
                 'is_ijin_anestesi'       => V::DEFAULT(),
                 'ket_persiapan_darah'    => V::DEFAULT(),
             ],
             [
-                'nomor_reg'              => ['nomor_rawat'],
-                'kode_dokter_bedah'      => [],
-                'kode_dokter_anestesi'   => [],
+                'id_jadwal'              => [],
+                'id_tindakan'            => [],
+                'id_sn_cn'               => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_bedah'        => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_anestesi'     => [
+                    'id_orang'  => ['nama']
+                ],
                 'id_keadaan_umum'        => ['nama_keadaan'],
                 'id_penandaan_area'      => ['nama_ketersediaan'],
                 'id_ijin_transfusi'      => ['nama_ketersediaan'],
                 'id_persiapan_darah'     => ['nama_ketersediaan'],
                 'id_perlengkapan_khusus' => ['nama_ketersediaan'],
-                'id_petugas_ruangan'     => [],
-                'id_petugas_ok'          => [],
+                'id_petugas_ruangan'     => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_petugas_ok'          => [
+                    'id_orang'  => ['nama']
+                ],
             ],
         );
     }

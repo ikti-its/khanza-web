@@ -21,9 +21,13 @@ final class SkorAldretteModel extends ModelTemplate
                 'instruksi_rr'    => V::DEFAULT(),
             ],
             [
-                'nomor_reg'          => ['nomor_rawat'],
-                'id_petugas'         => [],
-                'id_dokter_anestesi' => [],
+                'id_jadwal'          => [],
+                'id_petugas'         => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_anestesi' => [
+                    'id_orang'  => ['nama']
+                ],
                 'skor_aktivitas'     => ['nama_skala', 'nilai'],
                 'skor_respirasi'     => ['nama_skala', 'nilai'],
                 'skor_tekanan_darah' => ['nama_skala', 'nilai'],

@@ -15,23 +15,33 @@ final class ChecklistPostopModel extends ModelTemplate
             [
                 'id_checklist_post'    => V::DEFAULT(),
                 'waktu_checklist'      => V::DEFAULT(),
-                'sn_cn'                => V::DEFAULT(),
-                'tindakan'             => V::DEFAULT(),
                 'jenis_cairan_infus'   => V::DEFAULT(),
                 'waktu_pasang_kateter' => V::DEFAULT(),
                 'jumlah_urine_cc'      => V::DEFAULT(),
                 'catatan_luka_operasi' => V::DEFAULT(),
             ],
             [
-                'nomor_reg'            => ['nomor_rawat'],
-                'kode_dokter_bedah'    => [],
-                'kode_dokter_anestesi' => [],
+                'id_jadwal'            => [],
+                'id_tindakan'          => [],
+                'id_sn_cn'             => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_bedah'      => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_anestesi'   => [
+                    'id_orang'  => ['nama']
+                ],
                 'id_kesadaran_pascaop' => ['nama_kesadaran'],
                 'id_jaringan_pa_vc'    => ['nama_ketersediaan'],
                 'id_kateter_urine'     => ['nama_ketersediaan'],
                 'id_warna_urine'       => ['nama_warna'],
-                'id_petugas_anestesi'  => [],
-                'id_petugas_ok'        => [],
+                'id_petugas_anestesi'  => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_petugas_ok'        => [
+                    'id_orang'  => ['nama']
+                ],
             ],
         );
     }

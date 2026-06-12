@@ -21,9 +21,13 @@ final class SkorStewardModel extends ModelTemplate
                 'instruksi_rr'    => V::DEFAULT(),
             ],
             [
-                'nomor_reg'          => ['nomor_rawat'],
-                'id_petugas'         => [],
-                'id_dokter_anestesi' => [],
+                'id_jadwal'          => [],
+                'id_petugas'         => [
+                    'id_orang'  => ['nama']
+                ],
+                'id_dokter_anestesi' => [
+                    'id_orang'  => ['nama']
+                ],
                 'skor_kesadaran'     => ['nama_skala', 'nilai'],
                 'skor_respirasi'     => ['nama_skala', 'nilai'],
                 'skor_motorik'       => ['nama_skala', 'nilai'],
