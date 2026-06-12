@@ -268,6 +268,39 @@ class ModelTemplate extends Model
     }
 
     /**
+     * Like find() but applies JOINs so display columns (e.g. nama_barang) are included.
+     * Use this when the result is passed to a form view that needs joined column values.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function find_one(int|string $id): array|null
+    {
+        if ($this->join === []) {
+            $row = parent::find($id);
+            return is_array($row) ? $row : null;
+        }
+
+        $this->selected_aliases = [];
+        $main    = 'm';
+        $builder = $this->db->table("{$this->table} {$main}");
+        $builder->select("{$main}.*");
+
+        $idx = 0;
+        foreach ($this->join as $fk_col => $spec) {
+            $this->apply_join_spec($builder, $fk_col, $spec, $main, $this->database, $idx);
+        }
+
+        $builder->where("{$main}.{$this->primaryKey}", $id);
+
+        $result = $builder->get();
+        assert($result instanceof BaseResult,
+            "find_one JOIN query failed on table: {$this->table}");
+
+        $row = $result->getRowArray();
+        return is_array($row) ? $row : null;
+    }
+
+    /**
      * @return list<array<string, mixed>>
      */
     #[\Override]

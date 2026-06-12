@@ -337,7 +337,7 @@ class ControllerTemplate extends Controller
         $breadcrumbs = [
             ['title' => 'Ubah', 'icon', 'Ubah']
         ];
-        $data  = $this->model->find($id);
+        $data  = $this->model->find_one($id);
         return view('/layouts/tambah_ubah', [
             'judul'       => 'Ubah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
@@ -423,7 +423,7 @@ class ControllerTemplate extends Controller
             $breadcrumbs = [
                 ['title' => 'Ubah', 'icon', 'Ubah']
             ];
-            $data = $this->model->find($id);
+            $data = $this->model->find_one($id);
             return view('/layouts/tambah_ubah', [
                 'judul'       => 'Ubah ' . $this->title,
                 'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
