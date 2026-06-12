@@ -137,7 +137,11 @@
                     <select id="selectBarang" class="border border-gray-300 text-sm rounded-lg p-2 flex-1 bg-white dark:bg-slate-900 dark:border-gray-700 dark:text-white focus:ring-emerald-500 focus:border-emerald-500">
                         <option value="">-- Pilih Barang --</option>
                     </select>
-                    <button type="button" onclick="addBhpItem()" class="inline-flex justify-center items-center py-2 px-4 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm transition-all flex-shrink-0">
+                    <button type="button" onclick="addBhpItem()"
+                            class="inline-flex items-center gap-x-1.5 py-2 px-3 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm transition-all flex-shrink-0">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                        </svg>
                         Tambah
                     </button>
                 </div>
