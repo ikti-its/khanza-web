@@ -31,6 +31,7 @@ final class HasilLabMbController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,  'id_registrasi',            'Nomor Registrasi'],
                 [SHOW, REQUIRED, I::TEXT,  'id_dokter_pj',             'Kode Dokter PJ'],
                 [SHOW, REQUIRED, I::TEXT,  'id_petugas_lab',           'Petugas Lab'],
+                [SHOW, REQUIRED, I::TEXT,  'id_dokter_perujuk',        'Kode Dokter Perujuk'],
                 [SHOW, REQUIRED, I::DATE,  'tgl_jam_hasil',            'Tanggal & Jam Hasil'],
                 [SHOW, REQUIRED, I::INDEX, 'id_item_pemeriksaan',      'Item Pemeriksaan'],
                 [SHOW, REQUIRED, I::INDEX, 'id_parameter_pemeriksaan', 'Parameter Pemeriksaan'],
