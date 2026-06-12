@@ -17,7 +17,7 @@ final class RegistrasiController extends ControllerTemplate
                 ['Rawat Inap', 'rawat_inap'],
                 ['Registrasi', 'registrasi'],
             ],
-            'Rawat Inap',
+            'Registrasi',
             [
                 A::READ,
                 A::CREATE,
@@ -43,5 +43,35 @@ final class RegistrasiController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::SELECT, 'status_bayar',     'Status Bayar'],
             ],
         );
+    }
+
+    /**
+     * Menampilkan data modal registrasi rawat inap
+     */
+    public function list()
+    {
+        $tabel = $this->model->table;
+
+        $data = $this->model->builder()
+            ->select("
+                {$tabel}.id_rawat_inap,
+                {$tabel}.kamar,
+                {$tabel}.dokter_pj AS id_dokter,
+                rekam_medis.registrasi.nomor_rawat,
+                role.pasien.nomor_rm,
+                pasien_orang.nama AS nama,
+                dokter_orang.nama AS nama_dokter
+            ")
+            ->join('rekam_medis.registrasi', "rekam_medis.registrasi.id_registrasi = {$tabel}.id_registrasi", 'inner')
+            ->join('role.pasien', 'role.pasien.id_pasien = rekam_medis.registrasi.id_pasien', 'inner')
+            ->join('person.orang AS pasien_orang', 'pasien_orang.id_orang = role.pasien.id_orang', 'inner')
+            ->join('role.dokter', "role.dokter.id_dokter = {$tabel}.dokter_pj", 'inner')
+            ->join('person.orang AS dokter_orang', 'dokter_orang.id_orang = role.dokter.id_orang', 'inner')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON([
+            'data' => $data
+        ]);
     }
 }
