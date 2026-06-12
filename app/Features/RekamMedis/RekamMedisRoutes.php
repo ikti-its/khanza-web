@@ -14,7 +14,7 @@ final class RekamMedisRoutes extends RouteTemplate
             [
                 \App\Features\RekamMedis\Registrasi\RegistrasiController::class,
             ],
-            'rekam_medis.svg',
+            'registrasi.svg',
         );
     }
 }
