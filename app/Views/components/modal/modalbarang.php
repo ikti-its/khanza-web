@@ -25,16 +25,14 @@
             },
             rowsPerPage: 10,
             onSelect: (item) => {
-                const setField = (name, value) => {
-                    const el = document.querySelector('[name="' + name + '"]');
-                    if (el) el.value = value ?? '';
-                };
-                document.getElementById('id_barang').value         = item.id_barang;
-                document.getElementById('id_barang_display').value = item.nama_barang;
-                setField('nama_satuan', item.nama_satuan);
-                setField('kode_barang', item.kode_barang);
-                setField('stok_sistem', item.stok);
-                setField('harga',       item.harga_satuan);
+                autofillFields({
+                    id_barang:         item.id_barang,
+                    id_barang_display: item.nama_barang,
+                    nama_satuan:       item.nama_satuan,
+                    kode_barang:       item.kode_barang,
+                    stok_sistem:       item.stok,
+                    harga:             item.harga_satuan,
+                });
             },
         });
     });
