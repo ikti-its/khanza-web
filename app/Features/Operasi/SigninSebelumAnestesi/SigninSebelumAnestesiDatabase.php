@@ -39,7 +39,7 @@ final class SigninSebelumAnestesiDatabase extends DatabaseTemplate
                 [
                     ['nomor_reg'],
                     \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
-                    ['nomor_reg'],
+                    ['id_registrasi'],
                 ],
                 [
                     ['kode_dokter_bedah'],

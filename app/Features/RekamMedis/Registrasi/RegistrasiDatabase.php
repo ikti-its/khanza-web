@@ -35,7 +35,7 @@ final class RegistrasiDatabase extends DatabaseTemplate
                 'status_poli'       => T::NAME(50),
                 'status_bayar'      => T::NAME(50),
             ],
-            'nomor_reg',
+            'id_registrasi',
             [],
             [
                 [
