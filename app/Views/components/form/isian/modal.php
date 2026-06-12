@@ -9,6 +9,7 @@
 $modal_name     = $opsi['modal'] ?? '';
 $display_column = $opsi['display_column'] ?? '';
 $display_value  = $row[$display_column] ?? '';
+$placeholder    = $opsi['placeholder'] ?? 'Klik untuk memilih...';
 ?>
 <input type="hidden"
     id="<?= $column ?>"
@@ -20,7 +21,7 @@ $display_value  = $row[$display_column] ?? '';
         id="<?= $column ?>_display"
         value="<?= esc((string) $display_value) ?>"
         class="py-2 px-3 border border-gray-200 rounded-lg text-sm bg-gray-50 flex-1 min-w-0 cursor-pointer hover:border-blue-400 dark:border-gray-700 dark:bg-slate-800"
-        placeholder="-- Klik untuk memilih --"
+        placeholder="<?= esc($placeholder) ?>"
         onclick="open_<?= $modal_name ?>()"
         readonly>
     <button type="button"
