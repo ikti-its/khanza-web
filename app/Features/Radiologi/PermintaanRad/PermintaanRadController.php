@@ -88,11 +88,15 @@ final class PermintaanRadController extends ControllerTemplate
                 'p.nomor_rm',
                 'o.nama',
                 's.nama_status',
+                'r.id_dokter AS id_dokter_perujuk',
+                'od.nama AS nama_dokter_perujuk',
             ])
             ->join('rekam_medis.registrasi r',  'r.nomor_reg = pr.nomor_reg')
             ->join('role.pasien p',             'p.id_pasien = r.id_pasien')
             ->join('person.orang o',            'o.id_orang  = p.id_orang')
             ->join('radiologi.ref_status_permintaan_rad s', 's.id_status = pr.id_status_permintaan', 'left')
+            ->join('role.dokter d',             'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od',           'od.id_orang = d.id_orang', 'left')
             ->orderBy('pr.tgl_jam_permintaan', 'DESC')
             ->get()
             ->getResultArray();

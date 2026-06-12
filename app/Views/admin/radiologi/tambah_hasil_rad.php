@@ -273,7 +273,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
     // TINDAKAN
     // ════════════════════════════════════════════
     function fetchTindakanItems(idPermintaan) {
-        fetch(`/radiologi/permintaan rad item/modal/list?id_permintaan=${idPermintaan}`)
+        fetch(`/radiologi/permintaan-rad-item/modal/list?id_permintaan=${idPermintaan}`)
             .then(res => res.json())
             .then(result => renderTindakanTable(result.data || []))
             .catch(() => {
