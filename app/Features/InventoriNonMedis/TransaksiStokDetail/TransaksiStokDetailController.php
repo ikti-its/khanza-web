@@ -25,7 +25,7 @@ final class TransaksiStokDetailController extends ControllerTemplate
             [
                 [HIDE,       OPTIONAL, I::INDEX,  'id_detail',    'ID'],
                 [HIDE,       OPTIONAL, I::INDEX,  'id_transaksi', 'ID Transaksi'],
-                [TABLE_ONLY, OPTIONAL, I::SELECT, 'id_barang',    'Barang'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'nama_barang',  'Barang'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,   'kode_barang',  'Kode'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,   'nama_satuan',  'Satuan'],
                 [SHOW,       REQUIRED, I::NUMBER, 'qty',          'Qty'],

@@ -28,7 +28,7 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
                 [HIDE,       OPTIONAL, I::INDEX,  'id_detail',        'ID Detail'],
                 [HIDE,       OPTIONAL, I::INDEX,  'id_pengajuan',     'ID Pengajuan'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,   'no_pengajuan',     'No. Pengajuan'],
-                [TABLE_ONLY, OPTIONAL, I::SELECT, 'id_barang',        'Barang'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'nama_barang',      'Barang'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,   'nama_barang_baru', 'Nama Barang Baru'],
                 [TABLE_ONLY, OPTIONAL, I::MONEY,  'harga',            'Harga/Satuan'],
                 [TABLE_ONLY, OPTIONAL, I::NUMBER, 'qty',              'Qty Diajukan'],

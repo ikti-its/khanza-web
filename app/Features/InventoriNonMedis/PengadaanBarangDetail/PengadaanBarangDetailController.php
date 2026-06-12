@@ -28,7 +28,7 @@ final class PengadaanBarangDetailController extends ControllerTemplate
             [
                 [HIDE,       OPTIONAL, I::INDEX,  'id_detail',    'ID'],
                 [HIDE,       OPTIONAL, I::INDEX,  'id_pengadaan', 'ID Pengadaan'],
-                [TABLE_ONLY, OPTIONAL, I::SELECT, 'id_barang',    'Barang'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'nama_barang',  'Barang'],
                 [SHOW,       REQUIRED, I::NUMBER, 'qty',          'Qty'],
                 [SHOW,       OPTIONAL, I::MONEY,  'harga_satuan', 'Harga Satuan'],
                 [TABLE_ONLY, OPTIONAL, I::MONEY,  'subtotal',     'Subtotal'],
