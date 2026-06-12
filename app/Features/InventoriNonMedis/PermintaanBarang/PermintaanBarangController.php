@@ -41,6 +41,7 @@ final class PermintaanBarangController extends ControllerTemplate
         );
     }
 
+    // auto no_permintaan + status awal = 1
     protected function before_create(array &$postData): void
     {
         helper('autonomor');
@@ -49,6 +50,7 @@ final class PermintaanBarangController extends ControllerTemplate
         $postData['id_status_permintaan_barang'] = 1;
     }
 
+    // status dikelola lewat Ringkasan, jangan ikut ke-submit
     protected function before_update(array &$postData, int|string $id): void
     {
         unset($postData['id_status_permintaan_barang']);

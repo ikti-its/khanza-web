@@ -37,6 +37,7 @@ final class StokOpnameController extends ControllerTemplate
         );
     }
 
+    // sembunyiin status di form tambah, auto-set pas create
     #[\Override]
     public function create_page(): string
     {
@@ -55,11 +56,13 @@ final class StokOpnameController extends ControllerTemplate
         ]);
     }
 
+    // status awal = 1 (Proses)
     protected function before_create(array &$postData): void
     {
         $postData['id_status_stok_opname'] = 1;
     }
 
+    // blok kalau udah Selesai, validasi detail, buat transaksi kalau → Selesai
     public function update(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);
@@ -97,6 +100,7 @@ final class StokOpnameController extends ControllerTemplate
         return $result;
     }
 
+    // minimal 1 detail harus ada sebelum bisa Selesai
     private function validate_before_selesai(int $id): ?string
     {
         $has_items = $this->get_db()
@@ -110,6 +114,7 @@ final class StokOpnameController extends ControllerTemplate
             : 'Isi detail stok opname terlebih dahulu sebelum mengubah status menjadi Selesai.';
     }
 
+    // catat penyesuaian stok, update stok barang ke nilai fisik (hanya yang ada selisih)
     private function create_transaksi_stok_opname(int $id_opname): void
     {
         $db = $this->get_db();

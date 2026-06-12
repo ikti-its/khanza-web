@@ -44,6 +44,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         );
     }
 
+    // auto no_penerimaan + status awal = 1, simpan nomor buat populate detail
     protected function before_create(array &$postData): void
     {
         helper('autonomor');
@@ -54,6 +55,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         $this->new_no_penerimaan                 = $postData['no_penerimaan'];
     }
 
+    // kalau create berhasil, populate detail dari barang yang dipesan
     public function create(): string|RedirectResponse
     {
         $result = parent::create();
@@ -75,6 +77,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         return $result;
     }
 
+    // kalau status → Lengkap (baru pertama), isi no_masuk & tanggal_diterima
     protected function before_update(array &$postData, int|string $id): void
     {
         $new_status = (int) ($postData['id_status_penerimaan_barang'] ?? 0);
@@ -91,6 +94,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         $this->pending_masuk          = true;
     }
 
+    // validasi detail sebelum → Lengkap, buat transaksi stok masuk & update status pengadaan
     public function update(int|string $id): string|RedirectResponse
     {
         $new_status     = (int) ($this->request->getPost('id_status_penerimaan_barang') ?? 0);
@@ -126,6 +130,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         return $result;
     }
 
+    // cek minimal 1 item punya qty_diterima > 0
     private function validate_penerimaan(int $id): ?string
     {
         $has_items = $this->get_db()
@@ -138,6 +143,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         return $has_items ? null : 'Isi detail penerimaan terlebih dahulu sebelum mengubah status menjadi Lengkap.';
     }
 
+    // copy item dari pengadaan ke detail penerimaan
     private function auto_populate_detail(int $id_penerimaan): void
     {
         $db = $this->get_db();
@@ -168,6 +174,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         }
     }
 
+    // catat transaksi masuk + tambah stok barang
     private function create_transaksi_stok_masuk(int $id, string $no_masuk): void
     {
         $db = $this->get_db();
@@ -223,6 +230,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         $db->transCommit();
     }
 
+    // kalau semua item sudah diterima penuh, set status pengadaan → Selesai
     private function update_pengadaan_status(int $id_pengadaan): void
     {
         if ($id_pengadaan === 0) return;

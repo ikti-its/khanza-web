@@ -37,6 +37,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
         );
     }
 
+    // kalau status → Disetujui (baru pertama), isi tanggal_disetujui
     protected function before_update(array &$postData, int|string $id): void
     {
         $new_status = (int) ($postData['id_status_pengajuan_barang'] ?? 0);
@@ -49,6 +50,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
         $postData['tanggal_disetujui'] = date('Y-m-d H:i:s');
     }
 
+    // validasi atasan & qty sebelum approve, auto-buat pengadaan setelah
     public function update(int|string $id): string|RedirectResponse
     {
         $new_status = (int) ($this->request->getPost('id_status_pengajuan_barang') ?? 0);
@@ -88,6 +90,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
         return $result;
     }
 
+    // buat pengadaan + detail otomatis setelah pengajuan disetujui
     private function auto_create_pengadaan(int $id_pengajuan): void
     {
         $db = $this->get_db();

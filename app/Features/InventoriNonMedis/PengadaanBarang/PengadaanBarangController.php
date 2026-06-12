@@ -42,6 +42,7 @@ final class PengadaanBarangController extends ControllerTemplate
         );
     }
 
+    // auto no_pengadaan + status awal = 1
     protected function before_create(array &$postData): void
     {
         helper('autonomor');
@@ -50,6 +51,7 @@ final class PengadaanBarangController extends ControllerTemplate
         $postData['id_status_pengadaan_barang'] = 1;
     }
 
+    // cetak surat pemesanan
     public function print(int|string $id): string
     {
         $db = $this->get_db();

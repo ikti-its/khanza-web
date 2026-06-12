@@ -44,16 +44,19 @@ final class PengajuanBarangDetailController extends ControllerTemplate
         );
     }
 
+    // hitung subtotal
     protected function before_create(array &$postData): void
     {
         $postData['subtotal'] = (float) ($postData['harga'] ?? 0) * (float) ($postData['qty'] ?? 0);
     }
 
+    // hitung ulang subtotal
     protected function before_update(array &$postData, int|string $id): void
     {
         $postData['subtotal'] = (float) ($postData['harga'] ?? 0) * (float) ($postData['qty'] ?? 0);
     }
 
+    // update total_harga pengajuan setelah tambah
     public function create(): string|RedirectResponse
     {
         $result = parent::create();
@@ -64,6 +67,7 @@ final class PengajuanBarangDetailController extends ControllerTemplate
         return $result;
     }
 
+    // update total_harga pengajuan setelah ubah
     public function update(int|string $id): string|RedirectResponse
     {
         $row    = $this->model->find($id);
@@ -75,6 +79,7 @@ final class PengajuanBarangDetailController extends ControllerTemplate
         return $result;
     }
 
+    // update total_harga pengajuan setelah hapus
     public function delete(int|string $id): string|RedirectResponse
     {
         $row    = $this->model->find($id);
@@ -86,6 +91,7 @@ final class PengajuanBarangDetailController extends ControllerTemplate
         return $result;
     }
 
+    // jumlah subtotal → update total_harga pengajuan
     private function recalculate_total(int $id_pengajuan): void
     {
         $db  = $this->get_db();

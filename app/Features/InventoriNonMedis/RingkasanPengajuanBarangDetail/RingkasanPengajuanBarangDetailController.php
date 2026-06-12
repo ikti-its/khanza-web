@@ -45,6 +45,7 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
         );
     }
 
+    // hitung ulang subtotal pakai harga existing × qty_disetujui
     protected function before_update(array &$postData, int|string $id): void
     {
         $existing = $this->model->find($id);
@@ -55,6 +56,7 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
         $postData['subtotal'] = $harga * $qty_disetujui;
     }
 
+    // validasi qty_disetujui ≤ qty pengajuan, update total setelah simpan
     public function update(int|string $id): string|RedirectResponse
     {
         $row = $this->model->find($id);
@@ -74,6 +76,7 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
         return $result;
     }
 
+    // jumlah subtotal → update total_harga pengajuan
     private function recalculate_total(int $id_pengajuan): void
     {
         $db  = $this->get_db();

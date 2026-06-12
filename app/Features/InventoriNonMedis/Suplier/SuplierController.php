@@ -39,6 +39,7 @@ final class SuplierController extends ControllerTemplate
         );
     }
 
+    // inject pilihan bank ke field id_bank pas render form
     protected function get_fields_with_options(bool $include_pk = false, bool $is_form = false): array
     {
         $fields = parent::get_fields_with_options($include_pk, $is_form);
@@ -63,6 +64,7 @@ final class SuplierController extends ControllerTemplate
         return $fields;
     }
 
+    // load data rekening terkait suplier ke form ubah
     public function update_page(int|string $id): string
     {
         if ($id == 0) return $this->index();
@@ -99,6 +101,7 @@ final class SuplierController extends ControllerTemplate
         ]);
     }
 
+    // generate kode suplier format S0001, S0002, dst
     private function generate_kode(): string
     {
         $row = $this->get_db()
@@ -113,6 +116,7 @@ final class SuplierController extends ControllerTemplate
         return 'S' . str_pad((string) $next, 4, '0', STR_PAD_LEFT);
     }
 
+    // pre-fill kode_suplier dengan kode otomatis
     public function create_page(): string
     {
         $konfig = $this->get_fields_with_options(false, true);
@@ -131,6 +135,7 @@ final class SuplierController extends ControllerTemplate
         ]);
     }
 
+    // simpan rekening baru ke finansial.rekening, link id_rekening ke suplier
     protected function before_create(array &$postData): void
     {
         $id_bank        = $postData['id_bank']        ?? null;
@@ -150,6 +155,7 @@ final class SuplierController extends ControllerTemplate
         $postData['id_rekening'] = $db->insertID();
     }
 
+    // update rekening yang sudah ada, atau insert baru kalau belum punya rekening
     protected function before_update(array &$postData, int|string $id): void
     {
         $id_bank        = $postData['id_bank']        ?? null;
