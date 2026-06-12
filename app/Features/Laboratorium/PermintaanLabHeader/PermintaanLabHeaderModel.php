@@ -20,9 +20,9 @@ final class PermintaanLabHeaderModel extends ModelTemplate
                 'informasi_tambahan'   => V::DEFAULT(),
             ],
             [
-                'nomor_reg'            => ['nomor_rawat'],
+                'id_registrasi'        => ['nomor_reg'],
                 'id_kategori_lab'      => ['nama_kategori'],
-                'kode_dokter_perujuk'  => [
+                'id_dokter_perujuk'    => [
                     'id_orang'  => ['nama']
                 ],
                 'id_status_permintaan' => ['nama_status'],

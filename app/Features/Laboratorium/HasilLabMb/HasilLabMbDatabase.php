@@ -16,10 +16,10 @@ final class HasilLabMbDatabase extends DatabaseTemplate
             [
                 'id_hasil_mb'              => T::ID(100_000_000),
                 'id_permintaan_lab'        => T::FK_AUTO(),
-                'nomor_reg'                => T::FK_AUTO(),
-                'kode_dokter_pj'           => T::FK_AUTO(),
+                'id_registrasi'            => T::FK_AUTO(),
+                'id_dokter_pj'             => T::FK_AUTO(),
                 'id_petugas_lab'           => T::FK_AUTO(),
-                'kode_dokter_perujuk'      => T::FK_AUTO(),
+                'id_dokter_perujuk'        => T::FK_AUTO(),
                 'tgl_jam_hasil'            => T::DTIME(),
                 'id_item_pemeriksaan'      => T::FK_AUTO(),
                 'id_parameter_pemeriksaan' => T::FK_AUTO(),
@@ -35,12 +35,12 @@ final class HasilLabMbDatabase extends DatabaseTemplate
                     ['id_permintaan'],
                 ],
                 [
-                    'nomor_reg',
+                    'id_registrasi',
                     \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
                     'id_registrasi',
                 ],
                 [
-                    'kode_dokter_pj',
+                    'id_dokter_pj',
                     \App\Features\Role\Dokter\DokterDatabase::class,
                     'id_dokter',
                 ],
@@ -50,7 +50,7 @@ final class HasilLabMbDatabase extends DatabaseTemplate
                     'id_petugas',
                 ],
                 [
-                    'kode_dokter_perujuk',
+                    'id_dokter_perujuk',
                     \App\Features\Role\Dokter\DokterDatabase::class,
                     'id_dokter',
                 ],

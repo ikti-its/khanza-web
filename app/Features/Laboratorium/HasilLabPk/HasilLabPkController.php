@@ -28,10 +28,10 @@ final class HasilLabPkController extends ControllerTemplate
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_hasil_pk',              'ID Hasil PK'],
                 [SHOW, REQUIRED, I::INDEX, 'id_permintaan_lab',        'ID Permintaan Lab'],
-                [SHOW, REQUIRED, I::TEXT,  'nomor_reg',                'Nomor Registrasi'],
-                [SHOW, REQUIRED, I::TEXT,  'kode_dokter_pj',           'Kode Dokter PJ'],
+                [SHOW, REQUIRED, I::TEXT,  'id_registrasi',            'Nomor Registrasi'],
+                [SHOW, REQUIRED, I::TEXT,  'id_dokter_pj',             'Kode Dokter PJ'],
                 [SHOW, REQUIRED, I::TEXT,  'id_petugas_lab',           'ID Petugas Lab'],
-                [SHOW, REQUIRED, I::TEXT,  'kode_dokter_perujuk',      'Kode Dokter Perujuk'],
+                [SHOW, REQUIRED, I::TEXT,  'id_dokter_perujuk',        'Kode Dokter Perujuk'],
                 [SHOW, REQUIRED, I::DATE,  'tgl_jam_hasil',            'Tanggal & Jam Hasil'],
                 [SHOW, REQUIRED, I::INDEX, 'id_kategori_usia',         'ID Kategori Usia'],
                 [SHOW, REQUIRED, I::INDEX, 'id_item_pemeriksaan',      'ID Item Pemeriksaan'],
