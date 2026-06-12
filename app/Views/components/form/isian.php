@@ -58,7 +58,7 @@
         ]);
 
         echo view('components/form/isian/' . $type, [
-            'id'     => '',
+            'id'     => $column,
             'column' => $column,
             'value'  => $row[$column] ?? '',
             'req'    => $required,

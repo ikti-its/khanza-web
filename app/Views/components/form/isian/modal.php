@@ -15,10 +15,19 @@ $display_value  = $row[$display_column] ?? '';
     name="<?= $column ?>"
     value="<?= esc((string) $value) ?>"
     <?= $req ? 'required' : '' ?>>
-<input type="text"
-    id="<?= $column ?>_display"
-    value="<?= esc((string) $display_value) ?>"
-    class="py-2 px-3 border border-gray-200 rounded-lg text-sm bg-gray-50 w-full md:w-1/4 cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 dark:border-gray-700 dark:bg-slate-800"
-    placeholder="-- Klik untuk memilih --"
-    onclick="open_<?= $modal_name ?>()"
-    readonly>
+<div class="flex items-center gap-2 w-full md:w-1/4">
+    <input type="text"
+        id="<?= $column ?>_display"
+        value="<?= esc((string) $display_value) ?>"
+        class="py-2 px-3 border border-gray-200 rounded-lg text-sm bg-gray-50 flex-1 min-w-0 cursor-pointer hover:border-blue-400 dark:border-gray-700 dark:bg-slate-800"
+        placeholder="-- Klik untuk memilih --"
+        onclick="open_<?= $modal_name ?>()"
+        readonly>
+    <button type="button"
+        onclick="open_<?= $modal_name ?>()"
+        class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
+        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+    </button>
+</div>
