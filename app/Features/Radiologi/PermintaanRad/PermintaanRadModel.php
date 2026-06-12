@@ -21,9 +21,6 @@ final class PermintaanRadModel extends ModelTemplate
             ],
             [
                 'nomor_reg'            => [],
-                'kode_dokter_perujuk'  => [
-                    'id_orang'  => ['nama'],
-                ],
                 'id_status_permintaan' => ['nama_status'],
             ],
         );

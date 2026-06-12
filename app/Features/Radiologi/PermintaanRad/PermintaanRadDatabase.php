@@ -17,7 +17,6 @@ final class PermintaanRadDatabase extends DatabaseTemplate
                 'id_permintaan'        => T::ID(100_000_000),
                 'no_permintaan'        => T::RECORD(20),
                 'nomor_reg'            => T::FK_AUTO(),
-                'id_dokter_perujuk'    => T::FK_AUTO(),
                 'tgl_jam_permintaan'   => T::DTIME(),
                 'informasi_tambahan'   => T::NOTE(),
                 'indikasi_klinis'      => T::TEXT(),
@@ -30,11 +29,6 @@ final class PermintaanRadDatabase extends DatabaseTemplate
                     ['nomor_reg'],
                     \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
                     ['nomor_reg'],
-                ],
-                [
-                    ['id_dokter_perujuk'],
-                    \App\Features\Role\Dokter\DokterDatabase::class,
-                    ['id_dokter'],
                 ],
                 [
                     ['id_status_permintaan'],
