@@ -44,7 +44,7 @@ final class BarangController extends ControllerTemplate
     {
         $rows = $this->model->builder()
             ->join('inventori_non_medis.satuan', 'inventori_non_medis.satuan.id_satuan = inventori_non_medis.barang.id_satuan', 'left')
-            ->select('inventori_non_medis.barang.id_barang, inventori_non_medis.barang.kode_barang, inventori_non_medis.barang.nama_barang, inventori_non_medis.satuan.nama_satuan, inventori_non_medis.barang.stok')
+            ->select('inventori_non_medis.barang.id_barang, inventori_non_medis.barang.kode_barang, inventori_non_medis.barang.nama_barang, inventori_non_medis.satuan.nama_satuan, inventori_non_medis.barang.stok, inventori_non_medis.barang.harga_satuan')
             ->orderBy('inventori_non_medis.barang.nama_barang', 'ASC')
             ->get()->getResultArray();
 
