@@ -27,9 +27,6 @@ final class HasilLabMbModel extends ModelTemplate
                 'id_petugas_lab'           => [
                     'id_orang'  => ['nama']
                 ],
-                'id_dokter_perujuk'      => [
-                    'id_orang'  => ['nama']
-                ],
                 'id_item_pemeriksaan'      => ['kode_periksa', 'nama_item', 'tarif'],
                 'id_parameter_pemeriksaan' => ['nama_parameter', 'satuan', 'nilai_rujukan', 'biaya_item'],
             ],

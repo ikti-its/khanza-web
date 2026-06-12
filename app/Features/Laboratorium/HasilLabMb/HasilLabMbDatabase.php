@@ -19,7 +19,6 @@ final class HasilLabMbDatabase extends DatabaseTemplate
                 'id_registrasi'            => T::FK_AUTO(),
                 'id_dokter_pj'             => T::FK_AUTO(),
                 'id_petugas_lab'           => T::FK_AUTO(),
-                'id_dokter_perujuk'        => T::FK_AUTO(),
                 'tgl_jam_hasil'            => T::DTIME(),
                 'id_item_pemeriksaan'      => T::FK_AUTO(),
                 'id_parameter_pemeriksaan' => T::FK_AUTO(),
@@ -48,11 +47,6 @@ final class HasilLabMbDatabase extends DatabaseTemplate
                     'id_petugas_lab',
                     \App\Features\Role\Petugas\PetugasDatabase::class,
                     'id_petugas',
-                ],
-                [
-                    'id_dokter_perujuk',
-                    \App\Features\Role\Dokter\DokterDatabase::class,
-                    'id_dokter',
                 ],
                 [
                     ['id_item_pemeriksaan'],
