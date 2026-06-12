@@ -16,7 +16,7 @@ final class HasilRadTindakanDatabase extends DatabaseTemplate
             [
                 'id_hasil_tindakan'       => T::ID(100_000_000),
                 'id_hasil_rad'            => T::FK_AUTO(),
-                'id_item_rad'             => T::FK_AUTO(),
+                'id_permintaan_item'      => T::FK_AUTO(),
                 'proyeksi'                => T::TEXT(),
                 'kilovoltage_kv'          => T::RAD(),
                 'milliampere_second_mas'  => T::RAD(),
@@ -37,9 +37,9 @@ final class HasilRadTindakanDatabase extends DatabaseTemplate
                     ['id_hasil_rad'],
                 ],
                 [
-                    ['id_item_rad'],
-                    \App\Features\Radiologi\RefItemRad\RefItemRadDatabase::class,
-                    ['id_item'],
+                    ['id_permintaan_item'],
+                    \App\Features\Radiologi\PermintaanRadItem\PermintaanRadItemDatabase::class,
+                    ['id_permintaan_item'],
                 ],
                 [
                     ['id_template_rad'],

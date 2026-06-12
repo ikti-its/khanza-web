@@ -20,7 +20,7 @@ final class PermintaanRadModel extends ModelTemplate
                 'indikasi_klinis'      => V::DEFAULT(),
             ],
             [
-                'nomor_reg'            => ['nomor_rawat'],
+                'id_registrasi'        => ['nomor_reg'],
                 'kode_dokter_perujuk'  => [
                     'id_orang'  => ['nama'],
                 ],

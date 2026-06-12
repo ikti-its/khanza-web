@@ -22,14 +22,14 @@ final class PermintaanRadItemDatabase extends DatabaseTemplate
             [],
             [
                 [
-                    'id_permintaan',
+                    ['id_permintaan'],
                     \App\Features\Radiologi\PermintaanRad\PermintaanRadDatabase::class,
-                    'id_permintaan',
+                    ['id_permintaan'],
                 ],
                 [
-                    'id_item',
+                    ['id_item'],
                     \App\Features\Radiologi\RefItemRad\RefItemRadDatabase::class,
-                    'id_item',
+                    ['id_item'],
                 ],
             ],
         );

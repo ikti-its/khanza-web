@@ -28,8 +28,8 @@ final class PermintaanRadController extends ControllerTemplate
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_permintaan',        'ID Permintaan'],
                 [SHOW, REQUIRED, I::TEXT,   'no_permintaan',        'No. Permintaan'],
-                [SHOW, REQUIRED, I::TEXT,   'nomor_reg',            'Nomor Registrasi'],
-                [SHOW, REQUIRED, I::TEXT,   'kode_dokter_perujuk',  'Kode Dokter Perujuk'],
+                [SHOW, REQUIRED, I::TEXT,   'id_registrasi',        'Nomor Registrasi'],
+                [SHOW, REQUIRED, I::TEXT,   'id_dokter_perujuk',    'Kode Dokter Perujuk'],
                 [SHOW, REQUIRED, I::DTIME,  'tgl_jam_permintaan',   'Tanggal Permintaan'],
                 [SHOW, REQUIRED, I::TEXT,   'informasi_tambahan',   'Informasi Tambahan'],
                 [SHOW, REQUIRED, I::TEXT,   'indikasi_klinis',      'Indikasi Klinis'],
