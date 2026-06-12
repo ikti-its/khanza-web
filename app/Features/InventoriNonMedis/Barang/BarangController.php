@@ -40,6 +40,17 @@ final class BarangController extends ControllerTemplate
 
     protected array $row_alert = ['value' => 'stok', 'threshold' => 'stok_minimum'];
 
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $rows = $this->model->builder()
+            ->join('inventori_non_medis.satuan', 'inventori_non_medis.satuan.id_satuan = inventori_non_medis.barang.id_satuan', 'left')
+            ->select('inventori_non_medis.barang.id_barang, inventori_non_medis.barang.kode_barang, inventori_non_medis.barang.nama_barang, inventori_non_medis.satuan.nama_satuan, inventori_non_medis.barang.stok')
+            ->orderBy('inventori_non_medis.barang.nama_barang', 'ASC')
+            ->get()->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
+    }
+
     /** @param array<string, scalar|null> $postData */
     protected function before_create(array &$postData): void
     {
