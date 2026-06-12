@@ -311,7 +311,7 @@ class ControllerTemplate extends Controller
         return $result;
     }
 
-    private function create_view(array $baris = []): string
+    protected function create_view(array $baris = []): string
     {
         $breadcrumbs = [['title' => 'Tambah', 'icon', 'tambah']];
         return view('/layouts/tambah_ubah', [

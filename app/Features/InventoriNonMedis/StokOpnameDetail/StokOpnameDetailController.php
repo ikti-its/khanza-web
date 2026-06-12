@@ -38,6 +38,7 @@ final class StokOpnameDetailController extends ControllerTemplate
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'stok_sistem', 'Stok Sistem'],
                 [SHOW,       REQUIRED, I::NUMBER,   'stok_fisik',  'Stok Fisik'],
                 [TABLE_ONLY, OPTIONAL, I::NUMBER,   'selisih',     'Selisih'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'selisih',     'Selisih'],
                 [SHOW,       OPTIONAL, I::TEXT,     'catatan',     'Catatan'],
             ],
             parent_fk: 'id_opname',
