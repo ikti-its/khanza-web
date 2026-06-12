@@ -23,6 +23,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::REGISTRASI,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,   'id_skrining',      'ID Skrining'],
