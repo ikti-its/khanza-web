@@ -14,13 +14,6 @@ final class RegistrasiModel extends ModelTemplate
             new RegistrasiDatabase(),
             [
                 'id_rawat_inap'    => V::DEFAULT(),
-                'nomor_rawat'      => V::DEFAULT(),
-                'nomor_rm'         => V::DEFAULT(),
-                'nama_pasien'      => V::DEFAULT(),
-                'alamat_pasien'    => V::DEFAULT(),
-                'penanggung_jawab' => V::DEFAULT(),
-                'hubungan_pj'      => V::DEFAULT(),
-                'jenis_bayar'      => V::DEFAULT(),
                 'kamar'            => V::DEFAULT(),
                 'tarif_kamar'      => V::DEFAULT(),
                 'diagnosa_awal'    => V::DEFAULT(),
@@ -28,14 +21,18 @@ final class RegistrasiModel extends ModelTemplate
                 'tanggal_masuk'    => V::DEFAULT(),
                 'tanggal_keluar'   => V::DEFAULT(),
                 'jam_keluar'       => V::DEFAULT(),
-                'total_biaya'      => V::DEFAULT(),
-                'status_pulang'    => V::DEFAULT(),
                 'lama_ranap'       => V::DEFAULT(),
-                'dokter_pj'        => V::DEFAULT(),
-                'status_bayar'     => V::DEFAULT(),
-                'jam_masuk'        => V::DEFAULT(),
+                'total_biaya'      => V::DEFAULT(),
             ],
-            [],
+            [
+                'id_registrasi' => ['nomor_rawat'],
+                'jenis_bayar'   => ['nama_jenis_bayar'],
+                'status_pulang' => ['nama_status_pulang'],
+                'dokter_pj'     => [
+                    'id_orang'  => ['nama']
+                ],
+                'status_bayar' => ['nama_status_bayar'],
+            ],
         );
     }
 }
