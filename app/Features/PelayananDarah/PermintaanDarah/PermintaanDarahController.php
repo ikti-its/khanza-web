@@ -6,6 +6,7 @@ namespace App\Features\PelayananDarah\PermintaanDarah;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class PermintaanDarahController extends ControllerTemplate
 {
@@ -148,5 +149,68 @@ final class PermintaanDarahController extends ControllerTemplate
             'master_rhesus'   => $masterRhesus,
             'form_action'     => '/submittambah',
         ]);
+    }
+
+    /**
+     * OVERRIDE: Memproses simpan data permintaan darah
+     */
+    #[\Override]
+    public function create(): string|RedirectResponse
+    {
+        $rawPost = $this->request->getPost();
+
+        $listKomponen = $this->request->getPost('id_komponen');
+        $listGolDarah = $this->request->getPost('id_golongan_darah');
+        $listRhesus   = $this->request->getPost('id_rhesus');
+        $listJumlah   = $this->request->getPost('jumlah');
+
+        $dataPermintaan = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataPermintaan[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $this->model->insert($dataPermintaan);
+            $idPermintaan = $this->model->getInsertID();
+
+            if (!empty($listKomponen) && is_array($listKomponen)) {
+                $modelDetail = new \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailModel();
+
+                foreach ($listKomponen as $index => $idKomponen) {
+                    if (empty($idKomponen)) continue;
+
+                    $modelDetail->insert([
+                        'id_permintaan'     => $idPermintaan,
+                        'id_komponen'       => $idKomponen,
+                        'id_golongan_darah' => $listGolDarah[$index],
+                        'id_rhesus'         => $listRhesus[$index],
+                        'jumlah'            => (int)$listJumlah[$index],
+                    ]);
+                }
+            }
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException("Gagal menyimpan data permintaan darah.");
+            }
+
+            session()->setFlashdata('success', 'Data permintaan darah berhasil disimpan.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
+                ? $this->friendly_db_error($e) 
+                : $e->getMessage();
+                
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 }
