@@ -53,6 +53,7 @@ final class BarangController extends ControllerTemplate
     }
 
     /** @param array<string, scalar|null> $postData */
+    // stok awal = 0
     protected function before_create(array &$postData): void
     {
         $postData['stok'] = 0;

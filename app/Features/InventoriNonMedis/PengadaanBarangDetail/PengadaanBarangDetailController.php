@@ -39,6 +39,7 @@ final class PengadaanBarangDetailController extends ControllerTemplate
         );
     }
 
+    // hitung ulang subtotal
     protected function before_update(array &$postData, int|string $id): void
     {
         $harga             = (float) ($postData['harga_satuan'] ?? 0);
@@ -46,6 +47,7 @@ final class PengadaanBarangDetailController extends ControllerTemplate
         $postData['subtotal'] = $harga * $qty;
     }
 
+    // validasi qty ≤ qty disetujui pengajuan, update total_harga pengadaan
     public function update(int|string $id): string|RedirectResponse
     {
         $row = $this->model->find($id);
@@ -80,6 +82,7 @@ final class PengadaanBarangDetailController extends ControllerTemplate
         return $result;
     }
 
+    // update total_harga pengadaan setelah baris dihapus
     public function delete(int|string $id): string|RedirectResponse
     {
         $row    = $this->model->find($id);
@@ -91,6 +94,7 @@ final class PengadaanBarangDetailController extends ControllerTemplate
         return $result;
     }
 
+    // jumlah subtotal → update total_harga pengadaan
     private function recalculate_total(int $id_pengadaan): void
     {
         $db  = $this->get_db();

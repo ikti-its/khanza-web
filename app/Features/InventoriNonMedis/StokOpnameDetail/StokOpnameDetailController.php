@@ -45,6 +45,7 @@ final class StokOpnameDetailController extends ControllerTemplate
         );
     }
 
+    // ambil status opname induk
     private function get_parent_status(int $id_opname): int
     {
         $row = $this->get_db()
@@ -55,6 +56,7 @@ final class StokOpnameDetailController extends ControllerTemplate
         return (int) ($row['id_status_stok_opname'] ?? 0);
     }
 
+    // blok kalau opname induk udah Selesai
     public function create(): string|RedirectResponse
     {
         $id_opname = (int) ($this->request->getPost('id_opname') ?? 0);
@@ -66,6 +68,7 @@ final class StokOpnameDetailController extends ControllerTemplate
         return parent::create();
     }
 
+    // ambil stok_sistem dari barang, hitung selisih
     protected function before_create(array &$postData): void
     {
         $id_barang   = (int) ($postData['id_barang'] ?? 0);
@@ -84,6 +87,7 @@ final class StokOpnameDetailController extends ControllerTemplate
         $postData['selisih']     = (int) ($postData['stok_fisik'] ?? 0) - $stok_sistem;
     }
 
+    // blok kalau opname induk udah Selesai
     public function update(int|string $id): string|RedirectResponse
     {
         $row       = $this->model->find((int) $id);
@@ -98,6 +102,7 @@ final class StokOpnameDetailController extends ControllerTemplate
         return parent::update($id);
     }
 
+    // pakai stok_sistem lama, hitung ulang selisih
     protected function before_update(array &$postData, int|string $id): void
     {
         $row         = $this->model->find((int) $id);

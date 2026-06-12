@@ -41,6 +41,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         );
     }
 
+    // kalau status → Disetujui (baru pertama), generate no_keluar & isi tanggal
     protected function before_update(array &$postData, int|string $id): void
     {
         $new_status = (int) ($postData['id_status_permintaan_barang'] ?? 0);
@@ -57,6 +58,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         $this->pending_keluar          = true;
     }
 
+    // validasi petugas, qty & stok sebelum approve, buat transaksi keluar setelah
     public function update(int|string $id): string|RedirectResponse
     {
         $new_status = (int) ($this->request->getPost('id_status_permintaan_barang') ?? 0);
@@ -106,6 +108,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         return $result;
     }
 
+    // cek stok cukup untuk semua item yang disetujui
     private function validate_stock(int $id): ?string
     {
         $details = $this->get_db()
@@ -125,6 +128,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         return null;
     }
 
+    // catat transaksi keluar + kurangi stok barang
     private function create_transaksi_stok_keluar(int $id, string $no_keluar): void
     {
         $db = $this->get_db();

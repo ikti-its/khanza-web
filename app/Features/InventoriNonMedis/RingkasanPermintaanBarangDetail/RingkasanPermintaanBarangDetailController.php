@@ -43,6 +43,7 @@ final class RingkasanPermintaanBarangDetailController extends ControllerTemplate
         );
     }
 
+    // qty_disetujui ga boleh lebih dari qty yang diminta
     public function update(int|string $id): string|RedirectResponse
     {
         $row = $this->model->find($id);
