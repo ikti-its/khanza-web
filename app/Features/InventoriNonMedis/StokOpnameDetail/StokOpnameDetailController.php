@@ -31,7 +31,7 @@ final class StokOpnameDetailController extends ControllerTemplate
                 [HIDE,       OPTIONAL, I::INDEX,    'id_detail',   'ID Detail'],
                 [HIDE,       OPTIONAL, I::INDEX,    'id_opname',   'ID Opname'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,     'nama_barang', 'Barang'],
-                [FORM_ONLY,  REQUIRED, I::MODAL,    'id_barang',   'Barang',  ['modal' => 'modalBarang', 'display_column' => 'nama_barang']],
+                [FORM_ONLY,  REQUIRED, I::MODAL,    'id_barang',   'Barang',  ['modal' => 'modalBarang', 'display_column' => 'nama_barang', 'placeholder' => 'Klik cari barang...']],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'kode_barang', 'Kode Barang'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_satuan', 'Satuan'],
                 [TABLE_ONLY, OPTIONAL, I::NUMBER,   'stok_sistem', 'Stok Sistem'],
