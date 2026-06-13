@@ -323,4 +323,69 @@ final class PermintaanDarahController extends ControllerTemplate
             'form_action'     => '/submitedit/' . $id,
         ]);
     }
+
+    /**
+     * OVERRIDE: Mengeksekusi Simpan Perubahan Data Permintaan Darah
+     */
+    #[\Override]
+    public function update(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->index();
+
+        $rawPost = $this->request->getPost();
+
+        $listKomponen = $this->request->getPost('id_komponen');
+        $listGolDarah = $this->request->getPost('id_golongan_darah');
+        $listRhesus   = $this->request->getPost('id_rhesus');
+        $listJumlah   = $this->request->getPost('jumlah');
+
+        $dataPermintaan = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataPermintaan[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $this->model->update($id, $dataPermintaan);
+
+            $modelDetail = new \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailModel();
+
+            $modelDetail->where('id_permintaan', $id)->delete();
+
+            if (!empty($listKomponen) && is_array($listKomponen)) {
+                foreach ($listKomponen as $index => $idKomponen) {
+                    if (empty($idKomponen)) continue;
+
+                    $modelDetail->insert([
+                        'id_permintaan'     => $id,
+                        'id_komponen'       => $idKomponen,
+                        'id_golongan_darah' => $listGolDarah[$index],
+                        'id_rhesus'         => $listRhesus[$index],
+                        'jumlah'            => (int)$listJumlah[$index],
+                    ]);
+                }
+            }
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException("Gagal memperbarui data permintaan darah.");
+            }
+
+            session()->setFlashdata('success', 'Data permintaan darah berhasil diperbarui.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
+                ? $this->friendly_db_error($e) 
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
+    }
 }
