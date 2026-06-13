@@ -18,6 +18,7 @@ final class PermintaanRadModel extends ModelTemplate
                 'tgl_jam_permintaan'   => V::DEFAULT(),
                 'informasi_tambahan'   => V::DEFAULT(),
                 'indikasi_klinis'      => V::DEFAULT(),
+                'tgl_jam_sampel'       => V::DEFAULT(),
             ],
             [
                 'nomor_reg'            => [],

@@ -21,6 +21,7 @@ final class PermintaanRadDatabase extends DatabaseTemplate
                 'informasi_tambahan'   => T::NOTE(),
                 'indikasi_klinis'      => T::TEXT(),
                 'id_status_permintaan' => T::FK_AUTO(),
+                'tgl_jam_sampel'       => T::DTIME()->nullable(),
             ],
             'id_permintaan',
             ['no_permintaan'],

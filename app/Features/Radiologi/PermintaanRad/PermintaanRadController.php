@@ -24,6 +24,7 @@ final class PermintaanRadController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::SAMPEL,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_permintaan',        'ID Permintaan'],
@@ -33,6 +34,7 @@ final class PermintaanRadController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,   'informasi_tambahan',   'Informasi Tambahan'],
                 [SHOW, REQUIRED, I::TEXT,   'indikasi_klinis',      'Indikasi Klinis'],
                 [SHOW, REQUIRED, I::SELECT, 'id_status_permintaan', 'Status Permintaan'],
+                [SHOW, OPTIONAL, I::DTIME,  'tgl_jam_sampel',       'Waktu Sampel'],
             ],
         );
     }
@@ -78,7 +80,7 @@ final class PermintaanRadController extends ControllerTemplate
 
     public function list()
     {
-        $rows = $this->model->db
+        $builder = $this->model->db
             ->table('radiologi.permintaan_rad pr')
             ->select([
                 'pr.id_permintaan',
@@ -97,11 +99,14 @@ final class PermintaanRadController extends ControllerTemplate
             ->join('radiologi.ref_status_permintaan_rad s', 's.id_status = pr.id_status_permintaan', 'left')
             ->join('role.dokter d',             'd.id_dokter = r.id_dokter', 'left')
             ->join('person.orang od',           'od.id_orang = d.id_orang', 'left')
-            ->orderBy('pr.tgl_jam_permintaan', 'DESC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('pr.tgl_jam_permintaan', 'DESC');
 
-        return $this->response->setJSON(['data' => $rows]);
+        $status = $this->request->getGet('status');
+        if ($status !== null) {
+            $builder->where('pr.id_status_permintaan', (int) $status);
+        }
+
+        return $this->response->setJSON(['data' => $builder->get()->getResultArray()]);
     }
 
     #[\Override]
@@ -328,6 +333,24 @@ final class PermintaanRadController extends ControllerTemplate
         } catch (\RuntimeException $e) {
             $this->model->db->transRollback();
             session()->setFlashdata('error', $e->getMessage());
+        }
+
+        return $this->home();
+    }
+
+    public function sampel(int|string $id): \CodeIgniter\HTTP\RedirectResponse
+    {
+        if ($id == 0) return $this->home();
+
+        try {
+            $this->model->update($id, [
+                'tgl_jam_sampel'       => date('Y-m-d H:i:s'),
+                'id_status_permintaan' => 2,
+            ]);
+
+            session()->setFlashdata('success', 'Waktu pengambilan sampel berhasil dicatat.');
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            session()->setFlashdata('error', $this->friendly_db_error($e));
         }
 
         return $this->home();

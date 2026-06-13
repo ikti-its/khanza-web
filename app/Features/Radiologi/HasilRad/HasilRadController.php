@@ -30,7 +30,7 @@ final class HasilRadController extends ControllerTemplate
                 [SHOW, REQUIRED, I::INDEX, 'id_permintaan_rad',   'No. Permintaan'],
                 [SHOW, REQUIRED, I::TEXT,  'id_dokter_pj',        'Dokter PJ'],
                 [SHOW, REQUIRED, I::TEXT,  'id_petugas_rad',      'Petugas Rad'],
-                [SHOW, REQUIRED, I::TEXT,  'id_dokter_perujuk',   'Dokter Perujuk'],
+                [HIDE, REQUIRED, I::TEXT,  'id_dokter_perujuk',   'Dokter Perujuk'],
                 [SHOW, REQUIRED, I::DTIME, 'tgl_jam_hasil',       'Tanggal dan Jam Hasil'],
                 [SHOW, OPTIONAL, I::TEXT,  'catatan',             'Catatan'],
             ],
@@ -157,12 +157,21 @@ final class HasilRadController extends ControllerTemplate
                     ->update();
             }
             
+            // 4. Update status permintaan → Selesai
+            if (!empty($dataHeader['id_permintaan_rad'])) {
+                $this->model->db
+                    ->table('radiologi.permintaan_rad')
+                    ->where('id_permintaan', $dataHeader['id_permintaan_rad'])
+                    ->set('id_status_permintaan', 3)
+                    ->update();
+            }
+
             $this->model->db->transComplete();
- 
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal menyimpan hasil radiologi.');
             }
- 
+
             session()->setFlashdata('success', 'Hasil radiologi berhasil disimpan.');
             return redirect()->to($this->get_uri_path() . '/data');
  
@@ -201,10 +210,10 @@ final class HasilRadController extends ControllerTemplate
                     'od.nama AS nama_dokter_perujuk',
                 ])
                 ->join('rekam_medis.registrasi r',  'r.nomor_reg   = pr.nomor_reg')
-                ->join('role.pasien p',             'p.id_pasien   = r.id_pasien')
-                ->join('person.orang o',            'o.id_orang    = p.id_orang')
-                ->join('role.dokter d',             'd.id_dokter   = r.id_dokter', 'left')
-                ->join('person.orang od',           'od.id_orang   = d.id_orang', 'left')
+                ->join('role.pasien p',             'p.id_pasien   = r.id_pasien',  'left')
+                ->join('person.orang o',            'o.id_orang    = p.id_orang',   'left')
+                ->join('role.dokter d',             'd.id_dokter   = r.id_dokter',  'left')
+                ->join('person.orang od',           'od.id_orang   = d.id_orang',   'left')
                 ->where('pr.id_permintaan', $baris['id_permintaan_rad'])
                 ->get()
                 ->getRowArray();

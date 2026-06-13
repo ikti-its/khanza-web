@@ -22,7 +22,7 @@
         initModalList({
             modalId:     'modalPermintaanRad',
             tableId:     'permintaanRadTable',
-            url:         '<?= site_url('radiologi/permintaan-radiologi/modal/list') ?>',
+            url:         '<?= site_url('radiologi/permintaan-radiologi/modal/list?status=2') ?>',
             fields:      ['no_permintaan', 'nomor_reg', 'nama', 'tgl_jam_permintaan', 'nama_status'],
             searchIds: {
                 searchNoPermintaan: 'no_permintaan',
