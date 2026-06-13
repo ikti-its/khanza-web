@@ -87,7 +87,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
             ['title' => 'Ubah', 'icon' => 'ubah']
         ];
 
-        $baris = $this->model->find($id);
+        $baris = $this->model->find_one($id);
 
         $dataPasien = null;
         if (!empty($baris['no_rm'])) {

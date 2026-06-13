@@ -57,8 +57,9 @@
                     Petugas<span class="text-red-600">*</span>
                 </label>
                 <div class="w-full lg:w-1/4 flex gap-x-2">
-                    <input type="hidden" name="id_petugas" id="id_petugas" value="">
+                    <input type="hidden" name="id_petugas" id="id_petugas" value="<?= esc($baris['id_petugas'] ?? '') ?>">
                     <input type="text" name="nama_petugas" id="nama_petugas"
+                           value="<?= esc($baris['nama'] ?? '') ?>"
                            placeholder="Klik cari petugas..." onclick="open_modalPetugas()"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50">
                     <button type="button" onclick="open_modalPetugas()"
