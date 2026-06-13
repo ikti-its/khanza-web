@@ -217,23 +217,24 @@ class ControllerTemplate extends Controller
     private function build_modular_columns(): array
     {
         $join_specs   = $this->model->join;
+        $leaf_aliases = $this->model->compute_leaf_aliases();
         $fields_lokal = $this->get_fields_with_options(false, false);
         $konfig_kolom = [];
- 
+
         foreach ($fields_lokal as $field) {
             $column = $field[2];
- 
+
             if (isset($join_specs[$column])) {
-                $leaf_cols    = $this->extract_leaf_columns($join_specs[$column]);
+                $aliases      = $leaf_aliases[$column] ?? [];
                 $parent_label = $field[1];
-                foreach ($leaf_cols as $i => $leaf) {
-                    $konfig_kolom[] = $this->make_join_column_config($leaf, $i === 0 ? $parent_label : null);
+                foreach ($aliases as $i => $alias) {
+                    $konfig_kolom[] = $this->make_join_column_config($alias, $i === 0 ? $parent_label : null);
                 }
             } else {
                 $konfig_kolom[] = $field;
             }
         }
- 
+
         return $konfig_kolom;
     }
 

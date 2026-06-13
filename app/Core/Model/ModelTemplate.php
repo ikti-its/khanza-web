@@ -151,12 +151,15 @@ class ModelTemplate extends Model
         \CodeIgniter\Database\BaseBuilder $builder,
         string $table_alias,
         string $col_name,
+        string $root_fk = '',
     ): void {
         if (isset($this->selected_aliases[$col_name])) {
-            return;
+            $alias = "{$root_fk}_{$col_name}";
+        } else {
+            $this->selected_aliases[$col_name] = true;
+            $alias = $col_name;
         }
-        $this->selected_aliases[$col_name] = true;
-        $builder->select("{$table_alias}.{$col_name} AS {$col_name}");
+        $builder->select("{$table_alias}.{$col_name} AS {$alias}");
     }
 
     /** @param array<int|string, mixed> $spec */
@@ -167,9 +170,12 @@ class ModelTemplate extends Model
         string $parent_alias,
         DatabaseTemplate $parent_db,
         int &$idx,
+        string $root_fk = '',
     ): void {
         $fk_lookup = $this->build_fk_lookup($parent_db);
         if (!isset($fk_lookup[$fk_col])) return;
+
+        if ($root_fk === '') $root_fk = $fk_col;
 
         /** @var class-string<DatabaseTemplate> $ref_class */
         [$ref_class, $ref_on] = $fk_lookup[$fk_col];
@@ -188,12 +194,51 @@ class ModelTemplate extends Model
         foreach ($spec as $k => $v) {
             if (is_int($k)) {
                 assert(is_string($v), "Leaf value di join spec harus string, dapat: " . gettype($v));
-                $this->select_once($builder, $ref_alias, $v);
+                $this->select_once($builder, $ref_alias, $v, $root_fk);
             } else {
                 assert(is_array($v), "Nested join spec untuk key '{$k}' harus array");
-                $this->apply_join_spec($builder, $k, $v, $ref_alias, $ref_db, $idx);
+                $this->apply_join_spec($builder, $k, $v, $ref_alias, $ref_db, $idx, $root_fk);
             }
         }
+    }
+
+    /**
+     * Computes the actual SELECT aliases that will be used for each join spec's leaf columns.
+     * Mirrors the same conflict-resolution logic as select_once/apply_join_spec so that
+     * ControllerTemplate can build correct column display configs without running a query.
+     *
+     * @return array<string, list<string>> root_fk_col => list of actual aliases
+     */
+    public function compute_leaf_aliases(): array
+    {
+        $used   = []; // col_name => alias (mirrors selected_aliases)
+        $result = [];
+
+        foreach ($this->join as $root_fk => $spec) {
+            $result[$root_fk] = $this->spec_to_aliases($spec, $root_fk, $used);
+        }
+
+        return $result;
+    }
+
+    /** @param array<int|string, mixed> $spec */
+    private function spec_to_aliases(array $spec, string $root_fk, array &$used): array
+    {
+        $aliases = [];
+        foreach ($spec as $k => $v) {
+            if (is_int($k) && is_string($v)) {
+                if (isset($used[$v])) {
+                    $alias = $root_fk !== '' ? "{$root_fk}_{$v}" : $v;
+                } else {
+                    $alias        = $v;
+                    $used[$v]     = $alias;
+                }
+                $aliases[] = $alias;
+            } elseif (is_string($k) && is_array($v)) {
+                $aliases = array_merge($aliases, $this->spec_to_aliases($v, $root_fk, $used));
+            }
+        }
+        return $aliases;
     }
 
     /**
