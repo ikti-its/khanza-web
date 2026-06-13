@@ -37,10 +37,24 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
         );
     }
 
-    // kalau status → Disetujui (baru pertama), isi tanggal_disetujui
+    // hanya tampilkan Proses Pengajuan (4), Disetujui (2), Ditolak (3) — bukan Draf
+    protected function before_read(): void
+    {
+        $this->model->set_filter('id_status_pengajuan_barang', [2, 3, 4]);
+    }
+
+    // hanya izinkan transisi ke Disetujui (2) atau Ditolak (3) dari Ringkasan
     protected function before_update(array &$postData, int|string $id): void
     {
         $new_status = (int) ($postData['id_status_pengajuan_barang'] ?? 0);
+
+        if (!in_array($new_status, [2, 3], true)) {
+            $current = $this->model->find($id);
+            $postData['id_status_pengajuan_barang'] = (int) ($current['id_status_pengajuan_barang'] ?? 4);
+            return;
+        }
+
+        // isi tanggal_disetujui saat pertama kali Disetujui
         if ($new_status !== 2) return;
 
         $current = $this->model->find($id);
@@ -53,11 +67,17 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
     // validasi atasan & qty sebelum approve, auto-buat pengadaan setelah
     public function update(int|string $id): string|RedirectResponse
     {
-        $new_status = (int) ($this->request->getPost('id_status_pengajuan_barang') ?? 0);
-        $current    = $this->model->find((int) $id);
-        $is_new_approval = $new_status === 2
-            && is_array($current)
-            && (int) ($current['id_status_pengajuan_barang'] ?? 0) !== 2;
+        $new_status     = (int) ($this->request->getPost('id_status_pengajuan_barang') ?? 0);
+        $current        = $this->model->find((int) $id);
+        $current_status = is_array($current) ? (int) ($current['id_status_pengajuan_barang'] ?? 0) : 0;
+
+        // blokir jika sudah Disetujui atau Ditolak
+        if (in_array($current_status, [2, 3], true)) {
+            session()->setFlashdata('error', 'Pengajuan yang sudah diproses tidak dapat diubah kembali.');
+            return $this->home();
+        }
+
+        $is_new_approval = $new_status === 2 && $current_status !== 2;
 
         if ($is_new_approval) {
             if (empty($this->request->getPost('atasan_logistik'))) {

@@ -44,6 +44,18 @@ final class PengajuanBarangDetailController extends ControllerTemplate
         );
     }
 
+    // true jika status pengajuan bukan Draf (1) — detail tidak boleh diubah
+    private function is_locked(int $id_pengajuan): bool
+    {
+        if ($id_pengajuan <= 0) return false;
+        $row = $this->get_db()
+            ->table('inventori_non_medis.pengajuan_barang')
+            ->select('id_status_pengajuan_barang')
+            ->where('id_pengajuan', $id_pengajuan)
+            ->get()->getRowArray();
+        return is_array($row) && (int) ($row['id_status_pengajuan_barang'] ?? 0) !== 1;
+    }
+
     // hitung subtotal
     protected function before_create(array &$postData): void
     {
@@ -56,38 +68,51 @@ final class PengajuanBarangDetailController extends ControllerTemplate
         $postData['subtotal'] = (float) ($postData['harga'] ?? 0) * (float) ($postData['qty'] ?? 0);
     }
 
-    // update total_harga pengajuan setelah tambah
+    // lock check + update total_harga setelah tambah
     public function create(): string|RedirectResponse
     {
+        $id_pengajuan = (int) ($this->request->getPost('id_pengajuan') ?? 0);
+        if ($this->is_locked($id_pengajuan)) {
+            $this->home_params = ['id_pengajuan' => $id_pengajuan];
+            session()->setFlashdata('error', 'Pengajuan yang sudah diajukan tidak dapat ditambah detailnya.');
+            return $this->home();
+        }
         $result = parent::create();
-        if ($result instanceof RedirectResponse) {
-            $id_pengajuan = (int) $this->request->getPost('id_pengajuan');
-            if ($id_pengajuan > 0) $this->recalculate_total($id_pengajuan);
+        if ($result instanceof RedirectResponse && $id_pengajuan > 0) {
+            $this->recalculate_total($id_pengajuan);
         }
         return $result;
     }
 
-    // update total_harga pengajuan setelah ubah
+    // lock check + update total_harga setelah ubah
     public function update(int|string $id): string|RedirectResponse
     {
-        $row    = $this->model->find($id);
+        $row          = $this->model->find($id);
+        $id_pengajuan = is_array($row) ? (int) ($row['id_pengajuan'] ?? 0) : 0;
+        if ($this->is_locked($id_pengajuan)) {
+            $this->home_params = ['id_pengajuan' => $id_pengajuan];
+            session()->setFlashdata('error', 'Pengajuan yang sudah diajukan tidak dapat diubah detailnya.');
+            return $this->home();
+        }
         $result = parent::update($id);
-        if ($result instanceof RedirectResponse && is_array($row)) {
-            $id_pengajuan = (int) ($row['id_pengajuan'] ?? 0);
-            if ($id_pengajuan > 0) $this->recalculate_total($id_pengajuan);
+        if ($result instanceof RedirectResponse && $id_pengajuan > 0) {
+            $this->recalculate_total($id_pengajuan);
         }
         return $result;
     }
 
-    // update total_harga pengajuan setelah hapus
+    // lock check + update total_harga setelah hapus
     public function delete(int|string $id): string|RedirectResponse
     {
-        $row    = $this->model->find($id);
-        $result = parent::delete($id);
-        if (is_array($row)) {
-            $id_pengajuan = (int) ($row['id_pengajuan'] ?? 0);
-            if ($id_pengajuan > 0) $this->recalculate_total($id_pengajuan);
+        $row          = $this->model->find($id);
+        $id_pengajuan = is_array($row) ? (int) ($row['id_pengajuan'] ?? 0) : 0;
+        if ($this->is_locked($id_pengajuan)) {
+            $this->home_params = ['id_pengajuan' => $id_pengajuan];
+            session()->setFlashdata('error', 'Pengajuan yang sudah diajukan tidak dapat dihapus detailnya.');
+            return $this->home();
         }
+        $result = parent::delete($id);
+        if ($id_pengajuan > 0) $this->recalculate_total($id_pengajuan);
         return $result;
     }
 

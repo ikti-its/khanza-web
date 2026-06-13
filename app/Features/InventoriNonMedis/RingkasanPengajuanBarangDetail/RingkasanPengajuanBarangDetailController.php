@@ -45,21 +45,41 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
         );
     }
 
+    // true jika pengajuan sudah Disetujui (2) atau Ditolak (3) — qty tidak bisa diubah lagi
+    private function is_locked(int $id_pengajuan): bool
+    {
+        if ($id_pengajuan <= 0) return false;
+        $row = $this->get_db()
+            ->table('inventori_non_medis.pengajuan_barang')
+            ->select('id_status_pengajuan_barang')
+            ->where('id_pengajuan', $id_pengajuan)
+            ->get()->getRowArray();
+        return is_array($row) && in_array((int) ($row['id_status_pengajuan_barang'] ?? 0), [2, 3], true);
+    }
+
     // hitung ulang subtotal pakai harga existing × qty_disetujui
     protected function before_update(array &$postData, int|string $id): void
     {
         $existing = $this->model->find($id);
         if (!is_array($existing)) return;
 
-        $harga             = (float) ($existing['harga'] ?? 0);
-        $qty_disetujui     = (float) ($postData['qty_disetujui'] ?? 0);
+        $harga                = (float) ($existing['harga'] ?? 0);
+        $qty_disetujui        = (float) ($postData['qty_disetujui'] ?? 0);
         $postData['subtotal'] = $harga * $qty_disetujui;
     }
 
-    // validasi qty_disetujui ≤ qty pengajuan, update total setelah simpan
+    // lock check + validasi qty + update total setelah simpan
     public function update(int|string $id): string|RedirectResponse
     {
-        $row = $this->model->find($id);
+        $row          = $this->model->find($id);
+        $id_pengajuan = is_array($row) ? (int) ($row['id_pengajuan'] ?? 0) : 0;
+
+        if ($this->is_locked($id_pengajuan)) {
+            $this->home_params = ['id_pengajuan' => $id_pengajuan];
+            session()->setFlashdata('error', 'Pengajuan yang sudah diproses tidak dapat diubah detailnya.');
+            return $this->home();
+        }
+
         if (is_array($row)) {
             $qty_disetujui = (float) ($this->request->getPost('qty_disetujui') ?? 0);
             $qty_max       = (float) ($row['qty'] ?? 0);
@@ -68,10 +88,10 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
                 return $this->home();
             }
         }
+
         $result = parent::update($id);
-        if ($result instanceof RedirectResponse && is_array($row)) {
-            $id_pengajuan = (int) ($row['id_pengajuan'] ?? 0);
-            if ($id_pengajuan > 0) $this->recalculate_total($id_pengajuan);
+        if ($result instanceof RedirectResponse && $id_pengajuan > 0) {
+            $this->recalculate_total($id_pengajuan);
         }
         return $result;
     }
