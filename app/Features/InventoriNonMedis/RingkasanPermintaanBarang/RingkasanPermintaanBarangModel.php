@@ -22,6 +22,7 @@ final class RingkasanPermintaanBarangModel extends ModelTemplate
             ],
             [
                 'petugas_gudang'              => ['id_orang' => ['nama']],
+                'petugas'                     => ['id_orang' => ['nama']],
                 'master_ruangan'              => ['nama_ruangan'],
                 'id_status_permintaan_barang' => ['nama_status_permintaan_barang'],
             ],

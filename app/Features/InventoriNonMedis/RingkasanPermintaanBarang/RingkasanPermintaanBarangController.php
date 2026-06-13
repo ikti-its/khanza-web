@@ -29,10 +29,12 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
                 [HIDE,       OPTIONAL, I::INDEX,    'id_permintaan',               'ID'],
                 [SHOW,       OPTIONAL, I::READONLY, 'no_permintaan',               'No. Permintaan'],
                 [SHOW,       OPTIONAL, I::READONLY, 'tanggal',                     'Tanggal'],
+                [SHOW,       REQUIRED, I::SELECT,   'id_status_permintaan_barang', 'Status'],
+                [TABLE_ONLY, OPTIONAL, I::READONLY, 'petugas',                     'Pemohon'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'petugas_nama',                'Pemohon'],
                 [TABLE_ONLY, OPTIONAL, I::SELECT,   'master_ruangan',              'Ruangan'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_ruangan',                'Ruangan'],
-                [SHOW,       REQUIRED, I::SELECT,   'id_status_permintaan_barang', 'Status'],
-                [SHOW,       OPTIONAL, I::SELECT,   'petugas_gudang',              'Petugas Gudang'],
+                [SHOW,       OPTIONAL, I::SELECT,   'petugas_gudang',              'Pengelola'],
                 [SHOW,       OPTIONAL, I::READONLY, 'no_keluar',                   'No. Keluar'],
                 [SHOW,       OPTIONAL, I::READONLY, 'tanggal_disetujui',           'Tgl. Disetujui'],
             ],
@@ -162,7 +164,6 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
             ->get()->getRowArray();
 
         $keterangan = trim(implode(', ', array_filter([
-            $no_keluar,
             $row['no_permintaan']  ?? '',
             ($row['nama_ruangan'] ?? '') !== '' ? 'Ruangan ' . $row['nama_ruangan'] : '',
             ($row['nama'] ?? '')         !== '' ? 'oleh ' . $row['nama']            : '',
