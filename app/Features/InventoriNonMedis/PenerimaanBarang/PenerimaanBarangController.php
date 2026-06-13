@@ -33,15 +33,42 @@ final class PenerimaanBarangController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX,    'id_penerimaan',               'ID'],
                 [SHOW, OPTIONAL, I::READONLY, 'no_penerimaan',               'No. Penerimaan'],
                 [SHOW, REQUIRED, I::SELECT,   'id_pengadaan',                'No. Pengadaan'],
-                [SHOW, REQUIRED, I::DTIME,    'tanggal',                     'Tanggal Terima'],
+                [SHOW, REQUIRED, I::DTIME,    'tanggal',                     'Tgl. Terima'],
+                [SHOW, OPTIONAL, I::SELECT,   'petugas',                     'Pelaksana'],
                 [SHOW, REQUIRED, I::SELECT,   'id_status_penerimaan_barang', 'Status'],
                 [SHOW, OPTIONAL, I::READONLY, 'no_masuk',                    'No. Masuk'],
-                [SHOW, OPTIONAL, I::READONLY, 'tanggal_diterima',            'Tgl. Diterima'],
                 [SHOW, OPTIONAL, I::TEXT,     'catatan',                     'Catatan'],
             ],
             child_path: '/inventori-non-medis/penerimaan-barang-detail',
             child_fk:   'id_penerimaan',
         );
+    }
+
+    // tampilkan status sebagai teks "Proses Penerimaan" (readonly) pada form tambah
+    public function create_page(): string
+    {
+        $konfig = $this->get_fields_with_options(false, true);
+        foreach ($konfig as &$field) {
+            if (($field[2] ?? '') === 'id_status_penerimaan_barang') {
+                $field[2] = 'nama_status_penerimaan_barang';
+                $field[3] = 'readonly';
+                unset($field[5]);
+            }
+        }
+        unset($field);
+
+        $baris = array_fill_keys(array_column($konfig, 2), null);
+        $baris['nama_status_penerimaan_barang'] = 'Proses Penerimaan';
+
+        return view('/layouts/tambah_ubah', [
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon', 'tambah']]),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'konfig'      => $konfig,
+            'baris'       => $baris,
+            'form_action' => '/submittambah/',
+        ]);
     }
 
     // auto no_penerimaan + status awal = 1, simpan nomor buat populate detail
@@ -89,9 +116,8 @@ final class PenerimaanBarangController extends ControllerTemplate
 
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.penerimaan_barang', 'no_masuk', 'id_penerimaan');
-        $postData['no_masuk']         = generateNextNoMasukBarang($lastNo);
-        $postData['tanggal_diterima'] = date('Y-m-d H:i:s');
-        $this->pending_masuk          = true;
+        $postData['no_masuk']  = generateNextNoMasukBarang($lastNo);
+        $this->pending_masuk   = true;
     }
 
     // validasi detail sebelum → Lengkap, buat transaksi stok masuk & update status pengadaan
@@ -182,13 +208,16 @@ final class PenerimaanBarangController extends ControllerTemplate
         $row = $db->table('inventori_non_medis.penerimaan_barang pb')
             ->join('inventori_non_medis.pengadaan_barang pg', 'pb.id_pengadaan = pg.id_pengadaan', 'left')
             ->join('inventori_non_medis.suplier s',           'pg.id_suplier = s.id_suplier',       'left')
-            ->select('s.nama_suplier')
+            ->join('role.petugas pt',                         'pb.petugas = pt.id_petugas',          'left')
+            ->join('person.orang o',                          'pt.id_orang = o.id_orang',            'left')
+            ->select('s.nama_suplier, pb.no_penerimaan, o.nama')
             ->where('pb.id_penerimaan', $id)
             ->get()->getRowArray();
 
         $keterangan = trim(implode(', ', array_filter([
-            $no_masuk,
+            $row['no_penerimaan'] ?? '',
             ($row['nama_suplier'] ?? '') !== '' ? 'Suplier ' . $row['nama_suplier'] : '',
+            ($row['nama'] ?? '')         !== '' ? 'oleh ' . $row['nama']            : '',
         ])));
 
         $details = $db->table('inventori_non_medis.penerimaan_barang_detail pbd')
