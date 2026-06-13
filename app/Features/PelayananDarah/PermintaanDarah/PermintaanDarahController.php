@@ -207,10 +207,120 @@ final class PermintaanDarahController extends ControllerTemplate
             $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
                 ? $this->friendly_db_error($e) 
                 : $e->getMessage();
-                
             session()->setFlashdata('error', $errMsg);
         }
 
         return redirect()->to($this->get_uri_path() . '/data');
+    }
+
+    /**
+     * OVERRIDE: Menampilkan Halaman Ubah Data Permintaan Darah
+     */
+    #[\Override]
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataPermintaan = $this->model->find($id);
+        if (!$dataPermintaan) {
+            $dataPermintaan = [];
+        }
+
+        $dataRawatInap  = [];
+        $dataRegistrasi = [];
+        $dataPasien     = [];
+        $dataOrang      = [];
+        $dataDokter     = [];
+
+        if (!empty($dataPermintaan['id_rawat_inap'])) {
+            $modelRawatInap = new \App\Features\RawatInap\Registrasi\RegistrasiModel();
+            $dataRawatInap  = $modelRawatInap->find($dataPermintaan['id_rawat_inap']) ?? [];
+
+            if (!empty($dataRawatInap['id_registrasi'])) {
+                $modelRegistrasi = new \App\Features\RekamMedis\Registrasi\RegistrasiModel();
+                $dataRegistrasi  = $modelRegistrasi->find($dataRawatInap['id_registrasi']) ?? [];
+
+                if (!empty($dataRegistrasi['id_pasien'])) {
+                    $modelPasien = new \App\Features\Role\Pasien\PasienModel();
+                    $dataPasien  = $modelPasien->find($dataRegistrasi['id_pasien']) ?? [];
+
+                    if (!empty($dataPasien['id_orang'])) {
+                        $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                        $dataOrang  = $modelOrang->find($dataPasien['id_orang']) ?? [];
+                    }
+                }
+            }
+        }
+
+        if (!empty($dataPermintaan['id_dokter_pengirim'])) {
+            $modelDokterUser = new \App\Features\Role\Dokter\DokterModel(); // Sesuai nama model role dokter kelompokmu
+            $dataDokterRole  = $modelDokterUser->find($dataPermintaan['id_dokter_pengirim']) ?? [];
+            
+            if (!empty($dataDokterRole['id_orang'])) {
+                $modelOrangDokter = new \App\Features\Person\Orang\OrangModel();
+                $dataOrangDokter  = $modelOrangDokter->find($dataDokterRole['id_orang']) ?? [];
+                $dataDokter['nama_dokter'] = $dataOrangDokter['nama'] ?? '';
+            }
+        }
+
+        $baris = array_merge($dataOrang, $dataPasien, $dataRegistrasi, $dataRawatInap, $dataDokter, $dataPermintaan);
+
+        $controllerRawatInap  = new \App\Features\RawatInap\Registrasi\RegistrasiController();
+        $controllerRegistrasi = new \App\Features\RekamMedis\Registrasi\RegistrasiController();
+        $controllerPasien     = new \App\Features\Role\Pasien\PasienController();
+
+        $konfigRawatInap  = $controllerRawatInap->fields;
+        $konfigRegistrasi = $controllerRegistrasi->fields;
+        $konfigPasien     = $controllerPasien->fields;
+        $konfigPermintaan = $this->get_fields_with_options(false, true);
+
+        $konfigGabungan = [];
+
+        foreach ($konfigPermintaan as $fieldPermintaan) {
+            $columnPermintaan = $fieldPermintaan[2];
+
+            if ($columnPermintaan === 'id_rawat_inap') {
+                foreach ($konfigRegistrasi as $fieldRegistrasi) {
+                    if ($fieldRegistrasi[2] === 'nomor_rawat') { $konfigGabungan[] = $fieldRegistrasi; break; }
+                }
+                foreach ($konfigPasien as $fieldPasien) {
+                    if ($fieldPasien[2] === 'nomor_rm') { $konfigGabungan[] = $fieldPasien; break; }
+                }
+                foreach ($konfigRawatInap as $fieldRanap) {
+                    if ($fieldRanap[2] === 'kamar') { $konfigGabungan[] = $fieldRanap; break; }
+                }
+                continue;
+            }
+            $konfigGabungan[] = $fieldPermintaan;
+        }
+
+        $modelKomponen = new \App\Features\Darah\KomponenDarah\KomponenDarahModel();
+        $modelGolDarah = new \App\Features\Darah\GolonganDarah\GolonganDarahModel();
+        $modelRhesus   = new \App\Features\Darah\Rhesus\RhesusModel();
+
+        $masterKomponen = $modelKomponen->findAll();
+        $masterGolDarah = $modelGolDarah->findAll();
+        $masterRhesus   = $modelRhesus->findAll();
+
+        $modelDetail = new \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailModel();
+        $dataDetailTersimpan = $modelDetail->where('id_permintaan', $id)->findAll();
+
+        $breadcrumbs = [
+            ['title' => 'Ubah', 'icon' => 'ubah']
+        ];
+
+        return view('admin/pelayanandarah/tambah_permintaandarah', [
+            'judul'           => 'Ubah ' . $this->title,
+            'breadcrumbs'     => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'      => $this->get_uri_path(),
+            'kolom_id'        => $this->model->primaryKey,
+            'konfig'          => $konfigGabungan,
+            'baris'           => $baris,
+            'master_komponen' => $masterKomponen,
+            'master_gol_darah'=> $masterGolDarah,
+            'master_rhesus'   => $masterRhesus,
+            'detail_tersimpan'=> $dataDetailTersimpan,
+            'form_action'     => '/submitedit/' . $id,
+        ]);
     }
 }
