@@ -18,9 +18,8 @@ final class PengajuanBarangModel extends ModelTemplate
                 'tanggal'      => V::DEFAULT(),
             ],
             [
-                'petugas_gudang' => [
-                    'id_orang' => ['nama'],
-                ],
+                'petugas_gudang'             => ['id_orang' => ['nama']],
+                'atasan_logistik'            => ['id_orang' => ['nama']],
                 'id_status_pengajuan_barang' => ['nama_status_pengajuan_barang'],
             ],
         );
