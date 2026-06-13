@@ -62,6 +62,7 @@ final class PermintaanRadController extends ControllerTemplate
                 'no_permintaan',
                 'nomor_reg',
                 'tgl_jam_sampel',
+                'id_status_permintaan',
             ], true)
         ));
 
@@ -131,6 +132,8 @@ final class PermintaanRadController extends ControllerTemplate
         if (empty($postData['tgl_jam_permintaan'])) {
             $postData['tgl_jam_permintaan'] = date('Y-m-d H:i:s');
         }
+
+        $postData['id_status_permintaan'] = 1;
     }
 
     #[\Override]
@@ -139,12 +142,11 @@ final class PermintaanRadController extends ControllerTemplate
         $rawPost = $this->request->getPost();
 
         $data = [
-            'no_permintaan'        => $rawPost['no_permintaan']        ?? '',
-            'nomor_reg'            => $rawPost['nomor_reg']            ?? '',
-            'tgl_jam_permintaan'   => $rawPost['tgl_jam_permintaan']   ?? '',
-            'informasi_tambahan'   => $rawPost['informasi_tambahan']   ?? '',
-            'indikasi_klinis'      => $rawPost['indikasi_klinis']      ?? '',
-            'id_status_permintaan' => $rawPost['id_status_permintaan'] ?? '',
+            'no_permintaan'      => $rawPost['no_permintaan']      ?? '',
+            'nomor_reg'          => $rawPost['nomor_reg']          ?? '',
+            'tgl_jam_permintaan' => $rawPost['tgl_jam_permintaan'] ?? '',
+            'informasi_tambahan' => $rawPost['informasi_tambahan'] ?? '',
+            'indikasi_klinis'    => $rawPost['indikasi_klinis']    ?? '',
         ];
 
         $this->before_create($data);
@@ -235,6 +237,7 @@ final class PermintaanRadController extends ControllerTemplate
                 'no_permintaan',
                 'nomor_reg',
                 'tgl_jam_sampel',
+                'id_status_permintaan',
             ], true)
         ));
 
@@ -259,12 +262,11 @@ final class PermintaanRadController extends ControllerTemplate
         $rawPost = $this->request->getPost();
 
         $data = [
-            'no_permintaan'        => $rawPost['no_permintaan']        ?? '',
-            'nomor_reg'            => $rawPost['nomor_reg']            ?? '',
-            'tgl_jam_permintaan'   => $rawPost['tgl_jam_permintaan']   ?? '',
-            'informasi_tambahan'   => $rawPost['informasi_tambahan']   ?? '',
-            'indikasi_klinis'      => $rawPost['indikasi_klinis']      ?? '',
-            'id_status_permintaan' => $rawPost['id_status_permintaan'] ?? '',
+            'no_permintaan'      => $rawPost['no_permintaan']      ?? '',
+            'nomor_reg'          => $rawPost['nomor_reg']          ?? '',
+            'tgl_jam_permintaan' => $rawPost['tgl_jam_permintaan'] ?? '',
+            'informasi_tambahan' => $rawPost['informasi_tambahan'] ?? '',
+            'indikasi_klinis'    => $rawPost['indikasi_klinis']    ?? '',
         ];
 
         $idItems = $this->request->getPost('id_item');
