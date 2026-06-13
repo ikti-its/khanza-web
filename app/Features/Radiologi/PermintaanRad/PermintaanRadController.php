@@ -61,6 +61,7 @@ final class PermintaanRadController extends ControllerTemplate
                 'id_permintaan',
                 'no_permintaan',
                 'nomor_reg',
+                'tgl_jam_sampel',
             ], true)
         ));
 
@@ -233,6 +234,7 @@ final class PermintaanRadController extends ControllerTemplate
                 'id_permintaan',
                 'no_permintaan',
                 'nomor_reg',
+                'tgl_jam_sampel',
             ], true)
         ));
 
