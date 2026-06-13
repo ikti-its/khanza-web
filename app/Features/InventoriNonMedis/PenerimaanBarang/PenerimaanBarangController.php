@@ -34,7 +34,7 @@ final class PenerimaanBarangController extends ControllerTemplate
                 [SHOW, OPTIONAL, I::READONLY, 'no_penerimaan',               'No. Penerimaan'],
                 [SHOW, REQUIRED, I::SELECT,   'id_pengadaan',                'No. Pengadaan'],
                 [SHOW, REQUIRED, I::DTIME,    'tanggal',                     'Tgl. Terima'],
-                [SHOW, OPTIONAL, I::SELECT,   'petugas',                     'Pelaksana'],
+                [SHOW, OPTIONAL, I::SELECT,   'petugas',                     'Penerima'],
                 [SHOW, REQUIRED, I::SELECT,   'id_status_penerimaan_barang', 'Status'],
                 [SHOW, OPTIONAL, I::READONLY, 'no_masuk',                    'No. Masuk'],
                 [SHOW, OPTIONAL, I::TEXT,     'catatan',                     'Catatan'],
@@ -217,7 +217,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         $keterangan = trim(implode(', ', array_filter([
             $row['no_penerimaan'] ?? '',
             ($row['nama_suplier'] ?? '') !== '' ? 'Suplier ' . $row['nama_suplier'] : '',
-            ($row['nama'] ?? '')         !== '' ? 'oleh ' . $row['nama']            : '',
+            ($row['nama'] ?? '')         !== '' ? 'Penerima: ' . $row['nama']       : '',
         ])));
 
         $details = $db->table('inventori_non_medis.penerimaan_barang_detail pbd')

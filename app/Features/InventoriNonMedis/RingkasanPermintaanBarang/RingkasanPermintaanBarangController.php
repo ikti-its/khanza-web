@@ -28,15 +28,17 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
             [
                 [HIDE,       OPTIONAL, I::INDEX,    'id_permintaan',               'ID'],
                 [SHOW,       OPTIONAL, I::READONLY, 'no_permintaan',               'No. Permintaan'],
-                [SHOW,       OPTIONAL, I::READONLY, 'tanggal',                     'Tanggal'],
+                [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal',                     'Tgl. Permintaan'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal',                     'Tgl. Permintaan'],
                 [SHOW,       REQUIRED, I::SELECT,   'id_status_permintaan_barang', 'Status'],
+                [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal_diproses',           'Tgl. Diproses'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',           'Tgl. Diproses'],
                 [TABLE_ONLY, OPTIONAL, I::READONLY, 'petugas',                     'Pemohon'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'petugas_nama',                'Pemohon'],
                 [TABLE_ONLY, OPTIONAL, I::SELECT,   'master_ruangan',              'Ruangan'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_ruangan',                'Ruangan'],
                 [SHOW,       OPTIONAL, I::SELECT,   'petugas_gudang',              'Pengelola'],
                 [SHOW,       OPTIONAL, I::READONLY, 'no_keluar',                   'No. Keluar'],
-                [SHOW,       OPTIONAL, I::READONLY, 'tanggal_disetujui',           'Tgl. Disetujui'],
             ],
             child_path: '/inventori-non-medis/ringkasan-permintaan-barang-detail',
             child_fk:   'id_permintaan',
@@ -60,18 +62,19 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
             return;
         }
 
-        // generate no_keluar & tanggal saat pertama kali Disetujui
-        if ($new_status !== 2) return;
-
         $current = $this->model->find($id);
         if (!is_array($current)) return;
         if ((int) ($current['id_status_permintaan_barang'] ?? 0) === 2) return;
 
+        $postData['tanggal_diproses'] = date('Y-m-d H:i:s');
+
+        if ($new_status !== 2) return;
+
+        // generate no_keluar hanya saat Disetujui
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.permintaan_barang', 'no_keluar', 'id_permintaan');
-        $postData['no_keluar']         = generateNextNoKeluarBarang($lastNo);
-        $postData['tanggal_disetujui'] = date('Y-m-d H:i:s');
-        $this->pending_keluar          = true;
+        $postData['no_keluar']  = generateNextNoKeluarBarang($lastNo);
+        $this->pending_keluar   = true;
     }
 
     // validasi petugas, qty & stok sebelum approve, buat transaksi keluar setelah
@@ -156,17 +159,20 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         $db = $this->get_db();
 
         $row = $db->table('inventori_non_medis.permintaan_barang pb')
-            ->join('ruangan.ruangan r', 'pb.master_ruangan = r.id_ruangan', 'left')
-            ->join('role.petugas p',    'pb.petugas_gudang = p.id_petugas', 'left')
-            ->join('person.orang o',    'p.id_orang = o.id_orang',          'left')
-            ->select('pb.no_permintaan, r.nama_ruangan, o.nama')
+            ->join('ruangan.ruangan r',      'pb.master_ruangan = r.id_ruangan',         'left')
+            ->join('role.petugas p_pemohon', 'pb.petugas = p_pemohon.id_petugas',        'left')
+            ->join('person.orang o_pemohon', 'p_pemohon.id_orang = o_pemohon.id_orang',  'left')
+            ->join('role.petugas p_pengelola', 'pb.petugas_gudang = p_pengelola.id_petugas',    'left')
+            ->join('person.orang o_pengelola', 'p_pengelola.id_orang = o_pengelola.id_orang',   'left')
+            ->select('pb.no_permintaan, r.nama_ruangan, o_pemohon.nama AS nama_pemohon, o_pengelola.nama AS nama_pengelola')
             ->where('pb.id_permintaan', $id)
             ->get()->getRowArray();
 
         $keterangan = trim(implode(', ', array_filter([
-            $row['no_permintaan']  ?? '',
-            ($row['nama_ruangan'] ?? '') !== '' ? 'Ruangan ' . $row['nama_ruangan'] : '',
-            ($row['nama'] ?? '')         !== '' ? 'oleh ' . $row['nama']            : '',
+            $row['no_permintaan']    ?? '',
+            ($row['nama_ruangan']   ?? '') !== '' ? 'Ruangan ' . $row['nama_ruangan']        : '',
+            ($row['nama_pemohon']   ?? '') !== '' ? 'Pemohon: ' . $row['nama_pemohon']       : '',
+            ($row['nama_pengelola'] ?? '') !== '' ? 'Pengelola: ' . $row['nama_pengelola']   : '',
         ])));
 
         $details = $db->table('inventori_non_medis.permintaan_barang_detail pbd')

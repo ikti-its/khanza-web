@@ -18,7 +18,7 @@ final class RingkasanPermintaanBarangModel extends ModelTemplate
                 'no_permintaan'     => V::DEFAULT(),
                 'tanggal'           => V::DEFAULT(),
                 'no_keluar'         => V::DEFAULT(),
-                'tanggal_disetujui' => V::DEFAULT(),
+                'tanggal_diproses'  => V::DEFAULT(),
             ],
             [
                 'petugas_gudang'              => ['id_orang' => ['nama']],

@@ -17,7 +17,7 @@ final class RingkasanPengajuanBarangModel extends ModelTemplate
                 'id_pengajuan'      => V::DEFAULT(),
                 'no_pengajuan'      => V::DEFAULT(),
                 'tanggal'           => V::DEFAULT(),
-                'tanggal_disetujui' => V::DEFAULT(),
+                'tanggal_diproses'  => V::DEFAULT(),
                 'total_harga'       => V::DEFAULT(),
             ],
             [

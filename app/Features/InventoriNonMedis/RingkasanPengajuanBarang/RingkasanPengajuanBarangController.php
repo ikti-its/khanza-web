@@ -26,14 +26,16 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
             [
                 [HIDE, OPTIONAL, I::INDEX,    'id_pengajuan',               'ID'],
                 [SHOW, OPTIONAL, I::READONLY, 'no_pengajuan',               'No. Pengajuan'],
-                [SHOW, OPTIONAL, I::READONLY, 'tanggal',                    'Tanggal'],
+                [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal',                    'Tgl. Pengajuan'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal',                    'Tgl. Pengajuan'],
                 [TABLE_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang', 'Pemohon'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama',           'Pemohon'],
                 [TABLE_ONLY, OPTIONAL, I::MONEY,    'total_harga',    'Total Harga'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'total_harga',    'Total Harga'],
                 [SHOW, REQUIRED, I::SELECT,   'id_status_pengajuan_barang', 'Status'],
+                [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal_diproses',          'Tgl. Diproses'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',          'Tgl. Diproses'],
                 [SHOW, OPTIONAL, I::SELECT,   'atasan_logistik',            'Pengelola'],
-                [SHOW, OPTIONAL, I::READONLY, 'tanggal_disetujui',          'Tgl. Disetujui'],
             ],
             child_path: '/inventori-non-medis/ringkasan-pengajuan-barang-detail',
             child_fk:   'id_pengajuan',
@@ -57,14 +59,13 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
             return;
         }
 
-        // isi tanggal_disetujui saat pertama kali Disetujui
-        if ($new_status !== 2) return;
-
         $current = $this->model->find($id);
         if (!is_array($current)) return;
         if ((int) ($current['id_status_pengajuan_barang'] ?? 0) === 2) return;
 
-        $postData['tanggal_disetujui'] = date('Y-m-d H:i:s');
+        $postData['tanggal_diproses'] = date('Y-m-d H:i:s');
+
+        if ($new_status !== 2) return;
     }
 
     // validasi atasan & qty sebelum approve, auto-buat pengadaan setelah

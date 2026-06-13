@@ -21,7 +21,7 @@ final class PengajuanBarangDatabase extends DatabaseTemplate
                 'petugas_gudang'             => T::FK_AUTO(),
                 'id_status_pengajuan_barang' => T::FK_AUTO(),
                 'atasan_logistik'            => T::FK_AUTO()->nullable(),
-                'tanggal_disetujui'          => T::DTIME()->nullable(),
+                'tanggal_diproses'           => T::DTIME()->nullable(),
                 'total_harga'               => T::MONEY()->nullable(),
             ],
             'id_pengajuan',
