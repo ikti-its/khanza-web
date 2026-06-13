@@ -23,14 +23,15 @@ final class PermintaanLabHeaderDatabase extends DatabaseTemplate
                 'indikasi_klinis'      => T::TEXT(),
                 'informasi_tambahan'   => T::NOTE(),
                 'id_status_permintaan' => T::FK_AUTO(),
+                'tgl_jam_sampel'       => T::DTIME()->nullable(),
             ],
             'id_permintaan',
             [],
             [
                 [
-                    'nomor_reg',
+                    ['nomor_reg'],
                     \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
-                    'nomor_reg',
+                    ['nomor_reg'],
                 ],
                 [
                     ['id_kategori_lab'],

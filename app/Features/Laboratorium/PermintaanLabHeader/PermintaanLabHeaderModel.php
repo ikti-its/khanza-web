@@ -18,6 +18,7 @@ final class PermintaanLabHeaderModel extends ModelTemplate
                 'tgl_permintaan'       => V::DEFAULT(),
                 'indikasi_klinis'      => V::DEFAULT(),
                 'informasi_tambahan'   => V::DEFAULT(),
+                'tgl_jam_sampel'       => V::DEFAULT(),
             ],
             [
                 'id_registrasi'        => ['nomor_reg'],

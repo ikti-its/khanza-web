@@ -24,6 +24,7 @@ final class PermintaanLabHeaderController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::SAMPEL,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_permintaan',        'ID Permintaan'],
@@ -35,6 +36,7 @@ final class PermintaanLabHeaderController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,   'indikasi_klinis',      'Indikasi Klinis'],
                 [SHOW, REQUIRED, I::TEXT,   'informasi_tambahan',   'Informasi Tambahan'],
                 [SHOW, REQUIRED, I::SELECT, 'id_status_permintaan', 'Status Permintaan'],
+                [SHOW, OPTIONAL, I::DTIME,  'tgl_jam_sampel',       'Waktu Sampel'],
             ],
         );
     }
