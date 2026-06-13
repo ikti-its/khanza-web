@@ -196,14 +196,14 @@ final class HasilRadController extends ControllerTemplate
                     'pr.id_permintaan',
                     'pr.no_permintaan',
                     'pr.nomor_reg',
-                    'pr.kode_dokter_perujuk',
+                    'r.id_dokter AS id_dokter_perujuk',
                     'o.nama AS nama_pasien',
                     'od.nama AS nama_dokter_perujuk',
                 ])
                 ->join('rekam_medis.registrasi r',  'r.nomor_reg   = pr.nomor_reg')
                 ->join('role.pasien p',             'p.id_pasien   = r.id_pasien')
                 ->join('person.orang o',            'o.id_orang    = p.id_orang')
-                ->join('role.dokter d',             'd.kode_dokter = pr.kode_dokter_perujuk', 'left')
+                ->join('role.dokter d',             'd.id_dokter   = r.id_dokter', 'left')
                 ->join('person.orang od',           'od.id_orang   = d.id_orang', 'left')
                 ->where('pr.id_permintaan', $baris['id_permintaan_rad'])
                 ->get()
@@ -354,20 +354,24 @@ final class HasilRadController extends ControllerTemplate
         $tindakanList = $rawPost['tindakan'] ?? [];
         $bhpList      = $rawPost['bhp']      ?? [];
 
+        // Fetch BHP lama sebelum transaksi agar tidak terblokir oleh abort
+        $modelBhp = new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel();
+        $bhpLama  = $modelBhp->where('id_hasil_rad', $id)->findAll();
+
         $this->model->db->transStart();
- 
+
         try {
             // 1. Update header
             $this->model->update($id, $dataHeader);
- 
+
             // 2. Hapus tindakan lama lalu insert ulang
             $modelTindakan = new \App\Features\Radiologi\HasilRadTindakan\HasilRadTindakanModel();
-            
+
             $modelTindakan->where('id_hasil_rad', $id)->delete();
             foreach ($tindakanList as $tindakan) {
                 $modelTindakan->insert([
                     'id_hasil_rad'            => $id,
-                    'id_item_rad'             => (int) ($tindakan['id_item_rad']               ?? 0),
+                    'id_permintaan_item'      => (int) ($tindakan['id_permintaan_item']         ?? 0),
                     'proyeksi'                => $tindakan['proyeksi']                         ?? '',
                     'kilovoltage_kv'          => (float) ($tindakan['kilovoltage_kv']          ?? 0),
                     'milliampere_second_mas'  => (float) ($tindakan['milliampere_second_mas']  ?? 0),
@@ -383,10 +387,7 @@ final class HasilRadController extends ControllerTemplate
                 ]);
             }
  
-            // 3. Hapus BHP lama lalu insert kembalikan stock
-            $modelBhp = new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel();
- 
-            $bhpLama = $modelBhp->where('id_hasil_rad', $id)->findAll();
+            // 3. Kembalikan stok BHP lama lalu hapus
             foreach ($bhpLama as $lama) {
                 $this->model->db
                     ->table('inventori_non_medis.barang')
@@ -441,16 +442,17 @@ final class HasilRadController extends ControllerTemplate
     public function delete(int|string $id): string|\CodeIgniter\HTTP\RedirectResponse
     {
         if ($id == 0) return $this->home();
- 
+
+        // Fetch BHP lama sebelum transaksi agar tidak terblokir oleh abort
+        $modelBhp = new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel();
+        $bhpLama  = $modelBhp->where('id_hasil_rad', $id)->findAll();
+
         $this->model->db->transStart();
- 
+
         try {
             $modelTindakan = new \App\Features\Radiologi\HasilRadTindakan\HasilRadTindakanModel();
             $modelTindakan->where('id_hasil_rad', $id)->delete();
- 
-            $modelBhp = new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel();
-            
-            $bhpLama = $modelBhp->where('id_hasil_rad', $id)->findAll();
+
             foreach ($bhpLama as $lama) {
                 $this->model->db
                     ->table('inventori_non_medis.barang')

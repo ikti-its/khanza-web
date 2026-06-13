@@ -25,9 +25,9 @@ final class HasilRadTindakanModel extends ModelTemplate
                 'hasil_ekspertise'        => V::DEFAULT(),
             ],
             [
-                'id_hasil_rad'    => [],
-                'id_permintaan_item' => ['kode_periksa', 'nama_pemeriksaan', 'tarif_dasar'],
-                'id_template_rad' => ['nama_template'],
+                'id_hasil_rad'       => [],
+                'id_permintaan_item' => ['id_item' => ['kode_periksa', 'nama_pemeriksaan', 'tarif_dasar']],
+                'id_template_rad'    => ['nama_template'],
             ],
         );
     }

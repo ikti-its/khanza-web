@@ -328,11 +328,11 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                     </td>
                     ${inp(`${p}[proyeksi]`,                 '',       '',            item.proyeksi                  ?? '')}
                     ${inp(`${p}[kilovoltage_kv]`,           'number', 'step="0.01"', item.kilovoltage_kv            ?? '')}
-                    ${inp(`${p}[milliampere_second_mas]`,   'number', 'step="0.01"', item.miliampere_second_mas     ?? '')}
+                    ${inp(`${p}[milliampere_second_mas]`,   'number', 'step="0.01"', item.milliampere_second_mas     ?? '')}
                     ${inp(`${p}[focus_film_distance_ffd]`,  'number', 'step="0.01"', item.focus_film_distance_ffd   ?? '')}
                     ${inp(`${p}[back_scatter_factor_bsf]`,  'number', 'step="0.01"', item.back_scatter_factor_bsf   ?? '')}
                     ${inp(`${p}[inaktivasi]`,               '',       '',            item.inaktivasi                ?? '')}
-                    ${inp(`${p}[jumlah_penyinaran]`,        'number', 'step="0.01"', item.jumlah_penyinaran         ?? '')}
+                    ${inp(`${p}[jumlah_penyinaran]`,        'number', 'step="1" min="0"', item.jumlah_penyinaran ?? '')}
                     ${inp(`${p}[dosis_radiasi]`,            '',       '',            item.dosis_radiasi             ?? '')}
                     <td class="p-2 border text-center dark:border-gray-700">
                         <button type="button" onclick="toggleEkspertise(${idx})"
@@ -449,7 +449,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
             <td class="p-2 border text-center dark:border-gray-700">${item.nama_satuan ?? '-'}</td>
             <td class="p-2 border text-center dark:border-gray-700">
                 <input type="number" name="bhp[${item.id_barang}][jumlah_pakai]"
-                       data-id="${item.id_barang}" value="1" min="1"
+                       data-id="${item.id_barang}" value="${item.jumlah_pakai ?? 1}" min="1"
                        class="w-16 text-center border border-gray-300 rounded p-1 dark:bg-slate-900 dark:text-white dark:border-gray-700">
             </td>
             <td class="p-2 border text-center dark:border-gray-700">
