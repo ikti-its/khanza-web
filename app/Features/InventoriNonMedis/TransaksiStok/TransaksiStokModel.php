@@ -19,7 +19,7 @@ final class TransaksiStokModel extends ModelTemplate
             ],
             [
                 'id_tipe_transaksi_stok' => ['nama_tipe_transaksi_stok'],
-                'id_permintaan'          => ['no_permintaan', 'no_keluar'],
+                'id_permintaan'          => ['no_keluar'],
                 'id_penerimaan'          => ['no_masuk'],
             ],
         );
