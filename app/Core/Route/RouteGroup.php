@@ -69,6 +69,7 @@ class RouteGroup
                     $routes->delete('hapus/(:segment)' ,  "\\$f::delete/$1", $filter);
                     $routes->get('cetak/(:segment)',      "\\$f::print/$1", $filter);
                     $routes->get('modal/list',            "\\$f::list", $filter);
+                    $routes->post('sampel/(:segment)',    "\\$f::sampel/$1", $filter);
                 });
             }
         }

@@ -14,4 +14,5 @@ enum ActionType: string
     case SEPARATE    = 'pisah';
     case TEST        = 'uji';
     case REGISTRASI  = 'registrasi';
+    case SAMPEL      = 'sampel';
 }
