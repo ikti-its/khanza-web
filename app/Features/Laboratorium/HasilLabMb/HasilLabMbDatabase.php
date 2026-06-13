@@ -20,8 +20,6 @@ final class HasilLabMbDatabase extends DatabaseTemplate
                 'id_dokter_pj'          => T::FK_AUTO(),
                 'id_petugas_lab'        => T::FK_AUTO(),
                 'tgl_jam_hasil'         => T::DTIME(),
-                'nilai_hasil'           => T::TEXT(),
-                'keterangan_hasil'      => T::NOTE(),
             ],
             'id_hasil_mb',
             [],

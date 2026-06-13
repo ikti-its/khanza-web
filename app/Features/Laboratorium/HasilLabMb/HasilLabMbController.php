@@ -32,8 +32,6 @@ final class HasilLabMbController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,  'id_dokter_pj',          'Kode Dokter PJ'],
                 [SHOW, REQUIRED, I::TEXT,  'id_petugas_lab',        'Petugas Lab'],
                 [SHOW, REQUIRED, I::DTIME, 'tgl_jam_hasil',         'Tanggal & Jam Hasil'],
-                [SHOW, REQUIRED, I::TEXT,  'nilai_hasil',           'Nilai Hasil'],
-                [SHOW, REQUIRED, I::TEXT,  'keterangan_hasil',      'Keterangan Hasil'],
             ],
         );
     }

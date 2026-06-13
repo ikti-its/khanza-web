@@ -13,10 +13,8 @@ final class HasilLabMbModel extends ModelTemplate
         parent::__construct(
             new HasilLabMbDatabase(),
             [
-                'id_hasil_mb'              => V::DEFAULT(),
-                'tgl_jam_hasil'            => V::DEFAULT(),
-                'nilai_hasil'              => V::DEFAULT(),
-                'keterangan_hasil'         => V::DEFAULT(),
+                'id_hasil_mb'   => V::DEFAULT(),
+                'tgl_jam_hasil' => V::DEFAULT(),
             ],
             [
                 'id_permintaan_lab'     => ['nomor_reg'],
