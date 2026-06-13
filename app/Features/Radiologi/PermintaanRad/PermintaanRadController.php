@@ -205,9 +205,13 @@ final class PermintaanRadController extends ControllerTemplate
                     'r.nomor_reg',
                     'p.nomor_rm',
                     'o.nama',
+                    'd.kode_dokter AS kode_dokter_perujuk',
+                    'od.nama AS nama_dokter',
                 ])
-                ->join('role.pasien p',  'p.id_pasien = r.id_pasien')
-                ->join('person.orang o', 'o.id_orang  = p.id_orang')
+                ->join('role.pasien p',   'p.id_pasien = r.id_pasien', 'left')
+                ->join('person.orang o',  'o.id_orang  = p.id_orang',  'left')
+                ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
+                ->join('person.orang od', 'od.id_orang = d.id_orang',  'left')
                 ->where('r.nomor_reg', $baris['nomor_reg'])
                 ->get()
                 ->getRowArray();
