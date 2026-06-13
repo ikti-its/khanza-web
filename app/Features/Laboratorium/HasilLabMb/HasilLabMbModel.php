@@ -19,19 +19,16 @@ final class HasilLabMbModel extends ModelTemplate
                 'keterangan_hasil'         => V::DEFAULT(),
             ],
             [
-                'id_permintaan_lab'        => [],
-                'id_registrasi'            => ['nomor_reg'],
-                'id_dokter_pj'             => [
-                    'id_orang'  => ['nama']
+                'id_permintaan_lab'     => ['nomor_reg'],
+                'id_permintaan_mb_item' => [
+                    'id_item_pemeriksaan' => ['kode_periksa', 'nama_item', 'tarif'],
                 ],
-                'id_petugas_lab'           => [
-                    'id_orang'  => ['nama']
+                'id_dokter_pj'          => [
+                    'id_orang' => ['nama']
                 ],
-                'id_dokter_perujuk'      => [
-                    'id_orang'  => ['nama']
+                'id_petugas_lab'        => [
+                    'id_orang' => ['nama']
                 ],
-                'id_item_pemeriksaan'      => ['kode_periksa', 'nama_item', 'tarif'],
-                'id_parameter_pemeriksaan' => ['nama_parameter', 'satuan', 'nilai_rujukan', 'biaya_item'],
             ],
         );
     }
