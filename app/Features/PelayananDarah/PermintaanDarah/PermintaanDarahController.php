@@ -388,4 +388,46 @@ final class PermintaanDarahController extends ControllerTemplate
 
         return redirect()->to($this->get_uri_path() . '/data');
     }
+
+    /**
+     * OVERRIDE: Menghapus data permintaan darah
+     */
+    #[\Override]
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->home();
+        
+        $dataPermintaan = $this->model->find($id);
+        if (!$dataPermintaan) {
+            session()->setFlashdata('error', 'Gagal menghapus. Data permintaan darah tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $modelDetail = new \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailModel();
+
+            $modelDetail->where('id_permintaan', $id)->delete();
+
+            $this->model->delete($id);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus data permintaan darah.');
+            }
+
+            session()->setFlashdata('success', 'Data permintaan darah berhasil dihapus.');
+
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $this->friendly_db_error($e));
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $e->getMessage());
+        }
+
+        return $this->home();
+    }
 }
