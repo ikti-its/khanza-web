@@ -29,7 +29,7 @@ final class StokOpnameController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX,  'id_opname',             'ID Opname'],
                 [SHOW, REQUIRED, I::DTIME,  'tanggal',               'Tanggal'],
                 [SHOW, OPTIONAL, I::SELECT, 'id_status_stok_opname', 'Status'],
-                [SHOW, OPTIONAL, I::SELECT, 'id_petugas',            'Pelaksana'],
+                [SHOW, REQUIRED, I::SELECT, 'id_petugas',            'Pelaksana'],
                 [SHOW, REQUIRED, I::TEXT,   'catatan',               'Catatan'],
             ],
             child_path: '/inventori-non-medis/detail-stok-opname',
