@@ -43,11 +43,30 @@ final class RingkasanPermintaanBarangDetailController extends ControllerTemplate
         );
     }
 
-    // qty_disetujui ga boleh lebih dari qty yang diminta
+    // true jika permintaan sudah Disetujui (2) atau Ditolak (3) — qty tidak bisa diubah lagi
+    private function is_locked(int $id_permintaan): bool
+    {
+        if ($id_permintaan <= 0) return false;
+        $row = $this->get_db()
+            ->table('inventori_non_medis.permintaan_barang')
+            ->select('id_status_permintaan_barang')
+            ->where('id_permintaan', $id_permintaan)
+            ->get()->getRowArray();
+        return is_array($row) && in_array((int) ($row['id_status_permintaan_barang'] ?? 0), [2, 3], true);
+    }
+
+    // qty_disetujui tidak bisa diubah jika sudah diproses, dan tidak boleh melebihi qty diminta
     public function update(int|string $id): string|RedirectResponse
     {
         $row = $this->model->find($id);
         if (is_array($row)) {
+            $id_permintaan = (int) ($row['id_permintaan'] ?? 0);
+            if ($this->is_locked($id_permintaan)) {
+                $this->home_params = ['id_permintaan' => $id_permintaan];
+                session()->setFlashdata('error', 'Permintaan yang sudah diproses tidak dapat diubah detailnya.');
+                return $this->home();
+            }
+
             $qty_disetujui = (float) ($this->request->getPost('qty_disetujui') ?? 0);
             $qty_max       = (float) ($row['qty'] ?? 0);
             if ($qty_disetujui > $qty_max) {

@@ -6,6 +6,7 @@ namespace App\Features\InventoriNonMedis\PermintaanBarang;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class PermintaanBarangController extends ControllerTemplate
 {
@@ -30,8 +31,7 @@ final class PermintaanBarangController extends ControllerTemplate
                 [SHOW, REQUIRED, I::DTIME,    'tanggal',                       'Tanggal'],
                 [SHOW, REQUIRED, I::SELECT,   'petugas',                       'Petugas'],
                 [SHOW, REQUIRED, I::SELECT,   'master_ruangan',                'Ruangan'],
-                [TABLE_ONLY, OPTIONAL, I::SELECT,   'id_status_permintaan_barang',   'Status'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_status_permintaan_barang', 'Status'],
+                [SHOW, OPTIONAL, I::SELECT, 'id_status_permintaan_barang', 'Status'],
                 [SHOW, OPTIONAL, I::READONLY, 'no_keluar',                     'No. Keluar'],
                 [SHOW, OPTIONAL, I::READONLY, 'petugas_gudang',                'Petugas Gudang'],
                 [SHOW, OPTIONAL, I::READONLY, 'tanggal_disetujui',             'Tgl. Disetujui'],
@@ -41,7 +41,31 @@ final class PermintaanBarangController extends ControllerTemplate
         );
     }
 
-    // auto no_permintaan + status awal = 1
+    // tampilkan status sebagai teks "Draf" (readonly) pada form tambah
+    public function create_page(): string
+    {
+        $konfig = $this->get_fields_with_options(false, true);
+        foreach ($konfig as &$field) {
+            if (($field[2] ?? '') === 'id_status_permintaan_barang') {
+                $field[2] = 'nama_status_permintaan_barang';
+                $field[3] = 'readonly';
+                unset($field[5]);
+            }
+        }
+        unset($field);
+
+        return view('/layouts/tambah_ubah', [
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon', 'tambah']]),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'konfig'      => $konfig,
+            'baris'       => ['nama_status_permintaan_barang' => 'Draf'],
+            'form_action' => '/submittambah/',
+        ]);
+    }
+
+    // auto no_permintaan + status awal Draf (1)
     protected function before_create(array &$postData): void
     {
         helper('autonomor');
@@ -50,9 +74,38 @@ final class PermintaanBarangController extends ControllerTemplate
         $postData['id_status_permintaan_barang'] = 1;
     }
 
-    // status dikelola lewat Ringkasan, jangan ikut ke-submit
+    // hanya izinkan transisi ke Draf (1) atau Proses Permintaan (4)
     protected function before_update(array &$postData, int|string $id): void
     {
-        unset($postData['id_status_permintaan_barang']);
+        $new_status = (int) ($postData['id_status_permintaan_barang'] ?? 0);
+        if (!in_array($new_status, [1, 4], true)) {
+            $current = $this->model->find($id);
+            $postData['id_status_permintaan_barang'] = (int) ($current['id_status_permintaan_barang'] ?? 1);
+        }
+    }
+
+    // blokir semua perubahan jika status bukan Draf (1),
+    // dan cegah pengajuan jika detail masih kosong
+    public function update(int|string $id): string|RedirectResponse
+    {
+        $current = $this->model->find((int) $id);
+        if (is_array($current) && (int) ($current['id_status_permintaan_barang'] ?? 0) !== 1) {
+            session()->setFlashdata('error', 'Permintaan yang sudah diproses tidak dapat diubah.');
+            return $this->home();
+        }
+
+        $new_status = (int) ($this->request->getPost('id_status_permintaan_barang') ?? 0);
+        if ($new_status === 4) {
+            $has_detail = $this->get_db()
+                ->table('inventori_non_medis.permintaan_barang_detail')
+                ->where('id_permintaan', (int) $id)
+                ->countAllResults() > 0;
+            if (!$has_detail) {
+                session()->setFlashdata('error', 'Tambahkan detail barang terlebih dahulu sebelum mengajukan permintaan.');
+                return $this->home();
+            }
+        }
+
+        return parent::update($id);
     }
 }

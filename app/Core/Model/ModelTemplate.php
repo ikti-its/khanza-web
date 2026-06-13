@@ -42,7 +42,7 @@ class ModelTemplate extends Model
         }
         $builder = $this->db->table($this->table);
         foreach ($this->runtime_filters as $col => $val) {
-            $builder->where($col, $val);
+            is_array($val) ? $builder->whereIn($col, $val) : $builder->where($col, $val);
         }
         if ($this->exclude_zero_pk) {
             $builder->where($this->primaryKey . ' !=', 0);
@@ -308,7 +308,7 @@ class ModelTemplate extends Model
     {
         if ($this->join === []) {
             foreach ($this->runtime_filters as $col => $val) {
-                $this->where($col, $val);
+                is_array($val) ? $this->whereIn($col, $val) : $this->where($col, $val);
             }
             if ($this->exclude_zero_pk) {
                 $this->where($this->primaryKey . ' !=', 0);
@@ -329,7 +329,9 @@ class ModelTemplate extends Model
         }
 
         foreach ($this->runtime_filters as $col => $val) {
-            $builder->where("{$main}.{$col}", $val);
+            is_array($val)
+                ? $builder->whereIn("{$main}.{$col}", $val)
+                : $builder->where("{$main}.{$col}", $val);
         }
         if ($this->exclude_zero_pk) {
             $builder->where("{$main}.{$this->primaryKey} !=", 0);

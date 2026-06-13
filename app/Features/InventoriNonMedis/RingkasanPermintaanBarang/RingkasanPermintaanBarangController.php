@@ -41,10 +41,24 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         );
     }
 
-    // kalau status → Disetujui (baru pertama), generate no_keluar & isi tanggal
+    // hanya tampilkan Proses Permintaan (4), Disetujui (2), Ditolak (3) — bukan Draf
+    protected function before_read(): void
+    {
+        $this->model->set_filter('id_status_permintaan_barang', [2, 3, 4]);
+    }
+
+    // hanya izinkan transisi ke Disetujui (2) atau Ditolak (3) dari Ringkasan
     protected function before_update(array &$postData, int|string $id): void
     {
         $new_status = (int) ($postData['id_status_permintaan_barang'] ?? 0);
+
+        if (!in_array($new_status, [2, 3], true)) {
+            $current = $this->model->find($id);
+            $postData['id_status_permintaan_barang'] = (int) ($current['id_status_permintaan_barang'] ?? 4);
+            return;
+        }
+
+        // generate no_keluar & tanggal saat pertama kali Disetujui
         if ($new_status !== 2) return;
 
         $current = $this->model->find($id);
@@ -61,11 +75,17 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
     // validasi petugas, qty & stok sebelum approve, buat transaksi keluar setelah
     public function update(int|string $id): string|RedirectResponse
     {
-        $new_status = (int) ($this->request->getPost('id_status_permintaan_barang') ?? 0);
-        $current    = $this->model->find((int) $id);
-        $is_new_approval = $new_status === 2
-            && is_array($current)
-            && (int) ($current['id_status_permintaan_barang'] ?? 0) !== 2;
+        $new_status     = (int) ($this->request->getPost('id_status_permintaan_barang') ?? 0);
+        $current        = $this->model->find((int) $id);
+        $current_status = is_array($current) ? (int) ($current['id_status_permintaan_barang'] ?? 0) : 0;
+
+        // blokir jika sudah Disetujui atau Ditolak
+        if (in_array($current_status, [2, 3], true)) {
+            session()->setFlashdata('error', 'Permintaan yang sudah diproses tidak dapat diubah kembali.');
+            return $this->home();
+        }
+
+        $is_new_approval = $new_status === 2 && $current_status !== 2;
 
         if ($is_new_approval) {
             if (empty($this->request->getPost('petugas_gudang'))) {

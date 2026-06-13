@@ -27,4 +27,21 @@ final class RingkasanPermintaanBarangModel extends ModelTemplate
             ],
         );
     }
+
+    // Batasi pilihan status: Proses Permintaan (4), Disetujui (2), Ditolak (3) — tanpa Draf
+    public function get_all_options(): array
+    {
+        $options = parent::get_all_options();
+
+        if (isset($options['id_status_permintaan_barang'])) {
+            $options['id_status_permintaan_barang'] = array_values(
+                array_filter(
+                    $options['id_status_permintaan_barang'],
+                    fn(array $opt) => in_array($opt[1], ['2', '3', '4'], true),
+                )
+            );
+        }
+
+        return $options;
+    }
 }

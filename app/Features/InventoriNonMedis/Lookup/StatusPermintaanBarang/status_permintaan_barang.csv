@@ -1,5 +1,5 @@
 id_status_permintaan_barang,nama_status_permintaan_barang
-0,-
-1,Menunggu
+1,Draf
 2,Disetujui
 3,Ditolak
+4,Proses Permintaan
