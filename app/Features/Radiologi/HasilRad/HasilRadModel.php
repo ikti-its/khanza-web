@@ -20,17 +20,12 @@ final class HasilRadModel extends ModelTemplate
             [
                 'id_permintaan_rad' => [
                     'no_permintaan',
-                    'nomor_reg' => [
-                        
-                    ]
+                    'nomor_reg',
                 ],
                 'id_dokter_pj'      => [
                     'id_orang' => ['nama']
                 ],
                 'id_petugas_rad'    => [
-                    'id_orang' => ['nama']
-                ],
-                'id_dokter_perujuk' => [
                     'id_orang' => ['nama']
                 ],
             ],

@@ -26,7 +26,7 @@ final class HasilRadTindakanModel extends ModelTemplate
             ],
             [
                 'id_hasil_rad'    => [],
-                'id_item_rad'     => ['kode_periksa', 'nama_pemeriksaan', 'tarif_dasar'],
+                'id_permintaan_item' => ['kode_periksa', 'nama_pemeriksaan', 'tarif_dasar'],
                 'id_template_rad' => ['nama_template'],
             ],
         );

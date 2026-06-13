@@ -324,7 +324,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800">
                     <td class="p-2 border text-center dark:border-gray-700">
                         ${item.nama_pemeriksaan}
-                        <input type="hidden" name="${p}[id_item_rad]" value="${item.id_item}">
+                        <input type="hidden" name="${p}[id_permintaan_item]" value="${item.id_permintaan_item}">
                     </td>
                     ${inp(`${p}[proyeksi]`,                 '',       '',            item.proyeksi                  ?? '')}
                     ${inp(`${p}[kilovoltage_kv]`,           'number', 'step="0.01"', item.kilovoltage_kv            ?? '')}

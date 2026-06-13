@@ -101,19 +101,18 @@ final class HasilRadController extends ControllerTemplate
         $rawPost = $this->request->getPost();
  
         $dataHeader = [
-            'id_permintaan_rad' => $rawPost['id_permintaan_rad'] ?? '',
-            'id_dokter_pj'      => $rawPost['id_dokter_pj']      ?? '',
-            'id_petugas_rad'    => $rawPost['id_petugas_rad']    ?? '',
-            'id_dokter_perujuk' => $rawPost['id_dokter_perujuk'] ?? '',
+            'id_permintaan_rad' => (int) ($rawPost['id_permintaan_rad'] ?? 0) ?: null,
+            'id_dokter_pj'      => (int) ($rawPost['id_dokter_pj']      ?? 0) ?: null,
+            'id_petugas_rad'    => (int) ($rawPost['id_petugas_rad']    ?? 0) ?: null,
             'tgl_jam_hasil'     => $rawPost['tgl_jam_hasil']     ?? date('Y-m-d H:i:s'),
             'catatan'           => $rawPost['catatan']           ?? '',
         ];
- 
+
         $tindakanList = $rawPost['tindakan'] ?? [];
         $bhpList      = $rawPost['bhp']      ?? [];
- 
+
         $this->model->db->transStart();
- 
+
         try {
             // 1. Insert header
             $this->model->insert($dataHeader);
@@ -124,7 +123,7 @@ final class HasilRadController extends ControllerTemplate
             foreach ($tindakanList as $tindakan) {
                 $modelTindakan->insert([
                     'id_hasil_rad'            => $idHasilRad,
-                    'id_item_rad'             => (int) ($tindakan['id_item_rad']             ?? 0),
+                    'id_permintaan_item'      => (int) ($tindakan['id_permintaan_item']      ?? 0),
                     'proyeksi'                => $tindakan['proyeksi']                       ?? '',
                     'kilovoltage_kv'          => (float) ($tindakan['kilovoltage_kv']        ?? 0),
                     'milliampere_second_mas'  => (float) ($tindakan['milliampere_second_mas'] ?? 0),
@@ -250,7 +249,7 @@ final class HasilRadController extends ControllerTemplate
             ->table('radiologi.hasil_rad_tindakan hrt')
             ->select([
                 'hrt.id_hasil_tindakan',
-                'hrt.id_item_rad AS id_item',
+                'hrt.id_permintaan_item',
                 'r.kode_periksa',
                 'r.nama_pemeriksaan',
                 'hrt.proyeksi',
@@ -264,7 +263,8 @@ final class HasilRadController extends ControllerTemplate
                 'hrt.hasil_ekspertise',
                 'hrt.id_template_rad',
             ])
-            ->join('radiologi.ref_item_rad r', 'r.id_item = hrt.id_item_rad')
+            ->join('radiologi.permintaan_rad_item pri', 'pri.id_permintaan_item = hrt.id_permintaan_item')
+            ->join('radiologi.ref_item_rad r',          'r.id_item = pri.id_item')
             ->where('hrt.id_hasil_rad', $id)
             ->get()
             ->getResultArray();
@@ -344,17 +344,16 @@ final class HasilRadController extends ControllerTemplate
         $rawPost = $this->request->getPost();
  
         $dataHeader = [
-            'id_permintaan_rad' => $rawPost['id_permintaan_rad'] ?? '',
-            'id_dokter_pj'      => $rawPost['id_dokter_pj']      ?? '',
-            'id_petugas_rad'    => $rawPost['id_petugas_rad']    ?? '',
-            'id_dokter_perujuk' => $rawPost['id_dokter_perujuk'] ?? '',
+            'id_permintaan_rad' => (int) ($rawPost['id_permintaan_rad'] ?? 0) ?: null,
+            'id_dokter_pj'      => (int) ($rawPost['id_dokter_pj']      ?? 0) ?: null,
+            'id_petugas_rad'    => (int) ($rawPost['id_petugas_rad']    ?? 0) ?: null,
             'tgl_jam_hasil'     => $rawPost['tgl_jam_hasil']     ?? date('Y-m-d H:i:s'),
             'catatan'           => $rawPost['catatan']           ?? '',
         ];
- 
+
         $tindakanList = $rawPost['tindakan'] ?? [];
         $bhpList      = $rawPost['bhp']      ?? [];
- 
+
         $this->model->db->transStart();
  
         try {
