@@ -54,13 +54,17 @@ final class PermintaanBarangController extends ControllerTemplate
         }
         unset($field);
 
+        // view mensyaratkan semua kolom konfig ada di $baris jika $baris non-empty
+        $baris = array_fill_keys(array_column($konfig, 2), null);
+        $baris['nama_status_permintaan_barang'] = 'Draf';
+
         return view('/layouts/tambah_ubah', [
             'judul'       => 'Tambah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon', 'tambah']]),
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->primary_key,
             'konfig'      => $konfig,
-            'baris'       => ['nama_status_permintaan_barang' => 'Draf'],
+            'baris'       => $baris,
             'form_action' => '/submittambah/',
         ]);
     }
