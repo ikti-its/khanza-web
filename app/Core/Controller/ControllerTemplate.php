@@ -157,7 +157,7 @@ class ControllerTemplate extends Controller
         return $postData;
     }
 
-    final public function index(): string
+    public function index(): string
     {
         $page = max(1, (int) ($this->request->getGet('page') ?? 1));
         $size = max(1, (int) ($this->request->getGet('size') ?? $this->meta_data['size']));
