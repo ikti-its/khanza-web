@@ -12,27 +12,29 @@ final class OperasiRoutes extends RouteTemplate
         parent::__construct(
             'Operasi',
             [
+
+                \App\Features\Operasi\PermintaanOperasi\PermintaanOperasiController::class,
+                \App\Features\Operasi\JadwalOperasi\JadwalOperasiController::class,
+                
                 // ==========================================
                 // 1. TAHAP PRA-OPERASI (PRE-OP)
                 // ==========================================
-                \App\Features\Operasi\PermintaanOperasi\PermintaanOperasiController::class,
-                \App\Features\Operasi\JadwalOperasi\JadwalOperasiController::class,
                 \App\Features\Operasi\PengkajianPreop\PengkajianPreopController::class,
                 \App\Features\Operasi\PengkajianPreAnestesi\PengkajianPreAnestesiController::class,
                 \App\Features\Operasi\ChecklistPreOperasi\ChecklistPreOperasiController::class,
-                \App\Features\Operasi\ChecklistPreOperasiPenunjang\ChecklistPreOperasiPenunjangController::class,
+                \App\Features\Operasi\ChecklistPreOperasiPenunjang\ChecklistPreOperasiPenunjangController::class => 'HIDE',
 
                 // ==========================================
                 // 2. TAHAP INTRABEDAH (SEBELUM INDUKSI & INSISI)
                 // ==========================================
                 \App\Features\Operasi\SigninSebelumAnestesi\SigninSebelumAnestesiController::class,
                 \App\Features\Operasi\PengkajianPreInduksi\PengkajianPreInduksiController::class,
-                \App\Features\Operasi\PengkajianPreInduksiAirway\PengkajianPreInduksiAirwayController::class,
+                \App\Features\Operasi\PengkajianPreInduksiAirway\PengkajianPreInduksiAirwayController::class => 'HIDE',
                 \App\Features\Operasi\TimeOutSebelumInsisi\TimeOutSebelumInsisiController::class,
-                \App\Features\Operasi\TimeOutSebelumInsisiPenunjang\TimeOutSebelumInsisiPenunjangController::class,
+                \App\Features\Operasi\TimeOutSebelumInsisiPenunjang\TimeOutSebelumInsisiPenunjangController::class => 'HIDE',
                 \App\Features\Operasi\CatatanAnestesiSedasi\CatatanAnestesiSedasiController::class,
-                \App\Features\Operasi\CatatanAnestesiSedasiAlat\CatatanAnestesiSedasiAlatController::class,
-                \App\Features\Operasi\CatatanAnestesiSedasiMonitoring\CatatanAnestesiSedasiMonitoringController::class,
+                \App\Features\Operasi\CatatanAnestesiSedasiAlat\CatatanAnestesiSedasiAlatController::class => 'HIDE',
+                \App\Features\Operasi\CatatanAnestesiSedasiMonitoring\CatatanAnestesiSedasiMonitoringController::class => 'HIDE',
 
                 // ==========================================
                 // 3. TAHAP INTRABEDAH (SEBELUM TUTUP LUKA)
@@ -44,8 +46,8 @@ final class OperasiRoutes extends RouteTemplate
                 // ==========================================
                 \App\Features\Operasi\CatatanPaskaOperasi\CatatanPaskaOperasiController::class,
                 \App\Features\Operasi\ChecklistPostop\ChecklistPostopController::class,
-                \App\Features\Operasi\ChecklistPostopDrain\ChecklistPostopDrainController::class,
-                \App\Features\Operasi\ChecklistPostopPenunjang\ChecklistPostopPenunjangController::class,
+                \App\Features\Operasi\ChecklistPostopDrain\ChecklistPostopDrainController::class => 'HIDE',
+                \App\Features\Operasi\ChecklistPostopPenunjang\ChecklistPostopPenunjangController::class => 'HIDE',
                 \App\Features\Operasi\SkorAldrette\SkorAldretteController::class,
                 \App\Features\Operasi\SkorSteward\SkorStewardController::class,
                 \App\Features\Operasi\SkorBromage\SkorBromageController::class,
@@ -54,7 +56,7 @@ final class OperasiRoutes extends RouteTemplate
                 // 5. TRANSFER ANTAR RUANG (PENYERAHAN PASIEN)
                 // ==========================================
                 \App\Features\Operasi\PenyerahanPasien\PenyerahanPasienController::class,
-                \App\Features\Operasi\PenyerahanPasienPeralatan\PenyerahanPasienPeralatanController::class,
+                \App\Features\Operasi\PenyerahanPasienPeralatan\PenyerahanPasienPeralatanController::class => 'HIDE',
 
                 // ==========================================
                 // 6. DATA REFERENSI (MASTER DATA)
