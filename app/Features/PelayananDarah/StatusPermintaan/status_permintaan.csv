@@ -1,3 +1,4 @@
 ﻿id_status_permintaan,nama_status_permintaan
-1,Dalam Proses
-2,Terpenuhi
+1,Belum Diproses
+2,Diproses Sebagian
+3,Terpenuhi
