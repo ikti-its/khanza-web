@@ -51,12 +51,11 @@ final class RegistrasiController extends ControllerTemplate
     }
     public function list()
     {
-        $nomorReg = $this->request->getGet('nomor_reg') ?? '';
-        $nama     = $this->request->getGet('nama')      ?? '';
+        $tabel = $this->model->table;
 
-        $builder = $this->model->db
-            ->table('rekam_medis.registrasi r')
+        $data = $this->model->builder($tabel . ' r')
             ->select([
+                'r.id_registrasi',
                 'r.nomor_reg',
                 'r.nomor_rawat',
                 'r.datetime',
@@ -65,21 +64,17 @@ final class RegistrasiController extends ControllerTemplate
                 'd.kode_dokter',
                 'od.nama AS nama_dokter',
                 'r.id_dokter',
+                "COALESCE(ri.kamar, '-') AS kamar"
             ])
-            ->join('role.pasien p',   'p.id_pasien = r.id_pasien')
-            ->join('person.orang o',  'o.id_orang  = p.id_orang')
+            ->join('role.pasien p',   'p.id_pasien = r.id_pasien', 'inner')
+            ->join('person.orang o',  'o.id_orang  = p.id_orang', 'inner')
             ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
-            ->join('person.orang od', 'od.id_orang = d.id_orang',  'left');
+            ->join('person.orang od', 'od.id_orang = d.id_orang',  'left')
+            ->join('rawat_inap.registrasi ri', 'ri.id_registrasi = r.id_registrasi', 'left')
+            ->orderBy('r.datetime', 'ASC')
+            ->get()
+            ->getResultArray();
 
-        if ($nomorReg !== '') {
-            $builder->like('r.nomor_reg', $nomorReg);
-        }
-        if ($nama !== '') {
-            $builder->like('o.nama', $nama);
-        }
-
-        $rows = $builder->orderBy('r.datetime', 'ASC')->get()->getResultArray();
-
-        return $this->response->setJSON(['data' => $rows]);
+        return $this->response->setJSON(['data' => $data]);
     }
 }

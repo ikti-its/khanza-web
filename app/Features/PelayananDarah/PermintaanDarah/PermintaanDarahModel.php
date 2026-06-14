@@ -18,10 +18,11 @@ final class PermintaanDarahModel extends ModelTemplate
                 'tanggal_permintaan' => V::DEFAULT(),
             ],
             [
-                'id_rawat_inap'        => [
-                    'id_registrasi' => [
-                        'nomor_rawat',
-                        'id_pasien' => ['nomor_rm']
+                'id_registrasi'        => [
+                    'nomor_rawat',
+                    'id_pasien' => [
+                        'nomor_rm',
+                        'id_orang' => ['nama']
                     ],
                 ],
                 'id_dokter_pengirim'   => [

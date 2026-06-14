@@ -29,7 +29,7 @@ final class PermintaanDarahController extends ControllerTemplate
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_permintaan',        'ID Permintaan'],
                 [SHOW, REQUIRED, I::TEXT,   'no_permintaan',        'Nomor Permintaan'],
-                [SHOW, REQUIRED, I::TEXT,   'id_rawat_inap',        'Nomor Rawat'],
+                [SHOW, REQUIRED, I::TEXT,   'id_registrasi',        'ID Registrasi'],
                 [SHOW, REQUIRED, I::TEXT,   'id_dokter_pengirim',   'Dokter Pengirim'],
                 [SHOW, REQUIRED, I::DTIME,  'tanggal_permintaan',   'Tanggal Permintaan'],
                 [SHOW, REQUIRED, I::SELECT, 'id_status_permintaan', 'Status Permintaan'],
@@ -103,7 +103,7 @@ final class PermintaanDarahController extends ControllerTemplate
                 $mockBaris[$columnPermintaan] = 1; 
             }
 
-            if ($columnPermintaan === 'id_rawat_inap') {
+            if ($columnPermintaan === 'id_registrasi') {
                 foreach ($konfigRegistrasi as $fieldRegistrasi) {
                     if ($fieldRegistrasi[2] === 'nomor_rawat') {
                         $mockBaris['nomor_rawat'] = '';
@@ -236,26 +236,27 @@ final class PermintaanDarahController extends ControllerTemplate
         $dataOrang      = [];
         $dataDokter     = [];
 
-        if (!empty($dataPermintaan['id_rawat_inap'])) {
-            $modelRawatInap = new \App\Features\RawatInap\Registrasi\RegistrasiModel();
-            $dataRawatInap  = $modelRawatInap->find($dataPermintaan['id_rawat_inap']) ?? [];
+        if (!empty($dataPermintaan['id_registrasi'])) {
+            $modelRegistrasi = new \App\Features\RekamMedis\Registrasi\RegistrasiModel();
+            $dataRegistrasi  = $modelRegistrasi->find($dataPermintaan['id_registrasi']) ?? [];
 
-            if (!empty($dataRawatInap['id_registrasi'])) {
-                $modelRegistrasi = new \App\Features\RekamMedis\Registrasi\RegistrasiModel();
-                $dataRegistrasi  = $modelRegistrasi->find($dataRawatInap['id_registrasi']) ?? [];
+            if (!empty($dataRegistrasi['id_pasien'])) {
+                $modelPasien = new \App\Features\Role\Pasien\PasienModel();
+                $dataPasien  = $modelPasien->find($dataRegistrasi['id_pasien']) ?? [];
 
-                if (!empty($dataRegistrasi['id_pasien'])) {
-                    $modelPasien = new \App\Features\Role\Pasien\PasienModel();
-                    $dataPasien  = $modelPasien->find($dataRegistrasi['id_pasien']) ?? [];
-
-                    if (!empty($dataPasien['id_orang'])) {
-                        $modelOrang = new \App\Features\Person\Orang\OrangModel();
-                        $dataOrang  = $modelOrang->find($dataPasien['id_orang']) ?? [];
-                    }
+                if (!empty($dataPasien['id_orang'])) {
+                    $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                    $dataOrang  = $modelOrang->find($dataPasien['id_orang']) ?? [];
                 }
             }
         }
 
+        $modelRawatInap = new \App\Features\RawatInap\Registrasi\RegistrasiModel();
+        $ranapResult    = $modelRawatInap->where('id_registrasi', $dataPermintaan['id_registrasi'])->first();
+        if ($ranapResult && !empty($ranapResult['kamar'])) {
+            $dataRawatInap['kamar'] = $ranapResult['kamar'];
+        }
+        
         if (!empty($dataPermintaan['id_dokter_pengirim'])) {
             $modelDokterUser = new \App\Features\Role\Dokter\DokterModel(); // Sesuai nama model role dokter kelompokmu
             $dataDokterRole  = $modelDokterUser->find($dataPermintaan['id_dokter_pengirim']) ?? [];
@@ -283,7 +284,7 @@ final class PermintaanDarahController extends ControllerTemplate
         foreach ($konfigPermintaan as $fieldPermintaan) {
             $columnPermintaan = $fieldPermintaan[2];
 
-            if ($columnPermintaan === 'id_rawat_inap') {
+            if ($columnPermintaan === 'id_registrasi') {
                 foreach ($konfigRegistrasi as $fieldRegistrasi) {
                     if ($fieldRegistrasi[2] === 'nomor_rawat') { $konfigGabungan[] = $fieldRegistrasi; break; }
                 }
@@ -450,12 +451,12 @@ final class PermintaanDarahController extends ControllerTemplate
                 CONCAT(role.pasien.nomor_rm, ' / ', rekam_medis.registrasi.nomor_rawat) AS identitas_rawat,
                 person.orang.nama
             ")
-            ->join('rawat_inap.registrasi', "rawat_inap.registrasi.id_rawat_inap = {$tabel}.id_rawat_inap", 'inner')
-            ->join('rekam_medis.registrasi', 'rekam_medis.registrasi.id_registrasi = rawat_inap.registrasi.id_registrasi', 'inner')
+            ->join('rekam_medis.registrasi', "rekam_medis.registrasi.id_registrasi = {$tabel}.id_registrasi", 'inner')
             ->join('role.pasien', 'role.pasien.id_pasien = rekam_medis.registrasi.id_pasien', 'inner')
             ->join('person.orang', 'person.orang.id_orang = role.pasien.id_orang', 'inner')
             ->join('pelayanan_darah.status_permintaan', "pelayanan_darah.status_permintaan.id_status_permintaan = {$tabel}.id_status_permintaan", 'inner')
             ->where("{$tabel}.id_status_permintaan !=", 3)
+            ->orderBy("{$tabel}.tanggal_permintaan", 'ASC')
             ->get()
             ->getResultArray();
 

@@ -16,7 +16,7 @@ final class PermintaanDarahDatabase extends DatabaseTemplate
             [
                 'id_permintaan'        => T::ID(30_000_000),
                 'no_permintaan'        => T::RECORD(20),
-                'id_rawat_inap'        => T::FK_AUTO(),
+                'id_registrasi'        => T::FK_AUTO(),
                 'id_dokter_pengirim'   => T::FK_AUTO(),
                 'tanggal_permintaan'   => T::DTIME(),
                 'id_status_permintaan' => T::FK_AUTO(),
@@ -25,9 +25,9 @@ final class PermintaanDarahDatabase extends DatabaseTemplate
             ['no_permintaan'],
             [
                 [
-                    'id_rawat_inap',
-                    \App\Features\RawatInap\Registrasi\RegistrasiDatabase::class,
-                    'id_rawat_inap',
+                    'id_registrasi',
+                    \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
+                    'id_registrasi',
                 ],
                 [
                     'id_dokter_pengirim',

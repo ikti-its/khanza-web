@@ -1,2 +1,2 @@
-﻿id_permintaan,no_permintaan,id_rawat_inap,id_dokter_pengirim,tanggal_permintaan,id_status_permintaan
-1,2026/04/REQ00001,1,1,2026-04-18 13:05:20,3
+﻿id_permintaan,no_permintaan,id_registrasi,id_dokter_pengirim,tanggal_permintaan,id_status_permintaan
+1,2026/04/REQ00001,5,1,2026-04-18 13:05:20,3

@@ -39,7 +39,7 @@
                 if (typeof autofillRegistrasi === 'function') {
                     autofillRegistrasi(item);
                 }
-                document.getElementById('modalRegistrasi').classList.add('hidden');
+                // document.getElementById('modalRegistrasi').classList.add('hidden');
             }
         });
     });

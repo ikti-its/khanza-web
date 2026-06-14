@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 
-<?= $this->include('components/modal/modalrawatinap') ?>
+<?= $this->include('components/modal/modalregistrasi') ?>
 <?= $this->include('components/modal/modaldokter') ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
@@ -24,17 +24,17 @@
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Nomor Rawat<span class="text-red-600">*</span>
                 </label>
-                <input type="hidden" name="id_rawat_inap" id="id_rawat_inap" value="<?= $baris['id_rawat_inap'] ?? '' ?>" required>
+                <input type="hidden" name="id_registrasi" id="id_registrasi" value="<?= $baris['id_registrasi'] ?? '' ?>" required>
 
                 <div class="w-full lg:w-1/4 flex gap-x-2">
                     <input type="text" id="nomor_rawat" name="nomor_rawat" readonly required
                            value="<?= $baris['nomor_rawat'] ?? '' ?>"
                            placeholder="Klik cari..." 
-                           <?= $isEdit ? 'disabled' : 'onclick="open_modalRawatInap()"' ?> 
+                           <?= $isEdit ? 'disabled' : 'onclick="open_modalRegistrasi()"' ?> 
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white <?= $isEdit ? 'cursor-not-allowed bg-gray-100' : 'cursor-pointer bg-slate-50' ?>">
                     
                     <?php if (!$isEdit) : ?>
-                        <button type="button" onclick="open_modalRawatInap()" 
+                        <button type="button" onclick="open_modalRegistrasi()" 
                                 class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -65,7 +65,7 @@
                     Kamar
                 </label>
                 <input type="text" id="kamar" name="kamar" readonly placeholder="Terisi otomatis..."
-                       value="<?= $baris['kamar'] ?? '' ?>"
+                       value="<?= $baris['kamar'] ?? '-' ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
@@ -222,8 +222,8 @@
         }
     });
     
-    function autofillRawatInap(item) {
-        document.getElementById('id_rawat_inap').value = item.id_rawat_inap;
+    function autofillRegistrasi(item) {
+        document.getElementById('id_registrasi').value = item.id_registrasi;
         document.getElementById('nomor_rawat').value = item.nomor_rawat;
         document.getElementById('nomor_rm').value = item.nomor_rm;
         document.getElementById('nama').value = item.nama;
