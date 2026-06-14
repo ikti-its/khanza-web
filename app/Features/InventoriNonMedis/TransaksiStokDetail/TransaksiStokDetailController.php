@@ -21,6 +21,7 @@ final class TransaksiStokDetailController extends ControllerTemplate
             'Transaksi Stok Detail',
             [
                 A::READ,
+                A::BACK,
             ],
             [
                 [HIDE,       OPTIONAL, I::INDEX,  'id_detail',    'ID'],

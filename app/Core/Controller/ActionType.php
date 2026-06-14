@@ -16,4 +16,5 @@ enum ActionType: string
     case REGISTRASI  = 'registrasi';
     case SAMPEL      = 'sampel';
     case JADWALKAN   = 'jadwalkan';
+    case BACK        = 'kembali';
 }

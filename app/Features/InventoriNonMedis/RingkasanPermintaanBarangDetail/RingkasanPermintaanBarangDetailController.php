@@ -22,6 +22,7 @@ final class RingkasanPermintaanBarangDetailController extends ControllerTemplate
             'Ringkasan Permintaan Barang Detail',
             [
                 A::READ,
+                A::BACK,
                 A::UPDATE,
             ],
             [

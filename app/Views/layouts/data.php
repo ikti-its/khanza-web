@@ -17,6 +17,7 @@
                             'modul_path'   => $modul_path,
                             'aksi'         => $aksi,
                             'query_string' => $query_string ?? '',
+                            'back_url'     => $back_url ?? null,
                         ]);
                         echo view('components/header/search_bar');
                         

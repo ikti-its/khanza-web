@@ -22,6 +22,7 @@ final class PenerimaanBarangDetailController extends ControllerTemplate
             'Penerimaan Barang Detail',
             [
                 A::READ,
+                A::BACK,
                 // A::CREATE,
                 A::UPDATE,
                 // A::DELETE,

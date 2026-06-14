@@ -10,7 +10,7 @@
     ]) ?>
     <div class="flex gap-x-6 justify-center items-center">
         <?= view('components/header/kembali', [
-            'link' => $modul_path
+            'link' => $modul_path . '/data'
         ]) ?>
     </div>
 </div>

@@ -15,6 +15,9 @@
                 echo view('components/header/notif_button');
                 echo '<div class="h-[1.375rem] border-r-4 bg-[#DCDCDC]"></div>';
             }
+            if(isset($aksi['kembali']) && $aksi['kembali'] === true){
+                echo view('components/header/kembali', ['link' => $back_url ?? null]);
+            }
             if(isset($aksi['tambah']) && $aksi['tambah'] === true){
                 $qs = (!empty($query_string)) ? '?' . $query_string : '';
                 echo view('components/header/tambah_button', [

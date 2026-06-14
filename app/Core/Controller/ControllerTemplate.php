@@ -199,6 +199,18 @@ class ControllerTemplate extends Controller
         );
         $query_string = !empty($extra_params) ? http_build_query($extra_params) : '';
 
+        $back_url = null;
+        if (isset($this->actions[ActionType::BACK->value])) {
+            $count = count($this->breadcrumbs);
+            if ($count >= 2) {
+                $segments = [];
+                for ($i = 0; $i < $count - 1; $i++) {
+                    $segments[] = str_replace('_', '-', $this->breadcrumbs[$i]['icon']);
+                }
+                $back_url = '/' . implode('/', $segments) . '/data';
+            }
+        }
+
         return view('/layouts/data', [
             'judul'       => $this->title,
             'breadcrumbs' => $this->breadcrumbs,
@@ -211,6 +223,7 @@ class ControllerTemplate extends Controller
             'row_alert'    => $this->row_alert,
             'child_link'   => $child_link,
             'query_string' => $query_string,
+            'back_url'     => $back_url,
         ]);
     }
 

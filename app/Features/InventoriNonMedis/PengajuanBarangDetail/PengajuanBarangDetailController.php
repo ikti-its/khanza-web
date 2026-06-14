@@ -22,6 +22,7 @@ final class PengajuanBarangDetailController extends ControllerTemplate
             'Detail Pengajuan Barang',
             [
                 A::READ,
+                A::BACK,
                 A::CREATE,
                 A::UPDATE,
                 A::DELETE,
