@@ -56,7 +56,7 @@ final class StokOpnameDetailController extends ControllerTemplate
         return (int) ($row['id_status_stok_opname'] ?? 0);
     }
 
-    // blok kalau opname induk udah Selesai
+    // blok kalau opname induk udah Selesai, atau barang sudah ada
     public function create(): string|RedirectResponse
     {
         $id_opname = (int) ($this->request->getPost('id_opname') ?? 0);
@@ -65,6 +65,21 @@ final class StokOpnameDetailController extends ControllerTemplate
             session()->setFlashdata('error', 'Tidak dapat menambah detail karena Stok Opname sudah Selesai.');
             return $this->home();
         }
+
+        $id_barang = (int) ($this->request->getPost('id_barang') ?? 0);
+        if ($id_barang > 0 && $id_opname > 0) {
+            $exists = $this->get_db()
+                ->table('inventori_non_medis.stok_opname_detail')
+                ->where('id_opname', $id_opname)
+                ->where('id_barang', $id_barang)
+                ->countAllResults();
+            if ($exists > 0) {
+                $this->home_params = ['id_opname' => $id_opname];
+                session()->setFlashdata('error', 'Barang tersebut sudah ada pada stok opname ini. Ubah data yang sudah ada jika ingin mengubah jumlah stoknya.');
+                return $this->home();
+            }
+        }
+
         return parent::create();
     }
 

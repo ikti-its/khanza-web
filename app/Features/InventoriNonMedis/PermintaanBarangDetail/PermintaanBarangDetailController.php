@@ -63,6 +63,21 @@ final class PermintaanBarangDetailController extends ControllerTemplate
             session()->setFlashdata('error', 'Permintaan yang sudah diproses tidak dapat ditambah detailnya.');
             return $this->home();
         }
+
+        $id_barang = (int) ($this->request->getPost('id_barang') ?? 0);
+        if ($id_barang > 0 && $id_permintaan > 0) {
+            $exists = $this->get_db()
+                ->table('inventori_non_medis.permintaan_barang_detail')
+                ->where('id_permintaan', $id_permintaan)
+                ->where('id_barang', $id_barang)
+                ->countAllResults();
+            if ($exists > 0) {
+                $this->home_params = ['id_permintaan' => $id_permintaan];
+                session()->setFlashdata('error', 'Barang tersebut sudah ada pada permintaan ini. Ubah data yang sudah ada jika ingin mengubah jumlahnya.');
+                return $this->home();
+            }
+        }
+
         return parent::create();
     }
 

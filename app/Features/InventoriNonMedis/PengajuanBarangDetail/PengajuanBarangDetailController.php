@@ -68,7 +68,7 @@ final class PengajuanBarangDetailController extends ControllerTemplate
         $postData['subtotal'] = (float) ($postData['harga'] ?? 0) * (float) ($postData['qty'] ?? 0);
     }
 
-    // lock check + update total_harga setelah tambah
+    // lock check + duplikat check + update total_harga setelah tambah
     public function create(): string|RedirectResponse
     {
         $id_pengajuan = (int) ($this->request->getPost('id_pengajuan') ?? 0);
@@ -77,6 +77,21 @@ final class PengajuanBarangDetailController extends ControllerTemplate
             session()->setFlashdata('error', 'Pengajuan yang sudah diajukan tidak dapat ditambah detailnya.');
             return $this->home();
         }
+
+        $id_barang = (int) ($this->request->getPost('id_barang') ?? 0);
+        if ($id_barang > 0 && $id_pengajuan > 0) {
+            $exists = $this->get_db()
+                ->table('inventori_non_medis.pengajuan_barang_detail')
+                ->where('id_pengajuan', $id_pengajuan)
+                ->where('id_barang', $id_barang)
+                ->countAllResults();
+            if ($exists > 0) {
+                $this->home_params = ['id_pengajuan' => $id_pengajuan];
+                session()->setFlashdata('error', 'Barang tersebut sudah ada pada pengajuan ini. Ubah data yang sudah ada jika ingin mengubah jumlahnya.');
+                return $this->home();
+            }
+        }
+
         $result = parent::create();
         if ($result instanceof RedirectResponse && $id_pengajuan > 0) {
             $this->recalculate_total($id_pengajuan);
