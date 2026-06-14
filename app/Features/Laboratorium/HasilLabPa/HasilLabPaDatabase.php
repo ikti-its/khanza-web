@@ -19,7 +19,7 @@ final class HasilLabPaDatabase extends DatabaseTemplate
                 'id_dokter_pj'        => T::FK_AUTO(),
                 'id_petugas_lab'      => T::FK_AUTO(),
                 'tgl_jam_hasil'       => T::DTIME(),
-                'id_item_pemeriksaan' => T::FK_AUTO(),
+                'id_permintaan_pa_item' => T::FK_AUTO(),
                 'diagnosa_klinis'     => T::TEXT(),
                 'makroskopik'         => T::TEXT(),
                 'mikroskopik'         => T::TEXT(),
@@ -45,9 +45,9 @@ final class HasilLabPaDatabase extends DatabaseTemplate
                     'id_petugas',
                 ],
                 [
-                    ['id_item_pemeriksaan'],
+                    ['id_permintaan_pa_item'],
                     \App\Features\Laboratorium\RefItemPemeriksaanLab\RefItemPemeriksaanLabDatabase::class,
-                    ['id_item_lab'],
+                    ['id_permintaan_pa_item'],
                 ],
             ],
         );
