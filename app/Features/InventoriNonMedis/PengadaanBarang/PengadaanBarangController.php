@@ -77,6 +77,21 @@ final class PengadaanBarangController extends ControllerTemplate
     // kalau create berhasil, populate detail dari item pengajuan
     public function create(): string|RedirectResponse
     {
+        // blokir jika pengajuan masih punya barang baru yang belum dipetakan ke master
+        $id_pengajuan = (int) ($this->request->getPost('id_pengajuan') ?? 0);
+        if ($id_pengajuan > 0) {
+            $unmapped = $this->get_db()
+                ->table('inventori_non_medis.pengajuan_barang_detail')
+                ->where('id_pengajuan', $id_pengajuan)
+                ->where('id_barang IS NULL')
+                ->where('qty_disetujui >', 0)
+                ->countAllResults();
+            if ($unmapped > 0) {
+                session()->setFlashdata('error', 'Terdapat barang baru pada pengajuan yang belum dipetakan ke master barang. Petakan terlebih dahulu melalui menu Ringkasan Pengajuan Barang.');
+                return $this->home();
+            }
+        }
+
         $result = parent::create();
 
         if ($result instanceof RedirectResponse && $this->new_no_pengadaan !== null) {
