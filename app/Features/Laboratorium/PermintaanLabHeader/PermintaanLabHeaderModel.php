@@ -21,7 +21,7 @@ final class PermintaanLabHeaderModel extends ModelTemplate
                 'tgl_jam_sampel'       => V::DEFAULT(),
             ],
             [
-                'id_registrasi'        => ['nomor_reg'],
+                'nomor_reg'            => [],
                 'id_kategori_lab'      => ['nama_kategori'],
                 'id_dokter_perujuk'    => [
                     'id_orang'  => ['nama']
