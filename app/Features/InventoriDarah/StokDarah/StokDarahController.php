@@ -59,4 +59,38 @@ final class StokDarahController extends ControllerTemplate
 
         return parent::index();
     }
+
+    /**
+     * Menampilkan data modal stok darah
+     */
+    public function list()
+    {
+        $tabel = $this->model->table;
+
+        $data = $this->model->builder()
+            ->select("
+                {$tabel}.id_stok_darah,
+                {$tabel}.no_kantong,
+                {$tabel}.tanggal_kadaluarsa,
+                k.nama_komponen,
+                g.nama_golongan_darah AS gol_darah,
+                r.kode_rhesus AS rhesus,
+                (COALESCE(k.jasa_sarana, 0) + COALESCE(k.paket_bhp, 0) + COALESCE(k.kso, 0) + COALESCE(k.manajemen, 0)) AS total_biaya
+            ")
+            ->join('darah.komponen_darah k', 'k.id_komponen = ' . $tabel . '.id_komponen', 'inner')
+            ->join('darah.golongan_darah g', 'g.id_golongan_darah = ' . $tabel . '.id_golongan_darah', 'left')
+            ->join('darah.rhesus r', 'r.id_rhesus = ' . $tabel . '.id_rhesus', 'left')
+            ->where($tabel . '.tanggal_kadaluarsa >=', date('Y-m-d'))
+            ->where($tabel . '.id_status_stok', 2) 
+            ->get()
+            ->getResultArray();
+
+        foreach ($data as &$row) {
+            $row['tanggal_kadaluarsa'] = date('d-m-Y', strtotime($row['tanggal_kadaluarsa']));
+        }
+
+        return $this->response->setJSON([
+            'data' => $data
+        ]);
+    }
 }
