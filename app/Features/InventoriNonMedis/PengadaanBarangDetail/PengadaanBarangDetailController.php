@@ -47,7 +47,7 @@ final class PengadaanBarangDetailController extends ControllerTemplate
         $postData['subtotal'] = $harga * $qty;
     }
 
-    // validasi qty ≤ qty disetujui pengajuan, update total_harga pengadaan
+    // validasi total qty seluruh pengadaan ≤ qty disetujui pengajuan, update total_harga pengadaan
     public function update(int|string $id): string|RedirectResponse
     {
         $row = $this->model->find($id);
@@ -55,21 +55,36 @@ final class PengadaanBarangDetailController extends ControllerTemplate
             $id_pengadaan = (int) ($row['id_pengadaan'] ?? 0);
             $id_barang    = (int) ($row['id_barang']    ?? 0);
             if ($id_pengadaan > 0 && $id_barang > 0) {
-                $limit = $this->get_db()
-                    ->table('inventori_non_medis.pengadaan_barang pb')
+                $db    = $this->get_db();
+                $limit = $db->table('inventori_non_medis.pengadaan_barang pb')
                     ->join('inventori_non_medis.pengajuan_barang_detail pjd',
                            'pb.id_pengajuan = pjd.id_pengajuan', 'left')
-                    ->select('pjd.qty_disetujui')
+                    ->select('pb.id_pengajuan, pjd.qty_disetujui')
                     ->where('pb.id_pengadaan', $id_pengadaan)
                     ->where('pb.id_pengajuan >', 0)
                     ->where('pjd.id_barang', $id_barang)
                     ->get()->getRowArray();
+
                 if (is_array($limit)) {
-                    $qty_max = (float) ($limit['qty_disetujui'] ?? 0);
-                    $qty_new = (float) ($this->request->getPost('qty') ?? 0);
-                    if ($qty_max > 0 && $qty_new > $qty_max) {
-                        session()->setFlashdata('error', "Qty pengadaan tidak boleh melebihi qty yang disetujui atasan ({$qty_max}).");
-                        return $this->home();
+                    $qty_disetujui = (float) ($limit['qty_disetujui'] ?? 0);
+                    $id_pengajuan  = (int)   ($limit['id_pengajuan']  ?? 0);
+                    $qty_new       = (float) ($this->request->getPost('qty') ?? 0);
+
+                    if ($qty_disetujui > 0 && $id_pengajuan > 0) {
+                        // total qty di semua pengadaan lain untuk pengajuan+barang yang sama
+                        $already = (float) ($db->table('inventori_non_medis.pengadaan_barang_detail pbd')
+                            ->join('inventori_non_medis.pengadaan_barang pb2', 'pbd.id_pengadaan = pb2.id_pengadaan', 'left')
+                            ->selectSum('pbd.qty', 'total')
+                            ->where('pb2.id_pengajuan', $id_pengajuan)
+                            ->where('pbd.id_barang', $id_barang)
+                            ->where('pbd.id_detail !=', (int) $id)
+                            ->get()->getRowArray()['total'] ?? 0);
+
+                        if ($qty_new + $already > $qty_disetujui) {
+                            $sisa = max(0, $qty_disetujui - $already);
+                            session()->setFlashdata('error', "Qty melebihi sisa yang disetujui. Maks: {$sisa} (dari total {$qty_disetujui} yang disetujui).");
+                            return $this->home();
+                        }
                     }
                 }
             }
