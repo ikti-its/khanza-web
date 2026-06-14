@@ -29,8 +29,8 @@ final class PermintaanDarahController extends ControllerTemplate
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_permintaan',        'ID Permintaan'],
                 [SHOW, REQUIRED, I::TEXT,   'no_permintaan',        'Nomor Permintaan'],
-                [SHOW, REQUIRED, I::TEXT,   'id_rawat_inap',        'ID Rawat Inap'],
-                [SHOW, REQUIRED, I::TEXT,   'id_dokter_pengirim',   'ID Dokter Pengirim'],
+                [SHOW, REQUIRED, I::TEXT,   'id_rawat_inap',        'Nomor Rawat'],
+                [SHOW, REQUIRED, I::TEXT,   'id_dokter_pengirim',   'Dokter Pengirim'],
                 [SHOW, REQUIRED, I::DTIME,  'tanggal_permintaan',   'Tanggal Permintaan'],
                 [SHOW, REQUIRED, I::SELECT, 'id_status_permintaan', 'Status Permintaan'],
             ],
@@ -97,6 +97,10 @@ final class PermintaanDarahController extends ControllerTemplate
             if ($columnPermintaan === 'no_permintaan') {
                 $mockBaris[$columnPermintaan] = $nomorPermintaanOtomatis;
                 $fieldPermintaan[3] = 'indeks';
+            }
+
+            if ($columnPermintaan === 'id_status_permintaan') {
+                $mockBaris[$columnPermintaan] = 1; 
             }
 
             if ($columnPermintaan === 'id_rawat_inap') {
@@ -429,5 +433,34 @@ final class PermintaanDarahController extends ControllerTemplate
         }
 
         return $this->home();
+    }
+
+    /**
+     * Menampilkan data modal permintaan darah
+     */
+    public function list()
+    {
+        $tabel = $this->model->table;
+
+        $data = $this->model->builder()
+            ->select("
+                {$tabel}.id_permintaan,
+                {$tabel}.no_permintaan,
+                pelayanan_darah.status_permintaan.nama_status_permintaan AS status,
+                CONCAT(role.pasien.nomor_rm, ' / ', rekam_medis.registrasi.nomor_rawat) AS identitas_rawat,
+                person.orang.nama
+            ")
+            ->join('rawat_inap.registrasi', "rawat_inap.registrasi.id_rawat_inap = {$tabel}.id_rawat_inap", 'inner')
+            ->join('rekam_medis.registrasi', 'rekam_medis.registrasi.id_registrasi = rawat_inap.registrasi.id_registrasi', 'inner')
+            ->join('role.pasien', 'role.pasien.id_pasien = rekam_medis.registrasi.id_pasien', 'inner')
+            ->join('person.orang', 'person.orang.id_orang = role.pasien.id_orang', 'inner')
+            ->join('pelayanan_darah.status_permintaan', "pelayanan_darah.status_permintaan.id_status_permintaan = {$tabel}.id_status_permintaan", 'inner')
+            ->where("{$tabel}.id_status_permintaan !=", 3)
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON([
+            'data' => $data
+        ]);
     }
 }
