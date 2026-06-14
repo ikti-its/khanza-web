@@ -34,4 +34,18 @@ final class RefItemPemeriksaanLabController extends ControllerTemplate
             ],
         );
     }
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $idKategori = $this->request->getGet('id_kategori');
+ 
+        $builder = $this->model->db
+            ->table('laboratorium.ref_item_pemeriksaan_lab')
+            ->select(['id_item_lab', 'kode_periksa', 'nama_item', 'tarif']);
+ 
+        if ($idKategori) {
+            $builder->where('id_kategori', (int) $idKategori);
+        }
+ 
+        return $this->response->setJSON(['data' => $builder->get()->getResultArray()]);
+    }
 }

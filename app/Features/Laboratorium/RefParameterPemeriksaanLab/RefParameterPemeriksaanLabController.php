@@ -35,4 +35,28 @@ final class RefParameterPemeriksaanLabController extends ControllerTemplate
             ],
         );
     }
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $idItemLab = $this->request->getGet('id_item_lab');
+ 
+        $builder = $this->model->db
+            ->table('laboratorium.ref_parameter_pemeriksaan_lab')
+            ->select([
+                'id_parameter',
+                'id_item_lab',
+                'nama_parameter',
+                'satuan',
+                'nilai_rujukan',
+                'biaya_item',
+            ]);
+ 
+        if ($idItemLab !== null) {
+            $builder->where('id_item_lab', (int) $idItemLab);
+        }
+ 
+        $rows = $builder->orderBy('id_parameter', 'ASC')->get()->getResultArray();
+ 
+        return $this->response->setJSON(['data' => $rows]);
+    }
 }

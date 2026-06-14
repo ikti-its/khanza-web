@@ -17,7 +17,7 @@ final class HasilLabPkModel extends ModelTemplate
                 'tgl_jam_hasil'    => V::DEFAULT(),
             ],
             [
-                'id_permintaan_lab'     => ['nomor_reg'],
+                'id_permintaan_lab'     => ['no_permintaan'],
                 'id_permintaan_pk_item' => [
                     'id_item_pemeriksaan' => ['kode_periksa', 'nama_item', 'tarif'],
                 ],
