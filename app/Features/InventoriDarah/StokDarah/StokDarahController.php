@@ -38,4 +38,25 @@ final class StokDarahController extends ControllerTemplate
             ],
         );
     }
+
+    /**
+     * OVERRIDE: Menampilkan Halaman Utama Data Stok Darah
+     */
+    #[\Override]
+    public function index(): string
+    {
+        $hariIni = date('Y-m-d');
+        
+        $idStatusLayak      = 2;
+        $idStatusTidakLayak = 3; 
+
+        $this->model->builder()
+            ->where('tanggal_kadaluarsa <', $hariIni)
+            ->where('id_status_stok', $idStatusLayak)
+            ->update([
+                'id_status_stok' => $idStatusTidakLayak
+            ]);
+
+        return parent::index();
+    }
 }
