@@ -16,7 +16,7 @@ final class PermintaanOperasiDatabase extends DatabaseTemplate
             [
                 'id_permintaan' => T::ID(300_000_000),
                 'nomor_reg'     => T::FK_AUTO(),
-                'kode_dokter'   => T::FK_AUTO(),
+                'id_dokter'   => T::FK_AUTO(),
                 'tanggal_minta' => T::DTIME(),
                 'is_cito'       => T::BOOL(),
             ],
@@ -29,7 +29,7 @@ final class PermintaanOperasiDatabase extends DatabaseTemplate
                     ['nomor_reg'],
                 ],
                 [
-                    ['kode_dokter'],
+                    ['id_dokter'],
                     \App\Features\Role\Dokter\DokterDatabase::class,
                     ['id_dokter'],
                 ],
