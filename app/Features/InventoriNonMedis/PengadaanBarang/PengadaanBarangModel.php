@@ -26,4 +26,47 @@ final class PengadaanBarangModel extends ModelTemplate
             ],
         );
     }
+
+    // hanya tampilkan pengajuan Disetujui yang masih punya sisa qty belum dipesan
+    // dan tidak memiliki barang baru yang belum dipetakan ke master barang
+    public function get_all_options(): array
+    {
+        $options = parent::get_all_options();
+
+        if (isset($options['id_pengajuan'])) {
+            $rows = $this->db->query("
+                SELECT DISTINCT pjd.id_pengajuan
+                FROM inventori_non_medis.pengajuan_barang_detail pjd
+                JOIN inventori_non_medis.pengajuan_barang pj ON pjd.id_pengajuan = pj.id_pengajuan
+                WHERE pjd.id_barang > 0
+                  AND pjd.qty_disetujui > 0
+                  AND pj.id_status_pengajuan_barang = 2
+                  AND (
+                    SELECT COALESCE(SUM(pbd.qty), 0)
+                    FROM inventori_non_medis.pengadaan_barang_detail pbd
+                    JOIN inventori_non_medis.pengadaan_barang pb ON pbd.id_pengadaan = pb.id_pengadaan
+                    WHERE pb.id_pengajuan = pjd.id_pengajuan
+                      AND pbd.id_barang = pjd.id_barang
+                  ) < pjd.qty_disetujui
+                  AND NOT EXISTS (
+                    SELECT 1
+                    FROM inventori_non_medis.pengajuan_barang_detail unmapped
+                    WHERE unmapped.id_pengajuan = pjd.id_pengajuan
+                      AND unmapped.id_barang IS NULL
+                      AND unmapped.qty_disetujui > 0
+                  )
+            ")->getResultArray();
+
+            $available = array_map(fn(array $r) => (string) $r['id_pengajuan'], $rows);
+
+            $options['id_pengajuan'] = array_values(
+                array_filter(
+                    $options['id_pengajuan'],
+                    fn(array $opt) => in_array($opt[1], $available, true),
+                )
+            );
+        }
+
+        return $options;
+    }
 }
