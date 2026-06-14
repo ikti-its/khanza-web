@@ -21,8 +21,6 @@ final class HasilLabPkDatabase extends DatabaseTemplate
                 'id_petugas_lab'        => T::FK_AUTO(),
                 'tgl_jam_hasil'         => T::DTIME(),
                 'id_kategori_usia'      => T::FK_AUTO(),
-                'nilai_hasil'           => T::TEXT(),
-                'keterangan_hasil'      => T::NOTE()->nullable(),
             ],
             'id_hasil_pk',
             [],

@@ -26,15 +26,13 @@ final class HasilLabPkController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_hasil_pk',           'ID Hasil PK'],
-                [SHOW, REQUIRED, I::INDEX, 'id_permintaan_lab',     'ID Permintaan Lab'],
-                [SHOW, REQUIRED, I::INDEX, 'id_permintaan_pk_item', 'ID Permintaan PK Item'],
-                [SHOW, REQUIRED, I::TEXT,  'id_dokter_pj',          'Kode Dokter PJ'],
-                [SHOW, REQUIRED, I::TEXT,  'id_petugas_lab',        'ID Petugas Lab'],
-                [SHOW, REQUIRED, I::DTIME, 'tgl_jam_hasil',         'Tanggal dan Jam Hasil'],
-                [SHOW, REQUIRED, I::INDEX, 'id_kategori_usia',      'ID Kategori Usia'],
-                [SHOW, REQUIRED, I::TEXT,  'nilai_hasil',           'Nilai Hasil'],
-                [SHOW, OPTIONAL, I::TEXT,  'keterangan_hasil',      'Keterangan Hasil'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_hasil_pk',           'ID Hasil PK'],
+                [HIDE, REQUIRED, I::INDEX,  'id_permintaan_lab',     'ID Permintaan Lab'],
+                [SHOW, REQUIRED, I::INDEX,  'id_permintaan_pk_item', 'ID Permintaan PK Item'],
+                [SHOW, REQUIRED, I::TEXT,   'id_dokter_pj',          'Kode Dokter PJ'],
+                [SHOW, REQUIRED, I::TEXT,   'id_petugas_lab',        'Petugas Lab'],
+                [SHOW, REQUIRED, I::DTIME,  'tgl_jam_hasil',         'Tanggal dan Jam Hasil'],
+                [SHOW, REQUIRED, I::SELECT, 'id_kategori_usia',      'Kategori Usia'],
             ],
         );
     }

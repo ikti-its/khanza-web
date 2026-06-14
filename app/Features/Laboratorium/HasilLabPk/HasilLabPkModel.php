@@ -13,10 +13,8 @@ final class HasilLabPkModel extends ModelTemplate
         parent::__construct(
             new HasilLabPkDatabase(),
             [
-                'id_hasil_pk'              => V::DEFAULT(),
-                'tgl_jam_hasil'            => V::DEFAULT(),
-                'nilai_hasil'              => V::DEFAULT(),
-                'keterangan_hasil'         => V::DEFAULT(),
+                'id_hasil_pk'      => V::DEFAULT(),
+                'tgl_jam_hasil'    => V::DEFAULT(),
             ],
             [
                 'id_permintaan_lab'     => ['nomor_reg'],
@@ -24,10 +22,10 @@ final class HasilLabPkModel extends ModelTemplate
                     'id_item_pemeriksaan' => ['kode_periksa', 'nama_item', 'tarif'],
                 ],
                 'id_dokter_pj'          => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_petugas_lab'        => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_kategori_usia'      => ['nama_kategori_usia'],
             ],
