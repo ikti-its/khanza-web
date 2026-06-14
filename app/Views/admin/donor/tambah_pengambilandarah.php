@@ -94,7 +94,7 @@
                     Nomor Bag<span class="text-red-600">*</span>
                 </label>
                 <input type="text" name="no_bag" value="<?= $baris['no_bag'] ?? '' ?>" placeholder="Masukkan nomor kantong..."
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                       maxlength="14" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Jenis Bag<span class="text-red-600">*</span>
