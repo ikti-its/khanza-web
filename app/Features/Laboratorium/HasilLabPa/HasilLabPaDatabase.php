@@ -46,7 +46,7 @@ final class HasilLabPaDatabase extends DatabaseTemplate
                 ],
                 [
                     ['id_permintaan_pa_item'],
-                    \App\Features\Laboratorium\RefItemPemeriksaanLab\RefItemPemeriksaanLabDatabase::class,
+                    \App\Features\Laboratorium\PermintaanLabPaItem\PermintaanLabPaItemDatabase::class,
                     ['id_permintaan_pa_item'],
                 ],
             ],
