@@ -19,10 +19,10 @@ final class RuanganController extends ControllerTemplate
             'Ruangan',
             [
                 A::READ,
-                A::CREATE,
-                A::AUDIT,
-                A::UPDATE,
-                A::DELETE,
+                // A::CREATE,
+                // A::AUDIT,
+                // A::UPDATE,
+                // A::DELETE,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_ruangan',      'ID Ruangan'],
@@ -31,5 +31,17 @@ final class RuanganController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,  'jenis_instalasi', 'Jenis Instalasi'],
             ],
         );
+    }
+
+    public function list()
+    {
+        $rows = $this->model->db
+            ->table('ruangan.ruangan')
+            ->select(['id_ruangan', 'kode_ruangan', 'nama_ruangan', 'jenis_instalasi'])
+            ->orderBy('nama_ruangan', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
     }
 }
