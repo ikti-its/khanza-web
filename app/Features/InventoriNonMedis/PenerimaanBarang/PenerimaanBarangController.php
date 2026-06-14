@@ -123,11 +123,18 @@ final class PenerimaanBarangController extends ControllerTemplate
     // validasi detail sebelum → Lengkap, buat transaksi stok masuk & update status pengadaan
     public function update(int|string $id): string|RedirectResponse
     {
-        $new_status     = (int) ($this->request->getPost('id_status_penerimaan_barang') ?? 0);
         $current        = $this->model->find((int) $id);
+        $current_status = is_array($current) ? (int) ($current['id_status_penerimaan_barang'] ?? 0) : 0;
+
+        if (in_array($current_status, [2, 3], true)) {
+            session()->setFlashdata('error', 'Penerimaan barang yang sudah dikonfirmasi atau dibatalkan tidak dapat diubah.');
+            return $this->home();
+        }
+
+        $new_status     = (int) ($this->request->getPost('id_status_penerimaan_barang') ?? 0);
         $is_new_lengkap = $new_status === 2
             && is_array($current)
-            && (int) ($current['id_status_penerimaan_barang'] ?? 0) !== 2;
+            && $current_status !== 2;
 
         if ($is_new_lengkap) {
             $error = $this->validate_penerimaan((int) $id);
