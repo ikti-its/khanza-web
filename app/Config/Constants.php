@@ -85,3 +85,7 @@ define('TABLE_ONLY', 2); // visible in table only, hidden in form
 define('FORM_ONLY',  3); // visible in form only, hidden in table
 define('REQUIRED', 1); // field is required
 define('OPTIONAL', 0); // field is optional
+
+define('ID_KATEGORI_PK', 1);
+define('ID_KATEGORI_PA', 2);
+define('ID_KATEGORI_MB', 3);
