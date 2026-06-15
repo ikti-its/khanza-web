@@ -184,6 +184,22 @@ final class PengambilanDarahController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            $tanggalInput = $dataPengambilan['tanggal_pengambilan'] ?? null;
+
+            if ($tanggalInput) {
+                $waktuInput    = strtotime($tanggalInput);
+                $waktuSekarang = time();
+                $batasMundur   = strtotime('-2 days');
+                
+                if ($waktuInput > $waktuSekarang) {
+                    throw new \RuntimeException("Gagal Menyimpan! Tanggal pengambilan darah tidak boleh melebihi waktu saat ini.");
+                }
+
+                if ($waktuInput < $batasMundur) {
+                    throw new \RuntimeException("Gagal Menyimpan! Batas keterlambatan input data donor untuk petugas maksimal adalah 2 hari ke belakang. Jika ingin menginput data Mobile Unit yang lebih lama, harap laporkan ke Supervisor / Kepala Ruangan.");
+                }
+            }
+
             $this->model->insert($dataPengambilan);
             $idPengambilan = $this->model->getInsertID();
 
@@ -438,6 +454,22 @@ final class PengambilanDarahController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            $tanggalInput = $dataPengambilan['tanggal_pengambilan'] ?? null;
+
+            if ($tanggalInput) {
+                $waktuInput    = strtotime($tanggalInput);
+                $waktuSekarang = time();
+                $batasMundur   = strtotime('-2 days'); 
+                
+                if ($waktuInput > $waktuSekarang) {
+                    throw new \RuntimeException("Gagal Memperbarui! Perubahan tanggal pengambilan darah tidak boleh melebihi waktu saat ini.");
+                }
+
+                if ($waktuInput < $batasMundur) {
+                    throw new \RuntimeException("Gagal Memperbarui! Batas keterlambatan pengubahan data donor untuk petugas maksimal adalah 2 hari ke belakang.");
+                }
+            }
+
             $this->model->update($id, $dataPengambilan);
 
             $modelMedisDonor = new \App\Features\LogistikUTD\MedisDonor\MedisDonorModel();
