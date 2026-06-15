@@ -36,7 +36,7 @@ final class PengadaanBarangController extends ControllerTemplate
                 [TABLE_ONLY, OPTIONAL, I::MONEY,    'total_harga',                 'Total Harga'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'total_harga',                 'Total Harga'],
                 [SHOW,       OPTIONAL, I::SELECT,   'id_suplier',                  'Suplier'],
-                [SHOW,       REQUIRED, I::DTIME,    'tanggal',                     'Tgl. Pengadaan'],
+                [SHOW,       REQUIRED, I::DTIME,    'tanggal',                     'Tanggal Pengadaan'],
                 [TABLE_ONLY, OPTIONAL, I::SELECT,   'id_status_pengadaan_barang',   'Status'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_status_pengadaan_barang', 'Status'],
                 [SHOW,       OPTIONAL, I::TEXT,     'catatan',                     'Catatan'],

@@ -29,7 +29,7 @@
 
                 <!-- Tgl Pengambilan | Metode Diperoleh -->
                 <div class="mb-5 sm:block md:flex items-center">
-                    <label class="<?= $labelLeft ?>">Tgl. Pengambilan Bahan</label>
+                    <label class="<?= $labelLeft ?>">Tanggal Pengambilan Bahan</label>
                     <input type="datetime-local" name="tgl_pengambilan_bahan"
                            value="<?= esc($baris['tgl_pengambilan_bahan'] ?? '') ?>"
                            class="<?= $inputClass ?> lg:w-1/4">
@@ -72,7 +72,7 @@
                            placeholder="Nama lab / RS sebelumnya..."
                            class="<?= $inputClass ?> lg:w-1/4">
 
-                    <label class="<?= $labelRight ?>">Tgl. Pemeriksaan Sebelumnya</label>
+                    <label class="<?= $labelRight ?>">Tanggal Pemeriksaan Sebelumnya</label>
                     <input type="date" name="riwayat_tgl_sebelumnya"
                            value="<?= esc($baris['riwayat_tgl_sebelumnya'] ?? '') ?>"
                            class="<?= $inputClass ?> lg:w-1/4">
