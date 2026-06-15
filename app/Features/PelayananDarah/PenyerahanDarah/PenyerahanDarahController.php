@@ -267,4 +267,19 @@ final class PenyerahanDarahController extends ControllerTemplate
 
         return redirect()->to($this->get_uri_path() . '/data');
     }
+
+    /**
+     * Endpoint POST: Memproses perubahan status pembayaran dari tombol aksi bayar
+     */
+    public function bayar(int|string $id)
+    {
+        $idStatusSudahBayar = 2;
+
+        $this->model->update($id, [
+            'id_status_pembayaran' => $idStatusSudahBayar
+        ]);
+
+        session()->setFlashdata('success', 'Pembayaran berhasil dikonfirmasi lunas.');
+        return redirect()->to($this->get_uri_path() . '/data');
+    }
 }

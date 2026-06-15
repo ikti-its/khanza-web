@@ -17,4 +17,5 @@ enum ActionType: string
     case SAMPEL      = 'sampel';
     case JADWALKAN   = 'jadwalkan';
     case BACK        = 'kembali';
+    case PAY         = 'bayar';
 }

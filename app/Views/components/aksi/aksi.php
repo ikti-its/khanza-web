@@ -10,7 +10,7 @@
             $child_url = $child_link['path'] . '/data?' . $child_link['fk'] . '=' . urlencode((string) $id);
             echo '<div class="px-3 py-1.5"><a href="' . $child_url . '" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:text-blue-400">Detail</a></div>';
         }
-        $aksi_list = ['notif', 'tambah', 'audit', 'cetak', 'tindakan', 'detail', 'detail2', 'ubah', 'hapus', 'validasi', 'ambulans', 'pilih', 'pisah', 'uji', 'registrasi', 'sampel', 'jadwalkan', 'kembali'];
+        $aksi_list = ['notif', 'tambah', 'audit', 'cetak', 'tindakan', 'detail', 'detail2', 'ubah', 'hapus', 'validasi', 'ambulans', 'pilih', 'pisah', 'uji', 'registrasi', 'sampel', 'jadwalkan', 'kembali', 'bayar'];
         if (ENVIRONMENT === 'development') {
             foreach ($aksi as $key => $value) {
                 if (!in_array($key, $aksi_list)) {
@@ -67,6 +67,9 @@
         }
         if (isset($aksi['cetak'])  && $aksi['cetak']  === true) {
             echo view('components/aksi/cetak',  $data);
+        }
+        if (isset($aksi['bayar']) && $aksi['bayar'] === true) {
+            echo view('components/aksi/bayar', $data);
         }
         if (isset($aksi['detail']) && $aksi['detail'] === true) {
             echo view('components/aksi/detail', $data);

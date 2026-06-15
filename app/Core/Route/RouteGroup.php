@@ -70,6 +70,7 @@ class RouteGroup
                     $routes->get('cetak/(:segment)',      "\\$f::print/$1", $filter);
                     $routes->get('modal/list',            "\\$f::list", $filter);
                     $routes->post('sampel/(:segment)',    "\\$f::sampel/$1", $filter);
+                    $routes->post('bayar/(:segment)',     "\\$f::bayar/$1", $filter);
                 });
             }
         }
