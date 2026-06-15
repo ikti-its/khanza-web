@@ -6,6 +6,7 @@ namespace App\Features\PelayananDarah\PenyerahanDarah;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class PenyerahanDarahController extends ControllerTemplate
 {
@@ -22,24 +23,248 @@ final class PenyerahanDarahController extends ControllerTemplate
                 A::READ,
                 A::CREATE,
                 A::AUDIT,
-                A::UPDATE,
+                // A::UPDATE,
                 A::DELETE,
+                A::PAY,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_penyerahan',        'ID Penyerahan'],
                 [SHOW, REQUIRED, I::TEXT,   'no_penyerahan',        'Nomor Penyerahan'],
                 [SHOW, REQUIRED, I::INDEX,  'id_permintaan',        'ID Permintaan'],
                 [SHOW, REQUIRED, I::DTIME,  'tanggal_penyerahan',   'Tanggal Penyerahan'],
-                [SHOW, REQUIRED, I::INDEX,  'id_shift',             'ID Shift'],
+                [SHOW, REQUIRED, I::SELECT, 'id_shift',             'Shift'],
                 [SHOW, REQUIRED, I::INDEX,  'id_petugas_cross',     'ID Petugas Crossmatch'],
                 [SHOW, REQUIRED, I::TEXT,   'keterangan',           'Keterangan'],
-                [SHOW, REQUIRED, I::INDEX,  'id_rekening',          'ID Rekening'],
+                [SHOW, REQUIRED, I::SELECT, 'id_rekening',          'Rekening'],
                 [SHOW, REQUIRED, I::NAME,   'pengambil_darah',      'Pengambil Darah'],
                 [SHOW, REQUIRED, I::TEXT,   'alamat_pengambil',     'Alamat Pengambil'],
                 [SHOW, REQUIRED, I::INDEX,  'id_penanggung_jawab',  'ID Penanggung Jawab'],
                 [SHOW, REQUIRED, I::FLOAT,  'besar_ppn',            'PPN (%)'],
-                [SHOW, REQUIRED, I::SELECT, 'id_status_pembayaran', 'ID Status Pembayaran'],
+                [SHOW, REQUIRED, I::SELECT, 'id_status_pembayaran', 'Status Pembayaran'],
             ],
         );
+    }
+
+    /**
+     * OVERRIDE: Menampilkan Form Penyerahan Darah
+     */
+    #[\Override]
+    public function create_page(): string
+    {
+        $breadcrumbs = [
+            ['title' => 'Tambah', 'icon' => 'tambah']
+        ];
+
+        $konfigPenyerahan = $this->get_fields_with_options(false, true);
+
+        $controllerPermintaan = new \App\Features\PelayananDarah\PermintaanDarah\PermintaanDarahController();
+        $konfigPermintaan = $controllerPermintaan->fields;
+
+        $modelBhpMedis    = new \App\Features\LogistikUTD\PengambilanMedis\PengambilanMedisModel();
+        $modelBhpNonMedis = new \App\Features\LogistikUTD\PengambilanPenunjang\PengambilanPenunjangModel();
+
+        $rawMedis    = $modelBhpMedis->get_katalog_dan_stok_ruangan();
+        $rawPenunjang = $modelBhpNonMedis->get_katalog_dan_stok_ruangan();
+
+        $masterBhpMedis = [];
+        foreach ($rawMedis as $row) {
+            $sisaStok = (int)$row['total_masuk'] - (int)$row['total_terpakai_donor'] - (int)$row['total_terpakai_pemisahan'] - (int)$row['total_terpakai_penyerahan'] - (int)$row['total_rusak'];
+            
+            if ((int)$row['total_masuk'] > 0) {
+                $masterBhpMedis[] = [
+                    'id_barang'   => $row['id_barang'],
+                    'nama_barang' => $row['nama_barang'],
+                    'harga'       => $row['harga'],
+                    'stok'        => $sisaStok
+                ];
+            }
+        }
+
+        $masterBhpNonMedis = [];
+        foreach ($rawPenunjang as $row) {
+            $sisaStokNon = (int)$row['total_masuk'] - (int)$row['total_terpakai_donor'] - (int)$row['total_terpakai_pemisahan'] - (int)$row['total_terpakai_penyerahan'] - (int)$row['total_rusak'];
+            
+            if ((int)$row['total_masuk'] > 0) {
+                $masterBhpNonMedis[] = [
+                    'id_barang'   => $row['id_barang'],
+                    'nama_barang' => $row['nama_barang'],
+                    'harga'       => $row['harga'],
+                    'stok'        => $sisaStokNon
+                ];
+            }
+        }
+
+        $mockBaris = [];
+        $konfigGabungan = [];
+
+        $tahunSekarang = date('Y');
+        $bulanSekarang = date('m');
+
+        $jumlahPenyerahanBulanIni = $this->model->db->table('pelayanan_darah.penyerahan_darah')
+            ->where('EXTRACT(YEAR FROM tanggal_penyerahan)', $tahunSekarang)
+            ->where('EXTRACT(MONTH FROM tanggal_penyerahan)', $bulanSekarang)
+            ->countAllResults();
+
+        $nextUrutan = $jumlahPenyerahanBulanIni + 1;
+        
+        $stringUrutan = str_pad((string)$nextUrutan, 5, '0', STR_PAD_LEFT);
+        
+        $nomorPenyerahanOtomatis = "{$tahunSekarang}-{$bulanSekarang}-PD{$stringUrutan}";
+
+        foreach ($konfigPenyerahan as $fieldPenyerahan) {
+            $columnPenyerahan = $fieldPenyerahan[2];
+
+            if ($columnPenyerahan === 'id_penyerahan') {
+                continue;
+            }
+
+            $isTanggal = ($fieldPenyerahan[3] === 'tanggal' || str_contains($columnPenyerahan, 'tanggal') || $fieldPenyerahan[3] === 'dtime');
+            $mockBaris[$columnPenyerahan] = $isTanggal ? date('Y-m-d\TH:i') : '';
+
+            if ($columnPenyerahan === 'besar_ppn') {
+                $mockBaris[$columnPenyerahan] = '11.00';
+            }
+
+            if ($columnPenyerahan === 'no_penyerahan') {
+                $mockBaris[$columnPenyerahan] = $nomorPenyerahanOtomatis;
+                $fieldPenyerahan[3] = 'indeks';
+            }
+
+            if ($columnPenyerahan === 'id_permintaan') {
+                foreach ($konfigPermintaan as $fieldPermintaan) {
+                    if ($fieldPermintaan[2] === 'no_permintaan') {
+                        $mockBaris['no_permintaan'] = '';
+                        $konfigGabungan[] = $fieldPermintaan;
+                        break;
+                    }
+                }
+                continue;
+            }
+
+            $konfigGabungan[] = $fieldPenyerahan;
+        }
+
+        return view('admin/pelayanandarah/tambah_penyerahandarah', [
+            'judul'             => 'Tambah ' . $this->title,
+            'breadcrumbs'       => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'        => $this->get_uri_path(),
+            'kolom_id'          => $this->model->primaryKey,
+            'konfig'            => $konfigGabungan,
+            'baris'             => $mockBaris,
+            'bhp_medis_options' => $masterBhpMedis,
+            'bhp_non_options'   => $masterBhpNonMedis,
+            'form_action'       => '/submittambah',
+        ]);
+    }
+
+    /**
+     * OVERRIDE: Memproses simpan data penyerahan darah & penggunaan BHP
+     */
+    #[\Override]
+    final public function create(): string|RedirectResponse
+    {
+        $rawPost = $this->request->getPost();
+
+        $stokDarahTerpilih = $this->request->getPost('id_stok_darah');
+
+        $bhpMedis          = $this->request->getPost('id_medis_donor');
+        $hargaMedis        = $this->request->getPost('harga_medis');
+        $bhpNonMedis       = $this->request->getPost('id_penunjang_donor');
+        $hargaNonMedis     = $this->request->getPost('harga_penunjang');
+
+        $dataPenyerahan = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataPenyerahan[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $this->model->insert($dataPenyerahan);
+            $idPenyerahan = $this->model->getInsertID();
+
+            if (!empty($stokDarahTerpilih) && is_array($stokDarahTerpilih)) {
+                $modelDetail     = new \App\Features\PelayananDarah\PenyerahanDarahDetail\PenyerahanDarahDetailModel();
+                $modelStokDarah  = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
+                $modelKomponen   = new \App\Features\Darah\KomponenDarah\KomponenDarahModel();
+
+                foreach ($stokDarahTerpilih as $idStokDarah) {
+                    if (empty($idStokDarah)) continue;
+
+                    $stok = $modelStokDarah->find($idStokDarah);
+                    if (!$stok) continue;
+
+                    $masterKomp = $modelKomponen->find($stok['id_komponen']);
+                    
+                    $jasaSarana = (float)($masterKomp['jasa_sarana'] ?? 0);
+                    $paketBhp   = (float)($masterKomp['paket_bhp'] ?? 0);
+                    $kso        = (float)($masterKomp['kso'] ?? 0);
+                    $manajemen  = (float)($masterKomp['manajemen'] ?? 0);
+
+                    $modelDetail->insert([
+                        'id_penyerahan' => $idPenyerahan,
+                        'id_stok_darah' => $idStokDarah,
+                        'jasa_sarana'   => $jasaSarana,
+                        'paket_bhp'     => $paketBhp,
+                        'kso'           => $kso,
+                        'manajemen'     => $manajemen,
+                    ]);
+
+                    $modelStokDarah->update($idStokDarah, [
+                        'id_status_stok' => 4 
+                    ]);
+                }
+            }
+
+            if (!empty($bhpMedis) && is_array($bhpMedis)) {
+                $modelMedisPenyerahan = new \App\Features\LogistikUTD\MedisPenyerahan\MedisPenyerahanModel(); // Sesuai penamaan skema timmu
+
+                foreach ($bhpMedis as $idBarang => $jumlah) {
+                    if ((int)$jumlah <= 0) continue;
+
+                    $modelMedisPenyerahan->insert([
+                        'id_penyerahan' => $idPenyerahan,
+                        'id_barang'     => $idBarang,
+                        'jumlah'        => (int)$jumlah,
+                        'harga'         => (float)($hargaMedis[$idBarang] ?? 0),
+                    ]);
+                }
+            }
+
+            if (!empty($bhpNonMedis) && is_array($bhpNonMedis)) {
+                $modelPenunjangPenyerahan = new \App\Features\LogistikUTD\PenunjangPenyerahan\PenunjangPenyerahanModel(); // Sesuai penamaan skema timmu
+
+                foreach ($bhpNonMedis as $idBarang => $jumlah) {
+                    if ((int)$jumlah <= 0) continue;
+
+                    $modelPenunjangPenyerahan->insert([
+                        'id_penyerahan' => $idPenyerahan,
+                        'id_barang'     => $idBarang,
+                        'jumlah'        => (int)$jumlah,
+                        'harga'         => (float)($hargaNonMedis[$idBarang] ?? 0),
+                    ]);
+                }
+            }
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException("Gagal menyimpan data penyerahan darah dan penggunaan BHP.");
+            }
+
+            session()->setFlashdata('success', 'Data penyerahan darah dan penggunaan BHP berhasil disimpan.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 }
