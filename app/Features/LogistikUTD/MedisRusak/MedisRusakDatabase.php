@@ -15,9 +15,6 @@ final class MedisRusakDatabase extends DatabaseTemplate
             'medis_rusak',
             [
                 'id_medis_rusak' => T::ID(10_000_000),
-                'id_barang'      => T::FK_AUTO(),
-                'jumlah'         => T::QTY(1, 999),
-                'harga_beli'     => T::MONEY(),
                 'id_petugas'     => T::FK_AUTO(),
                 'tanggal_rusak'  => T::DTIME(),
                 'keterangan'     => T::NOTE(),
@@ -25,11 +22,6 @@ final class MedisRusakDatabase extends DatabaseTemplate
             'id_medis_rusak',
             [],
             [
-                [
-                    'id_barang',
-                    \App\Features\InventoriMedis\DataBarang\DataBarangDatabase::class,
-                    'id_barang',
-                ],
                 [
                     'id_petugas',
                     \App\Features\Role\Petugas\PetugasDatabase::class,

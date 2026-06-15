@@ -14,13 +14,10 @@ final class MedisRusakModel extends ModelTemplate
             new MedisRusakDatabase(),
             [
                 'id_medis_rusak' => V::DEFAULT(),
-                'jumlah'         => V::DEFAULT(),
-                'harga_beli'     => V::DEFAULT(),
                 'tanggal_rusak'  => V::DEFAULT(),
                 'keterangan'     => V::DEFAULT(),
             ],
             [
-                'id_barang'  => ['kode_barang', 'nama'],
                 'id_petugas' => [
                     'id_orang' => ['nama']
                 ],

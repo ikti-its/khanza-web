@@ -19,6 +19,7 @@ final class LogistikUTDRoutes extends RouteTemplate
                 \App\Features\LogistikUTD\MedisPenyerahan\MedisPenyerahanController::class,
                 \App\Features\LogistikUTD\PenunjangPenyerahan\PenunjangPenyerahanController::class,
                 \App\Features\LogistikUTD\MedisRusak\MedisRusakController::class,
+                \App\Features\LogistikUTD\MedisRusakDetail\MedisRusakDetailController::class,
                 \App\Features\LogistikUTD\PenunjangRusak\PenunjangRusakController::class,
                 \App\Features\LogistikUTD\PengambilanMedis\PengambilanMedisController::class,
                 \App\Features\LogistikUTD\PengambilanPenunjang\PengambilanPenunjangController::class,
