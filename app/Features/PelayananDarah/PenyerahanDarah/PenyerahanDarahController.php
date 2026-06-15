@@ -269,6 +269,67 @@ final class PenyerahanDarahController extends ControllerTemplate
     }
 
     /**
+     * OVERRIDE: Menghapus data penyerahan darah & penggunaan BHP
+     */
+    #[\Override]
+    final public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->home();
+
+        $dataPenyerahan = $this->model->find($id);
+        if (!$dataPenyerahan) {
+            session()->setFlashdata('error', 'Gagal menghapus. Data penyerahan darah tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $modelDetail              = new \App\Features\PelayananDarah\PenyerahanDarahDetail\PenyerahanDarahDetailModel();
+            $modelStokDarah           = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
+            $modelMedisPenyerahan     = new \App\Features\LogistikUTD\MedisPenyerahan\MedisPenyerahanModel();
+            $modelPenunjangPenyerahan = new \App\Features\LogistikUTD\PenunjangPenyerahan\PenunjangPenyerahanModel();
+
+            $daftarDetailTersimpan = $modelDetail->db->table($modelDetail->table)
+                ->where('id_penyerahan', $id)
+                ->get()
+                ->getResultArray();
+            
+            if (!empty($daftarDetailTersimpan) && is_array($daftarDetailTersimpan)) {
+                foreach ($daftarDetailTersimpan as $detail) {
+                    $modelStokDarah->builder()
+                        ->where($modelStokDarah->primaryKey, $detail['id_stok_darah'])
+                        ->update(['id_status_stok' => 2]);
+                }
+            }
+
+            $modelMedisPenyerahan->where('id_penyerahan', $id)->delete();
+            $modelPenunjangPenyerahan->where('id_penyerahan', $id)->delete();
+
+            $modelDetail->where('id_penyerahan', $id)->delete();
+
+            $this->model->delete($id);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus data penyerahan darah dan penggunaan BHP.');
+            }
+
+            session()->setFlashdata('success', 'Data penyerahan darah dan penggunaan BHP berhasil dihapus.');
+
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $this->friendly_db_error($e));
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $e->getMessage());
+        }
+
+        return $this->home();
+    }
+
+    /**
      * Endpoint POST: Memproses perubahan status pembayaran dari tombol aksi bayar
      */
     public function bayar(int|string $id)
