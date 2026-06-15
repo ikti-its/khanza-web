@@ -29,7 +29,6 @@ final class JadwalOperasiController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX, 'id_jadwal',          'ID Jadwal'],
                 [SHOW, REQUIRED, I::INDEX, 'id_permintaan',      'Permintaan Operasi'],
                 [SHOW, REQUIRED, I::INDEX, 'id_ruangan',         'Ruangan'],
-                [SHOW, REQUIRED, I::INDEX, 'id_tindakan',        'Tindakan'],
                 [SHOW, REQUIRED, I::INDEX, 'id_dokter_bedah',    'Dokter Bedah'],
                 [SHOW, REQUIRED, I::INDEX, 'id_dokter_anestesi', 'Dokter Anestesi'],
                 [SHOW, REQUIRED, I::DATE,  'tanggal',            'Tanggal'],

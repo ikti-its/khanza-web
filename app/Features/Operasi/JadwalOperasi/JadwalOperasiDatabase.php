@@ -17,7 +17,6 @@ final class JadwalOperasiDatabase extends DatabaseTemplate
                 'id_jadwal'            => T::ID(300_000_000),
                 'id_permintaan'        => T::FK_AUTO(),
                 'id_ruangan'           => T::FK_AUTO()->nullable(),
-                'id_tindakan'          => T::FK_AUTO()->nullable(),
                 'id_dokter_bedah'      => T::FK_AUTO()->nullable(),
                 'id_dokter_anestesi'   => T::FK_AUTO()->nullable(),
                 'tanggal'              => T::DATE()->nullable(),
@@ -37,11 +36,6 @@ final class JadwalOperasiDatabase extends DatabaseTemplate
                     ['id_ruangan'],
                     \App\Features\Ruangan\RuanganDatabase::class,
                     ['id_ruangan'],
-                ],
-                [
-                    ['id_tindakan'],
-                    \App\Features\Operasi\RefTindakanOperasi\RefTindakanOperasiDatabase::class,
-                    ['id_tindakan'],
                 ],
                 [
                     ['id_dokter_bedah'],
