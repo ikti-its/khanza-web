@@ -39,7 +39,7 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'harga',            'Harga/Satuan'],
                 [TABLE_ONLY, OPTIONAL, I::NUMBER,   'qty',              'Qty Diajukan'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'qty',              'Qty Diajukan'],
-                [SHOW,       OPTIONAL, I::NUMBER,   'qty_disetujui',    'Qty Disetujui'],
+                [SHOW,       REQUIRED, I::NUMBER,   'qty_disetujui',    'Qty Disetujui'],
                 [TABLE_ONLY, OPTIONAL, I::MONEY,    'subtotal',         'Subtotal'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'subtotal',         'Subtotal'],
             ],

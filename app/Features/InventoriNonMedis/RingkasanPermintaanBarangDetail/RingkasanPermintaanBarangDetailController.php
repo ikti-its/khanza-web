@@ -36,7 +36,7 @@ final class RingkasanPermintaanBarangDetailController extends ControllerTemplate
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_barang_baru', 'Nama Barang Baru'],
                 [TABLE_ONLY, REQUIRED, I::NUMBER,   'qty',            'Qty Diminta'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'qty',            'Qty Diminta'],
-                [SHOW,       OPTIONAL, I::NUMBER,   'qty_disetujui',  'Qty Disetujui'],
+                [SHOW,       REQUIRED, I::NUMBER,   'qty_disetujui',  'Qty Disetujui'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,     'catatan',        'Catatan'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'catatan',        'Catatan'],
             ],
