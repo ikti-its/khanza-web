@@ -33,7 +33,7 @@ final class PenerimaanBarangController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX,    'id_penerimaan',               'ID'],
                 [SHOW, OPTIONAL, I::READONLY, 'no_penerimaan',               'No. Penerimaan'],
                 [SHOW, REQUIRED, I::SELECT,   'id_pengadaan',                'No. Pengadaan'],
-                [SHOW, REQUIRED, I::DTIME,    'tanggal',                     'Tanggal Terima'],
+                [SHOW, REQUIRED, I::DTIME,    'tanggal',                     'Tanggal Penerimaan'],
                 [SHOW, OPTIONAL, I::SELECT,   'petugas',                     'Penerima'],
                 [SHOW, REQUIRED, I::SELECT,   'id_status_penerimaan_barang', 'Status'],
                 [SHOW, OPTIONAL, I::READONLY, 'no_masuk',                    'No. Masuk'],

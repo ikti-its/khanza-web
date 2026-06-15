@@ -35,7 +35,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
                 [SHOW, REQUIRED, I::SELECT,   'id_status_pengajuan_barang', 'Status'],
                 [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal_diproses',          'Tanggal Diproses'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',          'Tanggal Diproses'],
-                [SHOW, OPTIONAL, I::SELECT,   'atasan_logistik',            'Pengelola'],
+                [SHOW, REQUIRED, I::SELECT,   'atasan_logistik',            'Pengelola'],
             ],
             child_path: '/inventori-non-medis/ringkasan-pengajuan-barang-detail',
             child_fk:   'id_pengajuan',
