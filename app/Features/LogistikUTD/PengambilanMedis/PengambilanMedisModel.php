@@ -36,7 +36,7 @@ final class PengambilanMedisModel extends ModelTemplate
         $tabelMasterBarang = 'inventori_medis.data_barang';
         
         return $this->db->table($tabelMasterBarang)
-            ->select($tabelMasterBarang . '.id_barang, ' . $tabelMasterBarang . '.nama as nama_barang')
+            ->select($tabelMasterBarang . '.id_barang, ' . $tabelMasterBarang . '.kode_barang, ' . $tabelMasterBarang . '.nama as nama_barang')
             ->select('(SELECT pm.harga_beli 
                   FROM logistik_utd.pengambilan_medis pm 
                   WHERE pm.id_barang = ' . $tabelMasterBarang . '.id_barang 
@@ -59,7 +59,7 @@ final class PengambilanMedisModel extends ModelTemplate
                   WHERE my.id_barang = ' . $tabelMasterBarang . '.id_barang) AS total_terpakai_penyerahan')
             
             ->select('(SELECT COALESCE(SUM(mr.jumlah), 0)
-                  FROM logistik_utd.medis_rusak mr
+                  FROM logistik_utd.medis_rusak_detail mr
                   WHERE mr.id_barang = ' . $tabelMasterBarang . '.id_barang) AS total_rusak')
             ->get()
             ->getResultArray();
