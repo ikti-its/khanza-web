@@ -1,5 +1,4 @@
 id_barang,kode_barang,nama_barang,id_satuan,id_jenis_barang,stok,stok_minimum,harga_satuan
-0,-,-,0,0,0,0,0
 1,ATK-001,Pulpen Hitam,6,1,30,50,5000
 2,ATK-002,Kertas A4,38,1,30,150,45000
 3,KBR-001,Cairan Pembersih Lantai,4,2,30,5,25000
