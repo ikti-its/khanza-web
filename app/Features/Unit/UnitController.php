@@ -1,22 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\Poliklinik;
+namespace App\Features\Unit;
 
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 
-final class PoliklinikController extends ControllerTemplate
+final class UnitController extends ControllerTemplate
 {
     public function __construct()
     {
         parent::__construct(
-            new PoliklinikModel(),
+            new UnitModel(),
             [
-                ['Poliklinik', 'poliklinik'],
+                ['Unit', 'unit'],
             ],
-            'Poliklinik',
+            'Unit',
             [
                 A::READ,
                 A::CREATE,
@@ -24,9 +24,9 @@ final class PoliklinikController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_poliklinik',         'ID Poliklinik'],
-                [SHOW, REQUIRED, I::TEXT,  'kode_poliklinik',       'Kode Poliklinik'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_poliklinik',       'Nama Poliklinik'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_unit',         'ID Unit'],
+                [SHOW, REQUIRED, I::TEXT,  'kode_unit',       'Kode Unit'],
+                [SHOW, REQUIRED, I::TEXT,  'nama_unit',       'Nama Unit'],
                 [SHOW, REQUIRED, I::MONEY, 'biaya_registrasi_baru', 'Biaya Registrasi Baru'],
                 [SHOW, REQUIRED, I::MONEY, 'biaya_registrasi_lama', 'Biaya Registrasi Lama'],
             ],

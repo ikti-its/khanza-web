@@ -20,3 +20,4 @@ id_poliklinik,kode_poliklinik,nama_poliklinik,biaya_registrasi_baru,biaya_regist
 19,PL-0019,Poliklinik Bedah Thoraks Kardiak dan Vaskular,150000,100000
 20,PL-0020,Poliklinik Rehabilitasi Medik,100000,75000
 21,PL-0021,Poliklinik Kedokteran Jiwa Anak dan Remaja,100000,75000
+22,UGD,Unit Gawat Darurat,150000,150000,
