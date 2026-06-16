@@ -34,7 +34,7 @@ final class AllRoutes extends RouteGroup
                 \App\Features\Laboratorium\LaboratoriumRoutes::class,
                 \App\Features\Lokasi\LokasiRoutes::class,
                 \App\Features\Ruangan\RuanganRoutes::class,
-                \App\Features\Poliklinik\PoliklinikRoutes::class,
+                \App\Features\Unit\UnitRoutes::class,
             ]
         );
     }
