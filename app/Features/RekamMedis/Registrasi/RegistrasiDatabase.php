@@ -22,7 +22,7 @@ final class RegistrasiDatabase extends DatabaseTemplate
                 'id_pasien'         => T::FK_AUTO(),
                 'id_pj_pasien'      => T::FK_AUTO(),
                 'id_alamat_pj'      => T::FK_AUTO(),
-                'poliklinik'        => T::FK_AUTO(),
+                'unit'              => T::FK_AUTO(),
                 'hubungan_pj'       => T::NAME(50),
                 'no_telepon'        => T::NAME(20)->nullable(),
                 'biaya_registrasi'  => T::MONEY(),
@@ -56,9 +56,9 @@ final class RegistrasiDatabase extends DatabaseTemplate
                     ['id_alamat']
                 ],
                 [
-                    ['poliklinik'],
-                    \App\Features\Poliklinik\PoliklinikDatabase::class,
-                    ['id_poliklinik'],
+                    ['unit'],
+                    \App\Features\Unit\UnitDatabase::class,
+                    ['id_unit'],
                 ],
             ],
             false,

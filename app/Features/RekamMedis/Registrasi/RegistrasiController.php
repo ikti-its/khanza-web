@@ -32,7 +32,7 @@ final class RegistrasiController extends ControllerTemplate
                 [SHOW, REQUIRED, I::DTIME,  'datetime',          'Tanggal & Jam'],
                 [SHOW, REQUIRED, I::SELECT, 'id_dokter',         'Dokter'],
                 [SHOW, REQUIRED, I::SELECT, 'id_pasien',         'Pasien'],
-                [SHOW, REQUIRED, I::SELECT, 'id_poliklinik',     'Poliklinik'],
+                [SHOW, REQUIRED, I::SELECT, 'id_unit',           'Unit'],
                 [SHOW, REQUIRED, I::SELECT, 'id_pj_pasien',      'Penanggung Jawab'],
                 [SHOW, REQUIRED, I::SELECT, 'id_alamat_pj',      'Alamat PJ'],
                 [SHOW, REQUIRED, I::TEXT,   'hubungan_pj',       'Hubungan PJ'],

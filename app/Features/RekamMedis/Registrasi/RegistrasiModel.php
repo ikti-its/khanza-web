@@ -38,7 +38,7 @@ final class RegistrasiModel extends ModelTemplate
                 ],
                 'id_pj_pasien'  => ['nama'],
                 'id_alamat_pj'  => ['alamat_lengkap'],
-                'id_poliklinik' => ['kode_poliklinik', 'nama_poliklinik'],
+                'id_unit'       => ['kode_unit', 'nama_unit'],
             ],
         );
     }
