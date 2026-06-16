@@ -18,7 +18,7 @@ final class ChecklistPreOperasiPenunjangDatabase extends DatabaseTemplate
                 'id_checklist'       => T::FK_AUTO(),
                 'id_jenis_penunjang' => T::FK_AUTO(),
                 'id_ketersediaan'    => T::FK_AUTO(),
-                'keterangan'         => T::NOTE(),
+                'keterangan'         => T::NOTE()->nullable(),
             ],
             'id_penunjang',
             [],
