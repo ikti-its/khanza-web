@@ -24,7 +24,6 @@ final class SkorAldretteDatabase extends DatabaseTemplate
                 'skor_tekanan_darah' => T::FK_AUTO(),
                 'skor_kesadaran'     => T::FK_AUTO(),
                 'skor_warna_kulit'   => T::FK_AUTO(),
-                // 'total_skor'          => T::SCORE(),
                 'is_boleh_pindah' => T::BOOL(),
                 'catatan_keluar'  => T::NOTE(),
                 'instruksi_rr'    => T::NOTE(),

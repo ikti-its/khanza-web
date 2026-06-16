@@ -22,7 +22,6 @@ final class SkorStewardDatabase extends DatabaseTemplate
                 'skor_kesadaran'     => T::FK_AUTO(),
                 'skor_respirasi'     => T::FK_AUTO(),
                 'skor_motorik'       => T::FK_AUTO(),
-                // 'total_skor'         => T::SCORE(),
                 'is_boleh_pindah' => T::BOOL(),
                 'catatan_keluar'  => T::TEXT(),
                 'instruksi_rr'    => T::TEXT(),
