@@ -1,2 +1,4 @@
-﻿nomor_reg,nomor_rawat,tanggal,jam,kode_dokter,dokter_dituju,nomor_rm,nama_pasien,jenis_kelamin,poliklinik,penanggung_jawab,alamat_pj,hubungan_pj,biaya_registrasi,jenis_bayar,status_rawat,status_bayar
-UGD202604220012,RW1001,2025-04-12,20:20:20,D001,Dr. Ahmad,RM1001,Aziz,L,Poli Jantung,Jaya,Keputih,Diri Sendiri,100000,BPJS,Belum,Belum Bayar
+﻿id_registrasi,nomor_reg,nomor_rawat,tanggal_kunjungan,id_dokter,id_pasien,id_pj_pasien,alamat_pj,hubungan_pj,biaya_registrasi,jenis_bayar,status_rawat,status_bayar
+1,UGD202604229675,202604225432198,2026-04-22 20:20:20,3,5,12,Keputih,Istri,150000,BPJS,Belum,1
+2,UGD202606028742,202606024679245,2026-06-02 09:15:00,4,6,21,Gedung Budi,Anak,150000,Tunai,Rawat,1
+3,UGD202606165329,202606168935790,2025-06-16 11:30:00,7,7,23,Jl. Sudirman,Suami,150000,Tunai,Belum,1
