@@ -34,7 +34,7 @@ final class PengambilanPenunjangModel extends ModelTemplate
         $tabelMasterBarang = 'inventori_non_medis.barang'; 
 
         return $this->db->table($tabelMasterBarang)
-            ->select($tabelMasterBarang . '.id_barang, ' . $tabelMasterBarang . '.nama_barang')
+            ->select($tabelMasterBarang . '.id_barang, ' . $tabelMasterBarang . '.kode_barang, ' . $tabelMasterBarang . '.nama_barang')
             ->select('(SELECT pp.harga_beli 
                   FROM logistik_utd.pengambilan_penunjang pp 
                   WHERE pp.id_barang = ' . $tabelMasterBarang . '.id_barang 
@@ -57,7 +57,7 @@ final class PengambilanPenunjangModel extends ModelTemplate
                   WHERE py.id_barang = ' . $tabelMasterBarang . '.id_barang) AS total_terpakai_penyerahan')
             
             ->select('(SELECT COALESCE(SUM(pr.jumlah), 0) 
-                  FROM logistik_utd.penunjang_rusak pr
+                  FROM logistik_utd.penunjang_rusak_detail pr
                   WHERE pr.id_barang = ' . $tabelMasterBarang . '.id_barang) AS total_rusak')
             ->get()
             ->getResultArray();
