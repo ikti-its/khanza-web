@@ -1,4 +1,4 @@
-id_poliklinik,kode_poliklinik,nama_poliklinik,biaya_registrasi_baru,biaya_registrasi_lama
+id_unit,kode_unit,nama_unit,biaya_registrasi_baru,biaya_registrasi_lama
 1,PL-0001,Poliklinik Umum,50000,25000
 2,PL-0002,Poliklinik Gigi dan Mulut,75000,50000
 3,PL-0003,Poliklinik Penyakit Dalam,100000,75000
