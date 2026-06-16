@@ -42,4 +42,37 @@ final class RegistrasiController extends ControllerTemplate
             ],
         );
     }
+
+    /**
+     * Menampilkan data modal registrasi kunjungan UGD
+     */
+    public function list()
+    {
+        $tabel = $this->model->table;
+
+        $data = $this->model->builder($tabel . ' r')
+            ->select([
+                'r.id_registrasi',
+                'r.nomor_reg',
+                'r.nomor_rawat',
+                'r.tanggal_kunjungan',
+                'r.id_pasien',
+                'r.id_dokter',
+                'p.nomor_rm',
+                'o.nama AS nama_pasien',
+                'o.tanggal_lahir',
+                'od.nama AS nama_dokter'
+            ])
+            ->join('role.pasien p',   'p.id_pasien = r.id_pasien', 'inner')
+            ->join('person.orang o',  'o.id_orang  = p.id_orang', 'inner')
+            ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang',  'left')
+            ->orderBy('r.tanggal_kunjungan', 'DESC')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON([
+            'data' => $data
+        ]);
+    }
 }
