@@ -1,13 +1,21 @@
 ﻿id_dokter,id_orang,kode_dokter,spesialis
 1,10,DKT-0001,Spesialis Bedah
-2,11,DKT-0002,Spesialis Anak
-3,1,DKT-0003,Spesialis Jantung
-4,4,DKT-0004,Spesialis Penyakit Dalam
+2,18,DKT-0002,Spesialis Anak
+3,3,DKT-0003,Spesialis Patologi Klinik
+4,25,DKT-0004,Spesialis Penyakit Dalam
 5,16,DKT-0005,Spesialis Mata
 6,17,DKT-0006,Spesialis Saraf
-7,2,DKT-0007,Spesialis THT
+7,35,DKT-0007,Spesialis Radiologi
 8,14,DKT-0008,Spesialis Kulit dan Kelamin
 9,13,DKT-0009,Spesialis Kandungan
-10,5,DKT-0010,Spesialis Kejiwaan
+10,34,DKT-0010,Spesialis Anestesiologi
 11,15,DKT-0011,Spesialis Orthopedi
-12,18,DKT-0012,Spesialis Anak
+12,24,DKT-0012,Spesialis Jantung dan Pembuluh Darah
+13,36,DKT-0013,Spesialis Urologi
+14,39,DKT-0014,Spesialis THT
+15,40,DKT-0015,Spesialis Kejiwaan
+16,41,DKT-0016,Spesialis Gizi Klinik
+17,42,DKT-0017,Spesialis Emergensi
+18,43,DKT-0018,Spesialis Kedokteran Fisik dan Rehabilitasi
+19,44,DKT-0019,Spesialis Patologi Anatomi
+20,45,DKT-0020,Spesialis Onkologi

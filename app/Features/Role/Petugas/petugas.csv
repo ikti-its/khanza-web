@@ -1,5 +1,5 @@
 ﻿id_petugas,id_orang,deskripsi
-1,3,Kepala UTD
+1,46,Kepala UTD
 2,4,Petugas UTD
 3,5,Petugas UTD
 4,6,Petugas UTD
@@ -10,3 +10,15 @@
 9,12,Petugas Gudang
 10,1,IT
 11,2,Atasan Logistik
+12,47,Petugas Lab
+13,48,Petugas Lab
+14,49,Petugas Radiologi
+15,50,Petugas OK
+16,51,Petugas OK
+17,52,Petugas Farmasi
+18,53,Petugas Farmasi
+19,54,Petugas Rekam Medis
+20,55,Petugas Kasir
+21,56,Petugas Keamanan
+22,57,Kepala Perawat
+23,58,Petugas Administrasi
