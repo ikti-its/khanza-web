@@ -27,10 +27,7 @@ final class PenunjangRusakController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_penunjang_rusak', 'ID Penunjang Rusak'],
-                [SHOW, OPTIONAL, I::INDEX,  'id_barang',          'ID Barang'],
-                [SHOW, REQUIRED, I::NUMBER, 'jumlah',             'Jumlah'],
-                [SHOW, REQUIRED, I::MONEY,  'harga_beli',         'Harga Beli'],
-                [HIDE, REQUIRED, I::INDEX,  'id_petugas',         'ID Petugas'],
+                [SHOW, REQUIRED, I::INDEX,  'id_petugas',         'ID Petugas'],
                 [SHOW, REQUIRED, I::DTIME,  'tanggal_rusak',      'Tanggal Rusak'],
                 [SHOW, REQUIRED, I::TEXT,   'keterangan',         'Keterangan'],
             ],

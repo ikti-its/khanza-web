@@ -14,13 +14,10 @@ final class PenunjangRusakModel extends ModelTemplate
             new PenunjangRusakDatabase(),
             [
                 'id_penunjang_rusak' => V::DEFAULT(),
-                'jumlah'             => V::DEFAULT(),
-                'harga_beli'         => V::DEFAULT(),
                 'tanggal_rusak'      => V::DEFAULT(),
                 'keterangan'         => V::DEFAULT(),
             ],
             [
-                'id_barang'  => ['kode_barang', 'nama_barang'],
                 'id_petugas' => [
                     'id_orang' => ['nama']
                 ],

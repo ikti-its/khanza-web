@@ -1,2 +1,2 @@
-﻿id_penunjang_rusak,id_barang,jumlah,harga_beli,id_petugas,tanggal_rusak,keterangan
-1,5,2,15000,2,2026-05-07 11:34:42,Sarung tangan robek
+﻿id_penunjang_rusak,id_petugas,tanggal_rusak,keterangan
+1,2,2026-05-07 11:34:42,Sarung tangan robek
