@@ -28,8 +28,30 @@ final class TriaseMacamKasusController extends ControllerTemplate
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_macam_kasus',   'ID Macam Kasus'],
                 [SHOW, REQUIRED, I::TEXT,  'kode_macam_kasus', 'Kode'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_macam_kasus', 'Nama Macam Kasus'],
+                [SHOW, REQUIRED, I::TEXT,  'nama_macam_kasus', 'Macam Kasus'],
             ],
         );
+    }
+
+    /**
+     * Menampilkan data modal triase macam kasus
+     */
+    public function list()
+    {
+        $tabel = $this->model->table;
+
+        $data = $this->model->builder()
+            ->select("
+                {$tabel}.id_macam_kasus,
+                {$tabel}.kode_macam_kasus,
+                {$tabel}.nama_macam_kasus
+            ")
+            ->orderBy("{$tabel}.kode_macam_kasus", 'ASC')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON([
+            'data' => $data
+        ]);
     }
 }
