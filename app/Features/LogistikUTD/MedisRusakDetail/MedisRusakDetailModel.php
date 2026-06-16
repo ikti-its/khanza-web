@@ -18,11 +18,8 @@ final class MedisRusakDetailModel extends ModelTemplate
                 'harga_beli'            => V::DEFAULT(),
             ],
             [
-                'id_medis_rusak' => [
-                    'tanggal_rusak',
-                    'keterangan'   
-                ],
-                'id_barang'  => ['kode_barang', 'nama'],
+                'id_medis_rusak' => ['tanggal_rusak', 'keterangan'],
+                'id_barang'      => ['kode_barang', 'nama'],
             ],
         );
     }
