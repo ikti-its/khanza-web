@@ -175,6 +175,7 @@
         if (valueInput > batasMax) {
             alert(`Input tidak valid! Stok maksimal ruangan UTD untuk barang ini hanya tersisa ${batasMax} Pcs.`);
             inputNode.value = batasMax;
+            hitungTotalBaris(idBarang);
         }
     }
 
