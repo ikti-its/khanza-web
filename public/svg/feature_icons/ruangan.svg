@@ -1,0 +1,17 @@
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Garis lantai -->
+  <path d="M 1 19 H 19" stroke="#000000" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Frame luar pintu -->
+  <path d="M 2.5 19 V 1.5 H 17.5 V 19" stroke="#000000" stroke-width="1.2" stroke-linejoin="round"/>
+  
+  <!-- Garis dalam pintu -->
+  <path d="M 5 19 V 3.5 H 15 V 19" stroke="#000000" stroke-width="1.2" stroke-linejoin="round"/>
+  
+  <!-- Palang medis (Hollow Cross) -->
+  <path d="M 9 5.5 V 7 H 7.5 V 9 H 9 V 10.5 H 11 V 9 H 12.5 V 7 H 11 V 5.5 Z" stroke="#000000" stroke-width="1.2" stroke-linejoin="round"/>
+  
+  <!-- Gagang pintu -->
+  <path d="M 6.5 13.5 V 15" stroke="#000000" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 6.5 14.25 H 8" stroke="#000000" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
