@@ -1,11 +1,11 @@
-id_registrasi,nomor_reg,nomor_rawat,datetime,id_dokter,id_pasien,id_poliklinik,id_pj_pasien,id_alamat_pj,hubungan_pj,pekerjaanpj,notelp_pj,no_asuransi,no_telepon,biaya_registrasi,jenis_bayar,status_registrasi,status_rawat,status_poli,status_bayar
-1,REG-20260001,RW-001,2026-01-06 08:15:00,3,1,10,6,6,Suami,Wiraswasta,08123456789,-,08123456789,150000,BPJS,Aktif,Rawat Jalan,Selesai,Lunas
-2,REG-20260002,RW-002,2026-01-07 09:00:00,1,2,6,7,7,Ibu,Ibu Rumah Tangga,08234567890,-,08234567890,100000,Umum,Aktif,Rawat Jalan,Selesai,Lunas
-3,REG-20260003,RW-003,2026-01-08 10:30:00,4,3,3,8,8,Ayah,Pegawai Swasta,08345678901,INS-00123456,08345678901,100000,Asuransi,Aktif,Rawat Jalan,Sedang Diperiksa,Belum Lunas
-4,REG-20260004,RW-004,2026-01-09 08:45:00,7,4,8,9,9,Kakak,Guru,08456789012,-,08456789012,100000,BPJS,Aktif,Rawat Jalan,Selesai,Lunas
-5,REG-20260005,RW-005,2026-01-10 11:00:00,9,1,5,6,6,Suami,Wiraswasta,08123456789,INS-00234567,08123456789,100000,BPJS,Aktif,Rawat Inap,Sedang Diperiksa,Belum Lunas
-6,REG-20260006,RW-006,2026-01-13 08:00:00,2,2,4,7,7,Ibu,Ibu Rumah Tangga,08234567890,-,08234567890,100000,BPJS,Aktif,Rawat Jalan,Belum Diperiksa,Belum Lunas
-7,REG-20260007,RW-007,2026-01-14 13:15:00,5,3,7,8,8,Ayah,Pegawai Swasta,08345678901,-,08345678901,100000,Umum,Aktif,Rawat Jalan,Selesai,Lunas
-8,REG-20260008,RW-008,2026-01-15 09:30:00,6,4,9,9,9,Kakak,Guru,08456789012,INS-00345678,08456789012,100000,Asuransi,Aktif,Rawat Jalan,Selesai,Lunas
-9,REG-20260009,RW-009,2026-01-16 10:00:00,10,1,13,6,6,Suami,Wiraswasta,08123456789,-,08123456789,100000,BPJS,Aktif,Rawat Jalan,Belum Diperiksa,Belum Lunas
-10,REG-20260010,RW-010,2026-01-17 14:00:00,11,2,14,7,7,Ibu,Ibu Rumah Tangga,08234567890,-,08234567890,100000,Umum,Aktif,Rawat Inap,Sedang Diperiksa,Belum Lunas
+id_registrasi,nomor_reg,nomor_rawat,datetime,id_dokter,id_pasien,id_poliklinik,id_pj_pasien,id_alamat_pj,hubungan_pj,no_telepon,biaya_registrasi,jenis_bayar,status_registrasi,status_rawat,status_poli,status_bayar
+1,REG-20260001,RW-001,2026-01-06 08:15:00,3,1,10,6,6,Suami,08123456789,150000,BPJS,Aktif,Rawat Jalan,Selesai,Lunas
+2,REG-20260002,RW-002,2026-01-07 09:00:00,1,2,6,7,7,Ibu,08234567890,100000,Umum,Aktif,Rawat Jalan,Selesai,Lunas
+3,REG-20260003,RW-003,2026-01-08 10:30:00,4,3,3,8,8,Ayah,08345678901,100000,Asuransi,Aktif,Rawat Jalan,Sedang Diperiksa,Belum Lunas
+4,REG-20260004,RW-004,2026-01-09 08:45:00,7,4,8,9,9,Kakak,08456789012,100000,BPJS,Aktif,Rawat Jalan,Selesai,Lunas
+5,REG-20260005,RW-005,2026-01-10 11:00:00,9,1,5,6,6,Suami,08123456789,100000,BPJS,Aktif,Rawat Inap,Sedang Diperiksa,Belum Lunas
+6,REG-20260006,RW-006,2026-01-13 08:00:00,2,2,4,7,7,Ibu,08234567890,100000,BPJS,Aktif,Rawat Jalan,Belum Diperiksa,Belum Lunas
+7,REG-20260007,RW-007,2026-01-14 13:15:00,5,3,7,8,8,Ayah,08345678901,100000,Umum,Aktif,Rawat Jalan,Selesai,Lunas
+8,REG-20260008,RW-008,2026-01-15 09:30:00,6,4,9,9,9,Kakak,08456789012,100000,Asuransi,Aktif,Rawat Jalan,Selesai,Lunas
+9,REG-20260009,RW-009,2026-01-16 10:00:00,10,1,13,6,6,Suami,08123456789,100000,BPJS,Aktif,Rawat Jalan,Belum Diperiksa,Belum Lunas
+10,REG-20260010,RW-010,2026-01-17 14:00:00,11,2,14,7,7,Ibu,08234567890,100000,Umum,Aktif,Rawat Inap,Sedang Diperiksa,Belum Lunas
