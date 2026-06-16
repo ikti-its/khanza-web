@@ -13,25 +13,29 @@ final class RegistrasiModel extends ModelTemplate
         parent::__construct(
             new RegistrasiDatabase(),
             [
-                'nomor_reg'        => V::DEFAULT(),
-                'nomor_rawat'      => V::DEFAULT(),
-                'tanggal'          => V::DEFAULT(),
-                'jam'              => V::DEFAULT(),
-                'kode_dokter'      => V::DEFAULT(),
-                'dokter_dituju'    => V::DEFAULT(),
-                'nomor_rm'         => V::DEFAULT(),
-                'nama_pasien'      => V::DEFAULT(),
-                'jenis_kelamin'    => V::DEFAULT(),
-                'poliklinik'       => V::DEFAULT(),
-                'penanggung_jawab' => V::DEFAULT(),
-                'alamat_pj'        => V::DEFAULT(),
-                'hubungan_pj'      => V::DEFAULT(),
-                'biaya_registrasi' => V::DEFAULT(),
-                'jenis_bayar'      => V::DEFAULT(),
-                'status_rawat'     => V::DEFAULT(),
-                'status_bayar'     => V::DEFAULT(),
+                'id_registrasi'     => V::DEFAULT(),
+                'nomor_reg'         => V::DEFAULT(),
+                'nomor_rawat'       => V::DEFAULT(),
+                'tanggal_kunjungan' => V::DEFAULT(),
+                'alamat_pj'         => V::DEFAULT(),
+                'hubungan_pj'       => V::DEFAULT(),
+                'biaya_registrasi'  => V::DEFAULT(),
+                'jenis_bayar'       => V::DEFAULT(),
+                'status_rawat'      => V::DEFAULT(),
             ],
-            [],
+            [
+                'id_dokter'     => [
+                    'kode_dokter',
+                    'id_orang'  => ['nama'],
+                    'spesialis'
+                ],
+                'id_pasien'     => [
+                    'id_orang'  => ['nama'],
+                    'nomor_rm'
+                ],
+                'id_pj_pasien'  => ['nama'],
+                'status_bayar'  => ['nama_status_bayar'],
+            ],
         );
     }
 }
