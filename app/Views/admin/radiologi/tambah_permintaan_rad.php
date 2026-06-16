@@ -109,8 +109,8 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                         <thead style="background-color: #E6F2EF;" class="text-gray-800 font-semibold">
                             <tr>
                                 <th class="p-3 border text-center dark:border-gray-700">Kode</th>
-                                <th class="p-3 border text-left dark:border-gray-700">Nama Pemeriksaan</th>
-                                <th class="p-3 border text-right dark:border-gray-700">Tarif Dasar</th>
+                                <th class="p-3 border text-center dark:border-gray-700">Nama Pemeriksaan</th>
+                                <th class="p-3 border text-center dark:border-gray-700">Tarif Dasar</th>
                                 <th class="p-3 border text-center dark:border-gray-700">Hapus</th>
                             </tr>
                         </thead>
