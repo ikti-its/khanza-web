@@ -133,4 +133,46 @@ final class PenunjangRusakController extends ControllerTemplate
 
         return redirect()->to($this->get_uri_path() . '/data');
     }
+
+    /**
+     * OVERRIDE: Menghapus data BHP non medis rusak
+     */
+    #[\Override]
+    final public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->home();
+
+        $dataPenunjangRusak = $this->model->find($id);
+        if (!$dataPenunjangRusak) {
+            session()->setFlashdata('error', 'Gagal menghapus. Data kerusakan BHP non medis tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $modelDetail = new \App\Features\LogistikUTD\PenunjangRusakDetail\PenunjangRusakDetailModel();
+
+            $modelDetail->where('id_penunjang_rusak', $id)->delete();
+
+            $this->model->delete($id);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus data kerusakan BHP non medis.');
+            }
+
+            session()->setFlashdata('success', 'Data kerusakan BHP non medis berhasil dihapus.');
+
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $this->friendly_db_error($e));
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $e->getMessage());
+        }
+
+        return $this->home();
+    }
 }
