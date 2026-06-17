@@ -20,17 +20,17 @@ final class ChecklistPreOperasiPenunjangController extends ControllerTemplate
             'Checklist Pre Operasi Penunjang',
             [
                 A::READ,
-                A::CREATE,
+                // A::CREATE,
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_penunjang',    'ID Penunjang'],
-                [HIDE, OPTIONAL, I::INDEX, 'id_checklist',    'ID Checklist'],
-                [SHOW, REQUIRED, I::TEXT,  'jenis_penunjang', 'Jenis Penunjang'],
-                [SHOW, REQUIRED, I::INDEX, 'id_ketersediaan', 'Ketersediaan'],
-                [SHOW, REQUIRED, I::TEXT,  'keterangan',      'Keterangan'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_penunjang',       'ID Penunjang'],
+                [HIDE, REQUIRED, I::INDEX, 'id_checklist',       'ID Checklist'],
+                [HIDE, REQUIRED, I::INDEX, 'id_jenis_penunjang', 'Jenis Penunjang'],
+                [SHOW, REQUIRED, I::INDEX, 'id_ketersediaan',    'Ketersediaan'],
+                [SHOW, REQUIRED, I::TEXT,  'keterangan',         'Keterangan'],
             ],
         );
     }
