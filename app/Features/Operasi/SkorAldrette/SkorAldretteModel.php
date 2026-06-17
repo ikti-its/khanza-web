@@ -15,7 +15,6 @@ final class SkorAldretteModel extends ModelTemplate
             [
                 'id_skor_aldrette'   => V::DEFAULT(),
                 'waktu_penilaian'    => V::DEFAULT(),
-                // 'total_skor'         => V::DEFAULT(),
                 'is_boleh_pindah' => V::DEFAULT(),
                 'catatan_keluar'  => V::DEFAULT(),
                 'instruksi_rr'    => V::DEFAULT(),
