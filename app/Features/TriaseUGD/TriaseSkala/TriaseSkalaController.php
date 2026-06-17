@@ -27,9 +27,9 @@ final class TriaseSkalaController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_skala',         'ID Skala'],
-                [SHOW, REQUIRED, I::INDEX, 'id_tingkat_skala', 'ID Tingkat Skala'],
+                [SHOW, REQUIRED, I::SELECT,'id_tingkat_skala', 'Tingkat Skala'],
                 [SHOW, REQUIRED, I::TEXT,  'kode_skala',       'Kode'],
-                [SHOW, REQUIRED, I::INDEX, 'id_pemeriksaan',   'ID Pemeriksaan'],
+                [SHOW, REQUIRED, I::SELECT,'id_pemeriksaan',   'Pemeriksaan'],
                 [SHOW, REQUIRED, I::TEXT,  'pengkajian',       'Pengkajian'],
             ],
         );
