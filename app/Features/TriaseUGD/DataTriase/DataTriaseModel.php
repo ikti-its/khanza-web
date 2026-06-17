@@ -25,7 +25,13 @@ final class DataTriaseModel extends ModelTemplate
                 'nyeri'                 => V::DEFAULT(),
             ],
             [
-                'nomor_reg'            => ['nomor_rawat', 'nomor_rm', 'nama_pasien'],
+                'id_registrasi'        => [
+                    'nomor_rawat',
+                    'id_pasien'    => [
+                        'nomor_rm',
+                        'id_orang' => ['nama']
+                    ],
+                ],
                 'id_cara_masuk'        => ['nama_cara'],
                 'id_alat_transportasi' => ['nama_transportasi'],
                 'id_alasan_kedatangan' => ['nama_alasan'],

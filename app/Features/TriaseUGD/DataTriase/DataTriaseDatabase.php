@@ -15,7 +15,7 @@ final class DataTriaseDatabase extends DatabaseTemplate
             'data_triase',
             [
                 'id_triase'             => T::ID(100_000_000),
-                'nomor_reg'             => T::FK_AUTO(),
+                'id_registrasi'         => T::FK_AUTO(),
                 'tanggal_kunjungan'     => T::DTIME(),
                 'id_cara_masuk'         => T::FK_AUTO(),
                 'id_alat_transportasi'  => T::FK_AUTO(),
@@ -34,9 +34,9 @@ final class DataTriaseDatabase extends DatabaseTemplate
             [],
             [
                 [
-                    'nomor_reg',
+                    'id_registrasi',
                     \App\Features\UGD\Registrasi\RegistrasiDatabase::class,
-                    'nomor_reg',
+                    'id_registrasi',
                 ],
                 [
                     'id_cara_masuk',

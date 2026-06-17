@@ -349,7 +349,7 @@ class ModelTemplate extends Model
      * @return list<array<string, mixed>>
      */
     #[\Override]
-    public function findAll(int|null $limit = 10, int $offset = 0): array
+    public function findAll(int|null $limit = 0, int $offset = 0): array
     {
         if ($this->join === []) {
             foreach ($this->runtime_filters as $col => $val) {
