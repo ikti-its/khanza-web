@@ -15,7 +15,8 @@ final class OperasiRoutes extends RouteTemplate
 
                 \App\Features\Operasi\PermintaanOperasi\PermintaanOperasiController::class,
                 \App\Features\Operasi\JadwalOperasi\JadwalOperasiController::class,
-                
+                \App\Features\Operasi\LembarOperasi\LembarOperasiController::class => 'HIDE',
+
                 // ==========================================
                 // 1. TAHAP PRA-OPERASI (PRE-OP)
                 // ==========================================
