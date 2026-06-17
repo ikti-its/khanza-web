@@ -6,6 +6,7 @@ namespace App\Features\Radiologi\PermintaanRad;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class PermintaanRadController extends ControllerTemplate
 {
@@ -39,8 +40,11 @@ final class PermintaanRadController extends ControllerTemplate
         );
     }
 
-    #[\Override]
-    final public function create_page(): string
+    // ──────────────────────────────────────────────────────────
+    // PRIVATE HELPERS
+    // ──────────────────────────────────────────────────────────
+
+    private function generateNomorPermintaan(): string
     {
         helper('autonomor');
 
@@ -53,123 +57,122 @@ final class PermintaanRadController extends ControllerTemplate
             ->get()
             ->getRowArray();
 
-        $noPermintaan = generateNextNoPermintaanRad($lastNo['no_permintaan'] ?? null);
+        return generateNextNoPermintaanRad($lastNo['no_permintaan'] ?? null);
+    }
 
-        $konfig = array_values(array_filter(
+    private function getKonfig(): array
+    {
+        return array_values(array_filter(
             $this->get_fields_with_options(false, true),
             fn($f) => !in_array($f[2], [
-                'id_permintaan',
-                'no_permintaan',
-                'nomor_reg',
-                'tgl_jam_sampel',
-                'id_status_permintaan',
+                'id_permintaan', 'no_permintaan', 'nomor_reg',
+                'tgl_jam_sampel', 'id_status_permintaan',
             ], true)
         ));
-
-        $breadcrumbs = [['title' => 'Tambah', 'icon' => 'tambah']];
-
-        return view('admin/radiologi/tambah_permintaan_rad', [
-            'judul'         => 'Tambah ' . $this->title,
-            'breadcrumbs'   => array_merge($this->breadcrumbs, $breadcrumbs),
-            'modul_path'    => $this->get_uri_path(),
-            'kolom_id'      => $this->model->primaryKey,
-            'konfig'        => $konfig,
-            'baris'         => [],
-            'form_action'   => '/submittambah',
-            'no_permintaan' => $noPermintaan,
-        ]);
     }
 
-    public function list()
+    private function fetchDetailRegistrasi(string $nomorReg): array
     {
-        $builder = $this->model->db
-            ->table('radiologi.permintaan_rad pr')
+        return $this->model->db
+            ->table('rekam_medis.registrasi r')
             ->select([
-                'pr.id_permintaan',
-                'pr.no_permintaan',
-                'pr.nomor_reg',
-                'pr.tgl_jam_permintaan',
-                'p.nomor_rm',
-                'o.nama',
-                's.nama_status',
-                'r.id_dokter AS id_dokter_perujuk',
-                'od.nama AS nama_dokter_perujuk',
+                'r.nomor_reg', 'p.nomor_rm', 'o.nama',
+                'd.kode_dokter AS kode_dokter_perujuk', 'od.nama AS nama_dokter',
             ])
-            ->join('rekam_medis.registrasi r',  'r.nomor_reg = pr.nomor_reg')
-            ->join('role.pasien p',             'p.id_pasien = r.id_pasien')
-            ->join('person.orang o',            'o.id_orang  = p.id_orang')
-            ->join('radiologi.ref_status_permintaan_rad s', 's.id_status = pr.id_status_permintaan', 'left')
-            ->join('role.dokter d',             'd.id_dokter = r.id_dokter', 'left')
-            ->join('person.orang od',           'od.id_orang = d.id_orang', 'left')
-            ->orderBy('pr.tgl_jam_permintaan', 'DESC');
-
-        $status = $this->request->getGet('status');
-        if ($status !== null) {
-            $builder->where('pr.id_status_permintaan', (int) $status);
-        }
-
-        return $this->response->setJSON(['data' => $builder->get()->getResultArray()]);
+            ->join('role.pasien p',   'p.id_pasien = r.id_pasien', 'left')
+            ->join('person.orang o',  'o.id_orang  = p.id_orang',  'left')
+            ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang',  'left')
+            ->where('r.nomor_reg', $nomorReg)
+            ->get()
+            ->getRowArray() ?? [];
     }
 
-    #[\Override]
-    protected function before_create(array &$postData): void
+    private function fetchItemTerpilih(int $idPermintaan): array
     {
-        helper('autonomor');
-
-        if (empty($postData['no_permintaan'])) {
-            $lastNo = $this->model->db
-                ->table('radiologi.permintaan_rad')
-                ->select('no_permintaan')
-                ->like('no_permintaan', 'RAD' . date('Ymd'), 'after')
-                ->orderBy('no_permintaan', 'DESC')
-                ->limit(1)
-                ->get()
-                ->getRowArray();
-
-            $postData['no_permintaan'] = generateNextNoPermintaanRad($lastNo['no_permintaan'] ?? null);
-        }
-
-        if (empty($postData['tgl_jam_permintaan'])) {
-            $postData['tgl_jam_permintaan'] = date('Y-m-d H:i:s');
-        }
-
-        $postData['id_status_permintaan'] = 1;
+        return $this->model->db
+            ->table('radiologi.permintaan_rad_item pri')
+            ->select([
+                'pri.id_item', 'r.kode_periksa', 'r.nama_pemeriksaan', 'r.tarif_dasar',
+            ])
+            ->join('radiologi.ref_item_rad r', 'r.id_item = pri.id_item')
+            ->where('pri.id_permintaan', $idPermintaan)
+            ->get()
+            ->getResultArray();
     }
 
-    #[\Override]
-    public function create(): string|\CodeIgniter\HTTP\RedirectResponse
+    private function buildHeaderData(array $rawPost, bool $isCreate = false): array
     {
-        $rawPost = $this->request->getPost();
+        $noPermintaan = !empty($rawPost['no_permintaan']) ? $rawPost['no_permintaan'] : ($isCreate ? $this->generateNomorPermintaan() : '');
+        $tglPermintaan = !empty($rawPost['tgl_jam_permintaan']) ? $rawPost['tgl_jam_permintaan'] : date('Y-m-d H:i:s');
 
         $data = [
-            'no_permintaan'      => $rawPost['no_permintaan']      ?? '',
+            'no_permintaan'      => $noPermintaan,
             'nomor_reg'          => $rawPost['nomor_reg']          ?? '',
-            'tgl_jam_permintaan' => $rawPost['tgl_jam_permintaan'] ?? '',
+            'tgl_jam_permintaan' => $tglPermintaan,
             'informasi_tambahan' => $rawPost['informasi_tambahan'] ?? '',
             'indikasi_klinis'    => $rawPost['indikasi_klinis']    ?? '',
         ];
 
-        $this->before_create($data);
+        if ($isCreate) {
+            $data['id_status_permintaan'] = 1;
+        }
 
-        $idItems = $this->request->getPost('id_item');
+        return $data;
+    }
+
+    private function insertItems(int $idPermintaan, array $idItems): void
+    {
+        if (empty($idItems)) return;
+
+        // REFACTOR: Menggunakan Batch Insert
+        $data = array_map(fn($idItem) => [
+            'id_permintaan' => $idPermintaan,
+            'id_item'       => (int) $idItem,
+        ], $idItems);
+
+        (new \App\Features\Radiologi\PermintaanRadItem\PermintaanRadItemModel())->insertBatch($data);
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // HALAMAN TAMBAH
+    // ──────────────────────────────────────────────────────────
+
+    #[\Override]
+    final public function create_page(): string
+    {
+        return view('admin/radiologi/tambah_permintaan_rad', [
+            'judul'         => 'Tambah ' . $this->title,
+            'breadcrumbs'   => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
+            'modul_path'    => $this->get_uri_path(),
+            'kolom_id'      => $this->model->primaryKey,
+            'konfig'        => $this->getKonfig(),
+            'baris'         => [],
+            'form_action'   => '/submittambah',
+            'no_permintaan' => $this->generateNomorPermintaan(),
+        ]);
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // PROSES SIMPAN
+    // ──────────────────────────────────────────────────────────
+
+    #[\Override]
+    public function create(): string|RedirectResponse
+    {
+        $idItems = $this->request->getPost('id_item') ?? [];
         if (empty($idItems)) {
             session()->setFlashdata('error', 'Pilih minimal satu item radiologi.');
             return redirect()->back()->withInput();
         }
 
+        $data = $this->buildHeaderData($this->request->getPost(), true);
+
         $this->model->db->transStart();
 
         try {
             $this->model->insert($data);
-            $idPermintaan = $this->model->getInsertID();
-
-            $modelItem = new \App\Features\Radiologi\PermintaanRadItem\PermintaanRadItemModel();
-            foreach ($idItems as $idItem) {
-                $modelItem->insert([
-                    'id_permintaan' => $idPermintaan,
-                    'id_item'       => (int) $idItem,
-                ]);
-            }
+            $this->insertItems((int) $this->model->getInsertID(), $idItems);
 
             $this->model->db->transComplete();
 
@@ -180,104 +183,61 @@ final class PermintaanRadController extends ControllerTemplate
             session()->setFlashdata('success', 'Permintaan radiologi berhasil disimpan.');
             return redirect()->to($this->get_uri_path() . '/data');
 
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $this->friendly_db_error($e));
-            return redirect()->back()->withInput();
-        } catch (\RuntimeException $e) {
-            $this->model->db->transRollback();
-            session()->setFlashdata('error', $e->getMessage());
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
     }
+
+    // ──────────────────────────────────────────────────────────
+    // HALAMAN UBAH
+    // ──────────────────────────────────────────────────────────
 
     #[\Override]
     final public function update_page(int|string $id): string
     {
-        $breadcrumbs = [['title' => 'Ubah', 'icon' => 'ubah']];
-
         $baris = $this->model->find($id);
 
-        if (!empty($baris['nomor_reg'])) {
-            $dataJoin = $this->model->db
-                ->table('rekam_medis.registrasi r')
-                ->select([
-                    'r.nomor_reg',
-                    'p.nomor_rm',
-                    'o.nama',
-                    'd.kode_dokter AS kode_dokter_perujuk',
-                    'od.nama AS nama_dokter',
-                ])
-                ->join('role.pasien p',   'p.id_pasien = r.id_pasien', 'left')
-                ->join('person.orang o',  'o.id_orang  = p.id_orang',  'left')
-                ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
-                ->join('person.orang od', 'od.id_orang = d.id_orang',  'left')
-                ->where('r.nomor_reg', $baris['nomor_reg'])
-                ->get()
-                ->getRowArray();
-
-            if ($dataJoin) {
-                $baris = array_merge($baris, $dataJoin);
-            }
+        if (empty($baris)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
         }
 
-        $itemTerpilih = $this->model->db
-            ->table('radiologi.permintaan_rad_item pri')
-            ->select([
-                'pri.id_item',
-                'r.kode_periksa',
-                'r.nama_pemeriksaan',
-                'r.tarif_dasar',
-            ])
-            ->join('radiologi.ref_item_rad r', 'r.id_item = pri.id_item')
-            ->where('pri.id_permintaan', $id)
-            ->get()
-            ->getResultArray();
-
-        $konfig = array_values(array_filter(
-            $this->get_fields_with_options(false, true),
-            fn($f) => !in_array($f[2], [
-                'id_permintaan',
-                'no_permintaan',
-                'nomor_reg',
-                'tgl_jam_sampel',
-                'id_status_permintaan',
-            ], true)
-        ));
+        if (!empty($baris['nomor_reg'])) {
+            $baris = array_merge($baris, $this->fetchDetailRegistrasi($baris['nomor_reg']));
+        }
 
         return view('admin/radiologi/tambah_permintaan_rad', [
             'judul'         => 'Ubah ' . $this->title,
-            'breadcrumbs'   => array_merge($this->breadcrumbs, $breadcrumbs),
+            'breadcrumbs'   => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
             'modul_path'    => $this->get_uri_path(),
             'kolom_id'      => $this->model->primaryKey,
-            'konfig'        => $konfig,
+            'konfig'        => $this->getKonfig(),
             'baris'         => $baris,
             'form_action'   => '/submitedit/' . $id,
             'no_permintaan' => $baris['no_permintaan'] ?? '',
-            'item_terpilih' => $itemTerpilih,
+            'item_terpilih' => $this->fetchItemTerpilih((int) $id),
         ]);
     }
 
+    // ──────────────────────────────────────────────────────────
+    // PROSES UPDATE
+    // ──────────────────────────────────────────────────────────
+
     #[\Override]
-    public function update(int|string $id): string|\CodeIgniter\HTTP\RedirectResponse
+    public function update(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->home();
 
-        $rawPost = $this->request->getPost();
-
-        $data = [
-            'no_permintaan'      => $rawPost['no_permintaan']      ?? '',
-            'nomor_reg'          => $rawPost['nomor_reg']          ?? '',
-            'tgl_jam_permintaan' => $rawPost['tgl_jam_permintaan'] ?? '',
-            'informasi_tambahan' => $rawPost['informasi_tambahan'] ?? '',
-            'indikasi_klinis'    => $rawPost['indikasi_klinis']    ?? '',
-        ];
-
-        $idItems = $this->request->getPost('id_item');
+        $idItems = $this->request->getPost('id_item') ?? [];
         if (empty($idItems)) {
             session()->setFlashdata('error', 'Pilih minimal satu item radiologi.');
             return redirect()->back()->withInput();
         }
+
+        $data = $this->buildHeaderData($this->request->getPost(), false);
 
         $this->model->db->transStart();
 
@@ -286,13 +246,7 @@ final class PermintaanRadController extends ControllerTemplate
 
             $modelItem = new \App\Features\Radiologi\PermintaanRadItem\PermintaanRadItemModel();
             $modelItem->where('id_permintaan', $id)->delete();
-
-            foreach ($idItems as $idItem) {
-                $modelItem->insert([
-                    'id_permintaan' => $id,
-                    'id_item'       => (int) $idItem,
-                ]);
-            }
+            $this->insertItems((int) $id, $idItems);
 
             $this->model->db->transComplete();
 
@@ -303,28 +257,27 @@ final class PermintaanRadController extends ControllerTemplate
             session()->setFlashdata('success', 'Permintaan radiologi berhasil diperbarui.');
             return redirect()->to($this->get_uri_path() . '/data');
 
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $this->friendly_db_error($e));
-            return redirect()->back()->withInput();
-        } catch (\RuntimeException $e) {
-            $this->model->db->transRollback();
-            session()->setFlashdata('error', $e->getMessage());
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
     }
 
+    // ──────────────────────────────────────────────────────────
+    // DELETE — cascade hapus item lalu header
+    // ──────────────────────────────────────────────────────────
+
     #[\Override]
-    final public function delete(int|string $id): string|\CodeIgniter\HTTP\RedirectResponse
+    final public function delete(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->home();
 
         $this->model->db->transStart();
 
         try {
-            $modelItem = new \App\Features\Radiologi\PermintaanRadItem\PermintaanRadItemModel();
-            $modelItem->where('id_permintaan', $id)->delete();
-
+            (new \App\Features\Radiologi\PermintaanRadItem\PermintaanRadItemModel())->where('id_permintaan', $id)->delete();
             $this->model->delete($id);
 
             $this->model->db->transComplete();
@@ -335,18 +288,20 @@ final class PermintaanRadController extends ControllerTemplate
 
             session()->setFlashdata('success', 'Permintaan radiologi berhasil dihapus.');
 
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $this->friendly_db_error($e));
-        } catch (\RuntimeException $e) {
-            $this->model->db->transRollback();
-            session()->setFlashdata('error', $e->getMessage());
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $errorMsg);
         }
 
         return $this->home();
     }
 
-    public function sampel(int|string $id): \CodeIgniter\HTTP\RedirectResponse
+    // ──────────────────────────────────────────────────────────
+    // SAMPEL
+    // ──────────────────────────────────────────────────────────
+
+    public function sampel(int|string $id): RedirectResponse
     {
         if ($id == 0) return $this->home();
 
@@ -362,5 +317,33 @@ final class PermintaanRadController extends ControllerTemplate
         }
 
         return $this->home();
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // LIST
+    // ──────────────────────────────────────────────────────────
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $builder = $this->model->db
+            ->table('radiologi.permintaan_rad pr')
+            ->select([
+                'pr.id_permintaan', 'pr.no_permintaan', 'pr.nomor_reg', 'pr.tgl_jam_permintaan',
+                'p.nomor_rm', 'o.nama', 's.nama_status',
+                'r.id_dokter AS id_dokter_perujuk', 'od.nama AS nama_dokter_perujuk',
+            ])
+            ->join('rekam_medis.registrasi r',              'r.nomor_reg = pr.nomor_reg')
+            ->join('role.pasien p',                         'p.id_pasien = r.id_pasien')
+            ->join('person.orang o',                        'o.id_orang  = p.id_orang')
+            ->join('radiologi.ref_status_permintaan_rad s', 's.id_status = pr.id_status_permintaan', 'left')
+            ->join('role.dokter d',                         'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od',                       'od.id_orang = d.id_orang', 'left')
+            ->orderBy('pr.tgl_jam_permintaan', 'DESC');
+
+        if (($status = $this->request->getGet('status')) !== null) {
+            $builder->where('pr.id_status_permintaan', (int) $status);
+        }
+
+        return $this->response->setJSON(['data' => $builder->get()->getResultArray()]);
     }
 }
