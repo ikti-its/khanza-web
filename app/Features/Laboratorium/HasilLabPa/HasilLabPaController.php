@@ -6,6 +6,7 @@ namespace App\Features\Laboratorium\HasilLabPa;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class HasilLabPaController extends ControllerTemplate
 {
@@ -149,20 +150,22 @@ final class HasilLabPaController extends ControllerTemplate
         ?int $idPetugasLab,
         string $tglJamHasil,
     ): void {
-        foreach ($hasilList as $item) {
-            $this->model->insert([
-                'id_permintaan_lab'     => $idPermintaanLab,
-                'id_permintaan_pa_item' => (int) ($item['id_permintaan_pa_item'] ?? 0),
-                'id_dokter_pj'          => $idDokterPj,
-                'id_petugas_lab'        => $idPetugasLab,
-                'tgl_jam_hasil'         => $tglJamHasil,
-                'diagnosa_klinis'       => trim($item['diagnosa_klinis'] ?? ''),
-                'makroskopik'           => trim($item['makroskopik']     ?? ''),
-                'mikroskopik'           => trim($item['mikroskopik']     ?? ''),
-                'kesimpulan'            => trim($item['kesimpulan']      ?? ''),
-                'kesan'                 => trim($item['kesan']           ?? '') ?: null,
-            ]);
-        }
+        if (empty($hasilList)) return;
+
+        $batchData = array_map(fn($item) => [
+            'id_permintaan_lab'     => $idPermintaanLab,
+            'id_permintaan_pa_item' => (int) ($item['id_permintaan_pa_item'] ?? 0),
+            'id_dokter_pj'          => $idDokterPj,
+            'id_petugas_lab'        => $idPetugasLab,
+            'tgl_jam_hasil'         => $tglJamHasil,
+            'diagnosa_klinis'       => trim($item['diagnosa_klinis'] ?? ''),
+            'makroskopik'           => trim($item['makroskopik']     ?? ''),
+            'mikroskopik'           => trim($item['mikroskopik']     ?? ''),
+            'kesimpulan'            => trim($item['kesimpulan']      ?? ''),
+            'kesan'                 => trim($item['kesan']           ?? '') ?: null,
+        ], $hasilList);
+
+        $this->model->insertBatch($batchData);
     }
  
     private function deleteHasilPaByPermintaan(int $idPermintaanLab): void
@@ -197,7 +200,7 @@ final class HasilLabPaController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
  
     #[\Override]
-    public function create(): string|\CodeIgniter\HTTP\RedirectResponse
+    public function create(): string|RedirectResponse
     {
         $rawPost = $this->request->getPost();
  
@@ -221,13 +224,10 @@ final class HasilLabPaController extends ControllerTemplate
             session()->setFlashdata('success', 'Hasil Lab PA berhasil disimpan.');
             return redirect()->to($this->get_uri_path() . '/data');
  
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $this->friendly_db_error($e));
-            return redirect()->back()->withInput();
-        } catch (\RuntimeException $e) {
-            $this->model->db->transRollback();
-            session()->setFlashdata('error', $e->getMessage());
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
     }
@@ -275,7 +275,7 @@ final class HasilLabPaController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
  
     #[\Override]
-    public function update(int|string $id): string|\CodeIgniter\HTTP\RedirectResponse
+    public function update(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->home();
  
@@ -302,13 +302,10 @@ final class HasilLabPaController extends ControllerTemplate
             session()->setFlashdata('success', 'Hasil Lab PA berhasil diperbarui.');
             return redirect()->to($this->get_uri_path() . '/data');
  
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $this->friendly_db_error($e));
-            return redirect()->back()->withInput();
-        } catch (\RuntimeException $e) {
-            $this->model->db->transRollback();
-            session()->setFlashdata('error', $e->getMessage());
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
     }
@@ -318,7 +315,7 @@ final class HasilLabPaController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
  
     #[\Override]
-    public function delete(int|string $id): string|\CodeIgniter\HTTP\RedirectResponse
+    public function delete(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->home();
  
@@ -338,12 +335,10 @@ final class HasilLabPaController extends ControllerTemplate
  
             session()->setFlashdata('success', 'Hasil Lab PA berhasil dihapus.');
  
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $this->friendly_db_error($e));
-        } catch (\RuntimeException $e) {
-            $this->model->db->transRollback();
-            session()->setFlashdata('error', $e->getMessage());
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $errorMsg);
         }
  
         return $this->home();

@@ -6,6 +6,8 @@ namespace App\Features\Laboratorium\HasilLabPk;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
+
 
 final class HasilLabPkController extends ControllerTemplate
 {
@@ -115,32 +117,33 @@ final class HasilLabPkController extends ControllerTemplate
             ->join('laboratorium.ref_item_pemeriksaan_lab ri', 'ri.id_item_lab = pi.id_item_pemeriksaan')
             ->where('h.id_permintaan_lab', $idPermintaanLab)
             ->get()->getResultArray();
+
+        if(empty($hasilRows)) return [];
  
-        return array_map(function ($row) {
-            $params = $this->model->db
-                ->table('laboratorium.hasil_lab_pk_parameter hp')
-                ->select([
-                    'hp.id_hasil_pk_parameter',
-                    'hp.id_parameter',
-                    'rp.nama_parameter',
-                    'rp.satuan',
-                    'rp.nilai_rujukan',
-                    'hp.nilai_hasil',
-                    'hp.keterangan_hasil',
-                ])
-                ->join('laboratorium.ref_parameter_pemeriksaan_lab rp', 'rp.id_parameter = hp.id_parameter')
-                ->where('hp.id_hasil_pk', $row['id_hasil_pk'])
-                ->orderBy('rp.id_parameter', 'ASC')
-                ->get()->getResultArray();
- 
-            return [
-                'id_hasil_pk'           => $row['id_hasil_pk'],
-                'id_permintaan_pk_item' => $row['id_permintaan_pk_item'],
-                'kode_periksa'          => $row['kode_periksa'],
-                'nama_item'             => $row['nama_item'],
-                'parameter'             => $params,
-            ];
-        }, $hasilRows);
+        $idHasilPkList = array_column($hasilRows, 'id_hasil_pk');
+
+        $parameters = $this->model->db
+            ->table('laboratorium.hasil_lab_pk_parameter hp')
+            ->select([
+                'hp.id_hasil_pk', 'hp.id_hasil_pk_parameter', 'hp.id_parameter',
+                'rp.nama_parameter', 'rp.satuan', 'rp.nilai_rujukan',
+                'hp.nilai_hasil', 'hp.keterangan_hasil',
+            ])
+            ->join('laboratorium.ref_parameter_pemeriksaan_lab rp', 'rp.id_parameter = hp.id_parameter')
+            ->whereIn('hp.id_hasil_pk', $idHasilPkList)
+            ->orderBy('rp.id_parameter', 'ASC')
+            ->get()->getResultArray();
+
+        $groupedParams = [];
+        foreach ($parameters as $param) {
+            $groupedParams[$param['id_hasil_pk']][] = $param;
+        }
+
+        foreach ($hasilRows as &$row) {
+            $row['parameter'] = $groupedParams[$row['id_hasil_pk']] ?? [];
+        }
+
+        return $hasilRows;
     }
  
     private function insertHasilPkItems(
@@ -152,6 +155,8 @@ final class HasilLabPkController extends ControllerTemplate
         ?int $idKategoriUsia,
         \App\Features\Laboratorium\HasilLabPkParameter\HasilLabPkParameterModel $modelParam,
     ): void {
+        $paramBatch = [];
+
         foreach ($hasilList as $item) {
             $this->model->insert([
                 'id_permintaan_lab'     => $idPermintaanLab,
@@ -167,13 +172,17 @@ final class HasilLabPkController extends ControllerTemplate
                 $idParameter = (int) ($param['id_parameter'] ?? 0);
                 if ($idParameter <= 0) continue;
  
-                $modelParam->insert([
+                $paramBatch[] = [
                     'id_hasil_pk'      => $idHasilPk,
                     'id_parameter'     => $idParameter,
                     'nilai_hasil'      => trim($param['nilai_hasil']      ?? ''),
                     'keterangan_hasil' => trim($param['keterangan_hasil'] ?? '') ?: null,
-                ]);
+                ];
             }
+        }
+
+        if (!empty($paramBatch)) {
+            $modelParam->insertBatch($paramBatch);
         }
     }
  
@@ -224,7 +233,7 @@ final class HasilLabPkController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
  
     #[\Override]
-    public function create(): string|\CodeIgniter\HTTP\RedirectResponse
+    public function create(): string|RedirectResponse
     {
         $rawPost = $this->request->getPost();
  
@@ -251,13 +260,10 @@ final class HasilLabPkController extends ControllerTemplate
             session()->setFlashdata('success', 'Hasil Lab PK berhasil disimpan.');
             return redirect()->to($this->get_uri_path() . '/data');
  
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $this->friendly_db_error($e));
-            return redirect()->back()->withInput();
-        } catch (\RuntimeException $e) {
-            $this->model->db->transRollback();
-            session()->setFlashdata('error', $e->getMessage());
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
     }
@@ -305,7 +311,7 @@ final class HasilLabPkController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
  
     #[\Override]
-    public function update(int|string $id): string|\CodeIgniter\HTTP\RedirectResponse
+    public function update(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->home();
  
@@ -335,13 +341,10 @@ final class HasilLabPkController extends ControllerTemplate
             session()->setFlashdata('success', 'Hasil Lab PK berhasil diperbarui.');
             return redirect()->to($this->get_uri_path() . '/data');
  
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $this->friendly_db_error($e));
-            return redirect()->back()->withInput();
-        } catch (\RuntimeException $e) {
-            $this->model->db->transRollback();
-            session()->setFlashdata('error', $e->getMessage());
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
     }
@@ -351,7 +354,7 @@ final class HasilLabPkController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
  
     #[\Override]
-    public function delete(int|string $id): string|\CodeIgniter\HTTP\RedirectResponse
+    public function delete(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->home();
  
@@ -373,12 +376,10 @@ final class HasilLabPkController extends ControllerTemplate
  
             session()->setFlashdata('success', 'Hasil Lab PK berhasil dihapus.');
  
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $this->friendly_db_error($e));
-        } catch (\RuntimeException $e) {
-            $this->model->db->transRollback();
-            session()->setFlashdata('error', $e->getMessage());
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $errorMsg);
         }
  
         return $this->home();

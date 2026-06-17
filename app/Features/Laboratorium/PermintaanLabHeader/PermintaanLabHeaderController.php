@@ -84,16 +84,17 @@ final class PermintaanLabHeaderController extends ControllerTemplate
  
         $kategori = (int) ($this->request->getGet('kategori') ?? 0);
  
-        $existsMap = [
-            ID_KATEGORI_MB => 'laboratorium.permintaan_lab_mb_item mi',
-            ID_KATEGORI_PA => 'laboratorium.permintaan_lab_pa_item mi',
-            ID_KATEGORI_PK => 'laboratorium.permintaan_lab_pk_item mi',
-        ];
+        $tabelItem = match ($kategori) {
+            ID_KATEGORI_MB => 'laboratorium.permintaan_lab_mb_item',
+            ID_KATEGORI_PA => 'laboratorium.permintaan_lab_pa_item',
+            ID_KATEGORI_PK => 'laboratorium.permintaan_lab_pk_item',
+            default        => null,
+        };
  
-        if ($kategori > 0 && isset($existsMap[$kategori])) {
+        if ($tabelItem !== null) {
             $builder->where("EXISTS (
                 SELECT 1
-                FROM {$existsMap[$kategori]}
+                FROM {$tabelItem} mi
                 JOIN laboratorium.ref_item_pemeriksaan_lab ri ON ri.id_item_lab = mi.id_item_pemeriksaan
                 WHERE mi.id_permintaan_lab = plh.id_permintaan
                 AND ri.id_kategori = {$kategori}
