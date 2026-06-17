@@ -42,76 +42,75 @@ final class SkriningRawatJalanController extends ControllerTemplate
             ],
         );
     }
+
+    // ──────────────────────────────────────────────────────────
+    // PRIVATE HELPERS
+    // ──────────────────────────────────────────────────────────
+
+    private function getKonfig(bool $isUpdate = false): array
+    {
+        return array_values(array_filter(
+            $this->get_fields_with_options($isUpdate, true),
+            fn($f) => !in_array($f[2], ['id_skrining', 'no_rm'], true)
+        ));
+    }
+
+    private function fetchDataPasienByRm(string $noRm): array
+    {
+        return $this->model->db
+            ->table('role.pasien p')
+            ->select('p.nomor_rm, o.nama, o.nik, o.tanggal_lahir, jk.nama_jenis_kelamin as jenis_kelamin')
+            ->join('person.orang o', 'o.id_orang = p.id_orang')
+            ->join('person.jenis_kelamin jk', 'jk.id_jenis_kelamin = o.id_jenis_kelamin', 'left')
+            ->where('p.nomor_rm', $noRm)
+            ->get()
+            ->getRowArray() ?? [];
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // PAGES
+    // ──────────────────────────────────────────────────────────
+
     #[\Override]
     final public function create_page(): string
     {
-        $breadcrumbs = [
-            ['title' => 'Tambah', 'icon' => 'tambah']
-        ];
-
         $mockBaris = [
-            'id_skrining'      => '',
-            'no_rm'            => $this->request->getGet('no_rm') ?? '',
-            'tgl_skrining'     => date('Y-m-d'),
-            'jam_skrining'     => date('H:i:s'),
-            'id_kesadaran'     => '',
-            'id_pernafasan'    => '',
-            'id_skala_nyeri'   => '',
-            'id_nyeri_dada'    => '',
-            'id_batuk'         => '',
-            'is_geriatri'      => '',
-            'is_risiko_jatuh'  => '',
-            'id_keputusan'     => '',
-            'id_petugas'       => '',
+            'id_skrining' => '', 'no_rm' => $this->request->getGet('no_rm') ?? '',
+            'tgl_skrining' => date('Y-m-d'), 'jam_skrining' => date('H:i:s'),
+            'id_kesadaran' => '', 'id_pernafasan' => '', 'id_skala_nyeri' => '',
+            'id_nyeri_dada' => '', 'id_batuk' => '', 'is_geriatri' => '',
+            'is_risiko_jatuh' => '', 'id_keputusan' => '', 'id_petugas' => '',
         ];
-
-        $konfig = array_values(array_filter(
-            $this->get_fields_with_options(false, true),
-            fn($f) => $f[2] !== 'id_skrining' && $f[2] !== 'no_rm'
-        ));
 
         return view('admin/skrining_rawat_jalan/tambah_skrining_rj', [
             'judul'       => 'Tambah ' . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->model->primaryKey,
-            'konfig'      => $konfig,
+            'konfig'      => $this->getKonfig(),
             'baris'       => $mockBaris,
             'form_action' => '/submittambah',
         ]);
     }
+
     #[\Override]
     final public function update_page(int|string $id): string
     {
-        $breadcrumbs = [
-            ['title' => 'Ubah', 'icon' => 'ubah']
-        ];
-
         $baris = $this->model->find_one($id);
-
-        $dataPasien = null;
-        if (!empty($baris['no_rm'])) {
-            $dataPasien = $this->model->db
-                ->table('role.pasien p')
-                ->select('p.nomor_rm, o.nama, o.nik, o.tanggal_lahir, jk.nama_jenis_kelamin as jenis_kelamin')
-                ->join('person.orang o', 'o.id_orang = p.id_orang')
-                ->join('person.jenis_kelamin jk', 'jk.id_jenis_kelamin = o.id_jenis_kelamin', 'left')
-                ->where('p.nomor_rm', $baris['no_rm'])
-                ->get()
-                ->getRowArray();
+        
+        if (empty($baris)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
         }
 
-        $konfig = array_values(array_filter(
-            $this->get_fields_with_options(true, true),
-            fn($f) => $f[2] !== 'id_skrining' && $f[2] !== 'no_rm'
-        ));
+        $dataPasien = !empty($baris['no_rm']) ? $this->fetchDataPasienByRm($baris['no_rm']) : null;
 
         return view('admin/skrining_rawat_jalan/tambah_skrining_rj', [
             'judul'       => 'Ubah ' . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->model->primaryKey,
-            'konfig'      => $konfig,
+            'konfig'      => $this->getKonfig(true),
             'baris'       => $baris,
             'form_action' => '/submitedit/' . $id,
             'data_pasien' => $dataPasien,
