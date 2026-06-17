@@ -69,7 +69,7 @@ final class LembarOperasiController extends ControllerTemplate
 
     private function buildForms(int $idJadwal): array
     {
-        // BENAR-BENAR 1 QUERY: Menggunakan subquery selection dalam satu eksekusi SQL
+        // Menggunakan subquery selection dalam satu eksekusi SQL
         $sql = "SELECT
             (SELECT id_pengkajian_pre   FROM operasi.pengkajian_preop          WHERE id_jadwal = ?) AS pengkajian_preop,
             (SELECT id_pre_anestesi     FROM operasi.pengkajian_pre_anestesi   WHERE id_jadwal = ?) AS pengkajian_pre_anestesi,
@@ -182,7 +182,6 @@ final class LembarOperasiController extends ControllerTemplate
             $this->model->update($id, ['id_status' => $newStatus]);
             session()->setFlashdata('success', $messages[$newStatus]);
         } catch (\Exception $e) {
-            // FIX: Validasi instance exception agar tidak memicu TypeError
             $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException 
                 ? $this->friendly_db_error($e) 
                 : $e->getMessage();
