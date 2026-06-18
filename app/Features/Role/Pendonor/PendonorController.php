@@ -172,29 +172,45 @@ final class PendonorController extends ControllerTemplate
     #[\Override]
     final public function create(): string|RedirectResponse
     {
-        $modelOrang = new \App\Features\Person\Orang\OrangModel();
+        $modelAlamat  = new \App\Features\Lokasi\Alamat\AlamatModel();
+        $modelOrang   = new \App\Features\Person\Orang\OrangModel();
+        $rawPost      = $this->request->getPost();
 
         $dataPendonor = $this->get_post_data_custom();
-        $rawPost = $this->request->getPost();
 
-        $dataOrang = [];
-
-        foreach ($modelOrang->allowedFields as $field) {
-            $value = $rawPost[$field] ?? '';
-
-            if ($value === '') {
-                $value = null;
-            } 
-            else if (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
-                $value = (int) $value;
-            }
-
-            $dataOrang[$field] = $value;
-        }
-
-        $this->model->db->transBegin();
+        $this->model->db->transStart();
 
         try {
+            $dataAlamat = [
+                'alamat_lengkap'  => $rawPost['alamat_lengkap'] ?? null,
+                'id_provinsi'     => isset($rawPost['id_provinsi']) ? (int)$rawPost['id_provinsi'] : null,
+                'id_kota_lokal'   => isset($rawPost['id_kota_lokal']) ? (int)$rawPost['id_kota_lokal'] : null,
+                'id_kec_lokal'    => isset($rawPost['id_kec_lokal']) ? (int)$rawPost['id_kec_lokal'] : null,
+                'id_desa_lokal'   => isset($rawPost['id_desa_lokal']) ? (int)$rawPost['id_desa_lokal'] : null,
+            ];
+
+            if (!$modelAlamat->insert($dataAlamat)) {
+                throw new \RuntimeException('Sistem gagal memproses data Alamat baru.');
+            }
+
+            $idAlamatBaru = $modelAlamat->insertID();
+
+            $dataOrang = [];
+            foreach ($modelOrang->allowedFields as $field) {
+                $value = $rawPost[$field] ?? '';
+    
+                if ($value === '') {
+                    $value = null;
+                } 
+                else if (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
+                    $value = (int) $value;
+                }
+    
+                $dataOrang[$field] = $value;
+            }
+
+            $dataOrang['id_alamat'] = $idAlamatBaru;
+
             if (!$modelOrang->insert($dataOrang)) {
                 throw new \RuntimeException('Sistem gagal menyimpan identitas Orang.');
             }
@@ -206,27 +222,20 @@ final class PendonorController extends ControllerTemplate
                 throw new \RuntimeException('Sistem gagal menyimpan entitas Pendonor.');
             }
 
+            $this->model->db->transComplete();
+
             if ($this->model->db->transStatus() === false) {
-                $this->model->db->transRollback();
-                session()->setFlashdata('error', 'Transaksi database gagal. Seluruh perubahan dibatalkan.');
-                return redirect()->back()->withInput();
+                throw new \RuntimeException('Gagal menyimpan data pendonor.');
             }
 
-            $this->model->db->transCommit();
+            session()->setFlashdata('success', 'Data pendonor berhasil disimpan.');
 
-        } catch (\ReflectionException $e) {
-            $this->model->db->transRollback();
-            session()->setFlashdata('error', 'Kesalahan Refleksi: ' . $e->getMessage());
-            return redirect()->back()->withInput();
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
-                ? $this->friendly_db_error($e)
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
+                ? $this->friendly_db_error($e) 
                 : $e->getMessage();
-                
             session()->setFlashdata('error', $errMsg);
-            return redirect()->back()->withInput();
         }
 
         return redirect()->to($this->get_uri_path() . '/data');
