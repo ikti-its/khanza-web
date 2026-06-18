@@ -33,4 +33,25 @@ final class KotaController extends ControllerTemplate
             ],
         );
     }
+
+    /**
+     * Menampilkan data modal kota
+     */
+    public function list()
+    {
+        $tabel = $this->model->table;
+
+        $data = $this->model->builder()
+            ->select("
+                {$tabel}.id_kota,
+                {$tabel}.nama_kota
+            ")
+            ->where("{$tabel}.id_kota >", 0)
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON([
+            'data' => $data
+        ]);
+    }
 }
