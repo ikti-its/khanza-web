@@ -176,7 +176,7 @@
                 </label>
                 <div class="w-full lg:w-1/4">
                     <input type="text" id="nama_kota_wilayah" name="nama_kota_wilayah" readonly
-                           value="<?= $baris['nama_kota'] ?? '' ?>" placeholder="Terisi otomatis..."
+                           value="<?= $baris['nama_kota_wilayah'] ?? '' ?>" placeholder="Terisi otomatis..."
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed h-[38px]">
                 </div>
 

@@ -287,11 +287,28 @@ final class PendonorController extends ControllerTemplate
             $dataPendonor = [];
         }
 
-        $modelOrang = new \App\Features\Person\Orang\OrangModel();
-        $idOrang = $dataPendonor['id_orang'] ?? null;
-        $dataOrang = $idOrang ? $modelOrang->find($idOrang) : [];
+        $dataOrang  = [];
+        $dataAlamat = [];
 
-        $baris = array_merge($dataOrang, $dataPendonor);
+        if (!empty($dataPendonor['id_orang'])) {
+            $modelOrang = new \App\Features\Person\Orang\OrangModel();
+            $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+
+            if (!empty($dataOrang['id_alamat'])) {
+                $modelAlamat = new \App\Features\Lokasi\Alamat\AlamatModel();
+                $dataAlamat  = $modelAlamat->get_detail_wilayah($dataOrang['id_alamat']) ?? [];
+            }
+
+            if (!empty($dataOrang['tempat_lahir_kota'])) {
+                $modelKotaLahir = new \App\Features\Lokasi\Kota\KotaModel();
+                $kotaLahir = $modelKotaLahir->find($dataOrang['tempat_lahir_kota']);
+                if ($kotaLahir) {
+                    $dataAlamat['nama_kota'] = $kotaLahir['nama_kota'] ?? '';
+                }
+            }
+        }
+
+        $baris = array_merge($dataAlamat, $dataOrang, $dataPendonor);
 
         $controllerOrang = new \App\Features\Person\Orang\OrangController();
         $konfigOrang = $controllerOrang->get_fields_with_options(false, true);
@@ -324,7 +341,7 @@ final class PendonorController extends ControllerTemplate
             ['title' => 'Ubah', 'icon', 'Ubah']
         ];
 
-        return view('/layouts/tambah_ubah', [
+        return view('/admin/role/tambah_pendonor', [
             'judul'       => 'Ubah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
