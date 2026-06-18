@@ -479,22 +479,21 @@ $searchIcon = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="non
             alert('Silakan pilih minimal satu peralatan transfer.');
             return false;
         }
-        if (!document.getElementById('id_ruang_asal').value) {
-            alert('Silakan pilih ruang asal terlebih dahulu.');
-            return false;
+        
+        const reqs = [
+            { id: 'id_ruang_asal', msg: 'Silakan pilih ruang asal terlebih dahulu.' },
+            { id: 'id_ruang_selanjutnya', msg: 'Silakan pilih ruang selanjutnya terlebih dahulu.' },
+            { id: 'id_perawat_menyerahkan', msg: 'Silakan pilih perawat menyerahkan terlebih dahulu.' },
+            { id: 'id_perawat_menerima', msg: 'Silakan pilih perawat menerima terlebih dahulu.' }
+        ];
+
+        for (let v of reqs) {
+            if (!document.getElementById(v.id).value) {
+                alert(v.msg);
+                return false;
+            }
         }
-        if (!document.getElementById('id_ruang_selanjutnya').value) {
-            alert('Silakan pilih ruang selanjutnya terlebih dahulu.');
-            return false;
-        }
-        if (!document.getElementById('id_perawat_menyerahkan').value) {
-            alert('Silakan pilih perawat menyerahkan terlebih dahulu.');
-            return false;
-        }
-        if (!document.getElementById('id_perawat_menerima').value) {
-            alert('Silakan pilih perawat menerima terlebih dahulu.');
-            return false;
-        }
+
         const btn = document.getElementById('submitButton');
         if (btn) { btn.disabled = true; btn.innerHTML = 'Menyimpan...'; }
         return true;
