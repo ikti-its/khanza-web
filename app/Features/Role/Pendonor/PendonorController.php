@@ -88,7 +88,7 @@ final class PendonorController extends ControllerTemplate
     }
     
     /**
-     * OVERRIDE: Menampilkan Form Gabungan
+     * OVERRIDE: Menampilkan Form Pendonor
      */
     #[\Override]
     final public function create_page(): string
@@ -155,7 +155,7 @@ final class PendonorController extends ControllerTemplate
             $konfigGabungan[] = $fieldPendonor;
         }
 
-        return view('/layouts/tambah_ubah', [
+        return view('/admin/role/tambah_pendonor', [
             'judul'       => 'Tambah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
