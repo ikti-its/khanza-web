@@ -143,10 +143,10 @@
                     Kelurahan / Desa<span class="text-red-600">*</span>
                 </label>
                 <div class="w-full lg:w-1/4 flex gap-x-2">
-                    <input type="hidden" name="id_provinsi" id="id_provinsi" required>
-                    <input type="hidden" name="id_kota_lokal" id="id_kota_lokal" required>
-                    <input type="hidden" name="id_kec_lokal" id="id_kec_lokal" required>
-                    <input type="hidden" name="id_desa_lokal" id="id_desa_lokal" required>
+                    <input type="hidden" name="id_provinsi" id="id_provinsi" value="<?= $baris['id_provinsi'] ?? '' ?>" required>
+                    <input type="hidden" name="id_kota_lokal" id="id_kota_lokal" value="<?= $baris['id_kota_lokal'] ?? '' ?>" required>
+                    <input type="hidden" name="id_kec_lokal" id="id_kec_lokal" value="<?= $baris['id_kec_lokal'] ?? '' ?>" required>
+                    <input type="hidden" name="id_desa_lokal" id="id_desa_lokal" value="<?= $baris['id_desa_lokal'] ?? '' ?>" required>
 
                     <input type="text" id="nama_desa" name="nama_desa" readonly required
                            value="<?= $baris['nama_desa'] ?? '' ?>"

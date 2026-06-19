@@ -353,33 +353,45 @@ final class PendonorController extends ControllerTemplate
     }
 
     /**
-     * OVERRIDE: Mengeksekusi Simpan Perubahan Data Form Gabungan
+     * OVERRIDE: Mengeksekusi Simpan Perubahan Data Pendonor
      */
     #[\Override]
     final public function update(int|string $id): string|RedirectResponse
     {
-        $dataPendonorLama = $this->model->find($id);
-        if (!$dataPendonorLama) {
-            session()->setFlashdata('error', 'Data gagal diubah. Pendonor tidak ditemukan.');
-            return redirect()->to($this->get_uri_path() . '/data');
-        }
-
-        $idOrang = $dataPendonorLama['id_orang'];
-        $nomorPendonor = $dataPendonorLama['nomor_pendonor'];
+        if ($id == 0) return $this->index();
 
         $rawPost = $this->request->getPost();
 
-        $modelOrang = new \App\Features\Person\Orang\OrangModel();
+        $dataPendonorLama = $this->model->find($id);
+        $idOrang = $dataPendonorLama['id_orang'];
 
-        $this->model->db->transBegin();
+        $modelAlamat = new \App\Features\Lokasi\Alamat\AlamatModel();
+        $modelOrang  = new \App\Features\Person\Orang\OrangModel();
+
+        $dataOrangLama = $modelOrang->find($idOrang);
+        $idAlamatLama  = $dataOrangLama['id_alamat'] ?? null;
+
+        $this->model->db->transStart();
 
         try {
+            $dataAlamat = [
+                'alamat_lengkap'  => $rawPost['alamat_lengkap'] ?? null,
+                'id_provinsi'     => isset($rawPost['id_provinsi']) ? (int)$rawPost['id_provinsi'] : null,
+                'id_kota_lokal'   => isset($rawPost['id_kota_lokal']) ? (int)$rawPost['id_kota_lokal'] : null,
+                'id_kec_lokal'    => isset($rawPost['id_kec_lokal']) ? (int)$rawPost['id_kec_lokal'] : null,
+                'id_desa_lokal'   => isset($rawPost['id_desa_lokal']) ? (int)$rawPost['id_desa_lokal'] : null,
+            ];
+
+            if (!empty($idAlamatLama)) {
+                $modelAlamat->update($idAlamatLama, $dataAlamat);
+                $idAlamatFinal = $idAlamatLama;
+            } else {
+                $modelAlamat->insert($dataAlamat);
+                $idAlamatFinal = $modelAlamat->insertID();
+            }
+
             $dataOrang = [];
             foreach ($modelOrang->allowedFields as $field) {
-                if ($field === $modelOrang->primaryKey) {
-                    continue;
-                }
-
                 $value = $rawPost[$field] ?? '';
 
                 if ($value === '') {
@@ -390,26 +402,29 @@ final class PendonorController extends ControllerTemplate
 
                 $dataOrang[$field] = $value;
             }
+            $dataOrang['id_alamat'] = $idAlamatFinal;
 
-            if (!$modelOrang->update($idOrang, $dataOrang)) {
-                throw new \Exception('Gagal memperbarui data personal Orang.');
-            }
+            $modelOrang->update($idOrang, $dataOrang);
 
             $dataPendonor = $this->get_post_data_custom();
-
-            $dataPendonor['nomor_pendonor'] = $nomorPendonor;
             $dataPendonor['id_orang'] = $idOrang;
 
-            if (!$this->model->update($id, $dataPendonor)) {
-                throw new \Exception('Gagal memperbarui data spesifik Pendonor.');
+            $this->model->update($id, $dataPendonor);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal memperbarui data ' . $this->title . '.');
             }
 
-            $this->model->db->transCommit();
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil diperbarui.');
 
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', 'Gagal memperbarui data: ' . $e->getMessage());
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
+                ? $this->friendly_db_error($e) 
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
         }
 
         return redirect()->to($this->get_uri_path() . '/data');
