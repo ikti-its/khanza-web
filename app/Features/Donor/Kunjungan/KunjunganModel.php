@@ -33,4 +33,38 @@ final class KunjunganModel extends ModelTemplate
             ],
         );
     }
+
+    /**
+     * Memeriksa apakah pendonor lolos syarat interval jeda donor UTD
+     * @param int|string $idPendonor
+     * @param string $tglKunjunganInput
+     * @return array ['status' => bool, 'message' => string]
+     */
+    public function cekIntervalMedis(int|string $idPendonor, string $tglKunjunganInput): array
+    {
+        $minimalJedaHari = 60;
+
+        $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+        $dataPendonor  = $modelPendonor->find($idPendonor);
+
+        if ($dataPendonor && !empty($dataPendonor['tanggal_donor_terakhir'])) {
+            $tglDonorTerakhir = new \DateTime($dataPendonor['tanggal_donor_terakhir']);
+            $tglKunjunganBaru = new \DateTime($tglKunjunganInput);
+
+            $selisih = $tglDonorTerakhir->diff($tglKunjunganBaru);
+            $jumlahHari = (int) $selisih->format('%r%a');
+
+            if ($jumlahHari < $minimalJedaHari) {
+                $sisaHari = $minimalJedaHari - $jumlahHari;
+                $konversiBulan = (int) ($minimalJedaHari / 30);
+                
+                return [
+                    'status'  => false,
+                    'message' => "Gagal Mendaftarkan Kunjungan! Kebijakan UTD menetapkan syarat interval jeda minimal {$konversiBulan} bulan ({$minimalJedaHari} hari). Calon pendonor baru bisa donor kembali dalam {$sisaHari} hari lagi."
+                ];
+            }
+        }
+
+        return ['status' => true, 'message' => ''];
+    }
 }

@@ -6,6 +6,7 @@ namespace App\Features\Donor\Kunjungan;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class KunjunganController extends ControllerTemplate
 {
@@ -15,9 +16,9 @@ final class KunjunganController extends ControllerTemplate
             new KunjunganModel(),
             [
                 ['Donor',     'donor'],
-                ['Kunjungan', 'kunjungan'],
+                ['Registrasi Kunjungan', 'registrasi_kunjungan'],
             ],
-            'Kunjungan',
+            'Registrasi Kunjungan',
             [
                 A::READ,
                 A::CREATE,
@@ -100,7 +101,7 @@ final class KunjunganController extends ControllerTemplate
         }
 
         return view('/admin/donor/tambah_kunjungan', [
-            'judul'       => 'Registrasi ' . $this->title,
+            'judul'       => 'Tambah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->model->primaryKey,
@@ -108,6 +109,54 @@ final class KunjunganController extends ControllerTemplate
             'baris'       => $mockBaris,
             'form_action' => '/submittambah',
         ]);
+    }
+
+    /**
+     * OVERRIDE: Memproses simpan data registrasi kunjungan
+     */
+    #[\Override]
+    final public function create(): string|RedirectResponse
+    {
+        $rawPost     = $this->request->getPost();
+        $idPendonor  = $rawPost['id_pendonor'] ?? null;
+        $tglKunjunganInput = $rawPost['tanggal_kunjungan'] ?? date('Y-m-d H:i:s');
+
+        $validasiMedis = $this->model->cekIntervalMedis($idPendonor, $tglKunjunganInput);
+        
+        if ($validasiMedis['status'] === false) {
+            session()->setFlashdata('error', $validasiMedis['message']);
+        }
+
+        $dataKunjungan = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataKunjungan[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $this->model->insert($dataKunjungan);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menyimpan data registrasi kunjungan.');
+            }
+
+            session()->setFlashdata('success', 'Data registrasi kunjungan berhasil disimpan.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
+                ? $this->friendly_db_error($e) 
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 
     /**
