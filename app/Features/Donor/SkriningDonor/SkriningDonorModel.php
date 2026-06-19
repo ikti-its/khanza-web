@@ -14,11 +14,12 @@ final class SkriningDonorModel extends ModelTemplate
             new SkriningDonorDatabase(),
             [
                 'id_skrining'      => V::DEFAULT(),
+                'berat_badan'      => V::DEFAULT(),
                 'sistolik'         => V::DEFAULT(),
                 'diastolik'        => V::DEFAULT(),
-                'berat_badan'      => V::DEFAULT(),
-                'kadar_hemoglobin' => V::DEFAULT(),
+                'nadi'             => V::DEFAULT(),
                 'suhu_tubuh'       => V::DEFAULT(),
+                'kadar_hemoglobin' => V::DEFAULT(),
             ],
             [
                 'id_kunjungan'       => [
@@ -29,6 +30,7 @@ final class SkriningDonorModel extends ModelTemplate
                     ],
                 ],
                 'id_hasil_anamnesis' => ['nama_hasil'],
+                'id_status_skrining' => ['nama_status_skrining'],
             ],
         );
     }

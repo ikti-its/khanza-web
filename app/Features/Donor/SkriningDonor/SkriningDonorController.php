@@ -28,12 +28,14 @@ final class SkriningDonorController extends ControllerTemplate
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_skrining',        'ID Skrining'],
                 [SHOW, REQUIRED, I::INDEX,  'id_kunjungan',       'ID Kunjungan'],
+                [SHOW, REQUIRED, I::FLOAT,  'berat_badan',        'Berat Badan'],
                 [SHOW, REQUIRED, I::NUMBER, 'sistolik',           'Tekanan Sistolik'],
                 [SHOW, REQUIRED, I::NUMBER, 'diastolik',          'Tekanan Diastolik'],
-                [SHOW, REQUIRED, I::FLOAT,  'berat_badan',        'Berat Badan'],
-                [SHOW, REQUIRED, I::FLOAT,  'kadar_hemoglobin',   'Kadar Hemoglobin'],
+                [SHOW, REQUIRED, I::NUMBER, 'nadi',               'Denyut Nadi (x/menit)'],
                 [SHOW, REQUIRED, I::TEMP,   'suhu_tubuh',         'Suhu'],
+                [SHOW, REQUIRED, I::FLOAT,  'kadar_hemoglobin',   'Kadar Hemoglobin'],
                 [SHOW, REQUIRED, I::SELECT, 'id_hasil_anamnesis', 'Hasil Anamnesis'],
+                [SHOW, REQUIRED, I::SELECT, 'id_status_skrining', 'Status Skrining'],
             ],
         );
     }
