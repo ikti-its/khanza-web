@@ -445,15 +445,25 @@ final class PendonorController extends ControllerTemplate
 
         $idOrang = $pendonor['id_orang'] ?? null;
 
+        if (!empty($idOrang)) {
+            $modelOrang = new \App\Features\Person\Orang\OrangModel();
+            $orangRow   = $modelOrang->find($idOrang);
+            $idAlamat   = $orangRow['id_alamat'] ?? null;
+        }
+
         $this->model->db->transStart();
 
         try {
-            $modelOrang = new \App\Features\Person\Orang\OrangModel();
-
             $this->model->delete($id);
 
             if (!empty($idOrang)) {
+                $modelOrang = new \App\Features\Person\Orang\OrangModel();
                 $modelOrang->delete($idOrang);
+            }
+
+            if (!empty($idAlamat)) {
+                $modelAlamat = new \App\Features\Lokasi\Alamat\AlamatModel();
+                $modelAlamat->delete($idAlamat);
             }
 
             $this->model->db->transComplete();
