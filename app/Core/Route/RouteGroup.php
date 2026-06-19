@@ -71,6 +71,8 @@ class RouteGroup
                     $routes->get('modal/list',            "\\$f::list", $filter);
                     $routes->post('sampel/(:segment)',    "\\$f::sampel/$1", $filter);
                     $routes->post('bayar/(:segment)',     "\\$f::bayar/$1", $filter);
+                    $routes->post('upload/(:num)',        "\\$f::upload/$1", $filter);
+                    $routes->post('hapus-foto/(:num)',    "\\$f::hapusFoto/$1", $filter);
                 });
             }
         }

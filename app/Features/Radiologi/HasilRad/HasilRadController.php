@@ -294,18 +294,28 @@ final class HasilRadController extends ControllerTemplate
             ->get()
             ->getResultArray();
 
+        $fotoTerpilih = $this->model->db
+            ->table('radiologi.hasil_rad_foto')
+            ->select(['id_rad_foto', 'nama_file'])
+            ->where('id_hasil_rad', $id)
+            ->orderBy('tgl_upload', 'ASC')
+            ->get()
+            ->getResultArray();
+
         return view('admin/radiologi/tambah_hasil_rad', [
-            'judul'          => 'Ubah ' . $this->title,
-            'breadcrumbs'    => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
-            'modul_path'     => $this->get_uri_path(),
-            'kolom_id'       => $this->model->primaryKey,
-            'konfig'         => $this->getKonfig(),
-            'baris'          => $baris,
-            'form_action'    => '/submitedit/' . $id,
-            'template_rad'   => $this->fetchTemplateRad(),
-            'barang_non_medis'=> $this->fetchBarangNonMedis(),
-            'item_terpilih'  => $itemTerpilih,
-            'bhp_terpilih'   => $bhpTerpilih,
+            'judul'           => 'Ubah ' . $this->title,
+            'breadcrumbs'     => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
+            'modul_path'      => $this->get_uri_path(),
+            'kolom_id'        => $this->model->primaryKey,
+            'konfig'          => $this->getKonfig(),
+            'baris'           => $baris,
+            'form_action'     => '/submitedit/' . $id,
+            'template_rad'    => $this->fetchTemplateRad(),
+            'barang_non_medis' => $this->fetchBarangNonMedis(),
+            'item_terpilih'   => $itemTerpilih,
+            'bhp_terpilih'    => $bhpTerpilih,
+            'foto_terpilih'   => $fotoTerpilih,
+            'id_hasil_rad'    => $id,
         ]);
     }
  
