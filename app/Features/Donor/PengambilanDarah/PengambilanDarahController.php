@@ -77,6 +77,7 @@ final class PengambilanDarahController extends ControllerTemplate
             if ((int)$row['total_masuk'] > 0) {
                 $masterBhpMedis[] = [
                     'id_barang'   => $row['id_barang'],
+                    'kode_barang' => $row['kode_barang'],
                     'nama_barang' => $row['nama_barang'],
                     'harga'       => $row['harga'],
                     'stok'        => $sisaStok
@@ -91,6 +92,7 @@ final class PengambilanDarahController extends ControllerTemplate
             if ((int)$row['total_masuk'] > 0) {
                 $masterBhpNonMedis[] = [
                     'id_barang'   => $row['id_barang'],
+                    'kode_barang' => $row['kode_barang'],
                     'nama_barang' => $row['nama_barang'],
                     'harga'       => $row['harga'],
                     'stok'        => $sisaStokNon
@@ -330,6 +332,7 @@ final class PengambilanDarahController extends ControllerTemplate
             if ((int)$row['total_masuk'] > 0) {
                 $masterBhpMedis[] = [
                     'id_barang'   => $row['id_barang'],
+                    'kode_barang' => $row['kode_barang'],
                     'nama_barang' => $row['nama_barang'],
                     'harga'       => $row['harga'],
                     'stok'        => $sisaStok
@@ -343,6 +346,7 @@ final class PengambilanDarahController extends ControllerTemplate
             if ((int)$row['total_masuk'] > 0) {
                 $masterBhpNonMedis[] = [
                     'id_barang'   => $row['id_barang'],
+                    'kode_barang' => $row['kode_barang'],
                     'nama_barang' => $row['nama_barang'],
                     'harga'       => $row['harga'],
                     'stok'        => $sisaStokNon

@@ -234,9 +234,10 @@
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="bg-gray-100 text-sm text-gray-700 dark:bg-slate-800 dark:text-gray-400">
                         <tr>
-                            <th class="p-3">Nama Barang</th>
-                            <th class="p-3 w-24 text-center">Jumlah</th>
-                            <th class="p-3 w-20 text-center">Aksi</th>
+                            <th class="p-3 w-1/4">Kode Barang</th> 
+                            <th class="p-3 w-2/5">Nama Barang</th>
+                            <th class="p-3 w-1/5 text-center">Jumlah</th>
+                            <th class="p-3 w-32 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="bhpTableBody">
@@ -379,7 +380,7 @@
         items.forEach(item => {
             const opt = document.createElement('option');
             opt.value = item.id_barang;
-            opt.text  = `${item.nama_barang} (Stok: ${item.stok})`;
+            opt.text  = `[${item.kode_barang || '-'}] ${item.nama_barang} (Stok: ${item.stok})`;
             select.appendChild(opt);
         });
     }
@@ -393,11 +394,16 @@
 
         const idBarangTerpilih = select.value;
 
+        let kodeSnapshot  = '-';
+        let namaSnapshot  = '';
         let hargaSnapshot = 0;
+
         const daftarMaster = currentTab === 'medis' ? masterMedis : masterNonMedis;
-        
         const selectedItem = daftarMaster.find(item => String(item.id_barang) === String(idBarangTerpilih));
-        if (selectedItem && selectedItem.harga) {
+
+        if (selectedItem) {
+            namaSnapshot  = selectedItem.nama_barang;
+            kodeSnapshot  = selectedItem.kode_barang;
             hargaSnapshot = selectedItem.harga;
         }
 
@@ -419,8 +425,11 @@
         const priceName = currentTab === 'medis' ? 'harga_medis' : 'harga_penunjang';
 
         row.innerHTML = `
+            <td class="p-3 text-center font-medium text-gray-900 dark:text-white">
+                ${kodeSnapshot}
+            </td>
             <td class="p-3 font-medium text-gray-900 dark:text-white">
-                ${select.options[select.selectedIndex].text}
+                ${namaSnapshot}
                 <input type="hidden" name="${priceName}[${idBarangTerpilih}]" value="${hargaSnapshot}">
             </td>
             <td class="p-3 text-center">
@@ -439,7 +448,7 @@
         if (tbody.children.length === 0) {
             tbody.innerHTML = `
                 <tr id="emptyBhpRow">
-                    <td colspan="3" class="text-center py-6 text-gray-400 italic dark:text-gray-500">Belum ada BHP terpilih</td>
+                    <td colspan="4" class="text-center py-6 text-gray-400 italic dark:text-gray-500">Belum ada BHP terpilih</td>
                 </tr>`;
         }
     }
