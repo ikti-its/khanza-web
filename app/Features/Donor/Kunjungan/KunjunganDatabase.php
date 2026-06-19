@@ -15,7 +15,7 @@ final class KunjunganDatabase extends DatabaseTemplate
             'kunjungan',
             [
                 'id_kunjungan'      => T::ID(100_000_000),
-                'nomor_antrian'     => T::QUEUE(),
+                'nomor_antrian'     => T::RECORD(3),
                 'nomor_kunjungan'   => T::RECORD(20),
                 'tanggal_kunjungan' => T::DTIME(),
                 'id_pendonor'       => T::FK_AUTO(),
