@@ -14,10 +14,17 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const modalFilterInput = document.getElementById('modalKunjunganFilterType');
+        let fallbackUrl = '<?= site_url('donor/registrasi-kunjungan/modal/list') ?>';
+        
+        if (modalFilterInput && modalFilterInput.value !== '') {
+            fallbackUrl += '?filter=' + modalFilterInput.value;
+        }
+
         initModalList({
             modalId: 'modalKunjungan',
             tableId: 'kunjunganTable',
-            url:     '<?= site_url('donor/kunjungan/modal/list') ?>',
+            url:     fallbackUrl,
             fields: ['nomor_kunjungan', 'nomor_pendonor', 'nama'],
             searchIds: {
                 searchNoKunjungan: 'nomor_kunjungan',

@@ -265,7 +265,9 @@ final class KunjunganController extends ControllerTemplate
     {
         $tabel = $this->model->table;
 
-        $data = $this->model->builder()
+        $filter = $this->request->getGet('filter');
+
+        $builder = $this->model->builder()
             ->select("
                 {$tabel}.id_kunjungan,
                 {$tabel}.nomor_kunjungan,
@@ -274,9 +276,14 @@ final class KunjunganController extends ControllerTemplate
                 person.orang.nama
             ")
             ->join('role.pendonor', "role.pendonor.id_pendonor = {$tabel}.id_pendonor", 'inner')
-            ->join('person.orang', 'person.orang.id_orang = role.pendonor.id_orang', 'inner')
-            ->get()
-            ->getResultArray();
+            ->join('person.orang', 'person.orang.id_orang = role.pendonor.id_orang', 'inner');
+
+        if ($filter === 'lolos_skrining') {
+            $builder->join('donor.skrining_donor', "donor.skrining_donor.id_kunjungan = {$tabel}.id_kunjungan", 'inner')
+                    ->where('donor.skrining_donor.id_status_skrining', 1); // Asumsi 1 = Lolos
+        }
+
+        $data = $builder->get()->getResultArray();
 
         return $this->response->setJSON([
             'data' => $data

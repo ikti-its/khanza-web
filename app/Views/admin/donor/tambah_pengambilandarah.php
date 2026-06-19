@@ -1,6 +1,8 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 
+<input type="hidden" id="modalKunjunganFilterType" value="lolos_skrining">
+
 <?= $this->include('components/modal/modalkunjungan') ?>
 <?= $this->include('components/modal/modalpetugas') ?>
 
