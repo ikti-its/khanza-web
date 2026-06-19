@@ -113,7 +113,7 @@
       <strong>RS Bhayangkara</strong><br>
       Jl. Arif Rahman Hakim No. 213, Keputih, Sukolilo,<br>
       Surabaya, Jawa Timur<br>
-      Telp (0821)123456789
+      Telp (031)123456789
     </div>
 
     <div class="divider"></div>
