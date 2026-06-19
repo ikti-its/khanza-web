@@ -6,6 +6,7 @@ namespace App\Features\Donor\SkriningDonor;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class SkriningDonorController extends ControllerTemplate
 {
@@ -113,6 +114,56 @@ final class SkriningDonorController extends ControllerTemplate
     }
 
     /**
+     * OVERRIDE: Memproses Simpan Data Skrining Donor
+     */
+    #[\Override]
+    final public function create(): string|RedirectResponse
+    {
+        $rawPost = $this->request->getPost();
+
+        $hasilSkrining     = $this->model->hitungOtomatisStatusSkrining($rawPost);
+        $idStatusSkrining  = $hasilSkrining['status'];
+        $daftarAlasan      = $hasilSkrining['alasan'];
+
+        $dataSkrining = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataSkrining[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+
+        $dataSkrining['id_status_skrining'] = $idStatusSkrining;
+
+        $this->model->db->transStart();
+        try {
+            $this->model->insert($dataSkrining);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menyimpan data skrining donor.');
+            }
+
+            if ($idStatusSkrining === 1) {
+                session()->setFlashdata('success', 'Data skrining berhasil disimpan. Pendonor dinyatakan LOLOS.');
+            } else {
+                $teksAlasan = implode(', ', $daftarAlasan);
+                session()->setFlashdata('error', "Data skrining berhasil disimpan. Pendonor dinyatakan GAGAL/DITUNDA karena indikator: {$teksAlasan}.");
+            }
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
+    }
+
+    /**
      * OVERRIDE: Menampilkan Halaman Ubah Data Skrining Donor
      */
     #[\Override]
@@ -211,5 +262,65 @@ final class SkriningDonorController extends ControllerTemplate
             'baris'       => $baris,
             'form_action' => '/submitedit/' . $id,
         ]);
+    }
+
+    /**
+     * OVERRIDE: Mengeksekusi Simpan Perubahan Data Skrining Donor
+     */
+    #[\Override]
+    final public function update(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->index();
+        $rawPost = $this->request->getPost();
+
+        $hasilSkrining     = $this->model->hitungOtomatisStatusSkrining($rawPost);
+        $idStatusSkrining  = $hasilSkrining['status'];
+        $daftarAlasan      = $hasilSkrining['alasan'];
+
+        $dataSkrining = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataSkrining[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+        $dataSkrining['id_status_skrining'] = $idStatusSkrining;
+
+        $this->model->db->transStart();
+        try {
+            $dataLama = $this->model->find($id);
+            $statusSebelumnya = (int) ($dataLama['id_status_skrining'] ?? 0);
+
+            $this->model->update($id, $dataSkrining);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal memperbarui data skrining donor.');
+            }
+
+            if ($statusSebelumnya === 1 && $idStatusSkrining === 1) {
+                session()->setFlashdata('success', 'Data skrining berhasil diperbarui.');
+            } 
+            elseif ($statusSebelumnya === 1 && $idStatusSkrining === 2) {
+                $teksAlasan = implode(', ', $daftarAlasan);
+                session()->setFlashdata('success', "Data skrining berhasil diperbarui. Pendonor dinyatakan GAGAL/DITUNDA karena indikator: {$teksAlasan}.");
+            } 
+            elseif ($statusSebelumnya === 2 && $idStatusSkrining === 1) {
+                session()->setFlashdata('success', 'Data skrining berhasil diperbarui. Pendonor dinyatakan LOLOS.');
+            } 
+            elseif ($statusSebelumnya === 2 && $idStatusSkrining === 2) {
+                session()->setFlashdata('success', 'Data skrining berhasil diperbarui.');
+            }
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 }
