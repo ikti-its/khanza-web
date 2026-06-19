@@ -236,7 +236,7 @@
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="bg-gray-100 text-sm text-gray-700 dark:bg-slate-800 dark:text-gray-400">
                         <tr>
-                            <th class="p-3 w-1/4">Kode Barang</th> 
+                            <th class="p-3 w-1/4 text-center">Kode Barang</th> 
                             <th class="p-3 w-2/5">Nama Barang</th>
                             <th class="p-3 w-1/5 text-center">Jumlah</th>
                             <th class="p-3 w-32 text-center">Aksi</th>
@@ -244,7 +244,7 @@
                     </thead>
                     <tbody id="bhpTableBody">
                         <tr id="emptyBhpRow">
-                            <td colspan="3" class="text-center py-6 text-gray-400 italic dark:text-gray-500">
+                            <td colspan="4" class="text-center py-6 text-gray-400 italic dark:text-gray-500">
                                 Belum ada BHP terpilih
                             </td>
                         </tr>
@@ -348,6 +348,28 @@
                 tbody.appendChild(row);
             });
         }
+
+        const tabelBhpBody = document.getElementById('bhpTableBody');
+        if (tabelBhpBody) {
+            tabelBhpBody.addEventListener('keydown', function(e) {
+                if (e.target.matches('input[type="number"]') && (e.key === '-' || e.key === 'Subtract')) {
+                    e.preventDefault();
+                }
+            });
+
+            tabelBhpBody.addEventListener('input', function(e) {
+                if (e.target.matches('input[type="number"]')) {
+                    let input = e.target;
+                    
+                    if (input.value === '') return; 
+
+                    if (parseInt(input.value) < 1) {
+                        input.value = 1;
+                        alert("Jumlah penggunaan BHP minimal adalah 1.");
+                    }
+                }
+            });
+        }
     });
 
     function switchBhpTab(type) {
@@ -399,6 +421,7 @@
         let kodeSnapshot  = '-';
         let namaSnapshot  = '';
         let hargaSnapshot = 0;
+        let stokSnapshot  = 0;
 
         const daftarMaster = currentTab === 'medis' ? masterMedis : masterNonMedis;
         const selectedItem = daftarMaster.find(item => String(item.id_barang) === String(idBarangTerpilih));
@@ -407,6 +430,7 @@
             namaSnapshot  = selectedItem.nama_barang;
             kodeSnapshot  = selectedItem.kode_barang;
             hargaSnapshot = selectedItem.harga;
+            stokSnapshot  = parseInt(selectedItem.stok) || 0;
         }
 
         const emptyRow = document.getElementById('emptyBhpRow');
@@ -435,7 +459,15 @@
                 <input type="hidden" name="${priceName}[${idBarangTerpilih}]" value="${hargaSnapshot}">
             </td>
             <td class="p-3 text-center">
-                <input type="number" name="${inputName}[${idBarangTerpilih}]" data-id="${idBarangTerpilih}" data-type="${currentTab}" value="1" min="1" class="w-16 text-center border border-gray-300 rounded p-1 dark:bg-slate-900 dark:text-white dark:border-gray-700">
+                <input type="number"
+                       name="${inputName}[${idBarangTerpilih}]"
+                       data-id="${idBarangTerpilih}"
+                       data-type="${currentTab}"
+                       value="1"
+                       min="1"
+                       max="${stokSnapshot}"
+                       oninput="cekBatasStokBhp(this, ${stokSnapshot}, '${namaSnapshot}')"
+                       class="w-full max-w-[80px] text-center border border-gray-300 rounded p-1 dark:bg-slate-900 dark:text-white dark:border-gray-700">
             </td>
             <td class="p-3 text-center">
                 <button type="button" onclick="removeBhpItem(this)" class="text-red-600 font-semibold hover:underline dark:text-red-400">Hapus</button>
@@ -452,6 +484,15 @@
                 <tr id="emptyBhpRow">
                     <td colspan="4" class="text-center py-6 text-gray-400 italic dark:text-gray-500">Belum ada BHP terpilih</td>
                 </tr>`;
+        }
+    }
+
+    function cekBatasStokBhp(inputElement, maksimalStok, namaBarang) {
+        let nilaiInput = parseInt(inputElement.value);
+
+        if (nilaiInput > maksimalStok) {
+            alert(`Jumlah input melampaui batas sisa logistik.\nStok maksimal untuk ${namaBarang} saat ini adalah ${maksimalStok}.`);
+            inputElement.value = maksimalStok;
         }
     }
 
