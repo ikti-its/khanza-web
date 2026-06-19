@@ -184,20 +184,8 @@ final class PengambilanDarahController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
-            $tanggalInput = $dataPengambilan['tanggal_pengambilan'] ?? null;
-
-            if ($tanggalInput) {
-                $waktuInput    = strtotime($tanggalInput);
-                $waktuSekarang = time();
-                $batasMundur   = strtotime('-2 days');
-                
-                if ($waktuInput > $waktuSekarang) {
-                    throw new \RuntimeException("Gagal Menyimpan! Tanggal pengambilan darah tidak boleh melebihi waktu saat ini.");
-                }
-
-                if ($waktuInput < $batasMundur) {
-                    throw new \RuntimeException("Gagal Menyimpan! Batas keterlambatan input data donor untuk petugas maksimal adalah 2 hari ke belakang. Jika ingin menginput data Mobile Unit yang lebih lama, harap laporkan ke Supervisor / Kepala Ruangan.");
-                }
+            if (!empty($dataPengambilan['tanggal_pengambilan'])) {
+                $this->model->validasiTanggalOperasional($dataPengambilan['tanggal_pengambilan']);
             }
 
             $this->model->insert($dataPengambilan);
@@ -454,20 +442,8 @@ final class PengambilanDarahController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
-            $tanggalInput = $dataPengambilan['tanggal_pengambilan'] ?? null;
-
-            if ($tanggalInput) {
-                $waktuInput    = strtotime($tanggalInput);
-                $waktuSekarang = time();
-                $batasMundur   = strtotime('-2 days'); 
-                
-                if ($waktuInput > $waktuSekarang) {
-                    throw new \RuntimeException("Gagal Memperbarui! Perubahan tanggal pengambilan darah tidak boleh melebihi waktu saat ini.");
-                }
-
-                if ($waktuInput < $batasMundur) {
-                    throw new \RuntimeException("Gagal Memperbarui! Batas keterlambatan pengubahan data donor untuk petugas maksimal adalah 2 hari ke belakang.");
-                }
+            if (!empty($dataPengambilan['tanggal_pengambilan'])) {
+                $this->model->validasiTanggalOperasional($dataPengambilan['tanggal_pengambilan']);
             }
 
             $this->model->update($id, $dataPengambilan);
@@ -507,7 +483,7 @@ final class PengambilanDarahController extends ControllerTemplate
             }
 
             $idStatus = (int)($dataPengambilan['id_status_pengambilan'] ?? 0);
-            $this->sync_tanggal_donor_terakhir($idStatus, $dataPengambilan, $id);
+            $this->model->syncTanggalDonorTerakhir($idStatus, $dataPengambilan, $id);
 
             $this->model->db->transComplete();
 
@@ -551,7 +527,7 @@ final class PengambilanDarahController extends ControllerTemplate
             $modelMedisDonor->where('id_pengambilan_darah', $id)->delete();
             $modelPenunjangDonor->where('id_pengambilan_darah', $id)->delete();
 
-            $this->sync_tanggal_donor_terakhir(0, $dataPengambilan, $id);
+            $this->model->syncTanggalDonorTerakhir(0, $dataPengambilan, $id);
 
             $this->model->delete($id);
 
@@ -572,51 +548,5 @@ final class PengambilanDarahController extends ControllerTemplate
         }
 
         return $this->home();
-    }
-
-    /**
-     * HELPER: Menyinkronkan ulang tanggal donor terakhir pada data Pendonor
-     */
-    private function sync_tanggal_donor_terakhir(int $idStatusPengambilan, array $dataPengambilan, string|int $idPengambilanDarah): void
-    {
-        $idKunjungan = $dataPengambilan['id_kunjungan'] ?? null;
-
-        if (empty($idKunjungan)) {
-            return;
-        }
-
-        $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
-        $kunjunganRow   = $modelKunjungan->find($idKunjungan);
-
-        if (empty($kunjunganRow['id_pendonor'])) {
-            return;
-        }
-
-        $idPendonor    = $kunjunganRow['id_pendonor'];
-        $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
-
-        if ($idStatusPengambilan === 1) {
-            $modelPendonor->update($idPendonor, [
-                'tanggal_donor_terakhir' => $dataPengambilan['tanggal_pengambilan'] ?? date('Y-m-d')
-            ]);
-        }
-        else {
-            $riwayatSuksesTerakhir = $this->model->builder()
-                ->select('donor.pengambilan_darah.tanggal_pengambilan')
-                ->join('donor.kunjungan', 'donor.kunjungan.id_kunjungan = donor.pengambilan_darah.id_kunjungan', 'inner')
-                ->where('donor.kunjungan.id_pendonor', $idPendonor)
-                ->where('donor.pengambilan_darah.id_status_pengambilan', 1)
-                ->where('donor.pengambilan_darah.id_pengambilan_darah !=', $idPengambilanDarah)
-                ->orderBy('donor.pengambilan_darah.tanggal_pengambilan', 'DESC')
-                ->limit(1)
-                ->get()
-                ->getRowArray();
-
-            $tanggalRollback = $riwayatSuksesTerakhir ? $riwayatSuksesTerakhir['tanggal_pengambilan'] : null;
-
-            $modelPendonor->update($idPendonor, [
-                'tanggal_donor_terakhir' => $tanggalRollback
-            ]);
-        }
     }
 }

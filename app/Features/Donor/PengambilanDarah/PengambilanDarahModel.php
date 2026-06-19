@@ -31,4 +31,75 @@ final class PengambilanDarahModel extends ModelTemplate
             ],
         );
     }
+
+    /**
+     * Memastikan tanggal input pengambilan darah valid
+     * @param string $tanggalInput
+     * @throws \RuntimeException
+     */
+    public function validasiTanggalOperasional(string $tanggalInput): void
+    {
+        $tglDonasi   = new \DateTime($tanggalInput);
+        $tglSekarang = new \DateTime();
+
+        if ($tglDonasi->format('Y-m-d') > $tglSekarang->format('Y-m-d')) {
+            throw new \RuntimeException("Gagal Menyimpan! Tanggal pengambilan darah tidak boleh melebihi waktu saat ini.");
+        }
+
+        $selisih = $tglDonasi->diff($tglSekarang);
+        $selisihHari = (int) $selisih->format('%r%a');
+
+        if ($selisihHari > 2) {
+            throw new \RuntimeException("Gagal Menyimpan! Batas keterlambatan input data pengambilan darah untuk petugas maksimal adalah 2 hari ke belakang. Jika ingin menginput data Mobile Unit yang lebih lama, harap laporkan ke Supervisor / Kepala Ruangan.");
+        }
+    }
+
+    /**
+     * Memperbarui tanggal donor terakhir pada entitas Pendonor
+     * @param int $idStatusPengambilan
+     * @param array $dataPengambilan
+     * @param string|int $idPengambilanDarah
+     */
+    public function syncTanggalDonorTerakhir(int $idStatusPengambilan, array $dataPengambilan, string|int $idPengambilanDarah): void
+    {
+        $idKunjungan = $dataPengambilan['id_kunjungan'] ?? null;
+
+        if (empty($idKunjungan)) {
+            return;
+        }
+
+        $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
+        $kunjunganRow   = $modelKunjungan->find($idKunjungan);
+
+        if (empty($kunjunganRow['id_pendonor'])) {
+            return;
+        }
+
+        $idPendonor    = $kunjunganRow['id_pendonor'];
+        $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+
+        if ($idStatusPengambilan === 1) {
+            $modelPendonor->update($idPendonor, [
+                'tanggal_donor_terakhir' => $dataPengambilan['tanggal_pengambilan'] ?? date('Y-m-d')
+            ]);
+        }
+        else {
+            $riwayatSuksesTerakhir = $this->builder()
+                ->select('donor.pengambilan_darah.tanggal_pengambilan')
+                ->join('donor.kunjungan', 'donor.kunjungan.id_kunjungan = donor.pengambilan_darah.id_kunjungan', 'inner')
+                ->where('donor.kunjungan.id_pendonor', $idPendonor)
+                ->where('donor.pengambilan_darah.id_status_pengambilan', 1)
+                ->where('donor.pengambilan_darah.id_pengambilan_darah !=', $idPengambilanDarah)
+                ->orderBy('donor.pengambilan_darah.tanggal_pengambilan', 'DESC')
+                ->limit(1)
+                ->get()
+                ->getRowArray();
+
+            $tanggalRollback = $riwayatSuksesTerakhir ? $riwayatSuksesTerakhir['tanggal_pengambilan'] : null;
+
+            $modelPendonor->update($idPendonor, [
+                'tanggal_donor_terakhir' => $tanggalRollback
+            ]);
+        }
+    }
 }
