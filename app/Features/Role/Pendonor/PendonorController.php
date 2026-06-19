@@ -181,6 +181,8 @@ final class PendonorController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            $this->model->validasiUsiaMinimal($rawPost['tanggal_lahir']);
+
             $dataAlamat = [
                 'alamat_lengkap'  => $rawPost['alamat_lengkap'] ?? null,
                 'id_provinsi'     => isset($rawPost['id_provinsi']) ? (int)$rawPost['id_provinsi'] : null,
@@ -374,6 +376,8 @@ final class PendonorController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            $this->model->validasiUsiaMinimal($rawPost['tanggal_lahir']);
+
             $dataAlamat = [
                 'alamat_lengkap'  => $rawPost['alamat_lengkap'] ?? null,
                 'id_provinsi'     => isset($rawPost['id_provinsi']) ? (int)$rawPost['id_provinsi'] : null,

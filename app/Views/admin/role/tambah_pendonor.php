@@ -317,25 +317,6 @@
             document.getElementById('nik').focus();
             return false;
         }
-
-        const tglLahirInput = document.getElementById('tanggal_lahir').value;
-        if (tglLahirInput) {
-            const tglLahir = new Date(tglLahirInput);
-            const tglSekarang = new Date();
-            
-            let tahunUmur = tglSekarang.getFullYear() - tglLahir.getFullYear();
-            let bulanUmur = tglSekarang.getMonth() - tglLahir.getMonth();
-            
-            if (bulanUmur < 0 || (bulanUmur === 0 && tglSekarang.getDate() < tglLahir.getDate())) {
-                tahunUmur--;
-            }
-
-            if (tahunUmur < 17) {
-                alert(`Gagal Menyimpan! Usia calon pendonor saat ini adalah ${tahunUmur} Tahun.\nSyarat menjadi pendonor darah adalah minimal berusia 17 Tahun.`);
-                document.getElementById('tanggal_lahir').focus();
-                return false;
-            }
-        }
         
         const idKotaLahir = document.getElementById('tempat_lahir_kota').value;
         if (!idKotaLahir) {

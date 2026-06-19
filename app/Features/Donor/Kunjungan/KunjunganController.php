@@ -125,6 +125,7 @@ final class KunjunganController extends ControllerTemplate
         
         if ($validasiMedis['status'] === false) {
             session()->setFlashdata('error', $validasiMedis['message']);
+            return redirect()->to($this->get_uri_path() . '/data');
         }
 
         $dataKunjungan = [];

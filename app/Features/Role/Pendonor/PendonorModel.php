@@ -32,4 +32,22 @@ final class PendonorModel extends ModelTemplate
             ],
         );
     }
+
+    /**
+     * Memastikan usia Calon Pendonor minimal 17 tahun
+     * @param string $tanggalLahir
+     * @throws \RuntimeException
+     */
+    public function validasiUsiaMinimal(string $tanggalLahir): void
+    {
+        $tglLahir    = new \DateTime($tanggalLahir);
+        $tglSekarang = new \DateTime(); // Hari ini
+
+        $selisih = $tglLahir->diff($tglSekarang);
+        $tahunUmur = (int) $selisih->format('%r%y');
+
+        if ($tahunUmur < 17) {
+            throw new \RuntimeException("Gagal Menyimpan! Usia calon pendonor saat ini adalah {$tahunUmur} Tahun. Syarat menjadi pendonor darah adalah minimal berusia 17 Tahun.");
+        }
+    }
 }
