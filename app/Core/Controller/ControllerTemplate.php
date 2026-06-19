@@ -407,6 +407,7 @@ class ControllerTemplate extends Controller
         $this->fk_from_post();
         try {
             $this->model->insert($postData);
+            session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil disimpan.');
         } catch (\ReflectionException | DatabaseException $e) {
             $msg = $e instanceof DatabaseException
                 ? $this->friendly_db_error($e)
@@ -428,6 +429,7 @@ class ControllerTemplate extends Controller
         $this->fk_from_post();
         try {
             $this->model->update($id, $postData);
+            session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil diperbarui.');
         } catch(\ReflectionException $e){
             session()->setFlashdata('error', $e->getMessage());
             return $this->home();
@@ -459,6 +461,7 @@ class ControllerTemplate extends Controller
         $this->fk_from_row($id);
         try {
             $this->model->delete($id);
+            session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil dihapus.');
         } catch(DatabaseException $e){
             session()->setFlashdata('error', $this->friendly_db_error($e));
         }
