@@ -304,6 +304,9 @@
                 const row = document.createElement('tr');
                 row.className = "border-b text-sm dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800/30";
                 row.innerHTML = `
+                    <td class="p-3 text-center font-medium text-gray-900 dark:text-white">
+                        ${item.kode_barang}
+                    </td>
                     <td class="p-3 font-medium text-gray-900 dark:text-white">
                         ${item.nama_barang}
                         <input type="hidden" name="harga_medis[${item.id_barang}]" value="${item.harga}">
@@ -334,6 +337,9 @@
                 const row = document.createElement('tr');
                 row.className = "border-b text-sm dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800/30";
                 row.innerHTML = `
+                    <td class="p-3 text-center font-medium text-gray-900 dark:text-white">
+                        ${item.kode_barang}
+                    </td>
                     <td class="p-3 font-medium text-gray-900 dark:text-white">
                         ${item.nama_barang}
                         <input type="hidden" name="harga_penunjang[${item.id_barang}]" value="${item.harga}">
