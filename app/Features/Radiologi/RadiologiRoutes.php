@@ -17,6 +17,7 @@ final class RadiologiRoutes extends RouteTemplate
                 \App\Features\Radiologi\HasilRad\HasilRadController::class,
                 \App\Features\Radiologi\HasilRadTindakan\HasilRadTindakanController::class => 'HIDE',
                 \App\Features\Radiologi\HasilRadBhp\HasilRadBhpController::class => 'HIDE',
+                \App\Features\Radiologi\HasilRadFoto\HasilRadFotoController::class => 'HIDE',
                 \App\Features\Radiologi\RefItemRad\RefItemRadController::class,
                 \App\Features\Radiologi\RefStatusPermintaanRad\RefStatusPermintaanRadController::class,
                 \App\Features\Radiologi\RefTemplateRad\RefTemplateRadController::class,
