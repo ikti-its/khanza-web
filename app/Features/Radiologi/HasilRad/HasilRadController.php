@@ -34,7 +34,6 @@ final class HasilRadController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,  'id_petugas_rad',      'Petugas Rad'],
                 [HIDE, REQUIRED, I::TEXT,  'id_dokter_perujuk',   'Dokter Perujuk'],
                 [SHOW, REQUIRED, I::DTIME, 'tgl_jam_hasil',       'Tanggal dan Jam Hasil'],
-                [SHOW, OPTIONAL, I::TEXT,  'catatan',             'Catatan'],
             ],
         );
     }
@@ -234,7 +233,7 @@ final class HasilRadController extends ControllerTemplate
 
             session()->setFlashdata('success', 'Hasil radiologi berhasil disimpan.');
             return redirect()->to($this->get_uri_path() . '/data');
- 
+
         } catch (\Exception $e) {
             $this->model->db->transRollback();
             $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
@@ -242,7 +241,7 @@ final class HasilRadController extends ControllerTemplate
             return redirect()->back()->withInput();
         }
     }
- 
+
     // ──────────────────────────────────────────────────────────
     // HALAMAN UBAH
     // ──────────────────────────────────────────────────────────

@@ -15,7 +15,6 @@ final class HasilRadModel extends ModelTemplate
             [
                 'id_hasil_rad'        => V::DEFAULT(),
                 'tgl_jam_hasil'       => V::DEFAULT(),
-                'catatan'             => V::DEFAULT(),
             ],
             [
                 'id_permintaan_rad' => [
