@@ -25,6 +25,7 @@ final class HasilRadController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::PRINT,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_hasil_rad',        'ID Hasil Radiologi'],
@@ -418,5 +419,47 @@ final class HasilRadController extends ControllerTemplate
         }
  
         return $this->home();
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // CETAK HASIL EKSPERTISE
+    // ──────────────────────────────────────────────────────────
+
+    #[\Override]
+    public function print(int|string $id): string
+    {
+        $hasilRad = $this->model->find($id);
+
+        if (empty($hasilRad)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
+        }
+
+        $detailPermintaan = !empty($hasilRad['id_permintaan_rad'])
+            ? $this->fetchDetailPermintaan((int) $hasilRad['id_permintaan_rad'])
+            : [];
+
+        $namaDokterPj = !empty($hasilRad['id_dokter_pj'])
+            ? $this->fetchNamaRole('dokter', 'id_dokter', (int) $hasilRad['id_dokter_pj'], 'nama_dokter_pj')
+            : null;
+
+        $tindakanList = $this->model->db
+            ->table('radiologi.hasil_rad_tindakan hrt')
+            ->select(['r.kode_periksa', 'r.nama_pemeriksaan', 'hrt.hasil_ekspertise'])
+            ->join('radiologi.permintaan_rad_item pri', 'pri.id_permintaan_item = hrt.id_permintaan_item')
+            ->join('radiologi.ref_item_rad r',          'r.id_item = pri.id_item')
+            ->where('hrt.id_hasil_rad', $id)
+            ->get()
+            ->getResultArray();
+
+        // $organisasi = $this->model->db->table('ref.organisasi')->get()->getRowArray() ?? [];
+
+        return view('Views/components/cetak/cetak_hasil_rad', [
+            'hasilRad'         => $hasilRad,
+            'detailPermintaan' => $detailPermintaan,
+            'namaDokterPj'     => $namaDokterPj,
+            'tindakanList'     => $tindakanList,
+            // 'organisasi'    => $organisasi,
+        ]);
     }
 }
