@@ -26,6 +26,7 @@ final class PermintaanRadController extends ControllerTemplate
                 A::UPDATE,
                 A::DELETE,
                 A::SAMPEL,
+                A::PRINT,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_permintaan',        'ID Permintaan'],
@@ -317,6 +318,33 @@ final class PermintaanRadController extends ControllerTemplate
         }
 
         return $this->home();
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // CETAK
+    // ──────────────────────────────────────────────────────────
+
+    #[\Override]
+    public function print(int|string $id): string
+    {
+        $permintaan = $this->model->find($id);
+
+        if (empty($permintaan)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
+        }
+
+        $detailRegistrasi = !empty($permintaan['nomor_reg'])
+            ? $this->fetchDetailRegistrasi($permintaan['nomor_reg'])
+            : [];
+
+        $itemList = $this->fetchItemTerpilih((int) $id);
+
+        return view('Views/components/cetak/cetak_permintaan_rad', [
+            'permintaan'       => $permintaan,
+            'detailRegistrasi' => $detailRegistrasi,
+            'itemList'         => $itemList,
+        ]);
     }
 
     // ──────────────────────────────────────────────────────────
