@@ -166,7 +166,7 @@ final class PenyerahanDarahController extends ControllerTemplate
     final public function create(): string|RedirectResponse
     {
         $rawPost = $this->request->getPost();
-
+        $idPermintaan      = $rawPost['id_permintaan'] ?? null;
         $stokDarahTerpilih = $this->request->getPost('id_stok_darah');
 
         $bhpMedis          = $this->request->getPost('id_medis_donor');
@@ -185,6 +185,12 @@ final class PenyerahanDarahController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            if (empty($idPermintaan)) {
+                throw new \RuntimeException("Gagal menyimpan! Data permintaan darah tidak terdeteksi.");
+            }
+
+            $this->model->validasiDanHitungKuota((int)$idPermintaan, $stokDarahTerpilih);
+
             $this->model->insert($dataPenyerahan);
             $idPenyerahan = $this->model->getInsertID();
 
@@ -251,6 +257,8 @@ final class PenyerahanDarahController extends ControllerTemplate
                 }
             }
 
+            $this->model->sinkronisasiStatusPermintaan((int)$idPermintaan);
+            
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
@@ -310,7 +318,11 @@ final class PenyerahanDarahController extends ControllerTemplate
 
             $modelDetail->where('id_penyerahan', $id)->delete();
 
+            $idPermintaanAsal = (int)$dataPenyerahan['id_permintaan'];
+
             $this->model->delete($id);
+
+            $this->model->sinkronisasiStatusPermintaan($idPermintaanAsal);
 
             $this->model->db->transComplete();
 
