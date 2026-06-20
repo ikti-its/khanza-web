@@ -99,10 +99,6 @@ final class PermintaanDarahController extends ControllerTemplate
                 $fieldPermintaan[3] = 'indeks';
             }
 
-            if ($columnPermintaan === 'id_status_permintaan') {
-                $mockBaris[$columnPermintaan] = 1; 
-            }
-
             if ($columnPermintaan === 'id_registrasi') {
                 foreach ($konfigRegistrasi as $fieldRegistrasi) {
                     if ($fieldRegistrasi[2] === 'nomor_rawat') {
@@ -175,6 +171,8 @@ final class PermintaanDarahController extends ControllerTemplate
                 $dataPermintaan[$namaKolom] = $rawPost[$namaKolom];
             }
         }
+
+        $dataPermintaan['id_status_permintaan'] = 1;
 
         $this->model->db->transStart();
 
@@ -355,6 +353,11 @@ final class PermintaanDarahController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            $dataLama = $this->model->find($id);
+            if ($dataLama) {
+                $dataPermintaan['id_status_permintaan'] = $dataLama['id_status_permintaan'];
+            }
+            
             $this->model->update($id, $dataPermintaan);
 
             $modelDetail = new \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailModel();

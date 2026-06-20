@@ -96,26 +96,6 @@
                 <input type="datetime-local" name="tanggal_permintaan" value="<?= isset($baris['tanggal_permintaan']) && $baris['tanggal_permintaan'] !== '' ? date('Y-m-d\TH:i', strtotime($baris['tanggal_permintaan'])) : date('Y-m-d\TH:i') ?>"
                        max="<?= date('Y-m-d\TH:i') ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Status Permintaan<span class="text-red-600">*</span>
-                </label>
-                <select name="id_status_permintaan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-                    <option value="">-- Pilih --</option>
-                    <?php 
-                    $optionsStatus = [];
-                    foreach ($konfig as $field) {
-                        if ($field[2] === 'id_status_permintaan') {
-                            $optionsStatus = $field[5] ?? [];
-                            break;
-                        }
-                    }
-                    foreach ($optionsStatus as $opt) : 
-                        $selected = ((string)($baris['id_status_permintaan'] ?? '') === (string)$opt[1]) ? 'selected' : '';
-                    ?>
-                        <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
-                    <?php endforeach; ?>
-                </select>
             </div>
 
             <div class="mt-8 mb-5">
