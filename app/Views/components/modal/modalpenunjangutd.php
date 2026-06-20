@@ -9,12 +9,28 @@
     ],
     'actions' => [
         ['type' => 'button', 'text' => 'Refresh', 'onclick' => 'open_modalPenunjangUtd()', 'icon' => 'refresh'],
-        ['type' => 'button', 'text' => 'Masukkan Barang Terpilih', 'onclick' => 'submitModalChxPenunjang()', 'icon' => 'plus'],
     ]
 ]) ?>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const textCount = document.getElementById('selectedCount_modalPenunjangUtd');
+        if (textCount) {
+            textCount.classList.remove('hidden');
+        }
+
+        const btnCancel = document.getElementById('btnCancelModal_modalPenunjangUtd');
+        if (btnCancel) {
+            btnCancel.classList.remove('hidden');
+        }
+        
+        const btnSubmit = document.getElementById('btnSubmitModal_modalPenunjangUtd');
+        if (btnSubmit) {
+            btnSubmit.classList.remove('hidden');
+            btnSubmit.innerText = "Tambahkan";
+            btnSubmit.onclick = submitModalChxPenunjang;
+        }
+
         initModalList({
             modalId: 'modalPenunjangUtd',
             tableId: 'penunjangUtdTable',
@@ -44,6 +60,7 @@
                         <input type="checkbox" name="chx_penunjang_modal" 
                                value="${itemData.id_barang}" 
                                data-payload='${dataObjStr}'
+                               onchange="updateCountPenunjang()"
                                class="w-4 h-4 text-emerald-600 bg-gray-100 border-gray-300 rounded focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     `;
                 }
@@ -55,6 +72,14 @@
             observer.observe(targetNode, { childList: true, subtree: true });
         }
     });
+
+    function updateCountPenunjang() {
+        const checkedCount = document.querySelectorAll('input[name="chx_penunjang_modal"]:checked').length;
+        const textLabel = document.getElementById('selectedCount_modalPenunjangUtd');
+        if (textLabel) {
+            textLabel.textContent = `${checkedCount} item terpilih`;
+        }
+    }
 
     function submitModalChxPenunjang() {
         const checkedBoxes = document.querySelectorAll('input[name="chx_penunjang_modal"]:checked');
@@ -69,6 +94,8 @@
         });
 
         checkedBoxes.forEach(cb => cb.checked = false);
+
+        updateCountPenunjang();
 
         if (typeof close_modalPenunjangUtd === 'function') {
             close_modalPenunjangUtd();

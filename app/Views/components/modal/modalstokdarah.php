@@ -4,25 +4,45 @@
     'headers'      => ['No. Kantong', 'Komponen Darah', 'Gol. Darah', 'Rhesus', 'Kadaluwarsa'],
     'tableId'      => 'stokDarahTable',
     'searchInputs' => [
-        ['id' => 'searchNoKantong',   'placeholder' => 'Cari no. kantong...'],
+        ['id' => 'searchNoKantong',    'placeholder' => 'Cari no. kantong...'],
         ['id' => 'searchNamaKomponen', 'placeholder' => 'Cari komponen...'],
+        ['id' => 'searchGolDarah',     'placeholder' => 'Cari golongan darah...'],
+        ['id' => 'searchRhesus',       'placeholder' => 'Cari rhesus...'],
     ],
     'actions' => [
         ['type' => 'button', 'text' => 'Refresh', 'onclick' => 'open_modalStokDarah()', 'icon' => 'refresh'],
-        ['type' => 'button', 'text' => 'Masukkan Darah Terpilih', 'onclick' => 'submitModalChxDarah()', 'icon' => 'plus'],
     ]
 ]) ?>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const textCount = document.getElementById('selectedCount_modalStokDarah');
+        if (textCount) {
+            textCount.classList.remove('hidden');
+        }
+
+        const btnCancel = document.getElementById('btnCancelModal_modalStokDarah');
+        if (btnCancel) {
+            btnCancel.classList.remove('hidden');
+        }
+        
+        const btnSubmit = document.getElementById('btnSubmitModal_modalStokDarah');
+        if (btnSubmit) {
+            btnSubmit.classList.remove('hidden');
+            btnSubmit.innerText = "Tambahkan";
+            btnSubmit.onclick = submitModalChxDarah;
+        }
+
         initModalList({
             modalId: 'modalStokDarah',
             tableId: 'stokDarahTable',
-            url:     '<?= site_url('inventori-darah/stok-darah/modal/list') ?>', // Sesuaikan endpoint pencarian stok darah kelompokmu
+            url:     '<?= site_url('inventori-darah/stok-darah/modal/list') ?>',
             fields: ['no_kantong', 'nama_komponen', 'gol_darah', 'rhesus', 'tanggal_kadaluarsa'],
             searchIds: {
                 searchNoKantong: 'no_kantong',
-                searchNamaKomponen: 'nama_komponen'
+                searchNamaKomponen: 'nama_komponen',
+                searchGolDarah: 'gol_darah',
+                searchRhesus: 'rhesus'
             },
             rowsPerPage: 10,
             onSelect: (item) => {
@@ -44,6 +64,7 @@
                         <input type="checkbox" name="chx_darah_modal" 
                                value="${itemData.id_stok_darah}" 
                                data-payload='${dataObjStr}'
+                               onchange="updateCountDarah()"
                                class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-600 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     `;
                 }
@@ -55,6 +76,14 @@
             observerDarah.observe(targetNodeDarah, { childList: true, subtree: true });
         }
     });
+
+    function updateCountDarah() {
+        const checkedCount = document.querySelectorAll('input[name="chx_darah_modal"]:checked').length;
+        const textLabel = document.getElementById('selectedCount_modalStokDarah');
+        if (textLabel) {
+            textLabel.textContent = `${checkedCount} item terpilih`;
+        }
+    }
 
     function submitModalChxDarah() {
         const checkedBoxes = document.querySelectorAll('input[name="chx_darah_modal"]:checked');

@@ -65,6 +65,20 @@
             </button>
         </div>
 
+        <!-- Footer -->
+        <div class="mt-2 flex justify-between items-center border-t pt-2 dark:border-gray-700">
+            <span id="selectedCount_<?= $modalId ?>" class="text-sm text-gray-500 hidden font-medium">0 item dipilih</span>
+            <div class="flex gap-x-2">
+                <button type="button" id="btnCancelModal_<?= $modalId ?>" onclick="close_<?= $modalId ?>()"
+                        class="hidden px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 text-gray-700 font-medium shadow-sm transition">
+                    Batal
+                </button>
+                <button type="button" id="btnSubmitModal_<?= $modalId ?>"
+                        class="hidden px-4 py-2 text-sm font-semibold rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] shadow transition">
+                </button>
+            </div>
+        </div>
+        
     </div>
 </div>
 
