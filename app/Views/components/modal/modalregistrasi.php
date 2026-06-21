@@ -17,7 +17,7 @@
         [
             'type'    => 'link',
             'text'    => 'Registrasi Pasien',
-            'href'    => 'rekam-medis/registrasi',
+            'href'    => '/rekam-medis/registrasi/tambah',
             'icon'    => 'plus'
         ]
     ],
