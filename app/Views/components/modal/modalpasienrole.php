@@ -9,7 +9,7 @@
     ],
     'actions' => [
         ['type' => 'button', 'text' => 'Refresh', 'onclick' => 'open_modalPasienRole()', 'icon' => 'refresh'],
-        ['type' => 'link',   'text' => 'Tambah',  'href' => '/masterpasien/tambah-pasien', 'icon' => 'plus'],
+        ['type' => 'link',   'text' => 'Tambah',  'href' => '/role/pasien/tambah', 'icon' => 'plus'],
     ]
 ]) ?>
 
