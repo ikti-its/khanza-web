@@ -23,7 +23,7 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
     <div class="bg-white rounded-xl shadow-sm p-4 sm:p-7 dark:bg-slate-900 border border-gray-100 dark:border-gray-800">
         <?= view('components/form/judul', ['judul' => $judul]) ?>
 
-        <form action="<?= $modul_path . $form_action ?>" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="<?= $modul_path . $form_action ?>" id="myForm" onsubmit="return validateForm()" method="post" enctype="multipart/form-data">
             <?= csrf_field() ?>
 
             <input type="hidden" name="id_permintaan_rad" id="id_permintaan_rad" value="<?= $val('id_permintaan_rad') ?>">
@@ -115,8 +115,22 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
             </div>
             <div id="hiddenBhpInputs"></div>
 
+            <?php if (!$isEdit) : ?>
+            <!-- SECTION 4: Foto (Tambah — preview + submit) -->
+            <?= $sectionHead('Foto Pemeriksaan') ?>
+            <div class="flex justify-end mb-3">
+                <label class="<?= $addBtnClass ?> cursor-pointer">
+                    <?= $plusIcon ?> Tambah Foto
+                    <input type="file" id="inputFotoTambah" name="foto[]" multiple accept="image/*" class="hidden" onchange="pilihFoto(this)">
+                </label>
+            </div>
+            <div id="fotoPreviewGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-4">
+                <div style="grid-column:1/-1;text-align:center;" class="py-4 text-gray-400 italic text-sm dark:text-gray-500">Belum ada foto dipilih</div>
+            </div>
+            <?php endif; ?>
+
             <?php if ($isEdit) : ?>
-            <!-- SECTION 4: Foto -->
+            <!-- SECTION 4: Foto (Ubah — upload AJAX) -->
             <?= $sectionHead('Foto Pemeriksaan') ?>
             <div class="flex justify-end mb-3">
                 <label class="<?= $addBtnClass ?> cursor-pointer">
@@ -443,6 +457,61 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
     // ════════════════════════════════════════════
     // FOTO
     // ════════════════════════════════════════════
+    <?php if (!$isEdit) : ?>
+    let _fotoDataTransfer = new DataTransfer();
+    let _renderGen = 0;
+
+    function pilihFoto(input) {
+        [...input.files].forEach(f => {
+            const exists = [..._fotoDataTransfer.files].some(ef => ef.name === f.name && ef.size === f.size);
+            if (!exists) _fotoDataTransfer.items.add(f);
+        });
+        input.value = '';
+        document.getElementById('inputFotoTambah').files = _fotoDataTransfer.files;
+        renderFotoPreview();
+    }
+
+    function hapusFotoPreview(idx) {
+        const newDT = new DataTransfer();
+        [..._fotoDataTransfer.files].forEach((f, i) => { if (i !== idx) newDT.items.add(f); });
+        _fotoDataTransfer = newDT;
+        document.getElementById('inputFotoTambah').files = _fotoDataTransfer.files;
+        renderFotoPreview();
+    }
+
+    function renderFotoPreview() {
+        const grid = document.getElementById('fotoPreviewGrid');
+        grid.innerHTML = '';
+
+        if (!_fotoDataTransfer.files.length) {
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;" class="py-4 text-gray-400 italic text-sm dark:text-gray-500">Belum ada foto dipilih</div>';
+            return;
+        }
+
+        const gen = ++_renderGen;
+        [..._fotoDataTransfer.files].forEach((file, idx) => {
+            const div = document.createElement('div');
+            div.className = 'relative'; div.style.position = 'relative';
+            div.innerHTML = `
+                <div class="w-full h-24 bg-gray-100 rounded-lg border border-gray-200 dark:border-gray-600 flex items-center justify-center text-xs text-gray-400">Memuat...</div>
+                <button type="button" onclick="hapusFotoPreview(${idx})"
+                        style="position:absolute;top:4px;right:4px;z-index:10;width:20px;height:20px;font-size:16px;line-height:1;"
+                        class="flex items-center justify-center bg-red-600 text-white rounded-full shadow hover:bg-red-700">&times;</button>`;
+            grid.appendChild(div);
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                if (_renderGen !== gen) return;
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = file.name;
+                img.className = 'w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-gray-700';
+                div.replaceChild(img, div.firstChild);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+    <?php else : ?>
     const _idHasilRad    = <?= json_encode($id_hasil_rad ?? null) ?>;
     const _uploadPath    = '/radiologi/foto-hasil-radiologi/upload/';
     const _hapusFotoPath = '/radiologi/foto-hasil-radiologi/hapus-foto/';
@@ -498,6 +567,7 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
             })
             .catch(() => alert('Gagal menghapus foto.'));
     }
+    <?php endif; ?>
 
     // ════════════════════════════════════════════
     // VALIDASI FORM

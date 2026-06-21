@@ -123,6 +123,25 @@ final class HasilRadController extends ControllerTemplate
             ->update();
     }
 
+    private function processFotoUpload(int $idHasilRad): void
+    {
+        $uploadDir = ROOTPATH . 'public/uploads/radiologi/';
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+
+        $fotoModel = new \App\Features\Radiologi\HasilRadFoto\HasilRadFotoModel();
+        foreach ($this->request->getFiles()['foto'] ?? [] as $file) {
+            if (!$file->isValid() || $file->hasMoved() || !str_starts_with($file->getMimeType(), 'image/')) continue;
+
+            $newName = $file->getRandomName();
+            $file->move($uploadDir, $newName);
+            $fotoModel->insert([
+                'id_hasil_rad' => $idHasilRad,
+                'nama_file'    => $newName,
+                'tgl_upload'   => date('Y-m-d H:i:s'),
+            ]);
+        }
+    }
+
     private function insertTindakanAndBhp(int $idHasilRad, array $tindakanList, array $bhpList): void
     {
         // 1. Insert Tindakan (Batch)
@@ -230,6 +249,8 @@ final class HasilRadController extends ControllerTemplate
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal menyimpan hasil radiologi.');
             }
+
+            $this->processFotoUpload((int) $idHasilRad);
 
             session()->setFlashdata('success', 'Hasil radiologi berhasil disimpan.');
             return redirect()->to($this->get_uri_path() . '/data');
