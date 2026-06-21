@@ -179,6 +179,8 @@
 
                 <div class="space-y-5">
                     
+                    <input type="hidden" name="triase_tab_aktif" id="triase_tab_aktif" value="primer">
+
                     <div id="rowPrimerSpesifik" class="mb-5 sm:block md:flex items-center">
                         <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4 flex-shrink-0">
                             Keluhan Utama<span class="text-red-600">*</span>
@@ -276,6 +278,8 @@
                     <div class="border-t border-dashed border-gray-200 pt-5 mt-5 dark:border-gray-700">
                         <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Indikator Penilaian Skor Triase</h4>
                     </div>
+
+                    <div id="hiddenInputsContainer"></div>
 
                     <div class="flex flex-row gap-x-4 items-start w-full bg-white dark:bg-slate-900">
                         
@@ -375,8 +379,6 @@
                         </div>
 
                     </div>
-
-                    <input type="hidden" name="triase_tab_aktif" id="triase_tab_aktif" value="primer">
 
                     <div class="border-t border-dashed border-gray-200 pt-5 mt-6 dark:border-gray-700 space-y-5">
                         
@@ -720,7 +722,7 @@
                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/40 transition-colors">
                     <td class="px-3 py-2">
                         <label class="flex items-center gap-x-3 cursor-pointer w-full">
-                            <input type="checkbox" name="id_skala[]" value="${idSkalaKriteria}" ${isChecked}
+                            <input type="checkbox" value="${idSkalaKriteria}" ${isChecked}
                                 onchange="handleCheckboxChange(this)"
                                 class="h-3.5 w-3.5 rounded border-gray-300 dark:bg-slate-800 dark:border-gray-600 ${checkColor}">
                             <span class="text-sm font-medium text-gray-900 dark:text-gray-300" ${inlineTextColor}>${teksPengkajian}</span>
@@ -762,6 +764,22 @@
         } else {
             checkedSkalaIds = checkedSkalaIds.filter(id => id !== value);
         }
+
+        syncHiddenInputs();
+    }
+
+    /**
+     * Memproduksi input hidden secara dinamis
+     */
+    function syncHiddenInputs() {
+        const container = document.getElementById('hiddenInputsContainer');
+        let html = '';
+                                        
+        checkedSkalaIds.forEach(id => {
+            html += `<input type="hidden" name="id_skala[]" value="${id}">`;
+        });
+                                        
+        container.innerHTML = html;
     }
 
     function filterPemeriksaan() {
@@ -833,23 +851,36 @@
     }
 
     function validateForm() {
-        var requiredFields = document.querySelectorAll('select[required], input[required]');
+        var requiredFields = document.querySelectorAll('select[required], input[required], textarea[required]');
         for (var i = 0; i < requiredFields.length; i++) {
             if (!requiredFields[i].value) {
                 alert("Mohon lengkapi semua field yang bertanda bintang.");
                 return false;
             }
         }
+        
         const idReg = document.getElementById('id_registrasi').value;
         if (!idReg) {
             alert("Gagal Menyimpan! Anda wajib menentukan kunjungan nomor rawat pasien terlebih dahulu melalui modal.");
             return false;
         }
+
         const idKasus = document.getElementById('id_macam_kasus').value;
         if (!idKasus) {
             alert("Gagal Menyimpan! Anda wajib menentukan kategori macam kasus klinis terlebih dahulu.");
             return false;
         }
+        
+        const tabAktif = document.getElementById('triase_tab_aktif').value;
+        if (tabAktif === 'primer') {
+            document.getElementById('anamnesa_singkat').value = "";
+            document.querySelectorAll('input[name="id_plan_sekunder"]').forEach(radio => radio.checked = false);
+        } else if (tabAktif === 'sekunder') {
+            document.getElementById('keluhan_utama').value = "";
+            document.getElementById('id_kebutuhan_khusus').value = "";
+            document.querySelectorAll('input[name="id_plan_primer"]').forEach(radio => radio.checked = false);
+        }
+
         var submitButton = document.getElementById('submitButton');
         if (submitButton) {
             submitButton.setAttribute('disabled', true);

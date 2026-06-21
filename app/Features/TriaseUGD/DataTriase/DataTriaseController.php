@@ -6,6 +6,7 @@ namespace App\Features\TriaseUGD\DataTriase;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class DataTriaseController extends ControllerTemplate
 {
@@ -125,5 +126,92 @@ final class DataTriaseController extends ControllerTemplate
             'master_skala'          => $masterSkala,
             'form_action'           => '/submittambah',
         ]);
+    }
+
+    /**
+     * OVERRIDE: Memproses Simpan Data Triase UGD
+     */
+    #[\Override]
+    public function create(): string|RedirectResponse
+    {
+        $rawPost = $this->request->getPost();
+
+        $dataTriase = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataTriase[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+
+        $listSkalaTerpilih = $rawPost['id_skala'] ?? null;
+        $keluhanUtama      = $rawPost['keluhan_utama'] ?? null;
+        $idKebutuhan       = $rawPost['id_kebutuhan_khusus'] ?? null;
+        $anamnesaSingkat   = $rawPost['anamnesa_singkat'] ?? null;
+
+        $this->model->db->transStart();
+
+        try {
+            $this->model->insert($dataTriase);
+            $idTriaseBaru = $this->model->getInsertID();
+
+            $tabAktif = $rawPost['triase_tab_aktif'] ?? 'primer';
+
+            if ($tabAktif === 'primer') {
+                $modelPrimer = new \App\Features\TriaseUGD\DataTriasePrimer\DataTriasePrimerModel();
+                
+                $modelPrimer->insert([
+                    'id_triase'           => $idTriaseBaru,
+                    'keluhan_utama'       => $keluhanUtama,
+                    'id_kebutuhan_khusus' => $idKebutuhan,
+                    'tanggal_triase'      => $rawPost['tanggal_triase'],
+                    'catatan'             => $rawPost['catatan'],
+                    'id_plan_primer'      => $rawPost['id_plan_primer'],
+                    'id_petugas'          => $rawPost['id_petugas'],
+                ]);
+            } 
+            else if ($tabAktif === 'sekunder') {
+                $modelSekunder = new \App\Features\TriaseUGD\DataTriaseSekunder\DataTriaseSekunderModel();
+                
+                $modelSekunder->insert([
+                    'id_triase'        => $idTriaseBaru,
+                    'anamnesa_singkat' => $anamnesaSingkat,
+                    'tanggal_triase'   => $rawPost['tanggal_triase'],
+                    'catatan'          => $rawPost['catatan'],
+                    'id_plan_sekunder' => $rawPost['id_plan_sekunder'],
+                    'id_petugas'       => $rawPost['id_petugas'],
+                ]);
+            }
+
+            if (!empty($listSkalaTerpilih) && is_array($listSkalaTerpilih)) {
+                $modelDetail = new \App\Features\TriaseUGD\DataTriaseDetail\DataTriaseDetailModel();
+
+                foreach ($listSkalaTerpilih as $idSkala) {
+                    if (empty($idSkala)) continue;
+
+                    $modelDetail->insert([
+                        'id_triase' => $idTriaseBaru,
+                        'id_skala'  => $idSkala,
+                    ]);
+                }
+            }
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException("Gagal menyimpan data pemeriksaan triase pasien.");
+            }
+
+            session()->setFlashdata('success', 'Data pemeriksaan triase pasien berhasil disimpan.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
+                ? $this->friendly_db_error($e) 
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 }
