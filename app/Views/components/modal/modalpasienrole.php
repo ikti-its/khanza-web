@@ -26,11 +26,13 @@
             },
             rowsPerPage: 10,
             onSelect: (item) => {
-                document.getElementById('no_rm').value         = item.nomor_rm      ?? '';
-                document.getElementById('no_rm_display').value = item.nomor_rm      ?? '';
-                document.getElementById('nm_pasien').value     = item.nama          ?? '';
-                document.getElementById('tgl_lahir').value     = item.tanggal_lahir ?? '';
-                document.getElementById('jenis_kelamin').value = item.jenis_kelamin ?? '';
+                const el = (id) => document.getElementById(id);
+                if (el('id_pasien'))    el('id_pasien').value    = item.id_pasien      ?? '';
+                if (el('no_rm'))        el('no_rm').value        = item.nomor_rm       ?? '';
+                if (el('no_rm_display'))el('no_rm_display').value= item.nomor_rm       ?? '';
+                if (el('nm_pasien'))    el('nm_pasien').value    = item.nama           ?? '';
+                if (el('tgl_lahir'))    el('tgl_lahir').value    = item.tanggal_lahir  ?? '';
+                if (el('jenis_kelamin'))el('jenis_kelamin').value = item.jenis_kelamin ?? '';
             }
         });
     });
