@@ -31,7 +31,7 @@ final class DataTriaseDatabase extends DatabaseTemplate
                 'nyeri'                 => T::VITAL(0, 10),
             ],
             'id_triase',
-            [],
+            ['id_registrasi'],
             [
                 [
                     'id_registrasi',

@@ -152,6 +152,12 @@ final class DataTriaseController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            $dataTriaseLama = $this->model->where('id_registrasi', $dataTriase['id_registrasi'])->first();
+            
+            if ($dataTriaseLama) {
+                throw new \RuntimeException("Gagal menyimpan! Nomor rawat ini sudah memiliki dokumen keputusan triase sebelumnya. Silakan gunakan tombol ubah pada kolom aksi jika terjadi perubahan kondisi klinis pada pasien.");
+            }
+            
             $this->model->insert($dataTriase);
             $idTriaseBaru = $this->model->getInsertID();
 
@@ -213,5 +219,171 @@ final class DataTriaseController extends ControllerTemplate
         }
 
         return redirect()->to($this->get_uri_path() . '/data');
+    }
+    
+    /**
+     * OVERRIDE: Menampilkan Halaman Ubah Data / Retriase UGD
+     */
+    #[\Override]
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $triaseInduk = $this->model->find($id);
+        if (!$triaseInduk) {
+            $triaseInduk = [];
+        }
+
+        $dataRegistrasi = [];
+        $dataPasien     = [];
+        $dataOrang      = [];
+        $dataKasus      = [];
+        $dataPetugas    = [];
+        $dataPrimer     = [];
+        $dataSekunder   = [];
+
+        $modelPrimer = new \App\Features\TriaseUGD\DataTriasePrimer\DataTriasePrimerModel();
+        if (!empty($triaseInduk)) {
+            $dataPrimer = $modelPrimer->where('id_triase', $id)->first() ?? [];
+        }
+
+        $modelSekunder = new \App\Features\TriaseUGD\DataTriaseSekunder\DataTriaseSekunderModel();
+        if (!empty($triaseInduk)) {
+            $dataSekunder = $modelSekunder->where('id_triase', $id)->first() ?? [];
+        }
+
+        $tabAktif = !empty($dataPrimer) ? 'primer' : 'sekunder';
+
+        if (!empty($triaseInduk['id_registrasi'])) {
+            $modelReg = new \App\Features\UGD\Registrasi\RegistrasiModel();
+            $regRow = $modelReg->find($triaseInduk['id_registrasi']) ?? [];
+
+            if (!empty($regRow)) {
+                $dataRegistrasi['id_registrasi']     = $regRow['id_registrasi'] ?? '';
+                $dataRegistrasi['nomor_rawat']       = $regRow['nomor_rawat'] ?? '';
+                $dataRegistrasi['tanggal_kunjungan'] = $regRow['tanggal_kunjungan'] ?? '';
+                
+                if (!empty($regRow['id_pasien'])) {
+                    $modelPasien = new \App\Features\Role\Pasien\PasienModel();
+                    $pasienRow = $modelPasien->find($regRow['id_pasien']) ?? [];
+
+                    if (!empty($pasienRow)) {
+                        $dataPasien['nomor_rm'] = $pasienRow['nomor_rm'] ?? '';
+
+                        if (!empty($pasienRow['id_orang'])) {
+                            $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                            $orangRow = $modelOrang->find($pasienRow['id_orang']) ?? [];
+                            
+                            if (!empty($orangRow)) {
+                                $dataOrang['nama_pasien']   = $orangRow['nama'] ?? '';
+                                $dataOrang['tanggal_lahir'] = $orangRow['tanggal_lahir'] ?? '';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!empty($triaseInduk['id_macam_kasus'])) {
+            $modelKasus = new \App\Features\TriaseUGD\TriaseMacamKasus\TriaseMacamKasusModel();
+            $kasusRow = $modelKasus->find($triaseInduk['id_macam_kasus']) ?? [];
+            if (!empty($kasusRow)) {
+                $dataKasus['nama_macam_kasus'] = $kasusRow['nama_macam_kasus'] ?? '';
+            }
+        }
+
+        $idPetugasTerpilih = !empty($dataPrimer) ? ($dataPrimer['id_petugas'] ?? null) : ($dataSekunder['id_petugas'] ?? null);
+        if (!empty($idPetugasTerpilih)) {
+            $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
+            $petugasRow = $modelPetugas->find($idPetugasTerpilih) ?? [];
+            
+            if (!empty($petugasRow['id_orang'])) {
+                $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                $orangRow = $modelOrang->find($petugasRow['id_orang']) ?? [];
+                
+                if (!empty($orangRow['nama'])) {
+                    $dataPetugas['nama_petugas'] = $orangRow['nama'];
+                }
+            }
+        }
+
+        $barisRaw = array_merge($dataOrang, $dataPasien, $dataRegistrasi, $dataKasus, $dataPetugas, $dataPrimer, $dataSekunder, $triaseInduk);
+        
+        $baris = [];
+        foreach ($barisRaw as $key => $val) {
+            if (str_contains($key, 'tanggal')) {
+                $baris[$key] = $val ? date('Y-m-d\TH:i', strtotime((string)$val)) : '';
+            } else {
+                $baris[$key] = $val;
+            }
+        }
+
+        $konfigTriase = $this->get_fields_with_options(false, true);
+
+        $controllerPrimer   = new \App\Features\TriaseUGD\DataTriasePrimer\DataTriasePrimerController();
+        $controllerSekunder = new \App\Features\TriaseUGD\DataTriaseSekunder\DataTriaseSekunderController();
+        $konfigTriasePrimer = $controllerPrimer->get_fields_with_options(false, true);
+        $konfigTriaseSekunder = $controllerSekunder->get_fields_with_options(false, true);
+
+        $dbPemeriksaan = new \App\Features\TriaseUGD\TriasePemeriksaan\TriasePemeriksaanModel();
+        $masterPemeriksaan = $dbPemeriksaan->findAll();
+
+        $dbSkala = new \App\Features\TriaseUGD\TriaseSkala\TriaseSkalaModel();
+        $masterSkala = $dbSkala->findAll();
+
+        $konfigGabungan = [];
+        foreach ($konfigTriase as $field) {
+            if ($field[2] === 'id_triase') continue;
+            $konfigGabungan[] = $field;
+        }
+
+        foreach ($konfigTriasePrimer as $fPrimer) {
+            if ($fPrimer[2] === 'id_triase_primer' || $fPrimer[2] === 'id_triase') continue;
+            $konfigGabungan[] = $fPrimer;
+        }
+
+        foreach ($konfigTriaseSekunder as $fSekunder) {
+            if ($fSekunder[2] === 'id_triase_sekunder' || $fSekunder[2] === 'id_triase') continue;
+            
+            $exists = false;
+            foreach ($konfigGabungan as $konfig) {
+                if ($konfig[2] === $fSekunder[2]) { 
+                    $exists = true; 
+                    break; 
+                }
+            }
+            if (!$exists) {
+                $konfigGabungan[] = $fSekunder;
+            }
+        }
+
+        $modelDetail = new \App\Features\TriaseUGD\DataTriaseDetail\DataTriaseDetailModel();
+        $listDetailTersimpan = [];
+        if (!empty($triaseInduk)) {
+            $listDetailTersimpan = $modelDetail->where('id_triase', $id)->findAll();
+        }
+        
+        $arraySkalaTerpilihId = [];
+        foreach ($listDetailTersimpan as $detail) {
+            $arraySkalaTerpilihId[] = (string)$detail['id_skala'];
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Ubah', 'icon' => 'ubah']
+        ];
+
+        return view('admin/triaseugd/tambah_datatriase', [
+            'judul'                 => 'Ubah ' . $this->title,
+            'breadcrumbs'           => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'            => $this->get_uri_path(),
+            'kolom_id'              => $this->model->primaryKey,
+            'konfig'                => $konfigGabungan,
+            'baris'                 => $baris,
+            'master_pemeriksaan'    => $masterPemeriksaan,
+            'master_skala'          => $masterSkala,
+            'tab_aktif_lama'        => $tabAktif,
+            'skala_terpilih_lama'   => $arraySkalaTerpilihId,
+            'form_action'           => '/submitedit/' . $id,
+        ]);
     }
 }

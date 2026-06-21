@@ -187,7 +187,7 @@
                         </label>
                         <div class="w-full md:flex-1">
                             <textarea name="keluhan_utama" id="keluhan_utama" rows="3"
-                                      class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:bg-slate-800 dark:text-white resize-y focus:outline-none focus:border-blue-500" required></textarea>
+                                      class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:bg-slate-800 dark:text-white resize-y focus:outline-none focus:border-blue-500" required><?= $baris['keluhan_utama'] ?? '' ?></textarea>
                         </div>
                     </div>
 
@@ -197,7 +197,7 @@
                         </label>
                         <div class="w-full md:flex-1">
                             <textarea name="anamnesa_singkat" id="anamnesa_singkat" rows="3"
-                                      class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:bg-slate-800 dark:text-white resize-y focus:outline-none focus:border-blue-500"></textarea>
+                                      class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:bg-slate-800 dark:text-white resize-y focus:outline-none focus:border-blue-500"><?= $baris['anamnesa_singkat'] ?? '' ?></textarea>
                         </div>
                     </div>
 
@@ -489,7 +489,8 @@
                 nomor_rawat: "<?= $baris['nomor_rawat'] ?? '' ?>",
                 nomor_rm: "<?= $baris['nomor_rm'] ?? '' ?>",
                 nama_pasien: "<?= $baris['nama_pasien'] ?? '' ?>",
-                tanggal_lahir: "<?= $baris['tanggal_lahir'] ?? '' ?>"
+                tanggal_lahir: "<?= $baris['tanggal_lahir'] ?? '' ?>",
+                tanggal_kunjungan: "<?= $baris['tanggal_kunjungan'] ?? '' ?>"
             };
             autofillRegistrasiUgd(savedReg);
         }
@@ -512,7 +513,27 @@
             autofillPetugas(savedItem);
         }
 
-        renderIndikatorDetail();
+        const jenisTabLama = "<?= $tab_aktif_lama ?? 'primer' ?>";
+        switchTriaseTab(jenisTabLama);
+
+        const arraySkalaLama = <?= json_encode($skala_terpilih_lama ?? []) ?>;
+        if (arraySkalaLama && arraySkalaLama.length > 0) {
+            checkedSkalaIds = arraySkalaLama.map(id => String(id));
+            syncHiddenInputs();
+        }
+
+        const cekJudulHalaman = "<?= $judul ?? '' ?>";
+        const isModeEdit = cekJudulHalaman.includes('Ubah') || cekJudulHalaman.includes('Edit');
+        if (isModeEdit) {
+            const firstRow = document.querySelector('.pemeriksaan-row');
+            if (firstRow) {
+                firstRow.click(); 
+            } else {
+                renderIndikatorDetail();
+            }
+        } else {
+            renderIndikatorDetail();
+        }
     });
 
     const masterSkalaRaw = <?= json_encode($master_skala ?? []) ?>;
