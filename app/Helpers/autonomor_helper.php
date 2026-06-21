@@ -21,6 +21,107 @@ if (!function_exists('generateNextNoRM')) {
     }
 }
 
+// AutoNomor untuk No. Registrasi
+if (!function_exists('generateNextNoRegistrasi')) {
+    /**
+     * Generate nomor registrasi berikutnya.
+     * Format: REG-YYYYMMDDXXXX
+     * Contoh: REG-202606210001
+     *
+     * @param string|null $lastNo  Nomor terakhir pada tanggal yang sama (dari DB)
+     * @param string|null $tanggal Tanggal registrasi format 'Y-m-d', default hari ini
+     */
+    function generateNextNoRegistrasi(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'REG-' . date('Ymd', $tgl);
+
+        /** @var list<bool> $match */
+        $match = [];
+        if (!$lastNo || !preg_match('/^REG-' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
+
+// AutoNomor untuk No. Rawat
+if (!function_exists('generateNextNoRawat')) {
+    /**
+     * Generate nomor rawat berikutnya.
+     * Format: RW-XXX
+     * Contoh: RW-001
+     *
+     * @param string|null $lastNo Nomor rawat terakhir (dari DB)
+     */
+    function generateNextNoRawat(?string $lastNo): string
+    {
+        /** @var list<bool> $match */
+        $match = [];
+        if (!$lastNo || !preg_match('/^RW-(\d{3})$/', $lastNo, $match)) {
+            return 'RW-001';
+        }
+
+        $nextNum = (int) $match[1] + 1;
+
+        return 'RW-' . str_pad((string) $nextNum, 3, '0', STR_PAD_LEFT);
+    }
+}
+
+// AutoNomor untuk No. Registrasi UGD
+if (!function_exists('generateNextNoRegUGD')) {
+    /**
+     * Generate nomor registrasi UGD berikutnya.
+     * Format: UGDYYYYMMDDXXXX
+     * Contoh: UGD202606210001
+     */
+    function generateNextNoRegUGD(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'UGD' . date('Ymd', $tgl);
+
+        /** @var list<bool> $match */
+        $match = [];
+        if (!$lastNo || !preg_match('/^UGD' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
+
+// AutoNomor untuk No. Rawat UGD
+if (!function_exists('generateNextNoRawatUGD')) {
+    /**
+     * Generate nomor rawat UGD berikutnya.
+     * Format: YYYYMMDDXXXXXXX (7-digit sequential per hari)
+     * Contoh: 202606210000001
+     */
+    function generateNextNoRawatUGD(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = date('Ymd', $tgl);
+
+        /** @var list<bool> $match */
+        $match = [];
+        if (!$lastNo || !preg_match('/^' . date('Ymd', $tgl) . '(\d{7})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+
+        return $prefix . str_pad((string) $nomor, 7, '0', STR_PAD_LEFT);
+    }
+}
+
 // AutoNomor untuk No.Permintaan (Saat ini dipake di fitur Permintaan Barang)
 if (!function_exists('generateNextNoPermintaanBarang')) {
     /** Generate nomor permintaan barang berikutnya.
