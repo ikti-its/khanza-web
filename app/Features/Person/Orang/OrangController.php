@@ -39,4 +39,16 @@ final class OrangController extends ControllerTemplate
             ],
         );
     }
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $data = $this->model->db
+            ->table('person.orang')
+            ->select('id_orang, nik, nama')
+            ->orderBy('nama')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON(['data' => $data]);
+    }
 }
