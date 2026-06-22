@@ -21,7 +21,9 @@ final class PengambilanPenunjangModel extends ModelTemplate
             ],
             [
                 'id_barang'         => ['kode_barang', 'nama_barang'],
-                'id_petugas_gudang' => [''],
+                'id_petugas_gudang' => [
+                    'id_orang' => ['nama']
+                ],
             ],
         );
     }
