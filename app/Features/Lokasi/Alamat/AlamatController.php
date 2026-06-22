@@ -26,15 +26,28 @@ final class AlamatController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [SHOW, REQUIRED, I::INDEX, 'id_alamat',      'ID'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_provinsi',  'Provinsi'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_kota',      'Kota/Kabupaten'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_kecamatan', 'Kecamatan'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_desa',      'Kelurahan/Desa'],
-                [SHOW, REQUIRED, I::TEXT,  'rw',             'RW'],
-                [SHOW, REQUIRED, I::TEXT,  'rt',             'RT'],
-                [SHOW, REQUIRED, I::TEXT,  'alamat_lengkap', 'Alamat'],
+                [HIDE, REQUIRED, I::INDEX,   'id_alamat',      'ID'],
+                [SHOW, REQUIRED, I::SELECT,  'id_provinsi',    'Provinsi'],
+                [SHOW, REQUIRED, I::SELECT,  'id_kota_lokal',  'Kota/Kabupaten'],
+                [SHOW, REQUIRED, I::SELECT,  'id_kec_lokal',   'Kecamatan'],
+                [SHOW, REQUIRED, I::SELECT,  'id_desa_lokal',  'Kelurahan/Desa'],
+                [SHOW, REQUIRED, I::TEXT,    'rw',             'RW'],
+                [SHOW, REQUIRED, I::TEXT,    'rt',             'RT'],
+                [SHOW, REQUIRED, I::TEXT,    'alamat_lengkap', 'Alamat'],
             ],
         );
+    }
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $data = $this->model->db
+            ->table('lokasi.alamat a')
+            ->select('a.id_alamat, k.nama_kota, a.alamat_lengkap')
+            ->join('lokasi.kota k', 'k.id_provinsi = a.id_provinsi AND k.id_kota_lokal = a.id_kota_lokal', 'left')
+            ->orderBy('a.id_alamat')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON(['data' => $data]);
     }
 }
