@@ -520,4 +520,50 @@ final class DataTriaseController extends ControllerTemplate
 
         return redirect()->to($this->get_uri_path() . '/data');
     }
+
+    /**
+     * OVERRIDE: Menghapus data triase UGD
+     */
+    #[\Override]
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->home();
+        
+        $dataTriase = $this->model->find($id);
+        if (!$dataTriase) {
+            session()->setFlashdata('error', 'Gagal menghapus. Data pemeriksaan triase tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $modelDetail   = new \App\Features\TriaseUGD\DataTriaseDetail\DataTriaseDetailModel();
+            $modelPrimer   = new \App\Features\TriaseUGD\DataTriasePrimer\DataTriasePrimerModel();
+            $modelSekunder = new \App\Features\TriaseUGD\DataTriaseSekunder\DataTriaseSekunderModel();
+
+            $modelDetail->where('id_triase', $id)->delete();
+            $modelPrimer->where('id_triase', $id)->delete();
+            $modelSekunder->where('id_triase', $id)->delete();
+
+            $this->model->delete($id);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus data pemeriksaan triase pasien.');
+            }
+
+            session()->setFlashdata('success', 'Data pemeriksaan triase pasien berhasil dihapus.');
+
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $this->friendly_db_error($e));
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata('error', $e->getMessage());
+        }
+
+        return $this->home();
+    }
 }
