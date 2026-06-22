@@ -17,7 +17,7 @@
         [
             'type'    => 'link',
             'text'    => 'Tambah Daftar Dokter',
-            'href'    => '/dokter',
+            'href'    => '/role/dokter/tambah',
             'icon'    => 'plus'
         ]
     ]
