@@ -1,4 +1,4 @@
-id_registrasi,nomor_reg,nomor_rawat,datetime,id_dokter,id_pasien,id_pj_pasien,id_alamat_pj,unit,hubungan_pj,no_telepon,biaya_registrasi,jenis_bayar,status_registrasi,status_rawat,status_poli,status_bayar
+id_registrasi,nomor_reg,nomor_rawat,tanggal_reg,id_dokter,id_pasien,id_pj_pasien,id_alamat_pj,unit,hubungan_pj,no_telepon,biaya_registrasi,jenis_bayar,status_registrasi,status_rawat,status_poli,status_bayar
 1,REG-20260001,RW-001,2026-01-06 08:15:00,4,1,6,6,3,Suami,08123456789,100000,BPJS,Aktif,Rawat Jalan,Selesai,2
 2,REG-20260002,RW-002,2026-01-07 09:00:00,1,2,7,7,6,Ibu,08234567890,100000,Umum,Aktif,Rawat Jalan,Selesai,2
 3,REG-20260003,RW-003,2026-01-08 10:30:00,4,3,8,8,3,Ayah,08345678901,100000,Asuransi,Aktif,Rawat Jalan,Sedang Diperiksa,1

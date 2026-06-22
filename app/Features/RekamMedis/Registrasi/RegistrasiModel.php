@@ -16,7 +16,7 @@ final class RegistrasiModel extends ModelTemplate
                 'id_registrasi'     => V::DEFAULT(),
                 'nomor_reg'         => V::DEFAULT(),
                 'nomor_rawat'       => V::DEFAULT(),
-                'datetime'          => V::DEFAULT(),
+                'tanggal_reg'       => V::DEFAULT(),
                 'hubungan_pj'       => V::DEFAULT(),
                 'no_telepon'        => V::DEFAULT(),
                 'biaya_registrasi'  => V::DEFAULT(),
@@ -36,9 +36,15 @@ final class RegistrasiModel extends ModelTemplate
                     'id_orang'  => ['nama'],
                     'nomor_rm'
                 ],
-                'id_pj_pasien'  => ['nama'],
-                'id_alamat_pj'  => ['alamat_lengkap'],
-                'id_unit'       => ['kode_unit', 'nama_unit'],
+                'id_pj_pasien'      => ['nama'],
+                'id_alamat_pj'      => ['alamat_lengkap'],
+                'hubungan_pj'       => ['nama_hubungan_pj'],
+                'jenis_bayar'       => ['nama_jenis_bayar'],
+                'status_bayar'      => ['nama_status_bayar'],
+                'id_unit'           => ['kode_unit', 'nama_unit'],
+                'status_registrasi' => ['nama_status_registrasi'],
+                'status_rawat'      => ['nama_status_rawat'],
+                'status_poli'       => ['nama_status_poli'],
             ],
         );
     }
