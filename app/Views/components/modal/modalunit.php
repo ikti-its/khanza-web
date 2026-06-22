@@ -13,12 +13,18 @@
     ]
 ]) ?>
 
+<?php
+$_unitUrl = site_url('unit/unit/modal/list');
+if (!empty($excludeIds)) {
+    $_unitUrl .= '?exclude=' . implode(',', array_map('intval', $excludeIds));
+}
+?>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         initModalList({
             modalId:     'modalUnit',
             tableId:     'unitTable',
-            url:         '<?= site_url('unit/unit/modal/list') ?>',
+            url:         '<?= $_unitUrl ?>',
             fields:      ['kode_unit', 'nama_unit'],
             searchIds: {
                 searchKodeUnit: 'kode_unit',
