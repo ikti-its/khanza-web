@@ -1,7 +1,7 @@
 <?= view('components/modal/modal-table', [
     'modalId'      => 'modalRegistrasiUgd',
     'modalTitle'   => 'Pilih Data Registrasi Kunjungan UGD Pasien',
-    'headers'      => ['No. Registrasi', 'No. RM', 'Nama Pasien', 'Tanggal Kunjungan'],
+    'headers'      => ['No. Registrasi', 'No. RM', 'Nama Pasien', 'Tanggal Registrasi'],
     'tableId'      => 'registrasiUgdTable',
     'searchInputs' => [
         ['id' => 'searchNomorRegUgd', 'placeholder' => 'Cari No. Registrasi...'],
@@ -23,7 +23,7 @@
             modalId:     'modalRegistrasiUgd',
             tableId:     'registrasiUgdTable',
             url:         '<?= site_url('ugd/registrasi/modal/list') ?>',
-            fields:      ['nomor_reg', 'nomor_rm', 'nama_pasien', 'tanggal_kunjungan'],
+            fields:      ['nomor_reg', 'nomor_rm', 'nama_pasien', 'tanggal_reg'],
             searchIds: {
                 searchNomorRegUgd:   'nomor_reg',
                 searchNamaPasienUgd: 'nama_pasien',

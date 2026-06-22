@@ -490,7 +490,7 @@
                 nomor_rm: "<?= $baris['nomor_rm'] ?? '' ?>",
                 nama_pasien: "<?= $baris['nama_pasien'] ?? '' ?>",
                 tanggal_lahir: "<?= $baris['tanggal_lahir'] ?? '' ?>",
-                tanggal_kunjungan: "<?= $baris['tanggal_kunjungan'] ?? '' ?>"
+                tanggal_reg: "<?= $baris['tanggal_kunjungan'] ?? '' ?>"
             };
             autofillRegistrasiUgd(savedReg);
         }
@@ -843,16 +843,16 @@
         document.getElementById('nomor_rm').value = item.nomor_rm;
         document.getElementById('nama_pasien').value = item.nama_pasien;
 
-        if (item.tanggal_kunjungan) {
+        if (item.tanggal_reg) {
             try {
-                let tanpaZonaWaktu = item.tanggal_kunjungan.split('+')[0].trim();
+                let tanpaZonaWaktu = item.tanggal_reg.split('+')[0].trim();
                 let bagian = tanpaZonaWaktu.split(' '); 
                 let jamMenit = bagian[1].substring(0, 5);
                 let formatBrowser = `${bagian[0]}T${jamMenit}`;
                 document.getElementById('tanggal_kunjungan').value = formatBrowser;
             } catch (e) {
                 console.error("Gagal memformat tanggal kunjungan:", e);
-                document.getElementById('tanggal_kunjungan').value = item.tanggal_kunjungan;
+                document.getElementById('tanggal_kunjungan').value = item.tanggal_reg;
             }
         }
 
