@@ -163,6 +163,8 @@ final class DataTriaseController extends ControllerTemplate
 
             $tabAktif = $rawPost['triase_tab_aktif'] ?? 'primer';
 
+            $modelMasterSkala = new \App\Features\TriaseUGD\TriaseSkala\TriaseSkalaModel();
+
             if ($tabAktif === 'primer') {
                 $modelPrimer = new \App\Features\TriaseUGD\DataTriasePrimer\DataTriasePrimerModel();
                 
@@ -192,8 +194,22 @@ final class DataTriaseController extends ControllerTemplate
             if (!empty($listSkalaTerpilih) && is_array($listSkalaTerpilih)) {
                 $modelDetail = new \App\Features\TriaseUGD\DataTriaseDetail\DataTriaseDetailModel();
 
+                $listSkalaTerpilih = array_unique($listSkalaTerpilih);
+
                 foreach ($listSkalaTerpilih as $idSkala) {
                     if (empty($idSkala)) continue;
+
+                    $infoSkala = $modelMasterSkala->find($idSkala);
+                    if (!$infoSkala) continue;
+
+                    $tingkatSkala = (int)($infoSkala['id_tingkat_skala'] ?? 0);
+
+                    if ($tabAktif === 'primer' && !in_array($tingkatSkala, [1, 2], true)) {
+                        continue;
+                    }
+                    if ($tabAktif === 'sekunder' && !in_array($tingkatSkala, [3, 4, 5], true)) {
+                        continue;
+                    }
 
                     $modelDetail->insert([
                         'id_triase' => $idTriaseBaru,
@@ -362,11 +378,6 @@ final class DataTriaseController extends ControllerTemplate
         if (!empty($triaseInduk)) {
             $listDetailTersimpan = $modelDetail->where('id_triase', $id)->findAll();
         }
-        
-        $arraySkalaTerpilihId = [];
-        foreach ($listDetailTersimpan as $detail) {
-            $arraySkalaTerpilihId[] = (string)$detail['id_skala'];
-        }
 
         $breadcrumbs = [
             ['title' => 'Ubah', 'icon' => 'ubah']
@@ -382,8 +393,131 @@ final class DataTriaseController extends ControllerTemplate
             'master_pemeriksaan'    => $masterPemeriksaan,
             'master_skala'          => $masterSkala,
             'tab_aktif_lama'        => $tabAktif,
-            'skala_terpilih_lama'   => $arraySkalaTerpilihId,
+            'detail_triase_lama'    => $listDetailTersimpan,
             'form_action'           => '/submitedit/' . $id,
         ]);
+    }
+
+    /**
+     * OVERRIDE: Mengeksekusi Simpan Perubahan Data Triase & Retriase UGD
+     */
+    #[\Override]
+    public function update(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->index();
+
+        $rawPost = $this->request->getPost();
+
+        $dataTriase = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (array_key_exists($namaKolom, $rawPost)) {
+                $dataTriase[$namaKolom] = $rawPost[$namaKolom];
+            }
+        }
+
+        $listSkalaTerpilih = $rawPost['id_skala'] ?? null;
+        $keluhanUtama      = $rawPost['keluhan_utama'] ?? null;
+        $idKebutuhan       = $rawPost['id_kebutuhan_khusus'] ?? null;
+        $anamnesaSingkat   = $rawPost['anamnesa_singkat'] ?? null;
+
+        $this->model->db->transStart();
+
+        try {
+            $this->model->update($id, $dataTriase);
+
+            $tabAktif = $rawPost['triase_tab_aktif'] ?? 'primer';
+
+            $modelPrimer   = new \App\Features\TriaseUGD\DataTriasePrimer\DataTriasePrimerModel();
+            $modelSekunder = new \App\Features\TriaseUGD\DataTriaseSekunder\DataTriaseSekunderModel();
+
+            $modelMasterSkala = new \App\Features\TriaseUGD\TriaseSkala\TriaseSkalaModel();
+
+            if ($tabAktif === 'primer') {
+                $modelSekunder->where('id_triase', $id)->delete();
+
+                $existingPrimer = $modelPrimer->where('id_triase', $id)->first();
+                $payloadPrimer = [
+                    'id_triase'           => $id,
+                    'keluhan_utama'       => $keluhanUtama,
+                    'id_kebutuhan_khusus' => $idKebutuhan,
+                    'tanggal_triase'      => $rawPost['tanggal_triase'],
+                    'catatan'             => $rawPost['catatan'],
+                    'id_plan_primer'      => $rawPost['id_plan_primer'],
+                    'id_petugas'          => $rawPost['id_petugas'],
+                ];
+
+                if ($existingPrimer) {
+                    $modelPrimer->where('id_triase', $id)->set($payloadPrimer)->update();
+                } else {
+                    $modelPrimer->insert($payloadPrimer);
+                }
+            } 
+            else if ($tabAktif === 'sekunder') {
+                $modelPrimer->where('id_triase', $id)->delete();
+
+                $existingSekunder = $modelSekunder->where('id_triase', $id)->first();
+                $payloadSekunder = [
+                    'id_triase'        => $id,
+                    'anamnesa_singkat' => $anamnesaSingkat,
+                    'tanggal_triase'   => $rawPost['tanggal_triase'],
+                    'catatan'          => $rawPost['catatan'],
+                    'id_plan_sekunder' => $rawPost['id_plan_sekunder'],
+                    'id_petugas'       => $rawPost['id_petugas'],
+                ];
+
+                if ($existingSekunder) {
+                    $modelSekunder->where('id_triase', $id)->set($payloadSekunder)->update();
+                } else {
+                    $modelSekunder->insert($payloadSekunder);
+                }
+            }
+
+            $modelDetail = new \App\Features\TriaseUGD\DataTriaseDetail\DataTriaseDetailModel();
+            
+            $modelDetail->where('id_triase', $id)->delete();
+
+            if (!empty($listSkalaTerpilih) && is_array($listSkalaTerpilih)) {
+                $listSkalaTerpilih = array_unique($listSkalaTerpilih);
+
+                foreach ($listSkalaTerpilih as $idSkala) {
+                    if (empty($idSkala)) continue;
+
+                    $infoSkala = $modelMasterSkala->find($idSkala);
+                    if (!$infoSkala) continue;
+
+                    $tingkatSkala = (int)($infoSkala['id_tingkat_skala'] ?? 0);
+
+                    if ($tabAktif === 'primer' && !in_array($tingkatSkala, [1, 2], true)) {
+                        continue;
+                    }
+                    if ($tabAktif === 'sekunder' && !in_array($tingkatSkala, [3, 4, 5], true)) {
+                        continue;
+                    }
+
+                    $modelDetail->insert([
+                        'id_triase' => $id,
+                        'id_skala'  => $idSkala,
+                    ]);
+                }
+            }
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException("Gagal memperbarui data pemeriksaan triase pasien.");
+            }
+
+            session()->setFlashdata('success', 'Data pemeriksaan triase pasien berhasil diperbarui.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
+                ? $this->friendly_db_error($e) 
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 }

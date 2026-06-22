@@ -516,9 +516,19 @@
         const jenisTabLama = "<?= $tab_aktif_lama ?? 'primer' ?>";
         switchTriaseTab(jenisTabLama);
 
-        const arraySkalaLama = <?= json_encode($skala_terpilih_lama ?? []) ?>;
-        if (arraySkalaLama && arraySkalaLama.length > 0) {
-            checkedSkalaIds = arraySkalaLama.map(id => String(id));
+        const currentEditTriaseId = "<?= $baris['id_triase'] ?? '' ?>";
+
+        const arraySkalaLamaRaw = <?= json_encode($detail_triase_lama ?? []) ?>;
+        
+        checkedSkalaIds = [];
+        if (arraySkalaLamaRaw && arraySkalaLamaRaw.length > 0) {
+            arraySkalaLamaRaw.forEach(item => {
+                if (String(item.id_triase) !== String(currentEditTriaseId)) {
+                    return;
+                }
+                checkedSkalaIds.push(String(item.id_skala));
+            });
+            
             syncHiddenInputs();
         }
 
