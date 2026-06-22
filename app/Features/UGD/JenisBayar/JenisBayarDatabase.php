@@ -15,7 +15,7 @@ final class JenisBayarDatabase extends DatabaseTemplate
             'jenis_bayar',
             [
                 'id_jenis_bayar'   => T::ID(10),
-                'nama_jenis_bayar' => T::NAME(20),
+                'nama_jenis_bayar' => T::NAME(30),
             ],
             'id_jenis_bayar',
             [],
