@@ -14,7 +14,7 @@ final class HubunganPjDatabase extends DatabaseTemplate
             'rekam_medis',
             'hubungan_pj',
             [
-                'id_hubungan_pj'   => T::ID(5),
+                'id_hubungan_pj'   => T::ID(20),
                 'nama_hubungan_pj' => T::NAME(20),
             ],
             'id_hubungan_pj',
