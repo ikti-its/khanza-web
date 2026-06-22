@@ -1,5 +1,11 @@
+<?php
+$no_rm = urlencode($baris['no_rm'] ?? '');
+$registrasi_url = (isset($baris['id_keputusan']) && (int) $baris['id_keputusan'] === 2)
+    ? '/ugd/registrasi/tambah?no_rm=' . $no_rm
+    : '/rekam-medis/registrasi/tambah?no_rm=' . $no_rm;
+?>
 <div class="px-3 py-1.5">
-    <a href="/rekam-medis/registrasi/tambah" class="gap-x-1 text-sm text-green-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+    <a href="<?= $registrasi_url ?>" class="gap-x-1 text-sm text-green-600 decoration-2 hover:underline font-semibold dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
         Registrasi
     </a>
 </div>
