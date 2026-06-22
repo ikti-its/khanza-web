@@ -17,15 +17,15 @@ final class RegistrasiDatabase extends DatabaseTemplate
                 'id_registrasi'     => T::ID(100_000_000),
                 'nomor_reg'         => T::RECORD(20),
                 'nomor_rawat'       => T::RECORD(20),
-                'tanggal_kunjungan' => T::DTIME(),
+                'tanggal_reg'       => T::DTIME(),
                 'id_dokter'         => T::FK_AUTO(),
                 'id_pasien'         => T::FK_AUTO(),
                 'id_pj_pasien'      => T::FK_AUTO(),
-                'alamat_pj'         => T::TEXT(),
-                'hubungan_pj'       => T::TEXT(),
+                'id_alamat_pj'      => T::FK_AUTO(),
+                'hubungan_pj'       => T::FK_AUTO(),
                 'biaya_registrasi'  => T::MONEY(),
-                'jenis_bayar'       => T::NAME(50),
-                'status_rawat'      => T::NAME(50),
+                'jenis_bayar'       => T::FK_AUTO(),
+                'status_rawat'      => T::FK_AUTO(),
                 'status_bayar'      => T::FK_AUTO(), 
             ],
             'id_registrasi',
@@ -47,9 +47,29 @@ final class RegistrasiDatabase extends DatabaseTemplate
                     'id_orang',
                 ],
                 [
-                    'status_bayar',
-                    \App\Features\RawatInap\StatusBayar\StatusBayarDatabase::class,
-                    'id_status_bayar',
+                    ['id_alamat_pj'],
+                    \App\Features\Lokasi\Alamat\AlamatDatabase::class,
+                    ['id_alamat']
+                ],
+                [
+                    ['hubungan_pj'],
+                    \App\Features\UGD\HubunganPj\HubunganPjDatabase::class,
+                    ['id_hubungan_pj']
+                ],
+                [
+                    ['jenis_bayar'],
+                    \App\Features\UGD\JenisBayar\JenisBayarDatabase::class,
+                    ['id_jenis_bayar']
+                ],
+                [
+                    ['status_rawat'],
+                    \App\Features\UGD\StatusRawat\StatusRawatDatabase::class,
+                    ['id_status_rawat'],
+                ],
+                [
+                    ['status_bayar'],
+                    \App\Features\UGD\StatusBayar\StatusBayarDatabase::class,
+                    ['id_status_bayar'],
                 ],
             ],
             false,
