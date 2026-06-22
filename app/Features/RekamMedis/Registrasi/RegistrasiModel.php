@@ -13,18 +13,12 @@ final class RegistrasiModel extends ModelTemplate
         parent::__construct(
             new RegistrasiDatabase(),
             [
-                'id_registrasi'     => V::DEFAULT(),
-                'nomor_reg'         => V::DEFAULT(),
-                'nomor_rawat'       => V::DEFAULT(),
-                'tanggal_reg'       => V::DEFAULT(),
-                'hubungan_pj'       => V::DEFAULT(),
-                'no_telepon'        => V::DEFAULT(),
-                'biaya_registrasi'  => V::DEFAULT(),
-                'jenis_bayar'       => V::DEFAULT(),
-                'status_registrasi' => V::DEFAULT(),
-                'status_rawat'      => V::DEFAULT(),
-                'status_poli'       => V::DEFAULT(),
-                'status_bayar'      => V::DEFAULT(),
+                'id_registrasi'   => V::DEFAULT(),
+                'nomor_reg'       => V::DEFAULT(),
+                'nomor_rawat'     => V::DEFAULT(),
+                'tanggal_reg'     => V::DEFAULT(),
+                'no_telepon'      => V::DEFAULT(),
+                'biaya_registrasi'=> V::DEFAULT(),
             ],
             [
                 'id_dokter'     => [
