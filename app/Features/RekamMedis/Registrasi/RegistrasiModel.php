@@ -35,7 +35,7 @@ final class RegistrasiModel extends ModelTemplate
                 'hubungan_pj'       => ['nama_hubungan_pj'],
                 'jenis_bayar'       => ['nama_jenis_bayar'],
                 'status_bayar'      => ['nama_status_bayar'],
-                'id_unit'           => ['kode_unit', 'nama_unit'],
+                'unit'              => ['kode_unit', 'nama_unit'],
                 'status_registrasi' => ['nama_status_registrasi'],
                 'status_rawat'      => ['nama_status_rawat'],
                 'status_poli'       => ['nama_status_poli'],
