@@ -32,4 +32,20 @@ final class UnitController extends ControllerTemplate
             ],
         );
     }
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $builder = $this->model->db
+            ->table('unit.unit')
+            ->select('id_unit, kode_unit, nama_unit, biaya_registrasi_baru, biaya_registrasi_lama')
+            ->orderBy('kode_unit');
+
+        $exclude = $this->request->getGet('exclude');
+        if ($exclude !== null && $exclude !== '') {
+            $ids = array_map('intval', explode(',', $exclude));
+            $builder->whereNotIn('id_unit', $ids);
+        }
+
+        return $this->response->setJSON(['data' => $builder->get()->getResultArray()]);
+    }
 }
