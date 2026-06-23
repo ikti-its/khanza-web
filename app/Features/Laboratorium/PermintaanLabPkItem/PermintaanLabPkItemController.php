@@ -225,7 +225,8 @@ final class PermintaanLabPkItemController extends ControllerTemplate
             ->table('laboratorium.permintaan_lab_header h')
             ->select([
                 'h.id_permintaan', 'h.no_permintaan', 'h.nomor_reg', 'h.tgl_permintaan',
-                'p.nomor_rm', 'o.nama', 's.nama_status',
+                'h.id_status_permintaan',
+                'p.nomor_rm', 'o.nama', 'o.tanggal_lahir', 's.nama_status',
                 'd.kode_dokter', 'od.nama AS nama_dokter',
             ])
             ->join('rekam_medis.registrasi r',             'r.nomor_reg = h.nomor_reg',            'left')
