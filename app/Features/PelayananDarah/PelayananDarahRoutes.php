@@ -13,11 +13,11 @@ final class PelayananDarahRoutes extends RouteTemplate
             'Pelayanan Darah',
             [
                 \App\Features\PelayananDarah\PermintaanDarah\PermintaanDarahController::class,
-                \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailController::class,
+                \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailController::class => 'HIDE',
                 \App\Features\PelayananDarah\PenyerahanDarah\PenyerahanDarahController::class,
-                \App\Features\PelayananDarah\PenyerahanDarahDetail\PenyerahanDarahDetailController::class,
-                \App\Features\PelayananDarah\StatusPermintaan\StatusPermintaanController::class,
-                \App\Features\PelayananDarah\StatusPembayaran\StatusPembayaranController::class,
+                \App\Features\PelayananDarah\PenyerahanDarahDetail\PenyerahanDarahDetailController::class => 'HIDE',
+                \App\Features\PelayananDarah\StatusPermintaan\StatusPermintaanController::class => 'HIDE',
+                \App\Features\PelayananDarah\StatusPembayaran\StatusPembayaranController::class => 'HIDE',
             ],
             'pelayanan_darah.svg',
         );

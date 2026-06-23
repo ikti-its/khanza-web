@@ -14,7 +14,8 @@ final class PenangananDonorRoutes extends RouteTemplate
             [
                 \App\Features\PenangananDonor\Pencekalan\PencekalanController::class,
                 \App\Features\PenangananDonor\KasusReaktif\KasusReaktifController::class,
-                \App\Features\PenangananDonor\JenisPencekalan\JenisPencekalanController::class,
+                \App\Features\PenangananDonor\JenisPencekalan\JenisPencekalanController::class => 'HIDE',
+                \App\Features\PenangananDonor\StatusKasus\StatusKasusController::class => 'HIDE',
             ],
             'penanganan_donor.svg',
         );

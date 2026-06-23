@@ -13,10 +13,10 @@ final class InventoriDarahRoutes extends RouteTemplate
             'Inventori Darah',
             [
                 \App\Features\InventoriDarah\PemisahanKomponen\PemisahanKomponenController::class,
-                \App\Features\InventoriDarah\PemisahanKomponenDetail\PemisahanKomponenDetailController::class,
+                \App\Features\InventoriDarah\PemisahanKomponenDetail\PemisahanKomponenDetailController::class => 'HIDE',
                 \App\Features\InventoriDarah\StokDarah\StokDarahController::class,
-                \App\Features\InventoriDarah\StatusStok\StatusStokController::class,
-                \App\Features\InventoriDarah\SumberDarah\SumberDarahController::class,
+                \App\Features\InventoriDarah\StatusStok\StatusStokController::class => 'HIDE',
+                \App\Features\InventoriDarah\SumberDarah\SumberDarahController::class => 'HIDE',
             ],
             'inventaris_darah.svg',
         );

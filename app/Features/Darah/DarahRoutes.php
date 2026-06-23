@@ -12,9 +12,9 @@ final class DarahRoutes extends RouteTemplate
         parent::__construct(
             'Darah',
             [
-                \App\Features\Darah\GolonganDarah\GolonganDarahController::class,
+                \App\Features\Darah\GolonganDarah\GolonganDarahController::class => 'HIDE',
                 \App\Features\Darah\KomponenDarah\KomponenDarahController::class,
-                \App\Features\Darah\Rhesus\RhesusController::class,
+                \App\Features\Darah\Rhesus\RhesusController::class => 'HIDE',
             ],
             'darah.svg',
         );

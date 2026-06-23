@@ -13,7 +13,7 @@ final class UjiDarahRoutes extends RouteTemplate
             'Uji Darah',
             [
                 \App\Features\UjiDarah\HasilUjiSaring\HasilUjiSaringController::class,
-                \App\Features\UjiDarah\MetodeUji\MetodeUjiController::class,
+                \App\Features\UjiDarah\MetodeUji\MetodeUjiController::class => 'HIDE',
             ],
             'uji_darah.svg',
         );
