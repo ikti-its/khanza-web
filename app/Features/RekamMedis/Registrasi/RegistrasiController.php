@@ -153,6 +153,8 @@ final class RegistrasiController extends ControllerTemplate
             'status_bayar'      => '',
         ];
 
+        $baris['redirect_to'] = $this->request->getGet('redirect_to') ?? '';
+
         $noRm = $this->request->getGet('no_rm') ?? '';
         if ($noRm !== '') {
             $pasien = $this->fetchPasienByRm($noRm);
@@ -201,7 +203,8 @@ final class RegistrasiController extends ControllerTemplate
         try {
             $this->model->insert($this->buildPostData());
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil disimpan.');
-            return $this->home();
+            $redirect_to = $this->request->getPost('redirect_to');
+            return $redirect_to ? redirect()->to($redirect_to) : $this->home();
         } catch (\ReflectionException | DatabaseException $e) {
             $msg = $e instanceof DatabaseException
                 ? $this->friendly_db_error($e)
