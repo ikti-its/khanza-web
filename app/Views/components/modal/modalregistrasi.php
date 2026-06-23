@@ -29,7 +29,7 @@
             modalId:     'modalRegistrasi',
             tableId:     'registrasiTable',
             url:         '<?= site_url('rekam-medis/registrasi/modal/list') ?>',
-            fields:      ['nomor_reg', 'nomor_rm', 'nama', 'datetime'],
+            fields:      ['nomor_reg', 'nomor_rm', 'nama', 'tanggal_reg'],
             searchIds: {
                 searchNomorReg:   'nomor_reg',
                 searchNamaPasReg: 'nama',
