@@ -15,10 +15,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const btnTambah = document.querySelector('#modalPetugas a[href="/role/petugas/tambah"]');
-        if (btnTambah) {
-            btnTambah.removeAttribute('target');
-        }
         initModalList({
             modalId: 'modalPetugas',
             tableId: 'petugasTable',
