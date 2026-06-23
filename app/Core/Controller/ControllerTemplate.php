@@ -180,15 +180,6 @@ class ControllerTemplate extends Controller
         $konfig_kolom = $this->build_modular_columns();
         $data_tabel = $this->model->findAll($size, $offset);
 
-        // foreach ($data_tabel as $index_baris => $baris) {
-        //     foreach ($konfig_kolom as $kolom) {
-        //         $nama_field_data = $kolom[2];
-        //         if (!array_key_exists($nama_field_data, $baris)) {
-        //             $data_tabel[$index_baris][$nama_field_data] = '';
-        //         }
-        //     }
-        // }
-
         $child_link = ($this->child_path !== null && $this->child_fk !== null)
             ? ['path' => $this->child_path, 'fk' => $this->child_fk]
             : null;
