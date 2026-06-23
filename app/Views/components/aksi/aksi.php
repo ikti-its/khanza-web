@@ -11,7 +11,7 @@
             $child_label = $child_link['label'] ?? 'Detail';
             echo '<div class="px-3 py-1.5"><a href="' . $child_url . '" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:text-blue-400">' . esc($child_label) . '</a></div>';
         }
-        $aksi_list = ['notif', 'tambah', 'audit', 'cetak', 'tindakan', 'detail', 'detail2', 'ubah', 'hapus', 'validasi', 'ambulans', 'pilih', 'pisah', 'uji', 'registrasi', 'sampel', 'jadwalkan', 'kembali', 'bayar'];
+        $aksi_list = ['notif', 'tambah', 'audit', 'cetak', 'tindakan', 'detail', 'detail2', 'ubah', 'hapus', 'validasi', 'ambulans', 'pilih', 'pisah', 'uji', 'registrasi', 'sampel', 'jadwalkan', 'lembaroperasi', 'kembali', 'bayar'];
         if (ENVIRONMENT === 'development') {
             foreach ($aksi as $key => $value) {
                 if (!in_array($key, $aksi_list)) {
@@ -95,6 +95,9 @@
         }
         if (isset($aksi['jadwalkan']) && $aksi['jadwalkan'] === true) {
             echo view('components/aksi/jadwalkan', $data);
+        }
+        if (isset($aksi['lembaroperasi']) && $aksi['lembaroperasi'] === true) {
+            echo view('components/aksi/lembaroperasi', $data);
         }
         ?>
     </div>
