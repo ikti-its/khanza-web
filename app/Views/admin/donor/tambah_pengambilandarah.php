@@ -515,7 +515,7 @@
             const bulan = String(waktuSekarang.getMonth() + 1).padStart(2, '0'); 
             const komponenIdentik = item.nomor_pendonor || 'ANON';
             
-            inputNomorPengambilan.value = `${tahun}/${bulan}/${komponenIdentik}`;
+            inputNomorPengambilan.value = `${tahun}-${bulan}-${komponenIdentik}`;
         }
     }
 
