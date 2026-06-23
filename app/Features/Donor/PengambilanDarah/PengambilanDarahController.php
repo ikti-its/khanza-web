@@ -45,6 +45,21 @@ final class PengambilanDarahController extends ControllerTemplate
     }
 
     /**
+     * Menginjeksikan status alur kerja (workflow state) eksternal ke data tabel
+     */
+    #[\Override]
+    protected function after_read(array &$data_tabel): void
+    {
+        foreach ($data_tabel as $index => $baris) {
+            $idPengambilan = $baris['id_pengambilan_darah'];
+
+            $data_tabel[$index]['sudah_dipisahkan'] = $this->model->apakahSudahDipisahkan($idPengambilan);
+            
+            $data_tabel[$index]['sudah_diuji'] = $this->model->apakahSudahDiuji($idPengambilan);
+        }
+    }
+
+    /**
      * OVERRIDE: Menampilkan Form Pengambilan Darah & Penggunaan BHP
      */
     #[\Override]
@@ -157,7 +172,7 @@ final class PengambilanDarahController extends ControllerTemplate
     }
     
     /**
-     * OVERRIDE: Memproses simpan data ke 3 tabel
+     * OVERRIDE: Memproses simpan data pengambilan darah & penggunaan BHP
      */
     #[\Override]
     final public function create(): string|RedirectResponse

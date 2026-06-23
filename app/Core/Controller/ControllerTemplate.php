@@ -180,14 +180,14 @@ class ControllerTemplate extends Controller
         $konfig_kolom = $this->build_modular_columns();
         $data_tabel = $this->model->findAll($size, $offset);
 
-        foreach ($data_tabel as $index_baris => $baris) {
-            foreach ($konfig_kolom as $kolom) {
-                $nama_field_data = $kolom[2];
-                if (!array_key_exists($nama_field_data, $baris)) {
-                    $data_tabel[$index_baris][$nama_field_data] = '';
-                }
-            }
-        }
+        // foreach ($data_tabel as $index_baris => $baris) {
+        //     foreach ($konfig_kolom as $kolom) {
+        //         $nama_field_data = $kolom[2];
+        //         if (!array_key_exists($nama_field_data, $baris)) {
+        //             $data_tabel[$index_baris][$nama_field_data] = '';
+        //         }
+        //     }
+        // }
 
         $child_link = ($this->child_path !== null && $this->child_fk !== null)
             ? ['path' => $this->child_path, 'fk' => $this->child_fk]
@@ -210,6 +210,8 @@ class ControllerTemplate extends Controller
                 $back_url = '/' . implode('/', $segments) . '/data';
             }
         }
+
+        $this->after_read($data_tabel);
 
         return view('/layouts/data', [
             'judul'       => $this->title,
@@ -397,6 +399,7 @@ class ControllerTemplate extends Controller
     }
 
     protected function before_read(): void {}
+    protected function after_read(array &$data_tabel): void {}
     protected function before_create(array &$postData): void {}
     protected function before_update(array &$postData, int|string $id): void {}
 

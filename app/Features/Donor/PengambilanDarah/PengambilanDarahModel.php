@@ -102,4 +102,28 @@ final class PengambilanDarahModel extends ModelTemplate
             ]);
         }
     }
+
+    /**
+     * Memeriksa apakah kantong darah sudah pernah dipisahkan
+     * @param string|int $idPengambilanDarah
+     * @return bool
+     */
+    public function apakahSudahDipisahkan(string|int $idPengambilanDarah): bool
+    {
+        return $this->db->table('inventori_darah.pemisahan_komponen')
+            ->where('id_pengambilan_darah', $idPengambilanDarah)
+            ->countAllResults() > 0;
+    }
+
+    /**
+     * Memeriksa apakah kantong darah sudah pernah melalui Uji Saring IMLTD
+     * @param string|int $idPengambilanDarah
+     * @return bool
+     */
+    public function apakahSudahDiuji(string|int $idPengambilanDarah): bool
+    {
+        return $this->db->table('uji_darah.hasil_uji_saring')
+            ->where('id_pengambilan_darah', $idPengambilanDarah)
+            ->countAllResults() > 0;
+    }
 }
