@@ -85,7 +85,7 @@ final class OperasiRoutes extends RouteTemplate
                 \App\Features\Operasi\RefMetodeTransfer\RefMetodeTransferController::class => 'HIDE',
                 \App\Features\Operasi\RefMonitoringAnestesi\RefMonitoringAnestesiController::class => 'HIDE',
                 \App\Features\Operasi\RefObatBebas\RefObatBebasController::class => 'HIDE',
-                \App\Features\Operasi\RefPeralatanTransfer\RefPeralatanTransferController::class,
+                \App\Features\Operasi\RefPeralatanTransfer\RefPeralatanTransferController::class => 'HIDE',
                 \App\Features\Operasi\RefPosisiPasien\RefPosisiPasienController::class => 'HIDE',
                 \App\Features\Operasi\RefPremedikasi\RefPremedikasiController::class => 'HIDE',
                 \App\Features\Operasi\RefRencanaAnestesi\RefRencanaAnestesiController::class => 'HIDE',
