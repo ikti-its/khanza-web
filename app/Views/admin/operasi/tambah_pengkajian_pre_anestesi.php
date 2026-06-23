@@ -95,7 +95,7 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 <label class="<?= $labelLeft ?>">Tinggi Badan <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="tinggi_badan" value="<?= esc($baris['tinggi_badan'] ?? '') ?>"
-                           required min="0" class="<?= $stdClass ?>">
+                           required min="0" max="300" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">cm</span>
                 </div>
 
@@ -104,7 +104,7 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 </label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="berat_badan" value="<?= esc($baris['berat_badan'] ?? '') ?>"
-                           required min="0" class="<?= $stdClass ?>">
+                           required min="0" max="700"class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">kg</span>
                 </div>
             </div>
@@ -220,11 +220,11 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 </select>
 
                 <label class="<?= $labelRight ?>">
-                    Jumlah Rokok <span class="text-red-500">*</span>
+                    Jumlah Rokok
                 </label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="jumlah_rokok" value="<?= esc($baris['jumlah_rokok'] ?? '') ?>"
-                           required min="0" class="<?= $stdClass ?>">
+                           min="0" max="200" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">btg/hari</span>
                 </div>
             </div>
@@ -238,11 +238,11 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 </select>
 
                 <label class="<?= $labelRight ?>">
-                    Jumlah Alkohol <span class="text-red-500">*</span>
+                    Jumlah Alkohol
                 </label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="jumlah_alkohol" value="<?= esc($baris['jumlah_alkohol'] ?? '') ?>"
-                           required min="0" class="<?= $stdClass ?>">
+                           min="0" max="2000" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">ml/hari</span>
                 </div>
             </div>
@@ -263,10 +263,10 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 </select>
 
                 <label class="<?= $labelRight ?>">
-                    Keterangan Obat <span class="text-red-500">*</span>
+                    Keterangan Obat
                 </label>
                 <input type="text" name="ket_obat" value="<?= esc($baris['ket_obat'] ?? '') ?>"
-                       required class="<?= $inputClass ?> lg:w-1/4">
+                       class="<?= $inputClass ?> lg:w-1/4">
             </div>
 
             <!-- ── Riwayat Penyakit ── -->
