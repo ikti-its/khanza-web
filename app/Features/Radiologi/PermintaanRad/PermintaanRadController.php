@@ -308,7 +308,7 @@ final class PermintaanRadController extends ControllerTemplate
 
         try {
             $this->model->update($id, [
-                'tgl_jam_sampel'       => date('Y-m-d H:i:s'),
+                'tgl_jam_sampel'       => $this->request->getPost('tgl_jam_sampel') ?: date('Y-m-d H:i:s'),
                 'id_status_permintaan' => 2,
             ]);
 
