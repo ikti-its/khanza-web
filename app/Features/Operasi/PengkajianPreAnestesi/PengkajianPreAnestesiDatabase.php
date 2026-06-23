@@ -46,7 +46,7 @@ final class PengkajianPreAnestesiDatabase extends DatabaseTemplate
                 'is_alkohol'           => T::BOOL(),
                 'jumlah_alkohol'       => T::VITAL(0, 1_000)->nullable(),
                 'id_obat_bebas'        => T::FK_AUTO(),
-                'ket_obat'             => T::NOTE(),
+                'ket_obat'             => T::NOTE()->nullable(),
                 'rw_cardiovascular'    => T::NOTE(),
                 'rw_respiratory'       => T::NOTE(),
                 'rw_endocrine'         => T::NOTE(),
