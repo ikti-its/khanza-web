@@ -105,7 +105,6 @@ $tglHasil      = !empty($tgl_jam_hasil)        ? date('d-m-Y H:i', strtotime($tg
                 </tr>
                 <?php foreach ($item['parameter'] ?? [] as $param) : ?>
                 <tr>
-                    <td></td>
                     <td style="padding-left:16px"><?= esc($param['nama_parameter']) ?></td>
                     <td class="center"><?= esc($param['nilai_hasil'] ?? '-') ?></td>
                     <td class="center"><?= esc($param['satuan'] ?? '-') ?></td>
@@ -124,7 +123,7 @@ $tglHasil      = !empty($tgl_jam_hasil)        ? date('d-m-Y H:i', strtotime($tg
             <div class="ttd"><?= esc($h['nama_dokter_perujuk'] ?? '&nbsp;') ?></div>
         </div>
         <div style="text-align:center">
-            <p>Dokter Penanggungjawab,</p>
+            <p>Dokter Penanggung Jawab,</p>
             <div class="ttd"><?= esc($nama_dokter_pj ?? '&nbsp;') ?></div>
         </div>
         <div style="text-align:right">
