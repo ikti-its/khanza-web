@@ -299,6 +299,52 @@ final class PermintaanRadController extends ControllerTemplate
     }
 
     // ──────────────────────────────────────────────────────────
+    // INDEX
+    // ──────────────────────────────────────────────────────────
+
+    #[\Override]
+    final public function index(): string
+    {
+        $rows = $this->model->db
+            ->table('radiologi.permintaan_rad pr')
+            ->select([
+                'pr.id_permintaan', 'pr.no_permintaan', 'pr.nomor_reg', 'pr.tgl_jam_permintaan',
+                'pr.id_status_permintaan', 'pr.tgl_jam_sampel',
+                'p.nomor_rm', 'o.nama', 'o.tanggal_lahir',
+                's.nama_status',
+            ])
+            ->join('rekam_medis.registrasi r',              'r.nomor_reg = pr.nomor_reg',              'left')
+            ->join('role.pasien p',                         'p.id_pasien = r.id_pasien',               'left')
+            ->join('person.orang o',                        'o.id_orang  = p.id_orang',                'left')
+            ->join('radiologi.ref_status_permintaan_rad s', 's.id_status = pr.id_status_permintaan',   'left')
+            ->orderBy('pr.tgl_jam_permintaan', 'DESC')
+            ->get()->getResultArray();
+
+        $konfig = [
+            [1, 'No. Permintaan',  'no_permintaan',       'teks',    0],
+            [1, 'No. Registrasi',  'nomor_reg',           'teks',    0],
+            [1, 'No. RM',          'nomor_rm',            'teks',    0],
+            [1, 'Nama Pasien',     'nama',                'teks',    0],
+            [1, 'Tgl Permintaan',  'tgl_jam_permintaan',  'tanggal', 0],
+            [1, 'Status',          'nama_status',         'status',  0],
+        ];
+
+        return view('/layouts/data', [
+            'judul'        => $this->title,
+            'breadcrumbs'  => $this->breadcrumbs,
+            'meta_data'    => ['page' => 1, 'size' => count($rows), 'total' => 1],
+            'modul_path'   => $this->get_uri_path(),
+            'kolom_id'     => 'id_permintaan',
+            'konfig'       => $konfig,
+            'aksi'         => $this->actions,
+            'tabel'        => $rows,
+            'row_alert'    => [],
+            'child_link'   => null,
+            'query_string' => '',
+        ]);
+    }
+
+    // ──────────────────────────────────────────────────────────
     // SAMPEL
     // ──────────────────────────────────────────────────────────
 
