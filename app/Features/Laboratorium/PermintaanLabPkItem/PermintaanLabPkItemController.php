@@ -26,6 +26,7 @@ final class PermintaanLabPkItemController extends ControllerTemplate
                 A::UPDATE,
                 A::DELETE,
                 A::SAMPEL,
+                A::PRINT,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_permintaan_pk_item', 'ID Permintaan PK Item'],
@@ -116,13 +117,14 @@ final class PermintaanLabPkItemController extends ControllerTemplate
             ])
             ->join('laboratorium.ref_item_pemeriksaan_lab i', 'i.id_item_lab = pki.id_item_pemeriksaan')
             ->where('pki.id_permintaan_lab', $idPermintaanLab)
+            ->orderBy('pki.id_permintaan_pk_item', 'ASC')
             ->get()
             ->getResultArray();
 
         if (empty($items)) return [];
 
         $itemIds = array_column($items, 'id_permintaan_pk_item');
- 
+
         $parameters = $this->model->db
             ->table('laboratorium.permintaan_lab_pk_parameter pkp')
             ->select([
@@ -131,6 +133,7 @@ final class PermintaanLabPkItemController extends ControllerTemplate
             ])
             ->join('laboratorium.ref_parameter_pemeriksaan_lab p', 'p.id_parameter = pkp.id_parameter')
             ->whereIn('pkp.id_permintaan_pk_item', $itemIds)
+            ->orderBy('pkp.id_parameter', 'ASC')
             ->get()
             ->getResultArray();
 
@@ -504,19 +507,55 @@ final class PermintaanLabPkItemController extends ControllerTemplate
     }
  
     // -------------------------------------------------------------------------
+    // Cetak
+    // -------------------------------------------------------------------------
+
+    #[\Override]
+    public function print(int|string $id): string
+    {
+        $idPermintaanLab = (int) $id;
+
+        $header = $this->model->db
+            ->table('laboratorium.permintaan_lab_header plh')
+            ->select([
+                'plh.id_permintaan', 'plh.no_permintaan', 'plh.nomor_reg',
+                'plh.tgl_permintaan', 'plh.indikasi_klinis', 'plh.informasi_tambahan',
+                'p.nomor_rm', 'o.nama AS nama_pasien',
+                'd.kode_dokter', 'od.nama AS nama_dokter',
+            ])
+            ->join('rekam_medis.registrasi r',  'r.nomor_reg       = plh.nomor_reg',         'left')
+            ->join('role.pasien p',             'p.id_pasien       = r.id_pasien',           'left')
+            ->join('person.orang o',            'o.id_orang        = p.id_orang',            'left')
+            ->join('role.dokter d',             'd.id_dokter       = plh.id_dokter_perujuk', 'left')
+            ->join('person.orang od',           'od.id_orang       = d.id_orang',            'left')
+            ->where('plh.id_permintaan', $idPermintaanLab)
+            ->get()->getRowArray() ?? [];
+
+        if (empty($header)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
+        }
+
+        return view('Views/components/cetak/cetak_permintaan_lab_pk', [
+            'header' => $header,
+            'items'  => $this->fetchItemTerpilih($idPermintaanLab),
+        ]);
+    }
+
+    // -------------------------------------------------------------------------
     // List
     // -------------------------------------------------------------------------
- 
+
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
         $idPermintaan = (int) ($this->request->getGet('id_permintaan') ?? 0);
- 
+
         if ($idPermintaan > 0) {
             return $this->response->setJSON(['data' => $this->fetchItemTerpilih($idPermintaan)]);
         }
- 
+
         $rows = $this->fetchPermintaanLabHeaders();
-        
+
         return $this->response->setJSON(['data' => $rows]);
     }
 }
