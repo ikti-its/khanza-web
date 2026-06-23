@@ -25,6 +25,7 @@ final class HasilLabPaController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::PRINT,
             ],
              [
                 [HIDE, OPTIONAL, I::INDEX, 'id_hasil_pa',           'ID Hasil PA'],
@@ -342,5 +343,100 @@ final class HasilLabPaController extends ControllerTemplate
         }
  
         return $this->home();
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // INDEX — satu baris per permintaan yang sudah ada hasilnya
+    // ──────────────────────────────────────────────────────────
+
+    #[\Override]
+    final public function index(): string
+    {
+        $hasilSub = '(SELECT DISTINCT ON (id_permintaan_lab) id_permintaan_lab, id_dokter_pj, id_petugas_lab, tgl_jam_hasil'
+                  . ' FROM laboratorium.hasil_lab_pa'
+                  . ' ORDER BY id_permintaan_lab, tgl_jam_hasil DESC) h';
+
+        $rows = $this->model->db
+            ->table('laboratorium.permintaan_lab_header plh')
+            ->select([
+                'plh.id_permintaan AS id_permintaan_lab',
+                'plh.no_permintaan', 'plh.nomor_reg',
+                'p.nomor_rm', 'o.nama',
+                'h.tgl_jam_hasil',
+                'opj.nama AS nama_dokter_pj',
+                's.nama_status',
+            ])
+            ->join('rekam_medis.registrasi r',             'r.nomor_reg = plh.nomor_reg',           'left')
+            ->join('role.pasien p',                        'p.id_pasien = r.id_pasien',             'left')
+            ->join('person.orang o',                       'o.id_orang  = p.id_orang',              'left')
+            ->join('laboratorium.ref_status_permintaan s', 's.id_status = plh.id_status_permintaan','left')
+            ->join($hasilSub,                              'h.id_permintaan_lab = plh.id_permintaan')
+            ->join('role.dokter dpj',                      'dpj.id_dokter = h.id_dokter_pj',        'left')
+            ->join('person.orang opj',                     'opj.id_orang  = dpj.id_orang',          'left')
+            ->orderBy('h.tgl_jam_hasil', 'DESC')
+            ->get()->getResultArray();
+
+        $konfig = [
+            [1, 'No. Permintaan', 'no_permintaan',  'teks',    0],
+            [1, 'No. Registrasi', 'nomor_reg',      'teks',    0],
+            [1, 'Nama Pasien',    'nama',           'teks',    0],
+            [1, 'Dokter PJ',      'nama_dokter_pj', 'teks',    0],
+            [1, 'Tgl. Hasil',     'tgl_jam_hasil',  'tanggal', 0],
+            [1, 'Status',         'nama_status',    'status',  0],
+        ];
+
+        return view('/layouts/data', [
+            'judul'        => $this->title,
+            'breadcrumbs'  => $this->breadcrumbs,
+            'meta_data'    => ['page' => 1, 'size' => count($rows), 'total' => 1],
+            'modul_path'   => $this->get_uri_path(),
+            'kolom_id'     => 'id_permintaan_lab',
+            'konfig'       => $konfig,
+            'aksi'         => $this->actions,
+            'tabel'        => $rows,
+            'row_alert'    => [],
+            'child_link'   => null,
+            'query_string' => '',
+        ]);
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // CETAK
+    // ──────────────────────────────────────────────────────────
+
+    #[\Override]
+    public function print(int|string $id): string
+    {
+        $idPermintaanLab = (int) $id;
+
+        $firstHasil = $this->model->where('id_permintaan_lab', $idPermintaanLab)->first();
+
+        if (empty($firstHasil)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
+        }
+
+        $header = $this->model->db
+            ->table('laboratorium.permintaan_lab_header plh')
+            ->select([
+                'plh.no_permintaan', 'plh.nomor_reg', 'plh.tgl_permintaan',
+                'p.nomor_rm', 'o.nama AS nama_pasien',
+                'od.nama AS nama_dokter_perujuk',
+            ])
+            ->join('rekam_medis.registrasi r',  'r.nomor_reg = plh.nomor_reg',         'left')
+            ->join('role.pasien p',             'p.id_pasien = r.id_pasien',            'left')
+            ->join('person.orang o',            'o.id_orang  = p.id_orang',             'left')
+            ->join('role.dokter d',             'd.id_dokter = plh.id_dokter_perujuk',  'left')
+            ->join('person.orang od',           'od.id_orang = d.id_orang',             'left')
+            ->where('plh.id_permintaan', $idPermintaanLab)
+            ->get()->getRowArray() ?? [];
+
+        return view('Views/components/cetak/cetak_hasil_lab_pa', [
+            'header'         => $header,
+            'items'          => $this->fetchItemTerpilih($idPermintaanLab),
+            'tgl_jam_hasil'  => $firstHasil['tgl_jam_hasil'] ?? '',
+            'nama_dokter_pj' => !empty($firstHasil['id_dokter_pj'])   ? $this->fetchNamaDokterPj((int) $firstHasil['id_dokter_pj'])  : null,
+            'nama_petugas'   => !empty($firstHasil['id_petugas_lab']) ? $this->fetchNamaPetugas((int) $firstHasil['id_petugas_lab']) : null,
+        ]);
     }
 }
