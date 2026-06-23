@@ -15,6 +15,11 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const btnTambahPasien = document.querySelector('#modalPasienRole a[href="/role/pasien/tambah"]');
+        if (btnTambahPasien) {
+            btnTambahPasien.removeAttribute('target');
+            btnTambahPasien.href = '/role/pasien/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
+        }
         initModalList({
             modalId:     'modalPasienRole',
             tableId:     'pasienRoleTable',

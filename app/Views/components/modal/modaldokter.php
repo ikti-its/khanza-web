@@ -25,6 +25,11 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const btnTambahDokter = document.querySelector('#modalDokter a[href="/role/dokter/tambah"]');
+        if (btnTambahDokter) {
+            btnTambahDokter.removeAttribute('target');
+            btnTambahDokter.href = '/role/dokter/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
+        }
         initModalList({
             modalId:    'modalDokter',
             tableId:    'dokterTable',

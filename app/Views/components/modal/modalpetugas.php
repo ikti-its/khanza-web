@@ -15,6 +15,11 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const btnTambahPetugas = document.querySelector('#modalPetugas a[href="/role/petugas/tambah"]');
+        if (btnTambahPetugas) {
+            btnTambahPetugas.removeAttribute('target');
+            btnTambahPetugas.href = '/role/petugas/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
+        }
         initModalList({
             modalId: 'modalPetugas',
             tableId: 'petugasTable',
