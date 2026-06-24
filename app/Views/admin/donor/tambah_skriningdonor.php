@@ -55,7 +55,7 @@
                     Berat Badan (Kg)<span class="text-red-600">*</span>
                 </label>
                 <input type="number" step="0.01" name="berat_badan" min="20" max="200" placeholder="0.0" value="<?= $baris['berat_badan'] ?? '' ?>"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                       class="input-vital border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -64,19 +64,19 @@
                 </label>
                 <div class="w-full lg:w-1/4 flex items-center gap-x-2">
                     <input type="number" name="sistolik" min="70" max="250" placeholder="Sistolik" value="<?= $baris['sistolik'] ?? '' ?>"
-                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full text-center dark:border-gray-600 dark:text-white" required>
+                           class="input-vital border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full text-center dark:border-gray-600 dark:text-white" required>
         
                     <span class="text-gray-500 font-medium">/</span>
         
                     <input type="number" name="diastolik" min="40" max="150" placeholder="Diastolik" value="<?= $baris['diastolik'] ?? '' ?>"
-                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full text-center dark:border-gray-600 dark:text-white" required>
+                           class="input-vital border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full text-center dark:border-gray-600 dark:text-white" required>
                 </div>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Denyut Nadi (x/menit)<span class="text-red-600">*</span>
                 </label>
                 <input type="number" name="nadi" min="30" max="200" value="<?= $baris['nadi'] ?? '' ?>"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                       class="input-vital border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -84,13 +84,13 @@
                     Suhu Tubuh (°C)<span class="text-red-600">*</span>
                 </label>
                 <input type="number" step="0.1" name="suhu_tubuh" min="34.0" max="43.0" placeholder="0.0" value="<?= $baris['suhu_tubuh'] ?? '' ?>"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                       class="input-vital border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Kadar Hemoglobin (g/dL)<span class="text-red-600">*</span>
                 </label>
                 <input type="number" step="0.1" name="kadar_hemoglobin" min="5.0" max="25.0" placeholder="0.0" value="<?= $baris['kadar_hemoglobin'] ?? '' ?>"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                       class="input-vital border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -126,7 +126,6 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const kunjunganId = "<?= $baris['id_kunjungan'] ?? '' ?>";
-        
         if (kunjunganId !== '') {
             const savedItem = {
                 id_kunjungan: kunjunganId,
@@ -137,6 +136,22 @@
             
             autofillKunjungan(savedItem);
         }
+
+        const vitalFields = document.querySelectorAll('.input-vital');
+        vitalFields.forEach(function(input) {
+            input.addEventListener('keydown', function(e) {
+                if (e.key === '-' || e.key === 'Subtract') {
+                    e.preventDefault();
+                }
+            });
+
+            input.addEventListener('input', function() {
+                if (parseFloat(this.value) < 0) {
+                    this.value = '';
+                    alert("Nilai pemeriksaan skrining tidak boleh negatif!");
+                }
+            });
+        });
     });
     
     function autofillKunjungan(item) {
