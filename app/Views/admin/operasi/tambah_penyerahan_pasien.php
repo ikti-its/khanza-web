@@ -227,7 +227,8 @@ $searchIcon = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="non
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="<?= $labelLeft ?>">Disetujui <span class="text-red-500">*</span></label>
                     <select name="is_disetujui" required class="<?= $inputClass ?> lg:w-1/4">
-                        <option value="1" <?= ($baris['is_disetujui'] ?? '') !== '0' ? 'selected' : '' ?>>Ya</option>
+                        <option value="">-- Pilih --</option>
+                        <option value="1" <?= ($baris['is_disetujui'] ?? '') === '1' ? 'selected' : '' ?>>Ya</option>
                         <option value="0" <?= ($baris['is_disetujui'] ?? '') === '0' ? 'selected' : '' ?>>Tidak</option>
                     </select>
 
