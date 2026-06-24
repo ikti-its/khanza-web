@@ -203,6 +203,11 @@ final class PenyerahanPasienController extends ControllerTemplate
             $record['nama_perawat_menerima']    = $this->fetchNamaRole('petugas', 'id_petugas', $idPr);
         }
 
+        if (isset($record['is_disetujui'])) {
+            $isTrue = ($record['is_disetujui'] === true || $record['is_disetujui'] == 1 || $record['is_disetujui'] === 't');
+            $record['is_disetujui'] = $isTrue ? '1' : '0';
+        }
+
         return view('admin/operasi/tambah_penyerahan_pasien',
             $this->buildViewData(
                 $jadwal,
