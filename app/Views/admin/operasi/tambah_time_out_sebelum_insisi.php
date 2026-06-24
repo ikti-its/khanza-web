@@ -160,7 +160,7 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="perkiraan_waktu_jam"
                            value="<?= esc($baris['perkiraan_waktu_jam'] ?? '') ?>"
-                           required min="0" class="<?= $stdClass ?>">
+                           required min="0" max="24" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">jam</span>
                 </div>
 
@@ -216,6 +216,7 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 <label class="<?= $labelLeft ?>">Tanggal Steril <span class="text-red-500">*</span></label>
                 <input type="date" name="tanggal_steril"
                        value="<?= esc($baris['tanggal_steril'] ?? '') ?>"
+                       max="<?= date('Y-m-d') ?>"
                        required class="<?= $inputClass ?> lg:w-1/4">
             </div>
 
