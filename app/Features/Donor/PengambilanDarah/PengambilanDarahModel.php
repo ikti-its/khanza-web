@@ -126,4 +126,44 @@ final class PengambilanDarahModel extends ModelTemplate
             ->where('id_pengambilan_darah', $idPengambilanDarah)
             ->countAllResults() > 0;
     }
+
+    /**
+     * Mengambil data penggunaan BHP medis donor
+     */
+    public function getBhpMedisDetail(int|string $idPengambilan): array
+    {
+        $bhpMedis = $this->db->table('logistik_utd.medis_donor')
+            ->where('id_pengambilan_darah', $idPengambilan)
+            ->get()
+            ->getResultArray();
+
+        $modelMasterMedis = new \App\Features\InventoriMedis\DataBarang\DataBarangModel();
+        foreach ($bhpMedis as $k => $v) {
+            $masterItem = $modelMasterMedis->find($v['id_barang']);
+            $bhpMedis[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
+            $bhpMedis[$k]['nama_barang'] = $masterItem['nama'];
+        }
+
+        return $bhpMedis;
+    }
+
+    /**
+     * Mengambil data penggunaan BHP non medis donor
+     */
+    public function getBhpPenunjangDetail(int|string $idPengambilan): array
+    {
+        $bhpPenunjang = $this->db->table('logistik_utd.penunjang_donor')
+            ->where('id_pengambilan_darah', $idPengambilan)
+            ->get()
+            ->getResultArray();
+
+        $modelMasterPenunjang = new \App\Features\InventoriNonMedis\Barang\BarangModel();
+        foreach ($bhpPenunjang as $k => $v) {
+            $masterItem = $modelMasterPenunjang->find($v['id_barang']);
+            $bhpPenunjang[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
+            $bhpPenunjang[$k]['nama_barang'] = $masterItem['nama_barang'];
+        }
+
+        return $bhpPenunjang;
+    }
 }

@@ -25,6 +25,7 @@ final class PengambilanDarahController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
                 A::SEPARATE,
                 A::TEST,
             ],
@@ -567,5 +568,84 @@ final class PengambilanDarahController extends ControllerTemplate
         }
 
         return $this->home();
+    }
+
+    /**
+     * Menampilkan Halaman Detail Pengambilan Darah & Penggunaan BHP
+     */
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataPengambilan = $this->model->find($id);
+
+        $dataKunjungan = [];
+        $dataPendonor  = [];
+        $dataOrang     = [];
+        $dataPetugasMedis = [];
+
+        if (!empty($dataPengambilan['id_kunjungan'])) {
+            $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
+            $dataKunjungan  = $modelKunjungan->find($dataPengambilan['id_kunjungan']) ?? [];
+
+            if (!empty($dataKunjungan['id_pendonor'])) {
+                $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+                $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']) ?? [];
+
+                if (!empty($dataPendonor['id_orang'])) {
+                    $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                    $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                }
+            }
+        }
+
+        if (!empty($dataPengambilan['id_petugas'])) {
+            $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
+            $petugasRow   = $modelPetugas->find($dataPengambilan['id_petugas']) ?? [];
+
+            if (!empty($petugasRow['id_orang'])) {
+                $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
+                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+                
+                if (isset($orangPetugasRow['nama'])) {
+                    $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
+                }
+            }
+        }
+
+        $bhpMedis = $this->model->getBhpMedisDetail($id);
+        $bhpPenunjang = $this->model->getBhpPenunjangDetail($id);
+
+        $baris = array_merge($dataOrang, $dataPendonor, $dataKunjungan, $dataPetugasMedis, $dataPengambilan);
+
+        $optionsFields = $this->get_fields_with_options(false, true);
+        foreach ($optionsFields as $field) {
+            $colName = $field[2];
+            $options = $field[5] ?? [];
+            
+            if (!empty($options) && isset($baris[$colName])) {
+                $idMentah = $baris[$colName];
+                
+                foreach ($options as $opt) {
+                    if ((string)$opt[1] === (string)$idMentah) {
+                        $baris[$colName] = $opt[0];
+                        break;
+                    }
+                }
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail']
+        ];
+
+        return view('/admin/donor/detail_pengambilandarah', [
+            'judul'          => 'Detail ' . $this->title,
+            'breadcrumbs'    => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'     => $this->get_uri_path(),
+            'baris'          => $baris,
+            'bhp_medis'      => $bhpMedis,
+            'bhp_penunjang'  => $bhpPenunjang,
+        ]);
     }
 }

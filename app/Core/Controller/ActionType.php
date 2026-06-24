@@ -19,4 +19,5 @@ enum ActionType: string
     case LEMBAR_OPERASI = 'lembaroperasi';
     case BACK           = 'kembali';
     case PAY            = 'bayar';
+    case DETAIL         = 'detail2';
 }

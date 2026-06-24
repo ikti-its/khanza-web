@@ -72,6 +72,9 @@
         if (isset($aksi['detail']) && $aksi['detail'] === true) {
             echo view('components/aksi/detail', $data);
         }
+        if (isset($aksi['detail2']) && $aksi['detail2'] === true) {
+            echo view('components/aksi/detail2', $data);
+        }
         if (isset($aksi['pilih'])  && $aksi['pilih']  === true) {
             echo view('components/aksi/pilih',  $data);
         }
@@ -80,9 +83,6 @@
         }
         if (isset($aksi['hapus'])  && $aksi['hapus']  === true) {
             echo view('components/aksi/hapus',  $data);
-        }
-        if (isset($aksi['detail2']) && $aksi['detail2'] === true) {
-            echo view('components/aksi/detail2', $data);
         }
         if (isset($aksi['registrasi']) && $aksi['registrasi'] === true) {
             echo view('components/aksi/registrasi', $data);
