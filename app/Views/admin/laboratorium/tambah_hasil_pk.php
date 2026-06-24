@@ -18,7 +18,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
     <div class="bg-white rounded-xl shadow-sm p-4 sm:p-7 dark:bg-slate-900 border border-gray-100 dark:border-gray-800">
         <?= view('components/form/judul', ['judul' => $judul]) ?>
 
-        <form action="<?= $modul_path . $form_action ?>" id="myForm" onsubmit="return validateForm()" method="post">
+        <form action="<?= $modul_path . $form_action ?>" id="myForm" method="post">
             <?= csrf_field() ?>
 
             <input type="hidden" name="id_permintaan_lab" id="id_permintaan_lab" value="<?= esc($baris['id_permintaan_lab'] ?? '') ?>">
@@ -36,18 +36,20 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                 <label class="<?= $labelLeft ?>">
                     No. Permintaan <span class="text-red-500">*</span>
                 </label>
-                <div class="flex gap-x-2 lg:w-1/4">
-                    <input type="text" id="no_permintaan_display"
-                           value="<?= esc($baris['no_permintaan'] ?? '') ?>"
-                           readonly required
-                           placeholder="Klik cari permintaan..."
-                           <?= $isEdit ? '' : 'onclick="open_modalPermintaanLab(' . ID_KATEGORI_PK . ')"' ?>
-                           class="<?= $isEdit ? $readonlyClass : $inputClass ?>">
-                    <?php if (!$isEdit) : ?>
-                        <button type="button" onclick="open_modalPermintaanLab(<?= ID_KATEGORI_PK ?>)" class="<?= $btnClass ?>">
-                            <?= $searchIcon ?>
-                        </button>
-                    <?php endif; ?>
+                <div class="flex flex-col lg:w-1/4">
+                    <div class="flex gap-x-2">
+                        <input type="text" id="no_permintaan_display"
+                               value="<?= esc($baris['no_permintaan'] ?? '') ?>"
+                               readonly
+                               placeholder="Klik cari permintaan..."
+                               <?= $isEdit ? '' : 'onclick="open_modalPermintaanLab(' . ID_KATEGORI_PK . ')"' ?>
+                               class="<?= $isEdit ? $readonlyClass : $inputClass ?>">
+                        <?php if (!$isEdit) : ?>
+                            <button type="button" onclick="open_modalPermintaanLab(<?= ID_KATEGORI_PK ?>)" class="<?= $btnClass ?>">
+                                <?= $searchIcon ?>
+                            </button>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
 
@@ -79,30 +81,34 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                 <label class="<?= $labelLeft ?>">
                     Dokter PJ <span class="text-red-500">*</span>
                 </label>
-                <div class="flex gap-x-2 lg:w-1/4">
-                    <input type="text" id="nama_dokter_pj_display"
-                           value="<?= esc($baris['nama_dokter_pj'] ?? '') ?>"
-                           readonly required
-                           placeholder="Klik cari dokter..."
-                           onclick="open_modalDokterPJ()"
-                           class="<?= $inputClass ?>">
-                    <button type="button" onclick="open_modalDokterPJ()" class="<?= $btnClass ?>">
-                        <?= $searchIcon ?>
-                    </button>
+                <div class="flex flex-col lg:w-1/4">
+                    <div class="flex gap-x-2">
+                        <input type="text" id="nama_dokter_pj_display"
+                               value="<?= esc($baris['nama_dokter_pj'] ?? '') ?>"
+                               readonly
+                               placeholder="Klik cari dokter..."
+                               onclick="open_modalDokterPJ()"
+                               class="<?= $inputClass ?>">
+                        <button type="button" onclick="open_modalDokterPJ()" class="<?= $btnClass ?>">
+                            <?= $searchIcon ?>
+                        </button>
+                    </div>
                 </div>
                 <label class="<?= $labelRight ?>">
                     Petugas <span class="text-red-500">*</span>
                 </label>
-                <div class="flex gap-x-2 lg:w-1/4">
-                    <input type="text" id="nama_petugas_display"
-                           value="<?= esc($baris['nama_petugas'] ?? '') ?>"
-                           readonly required
-                           placeholder="Klik cari petugas..."
-                           onclick="open_modalPetugas()"
-                           class="<?= $inputClass ?>">
-                    <button type="button" onclick="open_modalPetugas()" class="<?= $btnClass ?>">
-                        <?= $searchIcon ?>
-                    </button>
+                <div class="flex flex-col lg:w-1/4">
+                    <div class="flex gap-x-2">
+                        <input type="text" id="nama_petugas_display"
+                               value="<?= esc($baris['nama_petugas'] ?? '') ?>"
+                               readonly
+                               placeholder="Klik cari petugas..."
+                               onclick="open_modalPetugas()"
+                               class="<?= $inputClass ?>">
+                        <button type="button" onclick="open_modalPetugas()" class="<?= $btnClass ?>">
+                            <?= $searchIcon ?>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -119,6 +125,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                     Pilih permintaan terlebih dahulu untuk mengisi hasil pemeriksaan.
                 </div>
             </div>
+            <p id="err_hasilPkContainer" class="hidden text-red-500 text-xs mt-1"></p>
 
             <div class="flex justify-end gap-x-2 mt-8">
                 <?= view('components/form/submit_button') ?>
@@ -139,6 +146,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
         document.getElementById('nama_pasien_display').value         = item.nama                ?? '';
         document.getElementById('nama_dokter_perujuk_display').value = item.nama_dokter_perujuk ?? '';
         document.getElementById('id_permintaan_lab').value           = item.id_permintaan       ?? '';
+        clearError('no_permintaan_display');
         fetchItemPk(item.id_permintaan);
     }
 
@@ -156,6 +164,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
         if (_modalDokterTarget === 'pj') {
             document.getElementById('nama_dokter_pj_display').value = item.nama_dokter ?? '';
             document.getElementById('id_dokter_pj').value           = item.id_dokter   ?? '';
+            clearError('nama_dokter_pj_display');
         }
         _modalDokterTarget = null;
     }
@@ -166,6 +175,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
     function autofillPetugas(item) {
         document.getElementById('nama_petugas_display').value = item.nama       ?? '';
         document.getElementById('id_petugas_lab').value       = item.id_petugas ?? '';
+        clearError('nama_petugas_display');
     }
 
     // ════════════════════════════════════════════
@@ -260,7 +270,8 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                                        name="${pParam}[nilai_hasil]"
                                        value="${escAttr(nilaiAwal)}"
                                        placeholder="Nilai hasil..."
-                                       class="w-full border border-gray-300 rounded p-1 text-sm dark:bg-slate-900 dark:border-gray-600 dark:text-white">
+                                       required
+                                       class="w-full border border-gray-300 rounded p-1 text-sm dark:bg-slate-900 dark:border-gray-600 dark:text-white nilai-hasil-input">
                             </td>
                             <td class="p-2 border dark:border-gray-700">
                                 <input type="text"
@@ -306,39 +317,64 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
         if (_itemTerpilih.length > 0) {
             renderHasilPk(_itemTerpilih);
         }
+
+        document.getElementById('myForm').addEventListener('submit', function (e) {
+            try {
+                if (!validateForm()) e.preventDefault();
+            } catch (err) {
+                e.preventDefault();
+            }
+        });
     });
 
     // ════════════════════════════════════════════
     // VALIDASI
     // ════════════════════════════════════════════
-    function validateForm() {
-        if (!document.getElementById('id_permintaan_lab').value) {
-            alert('Silakan pilih permintaan laboratorium terlebih dahulu.');
-            return false;
-        }
-        if (!document.getElementById('id_dokter_pj').value) {
-            alert('Silakan pilih Dokter PJ.');
-            return false;
-        }
-        if (!document.getElementById('id_petugas_lab').value) {
-            alert('Silakan pilih Petugas Lab.');
-            return false;
-        }
+    function showError(fieldId, msg) {
+        const errEl = document.getElementById('err_' + fieldId);
+        if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
+        const inputEl = document.getElementById(fieldId);
+        if (inputEl) inputEl.classList.add('!border-red-500');
+    }
 
-        const requiredFields = document.querySelectorAll('select[required], input[required]');
-        for (const field of requiredFields) {
-            if (!field.value) {
-                alert('Isi semua field yang wajib diisi.');
-                field.focus();
+    function clearError(fieldId) {
+        const errEl = document.getElementById('err_' + fieldId);
+        if (errEl) { errEl.textContent = ''; errEl.classList.add('hidden'); }
+        const inputEl = document.getElementById(fieldId);
+        if (inputEl) inputEl.classList.remove('!border-red-500');
+    }
+
+    function validateForm() {
+        const headerReqs = [
+            { id: 'id_permintaan_lab', msg: 'Permintaan laboratorium wajib dipilih.' },
+            { id: 'id_dokter_pj',      msg: 'Dokter PJ wajib dipilih.' },
+            { id: 'id_petugas_lab',    msg: 'Petugas lab wajib dipilih.' },
+        ];
+        for (const f of headerReqs) {
+            if (!document.getElementById(f.id)?.value) {
+                alert(f.msg);
                 return false;
             }
         }
 
-        const submitButton = document.getElementById('submitButton');
-        if (submitButton) {
-            submitButton.disabled = true;
-            submitButton.innerHTML = 'Menyimpan...';
+        clearError('hasilPkContainer');
+        let nilaiValid = true;
+        document.querySelectorAll('.nilai-hasil-input').forEach(input => {
+            input.classList.toggle('!border-red-500', !input.value.trim());
+            if (!input.value.trim()) nilaiValid = false;
+        });
+        if (!nilaiValid) {
+            showError('hasilPkContainer', 'Nilai hasil untuk semua parameter wajib diisi.');
+            return false;
         }
+
+        if (!document.getElementById('myForm').checkValidity()) {
+            document.getElementById('myForm').reportValidity();
+            return false;
+        }
+
+        const btn = document.getElementById('submitButton');
+        if (btn) { btn.disabled = true; btn.innerHTML = 'Menyimpan...'; }
         return true;
     }
 </script>

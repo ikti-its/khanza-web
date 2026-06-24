@@ -114,6 +114,7 @@ final class HasilLabMbController extends ControllerTemplate
             ->join('laboratorium.permintaan_lab_mb_item mi',   'mi.id_permintaan_mb_item = h.id_permintaan_mb_item')
             ->join('laboratorium.ref_item_pemeriksaan_lab ri', 'ri.id_item_lab = mi.id_item_pemeriksaan')
             ->where('h.id_permintaan_lab', $idPermintaanLab)
+            ->orderBy('h.id_permintaan_mb_item', 'ASC')
             ->get()->getResultArray();
 
         if (empty($hasilRows)) return [];
@@ -144,6 +145,33 @@ final class HasilLabMbController extends ControllerTemplate
         return $hasilRows;
     }
  
+    private function validateHasilList(array $hasilList): ?string
+    {
+        foreach ($hasilList as $item) {
+            foreach ($item['parameter'] ?? [] as $param) {
+                if ((int) ($param['id_parameter'] ?? 0) <= 0) continue;
+                if (trim($param['nilai_hasil'] ?? '') === '') {
+                    return 'Semua nilai hasil parameter wajib diisi sebelum disimpan.';
+                }
+            }
+        }
+        return null;
+    }
+
+    private function validateInput(
+        ?int $idPermintaanLab,
+        ?int $idDokterPj,
+        ?int $idPetugasLab,
+        array $hasilList,
+        string $emptyListMsg,
+    ): ?string {
+        if (!$idPermintaanLab) return 'Permintaan laboratorium wajib dipilih.';
+        if (!$idDokterPj)      return 'Dokter PJ wajib dipilih.';
+        if (!$idPetugasLab)    return 'Petugas lab wajib dipilih.';
+        if (empty($hasilList)) return $emptyListMsg;
+        return $this->validateHasilList($hasilList);
+    }
+
     private function insertHasilMbItems(
         array $hasilList,
         ?int $idPermintaanLab,
@@ -233,22 +261,36 @@ final class HasilLabMbController extends ControllerTemplate
     public function create(): string|RedirectResponse
     {
         $rawPost = $this->request->getPost();
- 
+
         $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
         $idDokterPj      = (int) ($rawPost['id_dokter_pj']      ?? 0) ?: null;
         $idPetugasLab    = (int) ($rawPost['id_petugas_lab']    ?? 0) ?: null;
         $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
         $hasilList       = $rawPost['hasil'] ?? [];
- 
+
+        if ($err = $this->validateInput(
+            $idPermintaanLab, $idDokterPj, $idPetugasLab, $hasilList,
+            'Tidak ada item hasil pemeriksaan. Pilih permintaan dan pastikan item MB sudah termuat.',
+        )) {
+            session()->setFlashdata('error', $err);
+            return redirect()->back()->withInput();
+        }
+
         $modelParam = new \App\Features\Laboratorium\HasilLabMbParameter\HasilLabMbParameterModel();
- 
+
         $this->model->db->transStart();
- 
+
         try {
             $this->insertHasilMbItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil, $modelParam);
- 
+
+            $this->model->db
+                ->table('laboratorium.permintaan_lab_header')
+                ->where('id_permintaan', $idPermintaanLab)
+                ->set('id_status_permintaan', 3)
+                ->update();
+
             $this->model->db->transComplete();
- 
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal menyimpan hasil lab MB.');
             }
@@ -271,15 +313,15 @@ final class HasilLabMbController extends ControllerTemplate
     #[\Override]
     final public function update_page(int|string $id): string
     {
-        $baris = $this->model->find($id);
- 
+        $idPermintaanLab = (int) $id;
+
+        $baris = $this->model->where('id_permintaan_lab', $idPermintaanLab)->first();
+
         if (empty($baris)) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
- 
-        $idPermintaanLab = (int) $baris['id_permintaan_lab'];
- 
+
         $baris = array_merge($baris, $this->fetchHeaderPermintaan($idPermintaanLab));
  
         if (!empty($baris['id_dokter_pj'])) {
@@ -310,25 +352,39 @@ final class HasilLabMbController extends ControllerTemplate
     public function update(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->home();
- 
+
         $rawPost = $this->request->getPost();
- 
+
         $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
         $idDokterPj      = (int) ($rawPost['id_dokter_pj']      ?? 0) ?: null;
         $idPetugasLab    = (int) ($rawPost['id_petugas_lab']    ?? 0) ?: null;
         $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
         $hasilList       = $rawPost['hasil'] ?? [];
- 
+
+        if ($err = $this->validateInput(
+            $idPermintaanLab, $idDokterPj, $idPetugasLab, $hasilList,
+            'Tidak ada item hasil pemeriksaan. Pastikan item MB masih termuat.',
+        )) {
+            session()->setFlashdata('error', $err);
+            return redirect()->back()->withInput();
+        }
+
         $modelParam = new \App\Features\Laboratorium\HasilLabMbParameter\HasilLabMbParameterModel();
- 
+
         $this->model->db->transStart();
- 
+
         try {
             $this->deleteHasilMbByPermintaan($idPermintaanLab, $modelParam);
             $this->insertHasilMbItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil, $modelParam);
- 
+
+            $this->model->db
+                ->table('laboratorium.permintaan_lab_header')
+                ->where('id_permintaan', $idPermintaanLab)
+                ->set('id_status_permintaan', 3)
+                ->update();
+
             $this->model->db->transComplete();
- 
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal memperbarui hasil lab MB.');
             }
@@ -351,17 +407,19 @@ final class HasilLabMbController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
- 
-        $baris = $this->model->find($id);
-        if (empty($baris)) return $this->home();
- 
+        $idPermintaanLab = (int) $id;
+        if ($idPermintaanLab == 0) return $this->home();
+
+        if (!$this->model->where('id_permintaan_lab', $idPermintaanLab)->countAllResults()) {
+            return $this->home();
+        }
+
         $modelParam = new \App\Features\Laboratorium\HasilLabMbParameter\HasilLabMbParameterModel();
- 
+
         $this->model->db->transStart();
- 
+
         try {
-            $this->deleteHasilMbByPermintaan((int) $baris['id_permintaan_lab'], $modelParam);
+            $this->deleteHasilMbByPermintaan($idPermintaanLab, $modelParam);
  
             $this->model->db->transComplete();
  

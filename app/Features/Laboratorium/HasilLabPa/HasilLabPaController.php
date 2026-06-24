@@ -215,9 +215,15 @@ final class HasilLabPaController extends ControllerTemplate
  
         try {
             $this->insertHasilPaItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil);
- 
+
+            $this->model->db
+                ->table('laboratorium.permintaan_lab_header')
+                ->where('id_permintaan', $idPermintaanLab)
+                ->set('id_status_permintaan', 3)
+                ->update();
+
             $this->model->db->transComplete();
- 
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal menyimpan hasil lab PA.');
             }
@@ -240,15 +246,15 @@ final class HasilLabPaController extends ControllerTemplate
     #[\Override]
     final public function update_page(int|string $id): string
     {
-        $baris = $this->model->find($id);
- 
+        $idPermintaanLab = (int) $id;
+
+        $baris = $this->model->where('id_permintaan_lab', $idPermintaanLab)->first();
+
         if (empty($baris)) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
- 
-        $idPermintaanLab = (int) $baris['id_permintaan_lab'];
- 
+
         $baris = array_merge($baris, $this->fetchHeaderPermintaan($idPermintaanLab));
  
         if (!empty($baris['id_dokter_pj'])) {
@@ -293,9 +299,15 @@ final class HasilLabPaController extends ControllerTemplate
         try {
             $this->deleteHasilPaByPermintaan($idPermintaanLab);
             $this->insertHasilPaItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil);
- 
+
+            $this->model->db
+                ->table('laboratorium.permintaan_lab_header')
+                ->where('id_permintaan', $idPermintaanLab)
+                ->set('id_status_permintaan', 3)
+                ->update();
+
             $this->model->db->transComplete();
- 
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal memperbarui hasil lab PA.');
             }
@@ -318,15 +330,17 @@ final class HasilLabPaController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
- 
-        $baris = $this->model->find($id);
-        if (empty($baris)) return $this->home();
- 
+        $idPermintaanLab = (int) $id;
+        if ($idPermintaanLab == 0) return $this->home();
+
+        if (!$this->model->where('id_permintaan_lab', $idPermintaanLab)->countAllResults()) {
+            return $this->home();
+        }
+
         $this->model->db->transStart();
- 
+
         try {
-            $this->deleteHasilPaByPermintaan((int) $baris['id_permintaan_lab']);
+            $this->deleteHasilPaByPermintaan($idPermintaanLab);
  
             $this->model->db->transComplete();
  

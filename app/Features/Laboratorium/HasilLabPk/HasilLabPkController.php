@@ -117,6 +117,7 @@ final class HasilLabPkController extends ControllerTemplate
             ->join('laboratorium.permintaan_lab_pk_item pi',   'pi.id_permintaan_pk_item = h.id_permintaan_pk_item')
             ->join('laboratorium.ref_item_pemeriksaan_lab ri', 'ri.id_item_lab = pi.id_item_pemeriksaan')
             ->where('h.id_permintaan_lab', $idPermintaanLab)
+            ->orderBy('h.id_permintaan_pk_item', 'ASC')
             ->get()->getResultArray();
 
         if(empty($hasilRows)) return [];
@@ -187,6 +188,18 @@ final class HasilLabPkController extends ControllerTemplate
         }
     }
  
+    private function validateHasilList(array $hasilList): ?string
+    {
+        foreach ($hasilList as $item) {
+            foreach ($item['parameter'] ?? [] as $param) {
+                if (empty(trim($param['nilai_hasil'] ?? ''))) {
+                    return 'Nilai hasil untuk semua parameter wajib diisi.';
+                }
+            }
+        }
+        return null;
+    }
+
     private function deleteHasilPkByPermintaan(
         int $idPermintaanLab,
         \App\Features\Laboratorium\HasilLabPkParameter\HasilLabPkParameterModel $modelParam,
@@ -244,16 +257,27 @@ final class HasilLabPkController extends ControllerTemplate
         $tglJamHasil     = $rawPost['tgl_jam_hasil']  ?? date('Y-m-d H:i:s');
         $idKategoriUsia  = (int) ($rawPost['id_kategori_usia'] ?? 0) ?: null;
         $hasilList       = $rawPost['hasil'] ?? [];
- 
+
+        if ($err = $this->validateHasilList($hasilList)) {
+            session()->setFlashdata('error', $err);
+            return redirect()->back()->withInput();
+        }
+
         $modelParam = new \App\Features\Laboratorium\HasilLabPkParameter\HasilLabPkParameterModel();
- 
+
         $this->model->db->transStart();
- 
+
         try {
             $this->insertHasilPkItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil, $idKategoriUsia, $modelParam);
- 
+
+            $this->model->db
+                ->table('laboratorium.permintaan_lab_header')
+                ->where('id_permintaan', $idPermintaanLab)
+                ->set('id_status_permintaan', 3)
+                ->update();
+
             $this->model->db->transComplete();
- 
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal menyimpan hasil lab PK.');
             }
@@ -276,15 +300,15 @@ final class HasilLabPkController extends ControllerTemplate
     #[\Override]
     final public function update_page(int|string $id): string
     {
-        $baris = $this->model->find($id);
- 
+        $idPermintaanLab = (int) $id;
+
+        $baris = $this->model->where('id_permintaan_lab', $idPermintaanLab)->first();
+
         if (empty($baris)) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
- 
-        $idPermintaanLab = (int) $baris['id_permintaan_lab'];
- 
+
         $baris = array_merge($baris, $this->fetchHeaderPermintaan($idPermintaanLab));
  
         if (!empty($baris['id_dokter_pj'])) {
@@ -324,17 +348,28 @@ final class HasilLabPkController extends ControllerTemplate
         $tglJamHasil     = $rawPost['tgl_jam_hasil']  ?? date('Y-m-d H:i:s');
         $idKategoriUsia  = (int) ($rawPost['id_kategori_usia'] ?? 0) ?: null;
         $hasilList       = $rawPost['hasil'] ?? [];
- 
+
+        if ($err = $this->validateHasilList($hasilList)) {
+            session()->setFlashdata('error', $err);
+            return redirect()->back()->withInput();
+        }
+
         $modelParam = new \App\Features\Laboratorium\HasilLabPkParameter\HasilLabPkParameterModel();
- 
+
         $this->model->db->transStart();
- 
+
         try {
             $this->deleteHasilPkByPermintaan($idPermintaanLab, $modelParam);
             $this->insertHasilPkItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil, $idKategoriUsia, $modelParam);
- 
+
+            $this->model->db
+                ->table('laboratorium.permintaan_lab_header')
+                ->where('id_permintaan', $idPermintaanLab)
+                ->set('id_status_permintaan', 3)
+                ->update();
+
             $this->model->db->transComplete();
- 
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal memperbarui hasil lab PK.');
             }
@@ -357,17 +392,19 @@ final class HasilLabPkController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
- 
-        $baris = $this->model->find($id);
-        if (empty($baris)) return $this->home();
- 
+        $idPermintaanLab = (int) $id;
+        if ($idPermintaanLab == 0) return $this->home();
+
+        if (!$this->model->where('id_permintaan_lab', $idPermintaanLab)->countAllResults()) {
+            return $this->home();
+        }
+
         $modelParam = new \App\Features\Laboratorium\HasilLabPkParameter\HasilLabPkParameterModel();
- 
+
         $this->model->db->transStart();
- 
+
         try {
-            $this->deleteHasilPkByPermintaan((int) $baris['id_permintaan_lab'], $modelParam);
+            $this->deleteHasilPkByPermintaan($idPermintaanLab, $modelParam);
  
             $this->model->db->transComplete();
  
