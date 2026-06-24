@@ -29,7 +29,7 @@ final class PenyerahanPasienPeralatanController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX, 'id',            'ID'],
                 [HIDE, OPTIONAL, I::INDEX, 'id_penyerahan', 'ID Penyerahan'],
                 [SHOW, REQUIRED, I::INDEX, 'id_peralatan',  'Peralatan'],
-                [SHOW, REQUIRED, I::TEXT,  'keterangan',    'Keterangan'],
+                [SHOW, OPTIONAL, I::TEXT,  'keterangan',    'Keterangan'],
             ],
         );
     }
