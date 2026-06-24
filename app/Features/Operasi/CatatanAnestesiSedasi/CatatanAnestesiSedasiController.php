@@ -133,20 +133,32 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
 
     private function fetchAlat(int $idCatatan): array
     {
-        return $this->model->db
+        $rows = $this->model->db
             ->table('operasi.catatan_anestesi_sedasi_alat')
             ->select('id_alat, is_digunakan, keterangan')
             ->where('id_catatan_anestesi', $idCatatan)
             ->get()->getResultArray();
+
+        return array_map(function (array $row): array {
+            $isTrue = ($row['is_digunakan'] === true || $row['is_digunakan'] == 1 || $row['is_digunakan'] === 't');
+            $row['is_digunakan'] = $isTrue ? '1' : '0';
+            return $row;
+        }, $rows);
     }
 
     private function fetchMonitoring(int $idCatatan): array
     {
-        return $this->model->db
+        $rows = $this->model->db
             ->table('operasi.catatan_anestesi_sedasi_monitoring')
             ->select('id_monitoring, is_digunakan, keterangan')
             ->where('id_catatan_anestesi', $idCatatan)
             ->get()->getResultArray();
+
+        return array_map(function (array $row): array {
+            $isTrue = ($row['is_digunakan'] === true || $row['is_digunakan'] == 1 || $row['is_digunakan'] === 't');
+            $row['is_digunakan'] = $isTrue ? '1' : '0';
+            return $row;
+        }, $rows);
     }
 
     // Helper dokter dan petugas
@@ -321,6 +333,13 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
             $record['nama_tindakan'] = $this->fetchTindakanName($idT);
         }
 
+        foreach (['is_alergi', 'is_lanjut_tindakan', 'is_epidural', 'is_spinal', 'is_anestesi_umum', 'is_blok_perifer', 'is_batal_tindakan'] as $field) {
+            if (isset($record[$field])) {
+                $isTrue = ($record[$field] === true || $record[$field] == 1 || $record[$field] === 't');
+                $record[$field] = $isTrue ? '1' : '0';
+            }
+        }
+
         return view('admin/operasi/tambah_catatan_anestesi_sedasi',
             $this->buildViewData($jadwal, $record, '/submitedit/' . $id, (int) $id));
     }
@@ -341,7 +360,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
 
         try {
             $this->model->insert($dataHeader);
-            
+
             $this->insertAlatAndMonitoring((int) $this->model->getInsertID(), $alatList, $monitoringList);
 
             $this->model->db->transComplete();
