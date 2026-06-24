@@ -382,6 +382,14 @@ final class HasilRadController extends ControllerTemplate
             // Insert data baru
             $this->insertTindakanAndBhp((int) $id, $tindakanList, $bhpList);
 
+            if (!empty($dataHeader['id_permintaan_rad'])) {
+                $this->model->db
+                    ->table('radiologi.permintaan_rad')
+                    ->where('id_permintaan', $dataHeader['id_permintaan_rad'])
+                    ->set('id_status_permintaan', 3)
+                    ->update();
+            }
+
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {

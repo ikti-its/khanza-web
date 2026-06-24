@@ -34,14 +34,16 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
             <!-- No. Permintaan -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="<?= $labelLeft ?>">No. Permintaan <span class="text-red-500">*</span></label>
-                <div class="flex gap-x-2 lg:w-1/4">
-                    <input type="text" id="no_permintaan_display" value="<?= $val('no_permintaan') ?>"
-                           readonly required placeholder="Klik cari permintaan..."
-                           <?= $isEdit ? '' : 'onclick="open_modalPermintaanRad()"' ?>
-                           class="<?= $isEdit ? $readonlyClass : $inputClass ?>">
-                    <?php if (!$isEdit) : ?>
-                        <button type="button" onclick="open_modalPermintaanRad()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
-                    <?php endif; ?>
+                <div class="flex flex-col lg:w-1/4">
+                    <div class="flex gap-x-2">
+                        <input type="text" id="no_permintaan_display" value="<?= $val('no_permintaan') ?>"
+                               readonly placeholder="Klik cari permintaan..."
+                               <?= $isEdit ? '' : 'onclick="open_modalPermintaanRad()"' ?>
+                               class="<?= $isEdit ? $readonlyClass : $inputClass ?>">
+                        <?php if (!$isEdit) : ?>
+                            <button type="button" onclick="open_modalPermintaanRad()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
 
@@ -63,16 +65,20 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
             <!-- Dokter PJ + Petugas -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="<?= $labelLeft ?>">Dokter PJ <span class="text-red-500">*</span></label>
-                <div class="flex gap-x-2 lg:w-1/4">
-                    <input type="text" id="nama_dokter_pj_display" value="<?= $val('nama_dokter_pj') ?>"
-                           readonly required placeholder="Klik cari dokter..." onclick="open_modalDokterPJ()" class="<?= $inputClass ?>">
-                    <button type="button" onclick="open_modalDokterPJ()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
+                <div class="flex flex-col lg:w-1/4">
+                    <div class="flex gap-x-2">
+                        <input type="text" id="nama_dokter_pj_display" value="<?= $val('nama_dokter_pj') ?>"
+                               readonly placeholder="Klik cari dokter..." onclick="open_modalDokterPJ()" class="<?= $inputClass ?>">
+                        <button type="button" onclick="open_modalDokterPJ()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
+                    </div>
                 </div>
                 <label class="<?= $labelRight ?>">Petugas <span class="text-red-500">*</span></label>
-                <div class="flex gap-x-2 lg:w-1/4">
-                    <input type="text" id="nama_petugas_display" value="<?= $val('nama_petugas') ?>"
-                           readonly required placeholder="Klik cari petugas..." onclick="open_modalPetugas()" class="<?= $inputClass ?>">
-                    <button type="button" onclick="open_modalPetugas()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
+                <div class="flex flex-col lg:w-1/4">
+                    <div class="flex gap-x-2">
+                        <input type="text" id="nama_petugas_display" value="<?= $val('nama_petugas') ?>"
+                               readonly placeholder="Klik cari petugas..." onclick="open_modalPetugas()" class="<?= $inputClass ?>">
+                        <button type="button" onclick="open_modalPetugas()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
+                    </div>
                 </div>
             </div>
 
@@ -573,12 +579,21 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
     // VALIDASI FORM
     // ════════════════════════════════════════════
     function validateForm() {
-        if (!document.getElementById('id_permintaan_rad').value) { alert('Silakan pilih permintaan radiologi terlebih dahulu.'); return false; }
-        if (!document.getElementById('id_dokter_pj').value)      { alert('Silakan pilih dokter PJ.'); return false; }
-        if (!document.getElementById('id_petugas_rad').value)    { alert('Silakan pilih petugas radiologi.'); return false; }
+        const headerReqs = [
+            { id: 'id_permintaan_rad', msg: 'Permintaan radiologi wajib dipilih.' },
+            { id: 'id_dokter_pj',      msg: 'Dokter PJ wajib dipilih.' },
+            { id: 'id_petugas_rad',    msg: 'Petugas radiologi wajib dipilih.' },
+        ];
+        for (const f of headerReqs) {
+            if (!document.getElementById(f.id)?.value) {
+                alert(f.msg);
+                return false;
+            }
+        }
 
-        for (const field of document.querySelectorAll('select[required], input[required]')) {
-            if (!field.value) { alert('Isi semua field yang wajib diisi.'); field.focus(); return false; }
+        if (!document.getElementById('myForm').checkValidity()) {
+            document.getElementById('myForm').reportValidity();
+            return false;
         }
 
         const btn = document.getElementById('submitButton');
