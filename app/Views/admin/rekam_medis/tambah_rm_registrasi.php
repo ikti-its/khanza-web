@@ -24,6 +24,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
             <?= csrf_field() ?>
 
             <!-- Hidden: auto-generated & FK values -->
+            <input type="hidden" name="redirect_to"  value="<?= esc($baris['redirect_to'] ?? '') ?>">
             <input type="hidden" name="nomor_reg"    value="<?= esc($baris['nomor_reg'] ?? '') ?>">
             <input type="hidden" name="nomor_rawat"  value="<?= esc($baris['nomor_rawat'] ?? '') ?>">
             <input type="hidden" name="id_pasien"    id="id_pasien"    value="<?= esc($baris['id_pasien'] ?? '') ?>">
