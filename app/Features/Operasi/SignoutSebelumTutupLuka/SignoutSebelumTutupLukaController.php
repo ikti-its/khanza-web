@@ -181,6 +181,13 @@ final class SignoutSebelumTutupLukaController extends ControllerTemplate
             $record['nama_perawat_ok']      = $this->fetchNamaRole('petugas', 'id_petugas', $idPo);
         }
 
+        foreach (['is_nama_tindakan_sesuai', 'is_kasa_lengkap', 'is_instrumen_lengkap', 'is_alat_tajam_lengkap', 'is_konfirmasi_bedah', 'is_konfirmasi_anestesi', 'is_konfirmasi_perawat'] as $field) {
+            if (isset($record[$field])) {
+                $isTrue = ($record[$field] === true || $record[$field] == 1 || $record[$field] === 't');
+                $record[$field] = $isTrue ? '1' : '0';
+            }
+        }
+
         return view('admin/operasi/tambah_signout_sebelum_tutupluka',
             $this->buildViewData($jadwal, $record, '/submitedit/' . $id));
     }
