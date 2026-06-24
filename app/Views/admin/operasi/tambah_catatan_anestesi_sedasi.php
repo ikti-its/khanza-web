@@ -192,7 +192,7 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 <label class="<?= $labelRight ?>">Tinggi Badan <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="tinggi_badan_cm" value="<?= esc($baris['tinggi_badan_cm'] ?? '') ?>"
-                           required min="0" class="<?= $stdClass ?>">
+                           required min="0" max="300" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">cm</span>
                 </div>
             </div>
@@ -201,7 +201,7 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 <label class="<?= $labelLeft ?>">Berat Badan <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="berat_badan_kg" value="<?= esc($baris['berat_badan_kg'] ?? '') ?>"
-                           required min="0" step="0.1" class="<?= $stdClass ?>">
+                           required min="0" max="700" step="0.1" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">kg</span>
                 </div>
 
@@ -232,14 +232,14 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 <label class="<?= $labelLeft ?>">Hemoglobin <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="hemoglobin" value="<?= esc($baris['hemoglobin'] ?? '') ?>"
-                           required step="0.1" min="0" class="<?= $stdClass ?>">
+                           required step="0.1" min="0" max="30" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">g/dL</span>
                 </div>
 
                 <label class="<?= $labelRight ?>">Hematokrit <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="hematokrit" value="<?= esc($baris['hematokrit'] ?? '') ?>"
-                           required step="0.1" min="0" class="<?= $stdClass ?>">
+                           required step="0.1" min="0" max="100" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">%</span>
                 </div>
             </div>
@@ -248,14 +248,14 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 <label class="<?= $labelLeft ?>">Leukosit <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="leukosit" value="<?= esc($baris['leukosit'] ?? '') ?>"
-                           required min="0" class="<?= $stdClass ?>">
+                           required min="0" max="500000" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">/µL</span>
                 </div>
 
                 <label class="<?= $labelRight ?>">Trombosit <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="trombosit" value="<?= esc($baris['trombosit'] ?? '') ?>"
-                           required min="0" class="<?= $stdClass ?>">
+                           required min="0" max="1000000" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">/µL</span>
                 </div>
             </div>
@@ -264,14 +264,14 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 <label class="<?= $labelLeft ?>">Bleeding Time (BT) <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="bleeding_time_bt" value="<?= esc($baris['bleeding_time_bt'] ?? '') ?>"
-                           required step="0.1" min="0" class="<?= $stdClass ?>">
+                           required step="0.1" min="0" max="60" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">menit</span>
                 </div>
 
                 <label class="<?= $labelRight ?>">Clotting Time (CT) <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="clotting_time_ct" value="<?= esc($baris['clotting_time_ct'] ?? '') ?>"
-                           required step="0.1" min="0" class="<?= $stdClass ?>">
+                           required step="0.1" min="0" max="60" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">menit</span>
                 </div>
             </div>
@@ -280,7 +280,7 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                 <label class="<?= $labelLeft ?>">Gula Darah Sewaktu <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="gula_darah_sewaktu" value="<?= esc($baris['gula_darah_sewaktu'] ?? '') ?>"
-                           required min="0" class="<?= $stdClass ?>">
+                           required min="0" max="1000" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">mg/dL</span>
                 </div>
             </div>
