@@ -63,7 +63,7 @@ final class KunjunganController extends ControllerTemplate
         $nextAntrian = $jumlahKunjunganHariIni + 1;
         $nomorAntrianOtomatis = str_pad((string)$nextAntrian, 3, '0', STR_PAD_LEFT);
 
-        $formatTanggalPendek = date('ymd');
+        $formatTanggalPendek = date('Ymd');
         $nomorKunjunganOtomatis = 'REG-' . $formatTanggalPendek . '-' . $nomorAntrianOtomatis;
 
         foreach ($fieldsKunjunganMatang as $fieldKunjungan) {
