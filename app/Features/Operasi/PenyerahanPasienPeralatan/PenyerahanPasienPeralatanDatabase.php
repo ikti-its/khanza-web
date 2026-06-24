@@ -17,7 +17,7 @@ final class PenyerahanPasienPeralatanDatabase extends DatabaseTemplate
                 'id'            => T::ID(300_000_000),
                 'id_penyerahan' => T::FK_AUTO(),
                 'id_peralatan'  => T::FK_AUTO(),
-                'keterangan'    => T::NOTE(),
+                'keterangan'    => T::NOTE()->nullable(),
             ],
             'id',
             [],
