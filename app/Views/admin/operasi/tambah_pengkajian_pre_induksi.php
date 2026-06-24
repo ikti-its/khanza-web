@@ -114,6 +114,92 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
                           class="<?= $stdClass ?>"><?= esc($baris['vital_lain_lain'] ?? '') ?></textarea>
             </div>
 
+            <!-- ── Assessment ── -->
+            <p class="<?= $sectionClass ?>">Assessment</p>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="<?= $labelLeft ?>">Sesuai Asesmen <span class="text-red-500">*</span></label>
+                <select name="is_sesuai_asesmen" required class="<?= $stdClass ?> lg:w-1/4">
+                    <option value="">— Pilih —</option>
+                    <option value="1" <?= ($baris['is_sesuai_asesmen'] ?? '') == '1' ? 'selected' : '' ?>>Ya</option>
+                    <option value="0" <?= isset($baris['is_sesuai_asesmen']) && $baris['is_sesuai_asesmen'] == '0' ? 'selected' : '' ?>>Tidak</option>
+                </select>
+            </div>
+
+            <div class="mb-5">
+                <label class="block mb-2 text-sm text-gray-900 dark:text-white">
+                    Perencanaan <span class="text-red-500">*</span>
+                </label>
+                <textarea name="perencanaan" rows="3" required
+                          class="<?= $stdClass ?>"><?= esc($baris['perencanaan'] ?? '') ?></textarea>
+            </div>
+
+            <!-- ── Infus & Kateter ── -->
+            <p class="<?= $sectionClass ?>">Infus & Kateter</p>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="<?= $labelLeft ?>">Infus Perifer <span class="text-red-500">*</span></label>
+                <input type="text" name="infus_perifer" value="<?= esc($baris['infus_perifer'] ?? '') ?>"
+                       required class="<?= $inputClass ?> lg:w-1/4">
+
+                <label class="<?= $labelRight ?>">Kateter Vena Sentral (CVC) <span class="text-red-500">*</span></label>
+                <input type="text" name="kateter_vena_sentral_cvc" value="<?= esc($baris['kateter_vena_sentral_cvc'] ?? '') ?>"
+                       required class="<?= $inputClass ?> lg:w-1/4">
+            </div>
+
+            <!-- ── Posisi & Premedikasi ── -->
+            <p class="<?= $sectionClass ?>">Posisi & Premedikasi</p>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="<?= $labelLeft ?>">Posisi <span class="text-red-500">*</span></label>
+                <select name="id_posisi" required class="<?= $stdClass ?> lg:w-1/4">
+                    <option value="">— Pilih —</option>
+                    <?php foreach ($options['posisi'] as $o): ?>
+                        <option value="<?= esc($o['id_posisi']) ?>"
+                            <?= ($baris['id_posisi'] ?? '') == $o['id_posisi'] ? 'selected' : '' ?>>
+                            <?= esc($o['nama_posisi']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="<?= $labelLeft ?>">Premedikasi <span class="text-red-500">*</span></label>
+                <select name="id_premedikasi" required class="<?= $stdClass ?> lg:w-1/4">
+                    <option value="">— Pilih —</option>
+                    <?php foreach ($options['premedikasi'] as $o): ?>
+                        <option value="<?= esc($o['id_premedikasi']) ?>"
+                            <?= ($baris['id_premedikasi'] ?? '') == $o['id_premedikasi'] ? 'selected' : '' ?>>
+                            <?= esc($o['nama_premedikasi']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <label class="<?= $labelRight ?>">Keterangan Premedikasi <span class="text-red-500">*</span></label>
+                <input type="text" name="ket_premedikasi" value="<?= esc($baris['ket_premedikasi'] ?? '') ?>"
+                       required class="<?= $inputClass ?> lg:w-1/4">
+            </div>
+
+            <!-- ── Induksi ── -->
+            <p class="<?= $sectionClass ?>">Induksi</p>
+
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="<?= $labelLeft ?>">Induksi <span class="text-red-500">*</span></label>
+                <select name="id_induksi" required class="<?= $stdClass ?> lg:w-1/4">
+                    <option value="">— Pilih —</option>
+                    <?php foreach ($options['induksi'] as $o): ?>
+                        <option value="<?= esc($o['id_induksi']) ?>"
+                            <?= ($baris['id_induksi'] ?? '') == $o['id_induksi'] ? 'selected' : '' ?>>
+                            <?= esc($o['nama_induksi']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <label class="<?= $labelRight ?>">Keterangan Induksi <span class="text-red-500">*</span></label>
+                <input type="text" name="ket_induksi" value="<?= esc($baris['ket_induksi'] ?? '') ?>"
+                       required class="<?= $inputClass ?> lg:w-1/4">
+            </div>
+
             <!-- ── Airway ── -->
             <p class="<?= $sectionClass ?>">Airway</p>
 
@@ -204,92 +290,6 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
             </div>
             <?php endfor; ?>
 
-            <!-- ── Assessment ── -->
-            <p class="<?= $sectionClass ?>">Assessment</p>
-
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="<?= $labelLeft ?>">Sesuai Asesmen <span class="text-red-500">*</span></label>
-                <select name="is_sesuai_asesmen" required class="<?= $stdClass ?> lg:w-1/4">
-                    <option value="">— Pilih —</option>
-                    <option value="1" <?= ($baris['is_sesuai_asesmen'] ?? '') == '1' ? 'selected' : '' ?>>Ya</option>
-                    <option value="0" <?= isset($baris['is_sesuai_asesmen']) && $baris['is_sesuai_asesmen'] == '0' ? 'selected' : '' ?>>Tidak</option>
-                </select>
-            </div>
-
-            <div class="mb-5">
-                <label class="block mb-2 text-sm text-gray-900 dark:text-white">
-                    Perencanaan <span class="text-red-500">*</span>
-                </label>
-                <textarea name="perencanaan" rows="3" required
-                          class="<?= $stdClass ?>"><?= esc($baris['perencanaan'] ?? '') ?></textarea>
-            </div>
-
-            <!-- ── Infus & Kateter ── -->
-            <p class="<?= $sectionClass ?>">Infus & Kateter</p>
-
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="<?= $labelLeft ?>">Infus Perifer <span class="text-red-500">*</span></label>
-                <input type="text" name="infus_perifer" value="<?= esc($baris['infus_perifer'] ?? '') ?>"
-                       required class="<?= $inputClass ?> lg:w-1/4">
-
-                <label class="<?= $labelRight ?>">Kateter Vena Sentral (CVC) <span class="text-red-500">*</span></label>
-                <input type="text" name="kateter_vena_sentral_cvc" value="<?= esc($baris['kateter_vena_sentral_cvc'] ?? '') ?>"
-                       required class="<?= $inputClass ?> lg:w-1/4">
-            </div>
-
-            <!-- ── Posisi & Premedikasi ── -->
-            <p class="<?= $sectionClass ?>">Posisi & Premedikasi</p>
-
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="<?= $labelLeft ?>">Posisi <span class="text-red-500">*</span></label>
-                <select name="id_posisi" required class="<?= $stdClass ?> lg:w-1/4">
-                    <option value="">— Pilih —</option>
-                    <?php foreach ($options['posisi'] as $o): ?>
-                        <option value="<?= esc($o['id_posisi']) ?>"
-                            <?= ($baris['id_posisi'] ?? '') == $o['id_posisi'] ? 'selected' : '' ?>>
-                            <?= esc($o['nama_posisi']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="<?= $labelLeft ?>">Premedikasi <span class="text-red-500">*</span></label>
-                <select name="id_premedikasi" required class="<?= $stdClass ?> lg:w-1/4">
-                    <option value="">— Pilih —</option>
-                    <?php foreach ($options['premedikasi'] as $o): ?>
-                        <option value="<?= esc($o['id_premedikasi']) ?>"
-                            <?= ($baris['id_premedikasi'] ?? '') == $o['id_premedikasi'] ? 'selected' : '' ?>>
-                            <?= esc($o['nama_premedikasi']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-
-                <label class="<?= $labelRight ?>">Keterangan Premedikasi <span class="text-red-500">*</span></label>
-                <input type="text" name="ket_premedikasi" value="<?= esc($baris['ket_premedikasi'] ?? '') ?>"
-                       required class="<?= $inputClass ?> lg:w-1/4">
-            </div>
-
-            <!-- ── Induksi ── -->
-            <p class="<?= $sectionClass ?>">Induksi</p>
-
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="<?= $labelLeft ?>">Induksi <span class="text-red-500">*</span></label>
-                <select name="id_induksi" required class="<?= $stdClass ?> lg:w-1/4">
-                    <option value="">— Pilih —</option>
-                    <?php foreach ($options['induksi'] as $o): ?>
-                        <option value="<?= esc($o['id_induksi']) ?>"
-                            <?= ($baris['id_induksi'] ?? '') == $o['id_induksi'] ? 'selected' : '' ?>>
-                            <?= esc($o['nama_induksi']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-
-                <label class="<?= $labelRight ?>">Keterangan Induksi <span class="text-red-500">*</span></label>
-                <input type="text" name="ket_induksi" value="<?= esc($baris['ket_induksi'] ?? '') ?>"
-                       required class="<?= $inputClass ?> lg:w-1/4">
-            </div>
-
             <!-- ── Intubasi ── -->
             <p class="<?= $sectionClass ?>">Intubasi</p>
 
@@ -352,13 +352,10 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="<?= $labelLeft ?>">Jarum <span class="text-red-500">*</span></label>
+                <label class="<?= $labelLeft ?>">Jenis Jarum/ No <span class="text-red-500">*</span></label>
                 <input type="text" name="teknik_regional_jarum" value="<?= esc($baris['teknik_regional_jarum'] ?? '') ?>"
                        required class="<?= $inputClass ?> lg:w-1/4">
             </div>
-
-            <!-- ── Kesimpulan ── -->
-            <p class="<?= $sectionClass ?>">Kesimpulan</p>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="<?= $labelLeft ?>">Kateter <span class="text-red-500">*</span></label>
