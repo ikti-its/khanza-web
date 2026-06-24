@@ -39,18 +39,21 @@ $isEdit = str_contains($judul, 'Ubah');
     <label class="<?= $labelRight ?>">
         No. Registrasi <span class="text-red-500">*</span>
     </label>
-    <div class="flex gap-x-2 lg:w-1/4">
-        <input type="text" id="nomor_reg_display"
-               value="<?= esc($baris['nomor_reg'] ?? '') ?>"
-               readonly required
-               placeholder="Klik cari registrasi..."
-               <?= $isEdit ? '' : 'onclick="open_modalRegistrasi()"' ?>
-               class="<?= $isEdit ? $readonlyClass : $inputClass ?>">
-        <?php if (!$isEdit) : ?>
-            <button type="button" onclick="open_modalRegistrasi()" class="<?= $btnClass ?>">
-                <?= $searchIcon ?>
-            </button>
-        <?php endif; ?>
+    <div class="flex flex-col lg:w-1/4">
+        <div class="flex gap-x-2">
+            <input type="text" id="nomor_reg_display"
+                   value="<?= esc($baris['nomor_reg'] ?? '') ?>"
+                   readonly
+                   placeholder="Klik cari registrasi..."
+                   <?= $isEdit ? '' : 'onclick="open_modalRegistrasi()"' ?>
+                   class="<?= $isEdit ? $readonlyClass : $inputClass ?>">
+            <?php if (!$isEdit) : ?>
+                <button type="button" onclick="open_modalRegistrasi()" class="<?= $btnClass ?>">
+                    <?= $searchIcon ?>
+                </button>
+            <?php endif; ?>
+        </div>
+        <p id="err_nomor_reg_display" class="hidden text-red-500 text-xs mt-1"></p>
     </div>
 </div>
 
@@ -74,16 +77,19 @@ $isEdit = str_contains($judul, 'Ubah');
     <label class="<?= $labelLeft ?>">
         Kode Dokter Perujuk <span class="text-red-500">*</span>
     </label>
-    <div class="flex gap-x-2 lg:w-1/4">
-        <input type="text" id="kode_dokter"
-               value="<?= esc($baris['kode_dokter'] ?? '') ?>"
-               readonly required
-               placeholder="Klik cari dokter..."
-               onclick="open_modalDokter()"
-               class="<?= $inputClass ?>">
-        <button type="button" onclick="open_modalDokter()" class="<?= $btnClass ?>">
-            <?= $searchIcon ?>
-        </button>
+    <div class="flex flex-col lg:w-1/4">
+        <div class="flex gap-x-2">
+            <input type="text" id="kode_dokter"
+                   value="<?= esc($baris['kode_dokter'] ?? '') ?>"
+                   readonly
+                   placeholder="Klik cari dokter..."
+                   onclick="open_modalDokter()"
+                   class="<?= $inputClass ?>">
+            <button type="button" onclick="open_modalDokter()" class="<?= $btnClass ?>">
+                <?= $searchIcon ?>
+            </button>
+        </div>
+        <p id="err_kode_dokter" class="hidden text-red-500 text-xs mt-1"></p>
     </div>
 
     <label class="<?= $labelRight ?>">Nama Dokter Perujuk</label>

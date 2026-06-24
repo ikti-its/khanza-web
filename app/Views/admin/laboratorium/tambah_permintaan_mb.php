@@ -52,6 +52,7 @@
                         </tbody>
                     </table>
                 </div>
+                <p id="err_items" class="hidden text-red-500 text-xs mt-2"></p>
                 <div id="hiddenItemLabInputs"></div>
             </div>
 
@@ -114,10 +115,11 @@
                 const params = result.data || [];
                 if (_itemLabSelected[idItemLab]) {
                     const selectedIds = _itemLabSelected[idItemLab]._selectedParamIds ?? new Set();
+                    const isSingle = params.length === 1;
                     params.forEach(p => {
                         _itemLabSelected[idItemLab].parameter[p.id_parameter] = {
                             ...p,
-                            checked: selectedIds.has(String(p.id_parameter)),
+                            checked: isSingle || selectedIds.has(String(p.id_parameter)),
                         };
                     });
                 }
@@ -180,19 +182,27 @@
                     </td>`;
                 tbody.appendChild(trEmpty);
             } else {
+                const isSingle = params.length === 1;
                 params.forEach(param => {
                     const trParam = document.createElement('tr');
                     trParam.className = 'hover:bg-emerald-50 dark:hover:bg-slate-700';
+                    // Jika hanya 1 parameter: auto terpilih, checkbox disabled, nilai tetap dikirim via hidden input
+                    const checkboxCell = isSingle
+                        ? `<td class="p-2 border text-center dark:border-gray-700 pl-8">
+                               <input type="hidden" name="id_parameter[${idItem}][]" value="${param.id_parameter}">
+                               <input type="checkbox" checked disabled class="opacity-50 cursor-not-allowed">
+                           </td>`
+                        : `<td class="p-2 border text-center dark:border-gray-700 pl-8">
+                               <input type="checkbox"
+                                      name="id_parameter[${idItem}][]"
+                                      value="${param.id_parameter}"
+                                      data-item="${idItem}"
+                                      data-param="${param.id_parameter}"
+                                      ${param.checked ? 'checked' : ''}
+                                      class="cursor-pointer">
+                           </td>`;
                     trParam.innerHTML = `
-                        <td class="p-2 border text-center dark:border-gray-700 pl-8">
-                            <input type="checkbox"
-                                   name="id_parameter[${idItem}][]"
-                                   value="${param.id_parameter}"
-                                   data-item="${idItem}"
-                                   data-param="${param.id_parameter}"
-                                   ${param.checked ? 'checked' : ''}
-                                   class="cursor-pointer">
-                        </td>
+                        ${checkboxCell}
                         <td class="p-2 border text-center text-xs text-gray-400 dark:border-gray-700"></td>
                         <td class="p-2 border pl-8 dark:border-gray-700 text-xs">${param.nama_parameter}</td>
                         <td class="p-2 border dark:border-gray-700 text-xs">${param.satuan ?? '-'}</td>
@@ -235,6 +245,20 @@
         }
     }
 
+    function showError(fieldId, msg) {
+        const errEl = document.getElementById('err_' + fieldId);
+        if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
+        const inputEl = document.getElementById(fieldId);
+        if (inputEl) inputEl.classList.add('!border-red-500');
+    }
+
+    function clearError(fieldId) {
+        const errEl = document.getElementById('err_' + fieldId);
+        if (errEl) { errEl.textContent = ''; errEl.classList.add('hidden'); }
+        const inputEl = document.getElementById(fieldId);
+        if (inputEl) inputEl.classList.remove('!border-red-500');
+    }
+
     function autofillRegistrasi(item) {
         document.getElementById('nomor_reg_display').value   = item.nomor_reg   ?? '';
         document.getElementById('nomor_rm_display').value    = item.nomor_rm    ?? '';
@@ -243,36 +267,56 @@
         document.getElementById('nama_dokter').value         = item.nama_dokter ?? '';
         document.getElementById('nomor_reg').value           = item.nomor_reg   ?? '';
         document.getElementById('id_dokter_perujuk').value   = item.id_dokter   ?? '';
+        clearError('nomor_reg_display');
+        clearError('kode_dokter');
     }
 
     function autofillFields(item) {
-        document.getElementById('kode_dokter').value          = item.kode_dokter ?? '';
-        document.getElementById('nama_dokter').value          = item.nama_dokter ?? '';
-        document.getElementById('id_dokter_perujuk').value    = item.id_dokter   ?? '';
+        document.getElementById('kode_dokter').value         = item.kode_dokter ?? '';
+        document.getElementById('nama_dokter').value         = item.nama_dokter ?? '';
+        document.getElementById('id_dokter_perujuk').value   = item.id_dokter   ?? '';
+        clearError('kode_dokter');
     }
 
     function validateForm() {
+        let valid = true;
+
+        clearError('nomor_reg_display');
+        clearError('kode_dokter');
+        clearError('items');
+
         if (!document.getElementById('nomor_reg').value) {
-            alert('Silakan pilih registrasi pasien terlebih dahulu.');
-            return false;
+            showError('nomor_reg_display', 'Registrasi pasien wajib dipilih.');
+            valid = false;
         }
         if (!document.getElementById('id_dokter_perujuk').value) {
-            alert('Silakan pilih dokter perujuk terlebih dahulu.');
-            return false;
+            showError('kode_dokter', 'Dokter perujuk wajib dipilih.');
+            valid = false;
         }
         const hiddenDiv = document.getElementById('hiddenItemLabInputs');
         if (!hiddenDiv.querySelector('input[name="id_item[]"]')) {
-            alert('Pilih minimal satu item pemeriksaan.');
+            showError('items', 'Pilih minimal satu item pemeriksaan.');
+            valid = false;
+        } else {
+            hiddenDiv.querySelectorAll('input[name="id_item[]"]').forEach(itemInput => {
+                const idItem     = itemInput.value;
+                const hasHidden  = document.querySelector(`input[type="hidden"][name="id_parameter[${idItem}][]"]`);
+                const hasChecked = document.querySelector(`input[type="checkbox"][name="id_parameter[${idItem}][]"]:checked`);
+                if (!hasHidden && !hasChecked) {
+                    const namaItem = _itemLabSelected[idItem]?.nama_item ?? `Item #${idItem}`;
+                    showError('items', `Pilih setidaknya 1 parameter untuk item pemeriksaan.`);
+                    valid = false;
+                }
+            });
+        }
+
+        if (!valid) return false;
+
+        if (!document.getElementById('myForm').checkValidity()) {
+            document.getElementById('myForm').reportValidity();
             return false;
         }
-        const requiredFields = document.querySelectorAll('select[required], input[required]');
-        for (const field of requiredFields) {
-            if (!field.value) {
-                alert('Isi semua field yang wajib diisi.');
-                field.focus();
-                return false;
-            }
-        }
+
         const submitButton = document.getElementById('submitButton');
         if (submitButton) {
             submitButton.disabled  = true;

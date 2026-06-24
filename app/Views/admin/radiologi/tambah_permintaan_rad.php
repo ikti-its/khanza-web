@@ -34,14 +34,17 @@ $val           = fn($k) => esc($baris[$k] ?? '');
                 <label class="<?= $labelLeft ?>">No. Permintaan</label>
                 <input type="text" value="<?= esc($no_permintaan ?? '') ?>" readonly class="<?= $readonlyClass ?> lg:w-1/4">
                 <label class="<?= $labelRight ?>">No. Registrasi <span class="text-red-500">*</span></label>
-                <div class="flex gap-x-2 lg:w-1/4">
-                    <input type="text" id="nomor_reg_display" value="<?= $val('nomor_reg') ?>"
-                           readonly required placeholder="Klik cari registrasi..."
-                           <?= $isEdit ? '' : 'onclick="open_modalRegistrasi()"' ?>
-                           class="<?= $isEdit ? $readonlyClass : $inputClass ?>">
-                    <?php if (!$isEdit) : ?>
-                        <button type="button" onclick="open_modalRegistrasi()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
-                    <?php endif; ?>
+                <div class="flex flex-col lg:w-1/4">
+                    <div class="flex gap-x-2">
+                        <input type="text" id="nomor_reg_display" value="<?= $val('nomor_reg') ?>"
+                               readonly placeholder="Klik cari registrasi..."
+                               <?= $isEdit ? '' : 'onclick="open_modalRegistrasi()"' ?>
+                               class="<?= $isEdit ? $readonlyClass : $inputClass ?>">
+                        <?php if (!$isEdit) : ?>
+                            <button type="button" onclick="open_modalRegistrasi()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
+                        <?php endif; ?>
+                    </div>
+                    <p id="err_nomor_reg_display" class="hidden text-red-500 text-xs mt-1"></p>
                 </div>
             </div>
 
@@ -58,10 +61,13 @@ $val           = fn($k) => esc($baris[$k] ?? '');
             <!-- Dokter Perujuk -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="<?= $labelLeft ?>">Kode Dokter Perujuk <span class="text-red-500">*</span></label>
-                <div class="flex gap-x-2 lg:w-1/4">
-                    <input type="text" id="kode_dokter" value="<?= $val('kode_dokter_perujuk') ?>"
-                           readonly required placeholder="Klik cari dokter..." onclick="open_modalDokter()" class="<?= $inputClass ?>">
-                    <button type="button" onclick="open_modalDokter()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
+                <div class="flex flex-col lg:w-1/4">
+                    <div class="flex gap-x-2">
+                        <input type="text" id="kode_dokter" value="<?= $val('kode_dokter_perujuk') ?>"
+                               readonly placeholder="Klik cari dokter..." onclick="open_modalDokter()" class="<?= $inputClass ?>">
+                        <button type="button" onclick="open_modalDokter()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
+                    </div>
+                    <p id="err_kode_dokter" class="hidden text-red-500 text-xs mt-1"></p>
                 </div>
                 <label class="<?= $labelRight ?>">Nama Dokter Perujuk</label>
                 <input type="text" id="nama_dokter" value="<?= $val('nama_dokter') ?>"
@@ -99,6 +105,7 @@ $val           = fn($k) => esc($baris[$k] ?? '');
                     </table>
                 </div>
                 <div id="hiddenItemInputs"></div>
+                <p id="err_items" class="hidden text-red-500 text-xs mt-2"></p>
             </div>
 
             <?= view('components/form/submit_button') ?>
@@ -128,12 +135,15 @@ $val           = fn($k) => esc($baris[$k] ?? '');
         document.getElementById('nama_dokter').value         = item.nama_dokter ?? '';
         document.getElementById('nomor_reg').value           = item.nomor_reg   ?? '';
         document.getElementById('kode_dokter_perujuk').value = item.kode_dokter ?? '';
+        clearError('nomor_reg_display');
+        clearError('kode_dokter');
     }
 
     function autofillFields(item) {
         document.getElementById('kode_dokter').value         = item.kode_dokter ?? '';
         document.getElementById('nama_dokter').value         = item.nama_dokter ?? '';
         document.getElementById('kode_dokter_perujuk').value = item.kode_dokter ?? '';
+        clearError('kode_dokter');
     }
 
     function renderItemRadTerpilih(selected) {
@@ -177,13 +187,45 @@ $val           = fn($k) => esc($baris[$k] ?? '');
         updateSelectedCount();
     }
 
-    function validateForm() {
-        if (!document.getElementById('nomor_reg').value)           { alert('Silakan pilih registrasi pasien terlebih dahulu.'); return false; }
-        if (!document.getElementById('kode_dokter_perujuk').value) { alert('Silakan pilih dokter perujuk terlebih dahulu.'); return false; }
-        if (!document.getElementById('hiddenItemInputs').querySelector('input[name="id_item[]"]')) { alert('Pilih minimal satu item radiologi.'); return false; }
+    function showError(fieldId, msg) {
+        const errEl = document.getElementById('err_' + fieldId);
+        if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
+        const inputEl = document.getElementById(fieldId);
+        if (inputEl) inputEl.classList.add('!border-red-500');
+    }
 
-        for (const field of document.querySelectorAll('select[required], input[required]')) {
-            if (!field.value) { alert('Isi semua field yang wajib diisi.'); field.focus(); return false; }
+    function clearError(fieldId) {
+        const errEl = document.getElementById('err_' + fieldId);
+        if (errEl) { errEl.textContent = ''; errEl.classList.add('hidden'); }
+        const inputEl = document.getElementById(fieldId);
+        if (inputEl) inputEl.classList.remove('!border-red-500');
+    }
+
+    function validateForm() {
+        let valid = true;
+
+        clearError('nomor_reg_display');
+        clearError('kode_dokter');
+        clearError('items');
+
+        if (!document.getElementById('nomor_reg').value) {
+            showError('nomor_reg_display', 'Registrasi pasien wajib dipilih.');
+            valid = false;
+        }
+        if (!document.getElementById('kode_dokter_perujuk').value) {
+            showError('kode_dokter', 'Dokter perujuk wajib dipilih.');
+            valid = false;
+        }
+        if (!document.getElementById('hiddenItemInputs').querySelector('input[name="id_item[]"]')) {
+            showError('items', 'Pilih minimal satu item radiologi.');
+            valid = false;
+        }
+
+        if (!valid) return false;
+
+        if (!document.getElementById('myForm').checkValidity()) {
+            document.getElementById('myForm').reportValidity();
+            return false;
         }
 
         const btn = document.getElementById('submitButton');

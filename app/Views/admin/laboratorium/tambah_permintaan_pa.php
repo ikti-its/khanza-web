@@ -29,30 +29,34 @@
 
                 <!-- Tgl Pengambilan | Metode Diperoleh -->
                 <div class="mb-5 sm:block md:flex items-center">
-                    <label class="<?= $labelLeft ?>">Tanggal Pengambilan Bahan</label>
+                    <label class="<?= $labelLeft ?>">Tanggal Pengambilan Bahan <span class="text-red-500">*</span></label>
                     <input type="datetime-local" name="tgl_pengambilan_bahan"
                            value="<?= esc($baris['tgl_pengambilan_bahan'] ?? '') ?>"
+                           required
                            class="<?= $inputClass ?> lg:w-1/4">
 
-                    <label class="<?= $labelRight ?>">Metode Diperoleh</label>
+                    <label class="<?= $labelRight ?>">Metode Diperoleh <span class="text-red-500">*</span></label>
                     <input type="text" name="metode_diperoleh"
                            value="<?= esc($baris['metode_diperoleh'] ?? '') ?>"
                            placeholder="Contoh: Biopsi, Eksisi..."
+                           required
                            class="<?= $inputClass ?> lg:w-1/4">
                 </div>
 
                 <!-- Lokasi Jaringan | Bahan Pengawet -->
                 <div class="mb-5 sm:block md:flex items-center">
-                    <label class="<?= $labelLeft ?>">Lokasi Jaringan</label>
+                    <label class="<?= $labelLeft ?>">Lokasi Jaringan <span class="text-red-500">*</span></label>
                     <input type="text" name="lokasi_jaringan"
                            value="<?= esc($baris['lokasi_jaringan'] ?? '') ?>"
                            placeholder="Contoh: Lambung, Kolon..."
+                           required
                            class="<?= $inputClass ?> lg:w-1/4">
 
-                    <label class="<?= $labelRight ?>">Bahan Pengawet</label>
+                    <label class="<?= $labelRight ?>">Bahan Pengawet <span class="text-red-500">*</span></label>
                     <input type="text" name="bahan_pengawet"
                            value="<?= esc($baris['bahan_pengawet'] ?? '') ?>"
                            placeholder="Contoh: Formalin 10%..."
+                           required
                            class="<?= $inputClass ?> lg:w-1/4">
                 </div>
             </div>
@@ -61,35 +65,38 @@
             <div class="mt-2 mb-5">
                 <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 pb-1 border-b dark:border-gray-700">
                     Riwayat PA Sebelumnya
-                    <span class="text-xs font-normal text-gray-400 ml-1">(opsional)</span>
                 </h4>
 
                 <!-- Lokasi Lab | Tgl Sebelumnya -->
                 <div class="mb-5 sm:block md:flex items-center">
-                    <label class="<?= $labelLeft ?>">Lokasi Lab Sebelumnya</label>
+                    <label class="<?= $labelLeft ?>">Lokasi Lab Sebelumnya <span class="text-red-500">*</span></label>
                     <input type="text" name="riwayat_lokasi_lab"
                            value="<?= esc($baris['riwayat_lokasi_lab'] ?? '') ?>"
                            placeholder="Nama lab / RS sebelumnya..."
+                           required
                            class="<?= $inputClass ?> lg:w-1/4">
 
-                    <label class="<?= $labelRight ?>">Tanggal Pemeriksaan Sebelumnya</label>
+                    <label class="<?= $labelRight ?>">Tanggal Pemeriksaan Sebelumnya <span class="text-red-500">*</span></label>
                     <input type="date" name="riwayat_tgl_sebelumnya"
                            value="<?= esc($baris['riwayat_tgl_sebelumnya'] ?? '') ?>"
+                           required
                            class="<?= $inputClass ?> lg:w-1/4">
                 </div>
 
                 <!-- No. PA Sebelumnya | Diagnosa Sebelumnya -->
                 <div class="mb-5 sm:block md:flex items-center">
-                    <label class="<?= $labelLeft ?>">No. PA Sebelumnya</label>
+                    <label class="<?= $labelLeft ?>">No. PA Sebelumnya <span class="text-red-500">*</span></label>
                     <input type="text" name="riwayat_no_pa_sebelumnya"
                            value="<?= esc($baris['riwayat_no_pa_sebelumnya'] ?? '') ?>"
                            placeholder="Nomor PA dari lab sebelumnya..."
+                           required
                            class="<?= $inputClass ?> lg:w-1/4">
 
-                    <label class="<?= $labelRight ?>">Diagnosa Sebelumnya</label>
+                    <label class="<?= $labelRight ?>">Diagnosa Sebelumnya <span class="text-red-500">*</span></label>
                     <input type="text" name="riwayat_diagnosa_sebelumnya"
                            value="<?= esc($baris['riwayat_diagnosa_sebelumnya'] ?? '') ?>"
                            placeholder="Diagnosa dari pemeriksaan sebelumnya..."
+                           required
                            class="<?= $inputClass ?> lg:w-1/4">
                 </div>
             </div>
@@ -129,6 +136,7 @@
                         </tbody>
                     </table>
                 </div>
+                <p id="err_items" class="hidden text-red-500 text-xs mt-2"></p>
                 <div id="hiddenItemLabInputs"></div>
             </div>
 
@@ -142,7 +150,10 @@
         const itemTerpilih = <?= json_encode($item_terpilih ?? []) ?>;
         if (itemTerpilih.length > 0) {
             itemTerpilih.forEach(item => {
-                _itemLabSelected[item.id_item_pemeriksaan] = item;
+                _itemLabSelected[item.id_item_pemeriksaan] = {
+                    ...item,
+                    id_item_lab: item.id_item_pemeriksaan,
+                };
             });
             renderItemLabTerpilih(Object.values(_itemLabSelected));
         }
@@ -215,6 +226,20 @@
         }
     }
 
+    function showError(fieldId, msg) {
+        const errEl = document.getElementById('err_' + fieldId);
+        if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
+        const inputEl = document.getElementById(fieldId);
+        if (inputEl) inputEl.classList.add('!border-red-500');
+    }
+
+    function clearError(fieldId) {
+        const errEl = document.getElementById('err_' + fieldId);
+        if (errEl) { errEl.textContent = ''; errEl.classList.add('hidden'); }
+        const inputEl = document.getElementById(fieldId);
+        if (inputEl) inputEl.classList.remove('!border-red-500');
+    }
+
     function autofillRegistrasi(item) {
         document.getElementById('nomor_reg_display').value   = item.nomor_reg   ?? '';
         document.getElementById('nomor_rm_display').value    = item.nomor_rm    ?? '';
@@ -222,40 +247,49 @@
         document.getElementById('kode_dokter').value         = item.kode_dokter ?? '';
         document.getElementById('nama_dokter').value         = item.nama_dokter ?? '';
         document.getElementById('nomor_reg').value           = item.nomor_reg   ?? '';
-        document.getElementById('id_dokter_perujuk').value = item.id_dokter   ?? '';
+        document.getElementById('id_dokter_perujuk').value   = item.id_dokter   ?? '';
+        clearError('nomor_reg_display');
+        clearError('kode_dokter');
     }
 
     function autofillFields(item) {
-        document.getElementById('kode_dokter').value          = item.kode_dokter ?? '';
-        document.getElementById('nama_dokter').value          = item.nama_dokter ?? '';
-        document.getElementById('id_dokter_perujuk').value  = item.id_dokter   ?? '';
+        document.getElementById('kode_dokter').value         = item.kode_dokter ?? '';
+        document.getElementById('nama_dokter').value         = item.nama_dokter ?? '';
+        document.getElementById('id_dokter_perujuk').value   = item.id_dokter   ?? '';
+        clearError('kode_dokter');
     }
 
     function validateForm() {
+        let valid = true;
+
+        clearError('nomor_reg_display');
+        clearError('kode_dokter');
+        clearError('items');
+
         if (!document.getElementById('nomor_reg').value) {
-            alert('Silakan pilih registrasi pasien terlebih dahulu.');
-            return false;
+            showError('nomor_reg_display', 'Registrasi pasien wajib dipilih.');
+            valid = false;
         }
         if (!document.getElementById('id_dokter_perujuk').value) {
-            alert('Silakan pilih dokter perujuk terlebih dahulu.');
-            return false;
+            showError('kode_dokter', 'Dokter perujuk wajib dipilih.');
+            valid = false;
         }
         const hiddenDiv = document.getElementById('hiddenItemLabInputs');
         if (!hiddenDiv.querySelector('input[name="id_item[]"]')) {
-            alert('Pilih minimal satu item pemeriksaan.');
+            showError('items', 'Pilih minimal satu item pemeriksaan.');
+            valid = false;
+        }
+
+        if (!valid) return false;
+
+        if (!document.getElementById('myForm').checkValidity()) {
+            document.getElementById('myForm').reportValidity();
             return false;
         }
-        const requiredFields = document.querySelectorAll('select[required], input[required]');
-        for (const field of requiredFields) {
-            if (!field.value) {
-                alert('Isi semua field yang wajib diisi.');
-                field.focus();
-                return false;
-            }
-        }
+
         const submitButton = document.getElementById('submitButton');
         if (submitButton) {
-            submitButton.disabled = true;
+            submitButton.disabled  = true;
             submitButton.innerHTML = 'Menyimpan...';
         }
         return true;
