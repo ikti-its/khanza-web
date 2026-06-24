@@ -30,7 +30,7 @@ final class CatatanAnestesiSedasiMonitoringController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX,  'id_catatan_anestesi', 'ID Catatan Anestesi'],
                 [SHOW, REQUIRED, I::TEXT,   'nama_monitoring',     'Nama Monitoring'],
                 [SHOW, REQUIRED, I::SELECT, 'is_digunakan',        'Digunakan'],
-                [SHOW, REQUIRED, I::TEXT,   'keterangan',          'Keterangan'],
+                [SHOW, OPTIONAL, I::TEXT,   'keterangan',          'Keterangan'],
             ],
         );
     }

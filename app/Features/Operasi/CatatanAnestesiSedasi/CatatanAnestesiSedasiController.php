@@ -67,11 +67,11 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
                 [SHOW, REQUIRED, I::BOOL,   'is_epidural',          'Epidural'],
                 [SHOW, REQUIRED, I::BOOL,   'is_spinal',            'Spinal'],
                 [SHOW, REQUIRED, I::BOOL,   'is_anestesi_umum',     'Anestesi Umum'],
-                [SHOW, REQUIRED, I::TEXT,   'ket_anestesi_umum',    'Keterangan Anestesi Umum'],
+                [SHOW, OPTIONAL, I::TEXT,   'ket_anestesi_umum',    'Keterangan Anestesi Umum'],
                 [SHOW, REQUIRED, I::BOOL,   'is_blok_perifer',      'Blok Perifer'],
-                [SHOW, REQUIRED, I::TEXT,   'ket_blok_perifer',     'Keterangan Blok Perifer'],
+                [SHOW, OPTIONAL, I::TEXT,   'ket_blok_perifer',     'Keterangan Blok Perifer'],
                 [SHOW, REQUIRED, I::BOOL,   'is_batal_tindakan',    'Batal Tindakan'],
-                [SHOW, REQUIRED, I::TEXT,   'alasan_batal',         'Alasan Batal'],
+                [SHOW, OPTIONAL, I::TEXT,   'alasan_batal',         'Alasan Batal'],
             ],
         );
     }
