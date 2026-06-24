@@ -25,6 +25,7 @@ final class JadwalOperasiController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::LEMBAR_OPERASI,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_jadwal',          'ID Jadwal'],
@@ -178,6 +179,7 @@ final class JadwalOperasiController extends ControllerTemplate
                 'ru.nama_ruangan',
                 'ob.nama AS nama_dokter_bedah',
                 'oa.nama AS nama_dokter_anestesi',
+                'j.id_status',
                 'rs.nama_status',
             ])
             ->join('operasi.permintaan_operasi po',      'po.id_permintaan = j.id_permintaan',   'left')
@@ -217,7 +219,6 @@ final class JadwalOperasiController extends ControllerTemplate
             'aksi'         => $this->actions,
             'tabel'        => $rows,
             'row_alert'    => [],
-            'child_link'   => ['path' => '/operasi/lembar-operasi', 'fk' => 'id_jadwal', 'label' => 'Lembar Operasi'],
             'query_string' => '',
         ]);
     }
