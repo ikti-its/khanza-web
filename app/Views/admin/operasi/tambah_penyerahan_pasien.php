@@ -49,12 +49,12 @@ $searchIcon = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="non
                 <label class="<?= $labelLeft ?>">Waktu Masuk Asal <span class="text-red-500">*</span></label>
                 <input type="datetime-local" name="waktu_masuk_asal"
                        value="<?= esc(substr(str_replace(' ', 'T', $baris['waktu_masuk_asal'] ?? ''), 0, 16)) ?>"
-                       required class="<?= $inputClass ?> lg:w-1/4">
+                       max="<?= date('Y-m-d\TH:i') ?>" required class="<?= $inputClass ?> lg:w-1/4">
 
                 <label class="<?= $labelRight ?>">Waktu Pindah <span class="text-red-500">*</span></label>
                 <input type="datetime-local" name="waktu_pindah"
                        value="<?= esc(substr(str_replace(' ', 'T', $baris['waktu_pindah'] ?? ''), 0, 16)) ?>"
-                       required class="<?= $inputClass ?> lg:w-1/4">
+                       max="<?= date('Y-m-d\TH:i') ?>" required class="<?= $inputClass ?> lg:w-1/4">
             </div>
 
             <!-- ── Info Transfer ── -->
