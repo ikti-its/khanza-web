@@ -90,7 +90,10 @@ $selectedBromage = (int) ($baris['skor_bromage'] ?? 0);
                         <img src="<?= base_url(esc($item['gambar'] ?? '')) ?>"
                              alt="<?= esc($item['nama_skala']) ?>"
                              class="w-full h-28 object-contain mb-2 rounded">
-                        <p class="text-xs text-gray-700 dark:text-gray-300 font-medium mb-1">
+                        <span class="inline-block px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                            Tingkat Blok
+                        </span>
+                         <p class="text-xs text-gray-700 dark:text-gray-300 font-medium mb-1">
                             <?= esc($item['tingkat_blok']) ?>
                         </p>
                         <span class="inline-block px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
@@ -168,12 +171,12 @@ $selectedBromage = (int) ($baris['skor_bromage'] ?? 0);
         }
 
         valEl.textContent = nilai;
-        const boleh    = nilai >= THRESHOLD;
+        const boleh    = nilai <= THRESHOLD;
         const narasiEl = document.getElementById('narasi_keputusan');
 
         document.getElementById('is_boleh_pindah').value = boleh ? '1' : '0';
         narasiEl.textContent = boleh
-            ? 'Pasien bisa dipindahkan ke ruang perawatan bila skor minimal 2'
+            ? 'Pasien dapat dipindahkan dari ruang pemulihan bila skor ≤ 2'
             : 'Pasien tidak dapat dipindahkan ke ruang perawatan karena kondisi yang lemah';
         narasiEl.className = 'text-sm font-medium ' + (boleh ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400');
     }
