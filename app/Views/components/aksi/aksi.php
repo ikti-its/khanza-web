@@ -60,11 +60,8 @@
                     break;
             }
         }
-        if (isset($aksi['pisah']) && $aksi['pisah'] === true) {
-            echo view('components/aksi/pemisahan_komponen', $data);
-        }
-        if (isset($aksi['uji']) && $aksi['uji'] === true) {
-            echo view('components/aksi/uji_imltd', $data);
+        if ((isset($aksi['pisah']) && $aksi['pisah'] === true) || (isset($aksi['uji']) && $aksi['uji'] === true)) {
+            echo view('components/aksi/proses_darah', array_merge($data, ['aksi' => $aksi]));
         }
         if (isset($aksi['cetak'])  && $aksi['cetak']  === true) {
             echo view('components/aksi/cetak',  $data);

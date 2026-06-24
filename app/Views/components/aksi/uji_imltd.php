@@ -1,29 +1,18 @@
-<div class="w-full">
-    <?php
-    $isBerhasil = isset($baris['id_status_pengambilan']) && (int)$baris['id_status_pengambilan'] === 1;
-    $belumDiproses = !isset($baris['sudah_diuji']) || $baris['sudah_diuji'] === false;
-    
-    if ($isBerhasil && $belumDiproses):
-    ?>
-        <div class="px-3 py-1.5">
-            <a href="<?= base_url('uji-darah/hasil-uji-saring/tambah?pengambilan=' . $id) ?>"
-               class="gap-x-1 text-sm text-indigo-600 hover:underline font-semibold dark:text-indigo-400">
-                Uji
-            </a>
-        </div>
-    <?php elseif ($isBerhasil && !$belumDiproses): ?>
-        <div class="px-3 py-1.5">
-            <span title="Darah ini sudah diuji sebelumnya"
-                  class="text-sm text-gray-400 font-semibold cursor-not-allowed line-through decoration-1">
-                Uji
-            </span>
-        </div>
-    <?php else: ?>
-        <div class="px-3 py-1.5 relative inline-block text-center">
-            <a class="text-sm font-semibold select-none pointer-events-none" style="visibility:hidden">Uji</a>
-            <span class="absolute inset-0 flex items-center justify-center text-sm text-gray-400 font-semibold italic dark:text-gray-500">
-                -
-            </span>
-        </div>
-    <?php endif; ?>
-</div>
+<?php
+$isBerhasil     = isset($baris['id_status_pengambilan']) && (int)$baris['id_status_pengambilan'] === 1;
+$belumDiproses  = !isset($baris['sudah_diuji']) || $baris['sudah_diuji'] === false;
+
+$base_class = "flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm font-medium w-full text-left focus:outline-none ";
+
+if ($isBerhasil && $belumDiproses):
+?>
+    <a href="<?= base_url('uji-darah/hasil-uji-saring/tambah?pengambilan=' . $id) ?>"
+       class="<?= $base_class ?> text-gray-800 hover:bg-gray-100 focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300">
+        Uji Saring IMLTD
+    </a>
+
+<?php elseif ($isBerhasil && !$belumDiproses): ?>
+    <span class="<?= $base_class ?> text-gray-400 line-through decoration-1 cursor-not-allowed bg-gray-50/40 dark:bg-neutral-800/40 dark:text-neutral-600">
+        ✕ Sudah Diuji
+    </span>
+<?php endif; ?>
