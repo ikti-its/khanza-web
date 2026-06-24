@@ -410,7 +410,8 @@ class ControllerTemplate extends Controller
             return $this->create_view($postData);
         }
 
-        return $this->home();
+        $redirect_to = $this->request->getPost('redirect_to');
+        return $redirect_to ? redirect()->to($redirect_to) : $this->home();
     }
 
     public function update(int|string $id): string|RedirectResponse

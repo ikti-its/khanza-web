@@ -18,6 +18,7 @@
         const btnTambah = document.querySelector('#modalTriaseMacamKasus a[href="/triase-ugd/triase-macam-kasus/tambah"]');
         if (btnTambah) {
             btnTambah.removeAttribute('target');
+            btnTambah.href = '/triase-ugd/triase-macam-kasus/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
         }
         initModalList({
             modalId: 'modalTriaseMacamKasus',

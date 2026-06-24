@@ -18,6 +18,7 @@
         const btnTambah = document.querySelector('#modalPendonor a[href="/role/pendonor/tambah"]');
         if (btnTambah) {
             btnTambah.removeAttribute('target');
+            btnTambah.href = '/role/pendonor/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
         }
         initModalList({
             modalId: 'modalPendonor',

@@ -156,6 +156,8 @@ final class RegistrasiController extends ControllerTemplate
             }
         }
 
+        $mockBaris['redirect_to'] = $this->request->getGet('redirect_to') ?? '';
+        
         return view('admin/ugd/tambah_ugd_registrasi', [
             'judul'       => 'Tambah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
@@ -243,7 +245,8 @@ final class RegistrasiController extends ControllerTemplate
 
             $db->transCommit();
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil disimpan.');
-            return $this->home();
+            $redirect_to = $this->request->getPost('redirect_to');
+            return $redirect_to ? redirect()->to($redirect_to) : $this->home();
         } catch (\ReflectionException | DatabaseException $e) {
             $db->transRollback();
             $msg = $e instanceof DatabaseException

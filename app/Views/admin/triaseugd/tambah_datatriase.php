@@ -318,7 +318,7 @@
                                        class="border border-gray-300 dark:border-gray-700 text-xs rounded-full px-3 py-1 w-44 focus:outline-none focus:border-blue-500 dark:bg-slate-800 dark:text-white">
                                 
                                 <button type="button"
-                                       onclick="window.location.href='<?= site_url('triase-ugd/triase-pemeriksaan/tambah') ?>'"
+                                       onclick="window.location.href='<?= site_url('triase-ugd/triase-pemeriksaan/tambah?redirect_to=') ?>' + encodeURIComponent(window.location.pathname + window.location.search)"
                                        title="Tambah Triase Pemeriksaan"
                                        class="text-lime-600 hover:text-lime-700 p-1">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
@@ -370,7 +370,7 @@
                                 <input type="text" id="searchSkala" onkeyup="filterSkalaIndikator()" 
                                        class="border border-gray-300 dark:border-gray-700 text-xs rounded-full px-3 py-1 w-44 focus:outline-none focus:border-red-500 dark:bg-slate-800 dark:text-white">
                                 <button type="button"
-                                       onclick="window.location.href='<?= site_url('triase-ugd/triase-skala/tambah') ?>'"
+                                       onclick="window.location.href='<?= site_url('triase-ugd/triase-skala/tambah?redirect_to=') ?>' + encodeURIComponent(window.location.pathname + window.location.search)"
                                        title="Tambah Triase Skala"
                                        class="text-lime-600 hover:text-lime-700 p-1">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>

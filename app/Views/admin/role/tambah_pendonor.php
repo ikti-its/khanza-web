@@ -13,6 +13,7 @@
         <form action="<?= $modul_path . $form_action ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
+            <input type="hidden" name="redirect_to" value="<?= esc($baris['redirect_to'] ?? '') ?>">
             <input type="hidden" name="id_orang" id="id_orang" value="<?= $baris['id_orang'] ?? '' ?>">
 
             <div class="mb-5 sm:block md:flex items-center">

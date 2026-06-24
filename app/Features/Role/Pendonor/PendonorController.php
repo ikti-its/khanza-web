@@ -155,6 +155,8 @@ final class PendonorController extends ControllerTemplate
             $konfigGabungan[] = $fieldPendonor;
         }
 
+        $mockBaris['redirect_to'] = $this->request->getGet('redirect_to') ?? '';
+
         return view('/admin/role/tambah_pendonor', [
             'judul'       => 'Tambah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
@@ -240,7 +242,8 @@ final class PendonorController extends ControllerTemplate
             session()->setFlashdata('error', $errMsg);
         }
 
-        return redirect()->to($this->get_uri_path() . '/data');
+        $redirect_to = $this->request->getPost('redirect_to');
+        return $redirect_to ? redirect()->to($redirect_to) : $this->home();
     }
 
     /**

@@ -23,6 +23,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
         <form action="<?= $modul_path . $form_action ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
+            <input type="hidden" name="redirect_to" value="<?= esc($baris['redirect_to'] ?? '') ?>">
             <input type="hidden" name="nomor_reg"    value="<?= esc($baris['nomor_reg'] ?? '') ?>">
             <input type="hidden" name="nomor_rawat"  value="<?= esc($baris['nomor_rawat'] ?? '') ?>">
             <input type="hidden" name="id_pasien"    id="id_pasien"    value="<?= esc($baris['id_pasien'] ?? '') ?>">
