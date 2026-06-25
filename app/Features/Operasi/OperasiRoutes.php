@@ -15,6 +15,8 @@ final class OperasiRoutes extends RouteTemplate
 
                 \App\Features\Operasi\PermintaanOperasi\PermintaanOperasiController::class,
                 \App\Features\Operasi\JadwalOperasi\JadwalOperasiController::class,
+                \App\Features\Operasi\PaketTindakanOperasi\PaketTindakanOperasiController::class,
+                \App\Features\Operasi\TagihanOperasi\TagihanOperasiController::class,
                 \App\Features\Operasi\LembarOperasi\LembarOperasiController::class => 'HIDE',
 
                 // ==========================================
@@ -78,6 +80,8 @@ final class OperasiRoutes extends RouteTemplate
                 \App\Features\Operasi\RefJenisSedasi\RefJenisSedasiController::class => 'HIDE',
                 \App\Features\Operasi\RefKeadaanUmum\RefKeadaanUmumController::class => 'HIDE',
                 \App\Features\Operasi\RefKeadaanUmumTransfer\RefKeadaanUmumTransferController::class => 'HIDE',
+                \App\Features\Operasi\RefKategoriOperasi\RefKategoriOperasiController::class => 'HIDE',
+                \App\Features\Operasi\RefKomponenJasa\RefKomponenJasaController::class => 'HIDE',
                 \App\Features\Operasi\RefKesadaran\RefKesadaranController::class => 'HIDE',
                 \App\Features\Operasi\RefKesadaranPascaop\RefKesadaranPascaopController::class => 'HIDE',
                 \App\Features\Operasi\RefKesiapanAnestesi\RefKesiapanAnestesiController::class => 'HIDE',
