@@ -28,34 +28,39 @@
         // Iterate over all table rows (excluding header row)
         for (let i = 1; i < tr.length; i++) {
             let found = false;
-
             let td_list = tr[i].getElementsByTagName("td");
 
             // Iterate over all td elements in the row except the last
             for (let j = 0; j < td_list.length - 1; j++) {
                 let td = td_list[j];
                 let nested = td.firstElementChild?.firstElementChild;
-                let text = nested.textContent;
+                if (!nested) continue;
+                let text = nested.textContent || nested.innerText;
 
                 // Reset cell text (remove any old highlights)
-
                 nested.innerHTML = text;
 
-                let index = text.toUpperCase().indexOf(filter);
-                if (index == -1) {
-                    continue;
+                // If column or search input is empty, skip text matching
+                if (filter === "") {
+                    continue; 
                 }
-                nested.innerHTML =
-                    text.substring(0, index) +
-                    "<mark>" + text.substring(index, index + filter.length) + "</mark>" +
-                    text.substring(index + filter.length);
-                found = true;
+
+                let index = text.toUpperCase().indexOf(filter);
+                if (index !== -1) {
+                    nested.innerHTML =
+                        text.substring(0, index) +
+                        "<mark>" + text.substring(index, index + filter.length) + "</mark>" +
+                        text.substring(index + filter.length);
+                    found = true;
+                }
             }
-            // Show or hide row based on search result
-            if (found) {
+
+            // If search input is empty, show all rows
+            if (filter === "") {
                 tr[i].style.display = "";
             } else {
-                tr[i].style.display = "none";
+                // Show or hide row based on search result
+                tr[i].style.display = found ? "" : "none";
             }
         }
     }
