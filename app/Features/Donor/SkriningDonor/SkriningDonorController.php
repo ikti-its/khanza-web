@@ -25,6 +25,7 @@ final class SkriningDonorController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_skrining',        'ID Skrining'],
@@ -357,5 +358,79 @@ final class SkriningDonorController extends ControllerTemplate
         }
 
         return redirect()->to($this->get_uri_path() . '/data');
+    }
+
+    /**
+     * Menampilkan Halaman Detail Skrining Donor
+     */
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataSkrining = $this->model->find($id);
+
+        $dataKunjungan = [];
+        $dataPendonor  = [];
+        $dataOrang     = [];
+
+        if (!empty($dataSkrining['id_kunjungan'])) {
+            $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
+            $dataKunjungan  = $modelKunjungan->find($dataSkrining['id_kunjungan']) ?? [];
+
+            if (!empty($dataKunjungan['id_pendonor'])) {
+                $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+                $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']) ?? [];
+
+                if (!empty($dataPendonor['id_orang'])) {
+                    $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                    $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                }
+            }
+        }
+
+        $baris = array_merge($dataOrang, $dataPendonor, $dataKunjungan, $dataSkrining);
+
+        $controllerKunjungan = new \App\Features\Donor\Kunjungan\KunjunganController();
+        $controllerPendonor  = new \App\Features\Role\Pendonor\PendonorController();
+        $controllerOrang     = new \App\Features\Person\Orang\OrangController();
+
+        $konfigSkrining  = $this->get_fields_with_options(false, true);
+        $konfigKunjungan = $controllerKunjungan->get_fields_with_options(false, true);
+        $konfigPendonor  = $controllerPendonor->get_fields_with_options(false, true);
+        $konfigOrang     = $controllerOrang->get_fields_with_options(false, true);
+
+        $konfigGabungan = array_merge($konfigOrang, $konfigPendonor, $konfigKunjungan, $konfigSkrining);
+
+        foreach ($konfigGabungan as $field) {
+            $colName = $field[2];
+            $options = $field[5] ?? [];
+
+            if (!empty($options) && isset($baris[$colName])) {
+                $idMentah = $baris[$colName];
+                foreach ($options as $opt) {
+                    if ((string)$opt[1] === (string)$idMentah) {
+                        $baris[$colName] = $opt[0];
+                        break;
+                    }
+                }
+            }
+        }
+
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail']
+        ];
+
+        return view('/admin/donor/detail_skriningdonor', [
+            'judul'       => 'Detail ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'baris'       => $baris,
+        ]);
     }
 }

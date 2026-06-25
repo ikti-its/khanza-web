@@ -79,12 +79,12 @@
                         <div>
                             <?php if (!empty($baris['id_status_pengambilan'])): ?>
                                 <?php if (isset($baris['id_status_pengambilan']) && $baris['id_status_pengambilan'] === 'Berhasil'): ?>
-                                    <span class="inline-flex items-center gap-x-1.5 py-1 px-2.5 rounded-full text-sm font-semibold bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-400">
-                                        <span class="w-1.5 h-1.5 inline-block rounded-full bg-teal-500"></span> Berhasil
+                                    <span class="inline-flex items-center gap-x-1.5 py-1 px-2.5 rounded-lg text-sm font-semibold bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-400">
+                                        <span class="w-1.5 h-1.5 inline-block rounded-lg bg-teal-500"></span> Berhasil
                                     </span>
                                 <?php else: ?>
-                                    <span class="inline-flex items-center gap-x-1.5 py-1 px-2.5 rounded-full text-sm font-semibold bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400">
-                                        <span class="w-1.5 h-1.5 inline-block rounded-full bg-red-500"></span> Gagal
+                                    <span class="inline-flex items-center gap-x-1.5 py-1 px-2.5 rounded-lg text-sm font-semibold bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400">
+                                        <span class="w-1.5 h-1.5 inline-block rounded-lg bg-red-500"></span> Gagal
                                     </span>
                                 <?php endif; ?>
                             <?php endif; ?>
