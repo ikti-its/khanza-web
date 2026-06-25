@@ -25,6 +25,7 @@ final class PendonorController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
                 A::PRINT,
             ],
             [
@@ -490,6 +491,77 @@ final class PendonorController extends ControllerTemplate
         }
 
         return $this->home();
+    }
+
+    /**
+     * Menampilkan Halaman Detail Pendonor
+     */
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataPendonor = $this->model->find($id);
+
+        $dataOrang  = [];
+        $dataAlamat = [];
+
+        if (!empty($dataPendonor['id_orang'])) {
+            $modelOrang = new \App\Features\Person\Orang\OrangModel();
+            $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+
+            if (!empty($dataOrang['id_alamat'])) {
+                $modelAlamat = new \App\Features\Lokasi\Alamat\AlamatModel();
+                $dataAlamat  = $modelAlamat->get_detail_wilayah($dataOrang['id_alamat']) ?? [];
+            }
+
+            if (!empty($dataOrang['tempat_lahir_kota'])) {
+                $modelKotaLahir = new \App\Features\Lokasi\Kota\KotaModel();
+                $kotaLahir = $modelKotaLahir->find($dataOrang['tempat_lahir_kota']);
+                if ($kotaLahir) {
+                    $dataAlamat['nama_kota_lahir'] = $kotaLahir['nama_kota'] ?? '';
+                }
+            }
+        }
+
+        $baris = array_merge($dataAlamat, $dataOrang, $dataPendonor);
+
+        $controllerOrang = new \App\Features\Person\Orang\OrangController();
+        $konfigOrang     = $controllerOrang->get_fields_with_options(false, true);
+        $konfigPendonor  = $this->get_fields_with_options(false, true);
+        $konfigGabungan  = array_merge($konfigOrang, $konfigPendonor);
+
+        foreach ($konfigGabungan as $field) {
+            $colName = $field[2];
+            $options = $field[5] ?? [];
+            
+            if (!empty($options) && isset($baris[$colName])) {
+                $idMentah = $baris[$colName];
+                
+                foreach ($options as $opt) {
+                    if ((string)$opt[1] === (string)$idMentah) {
+                        $baris[$colName] = $opt[0];
+                        break;
+                    }
+                }
+            }
+        }
+
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail']
+        ];
+
+        return view('/admin/role/detail_pendonor', [
+            'judul'       => 'Detail ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'baris'       => $baris,
+        ]);
     }
 
     /**
