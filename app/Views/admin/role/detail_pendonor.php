@@ -13,38 +13,38 @@
         <div class="space-y-6">
             
             <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Nomor Pendonor</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Nomor Pendonor</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-mono font-bold text-teal-700 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded-md dark:bg-teal-950/40 dark:text-teal-400 dark:border-teal-900 shadow-sm">
                         <?= esc($baris['nomor_pendonor'] ?? '-') ?>
                     </span>
                 </div>
 
-                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">NIK (No. KTP)</span>
+                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">NIK (No. KTP)</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-mono font-semibold text-gray-900 dark:text-white"><?= esc($baris['nik'] ?? '-') ?></span>
                 </div>
             </div>
 
             <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Nama Lengkap</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Nama Lengkap</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['nama'] ?? '-') ?></span>
                 </div>
 
-                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Jenis Kelamin</span>
+                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Jenis Kelamin</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['id_jenis_kelamin'] ?? '-') ?></span>
                 </div>
             </div>
 
             <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Tempat Lahir</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Tempat Lahir</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['nama_kota_lahir'] ?? '-') ?></span>
                 </div>
 
-                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Tanggal Lahir</span>
+                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Tanggal Lahir</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white">
                         <?= !empty($baris['tanggal_lahir']) ? (new IntlDateFormatter('id_ID', IntlDateFormatter::LONG, IntlDateFormatter::NONE))->format(strtotime($baris['tanggal_lahir'])) : '-' ?>
@@ -53,14 +53,14 @@
             </div>
 
             <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Golongan Darah</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Golongan Darah</span>
                 <div class="w-full lg:w-1/4">
                     <span class="inline-flex items-center justify-center px-3 py-1 rounded-md font-bold bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-900 shadow-sm text-sm">
                         <?= esc($baris['id_golongan_darah'] ?? '-') ?>
                     </span>
                 </div>
 
-                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Rhesus</span>
+                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Rhesus</span>
                 <div class="w-full lg:w-1/4">
                     <span class="inline-flex items-center justify-center px-3 py-1 rounded-md font-bold bg-teal-50 text-teal-700 border border-teal-200 dark:bg-teal-950/40 dark:text-teal-400 dark:border-teal-900 shadow-sm text-sm">
                         <?= esc($baris['id_rhesus'] ?? '-') ?>
@@ -69,7 +69,7 @@
             </div>
 
             <div class="sm:block md:flex items-start py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Alamat Lengkap</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Alamat Lengkap</span>
                 <div class="w-full md:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white">
                         <?= esc($baris['alamat_lengkap'] ?? '-') ?>
@@ -81,48 +81,48 @@
             </div>
 
             <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Kelurahan / Desa</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Kelurahan / Desa</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['nama_desa'] ?? '-') ?></span>
                 </div>
 
-                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Kecamatan</span>
+                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Kecamatan</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['nama_kecamatan'] ?? '-') ?></span>
                 </div>
             </div>
 
             <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Kota / Kabupaten</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Kota / Kabupaten</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['nama_kota_wilayah'] ?? '-') ?></span>
                 </div>
 
-                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Provinsi</span>
+                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Provinsi</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['nama_provinsi'] ?? '-') ?></span>
                 </div>
             </div>
 
             <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Agama</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Agama</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['id_agama'] ?? '-') ?></span>
                 </div>
 
-                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Status Pernikahan</span>
+                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Status Pernikahan</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['id_pernikahan'] ?? '-') ?></span>
                 </div>
             </div>
 
             <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Nomor Telepon</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Nomor Telepon</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['nomor_telepon'] ?? '-') ?></span>
                 </div>
 
-                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-900 dark:text-gray-900 md:w-1/4">Tanggal Donor Terakhir</span>
+                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Tanggal Donor Terakhir</span>
                 <div class="w-full lg:w-1/4">
                     <?php if (!empty($baris['tanggal_donor_terakhir'])): ?>
                         <span class="text-sm font-semibold text-gray-900 dark:text-white">
