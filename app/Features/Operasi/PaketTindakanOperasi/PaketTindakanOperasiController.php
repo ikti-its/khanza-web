@@ -37,4 +37,18 @@ final class PaketTindakanOperasiController extends ControllerTemplate
             ],
         );
     }
+
+    public function listByTindakan(int $idTindakan)
+    {
+        $rows = $this->model->db
+            ->table('operasi.paket_tindakan_operasi p')
+            ->select(['p.id_paket', 'rk.nama_komponen', 'p.tarif_kelas_3', 'p.tarif_kelas_2', 'p.tarif_kelas_1', 'p.tarif_vip', 'p.tarif_vvip'])
+            ->join('operasi.ref_komponen_jasa rk', 'rk.id_komponen = p.id_komponen', 'left')
+            ->where('p.id_tindakan', $idTindakan)
+            ->orderBy('p.id_komponen', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
+    }
 }
