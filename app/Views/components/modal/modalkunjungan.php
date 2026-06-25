@@ -1,7 +1,7 @@
 <?= view('components/modal/modal-table', [
     'modalId'      => 'modalKunjungan',
     'modalTitle'   => 'Cari Data Kunjungan Donor',
-    'headers'      => ['Nomor Kunjungan', 'Nomor Pendonor', 'Nama Pendonor'],
+    'headers'      => ['Nomor Kunjungan', 'Tanggal Kunjungan', 'Nomor Pendonor', 'Nama Pendonor'],
     'tableId'      => 'kunjunganTable',
     'searchInputs' => [
         ['id' => 'searchNoKunjungan', 'placeholder' => 'Cari No. Kunjungan...'],
@@ -25,7 +25,7 @@
             modalId: 'modalKunjungan',
             tableId: 'kunjunganTable',
             url:     fallbackUrl,
-            fields: ['nomor_kunjungan', 'nomor_pendonor', 'nama'],
+            fields: ['nomor_kunjungan', 'tanggal_kunjungan', 'nomor_pendonor', 'nama'],
             searchIds: {
                 searchNoKunjungan: 'nomor_kunjungan',
                 searchNamaKunjungan: 'nama'
