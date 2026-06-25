@@ -25,6 +25,7 @@ final class KunjunganController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_kunjungan',      'ID Kunjungan'],
@@ -291,6 +292,72 @@ final class KunjunganController extends ControllerTemplate
             'baris'       => $baris,
             'card'        => $card,
             'form_action' => '/submitedit/' . $id,
+        ]);
+    }
+
+    /**
+     * Menampilkan Halaman Detail Registrasi Kunjungan
+     */
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataKunjungan = $this->model->find($id);
+
+        $dataPendonor = [];
+        $dataOrang    = [];
+
+        if (!empty($dataKunjungan['id_pendonor'])) {
+            $pendonorModel = new \App\Features\Role\Pendonor\PendonorModel();
+            $dataPendonor  = $pendonorModel->find($dataKunjungan['id_pendonor']) ?? [];
+
+            if (!empty($dataPendonor['id_orang'])) {
+                $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+            }
+        }
+
+        $baris = array_merge($dataOrang, $dataPendonor, $dataKunjungan);
+
+        $controllerOrang    = new \App\Features\Person\Orang\OrangController();
+        $controllerPendonor = new \App\Features\Role\Pendonor\PendonorController();
+
+        $konfigOrang     = $controllerOrang->get_fields_with_options(false, true);
+        $konfigPendonor  = $controllerPendonor->get_fields_with_options(false, true);
+        $konfigKunjungan = $this->get_fields_with_options(false, true);
+
+        $konfigGabungan = array_merge($konfigOrang, $konfigPendonor, $konfigKunjungan);
+
+        foreach ($konfigGabungan as $field) {
+            $colName = $field[2];
+            $options = $field[5] ?? [];
+
+            if (!empty($options) && isset($baris[$colName])) {
+                $idMentah = $baris[$colName];
+                foreach ($options as $opt) {
+                    if ((string)$opt[1] === (string)$idMentah) {
+                        $baris[$colName] = $opt[0];
+                        break;
+                    }
+                }
+            }
+        }
+
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail']
+        ];
+
+        return view('/admin/donor/detail_kunjungan', [
+            'judul'       => 'Detail ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'baris'       => $baris,
         ]);
     }
 
