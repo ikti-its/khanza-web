@@ -37,6 +37,8 @@ final class PaketTindakanOperasiDatabase extends DatabaseTemplate
                     ['id_komponen'],
                 ],
             ],
+            false,
+            'paket_tindakan_operasi.csv',
         );
     }
 }
