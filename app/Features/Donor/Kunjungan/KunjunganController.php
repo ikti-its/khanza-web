@@ -51,7 +51,7 @@ final class KunjunganController extends ControllerTemplate
         $data_tabel = $this->model->get_data_tabel($perPage, $offset);
 
         $konfig = [
-            [1, 'Nomor Antrian',     'nomor_antrian',     'teks',        0],
+            [1, 'No. Antrian',       'nomor_antrian',     'teks',        0],
             [1, 'Nomor Kunjungan',   'nomor_kunjungan',   'teks',        0],
             [1, 'Tanggal Kunjungan', 'tanggal_kunjungan', 'tanggal_jam', 0],
             [1, 'Nomor Pendonor',    'nomor_pendonor',    'teks',        0],

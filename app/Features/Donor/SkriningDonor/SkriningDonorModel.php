@@ -36,6 +36,33 @@ final class SkriningDonorModel extends ModelTemplate
     }
 
     /**
+     * Mengambil data skrining donor
+     * @param int $limit
+     * @param int $offset
+     * @return list<array<string, mixed>>
+     */
+    public function get_data_tabel(int $limit, int $offset): array
+    {
+        return $this->db
+            ->table('donor.skrining_donor sd')
+            ->select([
+                'sd.id_skrining',
+                'k.nomor_kunjungan',
+                'p.nomor_pendonor',
+                'o.nama',
+                'ss.nama_status_skrining'
+            ])
+            ->join('donor.kunjungan k', 'k.id_kunjungan = sd.id_kunjungan', 'inner')
+            ->join('role.pendonor p', 'p.id_pendonor = k.id_pendonor', 'inner')
+            ->join('person.orang o', 'o.id_orang = p.id_orang', 'inner')
+            ->join('donor.status_skrining ss', 'ss.id_status_skrining = sd.id_status_skrining', 'left')
+            ->orderBy('k.tanggal_kunjungan', 'DESC')
+            ->limit($limit, $offset)
+            ->get()
+            ->getResultArray();
+    }
+
+    /**
      * Menentukan status kelayakan donor berdasarkan Permenkes
      * @param array $rawPost
      * @return array ['status' => int, 'alasan' => array]
