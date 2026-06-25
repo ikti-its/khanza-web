@@ -89,6 +89,43 @@ final class PendonorController extends ControllerTemplate
     }
     
     /**
+     * OVERRIDE: Halaman Utama Pendonor
+     */
+    #[\Override]
+    final public function index(): string
+    {
+        $currentPage = max(1, (int) ($this->request->getGet('page') ?? 1));
+        $perPage = 10;
+        $offset  = ($currentPage - 1) * $perPage;
+
+        $totalRows = $this->model->count_filtered();
+        $data_tabel = $this->model->get_data_tabel($perPage, $offset);
+
+        $konfig = [
+            [1, 'Nomor Pendonor',    'nomor_pendonor',         'teks',    0],
+            [1, 'Nama Lengkap',      'nama',                   'teks',    0],
+            [1, 'Golongan Darah',    'nama_golongan_darah',    'teks',    0],
+            [1, 'Rhesus',            'kode_rhesus',            'teks',    0],
+            [1, 'Nomor Telepon',     'nomor_telepon',          'teks',    0],
+            [1, 'Donor Terakhir',    'tanggal_donor_terakhir', 'tanggal', 0],
+        ];
+
+        return view('/layouts/data', [
+            'judul'        => $this->title,
+            'breadcrumbs'  => $this->breadcrumbs,
+            'meta_data'    => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'modul_path'   => $this->get_uri_path(),
+            'kolom_id'     => $this->primary_key,
+            'konfig'       => $konfig,
+            'aksi'         => $this->actions,
+            'tabel'        => $data_tabel,
+            'row_alert'    => [],
+            'child_link'   => null,
+            'query_string' => '',
+        ]);
+    }
+
+    /**
      * OVERRIDE: Menampilkan Form Pendonor
      */
     #[\Override]
@@ -569,26 +606,7 @@ final class PendonorController extends ControllerTemplate
      */
     public function list()
     {
-        $data = $this->model->builder()
-            ->select('
-                role.pendonor.id_pendonor,
-                role.pendonor.nomor_pendonor,
-                role.pendonor.id_rhesus,
-                person.orang.nama,
-                person.orang.nik,
-                person.orang.id_jenis_kelamin,
-                person.orang.id_golongan_darah,
-                person.orang.tanggal_lahir,
-                person.jenis_kelamin.nama_jenis_kelamin,
-                darah.golongan_darah.nama_golongan_darah,
-                darah.rhesus.kode_rhesus
-            ')
-            ->join('person.orang', 'person.orang.id_orang = role.pendonor.id_orang', 'inner')
-            ->join('person.jenis_kelamin', 'person.jenis_kelamin.id_jenis_kelamin = person.orang.id_jenis_kelamin', 'left')
-            ->join('darah.golongan_darah', 'darah.golongan_darah.id_golongan_darah = person.orang.id_golongan_darah', 'left')
-            ->join('darah.rhesus', 'darah.rhesus.id_rhesus = role.pendonor.id_rhesus', 'left')
-            ->get()
-            ->getResultArray();
+        $data = $this->model->get_data_tabel();
 
         return $this->response->setJSON([
             'data' => $data

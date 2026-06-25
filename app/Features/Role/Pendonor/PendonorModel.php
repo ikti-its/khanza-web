@@ -34,6 +34,44 @@ final class PendonorModel extends ModelTemplate
     }
 
     /**
+     * Mengambil data pendonor
+     * @param int|null $limit
+     * @param int $offset
+     * @return list<array<string, mixed>>
+     */
+    public function get_data_tabel(?int $limit = null, int $offset = 0): array
+    {
+        $builder = $this->db
+            ->table('role.pendonor p')
+            ->select([
+                'p.id_pendonor', 
+                'p.nomor_pendonor', 
+                'p.nomor_telepon', 
+                'p.tanggal_donor_terakhir',
+                'p.id_rhesus',
+                'o.nama', 
+                'o.nik',
+                'o.id_jenis_kelamin',
+                'o.id_golongan_darah',
+                'o.tanggal_lahir',
+                'jk.nama_jenis_kelamin',
+                'g.nama_golongan_darah', 
+                'r.kode_rhesus'
+            ])
+            ->join('person.orang o', 'o.id_orang = p.id_orang', 'inner')
+            ->join('person.jenis_kelamin jk', 'jk.id_jenis_kelamin = o.id_jenis_kelamin', 'left')
+            ->join('darah.golongan_darah g', 'g.id_golongan_darah = o.id_golongan_darah', 'left')
+            ->join('darah.rhesus r', 'r.id_rhesus = p.id_rhesus', 'left')
+            ->orderBy('p.nomor_pendonor', 'DESC');
+
+        if ($limit !== null && $limit > 0) {
+            $builder->limit($limit, $offset);
+        }
+
+        return $builder->get()->getResultArray();
+    }
+
+    /**
      * Memastikan usia Calon Pendonor minimal 17 tahun
      * @param string $tanggalLahir
      * @throws \RuntimeException
