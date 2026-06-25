@@ -35,6 +35,42 @@ final class KunjunganModel extends ModelTemplate
     }
 
     /**
+     * Mengambil data registrasi kunjungan
+     * @param int|null $limit
+     * @param int $offset
+     * @param string|null $filter
+     * @return list<array<string, mixed>>
+     */
+    public function get_data_tabel(?int $limit = null, int $offset = 0, ?string $filter = null): array
+    {
+        $builder = $this->db
+            ->table('donor.kunjungan k')
+            ->select([
+                'k.id_kunjungan',
+                'k.nomor_antrian',
+                'k.nomor_kunjungan',
+                'k.tanggal_kunjungan',
+                'p.id_pendonor',
+                'p.nomor_pendonor',
+                'o.nama'
+            ])
+            ->join('role.pendonor p', 'p.id_pendonor = k.id_pendonor', 'inner')
+            ->join('person.orang o', 'o.id_orang = p.id_orang', 'inner')
+            ->orderBy('k.tanggal_kunjungan', 'DESC');
+
+        if ($filter === 'lolos_skrining') {
+            $builder->join('donor.skrining_donor sd', 'sd.id_kunjungan = k.id_kunjungan', 'inner')
+                    ->where('sd.id_status_skrining', 1);
+        }
+
+        if ($limit !== null && $limit > 0) {
+            $builder->limit($limit, $offset);
+        }
+
+        return $builder->get()->getResultArray();
+    }
+
+    /**
      * Memeriksa apakah pendonor lolos syarat interval jeda donor UTD
      * @param int|string $idPendonor
      * @param string $tglKunjunganInput

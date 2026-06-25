@@ -37,7 +37,43 @@ final class KunjunganController extends ControllerTemplate
     }
 
     /**
-     * OVERRIDE: Menampilkan Form Kunjungan
+     * OVERRIDE: Halaman Utama Registrasi Kunjungan
+     */
+    #[\Override]
+    final public function index(): string
+    {
+        $currentPage = max(1, (int) ($this->request->getGet('page') ?? 1));
+        $perPage     = 10;
+        $offset      = ($currentPage - 1) * $perPage;
+
+        $totalRows  = $this->model->count_filtered();
+        $data_tabel = $this->model->get_data_tabel($perPage, $offset);
+
+        $konfig = [
+            [1, 'Nomor Antrian',     'nomor_antrian',     'teks',        0],
+            [1, 'Nomor Kunjungan',   'nomor_kunjungan',   'teks',        0],
+            [1, 'Tanggal Kunjungan', 'tanggal_kunjungan', 'tanggal_jam', 0],
+            [1, 'Nomor Pendonor',    'nomor_pendonor',    'teks',        0],
+            [1, 'Nama Lengkap',      'nama',              'teks',        0],
+        ];
+
+        return view('/layouts/data', [
+            'judul'        => $this->title,
+            'breadcrumbs'  => $this->breadcrumbs,
+            'meta_data'    => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'modul_path'   => $this->get_uri_path(),
+            'kolom_id'     => $this->primary_key,
+            'konfig'       => $konfig,
+            'aksi'         => $this->actions,
+            'tabel'        => $data_tabel,
+            'row_alert'    => [],
+            'child_link'   => null,
+            'query_string' => '',
+        ]);
+    }
+
+    /**
+     * OVERRIDE: Menampilkan Form Registrasi Kunjungan
      */
     #[\Override]
     final public function create_page(): string
@@ -263,27 +299,9 @@ final class KunjunganController extends ControllerTemplate
      */
     public function list()
     {
-        $tabel = $this->model->table;
-
         $filter = $this->request->getGet('filter');
 
-        $builder = $this->model->builder()
-            ->select("
-                {$tabel}.id_kunjungan,
-                {$tabel}.nomor_kunjungan,
-                role.pendonor.id_pendonor,
-                role.pendonor.nomor_pendonor,
-                person.orang.nama
-            ")
-            ->join('role.pendonor', "role.pendonor.id_pendonor = {$tabel}.id_pendonor", 'inner')
-            ->join('person.orang', 'person.orang.id_orang = role.pendonor.id_orang', 'inner');
-
-        if ($filter === 'lolos_skrining') {
-            $builder->join('donor.skrining_donor', "donor.skrining_donor.id_kunjungan = {$tabel}.id_kunjungan", 'inner')
-                    ->where('donor.skrining_donor.id_status_skrining', 1); // Asumsi 1 = Lolos
-        }
-
-        $data = $builder->get()->getResultArray();
+        $data = $this->model->get_data_tabel(null, 0, $filter);
 
         return $this->response->setJSON([
             'data' => $data
