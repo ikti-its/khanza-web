@@ -13,6 +13,7 @@ final class AllRoutes extends RouteGroup
                 \App\Features\Auth\AuthRoutes::class,
                 \App\Features\AturanPenggajian\AturanPenggajianRoutes::class,
                 \App\Features\Finansial\FinansialRoutes::class,
+                \App\Features\InventoriMedis\InventoriMedisRoutes::class,
                 \App\Features\InventoriNonMedis\InventoriNonMedisRoutes::class,
                 \App\Features\Person\PersonRoutes::class,
                 \App\Features\Pendidikan\PendidikanRoutes::class,
