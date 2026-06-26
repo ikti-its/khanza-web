@@ -43,6 +43,19 @@ final class JadwalOperasiController extends ControllerTemplate
     }
 
     // -------------------------------------------------------------------------
+    // Hooks
+    // -------------------------------------------------------------------------
+
+    #[\Override]
+    protected function before_read(): void
+    {
+        $this->model
+            ->set_order('is_cito', 'DESC')
+            ->set_order('tanggal', 'ASC')
+            ->set_order('waktu_mulai', 'ASC');
+    }
+
+    // -------------------------------------------------------------------------
     // Private Helpers
     // -------------------------------------------------------------------------
 
@@ -219,67 +232,4 @@ final class JadwalOperasiController extends ControllerTemplate
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Index
-    // -------------------------------------------------------------------------
-
-    #[\Override]
-    final public function index(): string
-    {
-        $rows = $this->model->db
-            ->table('operasi.jadwal_operasi j')
-            ->select([
-                'j.id_jadwal',
-                'j.tanggal',
-                'j.waktu_mulai',
-                'j.waktu_selesai',
-                'po.nomor_reg',
-                'po.is_cito',
-                'op.nama AS nama_pasien',
-                'ru.nama_ruangan',
-                'ob.nama AS nama_dokter_bedah',
-                'oa.nama AS nama_dokter_anestesi',
-                'j.id_status',
-                'rs.nama_status',
-            ])
-            ->join('operasi.permintaan_operasi po',      'po.id_permintaan = j.id_permintaan',   'left')
-            ->join('rekam_medis.registrasi r',           'r.nomor_reg      = po.nomor_reg',       'left')
-            ->join('role.pasien p',                      'p.id_pasien      = r.id_pasien',        'left')
-            ->join('person.orang op',                    'op.id_orang      = p.id_orang',         'left')
-            ->join('ruangan.ruangan ru',                 'ru.id_ruangan    = j.id_ruangan',       'left')
-            ->join('role.dokter db',                     'db.id_dokter     = j.id_dokter_bedah',  'left')
-            ->join('person.orang ob',                    'ob.id_orang      = db.id_orang',        'left')
-            ->join('role.dokter da',                     'da.id_dokter     = j.id_dokter_anestesi', 'left')
-            ->join('person.orang oa',                    'oa.id_orang      = da.id_orang',        'left')
-            ->join('operasi.ref_status_operasi rs',      'rs.id_status     = j.id_status',        'left')
-            ->orderBy('po.is_cito', 'DESC')
-            ->orderBy('j.tanggal',  'ASC')
-            ->orderBy('j.waktu_mulai', 'ASC')
-            ->get()
-            ->getResultArray();
-
-        $konfig = [
-            [1, 'No. Registrasi',   'nomor_reg',           'teks',    0],
-            [1, 'Nama Pasien',      'nama_pasien',         'teks',    0],
-            [1, 'Ruangan',          'nama_ruangan',        'teks',    0],
-            [1, 'Dokter Bedah',     'nama_dokter_bedah',   'teks',    0],
-            [1, 'Tanggal',          'tanggal',             'tanggal', 0],
-            [1, 'Waktu',            'waktu_mulai',         'teks',    0],
-            [1, 'Status',           'nama_status',         'status',  0],
-            [1, 'CITO',             'is_cito',             'bool',    0],
-        ];
-
-        return view('/layouts/data', [
-            'judul'        => $this->title,
-            'breadcrumbs'  => $this->breadcrumbs,
-            'meta_data'    => ['page' => 1, 'size' => count($rows), 'total' => 1],
-            'modul_path'   => $this->get_uri_path(),
-            'kolom_id'     => 'id_jadwal',
-            'konfig'       => $konfig,
-            'aksi'         => $this->actions,
-            'tabel'        => $rows,
-            'row_alert'    => [],
-            'query_string' => '',
-        ]);
-    }
 }
