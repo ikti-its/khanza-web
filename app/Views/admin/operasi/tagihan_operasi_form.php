@@ -288,34 +288,6 @@ $infoGrid = [
 
       <!-- ── Ringkasan Biaya ────────────────────────────────────────────── -->
       <div class="<?= $sectionDiv ?>">
-        <p class="<?= $sectionH ?>">Ringkasan Biaya</p>
-
-        <?php
-        $timMedis = array_filter([
-            'Operator 1'         => $baris['nama_operator_1']      ?? '',
-            'Operator 2'         => $baris['nama_operator_2']      ?? '',
-            'Operator 3'         => $baris['nama_operator_3']      ?? '',
-            'Dokter Anestesi'    => $baris['nama_dokter_anestesi'] ?? '',
-            'Dokter Anak'        => $baris['nama_dokter_anak']     ?? '',
-            'Ast. Operator 1'    => $baris['nama_ast_operator_1']  ?? '',
-            'Ast. Operator 2'    => $baris['nama_ast_operator_2']  ?? '',
-            'Ast. Operator 3'    => $baris['nama_ast_operator_3']  ?? '',
-        ]);
-        ?>
-        <?php if ($timMedis): ?>
-        <div class="mb-4 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
-          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">Tim Medis</p>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 text-sm">
-            <?php foreach ($timMedis as $peran => $nama): ?>
-            <div class="flex gap-x-2">
-              <span class="text-gray-400 dark:text-gray-500 flex-shrink-0"><?= esc($peran) ?>:</span>
-              <span class="text-gray-800 dark:text-gray-200 font-medium"><?= esc($nama) ?></span>
-            </div>
-            <?php endforeach; ?>
-          </div>
-        </div>
-        <?php endif; ?>
-
         <div class="flex flex-col gap-y-2 text-sm max-w-sm ml-auto">
           <div class="flex justify-between text-gray-600 dark:text-gray-400">
             <span>Total Tindakan</span>
