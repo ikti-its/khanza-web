@@ -67,9 +67,19 @@ final class LembarOperasiController extends ControllerTemplate
             ->getRowArray() ?? [];
     }
 
+    public function fetchTagihanId(int $idJadwal): ?int
+    {
+        $row = $this->model->db
+            ->table('operasi.tagihan_operasi')
+            ->select('id_tagihan')
+            ->where('id_jadwal', $idJadwal)
+            ->get()->getRowArray();
+
+        return $row ? (int) $row['id_tagihan'] : null;
+    }
+
     private function buildForms(int $idJadwal): array
     {
-        // Menggunakan subquery selection dalam satu eksekusi SQL
         $sql = "SELECT
             (SELECT id_pengkajian_pre   FROM operasi.pengkajian_preop          WHERE id_jadwal = ?) AS pengkajian_preop,
             (SELECT id_pre_anestesi     FROM operasi.pengkajian_pre_anestesi   WHERE id_jadwal = ?) AS pengkajian_pre_anestesi,
@@ -86,10 +96,7 @@ final class LembarOperasiController extends ControllerTemplate
             (SELECT id_skor_bromage     FROM operasi.skor_bromage              WHERE id_jadwal = ?) AS skor_bromage,
             (SELECT id_penyerahan       FROM operasi.penyerahan_pasien         WHERE id_jadwal = ?) AS penyerahan_pasien";
 
-        // Bind parameter $idJadwal sebanyak 14 kali
         $bindings = array_fill(0, 14, $idJadwal);
-        
-        // Eksekusi query tunggal
         $existingRecords = $this->model->db->query($sql, $bindings)->getRowArray() ?? [];
 
         // Helper mapper untuk array
@@ -154,6 +161,7 @@ final class LembarOperasiController extends ControllerTemplate
             'jadwal'      => $jadwal,
             'forms'       => $this->buildForms($idJadwal),
             'id_jadwal'   => $idJadwal,
+            'tagihan_id'  => $this->fetchTagihanId($idJadwal),
             'mulai_url'   => $this->get_uri_path() . '/submitedit/' . $idJadwal,
         ]);
     }

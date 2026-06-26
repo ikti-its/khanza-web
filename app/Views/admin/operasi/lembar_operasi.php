@@ -76,10 +76,11 @@ $iconCircle = '<svg class="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-
             <?php endforeach; ?>
         </div>
 
-        <!-- Status dropdown — visible while status belum terminal -->
-        <?php if ($idStatus < 4): ?>
+        <!-- Bottom row: status form + tagihan button -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+            <?php if ($idStatus < 4): ?>
             <form action="<?= esc($mulai_url) ?>" method="post"
-                  class="flex flex-wrap items-center gap-x-3 mt-4 pt-4 border-t border-gray-100 dark:border-gray-700"
+                  class="flex flex-wrap items-center gap-x-3"
                   onsubmit="return confirmStatus(this)">
                 <?= csrf_field() ?>
                 <label class="text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">Ubah Status:</label>
@@ -99,7 +100,28 @@ $iconCircle = '<svg class="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-
                     Simpan
                 </button>
             </form>
-        <?php endif; ?>
+            <?php else: ?>
+            <div></div>
+            <?php endif; ?>
+
+            <?php if ($tagihan_id): ?>
+            <a href="/operasi/tagihan-operasi/edit/<?= $tagihan_id ?>"
+               class="inline-flex items-center gap-x-2 py-2 px-4 text-sm font-semibold rounded-lg border border-green-600 text-green-700 hover:bg-green-50 dark:border-green-500 dark:text-green-400 dark:hover:bg-green-900/20 transition-colors">
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Edit Tagihan
+            </a>
+            <?php else: ?>
+            <a href="/operasi/tagihan-operasi/tambah?id_jadwal=<?= $id_jadwal ?>"
+               class="inline-flex items-center gap-x-2 py-2 px-4 text-sm font-semibold rounded-lg bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] transition-colors">
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                </svg>
+                Buat Tagihan
+            </a>
+            <?php endif; ?>
+        </div>
     </div>
 
     <!-- Form Checklist -->
