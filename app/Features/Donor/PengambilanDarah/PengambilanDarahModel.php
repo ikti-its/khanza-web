@@ -33,6 +33,37 @@ final class PengambilanDarahModel extends ModelTemplate
     }
 
     /**
+     * Mengambil data pengambilan darah
+     * @param int $limit
+     * @param int $offset
+     * @return list<array<string, mixed>>
+     */
+    public function get_data_tabel(int $limit, int $offset): array
+    {
+        return $this->db
+            ->table('donor.pengambilan_darah pd')
+            ->select([
+                'pd.id_pengambilan_darah',
+                'pd.nomor_pengambilan',
+                'pd.no_bag',
+                'pd.tanggal_pengambilan',
+                'o.nama',
+                'jb.nama_jenis_bag',
+                'sp.id_status_pengambilan',
+                'sp.nama_status_pengambilan'
+            ])
+            ->join('donor.kunjungan k', 'k.id_kunjungan = pd.id_kunjungan', 'inner')
+            ->join('role.pendonor p', 'p.id_pendonor = k.id_pendonor', 'inner')
+            ->join('person.orang o', 'o.id_orang = p.id_orang', 'inner')
+            ->join('donor.jenis_bag jb', 'jb.id_jenis_bag = pd.id_jenis_bag', 'left')
+            ->join('donor.status_pengambilan sp', 'sp.id_status_pengambilan = pd.id_status_pengambilan', 'left')
+            ->orderBy('pd.tanggal_pengambilan', 'DESC')
+            ->limit($limit, $offset)
+            ->get()
+            ->getResultArray();
+    }
+
+    /**
      * Memastikan tanggal input pengambilan darah valid
      * @param string $tanggalInput
      * @throws \RuntimeException

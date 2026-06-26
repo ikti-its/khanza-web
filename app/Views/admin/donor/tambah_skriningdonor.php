@@ -23,7 +23,7 @@
                     <input type="text" id="nomor_kunjungan" name="nomor_kunjungan" readonly required
                            placeholder="Klik cari..."
                            <?= $isEdit ? 'disabled' : 'onclick="open_modalKunjungan()"' ?>
-                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white <?= $isEdit ? 'cursor-not-allowed bg-gray-200' : 'cursor-pointer bg-slate-50' ?>">
+                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white <?= $isEdit ? 'cursor-not-allowed bg-gray-100' : 'cursor-pointer bg-slate-50' ?>">
                     
                     <?php if (!$isEdit) : ?>
                         <button type="button" onclick="open_modalKunjungan()"

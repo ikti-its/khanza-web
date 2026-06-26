@@ -22,7 +22,7 @@ final class PengambilanDarahController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
                 A::DETAIL,
@@ -43,6 +43,44 @@ final class PengambilanDarahController extends ControllerTemplate
                 [SHOW, OPTIONAL, I::SELECT,  'id_status_pengambilan', 'Status Pengambilan'],
             ],
         );
+    }
+
+    /**
+     * OVERRIDE: Halaman Utama Pengambilan Darah
+     */
+    #[\Override]
+    final public function index(): string
+    {
+        $currentPage = max(1, (int) ($this->request->getGet('page') ?? 1));
+        $perPage     = 10;
+        $offset      = ($currentPage - 1) * $perPage;
+
+        $totalRows  = $this->model->count_filtered();
+        $data_tabel = $this->model->get_data_tabel($perPage, $offset);
+
+        $this->after_read($data_tabel);
+
+        $konfig = [
+            [1, 'No. Pengambilan', 'nomor_pengambilan',         'teks',    0],
+            [1, 'Nomor Bag',       'no_bag',                    'teks',    0],
+            [1, 'Nama Pendonor',   'nama',                      'teks',    0],
+            [1, 'Jenis Bag',       'nama_jenis_bag',            'teks',    0],
+            [1, 'Status',          'nama_status_pengambilan',   'status',  0],
+        ];
+
+        return view('/layouts/data', [
+            'judul'        => $this->title,
+            'breadcrumbs'  => $this->breadcrumbs,
+            'meta_data'    => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'modul_path'   => $this->get_uri_path(),
+            'kolom_id'     => $this->primary_key,
+            'konfig'       => $konfig,
+            'aksi'         => $this->actions,
+            'tabel'        => $data_tabel,
+            'row_alert'    => [],
+            'child_link'   => null,
+            'query_string' => '',
+        ]);
     }
 
     /**
