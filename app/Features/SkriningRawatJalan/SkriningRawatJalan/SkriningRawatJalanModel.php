@@ -20,7 +20,10 @@ final class SkriningRawatJalanModel extends ModelTemplate
                 'is_risiko_jatuh'  => V::DEFAULT(),
                 ],
             [
-                'no_rm'          => ['nomor_rm'],
+                'no_rm'          => [
+                    'nomor_rm',
+                    'id_orang' => ['nama'],
+                ],
                 'id_kesadaran'   => ['kesadaran'],
                 'id_pernafasan'  => ['pernafasan'],
                 'id_skala_nyeri' => ['skala_nyeri'],
