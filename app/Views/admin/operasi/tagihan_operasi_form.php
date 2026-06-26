@@ -481,69 +481,27 @@ function autofillTindakan(item) {
     addTindakanToTable(item);
 }
 
-async function addTindakanToTable(item) {
+function addTindakanToTable(item) {
     _tindakanAdded[item.id_tindakan] = true;
+    const tarif = parseFloat(item.tarif) || 0;
     document.getElementById('emptyTindakanRow')?.remove();
 
-    const tbody = document.getElementById('tindakanTableBody');
+    const tr = document.createElement('tr');
+    tr.id = `tindakan-row-${item.id_tindakan}`;
+    tr.className = 'border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800';
+    tr.innerHTML = `
+        <td class="p-2 border text-center dark:border-gray-700">${item.kode_tindakan ?? '-'}</td>
+        <td class="p-2 border dark:border-gray-700">${item.nama_tindakan ?? ''}</td>
+        <td class="p-2 border text-right pr-4 dark:border-gray-700"
+            data-tindakan-tarif="${tarif}">${formatRupiah(tarif)}</td>
+        <td class="p-2 border text-center dark:border-gray-700">
+            <button type="button" onclick="hapusTindakan(${item.id_tindakan})"
+                    class="text-red-600 hover:underline text-sm dark:text-red-400">
+                Hapus
+            </button>
+        </td>`;
+    document.getElementById('tindakanTableBody').appendChild(tr);
 
-    // Fetch komponen paket untuk tindakan ini
-    let komponen = [];
-    try {
-        const res = await fetch(`/operasi/paket-tindakan-operasi/modal/list?id_tindakan=${item.id_tindakan}`);
-        const json = await res.json();
-        komponen = json.data ?? [];
-    } catch(e) {}
-
-    if (komponen.length > 0) {
-        // Baris header tindakan (tanpa tarif — subtotal dari komponen)
-        const hRow = document.createElement('tr');
-        hRow.id = `tindakan-row-${item.id_tindakan}`;
-        hRow.style.backgroundColor = '#E6F2EF';
-        hRow.className = 'border-b dark:border-gray-700 dark:bg-slate-700';
-        hRow.innerHTML = `
-            <td class="p-2 border text-center text-xs font-mono dark:border-gray-700">${item.kode_tindakan ?? '-'}</td>
-            <td class="p-2 border font-semibold text-gray-900 dark:text-white dark:border-gray-700">${item.nama_tindakan ?? ''}</td>
-            <td class="p-2 border text-center text-gray-400 dark:border-gray-700 italic text-xs">—</td>
-            <td class="p-2 border text-center dark:border-gray-700">
-                <button type="button" onclick="hapusTindakan(${item.id_tindakan})"
-                        class="text-red-600 hover:underline text-sm dark:text-red-400">Hapus</button>
-            </td>`;
-        tbody.appendChild(hRow);
-
-        // Baris per komponen
-        komponen.forEach(k => {
-            const tr = document.createElement('tr');
-            tr.className = 'border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800';
-            tr.dataset.tindakanId = item.id_tindakan;
-            const tarif = parseFloat(k.tarif_kelas_3) || 0;
-            tr.innerHTML = `
-                <td class="p-2 border dark:border-gray-700"></td>
-                <td class="p-2 pl-8 border text-gray-500 dark:text-gray-400 dark:border-gray-700 text-xs">${k.nama_komponen ?? ''}</td>
-                <td class="p-2 border text-right pr-4 dark:border-gray-700 text-xs"
-                    data-tindakan-tarif="${tarif}">${formatRupiah(tarif)}</td>
-                <td class="p-2 border dark:border-gray-700"></td>`;
-            tbody.appendChild(tr);
-        });
-    } else {
-        // Fallback: tidak ada komponen, tampilkan tarif tindakan langsung
-        const tarif = parseFloat(item.tarif) || 0;
-        const tr = document.createElement('tr');
-        tr.id = `tindakan-row-${item.id_tindakan}`;
-        tr.className = 'border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800';
-        tr.innerHTML = `
-            <td class="p-2 border text-center dark:border-gray-700">${item.kode_tindakan ?? '-'}</td>
-            <td class="p-2 border dark:border-gray-700">${item.nama_tindakan ?? ''}</td>
-            <td class="p-2 border text-right pr-4 dark:border-gray-700"
-                data-tindakan-tarif="${tarif}">${formatRupiah(tarif)}</td>
-            <td class="p-2 border text-center dark:border-gray-700">
-                <button type="button" onclick="hapusTindakan(${item.id_tindakan})"
-                        class="text-red-600 hover:underline text-sm dark:text-red-400">Hapus</button>
-            </td>`;
-        tbody.appendChild(tr);
-    }
-
-    // Hidden input untuk submit
     const inp = document.createElement('input');
     inp.type = 'hidden';
     inp.name = `tindakan[${item.id_tindakan}][id_tindakan]`;
@@ -556,7 +514,6 @@ async function addTindakanToTable(item) {
 
 function hapusTindakan(idTindakan) {
     document.getElementById(`tindakan-row-${idTindakan}`)?.remove();
-    document.querySelectorAll(`[data-tindakan-id="${idTindakan}"]`).forEach(el => el.remove());
     document.getElementById('hiddenTindakanInputs').querySelector(`[data-id="${idTindakan}"]`)?.remove();
     delete _tindakanAdded[idTindakan];
 
