@@ -20,12 +20,20 @@ class ModelTemplate extends Model
     private array $selected_aliases = [];
 
     /** @var array<string, mixed> */
-    protected array $runtime_filters  = [];
+    protected array $runtime_filters = [];
+    /** @var array<string, string> */
+    protected array $runtime_orders  = [];
     private bool  $exclude_zero_pk  = false;
 
     public function set_filter(string $col, mixed $val): static
     {
         $this->runtime_filters[$col] = $val;
+        return $this;
+    }
+
+    public function set_order(string $col, string $dir = 'ASC'): static
+    {
+        $this->runtime_orders[$col] = $dir;
         return $this;
     }
 
@@ -355,6 +363,9 @@ class ModelTemplate extends Model
             foreach ($this->runtime_filters as $col => $val) {
                 is_array($val) ? $this->whereIn($col, $val) : $this->where($col, $val);
             }
+            foreach ($this->runtime_orders as $col => $dir) {
+                $this->orderBy($col, $dir);
+            }
             if ($this->exclude_zero_pk) {
                 $this->where($this->primaryKey . ' !=', 0);
             }
@@ -377,6 +388,9 @@ class ModelTemplate extends Model
             is_array($val)
                 ? $builder->whereIn("{$main}.{$col}", $val)
                 : $builder->where("{$main}.{$col}", $val);
+        }
+        foreach ($this->runtime_orders as $col => $dir) {
+            $builder->orderBy($col, $dir);
         }
         if ($this->exclude_zero_pk) {
             $builder->where("{$main}.{$this->primaryKey} !=", 0);
