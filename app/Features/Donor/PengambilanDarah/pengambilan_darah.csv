@@ -1,3 +1,3 @@
 ﻿id_pengambilan_darah,nomor_pengambilan,id_kunjungan,tanggal_pengambilan,id_shift,no_bag,id_jenis_bag,id_jenis_donor,id_lokasi_pengambilan,id_petugas,id_status_pengambilan
-1,2026-04-UTD000001,1,2026-04-14,2,W123426110021F,2,1,1,3,1
-2,2026-04-UTD000002,2,2026-04-17,1,W123426110052M,1,1,1,2,1
+1,2026-04-UTD0001,1,2026-04-14,2,W123426110021F,2,1,1,3,1
+2,2026-04-UTD0002,2,2026-04-17,1,W123426110052M,1,1,1,2,1

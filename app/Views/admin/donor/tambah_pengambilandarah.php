@@ -19,6 +19,13 @@
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Nomor Pengambilan<span class="text-red-600">*</span>
+                </label>
+                <input type="text" name="nomor_pengambilan" id="nomor_pengambilan" readonly
+                       value="<?= $baris['nomor_pengambilan'] ?? '' ?>"
+                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed" required>
+                
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Nomor Kunjungan<span class="text-red-600">*</span>
                 </label>
                 <?php $isEdit = (str_contains($judul, 'Ubah')); ?>
@@ -38,13 +45,6 @@
                         </button>
                     <?php endif; ?>
                 </div>
-
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Nomor Pengambilan<span class="text-red-600">*</span>
-                </label>
-                <input type="text" name="nomor_pengambilan" id="nomor_pengambilan" readonly
-                       value="<?= $baris['nomor_pengambilan'] ?? '' ?>"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
@@ -507,16 +507,6 @@
         document.getElementById('nomor_kunjungan').value = item.nomor_kunjungan;
         document.getElementById('nomor_pendonor').value = item.nomor_pendonor;
         document.getElementById('nama').value = item.nama;
-
-        const inputNomorPengambilan = document.getElementById('nomor_pengambilan');
-        if (inputNomorPengambilan) {
-            const waktuSekarang = new Date();
-            const tahun = waktuSekarang.getFullYear(); 
-            const bulan = String(waktuSekarang.getMonth() + 1).padStart(2, '0'); 
-            const komponenIdentik = item.nomor_pendonor || 'ANON';
-            
-            inputNomorPengambilan.value = `${tahun}-${bulan}-${komponenIdentik}`;
-        }
     }
 
     function autofillPetugas(item) {

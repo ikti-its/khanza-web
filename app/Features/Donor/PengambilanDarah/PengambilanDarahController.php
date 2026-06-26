@@ -154,6 +154,17 @@ final class PengambilanDarahController extends ControllerTemplate
             }
         }
 
+        $tahunBulanIni = date('Y-m');
+        
+        $jumlahTransaksiBulanIni = $this->model->db->table('donor.pengambilan_darah')
+            ->where("TO_CHAR(tanggal_pengambilan, 'YYYY-MM')", $tahunBulanIni)
+            ->countAllResults();
+
+        $nextUrutanUTD = $jumlahTransaksiBulanIni + 1;
+        $nomorUrutPad  = str_pad((string)$nextUrutanUTD, 4, '0', STR_PAD_LEFT);
+
+        $nomorPengambilanOtomatis = date('Y') . '-' . date('m') . '-UTD' . $nomorUrutPad;
+
         $mockBaris = [];
         $konfigGabungan = [];
 
@@ -166,6 +177,11 @@ final class PengambilanDarahController extends ControllerTemplate
 
             $isTanggal = ($fieldPengambilan[3] === 'tanggal' || str_contains($columnPengambilan, 'tanggal'));
             $mockBaris[$columnPengambilan] = $isTanggal ? date('Y-m-d') : '';
+
+            if ($columnPengambilan === 'nomor_pengambilan') {
+                $mockBaris[$columnPengambilan] = $nomorPengambilanOtomatis;
+                $fieldPengambilan[3] = 'indeks';
+            }
 
             if ($columnPengambilan === 'id_kunjungan') {
                 foreach ($konfigKunjungan as $fieldKunjungan) {
