@@ -26,6 +26,7 @@ final class PermintaanOperasiController extends ControllerTemplate
                 A::UPDATE,
                 A::DELETE,
                 A::JADWALKAN,
+                A::LEMBAR_OPERASI,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_permintaan', 'ID Permintaan'],
