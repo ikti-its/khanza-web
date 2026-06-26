@@ -21,7 +21,12 @@ final class PermintaanRadModel extends ModelTemplate
                 'tgl_jam_sampel'       => V::DEFAULT(),
             ],
             [
-                'nomor_reg'            => [],
+                'nomor_reg' => [
+                    'nomor_reg',
+                    'id_pasien' => [
+                        'id_orang' => ['nama'],
+                    ],
+                ],
                 'id_status_permintaan' => ['nama_status'],
             ],
         );
