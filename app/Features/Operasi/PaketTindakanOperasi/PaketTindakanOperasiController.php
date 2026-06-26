@@ -26,16 +26,35 @@ final class PaketTindakanOperasiController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_paket',      'ID Paket'],
-                [SHOW, REQUIRED, I::INDEX, 'id_tindakan',   'Tindakan Operasi'],
-                [SHOW, REQUIRED, I::INDEX, 'id_komponen',   'Komponen Jasa'],
-                [SHOW, REQUIRED, I::MONEY, 'tarif_kelas_3', 'Tarif Kelas 3'],
-                [SHOW, REQUIRED, I::MONEY, 'tarif_kelas_2', 'Tarif Kelas 2'],
-                [SHOW, REQUIRED, I::MONEY, 'tarif_kelas_1', 'Tarif Kelas 1'],
-                [SHOW, REQUIRED, I::MONEY, 'tarif_vip',     'Tarif VIP'],
-                [SHOW, REQUIRED, I::MONEY, 'tarif_vvip',    'Tarif VVIP'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_paket',      'ID Paket'],
+                [SHOW, REQUIRED, I::INDEX,  'id_tindakan',   'Tindakan Operasi'],
+                [SHOW, REQUIRED, I::SELECT, 'id_komponen',   'Komponen Jasa'],
+                [SHOW, REQUIRED, I::MONEY,  'tarif_kelas_1', 'Tarif Kelas 1'],
+                [SHOW, REQUIRED, I::MONEY,  'tarif_kelas_2', 'Tarif Kelas 2'],
+                [SHOW, REQUIRED, I::MONEY,  'tarif_kelas_3', 'Tarif Kelas 3'],
+                [SHOW, REQUIRED, I::MONEY,  'tarif_vip',     'Tarif VIP'],
+                [SHOW, REQUIRED, I::MONEY,  'tarif_vvip',    'Tarif VVIP'],
             ],
         );
+    }
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $idTindakan = (int) $this->request->getGet('id_tindakan');
+        if ($idTindakan < 1) {
+            return $this->response->setJSON(['data' => []]);
+        }
+
+        $rows = $this->model->db
+            ->table('operasi.paket_tindakan_operasi p')
+            ->select(['k.nama_komponen', 'p.tarif_kelas_3'])
+            ->join('operasi.ref_komponen_jasa k', 'k.id_komponen = p.id_komponen', 'left')
+            ->where('p.id_tindakan', $idTindakan)
+            ->orderBy('p.id_komponen', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
     }
 
     public function listByTindakan(int $idTindakan)
