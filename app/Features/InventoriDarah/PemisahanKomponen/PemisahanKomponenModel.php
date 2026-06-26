@@ -25,4 +25,29 @@ final class PemisahanKomponenModel extends ModelTemplate
             ],
         );
     }
+
+    /**
+     * Memastikan tanggal input pemisahan valid
+     * @param string $idPengambilan
+     * @param string $tanggalPemisahanInput
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    public function validasiTanggalPemisahan(string $idPengambilan, string $tanggalPemisahanInput): void
+    {
+        $pengambilan = $this->db->table('donor.pengambilan_darah')
+            ->select('tanggal_pengambilan')
+            ->where('id_pengambilan_darah', $idPengambilan)
+            ->get()
+            ->getRowArray();
+
+        if ($pengambilan && !empty($pengambilan['tanggal_pengambilan'])) {
+            $tglPengambilan = new \DateTime($pengambilan['tanggal_pengambilan']);
+            $tglPemisahan   = new \DateTime($tanggalPemisahanInput);
+
+            if ($tglPemisahan < $tglPengambilan) {
+                throw new \InvalidArgumentException('Gagal Menyimpan! Tanggal pemisahan komponen tidak boleh mendahului tanggal pengambilan darah.');
+            }
+        }
+    }
 }

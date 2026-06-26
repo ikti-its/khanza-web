@@ -28,7 +28,9 @@
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Tanggal Pemisahan<span class="text-red-600">*</span>
                 </label>
-                <input type="date" name="tanggal_pemisahan" value="<?= $baris['tanggal_pemisahan'] ?? date('Y-m-d') ?>"
+                <input type="date" name="tanggal_pemisahan"
+                       value="<?= $baris['tanggal_pemisahan'] ?? date('Y-m-d') ?>"
+                       max="<?= date('Y-m-d') ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
@@ -47,7 +49,8 @@
                         }
                     }
                     foreach ($optionsShift as $opt) : 
-                        $selected = ((string)($baris['id_shift'] ?? '') === (string)$opt[1]) ? 'selected' : '';
+                        $valLama = old('id_shift', $baris['id_shift'] ?? '');
+                        $selected = ((string)$valLama === (string)$opt[1]) ? 'selected' : '';
                     ?>
                         <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
                     <?php endforeach; ?>
@@ -56,11 +59,12 @@
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Petugas<span class="text-red-600">*</span>
                 </label>
-                <input type="hidden" name="id_petugas" id="id_petugas" value="<?= $baris['id_petugas'] ?? '' ?>" required>
+                <input type="hidden" name="id_petugas" id="id_petugas"
+                       value="<?= old('id_petugas', $baris['id_petugas'] ?? '') ?>" required>
                 
                 <div class="w-full lg:w-1/4 flex gap-x-2">
                     <input type="text" id="nama_petugas" name="nama_petugas" readonly required
-                           value="<?= $baris['nama_petugas'] ?? '' ?>"
+                           value="<?= old('nama_petugas', $baris['nama_petugas'] ?? '') ?>"
                            placeholder="Klik cari..."
                            onclick="open_modalPetugas()"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50">

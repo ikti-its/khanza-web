@@ -21,8 +21,8 @@ final class PemisahanKomponenController extends ControllerTemplate
             'Pemisahan Komponen',
             [
                 A::READ,
-                A::CREATE,
-                A::AUDIT,
+                // A::CREATE,
+                // A::AUDIT,
                 // A::UPDATE,
                 A::DELETE,
             ],
@@ -170,6 +170,8 @@ final class PemisahanKomponenController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            $this->model->validasiTanggalPemisahan($rawPost['id_pengambilan_darah'], $rawPost['tanggal_pemisahan']);
+
             $this->model->insert($dataPemisahan);
             $idPemisahan = $this->model->getInsertID();
 
@@ -248,6 +250,7 @@ final class PemisahanKomponenController extends ControllerTemplate
                 ? $this->friendly_db_error($e) 
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
+            return redirect()->back()->withInput();
         }
 
         return redirect()->to($this->get_uri_path() . '/data');

@@ -66,7 +66,7 @@ final class PengambilanDarahModel extends ModelTemplate
     /**
      * Memastikan tanggal input pengambilan darah valid
      * @param string $tanggalInput
-     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     public function validasiTanggalOperasional(string $tanggalInput): void
     {
@@ -74,14 +74,14 @@ final class PengambilanDarahModel extends ModelTemplate
         $tglSekarang = new \DateTime();
 
         if ($tglDonasi->format('Y-m-d') > $tglSekarang->format('Y-m-d')) {
-            throw new \RuntimeException("Gagal Menyimpan! Tanggal pengambilan darah tidak boleh melebihi waktu saat ini.");
+            throw new \InvalidArgumentException("Gagal Menyimpan! Tanggal pengambilan darah tidak boleh melebihi waktu saat ini.");
         }
 
         $selisih = $tglDonasi->diff($tglSekarang);
         $selisihHari = (int) $selisih->format('%r%a');
 
         if ($selisihHari > 2) {
-            throw new \RuntimeException("Gagal Menyimpan! Batas keterlambatan input data pengambilan darah untuk petugas maksimal adalah 2 hari ke belakang. Jika ingin menginput data Mobile Unit yang lebih lama, harap laporkan ke Supervisor / Kepala Ruangan.");
+            throw new \InvalidArgumentException("Gagal Menyimpan! Batas keterlambatan input data pengambilan darah untuk petugas maksimal adalah 2 hari ke belakang. Jika ingin menginput data Mobile Unit yang lebih lama, harap laporkan ke Supervisor / Kepala Ruangan.");
         }
     }
 
