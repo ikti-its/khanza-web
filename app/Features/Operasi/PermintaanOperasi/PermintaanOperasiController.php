@@ -29,12 +29,12 @@ final class PermintaanOperasiController extends ControllerTemplate
                 A::LEMBAR_OPERASI,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_permintaan', 'ID Permintaan'],
-                [SHOW, REQUIRED, I::TEXT,   'nomor_reg',     'Nomor Registrasi'],
-                [SHOW, REQUIRED, I::TEXT,   'id_dokter',     'Kode Dokter'],
-                [SHOW, REQUIRED, I::SELECT, 'id_tindakan',   'Tindakan Operasi'],
-                [SHOW, REQUIRED, I::DATE,   'tanggal_minta', 'Tanggal Minta'],
-                [SHOW, REQUIRED, I::SELECT, 'is_cito',       'CITO'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_permintaan', 'ID Permintaan'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'nomor_reg',     'No. Registrasi'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'id_dokter',     'Dokter Peminta'],
+                [SHOW,       REQUIRED, I::SELECT, 'id_tindakan',   'Tindakan Operasi'],
+                [SHOW,       REQUIRED, I::DATE,   'tanggal_minta', 'Tanggal Minta'],
+                [SHOW,       OPTIONAL, I::BOOL,   'is_cito',       'CITO'],
             ],
         );
     }

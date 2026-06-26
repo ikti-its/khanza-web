@@ -27,16 +27,12 @@ final class TagihanOperasiController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_tagihan',      'ID Tagihan'],
-                [HIDE, OPTIONAL, I::INDEX, 'id_jadwal',       'ID Jadwal'],
-                [HIDE, OPTIONAL, I::INDEX, 'id_kategori',     'ID Kategori'],
-                [SHOW, OPTIONAL, I::TEXT,  'nomor_reg',       'No. Registrasi'],
-                [SHOW, OPTIONAL, I::TEXT,  'nama',            'Nama Pasien'],
-                [SHOW, OPTIONAL, I::TEXT,  'nama_tindakan',   'Tindakan'],
-                [SHOW, OPTIONAL, I::TEXT,  'nama_kategori',   'Kategori'],
-                [SHOW, OPTIONAL, I::DATE,  'tanggal_mulai',   'Tgl. Mulai'],
-                [HIDE, OPTIONAL, I::TEXT,  'jenis_anestesi',  'Jenis Anestesi'],
-                [HIDE, OPTIONAL, I::DATE,  'tanggal_selesai', 'Tanggal Selesai'],
+                [HIDE,      OPTIONAL, I::INDEX, 'id_tagihan',      'ID Tagihan'],
+                [SHOW,      OPTIONAL, I::INDEX, 'id_jadwal',       'Jadwal Operasi'],
+                [SHOW,      OPTIONAL, I::INDEX, 'id_kategori',     'Kategori Operasi'],
+                [FORM_ONLY, OPTIONAL, I::DATE,  'tanggal_mulai',   'Tgl. Mulai'],
+                [FORM_ONLY, OPTIONAL, I::TEXT,  'jenis_anestesi',  'Jenis Anestesi'],
+                [FORM_ONLY, OPTIONAL, I::DATE,  'tanggal_selesai', 'Tanggal Selesai'],
             ],
         );
     }
