@@ -29,14 +29,14 @@ final class PermintaanRadController extends ControllerTemplate
                 A::PRINT,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_permintaan',        'ID Permintaan'],
-                [SHOW, REQUIRED, I::TEXT,   'no_permintaan',        'No. Permintaan'],
-                [SHOW, REQUIRED, I::TEXT,   'nomor_reg',            'Nomor Registrasi'],
-                [SHOW, REQUIRED, I::DTIME,  'tgl_jam_permintaan',   'Tanggal Permintaan'],
-                [SHOW, REQUIRED, I::TEXT,   'informasi_tambahan',   'Informasi Tambahan'],
-                [SHOW, REQUIRED, I::TEXT,   'indikasi_klinis',      'Indikasi Klinis'],
-                [SHOW, REQUIRED, I::SELECT, 'id_status_permintaan', 'Status Permintaan'],
-                [SHOW, OPTIONAL, I::DTIME,  'tgl_jam_sampel',       'Waktu Sampel'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_permintaan',        'ID Permintaan'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'no_permintaan',        'No. Permintaan'],
+                [SHOW,       REQUIRED, I::TEXT,   'nomor_reg',            'Nomor Registrasi'],
+                [SHOW,       REQUIRED, I::DTIME,  'tgl_jam_permintaan',   'Tanggal Permintaan'],
+                [FORM_ONLY,  REQUIRED, I::TEXT,   'informasi_tambahan',   'Informasi Tambahan'],
+                [FORM_ONLY,  REQUIRED, I::TEXT,   'indikasi_klinis',      'Indikasi Klinis'],
+                [TABLE_ONLY, OPTIONAL, I::SELECT, 'id_status_permintaan', 'Status Permintaan'],
+                [TABLE_ONLY, OPTIONAL, I::DTIME,  'tgl_jam_sampel',       'Waktu Sampel'],
             ],
         );
     }
@@ -65,10 +65,7 @@ final class PermintaanRadController extends ControllerTemplate
     {
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn($f) => !in_array($f[2], [
-                'id_permintaan', 'no_permintaan', 'nomor_reg',
-                'tgl_jam_sampel', 'id_status_permintaan',
-            ], true)
+            fn($f) => $f[2] !== 'nomor_reg'
         ));
     }
 
@@ -296,52 +293,6 @@ final class PermintaanRadController extends ControllerTemplate
         }
 
         return $this->home();
-    }
-
-    // ──────────────────────────────────────────────────────────
-    // INDEX
-    // ──────────────────────────────────────────────────────────
-
-    #[\Override]
-    final public function index(): string
-    {
-        $rows = $this->model->db
-            ->table('radiologi.permintaan_rad pr')
-            ->select([
-                'pr.id_permintaan', 'pr.no_permintaan', 'pr.nomor_reg', 'pr.tgl_jam_permintaan',
-                'pr.id_status_permintaan', 'pr.tgl_jam_sampel',
-                'p.nomor_rm', 'o.nama', 'o.tanggal_lahir',
-                's.nama_status',
-            ])
-            ->join('rekam_medis.registrasi r',              'r.nomor_reg = pr.nomor_reg',              'left')
-            ->join('role.pasien p',                         'p.id_pasien = r.id_pasien',               'left')
-            ->join('person.orang o',                        'o.id_orang  = p.id_orang',                'left')
-            ->join('radiologi.ref_status_permintaan_rad s', 's.id_status = pr.id_status_permintaan',   'left')
-            ->orderBy('pr.tgl_jam_permintaan', 'DESC')
-            ->get()->getResultArray();
-
-        $konfig = [
-            [1, 'No. Permintaan',  'no_permintaan',       'teks',    0],
-            [1, 'No. Registrasi',  'nomor_reg',           'teks',    0],
-            [1, 'No. RM',          'nomor_rm',            'teks',    0],
-            [1, 'Nama Pasien',     'nama',                'teks',    0],
-            [1, 'Tgl Permintaan',  'tgl_jam_permintaan',  'tanggal', 0],
-            [1, 'Status',          'nama_status',         'status',  0],
-        ];
-
-        return view('/layouts/data', [
-            'judul'        => $this->title,
-            'breadcrumbs'  => $this->breadcrumbs,
-            'meta_data'    => ['page' => 1, 'size' => count($rows), 'total' => 1],
-            'modul_path'   => $this->get_uri_path(),
-            'kolom_id'     => 'id_permintaan',
-            'konfig'       => $konfig,
-            'aksi'         => $this->actions,
-            'tabel'        => $rows,
-            'row_alert'    => [],
-            'child_link'   => null,
-            'query_string' => '',
-        ]);
     }
 
     // ──────────────────────────────────────────────────────────
