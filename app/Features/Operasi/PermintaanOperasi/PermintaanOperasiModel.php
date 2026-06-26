@@ -18,11 +18,14 @@ final class PermintaanOperasiModel extends ModelTemplate
                 'is_cito'       => V::DEFAULT(),
             ],
             [
-                'nomor_reg'   => ['nomor_rawat'],
-                'id_dokter' => [
-                    'id_orang'  => ['nama']
+                'nomor_reg' => [
+                    'nomor_reg',
+                    'id_pasien' => [
+                        'id_orang' => ['nama'],
+                    ],
                 ],
-                'id_tindakan'          => [],
+                'id_dokter'   => ['id_orang' => ['nama']],
+                'id_tindakan' => ['nama_tindakan'],
             ],
         );
     }

@@ -25,7 +25,17 @@ final class SigninSebelumAnestesiModel extends ModelTemplate
                 'rencana_kesiapan_anestesi' => V::DEFAULT(),
             ],
             [
-                'id_jadwal'            => [],
+                'id_jadwal' => [
+                    'tanggal',
+                    'id_permintaan' => [
+                        'nomor_reg',
+                        'nomor_reg' => [
+                            'id_pasien' => [
+                                'id_orang' => ['nama'],
+                            ],
+                        ],
+                    ],
+                ],
                 'id_tindakan'          => [],
                 'id_sn_cn'             => [
                     'id_orang'  => ['nama']

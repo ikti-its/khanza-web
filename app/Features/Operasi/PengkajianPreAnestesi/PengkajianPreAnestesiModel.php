@@ -52,7 +52,17 @@ final class PengkajianPreAnestesiModel extends ModelTemplate
                 'catatan_khusus'       => V::DEFAULT(),
             ],
             [
-                'id_jadwal'           => [],
+                'id_jadwal' => [
+                    'tanggal',
+                    'id_permintaan' => [
+                        'nomor_reg',
+                        'nomor_reg' => [
+                            'id_pasien' => [
+                                'id_orang' => ['nama'],
+                            ],
+                        ],
+                    ],
+                ],
                 'id_dokter_anestesi'  => [
                     'id_orang'  => ['nama']
                 ],

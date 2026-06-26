@@ -19,15 +19,19 @@ final class JadwalOperasiModel extends ModelTemplate
                 'waktu_selesai'        => V::DEFAULT(),
             ],
             [
-                'id_permintaan'        => [],
-                'id_ruangan'           => ['kode_ruangan', 'nama_ruangan'],
-                'id_dokter_bedah'      => [
-                    'id_orang'  => ['nama']
+                'id_permintaan' => [
+                    'nomor_reg',
+                    'nomor_reg' => [
+                        'id_pasien' => [
+                            'id_orang' => ['nama'],
+                        ],
+                    ],
+                    'is_cito',
                 ],
-                'id_dokter_anestesi'   => [
-                    'id_orang'  => ['nama']
-                ],
-                'id_status'            => ['nama_status'],
+                'id_ruangan'         => ['nama_ruangan'],
+                'id_dokter_bedah'    => ['id_orang' => ['nama']],
+                'id_dokter_anestesi' => ['id_orang' => ['nama']],
+                'id_status'          => ['nama_status'],
             ],
         );
     }
