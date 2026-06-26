@@ -15,8 +15,8 @@ final class OperasiRoutes extends RouteTemplate
 
                 \App\Features\Operasi\PermintaanOperasi\PermintaanOperasiController::class,
                 \App\Features\Operasi\JadwalOperasi\JadwalOperasiController::class,
-                \App\Features\Operasi\PaketTindakanOperasi\PaketTindakanOperasiController::class,
                 \App\Features\Operasi\TagihanOperasi\TagihanOperasiController::class,
+                \App\Features\Operasi\PaketTindakanOperasi\PaketTindakanOperasiController::class => 'HIDE',
                 \App\Features\Operasi\LembarOperasi\LembarOperasiController::class => 'HIDE',
 
                 // ==========================================
