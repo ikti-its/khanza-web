@@ -42,7 +42,7 @@ final class RefTindakanOperasiController extends ControllerTemplate
     {
         $rows = $this->model->db
             ->table('operasi.ref_tindakan_operasi')
-            ->select(['id_tindakan', 'kode_tindakan', 'nama_tindakan'])
+            ->select(['id_tindakan', 'kode_tindakan', 'nama_tindakan', 'tarif_kelas_3'])
             ->orderBy('nama_tindakan', 'ASC')
             ->get()
             ->getResultArray();

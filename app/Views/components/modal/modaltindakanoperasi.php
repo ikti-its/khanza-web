@@ -32,7 +32,9 @@
             onSelect: (item) => {
                 autofillTindakan({
                     id_tindakan:   item.id_tindakan,
+                    kode_tindakan: item.kode_tindakan,
                     nama_tindakan: item.nama_tindakan,
+                    tarif:         item.tarif_kelas_3,
                 });
             }
         });
