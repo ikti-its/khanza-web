@@ -25,6 +25,7 @@ final class JadwalOperasiController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::JADWALKAN,
                 A::LEMBAR_OPERASI,
             ],
             [
@@ -90,6 +91,59 @@ final class JadwalOperasiController extends ControllerTemplate
         return $row['nama_ruangan'] ?? '';
     }
 
+    private function checkConflict(int $excludeId, array $data): ?string
+    {
+        $tanggal      = $data['tanggal'];
+        $waktuMulai   = $data['waktu_mulai'];
+        $waktuSelesai = $data['waktu_selesai'];
+
+        $checks = [
+            [
+                'col'    => 'id_dokter_bedah',
+                'join'   => [['role.dokter d', 'd.id_dokter = j.id_dokter_bedah'], ['person.orang o', 'o.id_orang = d.id_orang']],
+                'label'  => fn(array $r) => "Dokter Bedah {$r['nama']}",
+                'select' => 'j.waktu_mulai, j.waktu_selesai, o.nama',
+            ],
+            [
+                'col'    => 'id_dokter_anestesi',
+                'join'   => [['role.dokter d', 'd.id_dokter = j.id_dokter_anestesi'], ['person.orang o', 'o.id_orang = d.id_orang']],
+                'label'  => fn(array $r) => "Dokter Anestesi {$r['nama']}",
+                'select' => 'j.waktu_mulai, j.waktu_selesai, o.nama',
+            ],
+            [
+                'col'    => 'id_ruangan',
+                'join'   => [['ruangan.ruangan r', 'r.id_ruangan = j.id_ruangan']],
+                'label'  => fn(array $r) => "Ruangan {$r['nama_ruangan']}",
+                'select' => 'j.waktu_mulai, j.waktu_selesai, r.nama_ruangan',
+            ],
+        ];
+
+        foreach ($checks as $check) {
+            if (empty($data[$check['col']])) continue;
+
+            $builder = $this->model->db
+                ->table('operasi.jadwal_operasi j')
+                ->select($check['select'])
+                ->where('j.tanggal', $tanggal)
+                ->where('j.id_status !=', 5)
+                ->where('j.id_jadwal !=', $excludeId)
+                ->where("j.{$check['col']}", $data[$check['col']])
+                ->where("(j.waktu_mulai, j.waktu_selesai) OVERLAPS ('{$waktuMulai}'::time, '{$waktuSelesai}'::time)");
+
+            foreach ($check['join'] as [$table, $cond]) {
+                $builder->join($table, $cond, 'left');
+            }
+
+            $hit = $builder->get()->getRowArray();
+            if ($hit) {
+                $label = ($check['label'])($hit);
+                return "{$label} sudah terjadwal operasi di waktu yang sama ({$hit['waktu_mulai']}–{$hit['waktu_selesai']}).";
+            }
+        }
+
+        return null;
+    }
+
     // -------------------------------------------------------------------------
     // Pages
     // -------------------------------------------------------------------------
@@ -147,6 +201,12 @@ final class JadwalOperasiController extends ControllerTemplate
         ];
 
         try {
+            $conflict = $this->checkConflict((int) $id, $data);
+            if ($conflict !== null) {
+                session()->setFlashdata('error', $conflict);
+                return redirect()->back()->withInput();
+            }
+
             $this->model->update($id, $data);
 
             session()->setFlashdata('success', 'Jadwal operasi berhasil disimpan.');
