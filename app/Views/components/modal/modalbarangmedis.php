@@ -29,6 +29,7 @@
                     id_barang:   item.id_barang,
                     kode_barang: item.kode_barang,
                     nama_barang: item.nama,
+                    harga:       item.h_dasar,
                 });
             },
         });

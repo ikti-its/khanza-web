@@ -54,4 +54,16 @@ final class DataBarangController extends ControllerTemplate
             ],
         );
     }
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $rows = $this->model->db
+            ->table('inventori_medis.data_barang')
+            ->select(['id_barang', 'kode_barang', 'nama', 'h_dasar'])
+            ->orderBy('nama', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
+    }
 }
