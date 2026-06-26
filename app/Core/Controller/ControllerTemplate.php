@@ -247,7 +247,11 @@ class ControllerTemplate extends Controller
     private function make_join_column_config(string $col_name, ?string $label = null): array
     {
         $label ??= ucwords(str_replace('_', ' ', $col_name));
-        $type  = str_contains($col_name, 'tanggal') ? 'tanggal' : 'teks';
+        $type = match(true) {
+            str_contains($col_name, 'tanggal') => 'tanggal',
+            str_starts_with($col_name, 'is_')  => 'bool',
+            default                            => 'teks',
+        };
 
         return [1, $label, $col_name, $type, 0];
     }
