@@ -24,7 +24,13 @@ final class TagihanOperasiModel extends ModelTemplate
                 'is_pa'           => V::DEFAULT(),
             ],
             [
-                'id_jadwal'          => [],
+                'id_jadwal'          => [
+                    'id_permintaan' => [
+                        'nomor_reg',
+                        'nomor_reg'   => ['id_pasien' => ['id_orang' => ['nama']]],
+                        'id_tindakan' => ['nama_tindakan'],
+                    ],
+                ],
                 'id_kategori'        => ['nama_kategori'],
                 'id_operator_1'      => ['id_orang' => ['nama']],
                 'id_operator_2'      => ['id_orang' => ['nama']],

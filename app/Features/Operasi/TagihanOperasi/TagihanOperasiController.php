@@ -28,11 +28,15 @@ final class TagihanOperasiController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_tagihan',      'ID Tagihan'],
-                [SHOW, REQUIRED, I::INDEX, 'id_jadwal',       'Jadwal Operasi'],
-                [SHOW, REQUIRED, I::INDEX, 'id_kategori',     'Kategori'],
-                [SHOW, REQUIRED, I::TEXT,  'jenis_anestesi',  'Jenis Anestesi'],
-                [SHOW, OPTIONAL, I::DATE,  'tanggal_mulai',   'Tanggal Mulai'],
-                [SHOW, OPTIONAL, I::DATE,  'tanggal_selesai', 'Tanggal Selesai'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_jadwal',       'ID Jadwal'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_kategori',     'ID Kategori'],
+                [SHOW, OPTIONAL, I::TEXT,  'nomor_reg',       'No. Registrasi'],
+                [SHOW, OPTIONAL, I::TEXT,  'nama',            'Nama Pasien'],
+                [SHOW, OPTIONAL, I::TEXT,  'nama_tindakan',   'Tindakan'],
+                [SHOW, OPTIONAL, I::TEXT,  'nama_kategori',   'Kategori'],
+                [SHOW, OPTIONAL, I::DATE,  'tanggal_mulai',   'Tgl. Mulai'],
+                [HIDE, OPTIONAL, I::TEXT,  'jenis_anestesi',  'Jenis Anestesi'],
+                [HIDE, OPTIONAL, I::DATE,  'tanggal_selesai', 'Tanggal Selesai'],
             ],
         );
     }
