@@ -21,7 +21,7 @@ final class StokDarahController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],
@@ -46,16 +46,7 @@ final class StokDarahController extends ControllerTemplate
     public function index(): string
     {
         $hariIni = date('Y-m-d');
-        
-        $idStatusLayak      = 2;
-        $idStatusTidakLayak = 3; 
-
-        $this->model->builder()
-            ->where('tanggal_kadaluarsa <', $hariIni)
-            ->where('id_status_stok', $idStatusLayak)
-            ->update([
-                'id_status_stok' => $idStatusTidakLayak
-            ]);
+        $this->model->updateStatusKadaluarsa($hariIni);
 
         return parent::index();
     }
@@ -65,25 +56,8 @@ final class StokDarahController extends ControllerTemplate
      */
     public function list()
     {
-        $tabel = $this->model->table;
-
-        $data = $this->model->builder()
-            ->select("
-                {$tabel}.id_stok_darah,
-                {$tabel}.no_kantong,
-                {$tabel}.tanggal_kadaluarsa,
-                k.nama_komponen,
-                g.nama_golongan_darah AS gol_darah,
-                r.kode_rhesus AS rhesus,
-                (COALESCE(k.jasa_sarana, 0) + COALESCE(k.paket_bhp, 0) + COALESCE(k.kso, 0) + COALESCE(k.manajemen, 0)) AS total_biaya
-            ")
-            ->join('darah.komponen_darah k', 'k.id_komponen = ' . $tabel . '.id_komponen', 'inner')
-            ->join('darah.golongan_darah g', 'g.id_golongan_darah = ' . $tabel . '.id_golongan_darah', 'left')
-            ->join('darah.rhesus r', 'r.id_rhesus = ' . $tabel . '.id_rhesus', 'left')
-            ->where($tabel . '.tanggal_kadaluarsa >=', date('Y-m-d'))
-            ->where($tabel . '.id_status_stok', 2) 
-            ->get()
-            ->getResultArray();
+        $hariIni = date('Y-m-d');
+        $data = $this->model->get_stok_siap_pakai($hariIni);
 
         foreach ($data as &$row) {
             $row['tanggal_kadaluarsa'] = date('d-m-Y', strtotime($row['tanggal_kadaluarsa']));
