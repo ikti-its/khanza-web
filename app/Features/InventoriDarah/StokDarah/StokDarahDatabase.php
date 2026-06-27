@@ -15,7 +15,7 @@ final class StokDarahDatabase extends DatabaseTemplate
             'stok_darah',
             [
                 'id_stok_darah'       => T::ID(300_000_000),
-                'no_kantong'          => T::RECORD(25),
+                'no_kantong'          => T::RECORD(20),
                 'id_komponen'         => T::FK_AUTO(),
                 'id_golongan_darah'   => T::FK_AUTO(),
                 'id_rhesus'           => T::FK_AUTO(),

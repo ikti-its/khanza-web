@@ -52,6 +52,37 @@ final class StokDarahController extends ControllerTemplate
     }
 
     /**
+     * OVERRIDE: Menampilkan Form Stok Darah
+     */
+    #[\Override]
+    final public function create_page(): string
+    {
+        $breadcrumbs = [
+            ['title' => 'Tambah', 'icon' => 'tambah']
+        ];
+
+        $konfigFields = $this->get_fields_with_options(false, true);
+
+        $mockBaris = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if ($namaKolom === 'id_stok_darah') continue;
+
+            $mockBaris[$namaKolom] = '';
+        }
+
+        return view('/admin/inventoridarah/tambah_stokdarah', [
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'konfig'      => $konfigFields,
+            'baris'       => $mockBaris,
+            'form_action' => '/submittambah',
+        ]);
+    }
+
+    /**
      * Menampilkan data modal stok darah
      */
     public function list()

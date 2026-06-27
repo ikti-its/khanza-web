@@ -341,7 +341,7 @@
         var requiredFields = document.querySelectorAll('select[required], input[required]');
         for (var i = 0; i < requiredFields.length; i++) {
             if (!requiredFields[i].value) {
-                alert("Mohon lengkapi semua bidang data yang bertanda bintang (*).");
+                alert("Mohon isi semua field yang bertanda bintang.");
                 return false;
             }
         }
