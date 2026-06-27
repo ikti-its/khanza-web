@@ -76,7 +76,7 @@ final class KunjunganModel extends ModelTemplate
      */
     public function cekIntervalMedis(int|string $idPendonor, string $tglKunjunganInput): array
     {
-        $minimalJedaHari = 60;
+        $minimalJedaHari = 84;
 
         $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
         $dataPendonor  = $modelPendonor->find($idPendonor);
@@ -90,11 +90,11 @@ final class KunjunganModel extends ModelTemplate
 
             if ($jumlahHari < $minimalJedaHari) {
                 $sisaHari = $minimalJedaHari - $jumlahHari;
-                $konversiBulan = (int) ($minimalJedaHari / 30);
+                $sisaMinggu = (int) ceil($sisaHari / 7);
                 
                 return [
                     'status'  => false,
-                    'message' => "Gagal Mendaftarkan Kunjungan! Kebijakan UTD menetapkan syarat interval jeda minimal {$konversiBulan} bulan ({$minimalJedaHari} hari). Calon pendonor baru bisa donor kembali dalam {$sisaHari} hari lagi."
+                    'message' => "Gagal Mendaftarkan Kunjungan! Sesuai regulasi Kemenkes, syarat interval jeda donor minimal adalah 3 bulan / 12 minggu. Calon pendonor baru bisa donor kembali dalam {$sisaHari} hari lagi (sekitar {$sisaMinggu} minggu)."
                 ];
             }
         }
