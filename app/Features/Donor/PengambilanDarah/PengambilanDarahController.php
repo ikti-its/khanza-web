@@ -361,23 +361,8 @@ final class PengambilanDarahController extends ControllerTemplate
             }
         }
 
-        $modelMedisDonor    = new \App\Features\LogistikUTD\MedisDonor\MedisDonorModel();
-        $modelPenunjangDonor = new \App\Features\LogistikUTD\PenunjangDonor\PenunjangDonorModel();
-
-        $savedBhpMedis = $modelMedisDonor->findAll();
-        $savedBhpNonMedis = $modelPenunjangDonor->findAll();
-
-        $modelMasterMedis = new \App\Features\InventoriMedis\DataBarang\DataBarangModel();
-        foreach ($savedBhpMedis as $k => $v) {
-            $masterItem = $modelMasterMedis->find($v['id_barang']);
-            $savedBhpMedis[$k]['nama_barang'] = $masterItem['nama'] ?? 'Barang Medis';
-        }
-
-        $modelMasterPenunjang = new \App\Features\InventoriNonMedis\Barang\BarangModel();
-        foreach ($savedBhpNonMedis as $k => $v) {
-            $masterItem = $modelMasterPenunjang->find($v['id_barang']);
-            $savedBhpNonMedis[$k]['nama_barang'] = $masterItem['nama_barang'] ?? 'Barang Penunjang';
-        }
+        $savedBhpMedis    = $this->model->getBhpMedisDetail($id);
+        $savedBhpNonMedis = $this->model->getBhpPenunjangDetail($id);
 
         $baris = array_merge($dataOrang, $dataPendonor, $dataKunjungan, $dataPetugasMedis, $dataPengambilan);
 

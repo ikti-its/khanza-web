@@ -290,70 +290,48 @@
         }
 
         const savedMedisItems = <?= json_encode($saved_medis ?? []) ?>;
-        if (savedMedisItems.length > 0) {
-            const tbody = document.getElementById('bhpTableBody');
-            
-            savedMedisItems.forEach(item => {
-                if (String(item.id_pengambilan_darah) !== String(currentEditId)) {
-                    return;
-                }
-
-                const emptyRow = document.getElementById('emptyBhpRow');
-                if (emptyRow) emptyRow.remove();
-
-                const row = document.createElement('tr');
-                row.className = "border-b text-sm dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800/30";
-                row.innerHTML = `
-                    <td class="p-3 text-center font-medium text-gray-900 dark:text-white">
-                        ${item.kode_barang}
-                    </td>
-                    <td class="p-3 font-medium text-gray-900 dark:text-white">
-                        ${item.nama_barang}
-                        <input type="hidden" name="harga_medis[${item.id_barang}]" value="${item.harga}">
-                    </td>
-                    <td class="p-3 text-center">
-                        <input type="number" name="id_medis_donor[${item.id_barang}]" data-id="${item.id_barang}" data-type="medis" value="${item.jumlah}" min="1" class="w-16 text-center border border-gray-300 rounded p-1 dark:bg-slate-900 dark:text-white dark:border-gray-700">
-                    </td>
-                    <td class="p-3 text-center">
-                        <button type="button" onclick="removeBhpItem(this)" class="text-red-600 font-semibold hover:underline dark:text-red-400">Hapus</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
         const savedNonMedisItems = <?= json_encode($saved_non_medis ?? []) ?>;
-        if (savedNonMedisItems.length > 0) {
-            const tbody = document.getElementById('bhpTableBody');
+        const tbody = document.getElementById('bhpTableBody');
 
-            savedNonMedisItems.forEach(item => {
-                if (String(item.id_pengambilan_darah) !== String(currentEditId)) {
-                    return;
-                }
+        function renderSavedBhpRow(item, type) {
+            const emptyRow = document.getElementById('emptyBhpRow');
+            if (emptyRow) emptyRow.remove();
 
-                const emptyRow = document.getElementById('emptyBhpRow');
-                if (emptyRow) emptyRow.remove();
+            const masterDaftar = type === 'medis' ? masterMedis : masterNonMedis;
+            const masterMatch  = masterDaftar.find(m => String(m.id_barang) === String(item.id_barang));
+            const maksimalStok = masterMatch ? parseInt(masterMatch.stok) : parseInt(item.jumlah);
 
-                const row = document.createElement('tr');
-                row.className = "border-b text-sm dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800/30";
-                row.innerHTML = `
-                    <td class="p-3 text-center font-medium text-gray-900 dark:text-white">
-                        ${item.kode_barang}
-                    </td>
-                    <td class="p-3 font-medium text-gray-900 dark:text-white">
-                        ${item.nama_barang}
-                        <input type="hidden" name="harga_penunjang[${item.id_barang}]" value="${item.harga}">
-                    </td>
-                    <td class="p-3 text-center">
-                        <input type="number" name="id_penunjang_donor[${item.id_barang}]" data-id="${item.id_barang}" data-type="nonmedis" value="${item.jumlah}" min="1" class="w-16 text-center border border-gray-300 rounded p-1 dark:bg-slate-900 dark:text-white dark:border-gray-700">
-                    </td>
-                    <td class="p-3 text-center">
-                        <button type="button" onclick="removeBhpItem(this)" class="text-red-600 font-semibold hover:underline dark:text-red-400">Hapus</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
+            const inputName = type === 'medis' ? 'id_medis_donor' : 'id_penunjang_donor';
+            const priceName = type === 'medis' ? 'harga_medis' : 'harga_penunjang';
+
+            const row = document.createElement('tr');
+            row.className = "border-b text-sm dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800/30";
+            row.innerHTML = `
+                <td class="p-3 text-center font-medium text-gray-900 dark:text-white">${item.kode_barang}</td>
+                <td class="p-3 font-medium text-gray-900 dark:text-white">
+                    ${item.nama_barang}
+                    <input type="hidden" name="${priceName}[${item.id_barang}]" value="${item.harga}">
+                </td>
+                <td class="p-3 text-center">
+                    <input type="number" 
+                           name="${inputName}[${item.id_barang}]" 
+                           data-id="${item.id_barang}" 
+                           data-type="${type}" 
+                           value="${item.jumlah}" 
+                           min="1" 
+                           max="${maksimalStok}"
+                           oninput="cekBatasStokBhp(this, ${maksimalStok}, '${item.nama_barang}')"
+                           class="w-full max-w-[80px] text-center border border-gray-300 rounded p-1 dark:bg-slate-900 dark:text-white dark:border-gray-700">
+                </td>
+                <td class="p-3 text-center">
+                    <button type="button" onclick="removeBhpItem(this)" class="text-red-600 font-semibold hover:underline dark:text-red-400">Hapus</button>
+                </td>
+            `;
+            tbody.appendChild(row);
         }
+
+        savedMedisItems.forEach(item => renderSavedBhpRow(item, 'medis'));
+        savedNonMedisItems.forEach(item => renderSavedBhpRow(item, 'nonmedis'));
 
         const tabelBhpBody = document.getElementById('bhpTableBody');
         if (tabelBhpBody) {
