@@ -13,35 +13,31 @@
         <div class="space-y-6">
             
             <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Nomor Antrian</span>
-                <div class="w-full lg:w-1/4">
-                    <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                        <?= esc($baris['nomor_antrian'] ?? '-') ?>
-                    </span>
-                </div>
-
-                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Nomor Kunjungan</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Nomor Kunjungan</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white">
                         <?= esc($baris['nomor_kunjungan'] ?? '-') ?>
                     </span>
                 </div>
-            </div>
 
-            <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Tanggal Kunjungan</span>
+                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Tanggal Kunjungan</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white">
                         <?= !empty($baris['tanggal_kunjungan']) ? (new IntlDateFormatter('id_ID', IntlDateFormatter::LONG, IntlDateFormatter::SHORT))->format(strtotime($baris['tanggal_kunjungan'])) : '-' ?> WIB
                     </span>
                 </div>
+            </div>
 
-                <span class="block mt-4 md:my-0 md:ml-10 md:mr-12 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Nomor Pendonor</span>
+            <div class="sm:block md:flex items-center py-3">
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Nomor Pendonor</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-mono font-bold text-teal-700 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded-md dark:bg-teal-950/40 dark:text-teal-400 dark:border-teal-900 shadow-sm">
                         <?= esc($baris['nomor_pendonor'] ?? '-') ?>
                     </span>
                 </div>
+
+                <span class="block md:ml-10 md:w-1/4"></span>
+                <div class="lg:w-1/4 hidden lg:block"></div>
             </div>
 
             <div id="cardPendonor" class="mt-6 bg-slate-50 border border-slate-200 rounded-xl p-5 dark:bg-slate-800 dark:border-slate-700 shadow-sm">

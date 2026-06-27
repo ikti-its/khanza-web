@@ -16,27 +16,21 @@
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
-                    Nomor Antrian<span class="text-red-600">*</span>
-                </label>
-                <input type="text" name="nomor_antrian" value="<?= $baris['nomor_antrian'] ?? '' ?>" 
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100" readonly required>
-
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Nomor Kunjungan<span class="text-red-600">*</span>
                 </label>
                 <input type="text" name="nomor_kunjungan" value="<?= $baris['nomor_kunjungan'] ?? '' ?>" 
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100" readonly required>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Tanggal Kunjungan<span class="text-red-600">*</span>
+                </label>
+                <input type="datetime-local" name="tanggal_kunjungan" value="<?= isset($baris['tanggal_kunjungan']) && $baris['tanggal_kunjungan'] !== '' ? date('Y-m-d\TH:i', strtotime($baris['tanggal_kunjungan'])) : date('Y-m-d\TH:i') ?>"
+                       max="<?= date('Y-m-d\TH:i') ?>" 
+                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
-                    Tanggal Kunjungan<span class="text-red-600">*</span>
-                </label>
-                <input type="datetime-local" name="tanggal_kunjungan" value="<?= isset($baris['tanggal_kunjungan']) && $baris['tanggal_kunjungan'] !== '' ? date('Y-m-d\TH:i', strtotime($baris['tanggal_kunjungan'])) : date('Y-m-d\TH:i') ?>"
-                       max="<?= date('Y-m-d\TH:i') ?>"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
-
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Nomor Pendonor<span class="text-red-600">*</span>
                 </label>
                 <div class="w-full lg:w-1/4 flex gap-x-2">

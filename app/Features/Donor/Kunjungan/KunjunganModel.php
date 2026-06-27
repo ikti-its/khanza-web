@@ -14,7 +14,6 @@ final class KunjunganModel extends ModelTemplate
             new KunjunganDatabase(),
             [
                 'id_kunjungan'      => V::DEFAULT(),
-                'nomor_antrian'     => V::DEFAULT(),
                 'nomor_kunjungan'   => V::DEFAULT(),
                 'tanggal_kunjungan' => V::DEFAULT(),
             ],
@@ -47,7 +46,6 @@ final class KunjunganModel extends ModelTemplate
             ->table('donor.kunjungan k')
             ->select([
                 'k.id_kunjungan',
-                'k.nomor_antrian',
                 'k.nomor_kunjungan',
                 'k.tanggal_kunjungan',
                 'p.id_pendonor',

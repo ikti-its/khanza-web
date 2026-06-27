@@ -29,7 +29,6 @@ final class KunjunganController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_kunjungan',      'ID Kunjungan'],
-                [SHOW, REQUIRED, I::TEXT,  'nomor_antrian',     'Nomor Antrian'],
                 [SHOW, REQUIRED, I::TEXT,  'nomor_kunjungan',   'Nomor Kunjungan'],
                 [SHOW, REQUIRED, I::DTIME, 'tanggal_kunjungan', 'Tanggal Kunjungan'],
                 [SHOW, REQUIRED, I::INDEX, 'id_pendonor',       'ID Pendonor'],
@@ -51,7 +50,6 @@ final class KunjunganController extends ControllerTemplate
         $data_tabel = $this->model->get_data_tabel($perPage, $offset);
 
         $konfig = [
-            [1, 'No. Antrian',       'nomor_antrian',     'teks',        0],
             [1, 'Nomor Kunjungan',   'nomor_kunjungan',   'teks',        0],
             [1, 'Tanggal Kunjungan', 'tanggal_kunjungan', 'tanggal_jam', 0],
             [1, 'Nomor Pendonor',    'nomor_pendonor',    'teks',        0],
@@ -97,11 +95,11 @@ final class KunjunganController extends ControllerTemplate
             ->where('DATE(tanggal_kunjungan)', $tanggalHariIni)
             ->countAllResults();
 
-        $nextAntrian = $jumlahKunjunganHariIni + 1;
-        $nomorAntrianOtomatis = str_pad((string)$nextAntrian, 3, '0', STR_PAD_LEFT);
+        $nextUrutan = $jumlahKunjunganHariIni + 1;
+        $suffixUrutan = str_pad((string)$nextUrutan, 3, '0', STR_PAD_LEFT);
 
         $formatTanggalPendek = date('Ymd');
-        $nomorKunjunganOtomatis = 'REG-' . $formatTanggalPendek . '-' . $nomorAntrianOtomatis;
+        $nomorKunjunganOtomatis = 'REG-' . $formatTanggalPendek . '-' . $suffixUrutan;
 
         foreach ($fieldsKunjunganMatang as $fieldKunjungan) {
             $columnKunjungan = $fieldKunjungan[2];
@@ -112,9 +110,6 @@ final class KunjunganController extends ControllerTemplate
 
             if ($columnKunjungan === 'tanggal_kunjungan') {
                 $mockBaris[$columnKunjungan] = $tanggalHariIni;
-            } elseif ($columnKunjungan === 'nomor_antrian') {
-                $mockBaris[$columnKunjungan] = $nomorAntrianOtomatis;
-                $fieldKunjungan[3] = 'indeks';
             } elseif ($columnKunjungan === 'nomor_kunjungan') {
                 $mockBaris[$columnKunjungan] = $nomorKunjunganOtomatis;
                 $fieldKunjungan[3] = 'indeks';
