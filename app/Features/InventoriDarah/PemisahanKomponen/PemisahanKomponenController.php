@@ -15,7 +15,7 @@ final class PemisahanKomponenController extends ControllerTemplate
         parent::__construct(
             new PemisahanKomponenModel(),
             [
-                ['Inventaris Darah',   'inventaris_darah'],
+                ['Inventori Darah',   'inventori_darah'],
                 ['Pemisahan Komponen', 'pemisahan_komponen'],
             ],
             'Pemisahan Komponen',
@@ -25,6 +25,7 @@ final class PemisahanKomponenController extends ControllerTemplate
                 // A::AUDIT,
                 // A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_pemisahan',         'ID Pemisahan'],
@@ -34,6 +35,42 @@ final class PemisahanKomponenController extends ControllerTemplate
                 [SHOW, REQUIRED, I::INDEX, 'id_petugas',           'Petugas'],
             ],
         );
+    }
+
+    /**
+     * OVERRIDE: Halaman Utama Pemisahan Komponen
+     */
+    #[\Override]
+    final public function index(): string
+    {
+        $currentPage = max(1, (int) ($this->request->getGet('page') ?? 1));
+        $perPage     = 10;
+        $offset      = ($currentPage - 1) * $perPage;
+
+        $totalRows  = $this->model->count_filtered();
+        $data_tabel = $this->model->get_data_tabel($perPage, $offset);
+
+        $konfig = [
+            [1, 'No. Pengambilan',    'nomor_pengambilan',  'teks',    0],
+            [1, 'Nomor Bag',          'no_bag',             'teks',    0],
+            [1, 'Tanggal Pemisahan',  'tanggal_pemisahan',  'tanggal', 0],
+            [1, 'Shift',              'nama_shift',         'teks',    0],
+            [1, 'Petugas',            'nama_petugas',       'teks',    0],
+        ];
+
+        return view('/layouts/data', [
+            'judul'        => $this->title,
+            'breadcrumbs'  => $this->breadcrumbs,
+            'meta_data'    => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'modul_path'   => $this->get_uri_path(),
+            'kolom_id'     => $this->primary_key,
+            'konfig'       => $konfig,
+            'aksi'         => $this->actions,
+            'tabel'        => $data_tabel,
+            'row_alert'    => [],
+            'child_link'   => null,
+            'query_string' => '',
+        ]);
     }
 
     /**
@@ -363,6 +400,90 @@ final class PemisahanKomponenController extends ControllerTemplate
             'tanggal_kadaluarsa'  => $tanggalKadaluarsa,
             'id_sumber_darah'     => $idSumberDarah,
             'id_status_stok'      => $idStatusStok,
+        ]);
+    }
+
+    /**
+     * Menampilkan Halaman Detail Pemisahan Komponen
+     */
+    final public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataPemisahan = $this->model->find($id);
+        if (!$dataPemisahan) {
+            $dataPemisahan = [];
+        }
+
+        $dataPengambilan = [];
+        $dataPetugas     = [];
+
+        if (!empty($dataPemisahan['id_pengambilan_darah'])) {
+            $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
+            $rawPengambilan = $modelPengambilan->find($dataPemisahan['id_pengambilan_darah']) ?? [];
+            
+            $dataPengambilan = [
+                'nomor_pengambilan' => $rawPengambilan['nomor_pengambilan'] ?? '',
+                'no_bag'            => $rawPengambilan['no_bag'] ?? '',
+            ];
+        }
+
+        if (!empty($dataPemisahan['id_petugas'])) {
+            $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
+            $petugasRow   = $modelPetugas->find($dataPemisahan['id_petugas']) ?? [];
+
+            if (!empty($petugasRow['id_orang'])) {
+                $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
+                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+                
+                if (isset($orangPetugasRow['nama'])) {
+                    $dataPetugas['nama_petugas'] = $orangPetugasRow['nama'];
+                }
+            }
+        }
+
+        $komponenTerpilih = $this->model->getHasilPemisahan($id);
+
+        $bhpMedis     = $this->model->getBhpMedisDetail($id);
+        $bhpPenunjang = $this->model->getBhpPenunjangDetail($id);
+
+        $baris = array_merge($dataPengambilan, $dataPemisahan, $dataPetugas);
+
+        $konfigPemisahan = $this->get_fields_with_options(false, true);
+
+        foreach ($konfigPemisahan as $field) {
+            $colName = $field[2];
+            $options = $field[5] ?? [];
+
+            if (!empty($options) && isset($baris[$colName])) {
+                $idMentah = $baris[$colName];
+                foreach ($options as $opt) {
+                    if ((string)$opt[1] === (string)$idMentah) {
+                        $baris[$colName] = $opt[0];
+                        break;
+                    }
+                }
+            }
+        }
+
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail']
+        ];
+
+        return view('/admin/inventoridarah/detail_pemisahankomponen', [
+            'judul'              => 'Detail ' . $this->title,
+            'breadcrumbs'        => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'         => $this->get_uri_path(),
+            'baris'              => $baris,
+            'komponen_terpilih'  => $komponenTerpilih,
+            'bhp_medis'          => $bhpMedis,    
+            'bhp_penunjang'      => $bhpPenunjang, 
         ]);
     }
 }
