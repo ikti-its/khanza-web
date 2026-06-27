@@ -14,7 +14,7 @@ final class StokDarahController extends ControllerTemplate
         parent::__construct(
             new StokDarahModel(),
             [
-                ['Inventaris Darah', 'inventaris_darah'],
+                ['Inventori Darah',  'inventori_darah'],
                 ['Stok Darah',       'stok_darah'],
             ],
             'Stok Darah',

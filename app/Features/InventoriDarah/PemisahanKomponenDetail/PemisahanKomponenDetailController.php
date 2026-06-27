@@ -14,7 +14,7 @@ final class PemisahanKomponenDetailController extends ControllerTemplate
         parent::__construct(
             new PemisahanKomponenDetailModel(),
             [
-                ['Inventaris Darah',          'inventaris_darah'],
+                ['Inventori Darah',           'inventori_darah'],
                 ['Pemisahan Komponen Detail', 'pemisahan_komponen_detail'],
             ],
             'Pemisahan Komponen Detail',
