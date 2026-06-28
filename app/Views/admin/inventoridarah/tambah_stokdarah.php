@@ -98,19 +98,8 @@
                     <?php endforeach; ?>
                 </select>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Status Stok<span class="text-red-600">*</span>
-                </label>
-                <select name="id_status_stok" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800 h-[38px]" required>
-                    <option value="">-- Pilih --</option>
-                    <?php
-                    $optionsStat = [];
-                    foreach ($konfig as $field) { if ($field[2] === 'id_status_stok') { $optionsStat = $field[5] ?? []; break; } }
-                    foreach ($optionsStat as $opt) : $selected = ((string)old('id_status_stok', $baris['id_status_stok'] ?? '') === (string)$opt[1]) ? 'selected' : '';
-                    ?>
-                        <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <div class="block mt-5 md:my-0 md:ml-10 mb-2 w-1/5"></div>
+                <div class="w-full lg:w-1/4"></div>
             </div>
 
             <?= view('components/form/submit_button') ?>

@@ -6,6 +6,7 @@ namespace App\Features\InventoriDarah\StokDarah;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class StokDarahController extends ControllerTemplate
 {
@@ -80,6 +81,39 @@ final class StokDarahController extends ControllerTemplate
             'baris'       => $mockBaris,
             'form_action' => '/submittambah',
         ]);
+    }
+
+    /**
+     * OVERRIDE: Memproses simpan data stok darah
+     */
+    #[\Override]
+    final public function create(): string|RedirectResponse
+    {
+        $dataStok = $this->request->getPost();
+        $dataStok['id_status_stok'] = 2;
+
+        $this->model->db->transStart();
+        try {
+            $this->model->insert($dataStok);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menyimpan data stok darah.');
+            }
+
+            session()->setFlashdata('success', 'Data stok darah berhasil disimpan.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+            return redirect()->back()->withInput();
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 
     /**
