@@ -83,6 +83,43 @@ final class StokDarahController extends ControllerTemplate
     }
 
     /**
+     * OVERRIDE: Menampilkan Halaman Ubah Data Stok Darah
+     */
+    #[\Override]
+    final public function update_page(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $baris = $this->model->find($id);
+        if (!$baris) {
+            $baris = [];
+        }
+
+        $konfigFields = $this->get_fields_with_options(false, true);
+
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if (($baris[$namaKolom] ?? null) === null) {
+                $baris[$namaKolom] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Ubah', 'icon' => 'Ubah']
+        ];
+
+        return view('/admin/inventoridarah/tambah_stokdarah', [
+            'judul'       => 'Ubah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'konfig'      => $konfigFields,
+            'baris'       => $baris,
+            'form_action' => '/submitedit/' . $id,
+        ]);
+    }
+
+    /**
      * Menampilkan data modal stok darah
      */
     public function list()
