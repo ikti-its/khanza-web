@@ -223,7 +223,7 @@ final class JadwalOperasiController extends ControllerTemplate
             $this->model->update($id, $data);
 
             session()->setFlashdata('success', 'Jadwal operasi berhasil disimpan.');
-            return redirect()->to('/operasi/permintaan-operasi/data');
+            return redirect()->to('/operasi/jadwal-operasi/data');
 
         } catch (\Exception $e) {
             $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
