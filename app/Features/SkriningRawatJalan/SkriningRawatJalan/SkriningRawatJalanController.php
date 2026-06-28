@@ -24,6 +24,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
                 A::UPDATE,
                 A::DELETE,
                 A::REGISTRASI,
+                A::PRINT,
             ],
             [
                 [HIDE,      OPTIONAL, I::INDEX,   'id_skrining',      'ID Skrining'],
@@ -65,6 +66,28 @@ final class SkriningRawatJalanController extends ControllerTemplate
             ->where('p.nomor_rm', $noRm)
             ->get()
             ->getRowArray() ?? [];
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // PRINT
+    // ──────────────────────────────────────────────────────────
+
+    #[\Override]
+    public function print(int|string $id): string
+    {
+        $baris = $this->model->find_one($id);
+        if (empty($baris)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
+        }
+
+        $dataPasien = !empty($baris['no_rm']) ? $this->fetchDataPasienByRm($baris['no_rm']) : [];
+
+        return view('components/cetak/cetak_skrining_rawat_jalan', [
+            'judul'      => 'Cetak Skrining Rawat Jalan',
+            'baris'      => $baris,
+            'dataPasien' => $dataPasien,
+        ]);
     }
 
     // ──────────────────────────────────────────────────────────
