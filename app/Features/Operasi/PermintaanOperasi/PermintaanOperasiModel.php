@@ -21,6 +21,7 @@ final class PermintaanOperasiModel extends ModelTemplate
                 'nomor_reg' => [
                     'nomor_reg',
                     'id_pasien' => [
+                        'nomor_rm',
                         'id_orang' => ['nama'],
                     ],
                 ],
