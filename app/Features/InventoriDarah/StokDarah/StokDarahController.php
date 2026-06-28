@@ -154,6 +154,47 @@ final class StokDarahController extends ControllerTemplate
     }
 
     /**
+     * OVERRIDE: Mengeksekusi Simpan Perubahan Data Stok Darah
+     */
+    #[\Override]
+    final public function update(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->index();
+        
+        $dataLama = $this->model->find($id);
+        if (!$dataLama) {
+            session()->setFlashdata('error', 'Gagal memperbarui. Data stok darah tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $dataStok = $this->request->getPost();
+        $dataStok['id_status_stok'] = $dataLama['id_status_stok'];
+
+        $this->model->db->transStart();
+        try {
+            $this->model->update($id, $dataStok);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal memperbarui data stok darah.');
+            }
+
+            session()->setFlashdata('success', 'Data stok darah berhasil diperbarui.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+            return redirect()->back()->withInput();
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
+    }
+
+    /**
      * Menampilkan data modal stok darah
      */
     public function list()
