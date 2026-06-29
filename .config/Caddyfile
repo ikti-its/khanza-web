@@ -19,6 +19,14 @@ https://localhost {
     # PHP server (FrankenPHP)
     php_server
 
+    @static {
+    path *.svg *.png *.jpg *.jpeg *.webp *.gif *.ico
+    }
+
+    header @static {
+        Cache-Control "public, max-age=31536000, immutable"
+    }
+
     # Logging error ke file
     log {
         output file writable/logs/caddy_access.log
