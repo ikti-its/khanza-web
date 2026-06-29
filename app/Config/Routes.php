@@ -43,7 +43,7 @@ $routes->get('/datapegawai', 'akun::dataPegawai');
 
 $routes->get('/admin', 'auth::dashboard');
 
-$routes->get('/logout', 'auth::logout');
+$routes->get('/logout', [\App\Core\Controller\AuthController::class, 'logout']);
 
 $routes->get('/datapegawai', 'admin::dataPegawai');
 
