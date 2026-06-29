@@ -88,7 +88,7 @@ final class PemisahanKomponenController extends ControllerTemplate
         $controllerPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahController();
         $konfigPengambilan     = $controllerPengambilan->get_fields_with_options(false, true);
 
-        $modelKomponen = new \App\Features\Darah\KomponenDarah\KomponenDarahModel(); 
+        $modelKomponen = new \App\Features\InventoriDarah\KomponenDarah\KomponenDarahModel(); 
         $masterKomponen = $modelKomponen->findAll();
 
         $modelBhpMedis    = new \App\Features\LogistikUTD\PengambilanMedis\PengambilanMedisModel();
@@ -214,7 +214,7 @@ final class PemisahanKomponenController extends ControllerTemplate
 
             if (!empty($komponenTerpilih) && is_array($komponenTerpilih)) {
                 $modelKompDetail   = new \App\Features\InventoriDarah\PemisahanKomponenDetail\PemisahanKomponenDetailModel(); 
-                $modelMasterKomp   = new \App\Features\Darah\KomponenDarah\KomponenDarahModel();
+                $modelMasterKomp   = new \App\Features\InventoriDarah\KomponenDarah\KomponenDarahModel();
 
                 $idPengambilan      = $dataPemisahan['id_pengambilan_darah'];
                 $modelPengambilan   = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();

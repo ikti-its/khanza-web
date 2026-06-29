@@ -21,7 +21,7 @@ final class AllRoutes extends RouteGroup
                 \App\Features\Role\RoleRoutes::class,
                 \App\Features\RekamMedis\RekamMedisRoutes::class,
                 \App\Features\RawatInap\RawatInapRoutes::class,
-                \App\Features\Darah\DarahRoutes::class,
+                // \App\Features\Darah\DarahRoutes::class,
                 \App\Features\Donor\DonorRoutes::class,
                 \App\Features\InventoriDarah\InventoriDarahRoutes::class,
                 \App\Features\UjiDarah\UjiDarahRoutes::class,

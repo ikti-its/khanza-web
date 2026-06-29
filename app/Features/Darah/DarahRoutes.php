@@ -13,7 +13,6 @@ final class DarahRoutes extends RouteTemplate
             'Darah',
             [
                 \App\Features\Darah\GolonganDarah\GolonganDarahController::class => 'HIDE',
-                \App\Features\Darah\KomponenDarah\KomponenDarahController::class,
                 \App\Features\Darah\Rhesus\RhesusController::class => 'HIDE',
             ],
             'darah.svg',

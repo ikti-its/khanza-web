@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\Darah\KomponenDarah;
+namespace App\Features\InventoriDarah\KomponenDarah;
 
 use App\Core\Model\ModelTemplate;
 use App\Core\Model\ValidationType as V;

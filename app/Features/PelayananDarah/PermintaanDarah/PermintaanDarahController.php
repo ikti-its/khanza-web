@@ -59,7 +59,7 @@ final class PermintaanDarahController extends ControllerTemplate
         $konfigPasien     = $controllerPasien->fields;
         $konfigOrang      = $controllerOrang->fields;
 
-        $modelKomponen = new \App\Features\Darah\KomponenDarah\KomponenDarahModel();
+        $modelKomponen = new \App\Features\InventoriDarah\KomponenDarah\KomponenDarahModel();
         $modelGolDarah = new \App\Features\Darah\GolonganDarah\GolonganDarahModel();
         $modelRhesus   = new \App\Features\Darah\Rhesus\RhesusModel();
 
@@ -297,7 +297,7 @@ final class PermintaanDarahController extends ControllerTemplate
             $konfigGabungan[] = $fieldPermintaan;
         }
 
-        $modelKomponen = new \App\Features\Darah\KomponenDarah\KomponenDarahModel();
+        $modelKomponen = new \App\Features\InventoriDarah\KomponenDarah\KomponenDarahModel();
         $modelGolDarah = new \App\Features\Darah\GolonganDarah\GolonganDarahModel();
         $modelRhesus   = new \App\Features\Darah\Rhesus\RhesusModel();
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\Darah\KomponenDarah;
+namespace App\Features\InventoriDarah\KomponenDarah;
 
 use App\Core\Database\Template\DatabaseTemplate;
 use App\Core\Database\Template\SemanticType as T;
@@ -11,7 +11,7 @@ final class KomponenDarahDatabase extends DatabaseTemplate
     public function __construct()
     {
         parent::__construct(
-            'darah',
+            'inventori_darah',
             'komponen_darah',
             [
                 'id_komponen'       => T::ID(10),

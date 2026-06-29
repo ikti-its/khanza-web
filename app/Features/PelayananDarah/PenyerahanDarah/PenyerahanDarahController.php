@@ -197,7 +197,7 @@ final class PenyerahanDarahController extends ControllerTemplate
             if (!empty($stokDarahTerpilih) && is_array($stokDarahTerpilih)) {
                 $modelDetail     = new \App\Features\PelayananDarah\PenyerahanDarahDetail\PenyerahanDarahDetailModel();
                 $modelStokDarah  = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
-                $modelKomponen   = new \App\Features\Darah\KomponenDarah\KomponenDarahModel();
+                $modelKomponen   = new \App\Features\InventoriDarah\KomponenDarah\KomponenDarahModel();
 
                 foreach ($stokDarahTerpilih as $idStokDarah) {
                     if (empty($idStokDarah)) continue;

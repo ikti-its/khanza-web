@@ -29,7 +29,7 @@ final class StokDarahDatabase extends DatabaseTemplate
             [
                 [
                     'id_komponen',
-                    \App\Features\Darah\KomponenDarah\KomponenDarahDatabase::class,
+                    \App\Features\InventoriDarah\KomponenDarah\KomponenDarahDatabase::class,
                     'id_komponen',
                 ],
                 [

@@ -25,6 +25,7 @@ final class StokDarahController extends ControllerTemplate
                 // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_stok_darah',       'ID Stok Darah'],
@@ -32,9 +33,9 @@ final class StokDarahController extends ControllerTemplate
                 [SHOW, REQUIRED, I::SELECT, 'id_komponen',         'Komponen'],
                 [SHOW, REQUIRED, I::SELECT, 'id_golongan_darah',   'Golongan Darah'],
                 [SHOW, REQUIRED, I::SELECT, 'id_rhesus',           'Rhesus'],
-                [SHOW, REQUIRED, I::DATE,   'tanggal_pengambilan', 'Tanggal Pengambilan'],
+                [HIDE, REQUIRED, I::DATE,   'tanggal_pengambilan', 'Tanggal Pengambilan'],
                 [SHOW, REQUIRED, I::DATE,   'tanggal_kadaluarsa',  'Tanggal Kadaluarsa'],
-                [SHOW, REQUIRED, I::SELECT, 'id_sumber_darah',     'Sumber Darah'],
+                [HIDE, REQUIRED, I::SELECT, 'id_sumber_darah',     'Sumber Darah'],
                 [SHOW, REQUIRED, I::SELECT, 'id_status_stok',      'Status Stok'],
             ],
         );

@@ -59,7 +59,7 @@ final class StokDarahModel extends ModelTemplate
                 r.kode_rhesus AS rhesus,
                 (COALESCE(k.jasa_sarana, 0) + COALESCE(k.paket_bhp, 0) + COALESCE(k.kso, 0) + COALESCE(k.manajemen, 0)) AS total_biaya
             ")
-            ->join('darah.komponen_darah k', 'k.id_komponen = ' . $this->table . '.id_komponen', 'inner')
+            ->join('inventori_darah.komponen_darah k', 'k.id_komponen = ' . $this->table . '.id_komponen', 'inner')
             ->join('darah.golongan_darah g', 'g.id_golongan_darah = ' . $this->table . '.id_golongan_darah', 'left')
             ->join('darah.rhesus r', 'r.id_rhesus = ' . $this->table . '.id_rhesus', 'left')
             ->where($this->table . '.tanggal_kadaluarsa >=', $hariIni)

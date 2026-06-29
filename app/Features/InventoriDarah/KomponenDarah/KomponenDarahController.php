@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\Darah\KomponenDarah;
+namespace App\Features\InventoriDarah\KomponenDarah;
 
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
@@ -14,8 +14,8 @@ final class KomponenDarahController extends ControllerTemplate
         parent::__construct(
             new KomponenDarahModel(),
             [
-                ['Darah',          'darah'],
-                ['Komponen Darah', 'komponen_darah'],
+                ['Inventori Darah',  'inventori_darah'],
+                ['Komponen Darah',   'komponen_darah'],
             ],
             'Komponen Darah',
             [

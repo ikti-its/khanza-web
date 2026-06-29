@@ -12,6 +12,7 @@ final class InventoriDarahRoutes extends RouteTemplate
         parent::__construct(
             'Inventori Darah',
             [
+                \App\Features\InventoriDarah\KomponenDarah\KomponenDarahController::class,
                 \App\Features\InventoriDarah\PemisahanKomponen\PemisahanKomponenController::class,
                 \App\Features\InventoriDarah\PemisahanKomponenDetail\PemisahanKomponenDetailController::class => 'HIDE',
                 \App\Features\InventoriDarah\StokDarah\StokDarahController::class,

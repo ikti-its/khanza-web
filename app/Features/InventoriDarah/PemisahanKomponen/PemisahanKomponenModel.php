@@ -86,7 +86,7 @@ final class PemisahanKomponenModel extends ModelTemplate
     {
         return $this->db->table('inventori_darah.pemisahan_komponen_detail as pkd')
             ->select('pkd.*, k.kode_komponen, k.nama_komponen, k.masa_berlaku_hari')
-            ->join('darah.komponen_darah k', 'k.id_komponen = pkd.id_komponen')
+            ->join('inventori_darah.komponen_darah k', 'k.id_komponen = pkd.id_komponen')
             ->where('pkd.id_pemisahan', $idPemisahan)
             ->get()
             ->getResultArray();
