@@ -11,7 +11,7 @@
             $child_label = $child_link['label'] ?? 'Detail';
             echo '<div class="px-3 py-1.5"><a href="' . $child_url . '" class="gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-semibold dark:text-blue-400">' . esc($child_label) . '</a></div>';
         }
-        $aksi_list = ['notif', 'tambah', 'audit', 'cetak', 'tindakan', 'detail', 'detail2', 'ubah', 'hapus', 'validasi', 'ambulans', 'pilih', 'pisah', 'uji', 'registrasi', 'sampel', 'jadwalkan', 'lembaroperasi', 'kembali', 'bayar'];
+        $aksi_list = ['notif', 'tambah', 'audit', 'cetak', 'tindakan', 'detail', 'detail2', 'ubah', 'hapus', 'validasi', 'ambulans', 'pilih', 'pisah', 'uji', 'registrasi', 'sampel', 'jadwalkan', 'lembaroperasi', 'kembali', 'bayar', 'filter'];
         if (ENVIRONMENT === 'development') {
             foreach ($aksi as $key => $value) {
                 if (!in_array($key, $aksi_list)) {

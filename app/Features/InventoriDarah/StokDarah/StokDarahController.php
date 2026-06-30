@@ -26,6 +26,7 @@ final class StokDarahController extends ControllerTemplate
                 A::UPDATE,
                 A::DELETE,
                 A::DETAIL,
+                A::FILTER,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_stok_darah',       'ID Stok Darah'],
@@ -50,6 +51,19 @@ final class StokDarahController extends ControllerTemplate
         $hariIni = date('Y-m-d');
         $this->model->updateStatusKadaluarsa($hariIni);
 
+        $this->filters = [
+            'karantina'     => 'Karantina',
+            'tersedia'      => 'Tersedia',
+            'tidak_layak'   => 'Tidak Layak',
+            'terdistribusi' => 'Terdistribusi'
+        ];
+
+        $this->active_filter = $this->request->getGet('filter') ?: null;
+
+        if ($this->active_filter !== null && array_key_exists($this->active_filter, $this->filters)) {
+            $this->model->applyFilter($this->active_filter);
+        }
+    
         return parent::index();
     }
 

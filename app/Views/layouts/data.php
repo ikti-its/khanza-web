@@ -13,11 +13,13 @@
                 <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-gray-700">
                     <?php
                         echo view('components/header/data',[
-                            'judul'        => $judul,
-                            'modul_path'   => $modul_path,
-                            'aksi'         => $aksi,
-                            'query_string' => $query_string ?? '',
-                            'back_url'     => $back_url ?? null,
+                            'judul'         => $judul,
+                            'modul_path'    => $modul_path,
+                            'aksi'          => $aksi,
+                            'query_string'  => $query_string ?? '',
+                            'back_url'      => $back_url ?? null,
+                            'filters'       => $filters ?? [],
+                            'active_filter' => $active_filter ?? null,
                         ]);
                         echo view('components/header/search_bar');
                         

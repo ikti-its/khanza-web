@@ -68,4 +68,23 @@ final class StokDarahModel extends ModelTemplate
             ->get()
             ->getResultArray();
     }
+
+    /**
+     * Memfilter data stok darah berdasarkan status
+     */
+    public function applyFilter(string $filter): self
+    {
+        $statusMap = [
+            'karantina'     => 1,
+            'tersedia'      => 2,
+            'tidak_layak'   => 3,
+            'terdistribusi' => 4,
+        ];
+
+        if (isset($statusMap[$filter])) {
+            $this->set_filter('id_status_stok', $statusMap[$filter]);
+        }
+
+        return $this;
+    }
 }

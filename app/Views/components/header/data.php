@@ -18,6 +18,13 @@
             if(isset($aksi['kembali']) && $aksi['kembali'] === true){
                 echo view('components/header/kembali', ['link' => $back_url ?? null]);
             }
+            if (isset($aksi['filter']) && $aksi['filter'] === true) {
+                echo view('components/header/filter_button', [
+                    'modul_path'    => $modul_path,
+                    'filters'       => $filters ?? [],
+                    'active_filter' => $active_filter ?? null,
+                ]);
+            }
             if(isset($aksi['tambah']) && $aksi['tambah'] === true){
                 $qs = (!empty($query_string)) ? '?' . $query_string : '';
                 echo view('components/header/tambah_button', [
