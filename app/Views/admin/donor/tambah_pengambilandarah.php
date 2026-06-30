@@ -183,25 +183,30 @@
                     </button>
                 </div>
 
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Status Pengambilan
-                </label>
-                <select name="id_status_pengambilan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
-                    <option value="">-- Pilih --</option>
-                    <?php 
-                    $optionsStatus = [];
-                    foreach ($konfig as $field) {
-                        if ($field[2] === 'id_status_pengambilan') {
-                            $optionsStatus = $field[5] ?? [];
-                            break;
+                <?php if ($isEdit) : ?>
+                    <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                        Status Pengambilan<span class="text-red-600">*</span>
+                    </label>
+                    <select name="id_status_pengambilan" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                        <option value="">-- Pilih --</option>
+                        <?php 
+                        $optionsStatus = [];
+                        foreach ($konfig as $field) {
+                            if ($field[2] === 'id_status_pengambilan') {
+                                $optionsStatus = $field[5] ?? [];
+                                break;
+                            }
                         }
-                    }
-                    foreach ($optionsStatus as $opt) : 
-                        $selected = ((string)($baris['id_status_pengambilan'] ?? '') === (string)$opt[1]) ? 'selected' : '';
-                    ?>
-                        <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
-                    <?php endforeach; ?>
-                </select>
+                        foreach ($optionsStatus as $opt) : 
+                            $selected = ((string)($baris['id_status_pengambilan'] ?? '') === (string)$opt[1]) ? 'selected' : '';
+                        ?>
+                            <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                        
+                <?php else : ?>
+                    <input type="hidden" name="id_status_pengambilan" value="">
+                <?php endif; ?>
             </div>
 
             <h4 class="text-xl font-bold text-gray-800 dark:text-white mt-10 mb-4">Penggunaan BHP</h4>
