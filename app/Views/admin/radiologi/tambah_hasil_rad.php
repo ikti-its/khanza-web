@@ -298,21 +298,31 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
                     <tbody>`;
 
         items.forEach((item, idx) => {
-            const p = `tindakan[${idx}]`;
+            const p          = `tindakan[${idx}]`;
+            const isBacaSaja = !!item.is_baca_saja && item.is_baca_saja !== 'f';
+
+            const teknisCells = isBacaSaja
+                ? `<td colspan="8" class="p-2 border text-center text-sm text-gray-400 italic dark:border-gray-700 dark:text-gray-500">Parameter teknis tidak diperlukan</td>`
+                : `${inp(`${p}[proyeksi]`,               'text',   'maxlength="20" placeholder="Contoh: AP, PA"',         item.proyeksi               ?? '')}
+                   ${inp(`${p}[kilovoltage_kv]`,         'number', 'step="0.01" min="20"  max="160"  placeholder="kV"',   item.kilovoltage_kv         ?? '')}
+                   ${inp(`${p}[milliampere_second_mas]`, 'number', 'step="0.01" min="0.1" max="1000" placeholder="mAs"',  item.milliampere_second_mas ?? '')}
+                   ${inp(`${p}[focus_film_distance_ffd]`,'number', 'step="1"    min="40"  max="300"  placeholder="cm"',   item.focus_film_distance_ffd ?? '')}
+                   ${inp(`${p}[back_scatter_factor_bsf]`,'number', 'step="0.01" min="1.0" max="2.0"  placeholder="BSF"',  item.back_scatter_factor_bsf ?? '')}
+                   ${inp(`${p}[inaktivasi]`,             'text',   'maxlength="50" placeholder="Contoh: manual"',         item.inaktivasi             ?? '')}
+                   ${inp(`${p}[jumlah_penyinaran]`,      'number', 'step="1"    min="1"   max="50"   placeholder="kali"', item.jumlah_penyinaran      ?? '')}
+                   ${inp(`${p}[dosis_radiasi]`,          'text',   'maxlength="50" placeholder="Contoh: 1.2 mGy"',        item.dosis_radiasi          ?? '')}`;
+
+            const bakaSajaBadge = isBacaSaja
+                ? `<span class="ml-1 px-1.5 py-0.5 text-xs rounded bg-teal-100 text-teal-800 dark:bg-teal-800/30 dark:text-teal-300">Baca Saja</span>`
+                : '';
+
             html += `
                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800">
                     <td class="p-2 border text-center dark:border-gray-700">
-                        ${item.nama_pemeriksaan}
+                        ${item.nama_pemeriksaan}${bakaSajaBadge}
                         <input type="hidden" name="${p}[id_permintaan_item]" value="${item.id_permintaan_item}">
                     </td>
-                    ${inp(`${p}[proyeksi]`,               'text',   'maxlength="20" placeholder="Contoh: AP, PA"',         item.proyeksi               ?? '')}
-                    ${inp(`${p}[kilovoltage_kv]`,         'number', 'step="0.01" min="20"  max="160"  placeholder="kV"',   item.kilovoltage_kv         ?? '')}
-                    ${inp(`${p}[milliampere_second_mas]`, 'number', 'step="0.01" min="0.1" max="1000" placeholder="mAs"',  item.milliampere_second_mas ?? '')}
-                    ${inp(`${p}[focus_film_distance_ffd]`,'number', 'step="1"    min="40"  max="300"  placeholder="cm"',   item.focus_film_distance_ffd ?? '')}
-                    ${inp(`${p}[back_scatter_factor_bsf]`,'number', 'step="0.01" min="1.0" max="2.0"  placeholder="BSF"',  item.back_scatter_factor_bsf ?? '')}
-                    ${inp(`${p}[inaktivasi]`,             'text',   'maxlength="50" placeholder="Contoh: manual"',         item.inaktivasi             ?? '')}
-                    ${inp(`${p}[jumlah_penyinaran]`,      'number', 'step="1"    min="1"   max="50"   placeholder="kali"', item.jumlah_penyinaran      ?? '')}
-                    ${inp(`${p}[dosis_radiasi]`,          'text',   'maxlength="50" placeholder="Contoh: 1.2 mGy"',        item.dosis_radiasi          ?? '')}
+                    ${teknisCells}
                     <td class="p-2 border text-center dark:border-gray-700">
                         <button type="button" onclick="toggleEkspertise(${idx})" class="text-blue-600 hover:underline text-sm">▼</button>
                     </td>
