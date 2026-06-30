@@ -148,16 +148,16 @@ final class HasilRadController extends ControllerTemplate
         if (!empty($tindakanList)) {
             $batchTindakan = array_map(fn($tindakan) => [
                 'id_hasil_rad'            => $idHasilRad,
-                'id_permintaan_item'      => (int) ($tindakan['id_permintaan_item']      ?? 0),
-                'proyeksi'                => $tindakan['proyeksi']                       ?? '',
-                'kilovoltage_kv'          => (float) ($tindakan['kilovoltage_kv']        ?? 0),
-                'milliampere_second_mas'  => (float) ($tindakan['milliampere_second_mas'] ?? 0),
-                'focus_film_distance_ffd' => (float) ($tindakan['focus_film_distance_ffd'] ?? 0),
-                'back_scatter_factor_bsf' => (float) ($tindakan['back_scatter_factor_bsf'] ?? 0),
-                'inaktivasi'              => $tindakan['inaktivasi']                     ?? '',
-                'jumlah_penyinaran'       => (int) ($tindakan['jumlah_penyinaran']       ?? 0),
-                'dosis_radiasi'           => $tindakan['dosis_radiasi']                  ?? '',
-                'hasil_ekspertise'        => $tindakan['hasil_ekspertise']               ?? '',
+                'id_permintaan_item'      => (int) ($tindakan['id_permintaan_item']           ?? 0),
+                'proyeksi'                => ($tindakan['proyeksi']                ?? '') ?: null,
+                'kilovoltage_kv'          => ($tindakan['kilovoltage_kv']          ?? '') !== '' ? (float) $tindakan['kilovoltage_kv']          : null,
+                'milliampere_second_mas'  => ($tindakan['milliampere_second_mas']  ?? '') !== '' ? (float) $tindakan['milliampere_second_mas']  : null,
+                'focus_film_distance_ffd' => ($tindakan['focus_film_distance_ffd'] ?? '') !== '' ? (float) $tindakan['focus_film_distance_ffd'] : null,
+                'back_scatter_factor_bsf' => ($tindakan['back_scatter_factor_bsf'] ?? '') !== '' ? (float) $tindakan['back_scatter_factor_bsf'] : null,
+                'inaktivasi'              => ($tindakan['inaktivasi']              ?? '') ?: null,
+                'jumlah_penyinaran'       => ($tindakan['jumlah_penyinaran']       ?? '') !== '' ? (int) $tindakan['jumlah_penyinaran']          : null,
+                'dosis_radiasi'           => ($tindakan['dosis_radiasi']           ?? '') ?: null,
+                'hasil_ekspertise'        => ($tindakan['hasil_ekspertise']        ?? '') ?: null,
                 'id_template_rad'         => !empty($tindakan['id_template_rad']) ? (int) $tindakan['id_template_rad'] : null,
             ], $tindakanList);
 
@@ -293,6 +293,7 @@ final class HasilRadController extends ControllerTemplate
             ->table('radiologi.hasil_rad_tindakan hrt')
             ->select([
                 'hrt.id_hasil_tindakan', 'hrt.id_permintaan_item', 'r.kode_periksa', 'r.nama_pemeriksaan',
+                'pri.is_baca_saja',
                 'hrt.proyeksi', 'hrt.kilovoltage_kv', 'hrt.milliampere_second_mas', 'hrt.focus_film_distance_ffd',
                 'hrt.back_scatter_factor_bsf', 'hrt.inaktivasi', 'hrt.jumlah_penyinaran', 'hrt.dosis_radiasi',
                 'hrt.hasil_ekspertise', 'hrt.id_template_rad',
