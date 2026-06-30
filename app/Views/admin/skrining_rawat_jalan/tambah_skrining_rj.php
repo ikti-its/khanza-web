@@ -55,15 +55,62 @@ $konfigTanpaRM = array_values(array_filter($konfig, fn($f) => !in_array($f[2], [
 
             <?= view('components/form/isian', ['konfig' => $konfigTanpaRM, 'baris' => $baris]) ?>
 
+            <div id="peringatan-igd" class="hidden mb-5 p-4 rounded-lg border border-yellow-300 bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-700">
+                <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                    <div>
+                        <p class="text-sm font-semibold text-yellow-800 dark:text-yellow-300">Indikasi Kondisi Darurat Terdeteksi</p>
+                        <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">Pertimbangkan untuk mengarahkan pasien ke IGD berdasarkan kondisi berikut:</p>
+                        <ul id="peringatan-igd-daftar" class="mt-1 text-sm text-yellow-700 dark:text-yellow-400 list-disc list-inside"></ul>
+                    </div>
+                </div>
+            </div>
+
             <?= view('components/form/submit_button') ?>
         </form>
     </div>
 </div>
 
 <script>
+    const INDIKASI_IGD = [
+        { field: 'id_kesadaran',   nilai: '3', keterangan: 'Kesadaran: Tidak Sadar' },
+        { field: 'id_pernafasan',  nilai: '3', keterangan: 'Pernafasan: Tidak Bernafas' },
+        { field: 'id_pernafasan',  nilai: '2', keterangan: 'Pernafasan: Tampak Sesak' },
+        { field: 'id_nyeri_dada',  nilai: '3', keterangan: 'Nyeri Dada Kiri Tembus Punggung' },
+        { field: 'id_skala_nyeri', nilai: '6', keterangan: 'Skala Nyeri: Tak Tertahankan' },
+    ];
+
+    function cekIndikasiDarurat() {
+        const keputusan = document.querySelector('[name="id_keputusan"]')?.value;
+
+        const terdeteksi = INDIKASI_IGD.filter(({ field, nilai }) =>
+            document.querySelector(`[name="${field}"]`)?.value === nilai
+        );
+
+        const peringatanEl = document.getElementById('peringatan-igd');
+        const daftarEl     = document.getElementById('peringatan-igd-daftar');
+
+        if (terdeteksi.length === 0 || keputusan === '2') {
+            peringatanEl.classList.add('hidden');
+            return;
+        }
+
+        daftarEl.innerHTML = terdeteksi.map(k => `<li>${k.keterangan}</li>`).join('');
+        peringatanEl.classList.remove('hidden');
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         const tglInput = document.querySelector('[name="tgl_skrining"]');
         if (tglInput) tglInput.max = new Date().toISOString().split('T')[0];
+
+        const fieldDiamati = ['id_kesadaran', 'id_pernafasan', 'id_skala_nyeri', 'id_nyeri_dada', 'id_keputusan'];
+        fieldDiamati.forEach(name => {
+            document.querySelector(`[name="${name}"]`)?.addEventListener('change', cekIndikasiDarurat);
+        });
+
+        cekIndikasiDarurat();
     });
 
     function autofillPetugas(item) {
