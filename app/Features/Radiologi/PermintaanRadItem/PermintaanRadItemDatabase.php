@@ -17,6 +17,7 @@ final class PermintaanRadItemDatabase extends DatabaseTemplate
                 'id_permintaan_item' => T::ID(100_000_000),
                 'id_permintaan'      => T::FK_AUTO(),
                 'id_item'            => T::FK_AUTO(),
+                'is_baca_saja'       => T::BOOL(),
             ],
             'id_permintaan_item',
             [],

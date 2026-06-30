@@ -14,6 +14,7 @@ final class PermintaanRadItemModel extends ModelTemplate
             new PermintaanRadItemDatabase(),
             [
                 'id_permintaan_item' => V::DEFAULT(),
+                'is_baca_saja'       => V::DEFAULT(),
             ],
             [
                 'id_permintaan' => ['no_permintaan'],

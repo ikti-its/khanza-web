@@ -91,7 +91,7 @@ final class PermintaanRadController extends ControllerTemplate
         return $this->model->db
             ->table('radiologi.permintaan_rad_item pri')
             ->select([
-                'pri.id_item', 'r.kode_periksa', 'r.nama_pemeriksaan', 'r.tarif_dasar',
+                'pri.id_item', 'pri.is_baca_saja', 'r.kode_periksa', 'r.nama_pemeriksaan', 'r.tarif_dasar', 'r.tarif_baca',
             ])
             ->join('radiologi.ref_item_rad r', 'r.id_item = pri.id_item')
             ->where('pri.id_permintaan', $idPermintaan)
@@ -119,14 +119,14 @@ final class PermintaanRadController extends ControllerTemplate
         return $data;
     }
 
-    private function insertItems(int $idPermintaan, array $idItems): void
+    private function insertItems(int $idPermintaan, array $idItems, array $bacaSajaMap): void
     {
         if (empty($idItems)) return;
 
-        // REFACTOR: Menggunakan Batch Insert
         $data = array_map(fn($idItem) => [
             'id_permintaan' => $idPermintaan,
             'id_item'       => (int) $idItem,
+            'is_baca_saja'  => ($bacaSajaMap[(string) $idItem] ?? '0') === '1',
         ], $idItems);
 
         (new \App\Features\Radiologi\PermintaanRadItem\PermintaanRadItemModel())->insertBatch($data);
@@ -158,7 +158,8 @@ final class PermintaanRadController extends ControllerTemplate
     #[\Override]
     public function create(): string|RedirectResponse
     {
-        $idItems = $this->request->getPost('id_item') ?? [];
+        $idItems    = $this->request->getPost('id_item')      ?? [];
+        $bacaSajaMap = $this->request->getPost('is_baca_saja') ?? [];
         if (empty($idItems)) {
             session()->setFlashdata('error', 'Pilih minimal satu item radiologi.');
             return redirect()->back()->withInput();
@@ -170,7 +171,7 @@ final class PermintaanRadController extends ControllerTemplate
 
         try {
             $this->model->insert($data);
-            $this->insertItems((int) $this->model->getInsertID(), $idItems);
+            $this->insertItems((int) $this->model->getInsertID(), $idItems, $bacaSajaMap);
 
             $this->model->db->transComplete();
 
@@ -229,7 +230,8 @@ final class PermintaanRadController extends ControllerTemplate
     {
         if ($id == 0) return $this->home();
 
-        $idItems = $this->request->getPost('id_item') ?? [];
+        $idItems     = $this->request->getPost('id_item')      ?? [];
+        $bacaSajaMap = $this->request->getPost('is_baca_saja') ?? [];
         if (empty($idItems)) {
             session()->setFlashdata('error', 'Pilih minimal satu item radiologi.');
             return redirect()->back()->withInput();
@@ -244,7 +246,7 @@ final class PermintaanRadController extends ControllerTemplate
 
             $modelItem = new \App\Features\Radiologi\PermintaanRadItem\PermintaanRadItemModel();
             $modelItem->where('id_permintaan', $id)->delete();
-            $this->insertItems((int) $id, $idItems);
+            $this->insertItems((int) $id, $idItems, $bacaSajaMap);
 
             $this->model->db->transComplete();
 
