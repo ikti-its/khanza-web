@@ -54,7 +54,8 @@ final class PoliRawatJalanController extends ControllerTemplate
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
         $idUnit  = $this->request->getGet('id_unit');
-        $tanggal = $this->request->getGet('tanggal');
+        $dari    = $this->request->getGet('dari');
+        $sampai  = $this->request->getGet('sampai');
         $status  = $this->request->getGet('status');
 
         $builder = $this->model->db
@@ -82,8 +83,12 @@ final class PoliRawatJalanController extends ControllerTemplate
             $builder->where('r.unit', (int) $idUnit);
         }
 
-        if ($tanggal !== null && $tanggal !== '') {
-            $builder->where('DATE(r.tanggal_reg)', $tanggal);
+        if ($dari !== null && $dari !== '') {
+            $builder->where('DATE(r.tanggal_reg) >=', $dari);
+        }
+
+        if ($sampai !== null && $sampai !== '') {
+            $builder->where('DATE(r.tanggal_reg) <=', $sampai);
         }
 
         if ($status !== null && $status !== '') {

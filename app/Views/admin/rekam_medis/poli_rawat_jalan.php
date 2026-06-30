@@ -23,7 +23,13 @@
             </div>
             <div class="flex items-center gap-2">
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">Tanggal:</label>
-                <input type="date" id="filterTanggal"
+                <input type="date" id="filterTanggalDari"
+                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 bg-white dark:bg-slate-800 dark:border-gray-600 dark:text-white focus:ring-teal-500 focus:border-teal-500"
+                       onchange="loadData()">
+            </div>
+            <div class="flex items-center gap-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">s.d.</label>
+                <input type="date" id="filterTanggalSampai"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 bg-white dark:bg-slate-800 dark:border-gray-600 dark:text-white focus:ring-teal-500 focus:border-teal-500"
                        onchange="loadData()">
             </div>
@@ -112,7 +118,8 @@
 
     async function loadData() {
         const idUnit   = document.getElementById('filterPoli').value;
-        const tanggal  = document.getElementById('filterTanggal').value;
+        const dari     = document.getElementById('filterTanggalDari').value;
+        const sampai   = document.getElementById('filterTanggalSampai').value;
         const indicator = document.getElementById('loadingIndicator');
         const tbody     = document.getElementById('tableBody');
         const counter   = document.getElementById('totalCount');
@@ -123,9 +130,10 @@
 
         try {
             const params = new URLSearchParams();
-            if (idUnit)       params.set('id_unit', idUnit);
-            if (tanggal)      params.set('tanggal', tanggal);
-            if (activeStatus) params.set('status',  activeStatus);
+            if (idUnit)       params.set('id_unit',  idUnit);
+            if (dari)         params.set('dari',     dari);
+            if (sampai)       params.set('sampai',   sampai);
+            if (activeStatus) params.set('status',   activeStatus);
             const res  = await fetch(`${modulPath}/modal/list?${params.toString()}`);
             const json = await res.json();
             renderTable(json.data ?? []);
@@ -165,7 +173,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('filterTanggal').value = new Date().toISOString().split('T')[0];
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('filterTanggalDari').value   = today;
+        document.getElementById('filterTanggalSampai').value = today;
         setStatus('');
     });
 </script>
