@@ -69,7 +69,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                        value="<?= esc($baris['nama'] ?? '') ?>" class="<?= $readonlyClass ?>">
             </div>
 
-            <!-- Penanggung Jawab -->
+            <!-- Penanggung Jawab + Alamat PJ -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="<?= $labelLeft ?>">Penanggung Jawab <span class="text-red-600">*</span></label>
                 <div class="flex gap-x-2 lg:w-1/4">
@@ -78,18 +78,19 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                            onclick="open_modalOrang()" class="<?= $inputClass ?>">
                     <button type="button" onclick="open_modalOrang()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
                 </div>
-            </div>
 
-            <!-- Alamat PJ + Biaya Registrasi -->
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="<?= $labelLeft ?>">Alamat PJ <span class="text-red-600">*</span></label>
+                <label class="<?= $labelRight ?>">Alamat PJ <span class="text-red-600">*</span></label>
                 <div class="flex gap-x-2 lg:w-1/4">
                     <input type="text" id="alamat_pj_display" readonly required placeholder="Klik cari alamat..."
                            value="<?= esc($baris['alamat_lengkap'] ?? '') ?>"
                            onclick="open_modalAlamat()" class="<?= $inputClass ?>">
                     <button type="button" onclick="open_modalAlamat()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
                 </div>
-                <label class="<?= $labelRight ?>">Biaya Registrasi</label>
+            </div>
+
+            <!-- Biaya Registrasi -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="<?= $labelLeft ?>">Biaya Registrasi</label>
                 <input type="number" name="biaya_registrasi" id="biaya_registrasi"
                        value="<?= (int) ($baris['biaya_registrasi'] ?? $baris['biaya_default'] ?? 0) ?>" min="0" class="<?= $editableClass ?>">
             </div>
