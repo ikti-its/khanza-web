@@ -2,6 +2,7 @@
 <?= $this->section('content'); ?>
 <?= $this->include('components/modal/modalpasienrole') ?>
 <?= $this->include('components/modal/modalpetugas') ?>
+<?= $this->include('components/modal/modalunit') ?>
 
 <?php
 $baseInput     = 'border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white';
@@ -50,6 +51,13 @@ $konfigTanpaRM = array_values(array_filter($konfig, fn($f) => !in_array($f[2], [
                     <input type="hidden" name="id_petugas" id="id_petugas" value="<?= esc($baris['id_petugas'] ?? '') ?>">
                     <input type="text" name="nama_petugas" id="nama_petugas" value="<?= esc($baris['nama'] ?? '') ?>" readonly placeholder="Klik cari petugas..." onclick="open_modalPetugas()" class="<?= $inputClass ?>">
                     <button type="button" onclick="open_modalPetugas()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
+                </div>
+
+                <label class="<?= $labelRight ?>">Unit Tujuan</label>
+                <div class="w-full lg:w-1/4 flex gap-x-2">
+                    <input type="hidden" name="id_unit" id="id_unit" value="<?= esc($baris['id_unit'] ?? '') ?>">
+                    <input type="text" id="nama_unit_display" value="<?= esc($baris['nama_unit'] ?? '') ?>" readonly placeholder="Klik cari unit..." onclick="open_modalUnit()" class="<?= $inputClass ?>">
+                    <button type="button" onclick="open_modalUnit()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
                 </div>
             </div>
 
@@ -116,6 +124,11 @@ $konfigTanpaRM = array_values(array_filter($konfig, fn($f) => !in_array($f[2], [
     function autofillPetugas(item) {
         document.getElementById('id_petugas').value   = item.id_petugas ?? '';
         document.getElementById('nama_petugas').value = item.nama       ?? '';
+    }
+
+    function autofillUnitFields(item) {
+        document.getElementById('id_unit').value           = item.id_unit   ?? '';
+        document.getElementById('nama_unit_display').value = item.nama_unit ?? '';
     }
 
     function validateForm() {

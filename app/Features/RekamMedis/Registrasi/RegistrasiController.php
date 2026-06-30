@@ -108,6 +108,18 @@ final class RegistrasiController extends ControllerTemplate
         return $row ?: null;
     }
 
+    private function fetchUnitById(int $id): ?array
+    {
+        $row = $this->model->db
+            ->table('unit.unit')
+            ->select('id_unit, nama_unit, biaya_registrasi_baru')
+            ->where('id_unit', $id)
+            ->get()
+            ->getRowArray();
+
+        return $row ?: null;
+    }
+
     private function buildPostData(): array
     {
         return [
@@ -162,6 +174,16 @@ final class RegistrasiController extends ControllerTemplate
                 $baris['id_pasien']      = $pasien['id_pasien'];
                 $baris['nomor_rm']       = $pasien['nomor_rm'];
                 $baris['id_pasien_nama'] = $pasien['nama'];
+            }
+        }
+
+        $unitId = (int) ($this->request->getGet('unit') ?? 0);
+        if ($unitId > 0) {
+            $unit = $this->fetchUnitById($unitId);
+            if ($unit) {
+                $baris['unit']             = $unit['id_unit'];
+                $baris['nama_unit']        = $unit['nama_unit'];
+                $baris['biaya_registrasi'] = $unit['biaya_registrasi_baru'];
             }
         }
 
