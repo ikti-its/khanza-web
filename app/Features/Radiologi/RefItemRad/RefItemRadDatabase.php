@@ -18,6 +18,7 @@ final class RefItemRadDatabase extends DatabaseTemplate
                 'kode_periksa'     => T::CODE(6),
                 'nama_pemeriksaan' => T::TEXT(),
                 'tarif_dasar'      => T::MONEY(),
+                'tarif_baca'       => T::MONEY()->nullable(),
             ],
             'id_item',
             ['kode_periksa'],

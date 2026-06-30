@@ -21,8 +21,8 @@ final class RefItemRadController extends ControllerTemplate
             [
                 A::READ,
                 // A::CREATE,
-                // A::AUDIT,
-                // A::UPDATE,
+                A::AUDIT,
+                A::UPDATE,
                 // A::DELETE,
             ],
             [
@@ -30,6 +30,7 @@ final class RefItemRadController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,  'kode_periksa',     'Kode Periksa'],
                 [SHOW, REQUIRED, I::TEXT,  'nama_pemeriksaan', 'Nama Pemeriksaan'],
                 [SHOW, REQUIRED, I::MONEY, 'tarif_dasar',      'Tarif Dasar'],
+                [SHOW, OPTIONAL, I::MONEY, 'tarif_baca',       'Tarif Baca Saja'],
             ],
         );
     }
@@ -38,7 +39,7 @@ final class RefItemRadController extends ControllerTemplate
     {
         $rows = $this->model->db
             ->table('radiologi.ref_item_rad')
-            ->select(['id_item', 'kode_periksa', 'nama_pemeriksaan', 'tarif_dasar'])
+            ->select(['id_item', 'kode_periksa', 'nama_pemeriksaan', 'tarif_dasar', 'tarif_baca'])
             ->orderBy('kode_periksa', 'ASC')
             ->get()
             ->getResultArray();

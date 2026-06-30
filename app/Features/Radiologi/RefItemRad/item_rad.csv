@@ -1,165 +1,165 @@
-id_item,kode_periksa,nama_pemeriksaan,tarif_dasar
-1,RO-001,X-Ray Thorax PA,85000
-2,RO-002,X-Ray Thorax AP,85000
-3,RO-003,X-Ray Thorax Lateral,95000
-4,RO-004,X-Ray Abdomen 3 Posisi,125000
-5,RO-005,X-Ray Abdomen 2 Posisi,105000
-6,RO-006,X-Ray Abdomen AP,85000
-7,RO-007,X-Ray Pelvis AP,95000
-8,RO-008,X-Ray Vertebra Cervical AP/Lateral,115000
-9,RO-009,X-Ray Vertebra Thoracal AP/Lateral,115000
-10,RO-010,X-Ray Vertebra Lumbal AP/Lateral,115000
-11,RO-011,X-Ray Vertebra Lumbosacral AP/Lateral,125000
-12,RO-012,X-Ray Shoulder AP,95000
-13,RO-013,X-Ray Elbow AP/Lateral,95000
-14,RO-014,X-Ray Wrist AP/Lateral,95000
-15,RO-015,X-Ray Hand AP/Oblique,95000
-16,RO-016,X-Ray Hip AP,95000
-17,RO-017,X-Ray Femur AP/Lateral,95000
-18,RO-018,X-Ray Knee AP/Lateral,95000
-19,RO-019,X-Ray Ankle AP/Lateral,95000
-20,RO-020,X-Ray Foot AP/Oblique,95000
-21,RO-021,X-Ray Skull AP/Lateral,105000
-22,RO-022,X-Ray Sinus Paranasal (Waters),105000
-23,RO-023,X-Ray Mastoid (Schuller),105000
-24,RO-024,X-Ray Mandibula AP/Lateral,105000
-25,RO-025,X-Ray Clavicula AP,95000
-26,RO-026,X-Ray Scapula AP,95000
-27,RO-027,X-Ray Ribs AP/Oblique,105000
-28,RO-028,X-Ray Seluruh Tulang Belakang,175000
-29,RO-029,X-Ray Polos Gigi Geligi (Periapikal),65000
-30,RO-030,Foto Panoramik Gigi,185000
-31,FL-001,Fluoroskopi,285000
-32,FL-002,Oesofagografi,325000
-33,FL-003,Maag Duodenografi,355000
-34,FL-004,Colon In Loop (Barium Enema),395000
-35,FL-005,Intravenous Pyelogram (IVP),455000
-36,FL-006,Myelogram,550000
-37,FL-007,Histerosalpingografi (HSG),455000
-38,FL-008,Fistulografi,355000
-39,FL-009,Cystogram,355000
-40,FL-010,Urethrogram,355000
-41,FL-011,Cholangiogram Intraoperatif,455000
-42,FL-012,Loopogram,355000
-43,US-001,USG Abdomen Atas,185000
-44,US-002,USG Abdomen Bawah,185000
-45,US-003,USG Abdomen Lengkap,285000
-46,US-004,USG Pelvis / Ginekologi,185000
-47,US-005,USG Obstetri (Kehamilan),185000
-48,US-006,USG Obstetri Biometri Lengkap,285000
-49,US-007,USG Tiroid,185000
-50,US-008,USG Payudara,185000
-51,US-009,USG Scrotum/Testis,185000
-52,US-010,USG Ginjal Saluran Kemih (Renal),185000
-53,US-011,USG Musculoskeletal,215000
-54,US-012,USG Doppler Carotid,385000
-55,US-013,USG Doppler Vaskular Perifer,385000
-56,US-014,USG Doppler Renal,385000
-57,US-015,USG Transvaginal,215000
-58,US-016,USG Transrectal (TRUS),355000
-59,US-017,USG Leher,185000
-60,US-018,USG Mata (Okuler),185000
-61,US-019,USG Guided Biopsi,550000
-62,US-020,USG Guided Aspirasi/Drainase,455000
-63,US-021,Echocardiografi (Echo Jantung),455000
-64,US-022,Echo Doppler Jantung,555000
-65,CT-001,CT Scan Kepala Non Kontras,555000
-66,CT-002,CT Scan Kepala Kontras,755000
-67,CT-003,CT Scan Kepala + Kontras,850000
-68,CT-004,CT Scan Thorax Non Kontras,655000
-69,CT-005,CT Scan Thorax Kontras,850000
-70,CT-006,CT Scan Thorax HRCT,750000
-71,CT-007,CT Scan Abdomen Non Kontras,655000
-72,CT-008,CT Scan Abdomen Kontras,850000
-73,CT-009,CT Scan Abdomen + Pelvis Kontras,1150000
-74,CT-010,CT Scan Pelvis Non Kontras,655000
-75,CT-011,CT Scan Pelvis Kontras,850000
-76,CT-012,CT Scan Vertebra Cervical,755000
-77,CT-013,CT Scan Vertebra Thoracolumbal,755000
-78,CT-014,CT Scan Sinus Paranasal,655000
-79,CT-015,CT Scan Nasofaring,755000
-80,CT-016,CT Scan Orbit,655000
-81,CT-017,CT Scan Temporal Bone (Mastoid),655000
-82,CT-018,CT Scan Leher Kontras,850000
-83,CT-019,CT Scan Whole Abdomen + Thorax + Pelvis,1550000
-84,CT-020,CT Angiografi Koroner (CTCA),2550000
-85,CT-021,CT Angiografi Serebral,1850000
-86,CT-022,CT Angiografi Aorta,1850000
-87,CT-023,CT Urografi,1150000
-88,CT-024,CT Kolonografi (Virtual Colonoscopy),1550000
-89,CT-025,CT Perfusion Otak,2250000
-90,CT-026,Coronary Calcium Score,1250000
-91,CT-027,CT Scan Extremitas,655000
-92,CT-028,CT Scan Whole Body,2550000
-93,CT-029,CT Guided Biopsi,1550000
-94,CT-030,CT Guided Drainase,1350000
-95,MR-001,MRI Otak Non Kontras,1350000
-96,MR-002,MRI Otak Kontras,1750000
-97,MR-003,MRI Otak + Kontras,1950000
-98,MR-004,MRI Vertebra Cervical,1350000
-99,MR-005,MRI Vertebra Thorakal,1350000
-100,MR-006,MRI Vertebra Lumbal,1350000
-101,MR-007,MRI Thorax,1550000
-102,MR-008,MRI Abdomen Non Kontras,1550000
-103,MR-009,MRI Abdomen Kontras,1850000
-104,MR-010,MRI Pelvis Non Kontras,1550000
-105,MR-011,MRI Pelvis Kontras,1850000
-106,MR-012,MRI Prostat,1850000
-107,MR-013,MRI Payudara,1850000
-108,MR-014,MRI Jantung (Cardiac MRI),2550000
-109,MR-015,MRI Sendi Lutut,1350000
-110,MR-016,MRI Sendi Bahu,1350000
-111,MR-017,MRI Sendi Pergelangan Kaki,1350000
-112,MR-018,MRI Sendi Panggul,1350000
-113,MR-019,MRI Sendi Siku / Pergelangan Tangan,1350000
-114,MR-020,MRI Leher,1550000
-115,MR-021,MRI Nasofaring,1550000
-116,MR-022,MRI Orbit,1550000
-117,MR-023,MRA (MR Angiografi) Otak,1850000
-118,MR-024,MRA (MR Angiografi) Vaskular,1850000
-119,MR-025,MRCP (MR Cholangiopancreatography),1850000
-120,MR-026,MRI Fetal (Kehamilan),2250000
-121,MR-027,MRI Seluruh Tubuh (Whole Body MRI),3550000
-122,MR-028,MRI Guided Biopsi,2550000
-123,MR-029,MRI Elastografi Hati,2250000
-124,MM-001,Mammografi Bilateral,455000
-125,MM-002,Mammografi Unilateral,285000
-126,MM-003,Mammografi 3D (Tomosintesis),655000
-127,NM-001,Bone Scan (Skintigrafi Tulang),1850000
-128,NM-002,Thyroid Scan,1250000
-129,NM-003,HIDA Scan (Hepatobiliary),1850000
-130,NM-004,Renal Scan (Renografi),1850000
-131,NM-005,Lung Perfusion Scan (V/Q Scan),1850000
-132,NM-006,SPECT Scan,2550000
-133,NM-007,PET/CT Scan (F-18 FDG),8500000
-134,NM-008,Bone Densitometry (DEXA Scan),385000
-135,NM-009,PSMA PET/CT,12500000
-136,RI-001,Angiografi Serebral,5500000
-137,RI-002,Angiografi Koroner (Kateterisasi),5500000
-138,RI-003,Angiografi Perifer,4500000
-139,RI-004,Angiografi Renal,4500000
-140,RI-005,Angioplasty + Stenting Koroner (PCI),25000000
-141,RI-006,Angioplasty Perifer,12500000
-142,RI-007,Carotid Stenting,25000000
-143,RI-008,TIPS (Transjugular Intrahepatic Portosystemic Shunt),25000000
-144,RI-009,Embolisasi Arteri Uterus (UAE),15000000
-145,RI-010,Embolisasi Arteri Prostat (PAE),18500000
-146,RI-011,Chemoembolisasi (TACE) Hati,18500000
-147,RI-012,Drainase Bilier Perkutan (PTBD),8500000
-148,RI-013,Stenting Bilier,12500000
-149,RI-014,Nefrostomi Perkutan,8500000
-150,RI-015,Pemasangan IVC Filter,8500000
-151,RI-016,Trombolisis Intra-arterial,12500000
-152,RI-017,Vertebroplasty / Kyphoplasty,18500000
-153,RI-018,RFA (Radiofrequency Ablation) Tumor,18500000
-154,RI-019,Biopsi Perkutan CT/USG-guided,1850000
-155,RI-020,Drainase Perkutan CT/USG-guided,1850000
-156,RI-021,Parasentesis,850000
-157,RI-022,Torakosentesis,850000
-158,RI-023,Pemasangan CVC (Central Venous Catheter),1250000
-159,RI-024,Sklerotapi Varises,2550000
-160,RI-025,Suntikan Spinal / Epidural,1850000
-161,RI-026,Fine Needle Aspiration (FNA) Tiroid,550000
-162,RI-027,Biopsi Payudara Stereotaktik,1850000
-163,RI-028,Arthrogram,1250000
-164,RI-029,Cholangiogram Perkutan Transhepatik (PTC),4500000
+id_item,kode_periksa,nama_pemeriksaan,tarif_dasar,tarif_baca
+1,RO-001,X-Ray Thorax PA,85000,35000
+2,RO-002,X-Ray Thorax AP,85000,35000
+3,RO-003,X-Ray Thorax Lateral,95000,40000
+4,RO-004,X-Ray Abdomen 3 Posisi,125000,50000
+5,RO-005,X-Ray Abdomen 2 Posisi,105000,45000
+6,RO-006,X-Ray Abdomen AP,85000,35000
+7,RO-007,X-Ray Pelvis AP,95000,40000
+8,RO-008,X-Ray Vertebra Cervical AP/Lateral,115000,45000
+9,RO-009,X-Ray Vertebra Thoracal AP/Lateral,115000,45000
+10,RO-010,X-Ray Vertebra Lumbal AP/Lateral,115000,45000
+11,RO-011,X-Ray Vertebra Lumbosacral AP/Lateral,125000,50000
+12,RO-012,X-Ray Shoulder AP,95000,40000
+13,RO-013,X-Ray Elbow AP/Lateral,95000,40000
+14,RO-014,X-Ray Wrist AP/Lateral,95000,40000
+15,RO-015,X-Ray Hand AP/Oblique,95000,40000
+16,RO-016,X-Ray Hip AP,95000,40000
+17,RO-017,X-Ray Femur AP/Lateral,95000,40000
+18,RO-018,X-Ray Knee AP/Lateral,95000,40000
+19,RO-019,X-Ray Ankle AP/Lateral,95000,40000
+20,RO-020,X-Ray Foot AP/Oblique,95000,40000
+21,RO-021,X-Ray Skull AP/Lateral,105000,45000
+22,RO-022,X-Ray Sinus Paranasal (Waters),105000,45000
+23,RO-023,X-Ray Mastoid (Schuller),105000,45000
+24,RO-024,X-Ray Mandibula AP/Lateral,105000,45000
+25,RO-025,X-Ray Clavicula AP,95000,40000
+26,RO-026,X-Ray Scapula AP,95000,40000
+27,RO-027,X-Ray Ribs AP/Oblique,105000,45000
+28,RO-028,X-Ray Seluruh Tulang Belakang,175000,65000
+29,RO-029,X-Ray Polos Gigi Geligi (Periapikal),65000,30000
+30,RO-030,Foto Panoramik Gigi,185000,65000
+31,FL-001,Fluoroskopi,285000,85000
+32,FL-002,Oesofagografi,325000,95000
+33,FL-003,Maag Duodenografi,355000,100000
+34,FL-004,Colon In Loop (Barium Enema),395000,110000
+35,FL-005,Intravenous Pyelogram (IVP),455000,125000
+36,FL-006,Myelogram,550000,150000
+37,FL-007,Histerosalpingografi (HSG),455000,125000
+38,FL-008,Fistulografi,355000,100000
+39,FL-009,Cystogram,355000,100000
+40,FL-010,Urethrogram,355000,100000
+41,FL-011,Cholangiogram Intraoperatif,455000,125000
+42,FL-012,Loopogram,355000,100000
+43,US-001,USG Abdomen Atas,185000,65000
+44,US-002,USG Abdomen Bawah,185000,65000
+45,US-003,USG Abdomen Lengkap,285000,85000
+46,US-004,USG Pelvis / Ginekologi,185000,65000
+47,US-005,USG Obstetri (Kehamilan),185000,65000
+48,US-006,USG Obstetri Biometri Lengkap,285000,85000
+49,US-007,USG Tiroid,185000,65000
+50,US-008,USG Payudara,185000,65000
+51,US-009,USG Scrotum/Testis,185000,65000
+52,US-010,USG Ginjal Saluran Kemih (Renal),185000,65000
+53,US-011,USG Musculoskeletal,215000,75000
+54,US-012,USG Doppler Carotid,385000,110000
+55,US-013,USG Doppler Vaskular Perifer,385000,110000
+56,US-014,USG Doppler Renal,385000,110000
+57,US-015,USG Transvaginal,215000,75000
+58,US-016,USG Transrectal (TRUS),355000,100000
+59,US-017,USG Leher,185000,65000
+60,US-018,USG Mata (Okuler),185000,65000
+61,US-019,USG Guided Biopsi,550000,150000
+62,US-020,USG Guided Aspirasi/Drainase,455000,125000
+63,US-021,Echocardiografi (Echo Jantung),455000,125000
+64,US-022,Echo Doppler Jantung,555000,150000
+65,CT-001,CT Scan Kepala Non Kontras,555000,150000
+66,CT-002,CT Scan Kepala Kontras,755000,200000
+67,CT-003,CT Scan Kepala + Kontras,850000,225000
+68,CT-004,CT Scan Thorax Non Kontras,655000,175000
+69,CT-005,CT Scan Thorax Kontras,850000,225000
+70,CT-006,CT Scan Thorax HRCT,750000,200000
+71,CT-007,CT Scan Abdomen Non Kontras,655000,175000
+72,CT-008,CT Scan Abdomen Kontras,850000,225000
+73,CT-009,CT Scan Abdomen + Pelvis Kontras,1150000,300000
+74,CT-010,CT Scan Pelvis Non Kontras,655000,175000
+75,CT-011,CT Scan Pelvis Kontras,850000,225000
+76,CT-012,CT Scan Vertebra Cervical,755000,200000
+77,CT-013,CT Scan Vertebra Thoracolumbal,755000,200000
+78,CT-014,CT Scan Sinus Paranasal,655000,175000
+79,CT-015,CT Scan Nasofaring,755000,200000
+80,CT-016,CT Scan Orbit,655000,175000
+81,CT-017,CT Scan Temporal Bone (Mastoid),655000,175000
+82,CT-018,CT Scan Leher Kontras,850000,225000
+83,CT-019,CT Scan Whole Abdomen + Thorax + Pelvis,1550000,400000
+84,CT-020,CT Angiografi Koroner (CTCA),2550000,650000
+85,CT-021,CT Angiografi Serebral,1850000,475000
+86,CT-022,CT Angiografi Aorta,1850000,475000
+87,CT-023,CT Urografi,1150000,300000
+88,CT-024,CT Kolonografi (Virtual Colonoscopy),1550000,400000
+89,CT-025,CT Perfusion Otak,2250000,575000
+90,CT-026,Coronary Calcium Score,1250000,325000
+91,CT-027,CT Scan Extremitas,655000,175000
+92,CT-028,CT Scan Whole Body,2550000,650000
+93,CT-029,CT Guided Biopsi,1550000,400000
+94,CT-030,CT Guided Drainase,1350000,350000
+95,MR-001,MRI Otak Non Kontras,1350000,375000
+96,MR-002,MRI Otak Kontras,1750000,475000
+97,MR-003,MRI Otak + Kontras,1950000,525000
+98,MR-004,MRI Vertebra Cervical,1350000,375000
+99,MR-005,MRI Vertebra Thorakal,1350000,375000
+100,MR-006,MRI Vertebra Lumbal,1350000,375000
+101,MR-007,MRI Thorax,1550000,425000
+102,MR-008,MRI Abdomen Non Kontras,1550000,425000
+103,MR-009,MRI Abdomen Kontras,1850000,500000
+104,MR-010,MRI Pelvis Non Kontras,1550000,425000
+105,MR-011,MRI Pelvis Kontras,1850000,500000
+106,MR-012,MRI Prostat,1850000,500000
+107,MR-013,MRI Payudara,1850000,500000
+108,MR-014,MRI Jantung (Cardiac MRI),2550000,675000
+109,MR-015,MRI Sendi Lutut,1350000,375000
+110,MR-016,MRI Sendi Bahu,1350000,375000
+111,MR-017,MRI Sendi Pergelangan Kaki,1350000,375000
+112,MR-018,MRI Sendi Panggul,1350000,375000
+113,MR-019,MRI Sendi Siku / Pergelangan Tangan,1350000,375000
+114,MR-020,MRI Leher,1550000,425000
+115,MR-021,MRI Nasofaring,1550000,425000
+116,MR-022,MRI Orbit,1550000,425000
+117,MR-023,MRA (MR Angiografi) Otak,1850000,500000
+118,MR-024,MRA (MR Angiografi) Vaskular,1850000,500000
+119,MR-025,MRCP (MR Cholangiopancreatography),1850000,500000
+120,MR-026,MRI Fetal (Kehamilan),2250000,600000
+121,MR-027,MRI Seluruh Tubuh (Whole Body MRI),3550000,950000
+122,MR-028,MRI Guided Biopsi,2550000,675000
+123,MR-029,MRI Elastografi Hati,2250000,600000
+124,MM-001,Mammografi Bilateral,455000,125000
+125,MM-002,Mammografi Unilateral,285000,85000
+126,MM-003,Mammografi 3D (Tomosintesis),655000,175000
+127,NM-001,Bone Scan (Skintigrafi Tulang),1850000,450000
+128,NM-002,Thyroid Scan,1250000,325000
+129,NM-003,HIDA Scan (Hepatobiliary),1850000,450000
+130,NM-004,Renal Scan (Renografi),1850000,450000
+131,NM-005,Lung Perfusion Scan (V/Q Scan),1850000,450000
+132,NM-006,SPECT Scan,2550000,625000
+133,NM-007,PET/CT Scan (F-18 FDG),8500000,2000000
+134,NM-008,Bone Densitometry (DEXA Scan),385000,100000
+135,NM-009,PSMA PET/CT,12500000,3000000
+136,RI-001,Angiografi Serebral,5500000,1250000
+137,RI-002,Angiografi Koroner (Kateterisasi),5500000,1250000
+138,RI-003,Angiografi Perifer,4500000,1000000
+139,RI-004,Angiografi Renal,4500000,1000000
+140,RI-005,Angioplasty + Stenting Koroner (PCI),25000000,5000000
+141,RI-006,Angioplasty Perifer,12500000,2500000
+142,RI-007,Carotid Stenting,25000000,5000000
+143,RI-008,TIPS (Transjugular Intrahepatic Portosystemic Shunt),25000000,5000000
+144,RI-009,Embolisasi Arteri Uterus (UAE),15000000,3000000
+145,RI-010,Embolisasi Arteri Prostat (PAE),18500000,3500000
+146,RI-011,Chemoembolisasi (TACE) Hati,18500000,3500000
+147,RI-012,Drainase Bilier Perkutan (PTBD),8500000,1750000
+148,RI-013,Stenting Bilier,12500000,2500000
+149,RI-014,Nefrostomi Perkutan,8500000,1750000
+150,RI-015,Pemasangan IVC Filter,8500000,1750000
+151,RI-016,Trombolisis Intra-arterial,12500000,2500000
+152,RI-017,Vertebroplasty / Kyphoplasty,18500000,3500000
+153,RI-018,RFA (Radiofrequency Ablation) Tumor,18500000,3500000
+154,RI-019,Biopsi Perkutan CT/USG-guided,1850000,450000
+155,RI-020,Drainase Perkutan CT/USG-guided,1850000,450000
+156,RI-021,Parasentesis,850000,200000
+157,RI-022,Torakosentesis,850000,200000
+158,RI-023,Pemasangan CVC (Central Venous Catheter),1250000,300000
+159,RI-024,Sklerotapi Varises,2550000,600000
+160,RI-025,Suntikan Spinal / Epidural,1850000,450000
+161,RI-026,Fine Needle Aspiration (FNA) Tiroid,550000,150000
+162,RI-027,Biopsi Payudara Stereotaktik,1850000,450000
+163,RI-028,Arthrogram,1250000,300000
+164,RI-029,Cholangiogram Perkutan Transhepatik (PTC),4500000,1000000
