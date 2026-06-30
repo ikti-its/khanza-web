@@ -13,6 +13,7 @@ final class RekamMedisRoutes extends RouteTemplate
             'Rekam Medis',
             [
                 \App\Features\RekamMedis\Registrasi\RegistrasiController::class,
+                \App\Features\RekamMedis\PoliRawatJalan\PoliRawatJalanController::class,
             ],
             'registrasi.svg',
         );
