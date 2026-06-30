@@ -93,13 +93,14 @@ $val           = fn($k) => esc($baris[$k] ?? '');
                             <tr>
                                 <th class="p-3 border text-center dark:border-gray-700">Kode</th>
                                 <th class="p-3 border text-center dark:border-gray-700">Nama Pemeriksaan</th>
-                                <th class="p-3 border text-center dark:border-gray-700">Tarif Dasar</th>
+                                <th class="p-3 border text-center dark:border-gray-700">Tarif</th>
+                                <th class="p-3 border text-center dark:border-gray-700">Baca Saja</th>
                                 <th class="p-3 border text-center dark:border-gray-700">Hapus</th>
                             </tr>
                         </thead>
                         <tbody id="itemRadTerpilihBody">
                             <tr id="emptyItemRow">
-                                <td colspan="4" class="text-center py-6 text-gray-400 italic dark:text-gray-500">Belum ada item dipilih</td>
+                                <td colspan="5" class="text-center py-6 text-gray-400 italic dark:text-gray-500">Belum ada item dipilih</td>
                             </tr>
                         </tbody>
                     </table>
@@ -116,7 +117,7 @@ $val           = fn($k) => esc($baris[$k] ?? '');
 <script>
     const emptyRowHtml = `
         <tr id="emptyItemRow">
-            <td colspan="4" class="text-center py-6 text-gray-400 italic dark:text-gray-500">Belum ada item dipilih</td>
+            <td colspan="5" class="text-center py-6 text-gray-400 italic dark:text-gray-500">Belum ada item dipilih</td>
         </tr>`;
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -155,31 +156,59 @@ $val           = fn($k) => esc($baris[$k] ?? '');
         if (selected.length === 0) { tbody.innerHTML = emptyRowHtml; return; }
 
         selected.forEach(item => {
-            const tarif = new Intl.NumberFormat('id-ID').format(item.tarif_dasar);
+            const isBacaSaja = !!item.is_baca_saja && item.is_baca_saja !== 'f';
+            const tarifNilai = (isBacaSaja && item.tarif_baca) ? item.tarif_baca : item.tarif_dasar;
+            const tarifStr   = 'Rp ' + new Intl.NumberFormat('id-ID').format(tarifNilai);
 
             const tr = document.createElement('tr');
-            tr.className = 'hover:bg-gray-50 dark:hover:bg-slate-800';
-            tr.innerHTML = `
+            tr.dataset.id = item.id_item;
+            tr.className  = 'hover:bg-gray-50 dark:hover:bg-slate-800';
+            tr.innerHTML  = `
                 <td class="p-3 border text-center dark:border-gray-700">${item.kode_periksa}</td>
                 <td class="p-3 border dark:border-gray-700">${item.nama_pemeriksaan}</td>
-                <td class="p-3 border text-right dark:border-gray-700">Rp ${tarif}</td>
+                <td class="p-3 border text-right dark:border-gray-700" data-tarif-cell="${item.id_item}">${tarifStr}</td>
+                <td class="p-3 border text-center dark:border-gray-700">
+                    <input type="checkbox"
+                           ${isBacaSaja ? 'checked' : ''}
+                           onchange="onBacaSajaChange(${item.id_item}, this)"
+                           class="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500 dark:border-gray-600">
+                </td>
                 <td class="p-3 border text-center dark:border-gray-700">
                     <button type="button" onclick="hapusItemRad(${item.id_item}, this)"
                             class="text-red-600 hover:underline text-sm dark:text-red-400">Hapus</button>
                 </td>`;
             tbody.appendChild(tr);
 
-            const input = document.createElement('input');
-            input.type = 'hidden'; input.name = 'id_item[]';
-            input.value = item.id_item; input.dataset.id = item.id_item;
-            hiddenDiv.appendChild(input);
+            const inputItem = document.createElement('input');
+            inputItem.type = 'hidden'; inputItem.name = 'id_item[]';
+            inputItem.value = item.id_item; inputItem.dataset.id = item.id_item;
+            hiddenDiv.appendChild(inputItem);
+
+            const inputBaca = document.createElement('input');
+            inputBaca.type = 'hidden'; inputBaca.name = `is_baca_saja[${item.id_item}]`;
+            inputBaca.value = isBacaSaja ? '1' : '0'; inputBaca.dataset.bakasaja = item.id_item;
+            hiddenDiv.appendChild(inputBaca);
         });
+    }
+
+    function onBacaSajaChange(idItem, checkbox) {
+        const item      = _itemRadSelected[idItem];
+        item.is_baca_saja = checkbox.checked;
+
+        const inputBaca = document.getElementById('hiddenItemInputs').querySelector(`input[data-bakasaja="${idItem}"]`);
+        if (inputBaca) inputBaca.value = checkbox.checked ? '1' : '0';
+
+        const tarifNilai = (checkbox.checked && item.tarif_baca) ? item.tarif_baca : item.tarif_dasar;
+        const tarifCell  = document.querySelector(`[data-tarif-cell="${idItem}"]`);
+        if (tarifCell) tarifCell.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(tarifNilai);
     }
 
     function hapusItemRad(idItem, btn) {
         delete _itemRadSelected[idItem];
         btn.closest('tr').remove();
-        document.getElementById('hiddenItemInputs').querySelector(`input[data-id="${idItem}"]`)?.remove();
+        const hidden = document.getElementById('hiddenItemInputs');
+        hidden.querySelector(`input[data-id="${idItem}"]`)?.remove();
+        hidden.querySelector(`input[data-bakasaja="${idItem}"]`)?.remove();
 
         const tbody = document.getElementById('itemRadTerpilihBody');
         if (tbody.children.length === 0) tbody.innerHTML = emptyRowHtml;
