@@ -38,6 +38,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
                 [FORM_ONLY, REQUIRED, I::SELECT,  'id_batuk',         'Batuk'],
                 [FORM_ONLY, REQUIRED, I::BOOL,    'is_geriatri',      'Geriatri'],
                 [FORM_ONLY, REQUIRED, I::BOOL,    'is_risiko_jatuh',  'Risiko Jatuh'],
+                [SHOW,      OPTIONAL, I::SELECT,  'id_unit',          'Unit Tujuan'],
                 [SHOW,      REQUIRED, I::SELECT,  'id_petugas',       'Petugas'],
                 [SHOW,      REQUIRED, I::SELECT,  'id_keputusan',     'Keputusan'],
             ],
@@ -52,7 +53,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
     {
         return array_values(array_filter(
             $this->get_fields_with_options($isUpdate, true),
-            fn($f) => !in_array($f[2], ['id_skrining', 'no_rm'], true)
+            fn($f) => !in_array($f[2], ['id_skrining', 'no_rm', 'id_unit', 'id_petugas'], true)
         ));
     }
 
@@ -102,7 +103,8 @@ final class SkriningRawatJalanController extends ControllerTemplate
             'tgl_skrining' => date('Y-m-d'), 'jam_skrining' => date('H:i:s'),
             'id_kesadaran' => '', 'id_pernafasan' => '', 'id_skala_nyeri' => '',
             'id_nyeri_dada' => '', 'id_batuk' => '', 'is_geriatri' => '',
-            'is_risiko_jatuh' => '', 'id_keputusan' => '', 'id_petugas' => '',
+            'is_risiko_jatuh' => '', 'id_unit' => '', 'nama_unit' => '',
+            'id_keputusan' => '', 'id_petugas' => '',
         ];
 
         return view('admin/skrining_rawat_jalan/tambah_skrining_rj', [

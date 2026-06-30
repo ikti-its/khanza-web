@@ -25,6 +25,7 @@ final class SkriningRawatJalanDatabase extends DatabaseTemplate
                 'id_batuk'         => T::FK_AUTO(),
                 'is_geriatri'      => T::BOOL(),
                 'is_risiko_jatuh'  => T::BOOL(),
+                'id_unit'          => T::FK_AUTO()->nullable(),
                 'id_keputusan'     => T::FK_AUTO(),
                 'id_petugas'       => T::FK_AUTO(),
             ],
@@ -60,6 +61,11 @@ final class SkriningRawatJalanDatabase extends DatabaseTemplate
                     ['id_batuk'],
                     \App\Features\SkriningRawatJalan\RefSkriningBatuk\RefSkriningBatukDatabase::class,
                     ['id_batuk'],
+                ],
+                [
+                    ['id_unit'],
+                    \App\Features\Unit\UnitDatabase::class,
+                    ['id_unit'],
                 ],
                 [
                     ['id_keputusan'],
