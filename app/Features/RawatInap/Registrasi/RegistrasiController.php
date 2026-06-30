@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\RawatInap\Registrasi;
@@ -57,13 +57,13 @@ final class RegistrasiController extends ControllerTemplate
                 {$tabel}.id_rawat_inap,
                 {$tabel}.kamar,
                 {$tabel}.dokter_pj AS id_dokter,
-                rekam_medis.registrasi.nomor_rawat,
+                registrasi.registrasi.nomor_rawat,
                 role.pasien.nomor_rm,
                 pasien_orang.nama AS nama,
                 dokter_orang.nama AS nama_dokter
             ")
-            ->join('rekam_medis.registrasi', "rekam_medis.registrasi.id_registrasi = {$tabel}.id_registrasi", 'inner')
-            ->join('role.pasien', 'role.pasien.id_pasien = rekam_medis.registrasi.id_pasien', 'inner')
+            ->join('registrasi.registrasi', "registrasi.registrasi.id_registrasi = {$tabel}.id_registrasi", 'inner')
+            ->join('role.pasien', 'role.pasien.id_pasien = registrasi.registrasi.id_pasien', 'inner')
             ->join('person.orang AS pasien_orang', 'pasien_orang.id_orang = role.pasien.id_orang', 'inner')
             ->join('role.dokter', "role.dokter.id_dokter = {$tabel}.dokter_pj", 'inner')
             ->join('person.orang AS dokter_orang', 'dokter_orang.id_orang = role.dokter.id_orang', 'inner')

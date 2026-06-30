@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\Radiologi\HasilRad;
@@ -91,7 +91,7 @@ final class HasilRadController extends ControllerTemplate
                 'r.id_dokter AS id_dokter_perujuk', 'o.nama AS nama_pasien',
                 'od.nama AS nama_dokter_perujuk',
             ])
-            ->join('rekam_medis.registrasi r',  'r.nomor_reg   = pr.nomor_reg')
+            ->join('registrasi.registrasi r',  'r.nomor_reg   = pr.nomor_reg')
             ->join('role.pasien p',             'p.id_pasien   = r.id_pasien',  'left')
             ->join('person.orang o',            'o.id_orang    = p.id_orang',   'left')
             ->join('role.dokter d',             'd.id_dokter   = r.id_dokter',  'left')

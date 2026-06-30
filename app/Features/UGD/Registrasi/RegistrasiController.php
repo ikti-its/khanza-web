@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\UGD\Registrasi;
@@ -62,7 +62,7 @@ final class RegistrasiController extends ControllerTemplate
         helper('autonomor');
 
         $lastNo = $this->model->db
-            ->table('rekam_medis.registrasi')
+            ->table('registrasi.registrasi')
             ->select('nomor_reg')
             ->like('nomor_reg', 'REG-' . date('Ymd'), 'after')
             ->orderBy('nomor_reg', 'DESC')
@@ -78,7 +78,7 @@ final class RegistrasiController extends ControllerTemplate
         helper('autonomor');
 
         $lastNo = $this->model->db
-            ->table('rekam_medis.registrasi')
+            ->table('registrasi.registrasi')
             ->select('nomor_rawat')
             ->orderBy('nomor_rawat', 'DESC')
             ->limit(1)
@@ -205,14 +205,14 @@ final class RegistrasiController extends ControllerTemplate
         helper('autonomor');
 
         $lastRmReg = $this->model->db
-            ->table('rekam_medis.registrasi')
+            ->table('registrasi.registrasi')
             ->select('nomor_reg')
             ->like('nomor_reg', 'REG-' . date('Ymd'), 'after')
             ->orderBy('nomor_reg', 'DESC')
             ->limit(1)->get()->getRowArray();
 
         $lastRmRawat = $this->model->db
-            ->table('rekam_medis.registrasi')
+            ->table('registrasi.registrasi')
             ->select('nomor_rawat')
             ->orderBy('nomor_rawat', 'DESC')
             ->limit(1)->get()->getRowArray();
@@ -235,7 +235,7 @@ final class RegistrasiController extends ControllerTemplate
         $db->transBegin();
         try {
             $this->model->insert($ugdData);
-            $db->table('rekam_medis.registrasi')->insert($rmData);
+            $db->table('registrasi.registrasi')->insert($rmData);
 
             if ($db->transStatus() === false) {
                 $db->transRollback();
@@ -278,7 +278,7 @@ final class RegistrasiController extends ControllerTemplate
         $db->transBegin();
         try {
             $this->model->update($id, $ugdData);
-            $db->table('rekam_medis.registrasi')
+            $db->table('registrasi.registrasi')
                 ->where('nomor_reg', $current['nomor_reg'])
                 ->update($rmData);
 
@@ -312,7 +312,7 @@ final class RegistrasiController extends ControllerTemplate
         $db = $this->model->db;
         $db->transBegin();
         try {
-            $db->table('rekam_medis.registrasi')
+            $db->table('registrasi.registrasi')
                 ->where('nomor_reg', $current['nomor_reg'])
                 ->delete();
             $this->model->delete($id);

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\Operasi\PermintaanOperasi;
@@ -58,7 +58,7 @@ final class PermintaanOperasiController extends ControllerTemplate
     private function fetchRegistrasi(string $nomorReg): array
     {
         return $this->model->db
-            ->table('rekam_medis.registrasi r')
+            ->table('registrasi.registrasi r')
             ->select([
                 'r.nomor_reg',
                 'p.nomor_rm',

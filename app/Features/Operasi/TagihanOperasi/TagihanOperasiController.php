@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\Operasi\TagihanOperasi;
@@ -59,7 +59,7 @@ final class TagihanOperasiController extends ControllerTemplate
                 'ob.nama AS nama_dokter_bedah',
             ])
             ->join('operasi.permintaan_operasi po',      'po.id_permintaan = j.id_permintaan',  'left')
-            ->join('rekam_medis.registrasi r',           'r.nomor_reg      = po.nomor_reg',     'left')
+            ->join('registrasi.registrasi r',           'r.nomor_reg      = po.nomor_reg',     'left')
             ->join('role.pasien p',                      'p.id_pasien      = r.id_pasien',      'left')
             ->join('person.orang op',                    'op.id_orang      = p.id_orang',       'left')
             ->join('operasi.ref_tindakan_operasi ti',    'ti.id_tindakan   = po.id_tindakan',   'left')

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\Laboratorium\PermintaanLabPa;
@@ -82,7 +82,7 @@ final class PermintaanLabPaController extends ControllerTemplate
     private function fetchRegistrasi(string $nomorReg): array
     {
         return $this->model->db
-            ->table('rekam_medis.registrasi r')
+            ->table('registrasi.registrasi r')
             ->select([
                 'r.nomor_reg',
                 'p.nomor_rm',
@@ -181,7 +181,7 @@ final class PermintaanLabPaController extends ControllerTemplate
                 'h.id_status_permintaan',
                 'p.nomor_rm', 'o.nama', 'o.tanggal_lahir', 'd.kode_dokter', 'od.nama AS nama_dokter', 's.nama_status',
             ])
-            ->join('rekam_medis.registrasi r',             'r.nomor_reg  = h.nomor_reg',            'left')
+            ->join('registrasi.registrasi r',             'r.nomor_reg  = h.nomor_reg',            'left')
             ->join('role.pasien p',                        'p.id_pasien  = r.id_pasien',            'left')
             ->join('person.orang o',                       'o.id_orang   = p.id_orang',             'left')
             ->join('role.dokter d',                        'd.id_dokter  = h.id_dokter_perujuk',    'left')
@@ -484,7 +484,7 @@ final class PermintaanLabPaController extends ControllerTemplate
                 'p.nomor_rm', 'o.nama AS nama_pasien',
                 'd.kode_dokter', 'od.nama AS nama_dokter',
             ])
-            ->join('rekam_medis.registrasi r',  'r.nomor_reg       = plh.nomor_reg',         'left')
+            ->join('registrasi.registrasi r',  'r.nomor_reg       = plh.nomor_reg',         'left')
             ->join('role.pasien p',             'p.id_pasien       = r.id_pasien',           'left')
             ->join('person.orang o',            'o.id_orang        = p.id_orang',            'left')
             ->join('role.dokter d',             'd.id_dokter       = plh.id_dokter_perujuk', 'left')

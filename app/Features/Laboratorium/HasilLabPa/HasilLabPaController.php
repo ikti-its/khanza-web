@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\Laboratorium\HasilLabPa;
@@ -78,7 +78,7 @@ final class HasilLabPaController extends ControllerTemplate
                 'od.nama AS nama_dokter_perujuk',
                 'r.id_dokter AS id_dokter_perujuk',
             ])
-            ->join('rekam_medis.registrasi r',  'r.nomor_reg = plh.nomor_reg')
+            ->join('registrasi.registrasi r',  'r.nomor_reg = plh.nomor_reg')
             ->join('role.pasien p',             'p.id_pasien = r.id_pasien',  'left')
             ->join('person.orang o',            'o.id_orang  = p.id_orang',   'left')
             ->join('role.dokter d',             'd.id_dokter = r.id_dokter',  'left')
@@ -380,7 +380,7 @@ final class HasilLabPaController extends ControllerTemplate
                 'opj.nama AS nama_dokter_pj',
                 's.nama_status',
             ])
-            ->join('rekam_medis.registrasi r',             'r.nomor_reg = plh.nomor_reg',           'left')
+            ->join('registrasi.registrasi r',             'r.nomor_reg = plh.nomor_reg',           'left')
             ->join('role.pasien p',                        'p.id_pasien = r.id_pasien',             'left')
             ->join('person.orang o',                       'o.id_orang  = p.id_orang',              'left')
             ->join('laboratorium.ref_status_permintaan s', 's.id_status = plh.id_status_permintaan','left')
@@ -437,7 +437,7 @@ final class HasilLabPaController extends ControllerTemplate
                 'p.nomor_rm', 'o.nama AS nama_pasien',
                 'od.nama AS nama_dokter_perujuk',
             ])
-            ->join('rekam_medis.registrasi r',  'r.nomor_reg = plh.nomor_reg',         'left')
+            ->join('registrasi.registrasi r',  'r.nomor_reg = plh.nomor_reg',         'left')
             ->join('role.pasien p',             'p.id_pasien = r.id_pasien',            'left')
             ->join('person.orang o',            'o.id_orang  = p.id_orang',             'left')
             ->join('role.dokter d',             'd.id_dokter = plh.id_dokter_perujuk',  'left')

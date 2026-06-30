@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\PelayananDarah\PermintaanDarah;
@@ -50,7 +50,7 @@ final class PermintaanDarahController extends ControllerTemplate
         $konfigPermintaan = $this->get_fields_with_options(false, true);
 
         $controllerRawatInap  = new \App\Features\RawatInap\Registrasi\RegistrasiController();
-        $controllerRegistrasi = new \App\Features\RekamMedis\Registrasi\RegistrasiController();
+        $controllerRegistrasi = new \App\Features\Registrasi\Registrasi\RegistrasiController();
         $controllerPasien     = new \App\Features\Role\Pasien\PasienController();
         $controllerOrang      = new \App\Features\Person\Orang\OrangController();
 
@@ -235,7 +235,7 @@ final class PermintaanDarahController extends ControllerTemplate
         $dataDokter     = [];
 
         if (!empty($dataPermintaan['id_registrasi'])) {
-            $modelRegistrasi = new \App\Features\RekamMedis\Registrasi\RegistrasiModel();
+            $modelRegistrasi = new \App\Features\Registrasi\Registrasi\RegistrasiModel();
             $dataRegistrasi  = $modelRegistrasi->find($dataPermintaan['id_registrasi']) ?? [];
 
             if (!empty($dataRegistrasi['id_pasien'])) {
@@ -269,7 +269,7 @@ final class PermintaanDarahController extends ControllerTemplate
         $baris = array_merge($dataOrang, $dataPasien, $dataRegistrasi, $dataRawatInap, $dataDokter, $dataPermintaan);
 
         $controllerRawatInap  = new \App\Features\RawatInap\Registrasi\RegistrasiController();
-        $controllerRegistrasi = new \App\Features\RekamMedis\Registrasi\RegistrasiController();
+        $controllerRegistrasi = new \App\Features\Registrasi\Registrasi\RegistrasiController();
         $controllerPasien     = new \App\Features\Role\Pasien\PasienController();
 
         $konfigRawatInap  = $controllerRawatInap->fields;
@@ -451,11 +451,11 @@ final class PermintaanDarahController extends ControllerTemplate
                 {$tabel}.id_permintaan,
                 {$tabel}.no_permintaan,
                 pelayanan_darah.status_permintaan.nama_status_permintaan AS status,
-                CONCAT(role.pasien.nomor_rm, ' / ', rekam_medis.registrasi.nomor_rawat) AS identitas_rawat,
+                CONCAT(role.pasien.nomor_rm, ' / ', registrasi.registrasi.nomor_rawat) AS identitas_rawat,
                 person.orang.nama
             ")
-            ->join('rekam_medis.registrasi', "rekam_medis.registrasi.id_registrasi = {$tabel}.id_registrasi", 'inner')
-            ->join('role.pasien', 'role.pasien.id_pasien = rekam_medis.registrasi.id_pasien', 'inner')
+            ->join('registrasi.registrasi', "registrasi.registrasi.id_registrasi = {$tabel}.id_registrasi", 'inner')
+            ->join('role.pasien', 'role.pasien.id_pasien = registrasi.registrasi.id_pasien', 'inner')
             ->join('person.orang', 'person.orang.id_orang = role.pasien.id_orang', 'inner')
             ->join('pelayanan_darah.status_permintaan', "pelayanan_darah.status_permintaan.id_status_permintaan = {$tabel}.id_status_permintaan", 'inner')
             ->where("{$tabel}.id_status_permintaan !=", 3)

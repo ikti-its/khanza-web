@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\Laboratorium\PermintaanLabHeader;
@@ -62,7 +62,7 @@ final class PermintaanLabHeaderController extends ControllerTemplate
                 'r.id_dokter AS id_dokter_perujuk',
                 'od.nama AS nama_dokter_perujuk',
             ])
-            ->join('rekam_medis.registrasi r',              'r.nomor_reg = plh.nomor_reg')
+            ->join('registrasi.registrasi r',              'r.nomor_reg = plh.nomor_reg')
             ->join('role.pasien p',                         'p.id_pasien = r.id_pasien',                  'left')
             ->join('person.orang o',                        'o.id_orang  = p.id_orang',                   'left')
             ->join('laboratorium.ref_status_permintaan s',  's.id_status = plh.id_status_permintaan',     'left')

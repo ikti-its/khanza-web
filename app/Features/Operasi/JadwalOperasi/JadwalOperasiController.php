@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\Operasi\JadwalOperasi;
@@ -72,7 +72,7 @@ final class JadwalOperasiController extends ControllerTemplate
                 'od.nama AS nama_dokter_peminta',
                 'ti.nama_tindakan',
             ])
-            ->join('rekam_medis.registrasi r',        'r.nomor_reg    = po.nomor_reg',   'left')
+            ->join('registrasi.registrasi r',        'r.nomor_reg    = po.nomor_reg',   'left')
             ->join('role.pasien p',                   'p.id_pasien    = r.id_pasien',    'left')
             ->join('person.orang op',                 'op.id_orang    = p.id_orang',     'left')
             ->join('role.dokter d',                   'd.id_dokter    = po.id_dokter',   'left')
