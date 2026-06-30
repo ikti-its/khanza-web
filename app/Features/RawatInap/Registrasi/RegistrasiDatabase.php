@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\RawatInap\Registrasi;
@@ -35,7 +35,7 @@ final class RegistrasiDatabase extends DatabaseTemplate
             [
                 [
                     'id_registrasi',
-                    \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
+                    \App\Features\Registrasi\Registrasi\RegistrasiDatabase::class,
                     'id_registrasi',
                 ],
                 [

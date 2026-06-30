@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\PelayananDarah\PermintaanDarah;
@@ -26,7 +26,7 @@ final class PermintaanDarahDatabase extends DatabaseTemplate
             [
                 [
                     'id_registrasi',
-                    \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
+                    \App\Features\Registrasi\Registrasi\RegistrasiDatabase::class,
                     'id_registrasi',
                 ],
                 [

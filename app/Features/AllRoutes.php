@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features;
@@ -19,7 +19,7 @@ final class AllRoutes extends RouteGroup
                 \App\Features\Pendidikan\PendidikanRoutes::class,
                 \App\Features\Kontak\KontakRoutes::class,
                 \App\Features\Role\RoleRoutes::class,
-                \App\Features\RekamMedis\RekamMedisRoutes::class,
+                \App\Features\Registrasi\RegistrasiRoutes::class,
                 \App\Features\RawatInap\RawatInapRoutes::class,
                 // \App\Features\Darah\DarahRoutes::class,
                 \App\Features\Donor\DonorRoutes::class,

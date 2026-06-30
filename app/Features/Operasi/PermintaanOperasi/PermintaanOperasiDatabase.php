@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 namespace App\Features\Operasi\PermintaanOperasi;
@@ -26,7 +26,7 @@ final class PermintaanOperasiDatabase extends DatabaseTemplate
             [
                 [
                     ['nomor_reg'],
-                    \App\Features\RekamMedis\Registrasi\RegistrasiDatabase::class,
+                    \App\Features\Registrasi\Registrasi\RegistrasiDatabase::class,
                     ['nomor_reg'],
                 ],
                 [
