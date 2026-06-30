@@ -6,9 +6,18 @@ $data = [
 ];
 
 $isBerhasil = isset($baris['id_status_pengambilan']) && (int)$baris['id_status_pengambilan'] === 1;
+
+$pesanKunci = '';
+if (!$isBerhasil) {
+    if (isset($baris['id_status_pengambilan']) && $baris['id_status_pengambilan'] !== null && $baris['id_status_pengambilan'] !== '') {
+        $pesanKunci = 'Aksi lab dikunci karena status pengambilan gagal.';
+    } else {
+        $pesanKunci = 'Aksi lab belum tersedia karena status pengambilan belum ditentukan.';
+    }
+}
 ?>
 
-<div class="<?= $isBerhasil ? 'hs-dropdown' : '' ?> relative inline-flex px-2 py-1.5">
+<div class="<?= $isBerhasil ? 'hs-dropdown' : '' ?> relative inline-flex px-2 py-1.5" <?= !$isBerhasil ? 'title="' . esc($pesanKunci) . '"' : '' ?>>
     
     <?php if ($isBerhasil): ?>
         <button id="hs-dropdown-olah-lab-trigger" type="button" 
@@ -29,7 +38,7 @@ $isBerhasil = isset($baris['id_status_pengambilan']) && (int)$baris['id_status_p
         </div>
 
     <?php else: ?>
-        <button type="button" disabled title="Aksi lab dikunci karena status pengambilan gagal"
+        <button type="button" disabled 
                 class="inline-flex items-center gap-x-1 text-sm font-semibold text-gray-400 dark:text-neutral-600 cursor-not-allowed select-none">
             Proses Darah
             <svg class="size-4 text-gray-400 dark:text-neutral-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
