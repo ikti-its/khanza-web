@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\Registrasi\PoliRawatJalan;
+namespace App\Features\RawatJalan\PoliRawatJalan;
 
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
@@ -15,7 +15,7 @@ final class PoliRawatJalanController extends ControllerTemplate
         parent::__construct(
             new RegistrasiModel(),
             [
-                ['Registrasi',      'registrasi'],
+                ['Rawat Jalan', 'rawat_jalan'],
                 ['Poli Rawat Jalan', 'poli_rawat_jalan'],
             ],
             'Poli Rawat Jalan',

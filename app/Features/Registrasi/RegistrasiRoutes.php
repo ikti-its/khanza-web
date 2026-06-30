@@ -13,7 +13,6 @@ final class RegistrasiRoutes extends RouteTemplate
             'Registrasi',
             [
                 \App\Features\Registrasi\Registrasi\RegistrasiController::class,
-                \App\Features\Registrasi\PoliRawatJalan\PoliRawatJalanController::class,
             ],
             'registrasi.svg',
         );
