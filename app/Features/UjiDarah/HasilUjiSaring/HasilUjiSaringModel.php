@@ -30,4 +30,34 @@ final class HasilUjiSaringModel extends ModelTemplate
             ],
         );
     }
+
+    /**
+     * Memastikan tanggal input uji saring valid
+     * @param string $idPengambilan
+     * @param string $tanggalUjiInput
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    public function validasiTanggalUji(string $idPengambilan, string $tanggalUjiInput): void
+    {
+        $pengambilan = $this->db->table('donor.pengambilan_darah')
+            ->select('tanggal_pengambilan')
+            ->where('id_pengambilan_darah', $idPengambilan)
+            ->get()
+            ->getRowArray();
+
+        if ($pengambilan && !empty($pengambilan['tanggal_pengambilan'])) {
+            $tglPengambilan = new \DateTime($pengambilan['tanggal_pengambilan']);
+            $tglUji         = new \DateTime($tanggalUjiInput);
+            $hariIni        = new \DateTime(date('Y-m-d'));
+
+            if ($tglUji < $tglPengambilan) {
+                throw new \InvalidArgumentException('Gagal menyimpan! Tanggal uji saring tidak boleh mendahului tanggal pengambilan darah.');
+            }
+
+            if ($tglUji > $hariIni) {
+                throw new \InvalidArgumentException('Gagal menyimpan! Tanggal uji saring tidak boleh melebihi tanggal hari ini.');
+            }
+        }
+    }
 }

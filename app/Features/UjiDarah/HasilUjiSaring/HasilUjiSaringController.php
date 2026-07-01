@@ -143,6 +143,8 @@ final class HasilUjiSaringController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            $this->model->validasiTanggalUji($rawPost['id_pengambilan_darah'], $rawPost['tanggal_uji']);
+
             $this->model->insert($dataUjiSaring);
             $idUjiSaring = $this->model->getInsertID();
 
@@ -209,6 +211,7 @@ final class HasilUjiSaringController extends ControllerTemplate
                 ? $this->friendly_db_error($e) 
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
+            return redirect()->back()->withInput();
         }
 
         return redirect()->to($this->get_uri_path() . '/data');
@@ -357,6 +360,8 @@ final class HasilUjiSaringController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            $this->model->validasiTanggalUji($rawPost['id_pengambilan_darah'], $rawPost['tanggal_uji']);
+
             $this->model->update($id, $dataUjiSaring);
 
             $modelStokDarah    = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
@@ -427,6 +432,7 @@ final class HasilUjiSaringController extends ControllerTemplate
                 ? $this->friendly_db_error($e) 
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
+            return redirect()->back()->withInput();
         }
 
         return redirect()->to($this->get_uri_path() . '/data');

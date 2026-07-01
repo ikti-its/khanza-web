@@ -29,7 +29,7 @@
                     Tanggal Pemisahan<span class="text-red-600">*</span>
                 </label>
                 <input type="date" name="tanggal_pemisahan"
-                       value="<?= $baris['tanggal_pemisahan'] ?? date('Y-m-d') ?>"
+                       value="<?= old('tanggal_pemisahan', $baris['tanggal_pemisahan'] ?? date('Y-m-d')) ?>"
                        max="<?= date('Y-m-d') ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
