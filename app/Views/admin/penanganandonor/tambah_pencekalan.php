@@ -65,8 +65,15 @@
                             break;
                         }
                     }
+                    $isDariUjiSaringReaktif = !empty(service('request')->getGet('reaktif'));
+                    $selectedJenisPencekalan = (string)($baris['id_jenis_pencekalan'] ?? '');
+
+                    if ($selectedJenisPencekalan === '' && $isDariUjiSaringReaktif) {
+                        $selectedJenisPencekalan = '1';
+                    }
+
                     foreach ($optionsJenisPencekalan as $opt) : 
-                        $selected = ((string)($baris['id_jenis_pencekalan'] ?? '') === (string)$opt[1]) ? 'selected' : '';
+                        $selected = ($selectedJenisPencekalan === (string)$opt[1]) ? 'selected' : '';
                     ?>
                         <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
                     <?php endforeach; ?>
@@ -81,10 +88,10 @@
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Tanggal Selesai<span class="text-red-600">*</span>
+                    Tanggal Selesai
                 </label>
                 <input type="date" name="tanggal_selesai" value="<?= $baris['tanggal_selesai'] ?? date('Y-m-d') ?>"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">

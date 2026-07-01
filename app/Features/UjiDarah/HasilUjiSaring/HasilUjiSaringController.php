@@ -127,7 +127,10 @@ final class HasilUjiSaringController extends ControllerTemplate
         }
 
         $idPengambilanDarah = $dataUjiSaring['id_pengambilan_darah'] ?? null;
+        $dataPengambilan    = [];
         $nomorPengambilan   = '';
+        $daftarReaktif      = [];
+        $pencekalanUrl      = null;
 
         if ($idPengambilanDarah) {
             $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
@@ -143,15 +146,10 @@ final class HasilUjiSaringController extends ControllerTemplate
             $this->model->insert($dataUjiSaring);
             $idUjiSaring = $this->model->getInsertID();
 
-            $isHbsagReaktif  = (isset($rawPost['hbsag']) && (string)$rawPost['hbsag'] === '1');
-            $isHcvReaktif    = (isset($rawPost['hcv']) && (string)$rawPost['hcv'] === '1');
-            $isHivReaktif    = (isset($rawPost['hiv']) && (string)$rawPost['hiv'] === '1');
-            $isSifilisReaktif = (isset($rawPost['sifilis']) && (string)$rawPost['sifilis'] === '1');
-            $isMalariaReaktif = (isset($rawPost['malaria']) && (string)$rawPost['malaria'] === '1');
-
+            $daftarReaktif = $this->getDaftarReaktif($rawPost);
             $modelStokDarah = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
 
-            if ($isHbsagReaktif || $isHcvReaktif || $isHivReaktif || $isSifilisReaktif || $isMalariaReaktif) {
+            if (!empty($daftarReaktif)) {
                 $modelKasusReaktif = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
 
                 $tanggalDitetapkan = date('Y-m-d');
@@ -168,6 +166,19 @@ final class HasilUjiSaringController extends ControllerTemplate
                                    ->set(['id_status_stok' => 3])
                                    ->update();
                 }
+
+                if (empty($dataPengambilan['id_kunjungan'])) {
+                    throw new \RuntimeException('Data kunjungan tidak ditemukan, sehingga form pencekalan tidak dapat dibuka.');
+                }
+
+                $queryPencekalan = [
+                    'kunjungan'  => $dataPengambilan['id_kunjungan'],
+                    'petugas'    => $dataUjiSaring['id_petugas'] ?? '',
+                    'reaktif'    => implode(',', $daftarReaktif),
+                ];
+
+                $pencekalanUrl = '/penanganan-donor/pencekalan/tambah?' . http_build_query($queryPencekalan);
+
             } else {
                 if (!empty($nomorPengambilan)) {
                     $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
@@ -182,7 +193,15 @@ final class HasilUjiSaringController extends ControllerTemplate
                 throw new \RuntimeException("Gagal menyimpan data hasil uji saring.");
             }
 
-            session()->setFlashdata('success', 'Data hasil uji saring berhasil disimpan.');
+            if ($pencekalanUrl !== null) {
+                session()->set('pencekalan_url', $pencekalanUrl);
+                session()->set(
+                    'pencekalan_message',
+                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil uji saring reaktif.'
+                );
+            } else {
+                session()->setFlashdata('success', 'Data hasil uji saring berhasil disimpan.');
+            }
 
         } catch (\Exception $e) {
             $this->model->db->transRollback();
@@ -314,12 +333,13 @@ final class HasilUjiSaringController extends ControllerTemplate
         }
 
         $idPengambilanDarah = $dataUjiSaring['id_pengambilan_darah'] ?? null;
+        $dataPengambilan    = [];
         $nomorPengambilan   = '';
 
         if ($idPengambilanDarah) {
             $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
-            $dataPengambilan  = $modelPengambilan->find($idPengambilanDarah);
-            if ($dataPengambilan) {
+            $dataPengambilan  = $modelPengambilan->find($idPengambilanDarah) ?? [];
+            if (!empty($dataPengambilan)) {
                 $nomorPengambilan = $dataPengambilan['nomor_pengambilan'] ?? '';
             }
         }
@@ -329,23 +349,22 @@ final class HasilUjiSaringController extends ControllerTemplate
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
+        $idKunjungan    = $dataPengambilan['id_kunjungan'] ?? null;
+        $daftarReaktif  = $this->getDaftarReaktif($rawPost);
+        $pencekalanUrl  = null;
+        $hapusSesiWajib = false;
+
         $this->model->db->transStart();
 
         try {
             $this->model->update($id, $dataUjiSaring);
-
-            $isHbsagReaktif  = (isset($rawPost['hbsag']) && (string)$rawPost['hbsag'] === '1');
-            $isHcvReaktif    = (isset($rawPost['hcv']) && (string)$rawPost['hcv'] === '1');
-            $isHivReaktif    = (isset($rawPost['hiv']) && (string)$rawPost['hiv'] === '1');
-            $isSifilisReaktif = (isset($rawPost['sifilis']) && (string)$rawPost['sifilis'] === '1');
-            $isMalariaReaktif = (isset($rawPost['malaria']) && (string)$rawPost['malaria'] === '1');
 
             $modelStokDarah    = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
             $modelKasusReaktif = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
 
             $kasusLama = $modelKasusReaktif->where('id_uji_saring', $id)->first();
 
-            if ($isHbsagReaktif || $isHcvReaktif || $isHivReaktif || $isSifilisReaktif || $isMalariaReaktif) {
+            if (!empty($daftarReaktif)) {
                 if (!$kasusLama) {
                     $modelKasusReaktif->insert([
                         'id_uji_saring'      => $id,
@@ -357,14 +376,29 @@ final class HasilUjiSaringController extends ControllerTemplate
                 $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
                                ->set(['id_status_stok' => 3])
                                ->update();
+
+                if (empty($idKunjungan)) {
+                    throw new \RuntimeException('Data kunjungan tidak ditemukan, sehingga form pencekalan tidak dapat dibuka.');
+                }
+
+                if ($this->hasPencekalan($idKunjungan)) {
+                    $this->updateKeteranganPencekalan($idKunjungan, $daftarReaktif);
+                    $hapusSesiWajib = true;
+                } else {
+                    $pencekalanUrl = $this->makePencekalanUrl($dataPengambilan, $dataUjiSaring, $daftarReaktif);
+                }
             } else {
                 if ($kasusLama) {
                     $modelKasusReaktif->where('id_uji_saring', $id)->delete();
                 }
 
+                $this->hapusPencekalan($idKunjungan);
+
                 $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
                                ->set(['id_status_stok' => 2])
                                ->update();
+
+                $hapusSesiWajib = true;
             }
 
             $this->model->db->transComplete();
@@ -373,7 +407,19 @@ final class HasilUjiSaringController extends ControllerTemplate
                 throw new \RuntimeException("Gagal memperbarui data hasil uji saring.");
             }
 
-            session()->setFlashdata('success', 'Data hasil uji saring berhasil diperbarui.');
+            if ($hapusSesiWajib) {
+                $this->clearPencekalanSession();
+            }
+
+            if ($pencekalanUrl !== null) {
+                session()->set('pencekalan_url', $pencekalanUrl);
+                session()->set(
+                    'pencekalan_message',
+                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil uji saring reaktif.'
+                );
+            } else {
+                session()->setFlashdata('success', 'Data hasil uji saring berhasil diperbarui.');
+            }
 
         } catch (\Exception $e) {
             $this->model->db->transRollback();
@@ -401,13 +447,17 @@ final class HasilUjiSaringController extends ControllerTemplate
         }
 
         $idPengambilanDarah = $dataUjiSaring['id_pengambilan_darah'] ?? null;
+        $dataPengambilan    = [];
         $nomorPengambilan   = '';
+        $idKunjungan        = null;
 
         if ($idPengambilanDarah) {
             $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
-            $dataPengambilan  = $modelPengambilan->find($idPengambilanDarah);
-            if ($dataPengambilan) {
+            $dataPengambilan  = $modelPengambilan->find($idPengambilanDarah) ?? [];
+
+            if (!empty($dataPengambilan)) {
                 $nomorPengambilan = $dataPengambilan['nomor_pengambilan'] ?? '';
+                $idKunjungan      = $dataPengambilan['id_kunjungan'] ?? null;
             }
         }
 
@@ -419,6 +469,8 @@ final class HasilUjiSaringController extends ControllerTemplate
 
             $modelKasusReaktif->where('id_uji_saring', $id)->delete();
 
+            $this->hapusPencekalan($idKunjungan);
+
             if (!empty($nomorPengambilan)) {
                 $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
                                ->set(['id_status_stok' => 1])
@@ -428,6 +480,12 @@ final class HasilUjiSaringController extends ControllerTemplate
             $this->model->delete($id);
 
             $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus data hasil uji saring.');
+            }
+
+            $this->clearPencekalanSession();
 
             session()->setFlashdata('success', 'Data hasil uji saring berhasil dihapus.');
 
@@ -440,5 +498,113 @@ final class HasilUjiSaringController extends ControllerTemplate
         }
 
         return $this->home();
+    }
+
+    /**
+     * Mengambil daftar parameter IMLTD yang bernilai reaktif
+     */
+    private function getDaftarReaktif(array $rawPost): array
+    {
+        $daftarUji = [
+            'hbsag'   => 'HBsAg',
+            'hcv'     => 'HCV',
+            'hiv'     => 'HIV',
+            'sifilis' => 'Sifilis',
+            'malaria' => 'Malaria',
+        ];
+    
+        $daftarReaktif = [];
+    
+        foreach ($daftarUji as $kolom => $label) {
+            if (isset($rawPost[$kolom]) && (string) $rawPost[$kolom] === '1') {
+                $daftarReaktif[] = $label;
+            }
+        }
+    
+        return $daftarReaktif;
+    }
+    
+    /**
+     * Membuat keterangan pencekalan berdasarkan hasil uji saring reaktif
+     */
+    private function makeKeteranganReaktif(array $daftarReaktif): string
+    {
+        return 'Reaktif ' . implode(', ', $daftarReaktif) . ' pada uji saring IMLTD';
+    }
+    
+    /**
+     * Membuat URL form pencekalan dari hasil uji saring reaktif
+     */
+    private function makePencekalanUrl(array $dataPengambilan, array $dataUjiSaring, array $daftarReaktif): string
+    {
+        $queryPencekalan = [
+            'kunjungan' => $dataPengambilan['id_kunjungan'] ?? '',
+            'petugas'   => $dataUjiSaring['id_petugas'] ?? '',
+            'reaktif'   => implode(',', $daftarReaktif),
+        ];
+    
+        return '/penanganan-donor/pencekalan/tambah?' . http_build_query($queryPencekalan);
+    }
+    
+    /**
+     * Mengecek apakah pencekalan dari hasil uji saring IMLTD sudah ada
+     */
+    private function hasPencekalan(int|string $idKunjungan): bool
+    {
+        if (empty($idKunjungan)) {
+            return false;
+        }
+    
+        $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
+    
+        return $modelPencekalan
+            ->where('id_kunjungan', $idKunjungan)
+            ->first() !== null;
+    }
+    
+    /**
+     * Menghapus pencekalan yang berasal dari hasil uji saring IMLTD
+     */
+    private function hapusPencekalan(int|string $idKunjungan): void
+    {
+        if (empty($idKunjungan)) {
+            return;
+        }
+    
+        $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
+    
+        $modelPencekalan
+            ->where('id_kunjungan', $idKunjungan)
+            ->delete();
+    }
+    
+    /**
+     * Memperbarui keterangan pencekalan jika hasil reaktif berubah.
+     */
+    private function updateKeteranganPencekalan(int|string $idKunjungan, array $daftarReaktif): void
+    {
+        if (empty($idKunjungan)) {
+            return;
+        }
+    
+        $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
+    
+        $modelPencekalan
+            ->where('id_kunjungan', $idKunjungan)
+            ->set([
+                'keterangan' => $this->makeKeteranganReaktif($daftarReaktif),
+            ])
+            ->update();
+    }
+    
+    /**
+     * Menghapus session pengisian pencekalan
+     */
+    private function clearPencekalanSession(): void
+    {
+        session()->remove([
+            'pencekalan_url',
+            'pencekalan_message',
+        ]);
     }
 }

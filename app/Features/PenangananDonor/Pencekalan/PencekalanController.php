@@ -6,6 +6,7 @@ namespace App\Features\PenangananDonor\Pencekalan;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class PencekalanController extends ControllerTemplate
 {
@@ -100,6 +101,52 @@ final class PencekalanController extends ControllerTemplate
             $konfigGabungan[] = $fieldPencekalan;
         }
 
+        $idKunjungan = $this->request->getGet('kunjungan');
+        $idPetugas   = $this->request->getGet('petugas');
+        $reaktif     = $this->request->getGet('reaktif');
+
+        if ($idKunjungan !== null && is_numeric($idKunjungan)) {
+            $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
+            $dataKunjungan  = $modelKunjungan->find($idKunjungan) ?? [];
+
+            if (!empty($dataKunjungan)) {
+                $mockBaris['id_kunjungan']    = $dataKunjungan['id_kunjungan'] ?? '';
+                $mockBaris['nomor_kunjungan'] = $dataKunjungan['nomor_kunjungan'] ?? '';
+
+                if (!empty($dataKunjungan['id_pendonor'])) {
+                    $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+                    $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']) ?? [];
+
+                    $mockBaris['nomor_pendonor'] = $dataPendonor['nomor_pendonor'] ?? '';
+
+                    if (!empty($dataPendonor['id_orang'])) {
+                        $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                        $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+
+                        $mockBaris['nama'] = $dataOrang['nama'] ?? '';
+                    }
+                }
+            }
+        }
+
+        if ($idPetugas !== null && is_numeric($idPetugas)) {
+            $mockBaris['id_petugas'] = $idPetugas;
+
+            $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
+            $dataPetugas  = $modelPetugas->find($idPetugas) ?? [];
+
+            if (!empty($dataPetugas['id_orang'])) {
+                $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
+                $dataOrangPetugas  = $modelOrangPetugas->find($dataPetugas['id_orang']) ?? [];
+
+                $mockBaris['nama_petugas'] = $dataOrangPetugas['nama'] ?? '';
+            }
+        }
+
+        if (!empty($reaktif)) {
+            $mockBaris['keterangan'] = 'Reaktif ' . str_replace(',', ', ', (string) $reaktif) . ' pada uji saring IMLTD';
+        }
+
         return view('admin/penanganandonor/tambah_pencekalan', [
             'judul'          => 'Tambah ' . $this->title,
             'breadcrumbs'    => array_merge($this->breadcrumbs, $breadcrumbs),
@@ -109,6 +156,24 @@ final class PencekalanController extends ControllerTemplate
             'baris'          => $mockBaris,
             'form_action'    => '/submittambah',
         ]);
+    }
+
+    /**
+     * OVERRIDE: Memproses simpan data pencekalan
+     */
+    #[\Override]
+    public function create(): string|RedirectResponse
+    {
+        $response = parent::create();
+
+        if ($response instanceof RedirectResponse) {
+            session()->remove([
+                'pencekalan_url',
+                'pencekalan_message',
+            ]);
+        }
+
+        return $response;
     }
 
     /**
