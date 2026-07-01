@@ -94,7 +94,7 @@
                     Tanggal Permintaan<span class="text-red-600">*</span>
                 </label>
                 <input type="datetime-local" name="tanggal_permintaan" value="<?= isset($baris['tanggal_permintaan']) && $baris['tanggal_permintaan'] !== '' ? date('Y-m-d\TH:i', strtotime($baris['tanggal_permintaan'])) : date('Y-m-d\TH:i') ?>"
-                       max="<?= date('Y-m-d\TH:i') ?>"
+                       min="<?= date('Y-m-d\TH:i') ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
