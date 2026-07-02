@@ -36,6 +36,7 @@ final class SkriningDonorController extends ControllerTemplate
                 [SHOW, REQUIRED, I::NUMBER, 'nadi',               'Denyut Nadi (x/menit)'],
                 [SHOW, REQUIRED, I::TEMP,   'suhu_tubuh',         'Suhu'],
                 [SHOW, REQUIRED, I::FLOAT,  'kadar_hemoglobin',   'Kadar Hemoglobin'],
+                [HIDE, REQUIRED, I::TEXT,   'jawaban_kuesioner',  'Jawaban Kuesioner'],
                 [SHOW, REQUIRED, I::SELECT, 'id_hasil_anamnesis', 'Hasil Anamnesis'],
                 [SHOW, REQUIRED, I::SELECT, 'id_status_skrining', 'Status Skrining'],
             ],
@@ -155,7 +156,8 @@ final class SkriningDonorController extends ControllerTemplate
     #[\Override]
     final public function create(): string|RedirectResponse
     {
-        $rawPost = $this->request->getPost();
+        $rawPost  = $this->request->getPost();
+        $jawabanQ = $rawPost['q'] ?? [];
 
         $hasilSkrining     = $this->model->hitungOtomatisStatusSkrining($rawPost);
         $idStatusSkrining  = $hasilSkrining['status'];
@@ -170,6 +172,7 @@ final class SkriningDonorController extends ControllerTemplate
         }
 
         $dataSkrining['id_status_skrining'] = $idStatusSkrining;
+        $dataSkrining['jawaban_kuesioner']  = !empty($jawabanQ) ? json_encode($jawabanQ) : null;
 
         $this->model->db->transStart();
         try {
@@ -185,7 +188,7 @@ final class SkriningDonorController extends ControllerTemplate
                 session()->setFlashdata('success', 'Data skrining berhasil disimpan. Pendonor dinyatakan LOLOS.');
             } else {
                 $teksAlasan = implode(', ', $daftarAlasan);
-                session()->setFlashdata('error', "Data skrining berhasil disimpan. Pendonor dinyatakan GAGAL/DITUNDA karena indikator: {$teksAlasan}.");
+                session()->setFlashdata('success', "Data skrining berhasil disimpan. Pendonor dinyatakan GAGAL/DITUNDA karena indikator: {$teksAlasan}.");
             }
 
         } catch (\Exception $e) {
@@ -307,7 +310,9 @@ final class SkriningDonorController extends ControllerTemplate
     final public function update(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->index();
-        $rawPost = $this->request->getPost();
+        
+        $rawPost  = $this->request->getPost();
+        $jawabanQ = $rawPost['q'] ?? [];
 
         $hasilSkrining     = $this->model->hitungOtomatisStatusSkrining($rawPost);
         $idStatusSkrining  = $hasilSkrining['status'];
@@ -320,7 +325,9 @@ final class SkriningDonorController extends ControllerTemplate
                 $dataSkrining[$namaKolom] = $rawPost[$namaKolom];
             }
         }
+        
         $dataSkrining['id_status_skrining'] = $idStatusSkrining;
+        $dataSkrining['jawaban_kuesioner']  = !empty($jawabanQ) ? json_encode($jawabanQ) : null;
 
         $this->model->db->transStart();
         try {

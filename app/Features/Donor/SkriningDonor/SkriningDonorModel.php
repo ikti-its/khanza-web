@@ -20,6 +20,7 @@ final class SkriningDonorModel extends ModelTemplate
                 'nadi'             => V::DEFAULT(),
                 'suhu_tubuh'       => V::DEFAULT(),
                 'kadar_hemoglobin' => V::DEFAULT(),
+                'jawaban_kuesioner'=> V::DEFAULT(),
             ],
             [
                 'id_kunjungan'       => [

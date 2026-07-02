@@ -95,9 +95,49 @@
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
+                    Informed Consent<span class="text-red-600">*</span>
+                </label>        
+                <div class="w-full lg:w-1/4">
+                    <div class="border border-gray-300 rounded-xl p-4 bg-white shadow-sm">
+                        <?php
+                        $sudahIsiKuesioner = !empty($baris['jawaban_kuesioner']);
+                        ?>
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-900">
+                                    Kuesioner Donor
+                                </p>
+                                <p class="mt-1 text-xs text-gray-500 leading-relaxed">
+                                    Isi 41 pertanyaan untuk membantu menentukan hasil anamnesis.
+                                </p>
+                            </div>
+
+                            <span id="statusKuesioner"
+                                  class="text-xs font-semibold px-3 py-1 rounded-full"
+                                  style="
+                                      background-color: <?= $sudahIsiKuesioner ? '#dcfce7' : '#fef9c3' ?>;
+                                      color: <?= $sudahIsiKuesioner ? '#15803d' : '#92400e' ?>;
+                                  ">
+                                <?= $sudahIsiKuesioner ? 'Sudah diisi' : 'Belum diisi' ?>
+                            </span>
+                        </div>
+
+                        <button type="button"
+                                onclick="open_modalKuesionerSkrining()"
+                                class="mt-4 w-full inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm">
+                            <?= $sudahIsiKuesioner ? 'Lihat / Ubah Jawaban' : 'Isi Kuesioner' ?>
+                        </button>
+
+                        <p class="mt-2 text-xs text-gray-500 leading-relaxed">
+                            Setelah selesai, hasil anamnesis akan terisi otomatis dan masih dapat diubah oleh petugas.
+                        </p>
+                    </div>
+                </div>
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Hasil Anamnesis<span class="text-red-600">*</span>
                 </label>
-                <select name="id_hasil_anamnesis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
+                <select id="id_hasil_anamnesis" name="id_hasil_anamnesis" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="">-- Pilih --</option>
                     <?php
                     $optionsAnamnesis = [];
@@ -108,15 +148,18 @@
                         }
                     }
                     foreach ($optionsAnamnesis as $opt) :
-                        $selected = ((string)($baris['id_hasil_anamnesis'] ?? '') === (string)$opt[1]) ? 'selected' : '';
+                        $selected = ((string) old('id_hasil_anamnesis', $baris['id_hasil_anamnesis'] ?? '') === (string) $opt[1]) ? 'selected' : '';
                     ?>
-                        <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
+                        <option value="<?= $opt[1] ?>" <?= $selected ?>>
+                            <?= esc($opt[0]) ?>
+                        </option>
                     <?php endforeach; ?>
                 </select>
-
-                <div class="block mt-5 md:my-0 md:ml-10 mb-2 w-1/5"></div>
-                <div class="w-full lg:w-1/4"></div>
             </div>
+
+            <?= view('components/modal/modalkuesioner', [
+                'baris' => $baris
+            ]) ?>
 
             <?= view('components/form/submit_button') ?>
         </form>
@@ -174,6 +217,16 @@
         if (!idKunjungan) {
             alert("Silakan tentukan data Kunjungan terlebih dahulu melalui modal pencarian.");
             return false;
+        }
+
+        for (let i = 1; i <= 41; i++) {
+            const jawaban = document.querySelector(`input[name="q[q${i}]"]:checked`);
+
+            if (!jawaban) {
+                alert(`Pertanyaan informed consent nomor ${i} belum dijawab.`);
+                open_modalKuesionerSkrining();
+                return false;
+            }
         }
         
         var submitButton = document.getElementById('submitButton');

@@ -22,6 +22,7 @@ final class SkriningDonorDatabase extends DatabaseTemplate
                 'nadi'               => T::VITAL(30, 200),
                 'suhu_tubuh'         => T::TEMP(),
                 'kadar_hemoglobin'   => T::LAB(),
+                'jawaban_kuesioner'  => T::TEXT(),
                 'id_hasil_anamnesis' => T::FK_AUTO(),
                 'id_status_skrining' => T::FK_AUTO(),
             ],
