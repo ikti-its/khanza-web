@@ -41,6 +41,7 @@ final class RegistrasiController extends ControllerTemplate
                 [SHOW, REQUIRED, I::SELECT, 'status_rawat',      'Status Rawat'],
                 [SHOW, REQUIRED, I::SELECT, 'jenis_bayar',       'Jenis Bayar'],
                 [SHOW, REQUIRED, I::SELECT, 'status_bayar',      'Status Bayar'],
+                [SHOW, REQUIRED, I::SELECT, 'id_status_triase',  'Status Triase'],
             ],
         );
     }
@@ -53,7 +54,7 @@ final class RegistrasiController extends ControllerTemplate
     {
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn($f) => !in_array($f[2], ['id_registrasi', 'nomor_reg', 'nomor_rawat', 'id_pasien', 'id_dokter'], true)
+            fn($f) => !in_array($f[2], ['id_registrasi', 'nomor_reg', 'nomor_rawat', 'id_pasien', 'id_dokter', 'id_status_triase'], true)
         ));
     }
 
@@ -221,7 +222,7 @@ final class RegistrasiController extends ControllerTemplate
         $nomorRawat = generateNextNoRawat($lastRmRawat['nomor_rawat'] ?? null);
 
         $shared = $this->buildPostData();
-        $ugdData = array_merge($shared, ['nomor_reg' => $nomorReg, 'nomor_rawat' => $nomorRawat]);
+        $ugdData = array_merge($shared, ['nomor_reg' => $nomorReg, 'nomor_rawat' => $nomorRawat, 'id_status_triase'  => 1]);
         $rmData  = array_merge($shared, [
             'nomor_reg'         => $nomorReg,
             'nomor_rawat'       => $nomorRawat,

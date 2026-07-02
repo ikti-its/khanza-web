@@ -20,21 +20,22 @@ final class RegistrasiModel extends ModelTemplate
                 'biaya_registrasi' => V::DEFAULT(),
             ],
             [
-                'id_dokter'     => [
+                'id_dokter'        => [
                     'kode_dokter',
-                    'id_orang'  => ['nama'],
+                    'id_orang'     => ['nama'],
                     'spesialis'
                 ],
-                'id_pasien'     => [
-                    'id_orang'  => ['nama'],
+                'id_pasien'        => [
+                    'id_orang'     => ['nama'],
                     'nomor_rm'
                 ],
-                'id_pj_pasien'  => ['nama'],
-                'id_alamat_pj'  => ['alamat_lengkap'],
-                'hubungan_pj'   => ['nama_hubungan_pj'],
-                'jenis_bayar'   => ['nama_jenis_bayar'],
-                'status_rawat'  => ['nama_status_rawat'],
-                'status_bayar'  => ['nama_status_bayar'],
+                'id_pj_pasien'     => ['nama'],
+                'id_alamat_pj'     => ['alamat_lengkap'],
+                'hubungan_pj'      => ['nama_hubungan_pj'],
+                'jenis_bayar'      => ['nama_jenis_bayar'],
+                'status_rawat'     => ['nama_status_rawat'],
+                'status_bayar'     => ['nama_status_bayar'],
+                'id_status_triase' => ['nama_status_triase'],
             ],
         );
     }
