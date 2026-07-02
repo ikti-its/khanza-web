@@ -33,6 +33,7 @@ final class LembarOperasiController extends ControllerTemplate
             ->table('operasi.jadwal_operasi j')
             ->select([
                 'j.id_jadwal',
+                'j.nomor_operasi',
                 'j.tanggal',
                 'j.waktu_mulai',
                 'j.waktu_selesai',

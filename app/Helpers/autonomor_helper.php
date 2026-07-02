@@ -267,6 +267,34 @@ if (!function_exists('generateNextNoPermintaanRad')) {
     }
 }
 
+// AutoNomor untuk No. Operasi
+if (!function_exists('generateNextNoOperasi')) {
+    /**
+     * Generate nomor operasi berikutnya.
+     * Format: OPYYYYMMDDXXXX
+     * Contoh: OP202606300001
+     *
+     * @param string|null $lastNo  Nomor terakhir pada tanggal yang sama (dari DB)
+     * @param string|null $tanggal Tanggal operasi format 'Y-m-d', default hari ini
+     */
+    function generateNextNoOperasi(?string $lastNo, ?string $tanggal = null): string
+    {
+        $tgl    = $tanggal ? strtotime($tanggal) : time();
+        assert(is_int($tgl));
+        $prefix = 'OP' . date('Ymd', $tgl);
+
+        /** @var list<bool> $match */
+        $match = [];
+        if (!$lastNo || !preg_match('/^OP' . date('Ymd', $tgl) . '(\d{4})$/', $lastNo, $match)) {
+            $nomor = 1;
+        } else {
+            $nomor = (int) $match[1] + 1;
+        }
+
+        return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
+    }
+}
+
 // AutoNomor untuk No. Permintaan Laboratorium
 // Laboratorium — Patologi Anatomi (PA)
 if (!function_exists('generateNextNoPermintaanPk')) {

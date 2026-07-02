@@ -50,6 +50,11 @@ $iconCircle = '<svg class="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                     No. Registrasi: <?= esc($jadwal['nomor_reg'] ?? '-') ?>
                 </p>
+                <?php if (!empty($jadwal['nomor_operasi'])): ?>
+                <p class="text-sm font-mono text-gray-500 dark:text-gray-400 mt-0.5">
+                    No. Operasi: <?= esc($jadwal['nomor_operasi']) ?>
+                </p>
+                <?php endif; ?>
             </div>
             <div class="flex items-center gap-x-2">
                 <?php if ($isCito): ?>
@@ -155,6 +160,10 @@ $iconCircle = '<svg class="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-
                 </ul>
             </div>
         <?php endforeach; ?>
+    </div>
+
+    <div class="flex justify-end">
+        <?= view('components/header/kembali') ?>
     </div>
 
 </div>

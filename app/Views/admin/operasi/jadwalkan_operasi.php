@@ -29,7 +29,14 @@ $isCito        = filter_var($baris['is_cito'] ?? false, FILTER_VALIDATE_BOOLEAN)
             <input type="hidden" name="id_dokter_bedah"    id="id_dokter_bedah"    value="<?= esc($baris['id_dokter_bedah']    ?? '') ?>">
             <input type="hidden" name="id_dokter_anestesi" id="id_dokter_anestesi" value="<?= esc($baris['id_dokter_anestesi'] ?? '') ?>">
 
-            <?php 
+            <?php if (!empty($baris['nomor_operasi'])): ?>
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="<?= $labelLeft ?>">No. Operasi</label>
+                <input type="text" value="<?= esc($baris['nomor_operasi']) ?>" readonly class="<?= $readonlyClass ?> lg:w-1/4 font-mono">
+            </div>
+            <?php endif; ?>
+
+            <?php
             $fields = [
                 ['No. Registrasi', 'nomor_reg', 'Nama Pasien', 'nama_pasien'],
                 ['Dokter Peminta', 'nama_dokter_peminta', 'Tanggal Minta', 'tanggal_minta'],

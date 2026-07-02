@@ -25,21 +25,51 @@ final class JadwalOperasiController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
-                A::JADWALKAN,
                 A::LEMBAR_OPERASI,
+                A::FILTER,
             ],
             [
                 [HIDE,       OPTIONAL, I::INDEX, 'id_jadwal',          'ID Jadwal'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,  'nomor_operasi',      'No. Operasi'],
                 [TABLE_ONLY, OPTIONAL, I::INDEX, 'id_permintaan',      'Nama Pasien'],
                 [TABLE_ONLY, OPTIONAL, I::INDEX, 'id_ruangan',         'Ruangan'],
                 [HIDE,       OPTIONAL, I::INDEX, 'id_dokter_bedah',    'Dokter Bedah'],
                 [HIDE,       OPTIONAL, I::INDEX, 'id_dokter_anestesi', 'Dokter Anestesi'],
                 [SHOW,       REQUIRED, I::DATE,  'tanggal',            'Tanggal'],
                 [SHOW,       REQUIRED, I::TIME,  'waktu_mulai',        'Waktu Mulai'],
-                [FORM_ONLY,  OPTIONAL, I::TIME,  'waktu_selesai',      'Waktu Selesai'],
+                [SHOW,       OPTIONAL, I::TIME,  'waktu_selesai',      'Waktu Selesai'],
                 [TABLE_ONLY, OPTIONAL, I::INDEX, 'id_status',          'Status'],
             ],
         );
+    }
+
+    // -------------------------------------------------------------------------
+    // Index
+    // -------------------------------------------------------------------------
+
+    #[\Override]
+    public function index(): string|RedirectResponse
+    {
+        $this->filters = [
+            'menunggu'    => 'Menunggu Dijadwalkan',
+            'dijadwalkan' => 'Dijadwalkan',
+            'proses'      => 'Proses Operasi',
+            'selesai'     => 'Selesai',
+            'dibatalkan'  => 'Dibatalkan',
+        ];
+
+        $this->active_filter = $this->request->getGet('filter') ?: null;
+
+        match ($this->active_filter) {
+            'menunggu'    => $this->model->set_filter('id_status', 1),
+            'dijadwalkan' => $this->model->set_filter('id_status', 2),
+            'proses'      => $this->model->set_filter('id_status', 3),
+            'selesai'     => $this->model->set_filter('id_status', 4),
+            'dibatalkan'  => $this->model->set_filter('id_status', 5),
+            default       => null,
+        };
+
+        return parent::index();
     }
 
     // -------------------------------------------------------------------------
@@ -196,18 +226,42 @@ final class JadwalOperasiController extends ControllerTemplate
     // CRUD
     // -------------------------------------------------------------------------
 
+    private function generateNomorOperasi(string $tanggal): string
+    {
+        helper('autonomor');
+
+        $lastNo = $this->model->db
+            ->table('operasi.jadwal_operasi')
+            ->select('nomor_operasi')
+            ->like('nomor_operasi', 'OP' . date('Ymd', strtotime($tanggal)), 'after')
+            ->orderBy('nomor_operasi', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRowArray();
+
+        return generateNextNoOperasi($lastNo['nomor_operasi'] ?? null, $tanggal);
+    }
+
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->home();
 
         $rawPost = $this->request->getPost();
+        $tanggal = $rawPost['tanggal'] ?? null;
+
+        $existing = $this->model->find($id);
+        $nomorOperasi = $existing['nomor_operasi'] ?? null;
+        if ($nomorOperasi === null && $tanggal !== null) {
+            $nomorOperasi = $this->generateNomorOperasi($tanggal);
+        }
 
         $data = [
+            'nomor_operasi'      => $nomorOperasi,
             'id_ruangan'         => $rawPost['id_ruangan']         ?? null,
             'id_dokter_bedah'    => $rawPost['id_dokter_bedah']    ?? null,
             'id_dokter_anestesi' => $rawPost['id_dokter_anestesi'] ?? null,
-            'tanggal'            => $rawPost['tanggal']            ?? null,
+            'tanggal'            => $tanggal,
             'waktu_mulai'        => $rawPost['waktu_mulai']        ?? null,
             'waktu_selesai'      => $rawPost['waktu_selesai']      ?? null,
             'id_status'          => 2,
