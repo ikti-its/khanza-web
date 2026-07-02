@@ -17,7 +17,7 @@
         [
             'type'    => 'link',
             'text'    => 'Registrasi Pasien',
-            'href'    => '/rekam-medis/registrasi/tambah',
+            'href'    => '/registrasi/registrasi/tambah',
             'icon'    => 'plus'
         ]
     ],
@@ -25,15 +25,15 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const btnTambahRegistrasi = document.querySelector('#modalRegistrasi a[href="/rekam-medis/registrasi/tambah"]');
+        const btnTambahRegistrasi = document.querySelector('#modalRegistrasi a[href="/registrasi/registrasi/tambah"]');
         if (btnTambahRegistrasi) {
             btnTambahRegistrasi.removeAttribute('target');
-            btnTambahRegistrasi.href = '/rekam-medis/registrasi/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
+            btnTambahRegistrasi.href = '/registrasi/registrasi/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
         }
         initModalList({
             modalId:     'modalRegistrasi',
             tableId:     'registrasiTable',
-            url:         '<?= site_url('rekam-medis/registrasi/modal/list') ?>',
+            url:         '<?= site_url('registrasi/registrasi/modal/list') ?>',
             fields:      ['nomor_reg', 'nomor_rm', 'nama', 'tanggal_reg'],
             searchIds: {
                 searchNomorReg:   'nomor_reg',
