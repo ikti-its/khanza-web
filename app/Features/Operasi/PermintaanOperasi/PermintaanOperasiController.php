@@ -25,6 +25,7 @@ final class PermintaanOperasiController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::JADWALKAN,
             ],
             [
                 [HIDE,       OPTIONAL, I::INDEX,  'id_permintaan', 'ID Permintaan'],
@@ -115,9 +116,33 @@ final class PermintaanOperasiController extends ControllerTemplate
     #[\Override]
     protected function before_read(): void
     {
-        $this->model
-            ->set_order('is_cito', 'DESC');
+        $this->model->set_order('is_cito', 'DESC');
+    }
 
+    #[\Override]
+    protected function after_read(array &$data_tabel): void
+    {
+        if (empty($data_tabel)) return;
+
+        $ids = array_column($data_tabel, 'id_permintaan');
+
+        $jadwals = $this->model->db
+            ->table('operasi.jadwal_operasi')
+            ->select(['id_permintaan', 'id_jadwal', 'id_status'])
+            ->whereIn('id_permintaan', $ids)
+            ->get()
+            ->getResultArray();
+
+        $map = [];
+        foreach ($jadwals as $j) {
+            $map[$j['id_permintaan']] = $j;
+        }
+
+        foreach ($data_tabel as &$row) {
+            $j = $map[$row['id_permintaan']] ?? null;
+            $row['id_jadwal'] = $j['id_jadwal'] ?? null;
+            $row['id_status'] = $j['id_status'] ?? null;
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -222,6 +247,37 @@ final class PermintaanOperasiController extends ControllerTemplate
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
+    }
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $rows = $this->model->db
+            ->table('operasi.permintaan_operasi po')
+            ->select([
+                'po.id_permintaan',
+                'po.nomor_reg',
+                'po.tanggal_minta',
+                'po.is_cito',
+                'p.nomor_rm',
+                'o.nama',
+                'ti.nama_tindakan',
+                'od.nama AS nama_dokter',
+                'jo.id_jadwal',
+                'jo.id_status',
+            ])
+            ->join('registrasi.registrasi r',        'r.nomor_reg      = po.nomor_reg',     'left')
+            ->join('role.pasien p',                   'p.id_pasien      = r.id_pasien',      'left')
+            ->join('person.orang o',                  'o.id_orang       = p.id_orang',       'left')
+            ->join('role.dokter d',                   'd.id_dokter      = po.id_dokter',     'left')
+            ->join('person.orang od',                 'od.id_orang      = d.id_orang',       'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan',   'left')
+            ->join('operasi.jadwal_operasi jo',       'jo.id_permintaan = po.id_permintaan', 'left')
+            ->orderBy('po.is_cito', 'DESC')
+            ->orderBy('po.tanggal_minta', 'DESC')
+            ->get()
+            ->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
     }
 
     #[\Override]
