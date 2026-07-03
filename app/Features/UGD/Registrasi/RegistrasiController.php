@@ -26,6 +26,7 @@ final class RegistrasiController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::FILTER,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_registrasi',     'ID Registrasi'],
@@ -44,6 +45,26 @@ final class RegistrasiController extends ControllerTemplate
                 [SHOW, REQUIRED, I::SELECT, 'id_status_triase',  'Status Triase'],
             ],
         );
+    }
+
+    /**
+     * OVERRIDE: Menampilkan Halaman Utama Data Registrasi UGD
+     */
+    #[\Override]
+    public function index(): string
+    {
+        $this->filters = [
+            'belum_ditriase' => 'Belum Ditriase',
+            'sudah_ditriase' => 'Sudah Ditriase',
+        ];
+
+        $this->active_filter = $this->request->getGet('filter') ?: null;
+
+        if ($this->active_filter !== null && array_key_exists($this->active_filter, $this->filters)) {
+            $this->model->applyFilter($this->active_filter);
+        }
+
+        return parent::index();
     }
 
     // ──────────────────────────────────────────────────────────

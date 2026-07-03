@@ -34,14 +34,14 @@ final class DataTriaseController extends ControllerTemplate
                 [SHOW, REQUIRED, I::SELECT, 'id_alat_transportasi',  'Alat Transportasi'],
                 [SHOW, REQUIRED, I::SELECT, 'id_alasan_kedatangan',  'Alasan Kedatangan'],
                 [SHOW, REQUIRED, I::TEXT,   'keterangan_kedatangan', 'Keterangan'],
-                [SHOW, REQUIRED, I::INDEX,  'id_macam_kasus',        'ID Macam Kasus'],
-                [SHOW, REQUIRED, I::NUMBER, 'sistolik',              'Tekanan Sistolik'],
-                [SHOW, REQUIRED, I::NUMBER, 'diastolik',             'Tekanan Diastolik'],
-                [SHOW, REQUIRED, I::NUMBER, 'nadi',                  'Nadi (x/menit)'],
-                [SHOW, REQUIRED, I::NUMBER, 'pernapasan',            'Pernapasan (x/menit)'],
-                [SHOW, REQUIRED, I::TEMP,   'suhu',                  'Suhu'],
-                [SHOW, REQUIRED, I::NUMBER, 'saturasi_o2',           'Saturasi O2 (%)'],
-                [SHOW, REQUIRED, I::NUMBER, 'nyeri',                 'Nyeri (0-10)'],
+                [SHOW, REQUIRED, I::INDEX,  'id_macam_kasus',        'Macam Kasus'],
+                [HIDE, REQUIRED, I::NUMBER, 'sistolik',              'Tekanan Sistolik'],
+                [HIDE, REQUIRED, I::NUMBER, 'diastolik',             'Tekanan Diastolik'],
+                [HIDE, REQUIRED, I::NUMBER, 'nadi',                  'Nadi (x/menit)'],
+                [HIDE, REQUIRED, I::NUMBER, 'pernapasan',            'Pernapasan (x/menit)'],
+                [HIDE, REQUIRED, I::TEMP,   'suhu',                  'Suhu'],
+                [HIDE, REQUIRED, I::NUMBER, 'saturasi_o2',           'Saturasi O2 (%)'],
+                [HIDE, REQUIRED, I::NUMBER, 'nyeri',                 'Nyeri (0-10)'],
             ],
         );
     }
@@ -218,6 +218,9 @@ final class DataTriaseController extends ControllerTemplate
                 }
             }
 
+            $modelRegistrasi = new \App\Features\UGD\Registrasi\RegistrasiModel();
+            $modelRegistrasi->updateStatusTriase($dataTriase['id_registrasi'], 2);
+
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
@@ -277,7 +280,7 @@ final class DataTriaseController extends ControllerTemplate
             if (!empty($regRow)) {
                 $dataRegistrasi['id_registrasi']     = $regRow['id_registrasi'] ?? '';
                 $dataRegistrasi['nomor_rawat']       = $regRow['nomor_rawat'] ?? '';
-                $dataRegistrasi['tanggal_kunjungan'] = $regRow['tanggal_kunjungan'] ?? '';
+                // $dataRegistrasi['tanggal_kunjungan'] = $regRow['tanggal_reg'] ?? '';
                 
                 if (!empty($regRow['id_pasien'])) {
                     $modelPasien = new \App\Features\Role\Pasien\PasienModel();
@@ -502,6 +505,11 @@ final class DataTriaseController extends ControllerTemplate
                 }
             }
 
+            if (!empty($dataTriase['id_registrasi'])) {
+                $modelRegistrasi = new \App\Features\UGD\Registrasi\RegistrasiModel();
+                $modelRegistrasi->updateStatusTriase($dataTriase['id_registrasi'], 2);
+            }
+
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
@@ -547,6 +555,9 @@ final class DataTriaseController extends ControllerTemplate
             $modelSekunder->where('id_triase', $id)->delete();
 
             $this->model->delete($id);
+
+            $modelRegistrasi = new \App\Features\UGD\Registrasi\RegistrasiModel();
+            $modelRegistrasi->updateStatusTriase($dataTriase['id_registrasi'], 1);
 
             $this->model->db->transComplete();
 

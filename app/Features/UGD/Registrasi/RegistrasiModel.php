@@ -39,4 +39,33 @@ final class RegistrasiModel extends ModelTemplate
             ],
         );
     }
+
+    /**
+     * Memfilter data registrasi UGD berdasarkan status triase
+     */
+    public function applyFilter(string $filter): self
+    {
+        $statusMap = [
+            'belum_ditriase' => 1,
+            'sudah_ditriase' => 2,
+        ];
+
+        if (isset($statusMap[$filter])) {
+            $this->set_filter('id_status_triase', $statusMap[$filter]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Memperbarui status triase
+     */
+    public function updateStatusTriase(int|string $idRegistrasi, int $idStatusTriase): bool
+    {
+        return $this->db->table('ugd.registrasi')
+            ->where('id_registrasi', $idRegistrasi)
+            ->update([
+                'id_status_triase' => $idStatusTriase,
+            ]);
+    }
 }
