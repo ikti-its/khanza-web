@@ -304,7 +304,7 @@
                 const hasChecked = document.querySelector(`input[type="checkbox"][name="id_parameter[${idItem}][]"]:checked`);
                 if (!hasHidden && !hasChecked) {
                     const namaItem = _itemLabSelected[idItem]?.nama_item ?? `Item #${idItem}`;
-                    showError('items', `"${namaItem}" belum memiliki parameter yang dipilih.`);
+                    showError('items', `${namaItem} belum memiliki parameter yang dipilih.`);
                     valid = false;
                 }
             });
