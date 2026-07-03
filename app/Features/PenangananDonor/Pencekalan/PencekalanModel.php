@@ -65,4 +65,21 @@ final class PencekalanModel extends ModelTemplate
 
         return $tanggalSelesai < date('Y-m-d') ? self::STATUS_SELESAI : self::STATUS_AKTIF;
     }
+
+    /**
+     * Memfilter data pencekalan berdasarkan status
+     */
+    public function applyFilterStatus(string $filter): self
+    {
+        $statusMap = [
+            'aktif'   => 1,
+            'selesai' => 2,
+        ];
+
+        if (isset($statusMap[$filter])) {
+            $this->set_filter('id_status_pencekalan', $statusMap[$filter]);
+        }
+
+        return $this;
+    }
 }

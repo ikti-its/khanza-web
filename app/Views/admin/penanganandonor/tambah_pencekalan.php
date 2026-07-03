@@ -81,16 +81,23 @@
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
+                <?php
+                $tanggalMulai = !empty($baris['tanggal_mulai']) ? $baris['tanggal_mulai'] : date('Y-m-d');
+                $tanggalSelesai = !empty($baris['tanggal_selesai']) ? $baris['tanggal_selesai'] : '';
+                ?>
+
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Tanggal Mulai<span class="text-red-600">*</span>
                 </label>
-                <input type="date" name="tanggal_mulai" value="<?= !empty($baris['tanggal_mulai']) ? $baris['tanggal_mulai'] : date('Y-m-d') ?>"
+                <input type="date" id="tanggal_mulai" name="tanggal_mulai" value="<?= $tanggalMulai ?>"
+                       max="<?= date('Y-m-d') ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Tanggal Selesai
                 </label>
-                <input type="date" name="tanggal_selesai" value="<?= $baris['tanggal_selesai'] ?? date('Y-m-d') ?>"
+                <input type="date" id="tanggal_selesai" name="tanggal_selesai" value="<?= $tanggalSelesai ?>"
+                       min="<?= $tanggalMulai ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white">
             </div>
 
@@ -186,6 +193,17 @@
         document.getElementById('id_petugas').value = item.id_petugas;
         document.getElementById('nama_petugas').value = item.nama;
     }
+
+    const tanggalMulai = document.getElementById('tanggal_mulai');
+    const tanggalSelesai = document.getElementById('tanggal_selesai');
+
+    tanggalMulai.addEventListener('change', function () {
+        tanggalSelesai.min = this.value;
+
+        if (tanggalSelesai.value && tanggalSelesai.value < this.value) {
+            tanggalSelesai.value = '';
+        }
+    });
 
     function validateForm() {
         var requiredFields = document.querySelectorAll('select[required], input[required]');

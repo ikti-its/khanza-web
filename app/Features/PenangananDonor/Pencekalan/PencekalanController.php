@@ -25,6 +25,7 @@ final class PencekalanController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::FILTER,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_pencekalan',        'ID Pencekalan'],
@@ -47,6 +48,26 @@ final class PencekalanController extends ControllerTemplate
     protected function before_read(): void
     {
         $this->model->sinkronkanStatusPencekalan();
+    }
+
+    /**
+     * OVERRIDE: Menampilkan Halaman Utama Data Pencekalan
+     */
+    #[\Override]
+    public function index(): string|RedirectResponse
+    {
+        $this->filters = [
+            'aktif'   => 'Aktif',
+            'selesai' => 'Selesai',
+        ];
+
+        $this->active_filter = $this->request->getGet('filter') ?: null;
+
+        if ($this->active_filter !== null && array_key_exists($this->active_filter, $this->filters)) {
+            $this->model->applyFilterStatus($this->active_filter);
+        }
+
+        return parent::index();
     }
 
     /**
