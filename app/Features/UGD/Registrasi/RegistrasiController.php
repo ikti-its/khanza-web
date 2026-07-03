@@ -362,7 +362,9 @@ final class RegistrasiController extends ControllerTemplate
     {
         $tabel = $this->model->table;
 
-        $data = $this->model->builder($tabel . ' r')
+        $filter = $this->request->getGet('filter');
+
+        $builder = $this->model->builder($tabel . ' r')
             ->select([
                 'r.id_registrasi',
                 'r.nomor_reg',
@@ -373,12 +375,20 @@ final class RegistrasiController extends ControllerTemplate
                 'p.nomor_rm',
                 'o.nama AS nama_pasien',
                 'o.tanggal_lahir',
-                'od.nama AS nama_dokter'
+                'od.nama AS nama_dokter',
+                'st.nama_status_triase'
             ])
             ->join('role.pasien p',   'p.id_pasien = r.id_pasien', 'inner')
             ->join('person.orang o',  'o.id_orang  = p.id_orang', 'inner')
             ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
             ->join('person.orang od', 'od.id_orang = d.id_orang',  'left')
+            ->join('ugd.status_triase st', 'st.id_status_triase = r.id_status_triase', 'left');
+
+        if ($filter === 'belum_ditriase') {
+            $builder->where('r.id_status_triase', 1);
+        }
+
+        $data = $builder
             ->orderBy('r.tanggal_reg', 'DESC')
             ->get()
             ->getResultArray();

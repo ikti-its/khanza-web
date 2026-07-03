@@ -30,10 +30,18 @@
             btnTambahRegistrasiUgd.removeAttribute('target');
             btnTambahRegistrasiUgd.href = '/ugd/registrasi/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
         }
+
+        const modalFilterInput = document.getElementById('modalRegistrasiUgdFilterType');
+        let fallbackUrl = '<?= site_url('ugd/registrasi/modal/list') ?>';
+        
+        if (modalFilterInput && modalFilterInput.value !== '') {
+            fallbackUrl += '?filter=' + modalFilterInput.value;
+        }
+        
         initModalList({
             modalId:     'modalRegistrasiUgd',
             tableId:     'registrasiUgdTable',
-            url:         '<?= site_url('ugd/registrasi/modal/list') ?>',
+            url:         fallbackUrl,
             fields:      ['nomor_reg', 'nomor_rm', 'nama_pasien', 'tanggal_reg'],
             searchIds: {
                 searchNomorRegUgd:   'nomor_reg',

@@ -1,6 +1,8 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 
+<input type="hidden" id="modalRegistrasiUgdFilterType" value="belum_ditriase">
+
 <?= $this->include('components/modal/modalregistrasiugd') ?>
 <?= $this->include('components/modal/modaltriasemacamkasus') ?>
 <?= $this->include('components/modal/modalpetugas') ?>
