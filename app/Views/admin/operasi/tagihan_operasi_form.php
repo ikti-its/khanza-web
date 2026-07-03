@@ -75,7 +75,7 @@ $infoGrid = [
       <?php endforeach; ?>
 
       <!-- ── Info Operasi (readonly) ────────────────────────────────────── -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-4 mb-5 pb-5 border-b border-gray-200 dark:border-gray-700">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-4 mb-5">
         <?php foreach ($infoGrid as $label => $value): ?>
         <div>
           <p class="text-xs text-gray-500 dark:text-gray-400"><?= $label ?></p>
@@ -84,11 +84,11 @@ $infoGrid = [
         <?php endforeach; ?>
       </div>
 
-      <!-- ── Tindakan yang Dilakukan ──────────────────────────────────── -->
+      <!-- ── Rincian Biaya Tindakan ──────────────────────────────────── -->
       <div class="<?= $sectionDiv ?>">
-        <p class="<?= $sectionH ?>">Tindakan yang Dilakukan</p>
+        <p class="<?= $sectionH ?>">Rincian Biaya Tindakan</p>
         <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
-          Termasuk tindakan utama dan tindakan tambahan yang dilakukan selama operasi berlangsung.
+          Breakdown komponen jasa berdasarkan paket tindakan operasi yang dijadwalkan.
         </p>
 
         <div class="flex justify-end mb-3">
@@ -101,29 +101,26 @@ $infoGrid = [
         <div class="border rounded-xl overflow-hidden dark:border-gray-700 mb-8">
           <table class="w-full text-sm text-gray-700 dark:text-gray-300 table-fixed">
             <colgroup>
-              <col class="w-1/6">
-              <col class="w-3/6">
-              <col class="w-1/6">
+              <col class="w-5/6">
               <col class="w-1/6">
             </colgroup>
             <thead style="background-color:#E6F2EF;" class="text-gray-800 font-semibold text-base">
               <tr>
-                <th class="p-4 border text-center text-base">Kode</th>
-                <th class="p-4 border text-center text-base">Nama Tindakan</th>
+                <th class="p-4 border text-center text-base">Komponen</th>
                 <th class="p-4 border text-center text-base">Tarif</th>
-                <th class="p-4 border text-center text-base">Aksi</th>
+
               </tr>
             </thead>
-            <tbody id="tindakanTableBody">
-              <tr id="emptyTindakanRow">
-                <td colspan="4" class="text-center py-6 text-gray-400 italic dark:text-gray-500">
-                  Belum ada tindakan ditambahkan
+            <tbody id="paketTableBody">
+              <tr id="emptyPaketRow">
+                <td colspan="2" class="text-center py-6 text-gray-400 italic dark:text-gray-500">
+                  Belum ada rincian tindakan
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div id="hiddenTindakanInputs"></div>
+        <div id="hiddenPaketInputs"></div>
       </div>
       
       <!-- ── Data Utama ─────────────────────────────────────────────────── -->
@@ -435,14 +432,15 @@ function hapusObat(idBarang) {
 
 // Pre-fill pada mode edit / create
 document.addEventListener('DOMContentLoaded', function () {
-    const tindakanTerpilih = <?= json_encode(array_values($tindakan_terpilih ?? [])) ?>;
-    tindakanTerpilih.forEach(item => addTindakanToTable(item));
+    const paketTerpilih = <?= json_encode(array_values($paket_terpilih ?? [])) ?>;
+    paketTerpilih.forEach(item => addPaketToTable(item));
 
     const obatTerpilih = <?= json_encode(array_values($obat)) ?>;
     obatTerpilih.forEach(item => addObatToTable(item, item.jumlah));
 });
 
-// ── Tindakan ──────────────────────────────────────────────────────────────
+// ── Paket Tindakan ────────────────────────────────────────────────────────
+const _paketItems    = {};
 const _tindakanAdded = {};
 
 function autofillTindakan(item) {
@@ -450,50 +448,86 @@ function autofillTindakan(item) {
         alert('Tindakan ini sudah ditambahkan.');
         return;
     }
-    addTindakanToTable(item);
+    fetch(`<?= site_url('operasi/paket-tindakan-operasi/modal/list') ?>?id_tindakan=${item.id_tindakan}`)
+        .then(r => r.json())
+        .then(json => {
+            if (!json.data?.length) {
+                alert('Tindakan ini belum memiliki paket komponen jasa.');
+                return;
+            }
+            _tindakanAdded[item.id_tindakan] = true;
+            json.data.forEach(p => addPaketToTable(p));
+        });
 }
 
-function addTindakanToTable(item) {
-    _tindakanAdded[item.id_tindakan] = true;
-    const tarif = parseFloat(item.tarif) || 0;
-    document.getElementById('emptyTindakanRow')?.remove();
+function renderPaketTable() {
+    const tbody = document.getElementById('paketTableBody');
+    tbody.innerHTML = '';
 
-    const tr = document.createElement('tr');
-    tr.id = `tindakan-row-${item.id_tindakan}`;
-    tr.className = 'border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800';
-    tr.innerHTML = `
-        <td class="p-2 border text-center dark:border-gray-700">${item.kode_tindakan ?? '-'}</td>
-        <td class="p-2 border dark:border-gray-700">${item.nama_tindakan ?? ''}</td>
-        <td class="p-2 border text-right pr-4 dark:border-gray-700"
-            data-tindakan-tarif="${tarif}">${formatRupiah(tarif)}</td>
-        <td class="p-2 border text-center dark:border-gray-700">
-            <button type="button" onclick="hapusTindakan(${item.id_tindakan})"
-                    class="text-red-600 hover:underline text-sm dark:text-red-400">
-                Hapus
-            </button>
-        </td>`;
-    document.getElementById('tindakanTableBody').appendChild(tr);
+    const groups = {};
+    const groupOrder = [];
+    Object.values(_paketItems).forEach(item => {
+        const key = item.nama_tindakan || '-';
+        if (!groups[key]) { groups[key] = []; groupOrder.push(key); }
+        groups[key].push(item);
+    });
 
-    const inp = document.createElement('input');
-    inp.type = 'hidden';
-    inp.name = `tindakan[${item.id_tindakan}][id_tindakan]`;
-    inp.value = item.id_tindakan;
-    inp.dataset.id = item.id_tindakan;
-    document.getElementById('hiddenTindakanInputs').appendChild(inp);
+    if (groupOrder.length === 0) {
+        tbody.innerHTML = '<tr id="emptyPaketRow"><td colspan="2" class="text-center py-6 text-gray-400 italic dark:text-gray-500">Belum ada rincian tindakan</td></tr>';
+        updateTotal();
+        return;
+    }
+
+    groupOrder.forEach(tindakan => {
+        const idTindakan = groups[tindakan][0].id_tindakan;
+        const hdr = document.createElement('tr');
+        hdr.className = 'bg-gray-50 dark:bg-slate-800';
+        hdr.innerHTML = `
+            <td class="p-2 pl-4 border dark:border-gray-700 font-semibold text-sm text-gray-800 dark:text-white">${tindakan}</td>
+            <td class="p-2 border text-center dark:border-gray-700">
+                <button type="button" onclick="hapusTindakan(${idTindakan})"
+                        class="text-red-600 hover:underline text-xs dark:text-red-400">Hapus</button>
+            </td>`;
+        tbody.appendChild(hdr);
+
+        groups[tindakan].forEach(item => {
+            const tarif = parseFloat(item.tarif) || 0;
+            const tr = document.createElement('tr');
+            tr.id = `paket-row-${item.id_paket}`;
+            tr.className = 'border-b dark:border-gray-700';
+            tr.innerHTML = `
+                <td class="p-2 pl-10 border dark:border-gray-700 text-gray-600 dark:text-gray-400">
+                    <span class="text-gray-400 mr-1">→</span>${item.nama_komponen ?? '-'}
+                </td>
+                <td class="p-2 border text-right pr-4 dark:border-gray-700" data-tindakan-tarif="${tarif}">${formatRupiah(tarif)}</td>`;
+            tbody.appendChild(tr);
+        });
+    });
 
     updateTotal();
 }
 
 function hapusTindakan(idTindakan) {
-    document.getElementById(`tindakan-row-${idTindakan}`)?.remove();
-    document.getElementById('hiddenTindakanInputs').querySelector(`[data-id="${idTindakan}"]`)?.remove();
+    Object.values(_paketItems).forEach(item => {
+        if (item.id_tindakan == idTindakan) {
+            delete _paketItems[item.id_paket];
+            document.getElementById('hiddenPaketInputs').querySelector(`[data-id="${item.id_paket}"]`)?.remove();
+        }
+    });
     delete _tindakanAdded[idTindakan];
+    renderPaketTable();
+}
 
-    const tbody = document.getElementById('tindakanTableBody');
-    if (!tbody.children.length) {
-        tbody.innerHTML = '<tr id="emptyTindakanRow"><td colspan="4" class="text-center py-6 text-gray-400 italic dark:text-gray-500">Belum ada tindakan ditambahkan</td></tr>';
-    }
-    updateTotal();
+function addPaketToTable(item) {
+    _paketItems[item.id_paket] = item;
+
+    const inp = document.createElement('input');
+    inp.type = 'hidden';
+    inp.name = `paket[${item.id_paket}][id_paket]`;
+    inp.value = item.id_paket;
+    document.getElementById('hiddenPaketInputs').appendChild(inp);
+
+    renderPaketTable();
 }
 
 // ── Validasi ──────────────────────────────────────────────────────────────

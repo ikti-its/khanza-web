@@ -47,8 +47,9 @@ final class PaketTindakanOperasiController extends ControllerTemplate
 
         $rows = $this->model->db
             ->table('operasi.paket_tindakan_operasi p')
-            ->select(['k.nama_komponen', 'p.tarif_kelas_3'])
-            ->join('operasi.ref_komponen_jasa k', 'k.id_komponen = p.id_komponen', 'left')
+            ->select(['p.id_paket', 'p.id_tindakan', 'k.nama_komponen', 'p.tarif_kelas_3', 'ti.nama_tindakan'])
+            ->join('operasi.ref_komponen_jasa k',     'k.id_komponen  = p.id_komponen',  'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan = p.id_tindakan', 'left')
             ->where('p.id_tindakan', $idTindakan)
             ->orderBy('p.id_komponen', 'ASC')
             ->get()
