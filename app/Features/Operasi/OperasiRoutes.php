@@ -15,6 +15,7 @@ final class OperasiRoutes extends RouteTemplate
 
                 \App\Features\Operasi\PermintaanOperasi\PermintaanOperasiController::class,
                 \App\Features\Operasi\JadwalOperasi\JadwalOperasiController::class,
+                \App\Features\Operasi\PapanJadwalOperasi\PapanJadwalOperasiController::class,
                 \App\Features\Operasi\TagihanOperasi\TagihanOperasiController::class,
                 \App\Features\Operasi\PaketTindakanOperasi\PaketTindakanOperasiController::class => 'HIDE',
                 \App\Features\Operasi\LembarOperasi\LembarOperasiController::class => 'HIDE',
@@ -100,6 +101,7 @@ final class OperasiRoutes extends RouteTemplate
                 \App\Features\Operasi\RefStewardMotorik\RefStewardMotorikController::class => 'HIDE',
                 \App\Features\Operasi\RefStewardRespirasi\RefStewardRespirasiController::class => 'HIDE',
                 \App\Features\Operasi\RefTindakanOperasi\RefTindakanOperasiController::class => 'HIDE',
+                \App\Features\Operasi\RefSlotOperasi\RefSlotOperasiController::class => 'HIDE',
                 \App\Features\Operasi\RefWarnaUrine\RefWarnaUrineController::class => 'HIDE',
             ],
             'operasi.svg',
