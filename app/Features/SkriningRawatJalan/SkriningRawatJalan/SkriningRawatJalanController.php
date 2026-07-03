@@ -43,6 +43,17 @@ final class SkriningRawatJalanController extends ControllerTemplate
                 [SHOW,      REQUIRED, I::SELECT,  'id_keputusan',     'Keputusan'],
             ],
         );
+
+        $this->row_alert = ['value' => 'alert_igd', 'threshold' => 'alert_max'];
+    }
+
+    #[\Override]
+    protected function after_read(array &$data_tabel): void
+    {
+        foreach ($data_tabel as &$row) {
+            $row['alert_igd'] = ((int) ($row['id_keputusan'] ?? 1)) === 2 ? 0 : 1;
+            $row['alert_max'] = 1;
+        }
     }
 
     // ──────────────────────────────────────────────────────────
