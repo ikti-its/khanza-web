@@ -1,2 +1,2 @@
-﻿id_pencekalan,id_kunjungan,id_jenis_pencekalan,tanggal_mulai,tanggal_selesai,id_shift,id_petugas,keterangan
-1,2,1,2026-04-17,2026-10-30,3,6,Reaktif HCV pada uji IMLTD
+﻿id_pencekalan,id_kunjungan,id_jenis_pencekalan,tanggal_mulai,tanggal_selesai,id_shift,id_petugas,keterangan,id_status_pencekalan
+1,2,1,2026-04-17,2026-10-30,3,6,Reaktif HCV pada uji IMLTD,1

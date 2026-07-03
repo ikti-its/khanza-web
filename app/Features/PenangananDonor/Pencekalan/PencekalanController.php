@@ -27,16 +27,26 @@ final class PencekalanController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_pencekalan',       'ID Pencekalan'],
-                [SHOW, REQUIRED, I::INDEX,  'id_kunjungan',        'ID Kunjungan'],
-                [SHOW, REQUIRED, I::SELECT, 'id_jenis_pencekalan', 'Jenis Pencekalan'],
-                [SHOW, REQUIRED, I::DATE,   'tanggal_mulai',       'Tanggal Mulai'],
-                [SHOW, OPTIONAL, I::DATE,   'tanggal_selesai',     'Tanggal Selesai'],
-                [SHOW, REQUIRED, I::SELECT, 'id_shift',            'Shift'],
-                [SHOW, REQUIRED, I::INDEX,  'id_petugas',          'Petugas'],
-                [SHOW, REQUIRED, I::TEXT,   'keterangan',          'Keterangan'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_pencekalan',        'ID Pencekalan'],
+                [SHOW, REQUIRED, I::INDEX,  'id_kunjungan',         'ID Kunjungan'],
+                [SHOW, REQUIRED, I::SELECT, 'id_jenis_pencekalan',  'Jenis Pencekalan'],
+                [SHOW, REQUIRED, I::DATE,   'tanggal_mulai',        'Tanggal Mulai'],
+                [SHOW, OPTIONAL, I::DATE,   'tanggal_selesai',      'Tanggal Selesai'],
+                [SHOW, REQUIRED, I::SELECT, 'id_shift',             'Shift'],
+                [SHOW, REQUIRED, I::INDEX,  'id_petugas',           'Petugas'],
+                [SHOW, REQUIRED, I::TEXT,   'keterangan',           'Keterangan'],
+                [SHOW, REQUIRED, I::SELECT, 'id_status_pencekalan', 'Status Pencekalan'],
             ],
         );
+    }
+
+    /**
+     * OVERRIDE: Menyinkronkan status pencekalan sebelum data ditampilkan
+     */
+    #[\Override]
+    protected function before_read(): void
+    {
+        $this->model->sinkronkanStatusPencekalan();
     }
 
     /**
@@ -156,6 +166,15 @@ final class PencekalanController extends ControllerTemplate
             'baris'          => $mockBaris,
             'form_action'    => '/submittambah',
         ]);
+    }
+
+    /**
+     * OVERRIDE: Mengatur status default pencekalan
+     */
+    #[\Override]
+    protected function before_create(array &$postData): void
+    {
+        $this->model->setStatusAktif($postData);
     }
 
     /**
@@ -290,5 +309,16 @@ final class PencekalanController extends ControllerTemplate
             'baris'          => $baris,
             'form_action'    => '/submitedit/' . $id,
         ]);
+    }
+
+    /**
+     * OVERRIDE: Menentukan ulang status pencekalan saat data diperbarui
+     */
+    #[\Override]
+    protected function before_update(array &$postData, int|string $id): void
+    {
+        $postData['id_status_pencekalan'] = $this->model->tentukanStatusPencekalan(
+            $postData['tanggal_selesai'] ?? null
+        );
     }
 }

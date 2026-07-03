@@ -19,13 +19,50 @@ final class PencekalanModel extends ModelTemplate
                 'keterangan'      => V::DEFAULT(),
             ],
             [
-                'id_kunjungan'        => ['nomor_kunjungan'],
-                'id_jenis_pencekalan' => ['nama_jenis_pencekalan'],
-                'id_shift'            => ['nama_shift'],
-                'id_petugas'          => [
+                'id_kunjungan'         => ['nomor_kunjungan'],
+                'id_jenis_pencekalan'  => ['nama_jenis_pencekalan'],
+                'id_shift'             => ['nama_shift'],
+                'id_petugas'           => [
                     'id_orang' => ['nama']
                 ],
+                'id_status_pencekalan' => ['nama_status_pencekalan'],
             ],
         );
+    }
+
+    private const STATUS_AKTIF   = 1;
+    private const STATUS_SELESAI = 2;
+
+    /**
+     * Menyinkronkan status pencekalan menjadi selesai jika tanggal selesai sudah lewat
+     */
+    public function sinkronkanStatusPencekalan(): void
+    {
+        $this->builder()
+            ->set('id_status_pencekalan', self::STATUS_SELESAI)
+            ->where('tanggal_selesai IS NOT NULL', null, false)
+            ->where('tanggal_selesai <', date('Y-m-d'))
+            ->where('id_status_pencekalan !=', self::STATUS_SELESAI)
+            ->update();
+    }
+
+    /**
+     * Mengatur status pencekalan default menjadi aktif
+     */
+    public function setStatusAktif(array &$data): void
+    {
+        $data['id_status_pencekalan'] = self::STATUS_AKTIF;
+    }
+
+    /**
+     * Menentukan status pencekalan berdasarkan tanggal selesai
+     */
+    public function tentukanStatusPencekalan(?string $tanggalSelesai): int
+    {
+        if ($tanggalSelesai === null || $tanggalSelesai === '') {
+            return self::STATUS_AKTIF;
+        }
+
+        return $tanggalSelesai < date('Y-m-d') ? self::STATUS_SELESAI : self::STATUS_AKTIF;
     }
 }
