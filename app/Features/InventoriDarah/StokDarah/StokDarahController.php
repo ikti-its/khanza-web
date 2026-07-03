@@ -43,14 +43,20 @@ final class StokDarahController extends ControllerTemplate
     }
 
     /**
+     * OVERRIDE: Memperbarui status kadaluarsa sebelum data ditampilkan
+     */
+    #[\Override]
+    protected function before_read(): void
+    {
+        $this->model->updateStatusKadaluarsa(date('Y-m-d'));
+    }
+    
+    /**
      * OVERRIDE: Menampilkan Halaman Utama Data Stok Darah
      */
     #[\Override]
     public function index(): string
     {
-        $hariIni = date('Y-m-d');
-        $this->model->updateStatusKadaluarsa($hariIni);
-
         $this->filters = [
             'karantina'     => 'Karantina',
             'tersedia'      => 'Tersedia',
