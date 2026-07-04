@@ -53,6 +53,7 @@ final class PapanJadwalOperasiController extends ControllerTemplate
                 'op.nama AS nama_pasien',
                 'ti.nama_tindakan',
                 'ob.nama AS nama_dokter_bedah',
+                'oa.nama AS nama_dokter_anestesi',
             ])
             ->join('operasi.permintaan_operasi po',      'po.id_permintaan = j.id_permintaan',   'left')
             ->join('registrasi.registrasi r',            'r.nomor_reg      = po.nomor_reg',       'left')
@@ -61,6 +62,8 @@ final class PapanJadwalOperasiController extends ControllerTemplate
             ->join('operasi.ref_tindakan_operasi ti',    'ti.id_tindakan   = po.id_tindakan',     'left')
             ->join('role.dokter db',                     'db.id_dokter     = j.id_dokter_bedah',  'left')
             ->join('person.orang ob',                    'ob.id_orang      = db.id_orang',        'left')
+            ->join('role.dokter da',                     'da.id_dokter     = j.id_dokter_anestesi', 'left')
+            ->join('person.orang oa',                    'oa.id_orang      = da.id_orang',        'left')
             ->where('j.tanggal', $tanggal)
             ->where('j.id_status !=', 5)
             ->get()->getResultArray();
