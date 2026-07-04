@@ -301,9 +301,7 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
             const p          = `tindakan[${idx}]`;
             const isBacaSaja = !!item.is_baca_saja && item.is_baca_saja !== 'f';
 
-            const teknisCells = isBacaSaja
-                ? `<td colspan="8" class="p-2 border text-center text-sm text-gray-400 italic dark:border-gray-700 dark:text-gray-500">Parameter teknis tidak diperlukan</td>`
-                : `${inp(`${p}[proyeksi]`,               'text',   'maxlength="20" placeholder="Contoh: AP, PA"',         item.proyeksi               ?? '')}
+            const teknisCells = `${inp(`${p}[proyeksi]`,               'text',   'maxlength="20" placeholder="Contoh: AP, PA"',         item.proyeksi               ?? '')}
                    ${inp(`${p}[kilovoltage_kv]`,         'number', 'step="0.01" min="20"  max="160"  placeholder="kV"',   item.kilovoltage_kv         ?? '')}
                    ${inp(`${p}[milliampere_second_mas]`, 'number', 'step="0.01" min="0.1" max="1000" placeholder="mAs"',  item.milliampere_second_mas ?? '')}
                    ${inp(`${p}[focus_film_distance_ffd]`,'number', 'step="1"    min="40"  max="300"  placeholder="cm"',   item.focus_film_distance_ffd ?? '')}
