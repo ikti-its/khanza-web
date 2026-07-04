@@ -53,9 +53,9 @@
                         <th class="p-3 border-b border-gray-200 dark:border-gray-700 text-center">No.</th>
                         <th class="p-3 border-b border-gray-200 dark:border-gray-700 text-center">No. Registrasi</th>
                         <th class="p-3 border-b border-gray-200 dark:border-gray-700 text-center">No. RM</th>
-                        <th class="p-3 border-b border-gray-200 dark:border-gray-700">Nama Pasien</th>
-                        <th class="p-3 border-b border-gray-200 dark:border-gray-700">Dokter</th>
-                        <th class="p-3 border-b border-gray-200 dark:border-gray-700">Poli Tujuan</th>
+                        <th class="p-3 border-b border-gray-200 dark:border-gray-700 text-center">Nama Pasien</th>
+                        <th class="p-3 border-b border-gray-200 dark:border-gray-700 text-center">Dokter</th>
+                        <th class="p-3 border-b border-gray-200 dark:border-gray-700 text-center">Poli Tujuan</th>
                         <th class="p-3 border-b border-gray-200 dark:border-gray-700 text-center">Status Poli</th>
                         <th class="p-3 border-b border-gray-200 dark:border-gray-700 text-center">Tgl. Registrasi</th>
                     </tr>
@@ -71,6 +71,24 @@
         </div>
 
         <p id="totalCount" class="mt-3 text-xs text-gray-400 dark:text-gray-500"></p>
+    </div>
+</div>
+
+<!-- Modal Skrining -->
+<div id="modalSkrining" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-md mx-4 p-6 relative">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Hasil Skrining</p>
+                <h3 id="modalSkriningTitle" class="text-base font-semibold text-gray-800 dark:text-gray-100"></h3>
+            </div>
+            <button onclick="closeSkrining()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 ml-4 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div id="modalSkriningBody"></div>
     </div>
 </div>
 
@@ -159,9 +177,14 @@
                 <td class="p-3 border-b border-gray-100 dark:border-gray-700 text-center font-bold text-gray-500 dark:text-gray-400">${i + 1}</td>
                 <td class="p-3 border-b border-gray-100 dark:border-gray-700 text-center font-mono text-xs">${r.nomor_reg ?? '-'}</td>
                 <td class="p-3 border-b border-gray-100 dark:border-gray-700 text-center font-mono text-xs">${r.nomor_rm ?? '-'}</td>
-                <td class="p-3 border-b border-gray-100 dark:border-gray-700 font-medium">${r.nama_pasien ?? '-'}</td>
-                <td class="p-3 border-b border-gray-100 dark:border-gray-700">${r.nama_dokter ?? '-'}</td>
-                <td class="p-3 border-b border-gray-100 dark:border-gray-700">${r.nama_unit ?? '-'}</td>
+                <td class="p-3 border-b border-gray-100 dark:border-gray-700 text-center font-medium">
+                    <button onclick="showSkrining('${r.nomor_rm}', '${(r.nama_pasien ?? '').replace(/'/g, "\\'")}')"
+                            class="text-left hover:underline hover:text-teal-700 dark:hover:text-teal-400 transition-colors">
+                        ${r.nama_pasien ?? '-'}
+                    </button>
+                </td>
+                <td class="p-3 border-b border-gray-100 dark:border-gray-700 text-center">${r.nama_dokter ?? '-'}</td>
+                <td class="p-3 border-b border-gray-100 dark:border-gray-700 text-center">${r.nama_unit ?? '-'}</td>
                 <td class="p-3 border-b border-gray-100 dark:border-gray-700 text-center">
                     ${statusBadge(r.id_status_poli, r.nama_status_poli)}
                 </td>
@@ -170,6 +193,91 @@
         `).join('');
 
         counter.textContent = `Menampilkan ${rows.length} data registrasi rawat jalan.`;
+    }
+
+    // ── Skrining Modal ────────────────────────────────────────────
+    async function showSkrining(noRm, namaPasien) {
+        const modal   = document.getElementById('modalSkrining');
+        const title   = document.getElementById('modalSkriningTitle');
+        const body    = document.getElementById('modalSkriningBody');
+
+        title.textContent = namaPasien;
+        body.innerHTML = '<p class="text-sm text-gray-400 italic">Memuat...</p>';
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        try {
+            const res  = await fetch(`${modulPath}/skrining?no_rm=${encodeURIComponent(noRm)}`);
+            const json = await res.json();
+            body.innerHTML = renderSkrining(json.data);
+        } catch {
+            body.innerHTML = '<p class="text-sm text-red-400 italic">Gagal memuat data skrining.</p>';
+        }
+    }
+
+    function closeSkrining() {
+        const modal = document.getElementById('modalSkrining');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    function boolLabel(val) {
+        const t = val === true || val === 't' || val === '1' || val === 1;
+        return t
+            ? '<span class="text-red-600 font-semibold">Ya</span>'
+            : '<span class="text-gray-500">Tidak</span>';
+    }
+
+    function renderSkrining(d) {
+        if (!d) return '<p class="text-sm text-gray-400 italic">Belum ada data skrining untuk pasien ini.</p>';
+
+        const keputusan = d.skrining_keputusan ?? '-';
+        const isIgd     = keputusan.toLowerCase().includes('igd') || keputusan.toLowerCase().includes('gawat');
+
+        let dateStr = '-';
+        if (d.tgl_skrining) {
+            const dt = new Date(d.tgl_skrining);
+            dateStr = dt.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+            if (d.jam_skrining) dateStr += ', ' + d.jam_skrining.slice(0, 5);
+        }
+
+        const bannerBg     = isIgd ? '#fef2f2' : '#f0fdf4';
+        const bannerBorder = isIgd ? '#fca5a5' : '#86efac';
+        const bannerText   = isIgd ? '#991b1b' : '#166534';
+        const bannerIcon   = isIgd ? '⚠' : '✓';
+
+        const rowStyle = 'display:grid; grid-template-columns:110px 1fr; padding:5px 0; border-bottom:1px solid #f3f4f6;';
+        const labelStyle = 'font-size:12px; color:#6b7280;';
+        const valStyle   = 'font-size:12px; color:#111827; font-weight:500;';
+
+        const klinisRows = [
+            ['Kesadaran',   d.kesadaran      ?? '-'],
+            ['Pernapasan',  d.pernafasan     ?? '-'],
+            ['Skala Nyeri', d.skala_nyeri    ?? '-'],
+            ['Nyeri Dada',  d.nyeri_dada     ?? '-'],
+            ['Batuk',       d.kategori_batuk ?? '-'],
+        ].map(([l, v]) => `<div style="${rowStyle}"><span style="${labelStyle}">${l}</span><span style="${valStyle}">${v}</span></div>`).join('');
+
+        const risikoRows = [
+            ['Geriatri',     boolLabel(d.is_geriatri)],
+            ['Risiko Jatuh', boolLabel(d.is_risiko_jatuh)],
+        ].map(([l, v]) => `<div style="${rowStyle}"><span style="${labelStyle}">${l}</span><span style="font-size:12px;">${v}</span></div>`).join('');
+
+        const unitPart = d.nama_unit ? ` &middot; <span style="color:#111827; font-weight:500;">${d.nama_unit}</span>` : '';
+
+        return `
+            <p style="font-size:11px; color:#9ca3af; margin-bottom:10px;">${dateStr}</p>
+            <div style="background:${bannerBg}; border:1.5px solid ${bannerBorder}; border-radius:8px; padding:10px 14px; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+                <span style="font-size:16px; color:${bannerText}; line-height:1;">${bannerIcon}</span>
+                <span style="font-size:13px; font-weight:700; color:${bannerText}; letter-spacing:0.03em;">${keputusan.toUpperCase()}</span>
+            </div>
+            <p style="font-size:10px; font-weight:700; letter-spacing:0.08em; color:#9ca3af; margin-bottom:4px;">PEMERIKSAAN KLINIS</p>
+            <div style="margin-bottom:14px;">${klinisRows}</div>
+            <p style="font-size:10px; font-weight:700; letter-spacing:0.08em; color:#9ca3af; margin-bottom:4px;">FAKTOR RISIKO</p>
+            <div style="margin-bottom:14px;">${risikoRows}</div>
+            <div style="border-top:1px solid #e5e7eb; padding-top:10px; font-size:12px; color:#6b7280;">
+                Petugas: <span style="color:#111827; font-weight:500;">${d.nama_petugas ?? '-'}</span>${unitPart}
+            </div>`;
     }
 
     document.addEventListener('DOMContentLoaded', () => {

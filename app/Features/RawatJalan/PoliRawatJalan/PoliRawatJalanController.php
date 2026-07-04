@@ -97,4 +97,49 @@ final class PoliRawatJalanController extends ControllerTemplate
 
         return $this->response->setJSON(['data' => $builder->get()->getResultArray()]);
     }
+
+    public function detail(int|string $id): string|\CodeIgniter\HTTP\ResponseInterface
+    {
+        if ($id !== 'skrining') {
+            return $this->response->setStatusCode(404)->setJSON(['error' => 'not found']);
+        }
+
+        $noRm = trim($this->request->getGet('no_rm') ?? '');
+        if ($noRm === '') {
+            return $this->response->setJSON(['data' => null]);
+        }
+
+        $row = $this->model->db
+            ->table('skrining_rawat_jalan.skrining_rawat_jalan s')
+            ->select([
+                's.tgl_skrining',
+                's.jam_skrining',
+                'k.kesadaran',
+                'p.pernafasan',
+                'sn.skala_nyeri',
+                'nd.nyeri_dada',
+                'b.kategori_batuk',
+                's.is_geriatri',
+                's.is_risiko_jatuh',
+                'u.nama_unit',
+                'kp.skrining_keputusan',
+                'o.nama AS nama_petugas',
+            ])
+            ->join('skrining_rawat_jalan.ref_skrining_kesadaran k',  'k.id_kesadaran   = s.id_kesadaran',  'left')
+            ->join('skrining_rawat_jalan.ref_skrining_pernafasan p', 'p.id_pernafasan  = s.id_pernafasan', 'left')
+            ->join('skrining_rawat_jalan.ref_skrining_skala_nyeri sn','sn.id_skala_nyeri = s.id_skala_nyeri','left')
+            ->join('skrining_rawat_jalan.ref_skrining_nyeri_dada nd', 'nd.id_nyeri_dada  = s.id_nyeri_dada', 'left')
+            ->join('skrining_rawat_jalan.ref_skrining_batuk b',       'b.id_batuk        = s.id_batuk',      'left')
+            ->join('unit.unit u',                                      'u.id_unit         = s.id_unit',       'left')
+            ->join('skrining_rawat_jalan.ref_skrining_keputusan kp',  'kp.id_keputusan   = s.id_keputusan',  'left')
+            ->join('role.petugas pt',                                  'pt.id_petugas     = s.id_petugas',    'left')
+            ->join('person.orang o',                                   'o.id_orang        = pt.id_orang',     'left')
+            ->where('s.no_rm', $noRm)
+            ->orderBy('s.tgl_skrining', 'DESC')
+            ->orderBy('s.jam_skrining', 'DESC')
+            ->limit(1)
+            ->get()->getRowArray();
+
+        return $this->response->setJSON(['data' => $row ?? null]);
+    }
 }
