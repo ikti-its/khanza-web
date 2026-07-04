@@ -191,6 +191,47 @@ final class JadwalOperasiController extends ControllerTemplate
     // Pages
     // -------------------------------------------------------------------------
 
+    private function fetchTimTerpilih(int $idJadwal): array
+    {
+        return $this->model->db
+            ->table('operasi.jadwal_operasi_tim jt')
+            ->select(['jt.id_dokter', 'o.nama AS nama_dokter'])
+            ->join('role.dokter d',  'd.id_dokter = jt.id_dokter')
+            ->join('person.orang o', 'o.id_orang  = d.id_orang')
+            ->where('jt.id_jadwal', $idJadwal)
+            ->get()->getResultArray();
+    }
+
+    private function saveSlots(int $idJadwal, string $waktuMulai, string $waktuSelesai): void
+    {
+        $this->model->db->table('operasi.jadwal_operasi_slot')->where('id_jadwal', $idJadwal)->delete();
+
+        $builder = $this->model->db
+            ->table('operasi.ref_slot_operasi')
+            ->select('id_slot')
+            ->where('waktu_slot >=', $waktuMulai);
+
+        if ($waktuSelesai !== '00:00:00') {
+            $builder->where('waktu_slot <', $waktuSelesai);
+        }
+
+        $rows = $builder->get()->getResultArray();
+        if (empty($rows)) return;
+
+        $this->model->db->table('operasi.jadwal_operasi_slot')->insertBatch(
+            array_map(fn($s) => ['id_jadwal' => $idJadwal, 'id_slot' => (int) $s['id_slot']], $rows)
+        );
+    }
+
+    private function saveTim(int $idJadwal, array $idDokters): void
+    {
+        $this->model->db->table('operasi.jadwal_operasi_tim')->where('id_jadwal', $idJadwal)->delete();
+        if (empty($idDokters)) return;
+        $this->model->db->table('operasi.jadwal_operasi_tim')->insertBatch(
+            array_map(fn($d) => ['id_jadwal' => $idJadwal, 'id_dokter' => (int) $d], $idDokters)
+        );
+    }
+
     #[\Override]
     final public function update_page(int|string $id): string
     {
@@ -213,12 +254,13 @@ final class JadwalOperasiController extends ControllerTemplate
         }
 
         return view('admin/operasi/jadwalkan_operasi', [
-            'judul'       => 'Jadwalkan Operasi',
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Jadwalkan', 'icon' => 'ubah']]),
-            'modul_path'  => $this->get_uri_path(),
-            'kolom_id'    => $this->model->primaryKey,
-            'baris'       => $baris,
-            'form_action' => '/submitedit/' . $id,
+            'judul'         => 'Jadwalkan Operasi',
+            'breadcrumbs'   => array_merge($this->breadcrumbs, [['title' => 'Jadwalkan', 'icon' => 'ubah']]),
+            'modul_path'    => $this->get_uri_path(),
+            'kolom_id'      => $this->model->primaryKey,
+            'baris'         => $baris,
+            'form_action'   => '/submitedit/' . $id,
+            'tim_terpilih'  => $this->fetchTimTerpilih((int) $id),
         ]);
     }
 
@@ -247,10 +289,13 @@ final class JadwalOperasiController extends ControllerTemplate
     {
         if ($id == 0) return $this->home();
 
-        $rawPost = $this->request->getPost();
-        $tanggal = $rawPost['tanggal'] ?? null;
+        $rawPost      = $this->request->getPost();
+        $tanggal      = $rawPost['tanggal']       ?? null;
+        $waktuMulai   = $rawPost['waktu_mulai']   ?? null;
+        $waktuSelesai = $rawPost['waktu_selesai'] ?? null;
+        $idDokters    = $this->request->getPost('tim_dokter') ?? [];
 
-        $existing = $this->model->find($id);
+        $existing     = $this->model->find($id);
         $nomorOperasi = $existing['nomor_operasi'] ?? null;
         if ($nomorOperasi === null && $tanggal !== null) {
             $nomorOperasi = $this->generateNomorOperasi($tanggal);
@@ -262,8 +307,8 @@ final class JadwalOperasiController extends ControllerTemplate
             'id_dokter_bedah'    => $rawPost['id_dokter_bedah']    ?? null,
             'id_dokter_anestesi' => $rawPost['id_dokter_anestesi'] ?? null,
             'tanggal'            => $tanggal,
-            'waktu_mulai'        => $rawPost['waktu_mulai']        ?? null,
-            'waktu_selesai'      => $rawPost['waktu_selesai']      ?? null,
+            'waktu_mulai'        => $waktuMulai,
+            'waktu_selesai'      => $waktuSelesai,
             'id_status'          => 2,
         ];
 
@@ -274,12 +319,25 @@ final class JadwalOperasiController extends ControllerTemplate
                 return redirect()->back()->withInput();
             }
 
+            $this->model->db->transStart();
+
             $this->model->update($id, $data);
+            if ($waktuMulai !== null && $waktuSelesai !== null) {
+                $this->saveSlots((int) $id, $waktuMulai, $waktuSelesai);
+            }
+            $this->saveTim((int) $id, $idDokters);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menyimpan jadwal operasi.');
+            }
 
             session()->setFlashdata('success', 'Jadwal operasi berhasil disimpan.');
             return redirect()->to('/operasi/jadwal-operasi/data');
 
         } catch (\Exception $e) {
+            $this->model->db->transRollback();
             $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();

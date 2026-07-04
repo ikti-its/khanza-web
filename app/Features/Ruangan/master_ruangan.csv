@@ -27,21 +27,24 @@ id_ruangan,kode_ruangan,nama_ruangan,jenis_instalasi
 25,IT-04,Ruang PICU (Pediatric Intensive Care Unit),Perawatan Intensif
 26,OK-1,Ruang Operasi 1,Bedah Sentral
 27,OK-2,Ruang Operasi 2,Bedah Sentral
-28,BS-03,Ruang Pemulihan (PACU / Recovery Room),Bedah Sentral
-29,BS-04,Ruang Scrub Station (Cuci Tangan Bedah),Bedah Sentral
-30,FR-01,Gudang Farmasi Induk,Farmasi (Apotek)
-31,FR-02,Ruang Racikan Obat,Farmasi (Apotek)
-32,FR-03,Depo Farmasi Rawat Jalan,Farmasi (Apotek)
-33,FR-04,Depo Farmasi Rawat Inap,Farmasi (Apotek)
-34,LB-01,Ruang Pengambilan Sampel (Darah/Urine),Laboratorium
-35,LB-02,Ruang Laboratorium Utama (Analisis),Laboratorium
-36,LB-03,Bank Darah Rumah Sakit (BDRS),Laboratorium
-37,RD-01,Ruang Radiografi (X-Ray rontgen),Radiologi
-38,RD-02,Ruang Pemeriksaan USG,Radiologi
-39,RD-03,Ruang Pemeriksaan CT-Scan / MRI,Radiologi
-40,LG-01,Gudang Logistik Medis,Logistik & Umum
-41,LG-02,Gudang Logistik Non-Medis,Logistik & Umum
-42,LG-03,Ruang Manajemen / Administrasi Kantor,Logistik & Umum
-43,LG-04,Ruang Rekam Medis (Arsip),Logistik & Umum
-44,JZ-01,Ruang Pemulasaran Jenazah,Kamar Jenazah
-45,JZ-02,Laboratorium Otopsi / Dekontaminasi Jenazah,Kamar Jenazah
+28,OK-3,Ruang Operasi 3,Bedah Sentral
+29,OK-4,Ruang Operasi 4,Bedah Sentral
+30,OK-5,Ruang Operasi 5,Bedah Sentral
+32,BS-03,Ruang Pemulihan (PACU / Recovery Room),Bedah Sentral
+33,BS-04,Ruang Scrub Station (Cuci Tangan Bedah),Bedah Sentral
+34,FR-01,Gudang Farmasi Induk,Farmasi (Apotek)
+35,FR-02,Ruang Racikan Obat,Farmasi (Apotek)
+36,FR-03,Depo Farmasi Rawat Jalan,Farmasi (Apotek)
+37,FR-04,Depo Farmasi Rawat Inap,Farmasi (Apotek)
+38,LB-01,Ruang Pengambilan Sampel (Darah/Urine),Laboratorium
+39,LB-02,Ruang Laboratorium Utama (Analisis),Laboratorium
+40,LB-03,Bank Darah Rumah Sakit (BDRS),Laboratorium
+41,RD-01,Ruang Radiografi (X-Ray rontgen),Radiologi
+42,RD-02,Ruang Pemeriksaan USG,Radiologi
+43,RD-03,Ruang Pemeriksaan CT-Scan / MRI,Radiologi
+44,LG-01,Gudang Logistik Medis,Logistik & Umum
+45,LG-02,Gudang Logistik Non-Medis,Logistik & Umum
+46,LG-03,Ruang Manajemen / Administrasi Kantor,Logistik & Umum
+47,LG-04,Ruang Rekam Medis (Arsip),Logistik & Umum
+48,JZ-01,Ruang Pemulasaran Jenazah,Kamar Jenazah
+49,JZ-02,Laboratorium Otopsi / Dekontaminasi Jenazah,Kamar Jenazah
