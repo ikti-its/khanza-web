@@ -101,4 +101,97 @@ final class KunjunganModel extends ModelTemplate
 
         return ['status' => true, 'message' => ''];
     }
+
+    /**
+     * Memeriksa apakah pendonor memiliki pencekalan aktif
+     * @param int|string $idPendonor
+     * @return array ['status' => bool, 'message' => string]
+     */
+    private function cekPencekalanAktif(int|string $idPendonor): array
+    {
+        $dataPencekalan = $this->db
+            ->table('penanganan_donor.pencekalan pc')
+            ->select([
+                'pc.id_pencekalan',
+                'pc.tanggal_mulai',
+                'pc.tanggal_selesai',
+                'k.nomor_kunjungan',
+            ])
+            ->join('donor.kunjungan k', 'k.id_kunjungan = pc.id_kunjungan', 'inner')
+            ->where('k.id_pendonor', $idPendonor)
+            ->where('pc.id_status_pencekalan', 1)
+            ->get()
+            ->getRowArray();
+
+        if (!empty($dataPencekalan)) {
+            $tanggalSelesai = !empty($dataPencekalan['tanggal_selesai'])
+                ? date('d-m-Y', strtotime($dataPencekalan['tanggal_selesai']))
+                : 'belum ditentukan';
+
+            return [
+                'status'  => false,
+                'message' => "Gagal Mendaftarkan Kunjungan! Pendonor masih memiliki pencekalan aktif pada kunjungan {$dataPencekalan['nomor_kunjungan']}. Tanggal selesai pencekalan: {$tanggalSelesai}."
+            ];
+        }
+
+        return ['status' => true, 'message' => ''];
+    }
+
+    /**
+     * Memeriksa apakah pendonor memenuhi seluruh syarat registrasi kunjungan
+     * @param int|string|null $idPendonor
+     * @param string $tglKunjunganInput
+     * @return array ['status' => bool, 'message' => string]
+     */
+    public function cekSyaratRegistrasiKunjungan(int|string|null $idPendonor, string $tglKunjunganInput): array
+    {
+        if (empty($idPendonor)) {
+            return [
+                'status'  => false,
+                'message' => 'Gagal Mendaftarkan Kunjungan! Data pendonor belum dipilih.'
+            ];
+        }
+
+        $pencekalanModel = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
+        $pencekalanModel->sinkronkanStatusPencekalan();
+
+        $validasiPencekalan = $this->cekPencekalanAktif($idPendonor);
+
+        if ($validasiPencekalan['status'] === false) {
+            return $validasiPencekalan;
+        }
+
+        $validasiInterval = $this->cekIntervalMedis($idPendonor, $tglKunjunganInput);
+
+        if ($validasiInterval['status'] === false) {
+            return $validasiInterval;
+        }
+
+        return ['status' => true, 'message' => ''];
+    }
+
+    /**
+     * Memeriksa apakah kunjungan sudah digunakan pada proses lanjutan
+     */
+    public function kunjunganSudahDiproses(int|string $idKunjungan): bool
+    {
+        $daftarTabel = [
+            'donor.skrining_donor',
+            'donor.pengambilan_darah',
+            'penanganan_donor.pencekalan',
+        ];
+    
+        foreach ($daftarTabel as $tabel) {
+            $jumlahData = $this->db
+                ->table($tabel)
+                ->where('id_kunjungan', $idKunjungan)
+                ->countAllResults();
+    
+            if ($jumlahData > 0) {
+                return true;
+            }
+        }
+    
+        return false;
+    }
 }

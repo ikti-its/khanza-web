@@ -153,10 +153,10 @@ final class KunjunganController extends ControllerTemplate
         $idPendonor  = $rawPost['id_pendonor'] ?? null;
         $tglKunjunganInput = $rawPost['tanggal_kunjungan'] ?? date('Y-m-d H:i:s');
 
-        $validasiMedis = $this->model->cekIntervalMedis($idPendonor, $tglKunjunganInput);
-        
-        if ($validasiMedis['status'] === false) {
-            session()->setFlashdata('error', $validasiMedis['message']);
+        $validasiRegistrasi = $this->model->cekSyaratRegistrasiKunjungan($idPendonor, $tglKunjunganInput);
+
+        if ($validasiRegistrasi['status'] === false) {
+            session()->setFlashdata('error', $validasiRegistrasi['message']);
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
@@ -288,6 +288,55 @@ final class KunjunganController extends ControllerTemplate
             'card'        => $card,
             'form_action' => '/submitedit/' . $id,
         ]);
+    }
+
+    /**
+     * OVERRIDE: Mengeksekusi Simpan Perubahan Data Registrasi Kunjungan
+     */
+    #[\Override]
+    final public function update(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) {
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $dataLama = $this->model->find($id);
+
+        if (!$dataLama) {
+            session()->setFlashdata('error', 'Data registrasi kunjungan tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $rawPost = $this->request->getPost();
+
+        $idPendonorLama = $dataLama['id_pendonor'] ?? null;
+        $idPendonorBaru = $rawPost['id_pendonor'] ?? null;
+
+        $pendonorBerubah = (string) $idPendonorLama !== (string) $idPendonorBaru;
+
+        $tanggalLama = date('Y-m-d H:i:s', strtotime($dataLama['tanggal_kunjungan']));
+        $tanggalBaru = date('Y-m-d H:i:s', strtotime($rawPost['tanggal_kunjungan'] ?? $dataLama['tanggal_kunjungan']));
+
+        $tanggalKunjunganBerubah = $tanggalLama !== $tanggalBaru;
+
+        if ($pendonorBerubah || $tanggalKunjunganBerubah) {
+            if ($this->model->kunjunganSudahDiproses($id)) {
+                session()->setFlashdata('error', 'Nomor pendonor atau tanggal kunjungan tidak dapat diubah karena kunjungan sudah diproses.');
+                return redirect()->to($this->get_uri_path() . '/data');
+            }
+
+            $validasiRegistrasi = $this->model->cekSyaratRegistrasiKunjungan(
+                $idPendonorBaru,
+                $tanggalBaru
+            );
+
+            if ($validasiRegistrasi['status'] === false) {
+                session()->setFlashdata('error', $validasiRegistrasi['message']);
+                return redirect()->to($this->get_uri_path() . '/data');
+            }
+        }
+
+        return parent::update($id);
     }
 
     /**
