@@ -174,6 +174,21 @@ function confirmStatus(form) {
     const label = sel?.selectedOptions[0]?.text;
     return label ? confirm(`Yakin ingin mengubah status operasi menjadi "${label}"?`) : false;
 }
+
+(function () {
+    const key = 'back_jadwal_<?= $id_jadwal ?>';
+    const ref = document.referrer;
+    // Only store referrer when coming from outside lembar-operasi (genuine navigation, not post-redirect)
+    if (ref && !ref.includes('lembar-operasi')) {
+        sessionStorage.setItem(key, ref);
+    }
+    const backUrl = sessionStorage.getItem(key);
+    if (backUrl) {
+        document.querySelectorAll('a[href="javascript:history.back()"]').forEach(a => {
+            a.href = backUrl;
+        });
+    }
+})();
 </script>
 
 <?= $this->endSection(); ?>
