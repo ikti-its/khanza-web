@@ -27,7 +27,6 @@
             <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#fef3c7;"></span> Proses</div>
             <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#d1fae5;"></span> Selesai</div>
             <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#fee2e2;"></span> CITO</div>
-            <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#f97316;"></span> Overtime</div>
         </div>
 
         <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
@@ -104,12 +103,11 @@
                                 default => ['#dbeafe', '#93c5fd', '#1e3a5f'],
                             };
                             if ($isCito && $status === 2) { $bg = '#fee2e2'; $border = '#fca5a5'; $text = '#991b1b'; }
-                            if ($isOvertime) { $border = '#f97316'; }
                         ?>
                             <td rowspan="<?= $span ?>"
                                 data-status="<?= $status ?>"
-                                style="border-top:2px solid <?= $border ?>;
-                                       border-bottom:2px solid <?= $border ?>;
+                                style="border-top:1px solid <?= $border ?>;
+                                       border-bottom:1px solid <?= $border ?>;
                                        background:<?= $bg ?>;
                                        color:<?= $text ?>;
                                        vertical-align:middle;
