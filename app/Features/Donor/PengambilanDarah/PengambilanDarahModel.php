@@ -86,14 +86,14 @@ final class PengambilanDarahModel extends ModelTemplate
     }
 
     /**
-     * Memperbarui tanggal donor terakhir pada entitas Pendonor
+     * Memperbarui tanggal donor terakhir pendonor berdasarkan status pengambilan
      * @param int $idStatusPengambilan
      * @param array $dataPengambilan
-     * @param string|int $idPengambilanDarah
+     * @param array|null $dataPengambilanSebelumnya
      */
-    public function syncTanggalDonorTerakhir(int $idStatusPengambilan, array $dataPengambilan, string|int $idPengambilanDarah): void
+    public function syncTanggalDonorTerakhir(int $idStatusPengambilan, array $dataPengambilan, ?array $dataPengambilanSebelumnya = null): void
     {
-        $idKunjungan = $dataPengambilan['id_kunjungan'] ?? null;
+        $idKunjungan = $dataPengambilan['id_kunjungan'] ?? $dataPengambilanSebelumnya['id_kunjungan'] ?? null;
 
         if (empty($idKunjungan)) {
             return;
@@ -108,30 +108,44 @@ final class PengambilanDarahModel extends ModelTemplate
 
         $idPendonor    = $kunjunganRow['id_pendonor'];
         $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+        $dataPendonor  = $modelPendonor->find($idPendonor) ?? [];
+        
+        $tanggalAktif       = $this->normalisasiTanggal($dataPendonor['tanggal_donor_terakhir'] ?? null);
+        $tanggalPengambilan = $this->normalisasiTanggal($dataPengambilan['tanggal_pengambilan'] ?? null);
+        $tanggalSebelumnya  = $this->normalisasiTanggal($dataPengambilanSebelumnya['tanggal_pengambilan'] ?? null);
+        $statusSebelumnya   = (int)($dataPengambilanSebelumnya['id_status_pengambilan'] ?? $dataPengambilan['id_status_pengambilan'] ?? 0);
 
         if ($idStatusPengambilan === 1) {
-            $modelPendonor->update($idPendonor, [
-                'tanggal_donor_terakhir' => $dataPengambilan['tanggal_pengambilan'] ?? date('Y-m-d')
-            ]);
-        }
-        else {
-            $riwayatSuksesTerakhir = $this->builder()
-                ->select('donor.pengambilan_darah.tanggal_pengambilan')
-                ->join('donor.kunjungan', 'donor.kunjungan.id_kunjungan = donor.pengambilan_darah.id_kunjungan', 'inner')
-                ->where('donor.kunjungan.id_pendonor', $idPendonor)
-                ->where('donor.pengambilan_darah.id_status_pengambilan', 1)
-                ->where('donor.pengambilan_darah.id_pengambilan_darah !=', $idPengambilanDarah)
-                ->orderBy('donor.pengambilan_darah.tanggal_pengambilan', 'DESC')
-                ->limit(1)
-                ->get()
-                ->getRowArray();
+            $tanggalDonorBaru = $tanggalPengambilan ?? date('Y-m-d');
 
-            $tanggalRollback = $riwayatSuksesTerakhir ? $riwayatSuksesTerakhir['tanggal_pengambilan'] : null;
+            if ($tanggalAktif === null || $tanggalDonorBaru >= $tanggalAktif || $tanggalAktif === $tanggalSebelumnya) {
+                $modelPendonor->setTanggalDonorTerakhir($idPendonor, $tanggalDonorBaru);
+            }
 
-            $modelPendonor->update($idPendonor, [
-                'tanggal_donor_terakhir' => $tanggalRollback
-            ]);
+            return;
         }
+
+        if ($statusSebelumnya !== 1) {
+            return;
+        }
+
+        $tanggalYangDibatalkan = $tanggalSebelumnya ?? $tanggalPengambilan;
+
+        if ($tanggalAktif !== null && $tanggalYangDibatalkan !== null && $tanggalAktif === $tanggalYangDibatalkan) {
+            $modelPendonor->rollbackTanggalDonorTerakhir($idPendonor);
+        }
+    }
+
+    /**
+     * Menyamakan format tanggal menjadi YYYY-MM-DD atau null
+     */
+    private function normalisasiTanggal(?string $tanggal): ?string
+    {
+        if ($tanggal === null || $tanggal === '') {
+            return null;
+        }
+
+        return date('Y-m-d', strtotime($tanggal));
     }
 
     /**

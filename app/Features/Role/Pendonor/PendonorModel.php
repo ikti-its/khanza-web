@@ -88,4 +88,49 @@ final class PendonorModel extends ModelTemplate
             throw new \RuntimeException("Gagal Menyimpan! Usia calon pendonor saat ini adalah {$tahunUmur} Tahun. Syarat menjadi pendonor darah adalah minimal berusia 17 Tahun.");
         }
     }
+
+    /**
+     * Mengubah tanggal donor terakhir dan mencatat riwayat masa berlakunya
+     * @param int|string $idPendonor
+     * @param string|null $tanggalDonor
+     * @param string|null $waktuValid
+     */
+    public function setTanggalDonorTerakhir(int|string $idPendonor, ?string $tanggalDonor, ?string $waktuValid = null): void
+    {
+        $tanggalDonor = $this->normalisasiTanggal($tanggalDonor);
+
+        $modelRiwayat = new \App\Features\Role\RiwayatTanggalDonor\RiwayatTanggalDonorModel();
+        $modelRiwayat->catatTanggalDonor($idPendonor, $tanggalDonor, $waktuValid);
+
+        $this->update($idPendonor, [
+            'tanggal_donor_terakhir' => $tanggalDonor,
+        ]);
+    }
+
+    /**
+     * Mengembalikan tanggal donor terakhir ke riwayat sebelumnya
+     * @param int|string $idPendonor
+     * @param string|null $waktuValid
+     */
+    public function rollbackTanggalDonorTerakhir(int|string $idPendonor, ?string $waktuValid = null): void
+    {
+        $modelRiwayat = new \App\Features\Role\RiwayatTanggalDonor\RiwayatTanggalDonorModel();
+        $tanggalRollback = $modelRiwayat->rollbackKeRiwayatSebelumnya($idPendonor, $waktuValid);
+
+        $this->update($idPendonor, [
+            'tanggal_donor_terakhir' => $tanggalRollback,
+        ]);
+    }
+
+    /**
+     * Menyamakan format tanggal menjadi YYYY-MM-DD atau null
+     */
+    private function normalisasiTanggal(?string $tanggal): ?string
+    {
+        if ($tanggal === null || $tanggal === '') {
+            return null;
+        }
+
+        return date('Y-m-d', strtotime($tanggal));
+    }
 }

@@ -264,6 +264,12 @@ final class PendonorController extends ControllerTemplate
                 throw new \RuntimeException('Sistem gagal menyimpan entitas Pendonor.');
             }
 
+            $idPendonor = $this->model->insertID();
+            $this->model->setTanggalDonorTerakhir(
+                $idPendonor,
+                $dataPendonor['tanggal_donor_terakhir'] ?? null
+            );
+
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
@@ -454,7 +460,14 @@ final class PendonorController extends ControllerTemplate
             $dataPendonor = $this->get_post_data_custom();
             $dataPendonor['id_orang'] = $idOrang;
 
+            $tanggalDonorLama = $dataPendonorLama['tanggal_donor_terakhir'] ?? null;
+            $tanggalDonorBaru = $dataPendonor['tanggal_donor_terakhir'] ?? null;
+
             $this->model->update($id, $dataPendonor);
+
+            if (($tanggalDonorLama ?: null) !== ($tanggalDonorBaru ?: null)) {
+                $this->model->setTanggalDonorTerakhir($id, $tanggalDonorBaru);
+            }
 
             $this->model->db->transComplete();
 

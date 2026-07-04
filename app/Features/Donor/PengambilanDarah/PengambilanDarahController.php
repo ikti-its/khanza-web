@@ -293,6 +293,9 @@ final class PengambilanDarahController extends ControllerTemplate
                 }
             }
 
+            $idStatus = (int)($dataPengambilan['id_status_pengambilan'] ?? 0);
+            $this->model->syncTanggalDonorTerakhir($idStatus, $dataPengambilan);
+
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
@@ -300,18 +303,16 @@ final class PengambilanDarahController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data pengambilan darah dan BHP berhasil disimpan.');
-            return redirect()->to($this->get_uri_path() . '/data');
-
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
-            $this->model->db->transRollback();
-            session()->setFlashdata('error', $this->friendly_db_error($e));
-            return redirect()->to($this->get_uri_path() . '/data');
 
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $e->getMessage());
-            return redirect()->to($this->get_uri_path() . '/data');
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
         }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
     
     /**
@@ -480,6 +481,12 @@ final class PengambilanDarahController extends ControllerTemplate
         if ($id == 0) return $this->index();
 
         $rawPost = $this->request->getPost();
+        $dataPengambilanLama = $this->model->find($id);
+
+        if (!$dataPengambilanLama) {
+            session()->setFlashdata('error', 'Data pengambilan darah tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
 
         $bhpMedisUpdate      = $this->request->getPost('id_medis_donor');
         $hargaMedis          = $this->request->getPost('harga_medis');
@@ -542,7 +549,7 @@ final class PengambilanDarahController extends ControllerTemplate
             }
 
             $idStatus = (int)($dataPengambilan['id_status_pengambilan'] ?? 0);
-            $this->model->syncTanggalDonorTerakhir($idStatus, $dataPengambilan, $id);
+            $this->model->syncTanggalDonorTerakhir($idStatus, $dataPengambilan, $dataPengambilanLama);
 
             $this->model->db->transComplete();
 
@@ -586,7 +593,7 @@ final class PengambilanDarahController extends ControllerTemplate
             $modelMedisDonor->where('id_pengambilan_darah', $id)->delete();
             $modelPenunjangDonor->where('id_pengambilan_darah', $id)->delete();
 
-            $this->model->syncTanggalDonorTerakhir(0, $dataPengambilan, $id);
+            $this->model->syncTanggalDonorTerakhir(0, $dataPengambilan);
 
             $this->model->delete($id);
 

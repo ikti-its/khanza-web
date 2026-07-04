@@ -81,10 +81,10 @@ final class RiwayatTanggalDonorModel extends ModelTemplate
     /**
      * Mencatat tanggal donor baru dan menutup riwayat aktif sebelumnya
      * @param int|string $idPendonor
-     * @param string $tanggalDonor
+     * @param string|null $tanggalDonor
      * @param string|null $startValid
      */
-    public function catatTanggalDonor(int|string $idPendonor, string $tanggalDonor, ?string $startValid = null): void
+    public function catatTanggalDonor(int|string $idPendonor, ?string $tanggalDonor, ?string $startValid = null): void
     {
         $tanggalDonor = $this->normalisasiTanggal($tanggalDonor);
         $startValid ??= date('Y-m-d H:i:s');

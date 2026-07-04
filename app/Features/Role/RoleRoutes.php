@@ -15,6 +15,7 @@ final class RoleRoutes extends RouteTemplate
                 \App\Features\Role\Dokter\DokterController::class,
                 \App\Features\Role\Pasien\PasienController::class,
                 \App\Features\Role\Pendonor\PendonorController::class,
+                \App\Features\Role\RiwayatTanggalDonor\RiwayatTanggalDonorController::class => 'HIDE',
                 \App\Features\Role\Petugas\PetugasController::class,
             ],
             'role.svg',
