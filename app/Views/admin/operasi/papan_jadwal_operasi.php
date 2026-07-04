@@ -132,11 +132,11 @@
                                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:0 4px; margin-top:2px;">
                                             <div style="min-width:0;">
                                                 <div style="font-size:9px; opacity:0.45; line-height:1.2;">Bedah</div>
-                                                <div style="font-size:10px; opacity:0.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">dr. <?= esc($jadwal['nama_dokter_bedah'] ?? '—') ?></div>
+                                                <div style="font-size:10px; opacity:0.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><?= esc($jadwal['nama_dokter_bedah'] ?? '—') ?></div>
                                             </div>
                                             <div style="min-width:0;">
                                                 <div style="font-size:9px; opacity:0.45; line-height:1.2;">Anestesi</div>
-                                                <div style="font-size:10px; opacity:0.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">dr. <?= esc($jadwal['nama_dokter_anestesi'] ?? '—') ?></div>
+                                                <div style="font-size:10px; opacity:0.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><?= esc($jadwal['nama_dokter_anestesi'] ?? '—') ?></div>
                                             </div>
                                         </div>
                                 </a>
