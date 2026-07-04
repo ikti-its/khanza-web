@@ -20,6 +20,13 @@
             <p class="text-sm text-gray-400 dark:text-gray-500 italic">Tidak ada data ruangan operasi (kode OK*).</p>
         <?php else: ?>
 
+        <div style="display:flex; align-items:center; gap:20px; margin-bottom:12px; font-size:12px; color:#6b7280;">
+            <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#dbeafe;"></span> Dijadwalkan</div>
+            <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#fef3c7;"></span> Proses</div>
+            <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#d1fae5;"></span> Selesai</div>
+            <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#fee2e2;"></span> CITO</div>
+        </div>
+
         <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
             <table class="min-w-full text-xs" style="border-collapse:collapse;">
                 <colgroup>
@@ -52,13 +59,11 @@
                     $idSlot = (int) $slot['id_slot'];
                     $isHour = (substr($slot['waktu_slot'] ?? '', 3, 2) === '00');
 
-                    // Inline border styles on <tr> interfere with rowspan cells,
-                    // so borders are placed on individual <td> elements only.
                 ?>
                 <tr style="height:22px;">
 
                     <!-- Time label — always renders, carries the hour-separator border -->
-                    <td class="sticky left-0 z-10 bg-white dark:bg-slate-900 px-2 py-0 whitespace-nowrap font-mono leading-[22px]"
+                    <td class="sticky left-0 z-10 bg-white dark:bg-slate-900 px-2 py-0 whitespace-nowrap font-mono leading-[40px]"
                         style="border-right:1px solid #d1d5db;
                                <?= $isHour
                                    ? 'border-top:2px solid #9ca3af; font-size:11px; font-weight:600; color:#374151;'
@@ -82,56 +87,48 @@
                                 <?= $span > 1 ? "rowspan=\"{$span}\"" : '' ?>></td>
 
                         <?php else:
-                            $isCito   = filter_var($jadwal['is_cito'] ?? false, FILTER_VALIDATE_BOOLEAN);
+                            $raw      = $jadwal['is_cito'] ?? false;
+                            $isCito   = $raw === true || $raw === 't' || $raw === '1' || $raw === 1;
                             $status   = (int) ($jadwal['id_status'] ?? 2);
                             $idJadwal = (int) $jadwal['id_jadwal'];
 
                             [$bg, $border, $text] = match($status) {
                                 4       => ['#d1fae5', '#34d399', '#065f46'],
                                 3       => ['#fef3c7', '#f59e0b', '#78350f'],
-                                default => ['#dbeafe', '#60a5fa', '#1e3a5f'],
+                                default => ['#dbeafe', '#93c5fd', '#1e3a5f'],
                             };
-                            $leftBorder = $isCito ? 'border-left:4px solid #ef4444;' : "border-left:1px solid {$border};";
+                            if ($isCito && $status === 2) { $bg = '#fee2e2'; $border = '#fca5a5'; $text = '#991b1b'; }
                         ?>
                             <td rowspan="<?= $span ?>"
-                                style="border-top:1px solid <?= $border ?>;
-                                       border-right:1px solid #e5e7eb;
+                                data-status="<?= $status ?>"
+                                style="border-top:2px solid <?= $border ?>;
                                        border-bottom:2px solid <?= $border ?>;
-                                       <?= $leftBorder ?>
                                        background:<?= $bg ?>;
                                        color:<?= $text ?>;
                                        vertical-align:middle;
                                        padding:0;">
                                 <a href="<?= site_url("operasi/lembar-operasi/data?id_jadwal={$idJadwal}") ?>"
                                    class="block group" style="padding:4px 6px; height:100%;">
-                                    <?php if ($span === 1): ?>
-                                        <p class="font-semibold leading-tight group-hover:underline" style="font-size:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                                            <?= esc($jadwal['nama_pasien'] ?? '—') ?>
-                                            <?php if ($isCito): ?>
-                                                <span style="color:#dc2626; font-weight:700; font-size:9px; margin-left:2px;">CITO</span>
-                                            <?php endif; ?>
-                                        </p>
-                                    <?php else: ?>
+                                    <?php // span=1 atau lebih: selalu tampilkan 3 baris karena row sudah 40px ?>
                                         <p class="font-semibold leading-tight group-hover:underline" style="font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                                             <?= esc($jadwal['nama_pasien'] ?? '—') ?>
                                             <?php if ($isCito): ?>
-                                                <span style="color:#dc2626; font-weight:700; font-size:9px; margin-left:2px;">CITO</span>
+                                                <span style="display:inline-block;background:#ef4444;color:#fff;font-weight:700;font-size:8px;padding:0 3px;border-radius:2px;margin-left:3px;vertical-align:middle;line-height:14px;">CITO</span>
                                             <?php endif; ?>
                                         </p>
                                         <p style="font-size:10px; opacity:0.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;">
                                             <?= esc($jadwal['nama_tindakan'] ?? '') ?>
                                         </p>
-                                        <?php if ($span >= 3): ?>
-                                        <p style="font-size:10px; opacity:0.55; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                                            <?= esc($jadwal['nama_dokter_bedah'] ?? '') ?>
-                                        </p>
-                                        <?php endif; ?>
-                                        <?php if ($span >= 4): ?>
-                                        <p style="font-size:9px; opacity:0.45; margin-top:3px; font-family:monospace;">
-                                            <?= substr($jadwal['waktu_mulai'] ?? '', 0, 5) ?> – <?= substr($jadwal['waktu_selesai'] ?? '', 0, 5) ?>
-                                        </p>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
+                                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0 4px; margin-top:2px;">
+                                            <div style="min-width:0;">
+                                                <div style="font-size:9px; opacity:0.45; line-height:1.2;">Bedah</div>
+                                                <div style="font-size:10px; opacity:0.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">dr. <?= esc($jadwal['nama_dokter_bedah'] ?? '—') ?></div>
+                                            </div>
+                                            <div style="min-width:0;">
+                                                <div style="font-size:9px; opacity:0.45; line-height:1.2;">Anestesi</div>
+                                                <div style="font-size:10px; opacity:0.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">dr. <?= esc($jadwal['nama_dokter_anestesi'] ?? '—') ?></div>
+                                            </div>
+                                        </div>
                                 </a>
                             </td>
                         <?php endif; ?>
