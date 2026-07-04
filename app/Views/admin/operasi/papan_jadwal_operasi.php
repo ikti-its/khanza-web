@@ -20,11 +20,14 @@
             <p class="text-sm text-gray-400 dark:text-gray-500 italic">Tidak ada data ruangan operasi (kode OK*).</p>
         <?php else: ?>
 
+        <?php $now = date('H:i:s'); $isToday = ($tanggal === date('Y-m-d')); ?>
+
         <div style="display:flex; align-items:center; gap:20px; margin-bottom:12px; font-size:12px; color:#6b7280;">
             <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#dbeafe;"></span> Dijadwalkan</div>
             <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#fef3c7;"></span> Proses</div>
             <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#d1fae5;"></span> Selesai</div>
             <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#fee2e2;"></span> CITO</div>
+            <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background-color:#f97316;"></span> Overtime</div>
         </div>
 
         <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
@@ -92,12 +95,16 @@
                             $status   = (int) ($jadwal['id_status'] ?? 2);
                             $idJadwal = (int) $jadwal['id_jadwal'];
 
+                            $waktuSelesai = substr($jadwal['waktu_selesai'] ?? '', 0, 8);
+                            $isOvertime   = $isToday && $status === 3 && $waktuSelesai !== '' && $now > $waktuSelesai;
+
                             [$bg, $border, $text] = match($status) {
                                 4       => ['#d1fae5', '#34d399', '#065f46'],
                                 3       => ['#fef3c7', '#f59e0b', '#78350f'],
                                 default => ['#dbeafe', '#93c5fd', '#1e3a5f'],
                             };
                             if ($isCito && $status === 2) { $bg = '#fee2e2'; $border = '#fca5a5'; $text = '#991b1b'; }
+                            if ($isOvertime) { $border = '#f97316'; }
                         ?>
                             <td rowspan="<?= $span ?>"
                                 data-status="<?= $status ?>"
@@ -114,6 +121,9 @@
                                             <?= esc($jadwal['nama_pasien'] ?? '—') ?>
                                             <?php if ($isCito): ?>
                                                 <span style="display:inline-block;background:#ef4444;color:#fff;font-weight:700;font-size:8px;padding:0 3px;border-radius:2px;margin-left:3px;vertical-align:middle;line-height:14px;">CITO</span>
+                                            <?php endif; ?>
+                                            <?php if ($isOvertime): ?>
+                                                <span style="display:inline-block;background:#f97316;color:#fff;font-weight:700;font-size:8px;padding:0 3px;border-radius:2px;margin-left:3px;vertical-align:middle;line-height:14px;">Overtime</span>
                                             <?php endif; ?>
                                         </p>
                                         <p style="font-size:10px; opacity:0.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;">
@@ -148,6 +158,11 @@ function filterByDate(val) {
     url.searchParams.set('tanggal', val);
     window.location.href = url.toString();
 }
+
+<?php if ($isToday): ?>
+// Auto-refresh every 2 minutes so overtime badges stay accurate
+setTimeout(() => location.reload(), 2 * 60 * 1000);
+<?php endif; ?>
 </script>
 
 <?= $this->endSection(); ?>
