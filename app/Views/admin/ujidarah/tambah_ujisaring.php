@@ -26,7 +26,7 @@
                 </div>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Tanggal Uji<span class="text-red-600">*</span>
+                    Tanggal Hasil Uji<span class="text-red-600">*</span>
                 </label>
                 <input type="date" name="tanggal_uji" value="<?= old('tanggal_uji', $baris['tanggal_uji'] ?? date('Y-m-d')) ?>" 
                        max="<?= date('Y-m-d') ?>"

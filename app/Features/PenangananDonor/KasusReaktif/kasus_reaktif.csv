@@ -1,2 +1,2 @@
-﻿id_kasus,id_uji_saring,tanggal_ditetapkan,id_status_kasus
-1,2,2026-04-17,1
+﻿id_kasus,nomor_kasus,id_uji_saring,tanggal_ditetapkan,id_status_kasus
+1,KR-2026-0001,2,2026-04-17,1

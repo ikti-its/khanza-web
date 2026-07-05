@@ -29,7 +29,7 @@ final class HasilUjiSaringController extends ControllerTemplate
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_uji_saring',        'ID Uji Saring'],
                 [SHOW, REQUIRED, I::INDEX, 'id_pengambilan_darah', 'ID Pengambilan Darah'],
-                [SHOW, REQUIRED, I::DATE,  'tanggal_uji',          'Tanggal Uji'],
+                [SHOW, REQUIRED, I::DATE,  'tanggal_uji',          'Tanggal Hasil Uji'],
                 [SHOW, REQUIRED, I::SELECT,'id_metode_uji',        'Metode Uji'],
                 [SHOW, REQUIRED, I::INDEX, 'id_petugas',           'ID Petugas'],
                 [SHOW, REQUIRED, I::BOOL,  'hbsag',                'HBsAg'],
@@ -154,10 +154,11 @@ final class HasilUjiSaringController extends ControllerTemplate
             if (!empty($daftarReaktif)) {
                 $modelKasusReaktif = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
 
-                $tanggalDitetapkan = date('Y-m-d');
+                $tanggalDitetapkan = $dataUjiSaring['tanggal_uji'] ?? date('Y-m-d');
                 $idStatusKasus     = 1;
 
                 $modelKasusReaktif->insert([
+                    'nomor_kasus'        => $modelKasusReaktif->generateNomorKasus($tanggalDitetapkan),
                     'id_uji_saring'      => $idUjiSaring,
                     'tanggal_ditetapkan' => $tanggalDitetapkan,
                     'id_status_kasus'    => $idStatusKasus,
@@ -371,9 +372,11 @@ final class HasilUjiSaringController extends ControllerTemplate
 
             if (!empty($daftarReaktif)) {
                 if (!$kasusLama) {
+                    $tanggalDitetapkan = $dataUjiSaring['tanggal_uji'] ?? date('Y-m-d');
                     $modelKasusReaktif->insert([
+                        'nomor_kasus'        => $modelKasusReaktif->generateNomorKasus($tanggalDitetapkan),
                         'id_uji_saring'      => $id,
-                        'tanggal_ditetapkan' => date('Y-m-d'),
+                        'tanggal_ditetapkan' => $tanggalDitetapkan,
                         'id_status_kasus'    => 1,
                     ]);
                 }
