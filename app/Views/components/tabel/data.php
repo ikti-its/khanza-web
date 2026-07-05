@@ -11,7 +11,7 @@
             $has_row_alert = !empty($row_alert)
                 && isset($row_alert['value'], $row_alert['threshold']);
 
-            $data_visible = array_filter($konfig, fn($input) => $input[$VISIBLE]);
+            $data_visible = array_filter($konfig, fn($input) => in_array($input[$VISIBLE], [SHOW, TABLE_ONLY]));
 
             $has_child_link = isset($child_link) && $child_link !== null;
 

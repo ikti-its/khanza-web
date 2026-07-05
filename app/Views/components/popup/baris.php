@@ -1,5 +1,6 @@
 <?php
-$nilai = is_array($baris[$kolom]) ? reset($baris[$kolom]) : $baris[$kolom];
+$nilai = $baris[$kolom] ?? '';
+$nilai = is_array($nilai) ? reset($nilai) : $nilai;
 if ($nilai === 't')
     $nilai = 'Ya';
 if ($nilai === 'f')

@@ -238,7 +238,7 @@ class ControllerTemplate extends Controller
                 $aliases      = $leaf_aliases[$column] ?? [];
                 $parent_label = $field[1];
                 foreach ($aliases as $i => $alias) {
-                    $konfig_kolom[] = $this->make_join_column_config($alias, $i === 0 ? $parent_label : null);
+                    $konfig_kolom[] = $this->make_join_column_config($alias, $i === 0 ? $parent_label : null, $field[0]);
                 }
             } else {
                 $konfig_kolom[] = $field;
@@ -248,7 +248,7 @@ class ControllerTemplate extends Controller
         return $konfig_kolom;
     }
 
-    private function make_join_column_config(string $col_name, ?string $label = null): array
+    private function make_join_column_config(string $col_name, ?string $label = null, int $visible = SHOW): array
     {
         $label ??= ucwords(str_replace('_', ' ', $col_name));
         $type = match(true) {
@@ -257,7 +257,7 @@ class ControllerTemplate extends Controller
             default                            => 'teks',
         };
 
-        return [1, $label, $col_name, $type, 0];
+        return [$visible, $label, $col_name, $type, 0];
     }
 
     /**
@@ -310,11 +310,18 @@ class ControllerTemplate extends Controller
         foreach ($this->fields as $field) {
             [$visible, $display, $column, $type] = $field;
 
-            if ($visible === HIDE && !($include_pk && $column === $this->primary_key)) {
+            // Halaman data menerima semua field apa adanya: kolom tabel
+            // difilter di view, sedangkan popup detail menampilkan semuanya
+            // (termasuk HIDE dan FORM_ONLY). Kecuali primary key yang di-HIDE:
+            // judul popup sudah menampilkan id, jadi tak perlu diulang.
+            if ($is_form) {
+                if ($visible === HIDE && !($include_pk && $column === $this->primary_key)) {
+                    continue;
+                }
+                if ($visible === TABLE_ONLY) continue;
+            } elseif ($visible === HIDE && $column === $this->primary_key) {
                 continue;
             }
-            if ($is_form  && $visible === TABLE_ONLY) continue;
-            if (!$is_form && $visible === FORM_ONLY)  continue;
 
             if ($type === 'status' && isset($all_options[$column])) {
                 $field[5] = $all_options[$column];
