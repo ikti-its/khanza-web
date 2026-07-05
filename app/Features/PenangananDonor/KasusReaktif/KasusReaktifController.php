@@ -154,4 +154,20 @@ final class KasusReaktifController extends ControllerTemplate
             'baris'       => $baris,
         ]);
     }
+
+    /**
+     * Menampilkan data modal kasus reaktif
+     */
+    public function list()
+    {
+        $data = $this->model->get_data_tabel(null, 0, [
+            'untuk_modal' => true,
+            'dengan_parameter' => true,
+            'belum_diagnostik' => true,
+        ]);
+
+        return $this->response->setJSON([
+            'data' => $data,
+        ]);
+    }
 }
