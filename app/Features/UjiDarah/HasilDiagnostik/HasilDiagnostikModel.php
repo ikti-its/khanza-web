@@ -13,12 +13,13 @@ final class HasilDiagnostikModel extends ModelTemplate
         parent::__construct(
             new HasilDiagnostikDatabase(),
             [
-                'id_diagnostik'    => V::DEFAULT(),
-                'tanggal_hasil'    => V::DEFAULT(),
-                'dokter_pemeriksa' => V::DEFAULT(),
+                'id_diagnostik'     => V::DEFAULT(),
+                'tanggal_hasil'     => V::DEFAULT(),
+                'fasyankes_rujukan' => V::DEFAULT(),
+                'dokter_pemeriksa'  => V::DEFAULT(),
             ],
             [
-                'id_rujukan' => ['nomor_rujukan'],
+                'id_kasus' => ['nomor_kasus'],
             ],
         );
     }
