@@ -7,7 +7,7 @@
             rounded-lg border border-transparent bg-[#0A2D27] text-[#ACF2E7] 
             hover:bg-[#13594E] disabled:opacity-50 disabled:pointer-events-none 
             dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-        <img src="<?= base_url('svg/audit_button_icon.svg') ?>">
+        <img src="<?= base_url('svg/header/audit_button_icon.svg') ?>">
         Audit
     </a>
 </div>

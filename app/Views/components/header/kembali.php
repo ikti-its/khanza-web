@@ -7,7 +7,7 @@
             dark:bg-slate-900 dark:border-gray-700 dark:text-white
             dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1
             dark:focus:ring-gray-600">
-        <img src="<?= base_url('svg/kembali.svg') ?>">
+        <img src="<?= base_url('svg/header/kembali.svg') ?>">
         Kembali
     </a>
 </div>

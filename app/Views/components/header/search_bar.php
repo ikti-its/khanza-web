@@ -9,7 +9,7 @@
                     dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" 
                     placeholder="Cari">
             <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
-                <img src="<?= base_url('svg/search_bar_icon.svg') ?>">
+                <img src="<?= base_url('svg/header/search_bar_icon.svg') ?>">
             </div>
         </div>
     </div>
