@@ -211,14 +211,14 @@
 
             <li>
                 <?php if (isset(session('user_details')['role']) && (session('user_details')['role'] === 2)) : ?>
-                    <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-teal-200 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/detailberkaspegawai/<?php //echo session('user_specific_data')['pegawai']                                                                                                                                                                                                                                                                                  ?>">
+                    <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/detailberkaspegawai/<?php //echo session('user_specific_data')['pegawai']                                                                                                                                                                                                                                                                                  ?>">
                     <img src="<?= base_url('svg/icons/pegawai.svg') ?>">
                         Pegawai
                     </a>
                 <?php else : ?>
 
             <li class="hs-accordion" id="account-accordion">
-                <button type="button" class="hs-accordion-toggle hs-accordion-active:text-slate-700 hs-accordion-active:hover:bg-teal-200 w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 dark:hs-accordion-active:text-white">
+                <button type="button" class="hs-accordion-toggle hs-accordion-active:text-slate-700 hs-accordion-active:bg-gray-100 w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-gray-100 dark:text-neutral-400 dark:hover:text-neutral-300 dark:hs-accordion-active:text-white">
                     <img src="<?= base_url('svg/icons/pegawai.svg') ?>">
                     Pegawai
 
