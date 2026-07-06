@@ -768,5 +768,5 @@ $routes->set404Override(function () {
 //======================== Route Templates =====================================
 
 if (is_file('GeneratedRoutes.php')) {
-    require 'Config/GeneratedRoutes.php';
+    require 'GeneratedRoutes.php';
 }
