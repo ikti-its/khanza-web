@@ -10,7 +10,7 @@
         <?= $meta_data['page'] <= 1 ? 'disabled' : '' ?> 
         onclick="window.location.href='<?= $modul_path ?>/data?page=<?= $meta_data['page'] - 1 ?>&size=<?= $meta_data['size'] ?>'">
         
-        <img src="<?= base_url('svg/footer_prev.svg') ?>">
+        <img src="<?= base_url('svg/footer/footer_prev.svg') ?>">
         <span aria-hidden="true" class="hidden sm:block">Previous</span>
     </button>
 </div>

@@ -19,6 +19,6 @@
         onclick="<?= !$is_disabled ? "window.location.href='{$next_page_url}'" : '' ?>">
         
         <span aria-hidden="true" class="hidden sm:block">Next</span>
-        <img src="<?= base_url('svg/footer_next.svg') ?>" alt="Next Icon">
+        <img src="<?= base_url('svg/footer/footer_next.svg') ?>">
     </button>
 </div>
