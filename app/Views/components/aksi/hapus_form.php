@@ -4,7 +4,7 @@
         <div class="p-6 pt-0 text-center">
             <div class="flex justify-center mb-6">
                 <!-- Container for SVG, centered -->
-                <img src="<?= base_url('svg/form_hapus.svg') ?>">
+                <img src="<?= base_url('svg/form/form_hapus.svg') ?>">
             </div>
             Hapus data
             <h3 class="text-xl text-wrap font-normal text-gray-500 mt-5 mb-6">
