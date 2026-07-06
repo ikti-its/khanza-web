@@ -766,8 +766,5 @@ $routes->set404Override(function () {
 
 
 //======================== Route Templates =====================================
-use App\Features\AllRoutes;
 
-$r = new AllRoutes();
-$r->create_routes($routes);
-
+require_once 'GeneratedRoutes.php';
