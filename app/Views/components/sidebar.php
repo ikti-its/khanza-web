@@ -281,7 +281,7 @@
                     */
                 // ['Data Penggajian', '', 'data_penggajian', '/data-penggajian', $petugasrole, [
                 // ]],
-                ['Inventaris Medis', '', 'inventaris_medis', '',  $petugasrole, [
+                ['Inventaris Medis', '', 'inventaris_medis.svg', '',  $petugasrole, [
                     ['Data', '/datamedis', ''],
                     ['Stok Opname', '/stokopnamemedis', ''],
                     ['Mutasi Antar Gudang', '/mutasimedis', ''],
@@ -290,36 +290,36 @@
                     ['Sisa Stok',  '/sisastokmedis', ''],
                     ['Data Batch', '/batchmedis', '']
                 ]],
-                ['Rujukan', '', 'rujukan', '', $petugasdokterrole, [
+                ['Rujukan', '', 'rujukan.svg', '', $petugasdokterrole, [
                     ['Rujukan Masuk', '/rujukanmasuk', ''],
                     ['Rujukan Keluar', '/rujukankeluar', ''],
                 ]], #allrole
-                ['Persetujuan', '/persetujuanpengajuan', 'persetujuan', '', $persetujuanrole, []],
-                ['Registrasi', '/registrasi', 'registrasi', '', $petugasrole, []],
-                ['Data Pasien', '', 'olah_data_pasien', '', $petugasrole, [
+                ['Persetujuan', '/persetujuanpengajuan', 'persetujuan.svg', '', $persetujuanrole, []],
+                ['Registrasi', '/registrasi', 'registrasi.svg', '', $petugasrole, []],
+                ['Data Pasien', '', 'olah_data_pasien.svg', '', $petugasrole, [
                     ['Daftar Pasien', '/masterpasien', ''],
                     ['Kelahiran Bayi', '/kelahiranbayi', ''],
                     ['Pasien Meninggal', '/pasienmeninggal', ''],
                     ['Asuransi Pasien', '/asuransi', ''],
                     ['Instansi Pasien', '/instansi', ''],
                 ]],
-                ['Dokter', '', 'dokter_jaga', '', $petugasrole, [
+                ['Dokter', '', 'dokter_jaga.svg', '', $petugasrole, [
                     ['Daftar Dokter', '/dokter', ''],
                     ['Dokter Jaga', '/dokterjaga', ''],
                 ]],
-                ['Rawat Inap', '/rawatinap', 'rawat_inap', '', $petugasdokterrole, []],
-                ['Ruangan', '/kamar', 'kamar', '', $petugasrole, []],
-                ['Unit Gawat Darurat', '/ugd', 'ugd', '', $petugasdokterrole, []],
-                ['Ambulans', '/ambulans', 'ambulans', '', $petugasrole, []],
-                ['Tindakan', '/tindakan', 'tindakan', '', $petugasrole, []],
-                ['Pemeriksaan', '/pemeriksaanranap', 'pemeriksaan', '', $petugasrole, []],
-                ['Resep Obat', '/resepobat', 'resep_obat', '', $petugasdokterrole, []],
-                ['Pemberian Obat', '/pemberianobat', 'pemberian_obat', '', $petugasrole, []],
-                ['Resep Pulang', '', 'resep_pulang', '', $petugasrole, [
+                ['Rawat Inap', '/rawatinap', 'rawat_inap.svg', '', $petugasdokterrole, []],
+                ['Ruangan', '/kamar', 'kamar.svg', '', $petugasrole, []],
+                ['Unit Gawat Darurat', '/ugd', 'ugd.svg', '', $petugasdokterrole, []],
+                ['Ambulans', '/ambulans', 'ambulans.svg', '', $petugasrole, []],
+                ['Tindakan', '/tindakan', 'tindakan.svg', '', $petugasrole, []],
+                ['Pemeriksaan', '/pemeriksaanranap', 'pemeriksaan.svg', '', $petugasrole, []],
+                ['Resep Obat', '/resepobat', 'resep_obat.svg', '', $petugasdokterrole, []],
+                ['Pemberian Obat', '/pemberianobat', 'pemberian_obat.svg', '', $petugasrole, []],
+                ['Resep Pulang', '', 'resep_pulang.svg', '', $petugasrole, [
                     ['Permintaan Resep Pulang', '/permintaanreseppulang', ''],
                     ['Resep Pulang', '/reseppulang', ''],
                 ]],
-                ['Rekam Medis', '', 'rekam_medis', '', $dokterrole, [
+                ['Rekam Medis', '', 'rekam_medis.svg', '', $dokterrole, [
                     ['Daftar Rekam Medis', '/rekam-medis', ''],
                     ['Observasi Rawat Inap', '/catatanobservasiranap', ''],
                     ['Observasi Rawat Inap Kebidanan', '/catatanobservasikebidanan', ''],
