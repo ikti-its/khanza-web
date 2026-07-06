@@ -328,7 +328,9 @@
             ];
             echo view('components/menu/menu', ['menu_list' => $menu_list]);
 
-            $new_menu_list = new \App\Features\AllRoutes()->create_header();
+            if (is_file(APPPATH . 'Config/GeneratedSidebar.php')) {
+                $new_menu_list = require_once APPPATH . 'Config/GeneratedSidebar.php';
+            }
             echo view('components/menu/menu', ['menu_list' => $new_menu_list]);
             ?>
         </ul>
