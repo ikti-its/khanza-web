@@ -309,7 +309,7 @@
                 ]],
                 ['Rawat Inap', '/rawatinap', 'rawat_inap.svg', '', $petugasdokterrole, []],
                 ['Ruangan', '/kamar', 'kamar.svg', '', $petugasrole, []],
-                ['Unit Gawat Darurat', '/ugd', 'ugd.svg', '', $petugasdokterrole, []],
+                // ['Unit Gawat Darurat', '/ugd', 'ugd.svg', '', $petugasdokterrole, []],
                 ['Ambulans', '/ambulans', 'ambulans.svg', '', $petugasrole, []],
                 ['Tindakan', '/tindakan', 'tindakan.svg', '', $petugasrole, []],
                 ['Pemeriksaan', '/pemeriksaanranap', 'pemeriksaan.svg', '', $petugasrole, []],

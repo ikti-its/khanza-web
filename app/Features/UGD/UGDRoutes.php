@@ -10,7 +10,7 @@ final class UGDRoutes extends RouteTemplate
     public function __construct()
     {
         parent::__construct(
-            'UGD',
+            'Unit Gawat Darurat',
             [
                 \App\Features\UGD\Registrasi\RegistrasiController::class,
             ],
