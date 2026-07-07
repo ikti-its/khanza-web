@@ -5,7 +5,7 @@ namespace App\Core\Commands;
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
 
-class CreateSidebar extends BaseCommand
+class CopyIcon extends BaseCommand
 {
     protected $group = 'Omnia';
     protected $name = 'omnia:icon';
