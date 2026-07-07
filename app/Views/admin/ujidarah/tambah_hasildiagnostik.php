@@ -12,6 +12,8 @@
             'nama' => $nilai['nama_nilai_diagnostik'] ?? '',
         ];
     }
+
+    $parameterDiagnostikAwal = $parameter_diagnostik ?? [];
 ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
@@ -30,6 +32,7 @@
                     Nomor Kasus Reaktif<span class="text-red-600">*</span>
                 </label>
                 <div class="w-full lg:w-1/4 flex gap-x-2">
+                    <?php $isEdit = (str_contains($judul, 'Ubah')); ?>
                     <input type="text"
                            id="nomor_kasus"
                            name="nomor_kasus"
@@ -37,15 +40,17 @@
                            required
                            value="<?= old('nomor_kasus', $baris['nomor_kasus'] ?? '') ?>"
                            placeholder="Klik cari..."
-                           onclick="open_modalKasusReaktif()"
-                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50">
+                           <?= $isEdit ? 'disabled' : 'onclick="open_modalKasusReaktif()"' ?>
+                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white <?= $isEdit ? 'cursor-not-allowed bg-gray-100' : 'cursor-pointer bg-slate-50' ?>">
 
-                    <button type="button" onclick="open_modalKasusReaktif()"
-                            class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
-                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </button>
+                    <?php if (!$isEdit) : ?>
+                        <button type="button" onclick="open_modalKasusReaktif()"
+                                class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
+                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </button>
+                    <?php endif; ?>
                 </div>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
@@ -119,6 +124,13 @@
 
 <script>
     const nilaiDiagnostikOptions = <?= json_encode($daftarNilaiDiagnostik) ?>;
+    const parameterDiagnostikAwal = <?= json_encode($parameterDiagnostikAwal) ?>;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        if (parameterDiagnostikAwal.length > 0) {
+            renderParameterDiagnostik(parameterDiagnostikAwal);
+        }
+    });
 
     function autofillKasusReaktif(item) {
         document.getElementById('id_kasus').value = item.id_kasus || '';
@@ -149,6 +161,7 @@
         parameterList.forEach(function(parameter) {
             const idParameter = parameter.id_parameter_uji || '';
             const namaParameter = parameter.nama_parameter || '-';
+            const nilaiTerpilih = parameter.id_nilai_diagnostik || '';
 
             const tr = document.createElement('tr');
             tr.className = 'hover:bg-gray-50/50 dark:hover:bg-slate-800/30 transition';
@@ -180,6 +193,10 @@
                 radioNilai.value = nilai.id;
                 radioNilai.required = true;
                 radioNilai.className = 'w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 dark:border-gray-600';
+
+                if (String(nilai.id) === String(nilaiTerpilih)) {
+                    radioNilai.checked = true;
+                }
 
                 const teksNilai = document.createElement('span');
                 teksNilai.textContent = nilai.nama;

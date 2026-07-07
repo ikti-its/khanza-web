@@ -149,4 +149,67 @@ final class HasilDiagnostikController extends ControllerTemplate
 
         return redirect()->to($this->get_uri_path() . '/data');
     }
+
+    /**
+     * OVERRIDE: Menampilkan Halaman Ubah Data Hasil Diagnostik
+     */
+    #[\Override]
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+    
+        $dataDiagnostik = $this->model->find($id);
+    
+        if (!$dataDiagnostik) {
+            session()->setFlashdata('error', 'Data hasil diagnostik tidak ditemukan.');
+            return $this->index();
+        }
+    
+        $modelKasus = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
+        $dataKasus  = $modelKasus->find($dataDiagnostik['id_kasus']) ?? [];
+    
+        $modelUjiSaring = new \App\Features\UjiDarah\HasilUjiSaring\HasilUjiSaringModel();
+        $dataUjiSaring  = $modelUjiSaring->find($dataKasus['id_uji_saring'] ?? 0) ?? [];
+    
+        $parameterDiagnostik = !empty($dataUjiSaring)
+            ? $modelKasus->getParameterReaktifDetail($dataUjiSaring)
+            : [];
+    
+        $detailDiagnostik = $this->model->db
+            ->table('uji_darah.hasil_diagnostik_detail')
+            ->where('id_diagnostik', $id)
+            ->get()
+            ->getResultArray();
+    
+        $nilaiDiagnostikTerpilih = array_column(
+            $detailDiagnostik,
+            'id_nilai_diagnostik',
+            'id_parameter_uji'
+        );
+    
+        foreach ($parameterDiagnostik as $index => $parameter) {
+            $idParameter = $parameter['id_parameter_uji'];
+    
+            $parameterDiagnostik[$index]['id_nilai_diagnostik'] =
+                $nilaiDiagnostikTerpilih[$idParameter] ?? '';
+        }
+    
+        $modelNilaiDiagnostik = new \App\Features\UjiDarah\NilaiDiagnostik\NilaiDiagnostikModel();
+        $nilaiDiagnostik      = $modelNilaiDiagnostik->findAll();
+    
+        $breadcrumbs = [
+            ['title' => 'Ubah', 'icon' => 'Ubah']
+        ];
+    
+        return view('admin/ujidarah/tambah_hasildiagnostik', [
+            'judul'                => 'Ubah ' . $this->title,
+            'breadcrumbs'          => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'           => $this->get_uri_path(),
+            'kolom_id'             => $this->model->primaryKey,
+            'baris'                => array_merge($dataKasus, $dataDiagnostik),
+            'nilai_diagnostik'     => $nilaiDiagnostik,
+            'parameter_diagnostik' => $parameterDiagnostik,
+            'form_action'          => '/submitedit/' . $id,
+        ]);
+    }
 }
