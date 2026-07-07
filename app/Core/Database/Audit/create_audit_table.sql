@@ -27,7 +27,7 @@ BEGIN
         SELECT table_schema, table_name
         FROM information_schema.tables
         WHERE table_type = 'BASE TABLE' --only include tables
-            AND table_schema NOT IN ('pg_catalog', 'information_schema') -- exclude system tables
+            AND table_schema NOT IN ('pg_catalog', 'information_schema', 'ref', 'sik') -- exclude system tables
             AND table_name LIKE '%_encrypted'-- include _structure only
     LOOP    
         -- Find the primary keys in each table
