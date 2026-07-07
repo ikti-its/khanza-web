@@ -155,6 +155,7 @@ final class PemisahanKomponenController extends ControllerTemplate
         }
 
         $id_pengambilan = $this->request->getGet('pengambilan');
+        $batasKomponen  = ['nama_jenis_bag' => '-', 'batas' => null];
 
         if ($id_pengambilan !== null && is_numeric($id_pengambilan)) {
             $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
@@ -163,6 +164,7 @@ final class PemisahanKomponenController extends ControllerTemplate
             if ($dataPengambilan) {
                 $mockBaris['id_pengambilan_darah'] = $dataPengambilan['id_pengambilan_darah'];
                 $mockBaris['nomor_pengambilan']    = $dataPengambilan['nomor_pengambilan'];
+                $batasKomponen                     = $this->model->getBatasKomponen($id_pengambilan);
             }
         }
 
@@ -176,6 +178,7 @@ final class PemisahanKomponenController extends ControllerTemplate
             'master_komponen'   => $masterKomponen,
             'bhp_medis_options' => $masterBhpMedis,
             'bhp_non_options'   => $masterBhpNonMedis,
+            'batas_komponen'    => $batasKomponen,
             'form_action'       => '/submittambah',
         ]);
     }
@@ -208,6 +211,7 @@ final class PemisahanKomponenController extends ControllerTemplate
 
         try {
             $this->model->validasiTanggalPemisahan($rawPost['id_pengambilan_darah'], $rawPost['tanggal_pemisahan']);
+            $this->model->validasiJumlahKomponen($rawPost['id_pengambilan_darah'], is_array($komponenTerpilih) ? $komponenTerpilih : []);
 
             $this->model->insert($dataPemisahan);
             $idPemisahan = $this->model->getInsertID();

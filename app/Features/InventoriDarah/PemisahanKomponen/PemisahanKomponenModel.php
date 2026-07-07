@@ -27,6 +27,16 @@ final class PemisahanKomponenModel extends ModelTemplate
     }
 
     /**
+     * Batas jumlah komponen yang boleh dipisah berdasarkan kode jenis bag
+     */
+    private const BATAS_KOMPONEN = [
+        'SB' => 1,
+        'DB' => 2,
+        'TB' => 3,
+        'QB' => 4,
+    ];
+
+    /**
      * Mengambil data pemisahan komponen
      * @param int $limit
      * @param int $offset
@@ -76,6 +86,51 @@ final class PemisahanKomponenModel extends ModelTemplate
             if ($tglPemisahan < $tglPengambilan) {
                 throw new \InvalidArgumentException('Gagal Menyimpan! Tanggal pemisahan komponen tidak boleh mendahului tanggal pengambilan darah.');
             }
+        }
+    }
+
+    /**
+     * Mengambil batas jumlah komponen berdasarkan jenis bag pengambilan darah
+     * @param string|int $idPengambilan
+     * @return array{nama_jenis_bag: string, batas: int|null}
+     */
+    public function getBatasKomponen(string|int $idPengambilan): array
+    {
+        $row = $this->db->table('donor.pengambilan_darah pd')
+            ->select('jb.kode_jenis_bag, jb.nama_jenis_bag')
+            ->join('donor.jenis_bag jb', 'jb.id_jenis_bag = pd.id_jenis_bag', 'left')
+            ->where('pd.id_pengambilan_darah', $idPengambilan)
+            ->get()
+            ->getRowArray();
+
+        $kode = $row['kode_jenis_bag'] ?? null;
+
+        return [
+            'nama_jenis_bag' => $row['nama_jenis_bag'] ?? '-',
+            'batas'          => self::BATAS_KOMPONEN[$kode] ?? null,
+        ];
+    }
+
+    /**
+     * Memastikan jumlah komponen yang dipilih tidak melebihi batas maksimal jenis bag pengambilan darah
+     * @param string|int $idPengambilan
+     * @param array $komponenTerpilih
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    public function validasiJumlahKomponen(string|int $idPengambilan, array $komponenTerpilih): void
+    {
+        $batasKomponen = $this->getBatasKomponen($idPengambilan);
+        $batas         = $batasKomponen['batas'];
+
+        if ($batas === null) {
+            return;
+        }
+
+        if (count($komponenTerpilih) > $batas) {
+            throw new \InvalidArgumentException(
+                "Gagal Menyimpan! Jenis bag {$batasKomponen['nama_jenis_bag']} maksimal {$batas} komponen darah."
+            );
         }
     }
 

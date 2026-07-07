@@ -82,6 +82,12 @@
                 <label class="block text-sm font-medium text-gray-900 dark:text-white md:w-1/4">
                     Hasil Komponen Darah<span class="text-red-600">*</span>
                 </label>
+                <?php if (!empty($batas_komponen['batas'])) : ?>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        Jenis Bag: <span class="font-semibold"><?= esc($batas_komponen['nama_jenis_bag']) ?></span>
+                        &mdash; maksimal pilih <span class="font-semibold"><?= $batas_komponen['batas'] ?></span> komponen.
+                    </p>
+                <?php endif; ?>
             </div>
             
             <div class="overflow-hidden border border-gray-200 rounded-xl bg-white dark:bg-slate-900 dark:border-gray-700 mb-6">
@@ -179,6 +185,8 @@
 <script>
     const masterMedis    = <?= json_encode($bhp_medis_options ?? []) ?>;
     const masterNonMedis = <?= json_encode($bhp_non_options ?? []) ?>;
+    const batasKomponen  = <?= json_encode($batas_komponen['batas'] ?? null) ?>;
+    const namaJenisBag   = <?= json_encode($batas_komponen['nama_jenis_bag'] ?? '-') ?>;
     let currentTab = 'medis';
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -342,6 +350,14 @@
         for (var i = 0; i < requiredFields.length; i++) {
             if (!requiredFields[i].value) {
                 alert("Mohon isi semua field yang bertanda bintang.");
+                return false;
+            }
+        }
+
+        if (batasKomponen !== null) {
+            var jumlahTerpilih = document.querySelectorAll('input[name="id_komponen[]"]:checked').length;
+            if (jumlahTerpilih > batasKomponen) {
+                alert("Jenis bag " + namaJenisBag + " maksimal " + batasKomponen + " komponen darah. Saat ini terpilih " + jumlahTerpilih + ".");
                 return false;
             }
         }
