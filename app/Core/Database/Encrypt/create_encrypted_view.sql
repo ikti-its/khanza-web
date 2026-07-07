@@ -96,12 +96,12 @@ BEGIN
                 -- Handle INSERTs
                 encrypted_insert_columns := encrypted_insert_columns || format('%I, ', col.column_name);
                 encrypted_insert_values := encrypted_insert_values || format(
-                    'pgp_sym_encrypt(NEW.%I::text, ''%s''), ', col.column_name, encryption_key
+                    'pgp_sym_encrypt(NEW.%I::text, %L::text), ', col.column_name, encryption_key
                 );
 
                 -- Handle UPDATEs
                 encrypted_update_assignments := encrypted_update_assignments || format(
-                    '%I = pgp_sym_encrypt(NEW.%I::text, ''%s''), ', 
+                    '%I = pgp_sym_encrypt(NEW.%I::text, %L::text), ', 
                     col.column_name, col.column_name, encryption_key
                 );
             END IF;
