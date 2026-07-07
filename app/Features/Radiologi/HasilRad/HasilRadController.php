@@ -184,6 +184,19 @@ final class HasilRadController extends ControllerTemplate
         }
     }
 
+    private function tentukanStatusPermintaan(array $tindakanList): int
+    {
+        // Selesai (3) hanya jika semua tindakan sudah punya hasil ekspertise;
+        // selain itu tetap Sedang Diproses (2) menunggu bacaan dokter.
+        if (empty($tindakanList)) return 2;
+
+        foreach ($tindakanList as $tindakan) {
+            if (trim($tindakan['hasil_ekspertise'] ?? '') === '') return 2;
+        }
+
+        return 3;
+    }
+
     // ──────────────────────────────────────────────────────────
     // HALAMAN TAMBAH
     // ──────────────────────────────────────────────────────────
@@ -235,12 +248,12 @@ final class HasilRadController extends ControllerTemplate
             // 2. Insert tindakan dan BHP
             $this->insertTindakanAndBhp($idHasilRad, $tindakanList, $bhpList);
             
-            // 3. Update status permintaan → Selesai
+            // 3. Update status permintaan sesuai kelengkapan ekspertise
             if (!empty($dataHeader['id_permintaan_rad'])) {
                 $this->model->db
                     ->table('radiologi.permintaan_rad')
                     ->where('id_permintaan', $dataHeader['id_permintaan_rad'])
-                    ->set('id_status_permintaan', 3)
+                    ->set('id_status_permintaan', $this->tentukanStatusPermintaan($tindakanList))
                     ->update();
             }
 
@@ -387,7 +400,7 @@ final class HasilRadController extends ControllerTemplate
                 $this->model->db
                     ->table('radiologi.permintaan_rad')
                     ->where('id_permintaan', $dataHeader['id_permintaan_rad'])
-                    ->set('id_status_permintaan', 3)
+                    ->set('id_status_permintaan', $this->tentukanStatusPermintaan($tindakanList))
                     ->update();
             }
 
