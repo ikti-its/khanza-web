@@ -2,37 +2,24 @@
 declare(strict_types=1);
 
 namespace App\Core\Database\Special;
-use App\Core\Database\Template\DatabaseTemplate;
 
-final class AuditDatabase extends DatabaseTemplate
+final class AuditDatabase
 {    
-    #[\Override()]
-    public function up(): void
+    public function run(string $arg): void
     {
-        // $config = new \Config\Database()->default;
-        // $config['database'] = env('database.default.khanza_db');
-        // $this->db = \Config\Database::connect($config);
-        // $this->forge = \Config\Database::forge($this->db);
+        $config = new \Config\Database()->default;
+        $config['database'] = env('database.default.khanza_db');
+        $db = \Config\Database::connect($config);
+        $db->query('CREATE EXTENSION IF NOT EXISTS pgcrypto;');
+        $prefix = APPPATH . 'Core/Database/Audit/';
 
-        // $this->db->query('CREATE EXTENSION IF NOT EXISTS pgcrypto;');
-        // $this->db->query(file_get_contents(self::PATH . 'create_audit_table.sql'));
-        // $this->db->query(file_get_contents(self::PATH . 'create_audit_view.sql'));
-    }
-    
-    #[\Override()]
-    public function down(): void
-    {
-        // $config = new \Config\Database()->default;
-        // $config['database'] = env('database.default.khanza_db');
-        // $this->db = \Config\Database::connect($config);
-        // $this->forge = \Config\Database::forge($this->db);
-
-        // $this->db->query(file_get_contents(self::PATH . 'drop_audit_table.sql'));
-        // $this->db->query(file_get_contents(self::PATH . 'drop_audit_view.sql'));
-    }
-
-    #[\Override()]
-    public function dependencies(): array {
-        return [];
+        $sql = match ($arg) {
+            'drop_view'    => 'drop_audit_view.sql',
+            'drop_table'   => 'drop_audit_table.sql',
+            'create_table' => 'create_audit_table.sql',
+            'create_view'  => 'create_audit_view.sql',
+            default => die("Argument {$arg} not found"),
+        };
+        $db->query(file_get_contents($prefix . $sql));
     }
 }
