@@ -244,4 +244,14 @@ class RouteGroup
         
         return $php;
     }
+
+    final public function get_icon_paths()
+    {
+        $paths = [];
+        foreach($this->routes as $route_class) {
+            $route_instance = new $route_class();
+            $paths[] = $route_instance->get_icon_path();
+        }
+        return $paths;
+    }
 }
