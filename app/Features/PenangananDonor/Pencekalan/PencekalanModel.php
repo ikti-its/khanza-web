@@ -131,11 +131,16 @@ final class PencekalanModel extends ModelTemplate
      */
     private function adaNilaiDiagnostikPositif(array $nilaiDiagnostikDipilih): bool
     {
-        $modelNilai = new \App\Features\UjiDarah\NilaiDiagnostik\NilaiDiagnostikModel();
+        if (empty($nilaiDiagnostikDipilih)) {
+            return false;
+        }
     
-        $dataNilai = $modelNilai
+        $dataNilai = $this->db
+            ->table('uji_darah.nilai_diagnostik')
+            ->select('nama_nilai_diagnostik')
             ->whereIn('id_nilai_diagnostik', $nilaiDiagnostikDipilih)
-            ->findAll();
+            ->get()
+            ->getResultArray();
     
         foreach ($dataNilai as $nilai) {
             $namaNilai = strtolower(trim((string) ($nilai['nama_nilai_diagnostik'] ?? '')));
