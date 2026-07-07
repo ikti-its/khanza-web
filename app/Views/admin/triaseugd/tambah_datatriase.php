@@ -549,6 +549,11 @@
     });
 
     const masterSkalaRaw = <?= json_encode($master_skala ?? []) ?>;
+
+    // Pemetaan tingkat skala terpilih (paling tinggi/parah) -> saran Plan/Keputusan otomatis
+    const PLAN_PRIMER_MAP   = { 1: '1', 2: '2' };
+    const PLAN_SEKUNDER_MAP = { 3: '1', 4: '1', 5: '2' };
+
     let currentCategory = "";
     let currentSkala = 1;
     let currentTriaseTab = 'primer'; 
@@ -799,6 +804,32 @@
         }
 
         syncHiddenInputs();
+        autoSelectPlan();
+    }
+
+    /**
+     * Menyarankan Plan/Keputusan berdasarkan tingkat skala terparah yang tercentang
+     */
+    function autoSelectPlan() {
+        const tingkatRelevan = currentTriaseTab === 'primer' ? [1, 2] : [3, 4, 5];
+
+        const tingkatTerpilih = checkedSkalaIds
+            .map(id => masterSkalaRaw.find(item => String(item.id_skala) === String(id)))
+            .filter(Boolean)
+            .map(item => parseInt(item.id_tingkat_skala))
+            .filter(tingkat => tingkatRelevan.includes(tingkat));
+
+        if (tingkatTerpilih.length === 0) return;
+
+        const tingkatTerparah = Math.min(...tingkatTerpilih);
+        const peta = currentTriaseTab === 'primer' ? PLAN_PRIMER_MAP : PLAN_SEKUNDER_MAP;
+        const idPlanSaran = peta[tingkatTerparah];
+
+        if (idPlanSaran === undefined) return;
+
+        const namaRadio = currentTriaseTab === 'primer' ? 'id_plan_primer' : 'id_plan_sekunder';
+        const radio = document.querySelector(`input[name="${namaRadio}"][value="${idPlanSaran}"]`);
+        if (radio) radio.checked = true;
     }
 
     /**
