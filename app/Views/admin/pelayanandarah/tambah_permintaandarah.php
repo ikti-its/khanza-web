@@ -94,7 +94,7 @@
                     Tanggal Permintaan<span class="text-red-600">*</span>
                 </label>
                 <input type="datetime-local" name="tanggal_permintaan" value="<?= isset($baris['tanggal_permintaan']) && $baris['tanggal_permintaan'] !== '' ? date('Y-m-d\TH:i', strtotime($baris['tanggal_permintaan'])) : date('Y-m-d\TH:i') ?>"
-                       min="<?= date('Y-m-d\TH:i') ?>"
+                       min="<?= date('Y-m-d') ?>T00:00"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
             </div>
 
@@ -103,14 +103,22 @@
                     <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
                         Detail Permintaan Darah<span class="text-red-600">*</span>
                     </h3>
-                    <button type="button" onclick="tambahBarisKomponen()"
-                            class="inline-flex items-center gap-x-1.5 py-2 px-3 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm transition-all flex-shrink-0">
-                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        Tambah
-                    </button>
+                    <?php if ($detail_bisa_diubah ?? true) : ?>
+                        <button type="button" onclick="tambahBarisKomponen()"
+                                class="inline-flex items-center gap-x-1.5 py-2 px-3 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm transition-all flex-shrink-0">
+                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            Tambah
+                        </button>
+                    <?php endif; ?>
                 </div>
+
+                <?php if (!($detail_bisa_diubah ?? true)) : ?>
+                    <p class="text-sm text-amber-600 dark:text-amber-500 mb-3">
+                        Detail permintaan darah tidak dapat diubah karena status permintaan sudah diproses sebagian/terpenuhi.
+                    </p>
+                <?php endif; ?>
 
                 <div class="overflow-hidden border border-gray-200 rounded-xl bg-white dark:bg-slate-900 dark:border-gray-700 mb-6">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -140,6 +148,8 @@
 </div>
 
 <script>
+    const detailBisaDiubah = <?= json_encode($detail_bisa_diubah ?? true) ?>;
+
     document.addEventListener("DOMContentLoaded", function() {
         const currentEditId = "<?= $baris['id_permintaan'] ?? '' ?>";
         
@@ -158,10 +168,15 @@
 
                 const row = document.createElement('tr');
                 row.className = "baris-komponen border-b text-sm dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800/30";
-                
+
+                const disabledAttr = detailBisaDiubah ? '' : 'disabled';
+                const aksiCell = detailBisaDiubah
+                    ? `<button type="button" onclick="hapusBarisKomponen(this)" class="text-red-600 font-semibold hover:underline dark:text-red-400">Hapus</button>`
+                    : `-`;
+
                 row.innerHTML = `
                     <td class="p-3">
-                        <select name="id_komponen[]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500" required>
+                        <select name="id_komponen[]" ${disabledAttr} class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed dark:disabled:bg-slate-700" required>
                             <option value="">-- Pilih Komponen --</option>
                             <?php foreach ($master_komponen as $komponen) : ?>
                                 <option value="<?= $komponen['id_komponen'] ?>"><?= $komponen['nama_komponen'] ?></option>
@@ -169,7 +184,7 @@
                         </select>
                     </td>
                     <td class="p-3">
-                        <select name="id_golongan_darah[]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500" required>
+                        <select name="id_golongan_darah[]" ${disabledAttr} class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed dark:disabled:bg-slate-700" required>
                             <option value="">-- Pilih --</option>
                             <?php foreach ($master_gol_darah as $gol) : ?>
                                 <option value="<?= $gol['id_golongan_darah'] ?>"><?= $gol['nama_golongan_darah'] ?></option>
@@ -177,7 +192,7 @@
                         </select>
                     </td>
                     <td class="p-3">
-                        <select name="id_rhesus[]" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500" required>
+                        <select name="id_rhesus[]" ${disabledAttr} class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed dark:disabled:bg-slate-700" required>
                             <option value="">-- Pilih --</option>
                             <?php foreach ($master_rhesus as $rhe) : ?>
                                 <option value="<?= $rhe['id_rhesus'] ?>"><?= $rhe['kode_rhesus'] ?></option>
@@ -185,12 +200,10 @@
                         </select>
                     </td>
                     <td class="p-3">
-                        <input type="number" name="jumlah[]" min="1" value="${item.jumlah}" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full text-center dark:border-gray-600 dark:text-white dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500" required>
+                        <input type="number" name="jumlah[]" min="1" value="${item.jumlah}" ${disabledAttr} class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full text-center dark:border-gray-600 dark:text-white dark:bg-slate-800 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed dark:disabled:bg-slate-700" required>
                     </td>
                     <td class="p-3 text-center">
-                        <button type="button" onclick="hapusBarisKomponen(this)" class="text-red-600 font-semibold hover:underline dark:text-red-400">
-                            Hapus
-                        </button>
+                        ${aksiCell}
                     </td>
                 `;
 

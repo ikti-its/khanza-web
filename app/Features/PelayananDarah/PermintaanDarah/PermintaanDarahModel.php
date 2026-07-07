@@ -32,4 +32,21 @@ final class PermintaanDarahModel extends ModelTemplate
             ],
         );
     }
+
+    /**
+     * Status permintaan darah yang detailnya masih boleh diubah
+     */
+    public const STATUS_BELUM_DIPROSES = 1;
+
+    /**
+     * Memastikan detail permintaan darah hanya boleh diubah jika status masih Belum Diproses
+     * @param string|int $idPermintaan
+     * @return bool
+     */
+    public function isDetailBisaDiubah(string|int $idPermintaan): bool
+    {
+        $row = $this->find($idPermintaan);
+
+        return (int)($row['id_status_permintaan'] ?? self::STATUS_BELUM_DIPROSES) === self::STATUS_BELUM_DIPROSES;
+    }
 }

@@ -308,22 +308,25 @@ final class PermintaanDarahController extends ControllerTemplate
         $modelDetail = new \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailModel();
         $dataDetailTersimpan = $modelDetail->where('id_permintaan', $id)->findAll();
 
+        $detailBisaDiubah = (int)($dataPermintaan['id_status_permintaan'] ?? PermintaanDarahModel::STATUS_BELUM_DIPROSES) === PermintaanDarahModel::STATUS_BELUM_DIPROSES;
+
         $breadcrumbs = [
             ['title' => 'Ubah', 'icon' => 'ubah']
         ];
 
         return view('admin/pelayanandarah/tambah_permintaandarah', [
-            'judul'           => 'Ubah ' . $this->title,
-            'breadcrumbs'     => array_merge($this->breadcrumbs, $breadcrumbs),
-            'modul_path'      => $this->get_uri_path(),
-            'kolom_id'        => $this->model->primaryKey,
-            'konfig'          => $konfigGabungan,
-            'baris'           => $baris,
-            'master_komponen' => $masterKomponen,
-            'master_gol_darah'=> $masterGolDarah,
-            'master_rhesus'   => $masterRhesus,
-            'detail_tersimpan'=> $dataDetailTersimpan,
-            'form_action'     => '/submitedit/' . $id,
+            'judul'             => 'Ubah ' . $this->title,
+            'breadcrumbs'       => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'        => $this->get_uri_path(),
+            'kolom_id'          => $this->model->primaryKey,
+            'konfig'            => $konfigGabungan,
+            'baris'             => $baris,
+            'master_komponen'   => $masterKomponen,
+            'master_gol_darah'  => $masterGolDarah,
+            'master_rhesus'     => $masterRhesus,
+            'detail_tersimpan'  => $dataDetailTersimpan,
+            'detail_bisa_diubah'=> $detailBisaDiubah,
+            'form_action'       => '/submitedit/' . $id,
         ]);
     }
 
@@ -357,24 +360,28 @@ final class PermintaanDarahController extends ControllerTemplate
             if ($dataLama) {
                 $dataPermintaan['id_status_permintaan'] = $dataLama['id_status_permintaan'];
             }
-            
+
+            $detailBisaDiubah = (int)($dataLama['id_status_permintaan'] ?? PermintaanDarahModel::STATUS_BELUM_DIPROSES) === PermintaanDarahModel::STATUS_BELUM_DIPROSES;
+
             $this->model->update($id, $dataPermintaan);
 
-            $modelDetail = new \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailModel();
+            if ($detailBisaDiubah) {
+                $modelDetail = new \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailModel();
 
-            $modelDetail->where('id_permintaan', $id)->delete();
+                $modelDetail->where('id_permintaan', $id)->delete();
 
-            if (!empty($listKomponen) && is_array($listKomponen)) {
-                foreach ($listKomponen as $index => $idKomponen) {
-                    if (empty($idKomponen)) continue;
+                if (!empty($listKomponen) && is_array($listKomponen)) {
+                    foreach ($listKomponen as $index => $idKomponen) {
+                        if (empty($idKomponen)) continue;
 
-                    $modelDetail->insert([
-                        'id_permintaan'     => $id,
-                        'id_komponen'       => $idKomponen,
-                        'id_golongan_darah' => $listGolDarah[$index],
-                        'id_rhesus'         => $listRhesus[$index],
-                        'jumlah'            => (int)$listJumlah[$index],
-                    ]);
+                        $modelDetail->insert([
+                            'id_permintaan'     => $id,
+                            'id_komponen'       => $idKomponen,
+                            'id_golongan_darah' => $listGolDarah[$index],
+                            'id_rhesus'         => $listRhesus[$index],
+                            'jumlah'            => (int)$listJumlah[$index],
+                        ]);
+                    }
                 }
             }
 
