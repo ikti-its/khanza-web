@@ -38,6 +38,8 @@ final class HasilDiagnostikDetailDatabase extends DatabaseTemplate
                     'id_nilai_diagnostik',
                 ],
             ],
+            false,
+            'hasil_diagnostik_detail.csv',
         );
     }
 }
