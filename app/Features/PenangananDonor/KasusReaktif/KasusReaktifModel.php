@@ -35,6 +35,9 @@ final class KasusReaktifModel extends ModelTemplate
         );
     }
 
+    private const STATUS_KASUS_DALAM_PEMANTAUAN = 1;
+    private const STATUS_KASUS_SELESAI          = 2;
+
     /**
      * Membuat nomor kasus reaktif otomatis dengan format KR-YYYY-XXXX
      */
@@ -58,6 +61,32 @@ final class KasusReaktifModel extends ModelTemplate
         }
     
         return $prefix . str_pad((string) $urutanBerikutnya, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Mengubah status kasus reaktif menjadi selesai
+     */
+    public function selesaikanKasus(int|string $idKasus): void
+    {
+        $this->db
+            ->table('penanganan_donor.kasus_reaktif')
+            ->where('id_kasus', $idKasus)
+            ->update([
+                'id_status_kasus' => self::STATUS_KASUS_SELESAI,
+            ]);
+    }
+
+    /**
+     * Mengembalikan status kasus reaktif menjadi dalam penanganan
+     */
+    public function bukaKembaliKasus(int|string $idKasus): void
+    {
+        $this->db
+            ->table('penanganan_donor.kasus_reaktif')
+            ->where('id_kasus', $idKasus)
+            ->update([
+                'id_status_kasus' => self::STATUS_KASUS_DALAM_PEMANTAUAN,
+            ]);
     }
 
     /**

@@ -131,6 +131,8 @@ final class HasilDiagnostikController extends ControllerTemplate
                 $nilaiDiagnostikDipilih
             );
 
+            $modelKasus->selesaikanKasus($idKasus);
+
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
@@ -292,6 +294,8 @@ final class HasilDiagnostikController extends ControllerTemplate
                 $nilaiDiagnostikDipilih
             );
 
+            $modelKasus->selesaikanKasus($idKasus);
+
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
@@ -357,6 +361,8 @@ final class HasilDiagnostikController extends ControllerTemplate
     
             $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
             $modelPencekalan->resetPencekalanDiagnostik($dataUjiSaring);
+
+            $modelKasus->bukaKembaliKasus($idKasus);
     
             $this->model->db->transComplete();
     
