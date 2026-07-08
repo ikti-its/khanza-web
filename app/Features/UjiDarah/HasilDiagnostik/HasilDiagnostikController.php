@@ -15,10 +15,10 @@ final class HasilDiagnostikController extends ControllerTemplate
         parent::__construct(
             new HasilDiagnostikModel(),
             [
-                ['Uji Darah',        'uji_darah'],
-                ['Hasil Diagnostik', 'hasil_diagnostik'],
+                ['Uji Darah',            'uji_darah'],
+                ['Hasil Tes Diagnostik', 'hasil_tes_diagnostik'],
             ],
-            'Hasil Diagnostik',
+            'Hasil Tes Diagnostik',
             [
                 A::READ,
                 A::CREATE,
