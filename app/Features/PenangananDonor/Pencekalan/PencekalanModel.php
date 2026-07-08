@@ -32,7 +32,8 @@ final class PencekalanModel extends ModelTemplate
 
     private const STATUS_AKTIF   = 1;
     private const STATUS_SELESAI = 2;
-    private const JENIS_PENCEKALAN_PERMANEN = 2;
+    private const JENIS_PENCEKALAN_SEMENTARA = 1;
+    private const JENIS_PENCEKALAN_PERMANEN  = 2;
 
     /**
      * Menyinkronkan status pencekalan menjadi selesai jika tanggal selesai sudah lewat
@@ -121,6 +122,7 @@ final class PencekalanModel extends ModelTemplate
             ->format('Y-m-d');
 
         $this->update($dataPencekalan['id_pencekalan'], [
+            'id_jenis_pencekalan'  => self::JENIS_PENCEKALAN_SEMENTARA,
             'tanggal_selesai'      => $tanggalSelesai,
             'id_status_pencekalan' => self::STATUS_AKTIF,
         ]);

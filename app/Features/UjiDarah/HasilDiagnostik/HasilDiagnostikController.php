@@ -145,6 +145,7 @@ final class HasilDiagnostikController extends ControllerTemplate
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
+            return redirect()->back()->withInput();
         }
 
         return redirect()->to($this->get_uri_path() . '/data');
@@ -211,5 +212,103 @@ final class HasilDiagnostikController extends ControllerTemplate
             'parameter_diagnostik' => $parameterDiagnostik,
             'form_action'          => '/submitedit/' . $id,
         ]);
+    }
+
+    /**
+     * OVERRIDE: Memproses ubah data hasil diagnostik
+     */
+    #[\Override]
+    final public function update(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->index();
+
+        $rawPost = $this->request->getPost();
+        $dataDiagnostikLama = $this->model->find($id);
+
+        if (!$dataDiagnostikLama) {
+            session()->setFlashdata('error', 'Data hasil diagnostik tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $idKasus = $dataDiagnostikLama['id_kasus'];
+        $idParameterUji  = $rawPost['id_parameter_uji'] ?? [];
+        $nilaiDiagnostik = $rawPost['id_nilai_diagnostik'] ?? [];
+
+        $modelKasus = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
+        $dataKasus  = $modelKasus->find($idKasus);
+
+        if (!$dataKasus) {
+            session()->setFlashdata('error', 'Gagal memperbarui! Data kasus reaktif tidak ditemukan.');
+            return redirect()->back()->withInput();
+        }
+
+        $modelUjiSaring = new \App\Features\UjiDarah\HasilUjiSaring\HasilUjiSaringModel();
+        $dataUjiSaring  = $modelUjiSaring->find($dataKasus['id_uji_saring']);
+
+        if (!$dataUjiSaring) {
+            session()->setFlashdata('error', 'Gagal memperbarui! Data hasil uji saring sumber kasus tidak ditemukan.');
+            return redirect()->back()->withInput();
+        }
+
+        $dataDiagnostik = [
+            'tanggal_hasil'     => $rawPost['tanggal_hasil'],
+            'fasyankes_rujukan' => $rawPost['fasyankes_rujukan'],
+            'dokter_pemeriksa'  => $rawPost['dokter_pemeriksa'],
+        ];
+
+        $this->model->db->transStart();
+
+        try {
+            $this->model->update($id, $dataDiagnostik);
+
+            $this->model->db
+                ->table('uji_darah.hasil_diagnostik_detail')
+                ->where('id_diagnostik', $id)
+                ->delete();
+
+            $modelDetail = new \App\Features\UjiDarah\HasilDiagnostikDetail\HasilDiagnostikDetailModel();
+            $nilaiDiagnostikDipilih = [];
+
+            foreach ($idParameterUji as $idParameter) {
+                $idNilai = $nilaiDiagnostik[$idParameter] ?? null;
+
+                if (empty($idNilai)) {
+                    throw new \RuntimeException('Nilai diagnostik belum lengkap.');
+                }
+
+                $modelDetail->insert([
+                    'id_diagnostik'       => $id,
+                    'id_parameter_uji'    => $idParameter,
+                    'id_nilai_diagnostik' => $idNilai,
+                ]);
+
+                $nilaiDiagnostikDipilih[] = $idNilai;
+            }
+
+            $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
+            $modelPencekalan->updateDariHasilDiagnostik(
+                $dataUjiSaring,
+                $rawPost['tanggal_hasil'],
+                $nilaiDiagnostikDipilih
+            );
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal memperbarui data hasil diagnostik.');
+            }
+
+            session()->setFlashdata('success', 'Data hasil diagnostik berhasil diperbarui.');
+
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
+            return redirect()->back()->withInput();
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 }
