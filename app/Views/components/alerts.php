@@ -4,6 +4,7 @@ $errorMessage   = session()->getFlashdata('error');
 
 $pencekalanUrl     = session()->get('pencekalan_url');
 $pencekalanMessage = session()->get('pencekalan_message');
+$pencekalanTitle   = session()->get('pencekalan_title');
 
 $currentPath = service('uri')->getPath();
 $isFormPencekalan = str_contains($currentPath, 'penanganan-donor/pencekalan/tambah');
@@ -13,11 +14,12 @@ $isFormPencekalan = str_contains($currentPath, 'penanganan-donor/pencekalan/tamb
     <script>
         const wajibPencekalanUrl = <?= json_encode($pencekalanUrl) ?>;
         const wajibPencekalanMessage = <?= json_encode($pencekalanMessage ?? 'Data pencekalan wajib dilengkapi terlebih dahulu.') ?>;
+        const wajibPencekalanTitle = <?= json_encode($pencekalanTitle ?? 'Hasil Reaktif Terdeteksi') ?>;
 
         function showWajibPencekalanPopup() {
             Swal.fire({
                 icon: 'warning',
-                title: 'Hasil Reaktif Terdeteksi',
+                title: wajibPencekalanTitle,
                 text: wajibPencekalanMessage,
                 confirmButtonText: 'Isi Data Pencekalan',
                 showCancelButton: false,

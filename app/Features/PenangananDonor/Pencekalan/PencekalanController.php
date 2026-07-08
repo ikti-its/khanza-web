@@ -210,6 +210,7 @@ final class PencekalanController extends ControllerTemplate
             session()->remove([
                 'pencekalan_url',
                 'pencekalan_message',
+                'pencekalan_title',
             ]);
         }
 

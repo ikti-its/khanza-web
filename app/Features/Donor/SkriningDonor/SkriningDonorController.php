@@ -174,6 +174,10 @@ final class SkriningDonorController extends ControllerTemplate
         $dataSkrining['id_status_skrining'] = $idStatusSkrining;
         $dataSkrining['jawaban_kuesioner']  = !empty($jawabanQ) ? json_encode($jawabanQ) : null;
 
+        $anamnesisTidakMemenuhiSyarat = (int)($rawPost['id_hasil_anamnesis'] ?? 0) !== 1;
+        $idKunjungan   = $dataSkrining['id_kunjungan'] ?? null;
+        $pencekalanUrl = null;
+
         $this->model->db->transStart();
         try {
             $this->model->insert($dataSkrining);
@@ -184,7 +188,18 @@ final class SkriningDonorController extends ControllerTemplate
                 throw new \RuntimeException('Gagal menyimpan data skrining donor.');
             }
 
-            if ($idStatusSkrining === 1) {
+            if ($anamnesisTidakMemenuhiSyarat && !empty($idKunjungan) && !$this->hasPencekalan($idKunjungan)) {
+                $pencekalanUrl = $this->makePencekalanUrlAnamnesis($idKunjungan);
+            }
+
+            if ($pencekalanUrl !== null) {
+                session()->set('pencekalan_url', $pencekalanUrl);
+                session()->set('pencekalan_title', 'Hasil Anamnesis Tidak Memenuhi Syarat');
+                session()->set(
+                    'pencekalan_message',
+                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil anamnesis donor yang tidak memenuhi syarat.'
+                );
+            } elseif ($idStatusSkrining === 1) {
                 session()->setFlashdata('success', 'Data skrining berhasil disimpan. Pendonor dinyatakan LOLOS.');
             } else {
                 $teksAlasan = implode(', ', $daftarAlasan);
@@ -329,6 +344,10 @@ final class SkriningDonorController extends ControllerTemplate
         $dataSkrining['id_status_skrining'] = $idStatusSkrining;
         $dataSkrining['jawaban_kuesioner']  = !empty($jawabanQ) ? json_encode($jawabanQ) : null;
 
+        $anamnesisTidakMemenuhiSyarat = (int)($rawPost['id_hasil_anamnesis'] ?? 0) !== 1;
+        $idKunjungan   = $dataSkrining['id_kunjungan'] ?? null;
+        $pencekalanUrl = null;
+
         $this->model->db->transStart();
         try {
             $dataLama = $this->model->find($id);
@@ -342,16 +361,28 @@ final class SkriningDonorController extends ControllerTemplate
                 throw new \RuntimeException('Gagal memperbarui data skrining donor.');
             }
 
-            if ($statusSebelumnya === 1 && $idStatusSkrining === 1) {
+            if ($anamnesisTidakMemenuhiSyarat && !empty($idKunjungan) && !$this->hasPencekalan($idKunjungan)) {
+                $pencekalanUrl = $this->makePencekalanUrlAnamnesis($idKunjungan);
+            }
+
+            if ($pencekalanUrl !== null) {
+                session()->set('pencekalan_url', $pencekalanUrl);
+                session()->set('pencekalan_title', 'Hasil Anamnesis Tidak Memenuhi Syarat');
+                session()->set(
+                    'pencekalan_message',
+                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil anamnesis donor yang tidak memenuhi syarat.'
+                );
+            }
+            elseif ($statusSebelumnya === 1 && $idStatusSkrining === 1) {
                 session()->setFlashdata('success', 'Data skrining berhasil diperbarui.');
-            } 
+            }
             elseif ($statusSebelumnya === 1 && $idStatusSkrining === 2) {
                 $teksAlasan = implode(', ', $daftarAlasan);
                 session()->setFlashdata('success', "Data skrining berhasil diperbarui. Pendonor dinyatakan GAGAL/DITUNDA karena indikator: {$teksAlasan}.");
-            } 
+            }
             elseif ($statusSebelumnya === 2 && $idStatusSkrining === 1) {
                 session()->setFlashdata('success', 'Data skrining berhasil diperbarui. Pendonor dinyatakan LOLOS.');
-            } 
+            }
             elseif ($statusSebelumnya === 2 && $idStatusSkrining === 2) {
                 session()->setFlashdata('success', 'Data skrining berhasil diperbarui.');
             }
@@ -439,5 +470,33 @@ final class SkriningDonorController extends ControllerTemplate
             'modul_path'  => $this->get_uri_path(),
             'baris'       => $baris,
         ]);
+    }
+
+    /**
+     * Membuat URL form pencekalan dari hasil anamnesis yang tidak memenuhi syarat
+     */
+    private function makePencekalanUrlAnamnesis(int|string $idKunjungan): string
+    {
+        $queryPencekalan = [
+            'kunjungan' => $idKunjungan,
+        ];
+
+        return '/penanganan-donor/pencekalan/tambah?' . http_build_query($queryPencekalan);
+    }
+
+    /**
+     * Mengecek apakah pencekalan untuk kunjungan tersebut sudah ada
+     */
+    private function hasPencekalan(int|string $idKunjungan): bool
+    {
+        if (empty($idKunjungan)) {
+            return false;
+        }
+
+        $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
+
+        return $modelPencekalan
+            ->where('id_kunjungan', $idKunjungan)
+            ->first() !== null;
     }
 }
