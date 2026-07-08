@@ -2,6 +2,7 @@
 <?= $this->section('content'); ?>
 
 <?= $this->include('components/modal/modaldokter') ?>
+<?= $this->include('components/modal/modalpetugas') ?>
 <?= $this->include('components/modal/modalruangan') ?>
 
 <?php
@@ -18,6 +19,8 @@ $searchIcon  = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="no
 $plusIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>';
 
 $isCito = filter_var($baris['is_cito'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+$peranSelectClass = "$baseInput bg-slate-50 tim-peran";
 ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
@@ -118,36 +121,65 @@ $isCito = filter_var($baris['is_cito'] ?? false, FILTER_VALIDATE_BOOLEAN);
                 </a>
             </div>
 
-            <!-- ── Tim Dokter Tambahan ──────────────────────────────────────── -->
+            <!-- ── Tim Medis Tambahan ──────────────────────────────────────── -->
             <div class="mb-6 border-t border-gray-200 dark:border-gray-700 pt-5">
                 <div class="flex items-center justify-between mb-3">
-                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Tim Dokter Tambahan</p>
-                    <button type="button" onclick="bukaDokterTim()" class="<?= $addBtnClass ?>">
-                        <?= $plusIcon ?> Tambah Dokter
-                    </button>
+                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Tim Medis Tambahan</p>
+                    <div class="flex gap-x-2">
+                        <button type="button" onclick="bukaDokterTim()" class="<?= $addBtnClass ?>">
+                            <?= $plusIcon ?> Tambah Dokter
+                        </button>
+                        <button type="button" onclick="bukaPetugasTim()" class="<?= $addBtnClass ?>">
+                            <?= $plusIcon ?> Tambah Petugas
+                        </button>
+                    </div>
                 </div>
 
-                <div id="timTableWrap">
-                    <?php if (!empty($tim_terpilih)): ?>
-                    <table class="w-full text-sm text-gray-700 dark:text-gray-300">
+                <div class="border rounded-xl overflow-hidden dark:border-gray-700">
+                    <table id="timTable" class="w-full text-sm text-gray-700 dark:text-gray-300 table-fixed">
+                        <colgroup>
+                            <col class="w-1/2">
+                            <col class="w-2/5">
+                            <col>
+                        </colgroup>
+                        <thead style="background-color:#E6F2EF;" class="text-gray-800 font-semibold text-base">
+                            <tr>
+                                <th class="p-4 border text-center text-base">Nama</th>
+                                <th class="p-4 border text-center text-base">Peran</th>
+                                <th class="p-4 border text-center text-base">Aksi</th>
+                            </tr>
+                        </thead>
                         <tbody id="timTableBody">
-                        <?php foreach ($tim_terpilih as $tim): ?>
-                            <tr id="tim-row-<?= $tim['id_dokter'] ?>" class="border-b dark:border-gray-700">
-                                <td class="py-2"><?= esc($tim['nama_dokter']) ?></td>
-                                <td class="py-2 text-right">
-                                    <button type="button" onclick="hapusTim(<?= $tim['id_dokter'] ?>)"
+                        <?php if (empty($tim_terpilih)): ?>
+                            <tr id="emptyTim">
+                                <td colspan="3" class="text-center py-6 text-gray-400 italic dark:text-gray-500">Belum ada tim medis tambahan</td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php foreach ($tim_terpilih ?? [] as $tim):
+                            $jenis = !empty($tim['id_dokter']) ? 'dokter' : 'petugas';
+                            $id    = $jenis === 'dokter' ? (int) $tim['id_dokter'] : (int) $tim['id_petugas'];
+                            $key   = ($jenis === 'dokter' ? 'd-' : 'p-') . $id;
+                        ?>
+                            <tr id="tim-row-<?= $key ?>">
+                                <td class="p-2 pl-4 border dark:border-gray-700"><?= esc($tim['nama']) ?></td>
+                                <td class="p-2 border dark:border-gray-700">
+                                    <select name="tim[<?= $key ?>][id_peran]" class="<?= $peranSelectClass ?>" onchange="refreshPeranOptions()">
+                                        <option value="">— Pilih peran —</option>
+                                        <?php foreach ($peran_tim ?? [] as $val => $label): ?>
+                                        <option value="<?= $val ?>" <?= (int) ($tim['id_peran'] ?? 0) === $val ? 'selected' : '' ?>><?= esc($label) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <input type="hidden" name="tim[<?= $key ?>][id_<?= $jenis ?>]" value="<?= $id ?>">
+                                </td>
+                                <td class="p-2 border text-center dark:border-gray-700">
+                                    <button type="button" onclick="hapusTim('<?= $key ?>')"
                                             class="text-red-500 hover:underline text-xs">Hapus</button>
                                 </td>
-                                <input type="hidden" name="tim_dokter[]" value="<?= $tim['id_dokter'] ?>">
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <?php else: ?>
-                    <p id="emptyTim" class="text-xs text-gray-400 italic dark:text-gray-500">Belum ada tim dokter tambahan</p>
-                    <?php endif; ?>
                 </div>
-                <div id="hiddenTimInputs"></div>
             </div>
 
             <?= view('components/form/submit_button') ?>
@@ -158,12 +190,18 @@ $isCito = filter_var($baris['is_cito'] ?? false, FILTER_VALIDATE_BOOLEAN);
 <script>
 let _dokterTarget = null;
 const _timAdded   = {};
-<?php foreach ($tim_terpilih ?? [] as $t): ?>
-_timAdded[<?= $t['id_dokter'] ?>] = true;
+<?php foreach ($tim_terpilih ?? [] as $t):
+    $k = !empty($t['id_dokter']) ? 'd-' . (int) $t['id_dokter'] : 'p-' . (int) $t['id_petugas'];
+?>
+_timAdded['<?= $k ?>'] = true;
 <?php endforeach; ?>
+
+const PERAN_TIM          = <?= json_encode($peran_tim ?? []) ?>;
+const PERAN_SELECT_CLASS = '<?= $peranSelectClass ?>';
 
 function bukaDokter(target) { _dokterTarget = target; open_modalDokter(); }
 function bukaDokterTim()    { _dokterTarget = 'tim';  open_modalDokter(); }
+function bukaPetugasTim()   { open_modalPetugas(); }
 
 function autofillRuangan(item) {
     document.getElementById('nama_ruangan').value = item.nama_ruangan ?? '';
@@ -178,65 +216,69 @@ function autofillFields(item) {
         document.getElementById('nama_dokter_anestesi').value = item.nama_dokter ?? '';
         document.getElementById('id_dokter_anestesi').value   = item.id_dokter   ?? '';
     } else if (_dokterTarget === 'tim') {
-        tambahTim(item);
+        tambahTim('dokter', item.id_dokter, item.nama_dokter ?? '');
     }
     _dokterTarget = null;
 }
 
-function tambahTim(item) {
-    const id         = item.id_dokter;
-    const idBedah    = document.getElementById('id_dokter_bedah').value;
-    const idAnestesi = document.getElementById('id_dokter_anestesi').value;
+function autofillPetugas(item) {
+    tambahTim('petugas', item.id_petugas, item.nama ?? '');
+}
 
-    if (String(id) === String(idBedah) && idBedah)    { alert('Dokter ini sudah dipilih sebagai Dokter Bedah.');     return; }
-    if (String(id) === String(idAnestesi) && idAnestesi) { alert('Dokter ini sudah dipilih sebagai Dokter Anestesi.'); return; }
-    if (_timAdded[id]) { alert('Dokter sudah ada di tim.'); return; }
-    _timAdded[id] = true;
+function tambahTim(jenis, id, nama) {
+    const key = (jenis === 'dokter' ? 'd-' : 'p-') + id;
+
+    if (jenis === 'dokter') {
+        const idBedah    = document.getElementById('id_dokter_bedah').value;
+        const idAnestesi = document.getElementById('id_dokter_anestesi').value;
+        if (String(id) === String(idBedah) && idBedah)       { alert('Dokter ini sudah dipilih sebagai Dokter Bedah.');     return; }
+        if (String(id) === String(idAnestesi) && idAnestesi) { alert('Dokter ini sudah dipilih sebagai Dokter Anestesi.'); return; }
+    }
+    if (_timAdded[key]) { alert('Orang ini sudah ada di tim.'); return; }
+    _timAdded[key] = true;
 
     document.getElementById('emptyTim')?.remove();
 
-    let tbody = document.getElementById('timTableBody');
-    if (!tbody) {
-        const tbl = document.createElement('table');
-        tbl.className = 'w-full text-sm text-gray-700 dark:text-gray-300';
-        tbody = document.createElement('tbody');
-        tbody.id = 'timTableBody';
-        tbl.appendChild(tbody);
-        document.getElementById('timTableWrap').appendChild(tbl);
+    let options = '<option value="">— Pilih peran —</option>';
+    for (const [val, label] of Object.entries(PERAN_TIM)) {
+        options += `<option value="${val}">${label}</option>`;
     }
 
     const tr = document.createElement('tr');
-    tr.id = `tim-row-${id}`;
-    tr.className = 'border-b dark:border-gray-700';
+    tr.id = `tim-row-${key}`;
     tr.innerHTML = `
-        <td class="py-2">${item.nama_dokter ?? ''}</td>
-        <td class="py-2 text-right">
-            <button type="button" onclick="hapusTim(${id})" class="text-red-500 hover:underline text-xs">Hapus</button>
+        <td class="p-2 pl-4 border dark:border-gray-700">${nama}</td>
+        <td class="p-2 border dark:border-gray-700">
+            <select name="tim[${key}][id_peran]" class="${PERAN_SELECT_CLASS}" onchange="refreshPeranOptions()">${options}</select>
+            <input type="hidden" name="tim[${key}][id_${jenis}]" value="${id}">
+        </td>
+        <td class="p-2 border text-center dark:border-gray-700">
+            <button type="button" onclick="hapusTim('${key}')" class="text-red-500 hover:underline text-xs">Hapus</button>
         </td>`;
-    tbody.appendChild(tr);
-
-    const inp = document.createElement('input');
-    inp.type  = 'hidden';
-    inp.name  = 'tim_dokter[]';
-    inp.value = id;
-    inp.id    = `tim-inp-${id}`;
-    document.getElementById('hiddenTimInputs').appendChild(inp);
+    document.getElementById('timTableBody').appendChild(tr);
+    refreshPeranOptions();
 }
 
-function hapusTim(id) {
-    document.getElementById(`tim-row-${id}`)?.remove();
-    document.getElementById(`tim-inp-${id}`)?.remove();
-    delete _timAdded[id];
+function hapusTim(key) {
+    document.getElementById(`tim-row-${key}`)?.remove();
+    delete _timAdded[key];
 
     const tbody = document.getElementById('timTableBody');
-    if (tbody && tbody.children.length === 0) {
-        tbody.closest('table')?.remove();
-        const empty = document.createElement('p');
-        empty.id = 'emptyTim';
-        empty.className = 'text-xs text-gray-400 italic dark:text-gray-500';
-        empty.textContent = 'Belum ada tim dokter tambahan';
-        document.getElementById('timTableWrap').appendChild(empty);
+    if (tbody.children.length === 0) {
+        tbody.innerHTML = '<tr id="emptyTim"><td colspan="3" class="text-center py-6 text-gray-400 italic dark:text-gray-500">Belum ada tim medis tambahan</td></tr>';
     }
+    refreshPeranOptions();
+}
+
+function refreshPeranOptions() {
+    const selects = document.querySelectorAll('.tim-peran');
+    const taken   = new Set();
+    selects.forEach(s => { if (s.value) taken.add(s.value); });
+    selects.forEach(s => {
+        s.querySelectorAll('option').forEach(o => {
+            o.disabled = o.value !== '' && o.value !== s.value && taken.has(o.value);
+        });
+    });
 }
 
 function updateBoardLink() {
@@ -255,12 +297,21 @@ function validateForm() {
     if (!document.getElementById('id_dokter_anestesi').value) {
         alert('Silakan pilih dokter anestesi terlebih dahulu.'); return false;
     }
+    for (const s of document.querySelectorAll('.tim-peran')) {
+        if (!s.value) {
+            alert('Silakan pilih peran untuk setiap anggota tim medis.');
+            s.focus(); return false;
+        }
+    }
     const submitButton = document.getElementById('submitButton');
     if (submitButton) { submitButton.disabled = true; submitButton.innerHTML = 'Menyimpan...'; }
     return true;
 }
 
-document.addEventListener('DOMContentLoaded', updateBoardLink);
+document.addEventListener('DOMContentLoaded', () => {
+    updateBoardLink();
+    refreshPeranOptions();
+});
 </script>
 
 <?= $this->endSection(); ?>

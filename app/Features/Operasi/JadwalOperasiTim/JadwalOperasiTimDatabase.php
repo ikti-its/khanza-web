@@ -16,7 +16,9 @@ final class JadwalOperasiTimDatabase extends DatabaseTemplate
             [
                 'id_jadwal_tim' => T::ID(100_000_000),
                 'id_jadwal'     => T::FK_AUTO(),
-                'id_dokter'     => T::FK_AUTO(),
+                'id_dokter'     => T::FK_AUTO()->nullable(),
+                'id_petugas'    => T::FK_AUTO()->nullable(),
+                'id_peran'      => T::FK_AUTO()->nullable(),
             ],
             'id_jadwal_tim',
             [],
@@ -30,6 +32,16 @@ final class JadwalOperasiTimDatabase extends DatabaseTemplate
                     ['id_dokter'],
                     \App\Features\Role\Dokter\DokterDatabase::class,
                     ['id_dokter'],
+                ],
+                [
+                    ['id_petugas'],
+                    \App\Features\Role\Petugas\PetugasDatabase::class,
+                    ['id_petugas'],
+                ],
+                [
+                    ['id_peran'],
+                    \App\Features\Operasi\RefPeranTimMedis\RefPeranTimMedisDatabase::class,
+                    ['id_peran'],
                 ],
             ],
         );

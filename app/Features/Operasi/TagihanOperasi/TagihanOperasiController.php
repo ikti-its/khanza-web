@@ -75,6 +75,20 @@ final class TagihanOperasiController extends ControllerTemplate
             ->getRowArray() ?? [];
     }
 
+    private function fetchTimJadwal(int $idJadwal): array
+    {
+        return $this->model->db
+            ->table('operasi.jadwal_operasi_tim jt')
+            ->select('jt.id_dokter, jt.id_petugas, rp.kode AS peran, COALESCE(od.nama, op.nama) AS nama', false)
+            ->join('operasi.ref_peran_tim_medis rp', 'rp.id_peran = jt.id_peran', 'left')
+            ->join('role.dokter d',   'd.id_dokter   = jt.id_dokter',  'left')
+            ->join('person.orang od', 'od.id_orang   = d.id_orang',    'left')
+            ->join('role.petugas pt', 'pt.id_petugas = jt.id_petugas', 'left')
+            ->join('person.orang op', 'op.id_orang   = pt.id_orang',   'left')
+            ->where('jt.id_jadwal', $idJadwal)
+            ->get()->getResultArray();
+    }
+
     private function fetchKategori(): array
     {
         return $this->model->db
@@ -196,6 +210,16 @@ final class TagihanOperasiController extends ControllerTemplate
         $jadwal['id_operator_1']       = $jadwal['id_dokter_bedah']      ?? null;
         $jadwal['nama_operator_1']     = $jadwal['nama_dokter_bedah']     ?? '';
         // id_dokter_anestesi dan nama_dokter_anestesi sudah same key, langsung tersedia
+
+        // Tim medis tambahan dari jadwal → field tagihan sesuai kode peran
+        if ($idJadwal) {
+            foreach ($this->fetchTimJadwal($idJadwal) as $anggota) {
+                $peran = $anggota['peran'] ?? '';
+                if ($peran === '' || $peran === null) continue;
+                $jadwal['id_' . $peran]   = $anggota['id_dokter'] ?: $anggota['id_petugas'];
+                $jadwal['nama_' . $peran] = $anggota['nama'] ?? '';
+            }
+        }
 
         return view('admin/operasi/tagihan_operasi_form', [
             'judul'          => 'Buat Tagihan Operasi',

@@ -195,11 +195,28 @@ final class JadwalOperasiController extends ControllerTemplate
     {
         return $this->model->db
             ->table('operasi.jadwal_operasi_tim jt')
-            ->select(['jt.id_dokter', 'o.nama AS nama_dokter'])
-            ->join('role.dokter d',  'd.id_dokter = jt.id_dokter')
-            ->join('person.orang o', 'o.id_orang  = d.id_orang')
+            ->select('jt.id_dokter, jt.id_petugas, jt.id_peran, COALESCE(od.nama, op.nama) AS nama', false)
+            ->join('role.dokter d',   'd.id_dokter   = jt.id_dokter',  'left')
+            ->join('person.orang od', 'od.id_orang   = d.id_orang',    'left')
+            ->join('role.petugas pt', 'pt.id_petugas = jt.id_petugas', 'left')
+            ->join('person.orang op', 'op.id_orang   = pt.id_orang',   'left')
             ->where('jt.id_jadwal', $idJadwal)
             ->get()->getResultArray();
+    }
+
+    private function fetchPeranTim(): array
+    {
+        $rows = $this->model->db
+            ->table('operasi.ref_peran_tim_medis')
+            ->select(['id_peran', 'nama_peran'])
+            ->orderBy('id_peran', 'ASC')
+            ->get()->getResultArray();
+
+        $peran = [];
+        foreach ($rows as $row) {
+            $peran[(int) $row['id_peran']] = $row['nama_peran'];
+        }
+        return $peran;
     }
 
     private function saveSlots(int $idJadwal, string $waktuMulai, string $waktuSelesai): void
@@ -223,13 +240,36 @@ final class JadwalOperasiController extends ControllerTemplate
         );
     }
 
-    private function saveTim(int $idJadwal, array $idDokters): void
+    private function saveTim(int $idJadwal, array $tim): void
     {
         $this->model->db->table('operasi.jadwal_operasi_tim')->where('id_jadwal', $idJadwal)->delete();
-        if (empty($idDokters)) return;
-        $this->model->db->table('operasi.jadwal_operasi_tim')->insertBatch(
-            array_map(fn($d) => ['id_jadwal' => $idJadwal, 'id_dokter' => (int) $d], $idDokters)
-        );
+
+        $peranValid = $this->fetchPeranTim();
+        $peranTerpakai = [];
+        $rows = [];
+
+        foreach ($tim as $anggota) {
+            $idDokter  = (int) ($anggota['id_dokter']  ?? 0);
+            $idPetugas = (int) ($anggota['id_petugas'] ?? 0);
+            if ($idDokter === 0 && $idPetugas === 0) continue;
+
+            $idPeran = (int) ($anggota['id_peran'] ?? 0);
+            if (!isset($peranValid[$idPeran]) || isset($peranTerpakai[$idPeran])) {
+                $idPeran = 0;
+            } else {
+                $peranTerpakai[$idPeran] = true;
+            }
+
+            $rows[] = [
+                'id_jadwal'  => $idJadwal,
+                'id_dokter'  => $idDokter  ?: null,
+                'id_petugas' => $idPetugas ?: null,
+                'id_peran'   => $idPeran   ?: null,
+            ];
+        }
+
+        if (empty($rows)) return;
+        $this->model->db->table('operasi.jadwal_operasi_tim')->insertBatch($rows);
     }
 
     #[\Override]
@@ -261,6 +301,7 @@ final class JadwalOperasiController extends ControllerTemplate
             'baris'         => $baris,
             'form_action'   => '/submitedit/' . $id,
             'tim_terpilih'  => $this->fetchTimTerpilih((int) $id),
+            'peran_tim'     => $this->fetchPeranTim(),
         ]);
     }
 
@@ -293,7 +334,7 @@ final class JadwalOperasiController extends ControllerTemplate
         $tanggal      = $rawPost['tanggal']       ?? null;
         $waktuMulai   = $rawPost['waktu_mulai']   ?? null;
         $waktuSelesai = $rawPost['waktu_selesai'] ?? null;
-        $idDokters    = $this->request->getPost('tim_dokter') ?? [];
+        $tim          = $this->request->getPost('tim') ?? [];
 
         $existing     = $this->model->find($id);
         $nomorOperasi = $existing['nomor_operasi'] ?? null;
@@ -325,7 +366,7 @@ final class JadwalOperasiController extends ControllerTemplate
             if ($waktuMulai !== null && $waktuSelesai !== null) {
                 $this->saveSlots((int) $id, $waktuMulai, $waktuSelesai);
             }
-            $this->saveTim((int) $id, $idDokters);
+            $this->saveTim((int) $id, $tim);
 
             $this->model->db->transComplete();
 
