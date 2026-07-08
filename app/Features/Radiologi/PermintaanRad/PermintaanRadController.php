@@ -119,6 +119,14 @@ final class PermintaanRadController extends ControllerTemplate
         return $data;
     }
 
+    private function hasHasil(int $idPermintaan): bool
+    {
+        return $this->model->db
+            ->table('radiologi.hasil_rad')
+            ->where('id_permintaan_rad', $idPermintaan)
+            ->countAllResults() > 0;
+    }
+
     private function insertItems(int $idPermintaan, array $idItems, array $bacaSajaMap): void
     {
         if (empty($idItems)) return;
@@ -230,6 +238,11 @@ final class PermintaanRadController extends ControllerTemplate
     {
         if ($id == 0) return $this->home();
 
+        if ($this->hasHasil((int) $id)) {
+            session()->setFlashdata('error', 'Permintaan tidak dapat diubah karena hasil radiologi sudah dicatat.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
         $idItems     = $this->request->getPost('id_item')      ?? [];
         $bacaSajaMap = $this->request->getPost('is_baca_saja') ?? [];
         if (empty($idItems)) {
@@ -273,6 +286,11 @@ final class PermintaanRadController extends ControllerTemplate
     final public function delete(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->home();
+
+        if ($this->hasHasil((int) $id)) {
+            session()->setFlashdata('error', 'Permintaan tidak dapat dihapus karena hasil radiologi sudah dicatat.');
+            return $this->home();
+        }
 
         $this->model->db->transStart();
 
