@@ -215,7 +215,7 @@ final class HasilDiagnostikController extends ControllerTemplate
     }
 
     /**
-     * OVERRIDE: Memproses ubah data hasil diagnostik
+     * OVERRIDE: Mengeksekusi Simpan Perubahan Data Hasil Diagnostik
      */
     #[\Override]
     final public function update(int|string $id): string|RedirectResponse
@@ -307,6 +307,71 @@ final class HasilDiagnostikController extends ControllerTemplate
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
             return redirect()->back()->withInput();
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
+    }
+
+    /**
+     * OVERRIDE: Menghapus data hasil diagnostik
+     */
+    #[\Override]
+    final public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) return $this->index();
+    
+        $dataDiagnostik = $this->model->find($id);
+    
+        if (!$dataDiagnostik) {
+            session()->setFlashdata('error', 'Data hasil diagnostik tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+    
+        $idKasus = $dataDiagnostik['id_kasus'];
+    
+        $modelKasus = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
+        $dataKasus  = $modelKasus->find($idKasus);
+    
+        if (!$dataKasus) {
+            session()->setFlashdata('error', 'Gagal menghapus! Data kasus reaktif tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+    
+        $modelUjiSaring = new \App\Features\UjiDarah\HasilUjiSaring\HasilUjiSaringModel();
+        $dataUjiSaring  = $modelUjiSaring->find($dataKasus['id_uji_saring']);
+    
+        if (!$dataUjiSaring) {
+            session()->setFlashdata('error', 'Gagal menghapus! Data hasil uji saring sumber kasus tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+    
+        $this->model->db->transStart();
+    
+        try {
+            $this->model->db
+                ->table('uji_darah.hasil_diagnostik_detail')
+                ->where('id_diagnostik', $id)
+                ->delete();
+    
+            $this->model->delete($id);
+    
+            $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
+            $modelPencekalan->resetPencekalanDiagnostik($dataUjiSaring);
+    
+            $this->model->db->transComplete();
+    
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus data hasil diagnostik.');
+            }
+    
+            session()->setFlashdata('success', 'Data hasil diagnostik berhasil dihapus.');
+    
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
+            session()->setFlashdata('error', $errMsg);
         }
 
         return redirect()->to($this->get_uri_path() . '/data');

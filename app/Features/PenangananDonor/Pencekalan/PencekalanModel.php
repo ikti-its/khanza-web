@@ -154,4 +154,33 @@ final class PencekalanModel extends ModelTemplate
     
         return false;
     }
+
+    /**
+     * Mengembalikan pencekalan ke kondisi sementara setelah hasil diagnostik dihapus
+     */
+    public function resetPencekalanDiagnostik(array $dataUjiSaring): void
+    {
+        $idPengambilanDarah = $dataUjiSaring['id_pengambilan_darah'] ?? null;
+
+        $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
+        $dataPengambilan  = $modelPengambilan->find($idPengambilanDarah);
+
+        if (!$dataPengambilan || empty($dataPengambilan['id_kunjungan'])) {
+            throw new \RuntimeException('Data kunjungan donor tidak ditemukan.');
+        }
+
+        $dataPencekalan = $this->where('id_kunjungan', $dataPengambilan['id_kunjungan'])
+            ->orderBy('id_pencekalan', 'DESC')
+            ->first();
+
+        if (!$dataPencekalan) {
+            throw new \RuntimeException('Data pencekalan donor tidak ditemukan.');
+        }
+
+        $this->update($dataPencekalan['id_pencekalan'], [
+            'id_jenis_pencekalan'  => self::JENIS_PENCEKALAN_SEMENTARA,
+            'tanggal_selesai'      => null,
+            'id_status_pencekalan' => self::STATUS_AKTIF,
+        ]);
+    }
 }
