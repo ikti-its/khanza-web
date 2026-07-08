@@ -363,6 +363,8 @@ final class SkriningDonorController extends ControllerTemplate
 
             if ($anamnesisTidakMemenuhiSyarat && !empty($idKunjungan) && !$this->hasPencekalan($idKunjungan)) {
                 $pencekalanUrl = $this->makePencekalanUrlAnamnesis($idKunjungan);
+            } elseif (!$anamnesisTidakMemenuhiSyarat && !empty($idKunjungan)) {
+                $this->hapusPencekalan($idKunjungan);
             }
 
             if ($pencekalanUrl !== null) {
@@ -498,5 +500,21 @@ final class SkriningDonorController extends ControllerTemplate
         return $modelPencekalan
             ->where('id_kunjungan', $idKunjungan)
             ->first() !== null;
+    }
+
+    /**
+     * Menghapus pencekalan karena hasil anamnesis sudah memenuhi syarat
+     */
+    private function hapusPencekalan(int|string $idKunjungan): void
+    {
+        if (empty($idKunjungan)) {
+            return;
+        }
+
+        $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
+
+        $modelPencekalan
+            ->where('id_kunjungan', $idKunjungan)
+            ->delete();
     }
 }
