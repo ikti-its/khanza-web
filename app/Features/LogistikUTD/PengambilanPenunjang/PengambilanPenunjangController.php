@@ -30,9 +30,9 @@ final class PengambilanPenunjangController extends ControllerTemplate
                 [SHOW, REQUIRED, I::INDEX,  'id_barang',                'ID Barang'],
                 [SHOW, REQUIRED, I::NUMBER, 'jumlah',                   'Jumlah'],
                 [SHOW, REQUIRED, I::MONEY,  'harga_beli',               'Harga Beli'],
-                [HIDE, REQUIRED, I::INDEX,  'id_petugas_gudang',        'ID Petugas Gudang'],
+                [SHOW, REQUIRED, I::INDEX,  'id_petugas_gudang',        'Petugas Gudang'],
                 [SHOW, REQUIRED, I::DTIME,  'tanggal_pengambilan',      'Tanggal Pengambilan'],
-                [HIDE, REQUIRED, I::TEXT,   'keterangan',               'Keterangan'],
+                [SHOW, REQUIRED, I::TEXT,   'keterangan',               'Keterangan'],
             ],
         );
     }
