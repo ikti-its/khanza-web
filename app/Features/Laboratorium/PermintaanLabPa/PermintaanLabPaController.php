@@ -128,6 +128,18 @@ final class PermintaanLabPaController extends ControllerTemplate
             ->getResultArray();
     }
  
+    private function isEditable(int $idPermintaanLab): bool
+    {
+        $row = $this->model->db
+            ->table('laboratorium.permintaan_lab_header')
+            ->select('id_status_permintaan')
+            ->where('id_permintaan', $idPermintaanLab)
+            ->get()
+            ->getRowArray();
+
+        return in_array((int) ($row['id_status_permintaan'] ?? 0), [1, 2], true);
+    }
+
     private function buildHeaderData(array $rawPost, bool $withStatus = false): array
     {
         return array_merge([
@@ -332,7 +344,12 @@ final class PermintaanLabPaController extends ControllerTemplate
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return redirect()->back();
         }
- 
+
+        if (!$this->isEditable($idPermintaanLab)) {
+            session()->setFlashdata('error', 'Permintaan tidak dapat diubah karena status sudah Selesai atau Batal.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
         $rawPost = $this->request->getPost();
         $idItems = $this->request->getPost('id_item') ?? [];
  
