@@ -12,6 +12,9 @@ BEGIN
         FROM information_schema.tables
         WHERE table_type = 'BASE TABLE'
           AND table_schema NOT IN ('pg_catalog', 'information_schema')  -- skip system schemas
+          AND table_name NOT LIKE '%\_structure' ESCAPE '\'  -- already renamed
+          AND table_name NOT LIKE '%\_encrypted' ESCAPE '\'  -- encrypt output, not source data
+          AND table_name NOT LIKE '%\_audit' ESCAPE '\'      -- audit trail, not source data
     LOOP
         EXECUTE format(
             'ALTER TABLE %I.%I RENAME TO %I;',

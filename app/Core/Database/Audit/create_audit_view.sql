@@ -14,7 +14,7 @@ BEGIN
         SELECT table_schema, table_name
         FROM information_schema.tables
         WHERE table_type = 'BASE TABLE' --only include tables
-            AND table_schema NOT IN ('pg_catalog', 'information_schema', 'ref', 'sik') -- exclude system tables
+            AND table_schema NOT IN ('pg_catalog', 'information_schema') -- exclude system tables
             AND table_name LIKE '%_structure'-- include _structure only
     LOOP    
         RAISE NOTICE '%', tbl.table_name;
@@ -33,22 +33,23 @@ BEGIN
         decrypt_select := '';
 
         FOR col IN
-            SELECT column_name, data_type, udt_name
+            SELECT column_name, data_type, udt_schema, udt_name
             FROM information_schema.columns
             WHERE table_schema = tbl.table_schema AND table_name = tbl.table_name
             ORDER BY ordinal_position
         LOOP
             IF pk_columns IS NOT NULL AND col.column_name = ANY(pk_columns) THEN
                 -- Handle SELECTs
-                decrypt_select := decrypt_select || 
+                decrypt_select := decrypt_select ||
                     format('%I, ', col.column_name
                 );
             ELSE
                 -- Handle SELECTs
+                -- schema-qualified: app's DB connection resets search_path to "public"
                 decrypt_select := decrypt_select || format('convert_from(pgp_sym_decrypt(%I, ''%s'')::bytea, ''UTF-8'')::%s AS %I, ',
-                    col.column_name, 
+                    col.column_name,
                     encryption_key,
-                    CASE WHEN col.data_type = 'USER-DEFINED' THEN col.udt_name ELSE col.data_type END,
+                    CASE WHEN col.data_type = 'USER-DEFINED' THEN format('%I.%I', col.udt_schema, col.udt_name) ELSE col.data_type END,
                     col.column_name
                 );
             END IF;

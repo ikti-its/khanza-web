@@ -27,7 +27,7 @@ BEGIN
         SELECT table_schema, table_name
         FROM information_schema.tables
         WHERE table_type = 'BASE TABLE' --only include tables
-            AND table_schema NOT IN ('pg_catalog', 'information_schema', 'ref', 'sik') -- exclude system tables
+            AND table_schema NOT IN ('pg_catalog', 'information_schema') -- exclude system tables
             AND table_name LIKE '%_encrypted'-- include _structure only
     LOOP    
         -- Find the primary keys in each table
@@ -52,7 +52,7 @@ BEGIN
         audit_insert_values_old := '';
 
         FOR col IN
-            SELECT column_name, data_type, udt_name,
+            SELECT column_name, data_type, udt_schema, udt_name,
                 character_maximum_length, numeric_precision, numeric_scale,
                 is_nullable, column_default
             FROM information_schema.columns
@@ -63,7 +63,7 @@ BEGIN
                 col.column_name,
                 CASE
                     WHEN col.data_type = 'character varying' THEN
-                        CASE 
+                        CASE
 							WHEN col.character_maximum_length IS NULL THEN format('VARCHAR')
 							ELSE format('VARCHAR(%s)', col.character_maximum_length)
 						END
@@ -74,7 +74,8 @@ BEGIN
                             WHEN col.numeric_scale IS NULL THEN format('NUMERIC(%s)', col.numeric_precision)
                             ELSE format('NUMERIC(%s,%s)', col.numeric_precision, col.numeric_scale)
                         END
-                    WHEN col.data_type = 'USER-DEFINED' THEN col.udt_name
+                    -- schema-qualified: app's DB connection resets search_path to "public"
+                    WHEN col.data_type = 'USER-DEFINED' THEN format('%I.%I', col.udt_schema, col.udt_name)
                     ELSE col.data_type
                 END
             );
@@ -112,7 +113,7 @@ BEGIN
         -- Create or replace audit function
         EXECUTE format(
             $func$
-            CREATE FUNCTION %I.%I() RETURNS trigger AS
+            CREATE OR REPLACE FUNCTION %I.%I() RETURNS trigger AS
                 $body$
                 BEGIN
                     IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
@@ -133,9 +134,9 @@ BEGIN
 
         -- Create or replace audit trigger
         EXECUTE format('
-            CREATE TRIGGER %I
+            CREATE OR REPLACE TRIGGER %I
             AFTER INSERT OR UPDATE OR DELETE ON %I.%I
-            FOR EACH ROW EXECUTE FUNCTION %I.%I()', 
+            FOR EACH ROW EXECUTE FUNCTION %I.%I()',
             audit_trigger_name, tbl.table_schema, tbl.table_name, 
             tbl.table_schema, audit_function_name);
     END LOOP;
