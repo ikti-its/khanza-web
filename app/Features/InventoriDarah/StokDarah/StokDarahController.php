@@ -22,22 +22,22 @@ final class StokDarahController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                // A::AUDIT,
+                A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
                 A::DETAIL,
                 A::FILTER,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_stok_darah',       'ID Stok Darah'],
-                [SHOW, REQUIRED, I::TEXT,   'no_kantong',          'Nomor Kantong'],
-                [SHOW, REQUIRED, I::SELECT, 'id_komponen',         'Komponen'],
-                [SHOW, REQUIRED, I::SELECT, 'id_golongan_darah',   'Golongan Darah'],
-                [SHOW, REQUIRED, I::SELECT, 'id_rhesus',           'Rhesus'],
-                [HIDE, REQUIRED, I::DATE,   'tanggal_pengambilan', 'Tanggal Pengambilan'],
-                [SHOW, REQUIRED, I::DATE,   'tanggal_kadaluarsa',  'Tanggal Kadaluarsa'],
-                [HIDE, REQUIRED, I::SELECT, 'id_sumber_darah',     'Sumber Darah'],
-                [SHOW, REQUIRED, I::SELECT, 'id_status_stok',      'Status Stok'],
+                [HIDE,      OPTIONAL, I::INDEX,  'id_stok_darah',       'ID Stok Darah'],
+                [SHOW,      REQUIRED, I::TEXT,   'no_kantong',          'Nomor Kantong'],
+                [SHOW,      REQUIRED, I::SELECT, 'id_komponen',         'Komponen'],
+                [SHOW,      REQUIRED, I::SELECT, 'id_golongan_darah',   'Golongan Darah'],
+                [SHOW,      REQUIRED, I::SELECT, 'id_rhesus',           'Rhesus'],
+                [FORM_ONLY, REQUIRED, I::DATE,   'tanggal_pengambilan', 'Tanggal Pengambilan'],
+                [SHOW,      REQUIRED, I::DATE,   'tanggal_kadaluarsa',  'Tanggal Kadaluarsa'],
+                [FORM_ONLY, REQUIRED, I::SELECT, 'id_sumber_darah',     'Sumber Darah'],
+                [SHOW,      REQUIRED, I::SELECT, 'id_status_stok',      'Status Stok'],
             ],
         );
     }
@@ -214,6 +214,51 @@ final class StokDarahController extends ControllerTemplate
         }
 
         return redirect()->to($this->get_uri_path() . '/data');
+    }
+
+    /**
+     * Menampilkan Halaman Detail Stok Darah
+     */
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataStok = $this->model->find($id);
+
+        $baris = $dataStok;
+        $konfigFields = $this->get_fields_with_options(false, true);
+
+        foreach ($konfigFields as $field) {
+            $colName = $field[2];
+            $options = $field[5] ?? [];
+
+            if (!empty($options) && isset($baris[$colName])) {
+                $idMentah = $baris[$colName];
+                foreach ($options as $opt) {
+                    if ((string)$opt[1] === (string)$idMentah) {
+                        $baris[$colName] = $opt[0];
+                        break;
+                    }
+                }
+            }
+        }
+
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail']
+        ];
+
+        return view('/admin/inventoridarah/detail_stokdarah', [
+            'judul'       => 'Detail ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'baris'       => $baris,
+        ]);
     }
 
     /**
