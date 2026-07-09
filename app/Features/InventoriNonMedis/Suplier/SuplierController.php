@@ -116,23 +116,34 @@ final class SuplierController extends ControllerTemplate
         return 'S' . str_pad((string) $next, 4, '0', STR_PAD_LEFT);
     }
 
-    // pre-fill kode_suplier dengan kode otomatis
+    // pre-fill kode_suplier dengan kode otomatis, custom view dengan modal kota
     public function create_page(): string
     {
-        $konfig = $this->get_fields_with_options(false, true);
-        $baris  = array_fill_keys(array_column($konfig, 2), null);
-        $baris['kode_suplier'] = $this->generate_kode();
+        $banks = $this->get_db()
+            ->table('finansial.bank')
+            ->select('id_bank, nama_bank')
+            ->where('id_bank >', 0)
+            ->orderBy('nama_bank', 'ASC')
+            ->get()->getResultArray();
 
-        $breadcrumbs = [['title' => 'Tambah', 'icon', 'tambah']];
-        return view('/layouts/tambah_ubah', [
-            'judul'       => 'Tambah ' . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
-            'modul_path'  => $this->get_uri_path(),
-            'kolom_id'    => $this->primary_key,
-            'konfig'      => $konfig,
-            'baris'       => $baris,
-            'form_action' => '/submittambah/',
+        return view('admin/inventorinonmedis/tambah_suplier', [
+            'judul'        => 'Tambah ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
+            'modul_path'   => $this->get_uri_path(),
+            'form_action'  => '/submittambah/',
+            'kode_suplier' => $this->generate_kode(),
+            'options_bank' => $banks,
         ]);
+    }
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $data = $this->model->builder()
+            ->select('id_suplier, kode_suplier, nama_suplier')
+            ->orderBy('nama_suplier', 'ASC')
+            ->get()->getResultArray();
+
+        return $this->response->setJSON(['data' => $data]);
     }
 
     // simpan rekening baru ke finansial.rekening, link id_rekening ke suplier

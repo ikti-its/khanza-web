@@ -32,4 +32,14 @@ final class SatuanController extends ControllerTemplate
             ],
         );
     }
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $data = $this->model->builder()
+            ->select('id_satuan, kode_satuan, nama_satuan')
+            ->orderBy('nama_satuan', 'ASC')
+            ->get()->getResultArray();
+
+        return $this->response->setJSON(['data' => $data]);
+    }
 }

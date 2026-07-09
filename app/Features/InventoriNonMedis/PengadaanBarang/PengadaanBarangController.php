@@ -57,7 +57,6 @@ final class PengadaanBarangController extends ControllerTemplate
             'modul_path'        => $this->get_uri_path(),
             'form_action'       => '/submittambah/',
             'options_pengajuan' => $options['id_pengajuan'] ?? [],
-            'options_suplier'   => $options['id_suplier'] ?? [],
         ]);
     }
 

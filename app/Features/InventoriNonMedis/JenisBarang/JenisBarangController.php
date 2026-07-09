@@ -32,4 +32,14 @@ final class JenisBarangController extends ControllerTemplate
             ],
         );
     }
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $data = $this->model->builder()
+            ->select('id_jenis_barang, kode_jenis_barang, nama_jenis_barang')
+            ->orderBy('nama_jenis_barang', 'ASC')
+            ->get()->getResultArray();
+
+        return $this->response->setJSON(['data' => $data]);
+    }
 }

@@ -41,6 +41,17 @@ final class BarangController extends ControllerTemplate
 
     protected array $row_alert = ['value' => 'stok', 'threshold' => 'stok_minimum'];
 
+    // form tambah custom dengan modal search satuan dan jenis barang
+    public function create_page(): string
+    {
+        return view('admin/inventorinonmedis/tambah_barang', [
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
+            'modul_path'  => $this->get_uri_path(),
+            'form_action' => '/submittambah/',
+        ]);
+    }
+
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
         $rows = $this->model->builder()
@@ -57,5 +68,12 @@ final class BarangController extends ControllerTemplate
     protected function before_create(array &$postData): void
     {
         $postData['stok'] = 0;
+
+        // convert empty FK modal fields to null
+        foreach (['id_satuan', 'id_jenis_barang'] as $fk) {
+            if (isset($postData[$fk]) && $postData[$fk] === '') {
+                $postData[$fk] = null;
+            }
+        }
     }
 }

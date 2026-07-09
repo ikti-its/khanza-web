@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 
-<?= $this->include('components/modal/modalSuplier') ?>
+<?= $this->include('components/modal/modalKota') ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
@@ -12,40 +12,36 @@
         <form action="<?= $modul_path . $form_action ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
-            <input type="hidden" name="id_suplier" id="id_suplier" value="">
+            <input type="hidden" name="id_kota" id="id_kota" value="">
 
-            <!-- Pengajuan + No. Pengadaan -->
+            <!-- Kode Suplier + Nama Suplier -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
-                    Pengajuan<span class="text-red-600">*</span>
+                    Kode Suplier<span class="text-red-600">*</span>
                 </label>
-                <select name="id_pengajuan" id="id_pengajuan"
-                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
-                    <option value="">-- Pilih Pengajuan --</option>
-                    <?php foreach ($options_pengajuan as $opt): ?>
-                        <option value="<?= $opt[1] ?>"><?= esc($opt[0]) ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <input type="text" name="kode_suplier" id="kode_suplier"
+                       value="<?= esc($kode_suplier ?? '') ?>"
+                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    No. Pengadaan
+                    Nama Suplier<span class="text-red-600">*</span>
                 </label>
-                <input type="text" readonly placeholder="Terisi otomatis..."
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
+                <input type="text" name="nama_suplier" id="nama_suplier" placeholder="Masukkan nama suplier..."
+                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
             </div>
 
-            <!-- Suplier + Tanggal Pengadaan -->
+            <!-- Kota + Alamat -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
-                    Suplier
+                    Kota
                 </label>
                 <div class="w-full lg:w-1/4 flex gap-x-2">
-                    <input type="text" id="id_suplier_display"
-                           placeholder="Klik cari suplier..."
-                           onclick="open_modalSuplier()"
+                    <input type="text" id="id_kota_display"
+                           placeholder="Klik cari kota..."
+                           onclick="open_modalKota()"
                            onkeydown="return false"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50">
-                    <button type="button" onclick="open_modalSuplier()"
+                    <button type="button" onclick="open_modalKota()"
                             class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -54,34 +50,44 @@
                 </div>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Tanggal Pengadaan<span class="text-red-600">*</span>
+                    Alamat
                 </label>
-                <input type="datetime-local" name="tanggal" id="tanggal"
-                       value="<?= date('Y-m-d\TH:i') ?>"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
+                <input type="text" name="alamat" id="alamat" placeholder="Alamat suplier..."
+                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
             </div>
 
-            <!-- Status + Total Harga -->
+            <!-- No. Telepon + Bank -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
-                    Status
+                    No. Telepon
                 </label>
-                <input type="text" readonly value="Diproses"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
+                <input type="text" name="no_telp" id="no_telp" placeholder="No. telepon..."
+                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Total Harga
+                    Bank
                 </label>
-                <input type="text" readonly placeholder="Terisi otomatis..."
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
+                <select name="id_bank" id="id_bank"
+                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
+                    <option value="">-- Pilih Bank --</option>
+                    <?php foreach ($options_bank as $bank): ?>
+                        <option value="<?= $bank['id_bank'] ?>"><?= esc($bank['nama_bank']) ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
-            <!-- Catatan -->
+            <!-- No. Rekening + Nama Akun -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
-                    Catatan
+                    No. Rekening
                 </label>
-                <input type="text" name="catatan" id="catatan" placeholder="Catatan (opsional)..."
+                <input type="text" name="nomor_rekening" id="nomor_rekening" placeholder="Nomor rekening..."
+                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
+
+                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
+                    Nama Akun
+                </label>
+                <input type="text" name="nama_akun" id="nama_akun" placeholder="Nama pemilik rekening..."
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
             </div>
 
@@ -91,9 +97,9 @@
 </div>
 
 <script>
-    function autofillSuplier(item) {
-        document.getElementById('id_suplier').value = item.id_suplier ?? '';
-        document.getElementById('id_suplier_display').value = item.nama_suplier ?? '';
+    function autofillKota(item) {
+        document.getElementById('id_kota').value = item.id_kota ?? '';
+        document.getElementById('id_kota_display').value = item.nama_kota ?? '';
     }
 
     function validateForm() {
