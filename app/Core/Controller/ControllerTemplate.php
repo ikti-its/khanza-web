@@ -254,6 +254,7 @@ class ControllerTemplate extends Controller
         $type = match(true) {
             str_contains($col_name, 'tanggal') => 'tanggal',
             str_starts_with($col_name, 'is_')  => 'bool',
+            str_contains($col_name, 'status') || str_contains($col_name, 'tipe') => 'status',
             default                            => 'teks',
         };
 
