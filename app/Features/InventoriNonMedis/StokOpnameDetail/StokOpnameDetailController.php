@@ -33,17 +33,29 @@ final class StokOpnameDetailController extends ControllerTemplate
                 [HIDE,       OPTIONAL, I::INDEX,    'id_opname',   'ID Opname'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,     'nama_barang', 'Barang'],
                 [FORM_ONLY,  REQUIRED, I::MODAL,    'id_barang',   'Barang',  ['modal' => 'modalBarang', 'display_column' => 'nama_barang', 'placeholder' => 'Klik cari barang...']],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'kode_barang', 'Kode Barang'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_satuan', 'Satuan'],
-                [TABLE_ONLY, OPTIONAL, I::NUMBER,   'stok_sistem', 'Stok Sistem'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'stok_sistem', 'Stok Sistem'],
+                [HIDE,       OPTIONAL, I::READONLY, 'kode_barang', 'Kode Barang'],
+                [HIDE,       OPTIONAL, I::READONLY, 'nama_satuan', 'Satuan'],
+                [SHOW,       OPTIONAL, I::READONLY, 'stok_sistem', 'Stok Sistem'],
                 [SHOW,       REQUIRED, I::NUMBER,   'stok_fisik',  'Stok Fisik'],
-                [TABLE_ONLY, OPTIONAL, I::NUMBER,   'selisih',     'Selisih'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'selisih',     'Selisih'],
+                [TABLE_ONLY, OPTIONAL, I::SELECT,   'selisih',     'Selisih'],
                 [SHOW,       OPTIONAL, I::TEXT,     'catatan',     'Catatan'],
             ],
             parent_fk: 'id_opname',
         );
+    }
+
+    // format selisih: 0 → "-", positif → "+N", negatif tetap "-N"
+    protected function after_read(array &$data_tabel): void
+    {
+        foreach ($data_tabel as &$row) {
+            $val = (int) ($row['selisih'] ?? 0);
+            if ($val === 0) {
+                $row['selisih'] = '-';
+            } elseif ($val > 0) {
+                $row['selisih'] = '+' . $val;
+            }
+        }
+        unset($row);
     }
 
     // ambil status opname induk

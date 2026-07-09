@@ -36,6 +36,18 @@ if (in_array($status_lower, ['proses permintaan', 'proses pengajuan', 'diproses'
     $bg_color   = '#E9D5FF';
     $dot_color  = '#7C3AED';
     $text_color = '#5B21B6';
+} elseif ($status_lower === '-') {
+    $bg_color   = 'transparent';
+    $dot_color  = 'transparent';
+    $text_color = '#6B7280';
+} elseif (str_starts_with($elem, '+') && is_numeric(substr($elem, 1))) {
+    $bg_color   = '#DBEAFE';
+    $dot_color  = '#2563EB';
+    $text_color = '#1E40AF';
+} elseif (is_numeric($elem) && (int) $elem < 0) {
+    $bg_color   = '#FEE2E2';
+    $dot_color  = '#DC2626';
+    $text_color = '#991B1B';
 }
 ?>
 <td class="size-px w-48 whitespace-nowrap">
