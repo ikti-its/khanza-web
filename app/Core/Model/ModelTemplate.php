@@ -458,7 +458,7 @@ class ModelTemplate extends Model
     }
 
     final public function audit(): array {
-        $view = "{$this->schema}.{$this->table_name}_audit_view";
+        $view = "{$this->database->schema}.{$this->database->table}_audit_view";
         $sql  = "SELECT * FROM {$view}
             LEFT OUTER JOIN
             (SELECT id, nama FROM sik.pegawai) c
