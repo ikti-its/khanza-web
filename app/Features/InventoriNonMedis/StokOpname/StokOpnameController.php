@@ -37,21 +37,14 @@ final class StokOpnameController extends ControllerTemplate
         );
     }
 
-    // sembunyiin status di form tambah, auto-set pas create
+    // form tambah custom dengan modal search pelaksana
     #[\Override]
     public function create_page(): string
     {
-        $konfig = array_values(array_filter(
-            $this->get_fields_with_options(false, true),
-            fn($f) => $f[2] !== 'id_status_stok_opname'
-        ));
-        return view('/layouts/tambah_ubah', [
+        return view('admin/inventorinonmedis/tambah_stok_opname', [
             'judul'       => 'Tambah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
             'modul_path'  => $this->get_uri_path(),
-            'kolom_id'    => $this->primary_key,
-            'konfig'      => $konfig,
-            'baris'       => [],
             'form_action' => '/submittambah/',
         ]);
     }
@@ -60,6 +53,11 @@ final class StokOpnameController extends ControllerTemplate
     protected function before_create(array &$postData): void
     {
         $postData['id_status_stok_opname'] = 1;
+
+        // convert empty FK modal fields to null
+        if (isset($postData['id_petugas']) && $postData['id_petugas'] === '') {
+            $postData['id_petugas'] = null;
+        }
     }
 
     // blok kalau udah Selesai, validasi detail, buat transaksi kalau → Selesai

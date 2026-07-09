@@ -46,21 +46,18 @@ final class PengadaanBarangController extends ControllerTemplate
         );
     }
 
-    // tampilkan status sebagai teks "Diproses" (readonly) pada form tambah
+    // tampilkan form tambah custom dengan native validation
     public function create_page(): string
     {
-        $konfig = $this->get_fields_with_options(false, true);
-        $baris  = array_fill_keys(array_column($konfig, 2), null);
-        $baris['nama_status_pengadaan_barang'] = 'Diproses';
+        $options = $this->model->get_all_options();
 
-        return view('/layouts/tambah_ubah', [
-            'judul'       => 'Tambah ' . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon', 'tambah']]),
-            'modul_path'  => $this->get_uri_path(),
-            'kolom_id'    => $this->primary_key,
-            'konfig'      => $konfig,
-            'baris'       => $baris,
-            'form_action' => '/submittambah/',
+        return view('admin/inventorinonmedis/tambah_pengadaan_barang', [
+            'judul'             => 'Tambah ' . $this->title,
+            'breadcrumbs'       => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
+            'modul_path'        => $this->get_uri_path(),
+            'form_action'       => '/submittambah/',
+            'options_pengajuan' => $options['id_pengajuan'] ?? [],
+            'options_suplier'   => $options['id_suplier'] ?? [],
         ]);
     }
 

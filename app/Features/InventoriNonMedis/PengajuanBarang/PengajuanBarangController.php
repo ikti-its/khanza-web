@@ -44,29 +44,13 @@ final class PengajuanBarangController extends ControllerTemplate
         );
     }
 
-    // tampilkan status sebagai teks "Draf" (readonly) pada form tambah
+    // tampilkan form tambah custom dengan modal search
     public function create_page(): string
     {
-        $konfig = $this->get_fields_with_options(false, true);
-        foreach ($konfig as &$field) {
-            if (($field[2] ?? '') === 'id_status_pengajuan_barang') {
-                $field[2] = 'nama_status_pengajuan_barang';
-                $field[3] = 'readonly';
-                unset($field[5]);
-            }
-        }
-        unset($field);
-
-        $baris = array_fill_keys(array_column($konfig, 2), null);
-        $baris['nama_status_pengajuan_barang'] = 'Draf';
-
-        return view('/layouts/tambah_ubah', [
+        return view('admin/inventorinonmedis/tambah_pengajuan_barang', [
             'judul'       => 'Tambah ' . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon', 'tambah']]),
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
             'modul_path'  => $this->get_uri_path(),
-            'kolom_id'    => $this->primary_key,
-            'konfig'      => $konfig,
-            'baris'       => $baris,
             'form_action' => '/submittambah/',
         ]);
     }
@@ -78,6 +62,11 @@ final class PengajuanBarangController extends ControllerTemplate
         $lastNo = $this->get_last('inventori_non_medis.pengajuan_barang', 'no_pengajuan', 'id_pengajuan');
         $postData['no_pengajuan']               = generateNextNoPengajuanBarang($lastNo, $postData['tanggal'] ?? null);
         $postData['id_status_pengajuan_barang'] = 1;
+
+        // convert empty FK modal fields to null
+        if (isset($postData['petugas_gudang']) && $postData['petugas_gudang'] === '') {
+            $postData['petugas_gudang'] = null;
+        }
     }
 
     // hanya izinkan transisi ke Draf (1) atau Proses Pengajuan (4)
