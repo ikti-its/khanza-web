@@ -37,6 +37,12 @@ final class StokOpnameController extends ControllerTemplate
         );
     }
 
+    // data terbaru di atas
+    protected function before_read(): void
+    {
+        $this->model->set_order('id_opname', 'DESC');
+    }
+
     // form tambah custom dengan modal search pelaksana
     #[\Override]
     public function create_page(): string

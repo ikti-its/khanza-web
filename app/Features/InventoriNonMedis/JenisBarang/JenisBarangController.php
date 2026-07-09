@@ -42,4 +42,10 @@ final class JenisBarangController extends ControllerTemplate
 
         return $this->response->setJSON(['data' => $data]);
     }
+
+    // urut berdasarkan nama A-Z
+    protected function before_read(): void
+    {
+        $this->model->set_order('nama_jenis_barang', 'ASC');
+    }
 }

@@ -41,6 +41,12 @@ final class BarangController extends ControllerTemplate
 
     protected array $row_alert = ['value' => 'stok', 'threshold' => 'stok_minimum'];
 
+    // urut berdasarkan nama A-Z
+    protected function before_read(): void
+    {
+        $this->model->set_order('nama_barang', 'ASC');
+    }
+
     // form tambah custom dengan modal search satuan dan jenis barang
     public function create_page(): string
     {

@@ -44,6 +44,12 @@ final class PengajuanBarangController extends ControllerTemplate
         );
     }
 
+    // data terbaru di atas
+    protected function before_read(): void
+    {
+        $this->model->set_order('id_pengajuan', 'DESC');
+    }
+
     // tampilkan form tambah custom dengan modal search
     public function create_page(): string
     {

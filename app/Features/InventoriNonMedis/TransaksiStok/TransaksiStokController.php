@@ -34,4 +34,10 @@ final class TransaksiStokController extends ControllerTemplate
             child_fk:   'id_transaksi',
         );
     }
+
+    // data terbaru di atas
+    protected function before_read(): void
+    {
+        $this->model->set_order('id_transaksi', 'DESC');
+    }
 }

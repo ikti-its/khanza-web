@@ -116,6 +116,12 @@ final class SuplierController extends ControllerTemplate
         return 'S' . str_pad((string) $next, 4, '0', STR_PAD_LEFT);
     }
 
+    // urut berdasarkan nama A-Z
+    protected function before_read(): void
+    {
+        $this->model->set_order('nama_suplier', 'ASC');
+    }
+
     // pre-fill kode_suplier dengan kode otomatis, custom view dengan modal kota
     public function create_page(): string
     {

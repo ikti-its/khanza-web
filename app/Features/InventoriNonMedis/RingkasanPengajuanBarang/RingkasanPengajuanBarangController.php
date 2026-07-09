@@ -46,6 +46,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
     protected function before_read(): void
     {
         $this->model->set_filter('id_status_pengajuan_barang', [2, 3, 4]);
+        $this->model->set_order('id_pengajuan', 'DESC');
     }
 
     // hanya izinkan transisi ke Disetujui (2) atau Ditolak (3) dari Ringkasan

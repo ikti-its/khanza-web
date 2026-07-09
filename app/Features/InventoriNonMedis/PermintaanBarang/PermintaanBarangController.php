@@ -43,6 +43,12 @@ final class PermintaanBarangController extends ControllerTemplate
         );
     }
 
+    // data terbaru di atas
+    protected function before_read(): void
+    {
+        $this->model->set_order('id_permintaan', 'DESC');
+    }
+
     // tampilkan form tambah custom (seperti pattern Triase)
     public function create_page(): string
     {
