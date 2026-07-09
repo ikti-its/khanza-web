@@ -43,12 +43,13 @@ final class StokDarahController extends ControllerTemplate
     }
 
     /**
-     * OVERRIDE: Memperbarui status kadaluarsa sebelum data ditampilkan
+     * OVERRIDE: Memperbarui status kadaluarsa & mengurutkan stok dari yang paling cepat kadaluarsa (FEFO)
      */
     #[\Override]
     protected function before_read(): void
     {
         $this->model->updateStatusKadaluarsa(date('Y-m-d'));
+        $this->model->set_order('tanggal_kadaluarsa', 'ASC');
     }
     
     /**
