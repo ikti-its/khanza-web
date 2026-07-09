@@ -22,12 +22,14 @@
                     Kode Barang<span class="text-red-600">*</span>
                 </label>
                 <input type="text" name="kode_barang" id="kode_barang" placeholder="Masukkan kode barang..."
+                       maxlength="10"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Nama Barang<span class="text-red-600">*</span>
                 </label>
                 <input type="text" name="nama_barang" id="nama_barang" placeholder="Masukkan nama barang..."
+                       maxlength="100"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
             </div>
 
@@ -79,7 +81,7 @@
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Stok Minimum
                 </label>
-                <input type="number" name="stok_minimum" id="stok_minimum" placeholder="0" min="0"
+                <input type="number" name="stok_minimum" id="stok_minimum" placeholder="0" min="0" max="1000000"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
             </div>
 
@@ -88,7 +90,7 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Harga Satuan
                 </label>
-                <input type="number" name="harga_satuan" id="harga_satuan" placeholder="0" min="0" step="any"
+                <input type="number" name="harga_satuan" id="harga_satuan" placeholder="0" min="0" max="999999999999" step="any"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
             </div>
 

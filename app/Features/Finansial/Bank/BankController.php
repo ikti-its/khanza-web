@@ -37,4 +37,15 @@ final class BankController extends ControllerTemplate
             ],
         );
     }
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $data = $this->model->builder()
+            ->select('id_bank, nama_bank')
+            ->where('id_bank >', 0)
+            ->orderBy('nama_bank', 'ASC')
+            ->get()->getResultArray();
+
+        return $this->response->setJSON(['data' => $data]);
+    }
 }

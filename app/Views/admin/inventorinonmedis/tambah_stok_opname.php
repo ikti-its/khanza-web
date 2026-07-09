@@ -46,7 +46,7 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Catatan<span class="text-red-600">*</span>
                 </label>
-                <input type="text" name="catatan" id="catatan" placeholder="Masukkan catatan..."
+                <input type="text" name="catatan" id="catatan" placeholder="Masukkan catatan..." maxlength="500"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
             </div>
 
