@@ -51,6 +51,38 @@ final class PengajuanBarangController extends ControllerTemplate
         $this->model->set_order('id_pengajuan', 'DESC');
     }
 
+    // endpoint modal: pengajuan yang sudah disetujui dan masih punya sisa qty
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $data = $this->get_db()->query("
+            SELECT DISTINCT pj.id_pengajuan, pj.no_pengajuan, TO_CHAR(pj.tanggal, 'YYYY-MM-DD HH24:MI') AS tanggal, o.nama
+            FROM inventori_non_medis.pengajuan_barang pj
+            JOIN inventori_non_medis.pengajuan_barang_detail pjd ON pj.id_pengajuan = pjd.id_pengajuan
+            LEFT JOIN role.petugas pt ON pj.petugas_gudang = pt.id_petugas
+            LEFT JOIN person.orang o ON pt.id_orang = o.id_orang
+            WHERE pjd.id_barang > 0
+              AND pjd.qty_disetujui > 0
+              AND pj.id_status_pengajuan_barang = 2
+              AND (
+                SELECT COALESCE(SUM(pbd.qty), 0)
+                FROM inventori_non_medis.pengadaan_barang_detail pbd
+                JOIN inventori_non_medis.pengadaan_barang pb ON pbd.id_pengadaan = pb.id_pengadaan
+                WHERE pb.id_pengajuan = pjd.id_pengajuan
+                  AND pbd.id_barang = pjd.id_barang
+              ) < pjd.qty_disetujui
+              AND NOT EXISTS (
+                SELECT 1
+                FROM inventori_non_medis.pengajuan_barang_detail unmapped
+                WHERE unmapped.id_pengajuan = pjd.id_pengajuan
+                  AND unmapped.id_barang IS NULL
+                  AND unmapped.qty_disetujui > 0
+              )
+            ORDER BY pj.no_pengajuan DESC
+        ")->getResultArray();
+
+        return $this->response->setJSON(['data' => $data]);
+    }
+
     // tampilkan form tambah custom dengan modal search
     public function create_page(): string
     {

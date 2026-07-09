@@ -56,14 +56,11 @@ final class PengadaanBarangController extends ControllerTemplate
     // tampilkan form tambah custom dengan native validation
     public function create_page(): string
     {
-        $options = $this->model->get_all_options();
-
         return view('admin/inventorinonmedis/tambah_pengadaan_barang', [
-            'judul'             => 'Tambah ' . $this->title,
-            'breadcrumbs'       => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
-            'modul_path'        => $this->get_uri_path(),
-            'form_action'       => '/submittambah/',
-            'options_pengajuan' => $options['id_pengajuan'] ?? [],
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
+            'modul_path'  => $this->get_uri_path(),
+            'form_action' => '/submittambah/',
         ]);
     }
 

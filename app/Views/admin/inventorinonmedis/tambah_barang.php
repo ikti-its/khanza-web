@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <!-- Stok + Stok Minimum -->
+            <!-- Stok (auto) + Stok Minimum (input) — sejajar karena berhubungan -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Stok

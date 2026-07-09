@@ -16,12 +16,12 @@
             <input type="hidden" name="petugas" id="petugas" value="">
             <input type="hidden" name="master_ruangan" id="master_ruangan" value="">
 
-            <!-- No. Permintaan + Tanggal Permintaan -->
+            <!-- No. Permintaan (auto) + Tanggal Permintaan (input) -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     No. Permintaan
                 </label>
-                <input type="text" id="no_permintaan" readonly placeholder="Terisi otomatis..."
+                <input type="text" readonly placeholder="Terisi otomatis..."
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
@@ -32,7 +32,7 @@
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
             </div>
 
-            <!-- Pemohon + Ruangan -->
+            <!-- Pemohon (input) + Ruangan (input) -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Pemohon<span class="text-red-600">*</span>
@@ -69,33 +69,12 @@
                 </div>
             </div>
 
-            <!-- Status + Tanggal Diproses -->
+            <!-- Status (auto) -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Status
                 </label>
                 <input type="text" readonly value="Draf"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
-
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Tanggal Diproses
-                </label>
-                <input type="text" readonly placeholder="Terisi otomatis..."
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
-            </div>
-
-            <!-- Pengelola + No. Keluar -->
-            <div class="mb-5 sm:block md:flex items-center">
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
-                    Pengelola
-                </label>
-                <input type="text" readonly placeholder="Terisi otomatis..."
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
-
-                <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    No. Keluar
-                </label>
-                <input type="text" readonly placeholder="Terisi otomatis..."
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
             </div>
 
