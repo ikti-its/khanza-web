@@ -28,11 +28,11 @@
         const btnTambahRegistrasiUgd = document.querySelector('#modalRegistrasiUgd a[href="/ugd/registrasi/tambah"]');
         if (btnTambahRegistrasiUgd) {
             btnTambahRegistrasiUgd.removeAttribute('target');
-            btnTambahRegistrasiUgd.href = '/ugd/registrasi/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
+            btnTambahRegistrasiUgd.href = '/unit-gawat-darurat/registrasi/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
         }
 
         const modalFilterInput = document.getElementById('modalRegistrasiUgdFilterType');
-        let fallbackUrl = '<?= site_url('ugd/registrasi/modal/list') ?>';
+        let fallbackUrl = '<?= site_url('unit-gawat-darurat/registrasi/modal/list') ?>';
         
         if (modalFilterInput && modalFilterInput.value !== '') {
             fallbackUrl += '?filter=' + modalFilterInput.value;
