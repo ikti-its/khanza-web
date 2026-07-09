@@ -29,8 +29,8 @@ final class PermintaanBarangController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX,    'id_permintaan',                 'ID'],
                 [SHOW, OPTIONAL, I::READONLY, 'no_permintaan',                 'No. Permintaan'],
                 [SHOW, REQUIRED, I::DTIME,    'tanggal',                       'Tanggal Permintaan'],
-                [SHOW, REQUIRED, I::SELECT,   'petugas',                       'Pemohon'],
-                [SHOW, REQUIRED, I::SELECT,   'master_ruangan',                'Ruangan'],
+                [SHOW, REQUIRED, I::MODAL,    'petugas',                       'Pemohon', ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pemohon...']],
+                [SHOW, REQUIRED, I::MODAL,    'master_ruangan',                'Ruangan', ['modal' => 'modalPilihRuangan', 'display_column' => 'nama_ruangan', 'placeholder' => 'Klik cari ruangan...']],
                 [SHOW, OPTIONAL, I::SELECT, 'id_status_permintaan_barang', 'Status'],
                 [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal_diproses',             'Tanggal Diproses'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',             'Tanggal Diproses'],
@@ -43,30 +43,13 @@ final class PermintaanBarangController extends ControllerTemplate
         );
     }
 
-    // tampilkan status sebagai teks "Draf" (readonly) pada form tambah
+    // tampilkan form tambah custom (seperti pattern Triase)
     public function create_page(): string
     {
-        $konfig = $this->get_fields_with_options(false, true);
-        foreach ($konfig as &$field) {
-            if (($field[2] ?? '') === 'id_status_permintaan_barang') {
-                $field[2] = 'nama_status_permintaan_barang';
-                $field[3] = 'readonly';
-                unset($field[5]);
-            }
-        }
-        unset($field);
-
-        // view mensyaratkan semua kolom konfig ada di $baris jika $baris non-empty
-        $baris = array_fill_keys(array_column($konfig, 2), null);
-        $baris['nama_status_permintaan_barang'] = 'Draf';
-
-        return view('/layouts/tambah_ubah', [
+        return view('admin/inventorinonmedis/tambah_permintaan_barang', [
             'judul'       => 'Tambah ' . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon', 'tambah']]),
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
             'modul_path'  => $this->get_uri_path(),
-            'kolom_id'    => $this->primary_key,
-            'konfig'      => $konfig,
-            'baris'       => $baris,
             'form_action' => '/submittambah/',
         ]);
     }
@@ -78,6 +61,13 @@ final class PermintaanBarangController extends ControllerTemplate
         $lastNo = $this->get_last('inventori_non_medis.permintaan_barang', 'no_permintaan', 'id_permintaan');
         $postData['no_permintaan']               = generateNextNoPermintaanBarang($lastNo, $postData['tanggal'] ?? null);
         $postData['id_status_permintaan_barang'] = 1;
+
+        // convert empty FK modal fields to null agar tidak kirim '' ke kolom integer
+        foreach (['petugas', 'master_ruangan'] as $fk) {
+            if (isset($postData[$fk]) && $postData[$fk] === '') {
+                $postData[$fk] = null;
+            }
+        }
     }
 
     // hanya izinkan transisi ke Draf (1) atau Proses Permintaan (4)
