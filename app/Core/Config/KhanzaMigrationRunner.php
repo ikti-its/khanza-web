@@ -152,7 +152,7 @@ final class KhanzaMigrationRunner extends MigrationRunner
         }
 
         $all_migrations = $migrations;
-        
+
         unset($migrations[\App\Core\Database\Special\InitDatabase::class]);
         unset($migrations[\App\Core\Database\Special\SearchPathDatabase::class]);
         unset($migrations[\App\Core\Database\Special\EncryptDatabase::class]);
@@ -187,6 +187,39 @@ final class KhanzaMigrationRunner extends MigrationRunner
         $matches = [];
         preg_match($this->regex, $migration, $matches);
         return $matches[1] ?? '';
+    }
+
+    /**
+     * CodeIgniter 4.7.4 hardcoded the parent implementation to only scan each
+     * namespace's "/Database/Migrations/" subfolder. This app's ref-table
+     * classes are identified by naming convention (ending in "...Database"),
+     * not by folder location — they live under app/Core/Database/Special and
+     * scattered across app/Features/* — so the whole namespace still needs
+     * to be scanned, matching the pre-4.7.4 behavior.
+     */
+    #[\Override]
+    public function findNamespaceMigrations(string $namespace): array
+    {
+        $migrations = [];
+        $locator    = service('locator', true);
+
+        if (! empty($this->path)) {
+            helper('filesystem');
+            $dir   = rtrim($this->path, DIRECTORY_SEPARATOR) . '/';
+            $files = get_filenames($dir, true, false, false);
+        } else {
+            $files = $locator->listNamespaceFiles($namespace, '/');
+        }
+
+        foreach ($files as $file) {
+            $file = empty($this->path) ? $file : $this->path . str_replace($this->path, '', $file);
+
+            if ($migration = $this->migrationFromFile($file, $namespace)) {
+                $migrations[] = $migration;
+            }
+        }
+
+        return $migrations;
     }
 
     /**
