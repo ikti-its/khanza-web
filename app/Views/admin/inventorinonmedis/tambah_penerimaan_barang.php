@@ -91,11 +91,6 @@
 </div>
 
 <script>
-    function autofillPemohon(item) {
-        document.getElementById('petugas').value = item.id_petugas ?? '';
-        document.getElementById('petugas_display').value = item.nama ?? '';
-    }
-
     function validateForm() {
         var form = document.getElementById('myForm');
         if (!form.reportValidity()) {

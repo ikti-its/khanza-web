@@ -25,7 +25,10 @@
             },
             rowsPerPage: 10,
             onSelect: (item) => {
-                autofillRuangan(item);
+                autofillFields({
+                    master_ruangan:         item.id_ruangan,
+                    master_ruangan_display: item.nama_ruangan,
+                });
             },
         });
     });

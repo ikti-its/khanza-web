@@ -86,12 +86,6 @@
 </div>
 
 <script>
-    function autofillPemohon(item) {
-        document.getElementById('petugas_gudang').value = item.id_petugas ?? '';
-        document.getElementById('petugas_gudang_display').value = item.nama ?? '';
-        document.getElementById('petugas_gudang_display').setCustomValidity('');
-    }
-
     function validateForm() {
         var form = document.getElementById('myForm');
         if (!form.reportValidity()) {

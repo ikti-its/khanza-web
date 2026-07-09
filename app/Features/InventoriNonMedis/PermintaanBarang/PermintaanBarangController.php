@@ -22,6 +22,7 @@ final class PermintaanBarangController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
+                A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],

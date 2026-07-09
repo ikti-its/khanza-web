@@ -25,7 +25,17 @@
             },
             rowsPerPage: 10,
             onSelect: (item) => {
-                autofillPemohon(item);
+                // Cari field petugas yang ada di halaman (petugas atau petugas_gudang atau id_petugas)
+                var targets = ['petugas', 'petugas_gudang', 'id_petugas'];
+                for (var i = 0; i < targets.length; i++) {
+                    var el = document.getElementById(targets[i]);
+                    if (el) {
+                        el.value = item.id_petugas ?? '';
+                        var display = document.getElementById(targets[i] + '_display');
+                        if (display) display.value = item.nama ?? '';
+                        break;
+                    }
+                }
             },
         });
     });

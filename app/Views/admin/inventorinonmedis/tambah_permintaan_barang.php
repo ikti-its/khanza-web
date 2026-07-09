@@ -105,19 +105,6 @@
 </div>
 
 <script>
-    function autofillPemohon(item) {
-        document.getElementById('petugas').value = item.id_petugas ?? '';
-        document.getElementById('petugas_display').value = item.nama ?? '';
-        // Clear custom validity saat sudah diisi
-        document.getElementById('petugas_display').setCustomValidity('');
-    }
-
-    function autofillRuangan(item) {
-        document.getElementById('master_ruangan').value = item.id_ruangan ?? '';
-        document.getElementById('master_ruangan_display').value = item.nama_ruangan ?? '';
-        document.getElementById('master_ruangan_display').setCustomValidity('');
-    }
-
     function validateForm() {
         var form = document.getElementById('myForm');
         if (!form.reportValidity()) {
