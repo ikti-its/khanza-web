@@ -109,22 +109,20 @@ final class LembarOperasiController extends ControllerTemplate
         ];
 
         return [
-            'Pra-Operasi' => [
+            'Pre-Operasi' => [
                 $entry('Pengkajian Pre-Operasi',  'pengkajian-pre-operasi',  'pengkajian_preop'),
                 $entry('Pengkajian Pre-Anestesi', 'pengkajian-pre-anestesi', 'pengkajian_pre_anestesi'),
                 $entry('Checklist Pre-Operasi',   'checklist-pre-operasi',   'checklist_pre_operasi'),
             ],
-            'Intrabedah — Sebelum Induksi & Insisi' => [
+            'Intra-Operasi' => [
                 $entry('Sign-in Sebelum Anestesi',  'sign-in-sebelum-anestesi', 'signin_sebelum_anestesi'),
                 $entry('Pengkajian Pre-Induksi',    'pengkajian-pre-induksi',   'pengkajian_pre_induksi'),
                 $entry('Time Out Sebelum Insisi',   'time-out-sebelum-insisi',  'time_out_sebelum_insisi'),
                 $entry('Catatan Anestesi & Sedasi', 'catatan-anestesi-sedasi',  'catatan_anestesi_sedasi'),
-            ],
-            'Intrabedah — Sebelum Tutup Luka' => [
                 $entry('Sign-out Sebelum Tutup Luka', 'sign-out-sebelum-tutup-luka', 'signout_sebelum_tutupluka'),
             ],
-            'Pasca Operasi' => [
-                $entry('Catatan Pasca Operasi',  'catatan-paska-operasi',  'catatan_paska_operasi'),
+            'Post-Operasi' => [
+                $entry('Catatan Pasca Operasi',   'catatan-paska-operasi',  'catatan_paska_operasi'),
                 $entry('Checklist Post-Operasi', 'checklist-post-operasi', 'checklist_postop'),
                 $entry('Skor Aldrette',          'skor-aldrette',          'skor_aldrette'),
                 $entry('Skor Steward',           'skor-steward',           'skor_steward'),
