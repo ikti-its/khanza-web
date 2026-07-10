@@ -15,6 +15,11 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const btnTambahOrang = document.querySelector('#modalOrang a[href="/person/orang/tambah"]');
+        if (btnTambahOrang) {
+            btnTambahOrang.removeAttribute('target');
+            btnTambahOrang.href = '/person/orang/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
+        }
         initModalList({
             modalId:     'modalOrang',
             tableId:     'orangTable',
