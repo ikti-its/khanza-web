@@ -16,7 +16,7 @@ $btnClass      = 'inline-flex justify-center items-center p-2 text-sm font-mediu
 $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>';
 
 $isEdit = str_contains($judul, 'Ubah');
-$isCito = filter_var($baris['is_cito'] ?? false, FILTER_VALIDATE_BOOL);
+$isCito = in_array($baris['is_cito'] ?? false, [true, 1, '1', 't'], true);
 ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
