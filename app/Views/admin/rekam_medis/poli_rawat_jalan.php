@@ -75,20 +75,24 @@
 </div>
 
 <!-- Modal Skrining -->
-<div id="modalSkrining" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/40 backdrop-blur-sm">
-    <div class="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-md mx-4 p-6 relative">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <p class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Hasil Skrining</p>
-                <h3 id="modalSkriningTitle" class="text-base font-semibold text-gray-800 dark:text-gray-100"></h3>
+<div id="modalSkrining" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-md sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
+        <div class="w-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
+            <div class="flex justify-between items-start py-3 px-4 border-b dark:border-neutral-700">
+                <div>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Hasil Skrining</p>
+                    <h3 id="modalSkriningTitle" class="font-bold text-gray-800 dark:text-white"></h3>
+                </div>
+                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700"
+                        data-hs-overlay="#modalSkrining">
+                    <span class="sr-only">Close</span>
+                    <img src="<?= base_url('svg/form/popup_tombol_x.svg') ?>">
+                </button>
             </div>
-            <button onclick="closeSkrining()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 ml-4 mt-0.5">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
+            <div class="p-4">
+                <div id="modalSkriningBody"></div>
+            </div>
         </div>
-        <div id="modalSkriningBody"></div>
     </div>
 </div>
 
@@ -197,14 +201,12 @@
 
     // ── Skrining Modal ────────────────────────────────────────────
     async function showSkrining(noRm, namaPasien) {
-        const modal   = document.getElementById('modalSkrining');
-        const title   = document.getElementById('modalSkriningTitle');
-        const body    = document.getElementById('modalSkriningBody');
+        const title = document.getElementById('modalSkriningTitle');
+        const body  = document.getElementById('modalSkriningBody');
 
         title.textContent = namaPasien;
         body.innerHTML = '<p class="text-sm text-gray-400 italic">Memuat...</p>';
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        window.HSOverlay.open('#modalSkrining');
 
         try {
             const res  = await fetch(`${modulPath}/skrining?no_rm=${encodeURIComponent(noRm)}`);
@@ -213,12 +215,6 @@
         } catch {
             body.innerHTML = '<p class="text-sm text-red-400 italic">Gagal memuat data skrining.</p>';
         }
-    }
-
-    function closeSkrining() {
-        const modal = document.getElementById('modalSkrining');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
     }
 
     function boolLabel(val) {

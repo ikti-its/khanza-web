@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 
 <?php
-$isCito     = filter_var($jadwal['is_cito'] ?? false, FILTER_VALIDATE_BOOLEAN);
+$isCito     = in_array($jadwal['is_cito'] ?? false, [true, 1, '1', 't'], true);
 $idStatus   = (int)  ($jadwal['id_status'] ?? 0);
 $namaStatus = $jadwal['nama_status'] ?? '-';
 

@@ -189,7 +189,7 @@ $infoGrid = [
 
         <div class="flex items-center gap-x-3">
           <input type="checkbox" name="is_pa" id="is_pa" value="1"
-                 <?= filter_var($baris['is_pa'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'checked' : '' ?>
+                 <?= in_array($baris['is_pa'] ?? false, [true, 1, '1', 't'], true) ? 'checked' : '' ?>
                  class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
           <label for="is_pa" class="text-sm text-gray-900 dark:text-white cursor-pointer">
             Dikirim Pemeriksaan Patologi Anatomi (PA)
