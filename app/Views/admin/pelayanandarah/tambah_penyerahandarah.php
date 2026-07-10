@@ -108,7 +108,7 @@
                 </label>
                 <select name="id_rekening" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
                     <option value="">-- Pilih --</option>
-                    <?php 
+                    <?php
                     $optionsRekening = [];
                     foreach ($konfig as $field) {
                         if ($field[2] === 'id_rekening') {
@@ -116,7 +116,10 @@
                             break;
                         }
                     }
-                    foreach ($optionsRekening as $opt) : 
+                    $optionsRekening = array_filter($optionsRekening, function ($opt) {
+                        return (string)$opt[1] !== '0' && $opt[0] !== 'PT Sumber Makmur Abadi';
+                    });
+                    foreach ($optionsRekening as $opt) :
                         $selected = ((string)($baris['id_rekening'] ?? '') === (string)$opt[1]) ? 'selected' : '';
                     ?>
                         <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
