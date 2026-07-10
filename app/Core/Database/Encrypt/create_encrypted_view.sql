@@ -124,8 +124,14 @@ BEGIN
                 END IF;
 
                 -- Handle SELECTs
+                -- pgp_sym_decrypt() returns text; casting that text to ::bytea
+                -- (legacy escape format) blows up on any decrypted value containing
+                -- a lone backslash not part of a valid octal escape (e.g. literal
+                -- "\n" markers), which is common in free-text columns. Use
+                -- pgp_sym_decrypt_bytea() instead, which decrypts straight to real
+                -- bytea without re-parsing the plaintext as escape-format bytea.
                 decrypt_select := decrypt_select || format(
-                    'convert_from(pgp_sym_decrypt(%I, ''%s'')::bytea, ''UTF-8'')::%s AS %I, ',
+                    'convert_from(pgp_sym_decrypt_bytea(%I, ''%s''), ''UTF-8'')::%s AS %I, ',
                     col.column_name, encryption_key, structure_col_type, col.column_name
                 );
 
@@ -151,11 +157,11 @@ BEGIN
                 -- column (decrypted) against OLD to identify the row for UPDATE/DELETE.
                 IF pk_columns IS NULL THEN
                     update_pk_conditions := update_pk_conditions || format(
-                        'convert_from(pgp_sym_decrypt(%I, ''%s'')::bytea, ''UTF-8'')::%s IS NOT DISTINCT FROM OLD.%I AND ',
+                        'convert_from(pgp_sym_decrypt_bytea(%I, ''%s''), ''UTF-8'')::%s IS NOT DISTINCT FROM OLD.%I AND ',
                         col.column_name, encryption_key, structure_col_type, col.column_name
                     );
                     delete_pk_conditions := delete_pk_conditions || format(
-                        'convert_from(pgp_sym_decrypt(%I, ''%s'')::bytea, ''UTF-8'')::%s IS NOT DISTINCT FROM OLD.%I AND ',
+                        'convert_from(pgp_sym_decrypt_bytea(%I, ''%s''), ''UTF-8'')::%s IS NOT DISTINCT FROM OLD.%I AND ',
                         col.column_name, encryption_key, structure_col_type, col.column_name
                     );
                 END IF;
