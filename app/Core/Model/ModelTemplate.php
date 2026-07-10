@@ -83,6 +83,7 @@ class ModelTemplate extends Model
         parent::__construct(\Config\Database::connect($config));
 
         $validation = [];
+        $messages   = [];
         foreach ($this->database->fields as $col => $def) {
             $rules = [];
 
@@ -91,6 +92,8 @@ class ModelTemplate extends Model
 
             if (isset($def['constraint']) && in_array($base_type, ['CHAR', 'VARCHAR'], true)) {
                 $rules[] = "max_length[{$def['constraint']}]";
+                $namaKolom = str_replace('_', ' ', $col);
+                $messages[$col]['max_length'] = "Field {$namaKolom} tidak boleh lebih dari {$def['constraint']} karakter.";
             }
 
             if (!empty($rules)) {
@@ -99,6 +102,7 @@ class ModelTemplate extends Model
         }
         if (!empty($validation)) {
             $this->setValidationRules($validation);
+            $this->setValidationMessages($messages);
         }
 
         /*

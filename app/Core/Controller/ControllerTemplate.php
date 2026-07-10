@@ -416,7 +416,11 @@ class ControllerTemplate extends Controller
         $this->before_create($postData);
         $this->fk_from_post();
         try {
-            $this->model->insert($postData);
+            $inserted = $this->model->insert($postData);
+            if ($inserted === false) {
+                session()->setFlashdata('error', $this->format_validation_errors());
+                return $this->create_view($postData);
+            }
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil disimpan.');
         } catch (\ReflectionException | DatabaseException $e) {
             $msg = $e instanceof DatabaseException
@@ -439,30 +443,47 @@ class ControllerTemplate extends Controller
         $this->before_update($postData, $id);
         $this->fk_from_post();
         try {
-            $this->model->update($id, $postData);
+            $updated = $this->model->update($id, $postData);
+            if ($updated === false) {
+                return $this->update_error_view($id, $this->format_validation_errors());
+            }
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil diperbarui.');
         } catch(\ReflectionException $e){
             session()->setFlashdata('error', $e->getMessage());
             return $this->home();
         } catch(DatabaseException $e){
-            $errMsg = $this->friendly_db_error($e);
-            session()->setFlashdata('error', $errMsg);
-            $breadcrumbs = [
-                ['title' => 'Ubah', 'icon', 'Ubah']
-            ];
-            $data = $this->model->find_one($id);
-            return view('/layouts/tambah_ubah', [
-                'judul'       => 'Ubah ' . $this->title,
-                'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
-                'modul_path'  => $this->get_uri_path(),
-                'kolom_id'    => $this->primary_key,
-                'konfig'      => $this->get_fields_with_options(true, true),
-                'baris'       => $data,
-                'form_action' => '/submitedit/' . $id,
-            ]);
+            return $this->update_error_view($id, $this->friendly_db_error($e));
         }
 
         return $this->home();
+    }
+
+    /** Menampilkan kembali form ubah beserta pesan error setelah update gagal */
+    private function update_error_view(int|string $id, string $msg): string
+    {
+        session()->setFlashdata('error', $msg);
+        $breadcrumbs = [
+            ['title' => 'Ubah', 'icon', 'Ubah']
+        ];
+        $data = $this->model->find_one($id);
+        return view('/layouts/tambah_ubah', [
+            'judul'       => 'Ubah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'konfig'      => $this->get_fields_with_options(true, true),
+            'baris'       => $data,
+            'form_action' => '/submitedit/' . $id,
+        ]);
+    }
+
+    /** Menggabungkan pesan-pesan error validasi Model menjadi satu string */
+    private function format_validation_errors(): string
+    {
+        $errors = $this->model->errors();
+        return !empty($errors)
+            ? implode(' ', $errors)
+            : 'Data ' . $this->title . ' gagal disimpan karena tidak valid.';
     }
 
     public function delete(int|string $id): string|RedirectResponse
