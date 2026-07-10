@@ -1,34 +1,45 @@
 <?php $statusFinal = (int)($baris['id_status_permintaan'] ?? 0) >= 3; ?>
 
 <?php if (!$statusFinal): ?>
-<div id="modalSampel_<?= $id ?>" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/40">
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl p-6 w-80">
-        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-4">Konfirmasi Pengambilan Sampel</h3>
-        <form action="<?= $modul_path ?>/sampel/<?= $id ?>" method="post">
-            <?= csrf_field() ?>
-            <div class="mb-5">
-                <input type="datetime-local" name="tgl_jam_sampel" id="sampelDatetime_<?= $id ?>"
-                       required
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white bg-slate-50">
-            </div>
-            <div class="flex justify-between items-center">
-                <button type="button"
-                        onclick="cetakSampelBarcode('<?= esc($baris['no_permintaan'] ?? '', 'js') ?>','<?= esc($baris['nomor_rm'] ?? '', 'js') ?>','<?= esc($baris['nama'] ?? '', 'js') ?>','<?= esc($baris['tanggal_lahir'] ?? '', 'js') ?>')"
-                        class="px-3 py-1.5 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 font-semibold">
-                    Cetak Sampel
+<div id="hs-overlay-sampel-<?= $id ?>" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] pointer-events-none">
+    <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-sm sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
+        <div class="w-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
+            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
+                <h3 class="font-bold text-gray-800 dark:text-white">Konfirmasi Pengambilan Sampel</h3>
+                <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700"
+                        data-hs-overlay="#hs-overlay-sampel-<?= $id ?>">
+                    <span class="sr-only">Close</span>
+                    <img src="<?= base_url('svg/form/popup_tombol_x.svg') ?>">
                 </button>
-                <div class="flex gap-x-2">
-                    <button type="button" onclick="closeSampelModal(<?= $id ?>)"
-                            class="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 dark:text-gray-400">
-                        Batal
-                    </button>
-                    <button type="submit"
-                            class="px-3 py-1.5 text-sm font-semibold text-green bg-amber-500 hover:bg-amber-600 rounded-lg">
-                        Simpan
-                    </button>
-                </div>
             </div>
-        </form>
+            <div class="p-4">
+                <form action="<?= $modul_path ?>/sampel/<?= $id ?>" method="post">
+                    <?= csrf_field() ?>
+                    <div class="mb-5">
+                        <input type="datetime-local" name="tgl_jam_sampel" id="sampelDatetime_<?= $id ?>"
+                               required
+                               class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white bg-slate-50">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button type="button"
+                                onclick="cetakSampelBarcode('<?= esc($baris['no_permintaan'] ?? '', 'js') ?>','<?= esc($baris['nomor_rm'] ?? '', 'js') ?>','<?= esc($baris['nama'] ?? '', 'js') ?>','<?= esc($baris['tanggal_lahir'] ?? '', 'js') ?>')"
+                                class="px-3 py-1.5 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 font-semibold">
+                            Cetak Sampel
+                        </button>
+                        <div class="flex gap-x-2">
+                            <button type="button" data-hs-overlay="#hs-overlay-sampel-<?= $id ?>"
+                                    class="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 dark:text-gray-400">
+                                Batal
+                            </button>
+                            <button type="submit"
+                                    class="px-3 py-1.5 text-sm font-semibold text-green bg-amber-500 hover:bg-amber-600 rounded-lg">
+                                Simpan
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 <?php endif; ?>
@@ -40,7 +51,8 @@
             Sampel
         </span>
     <?php else: ?>
-        <button type="button" onclick="openSampelModal(<?= $id ?>)"
+        <button type="button" onclick="prefillSampelDatetime(<?= $id ?>)"
+                data-hs-overlay="#hs-overlay-sampel-<?= $id ?>"
                 class="gap-x-1 text-sm text-amber-600 decoration-2 hover:underline font-semibold dark:text-amber-400">
             Sampel
         </button>
@@ -50,14 +62,10 @@
 <script>
 if (!window._sampelModalFn) {
     window._sampelModalFn = true;
-    window.openSampelModal = function (id) {
+    window.prefillSampelDatetime = function (id) {
         const now = new Date();
         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
         document.getElementById('sampelDatetime_' + id).value = now.toISOString().slice(0, 16);
-        document.getElementById('modalSampel_' + id).classList.remove('hidden');
-    };
-    window.closeSampelModal = function (id) {
-        document.getElementById('modalSampel_' + id).classList.add('hidden');
     };
     window.cetakSampelBarcode = function (noPermintaan, nomorRm, nama, tanggalLahir) {
         const barcodeUrl = 'https://bwipjs-api.metafloor.com/?bcid=code128&text='
