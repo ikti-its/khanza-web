@@ -64,7 +64,10 @@ final class PermintaanRadController extends ControllerTemplate
 
     private function getKonfig(): array
     {
-        return array_values(array_filter($this->get_fields_with_options(false, true), fn($f) => $f[2] !== 'nomor_reg'));
+        return array_values(array_filter(
+            $this->get_fields_with_options(false, true),
+            static fn($f) => $f[2] !== 'nomor_reg',
+        ));
     }
 
     private function fetchDetailRegistrasi(string $nomorReg): array
@@ -142,7 +145,7 @@ final class PermintaanRadController extends ControllerTemplate
         if (empty($idItems))
             return;
 
-        $data = array_map(fn($idItem) => [
+        $data = array_map(static fn($idItem) => [
             'id_permintaan' => $idPermintaan,
             'id_item'       => (int) $idItem,
             'is_baca_saja'  => ($bacaSajaMap[(string) $idItem] ?? '0') === '1',
@@ -156,7 +159,7 @@ final class PermintaanRadController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
 
     #[\Override]
-    final public function create_page(): string
+    public function create_page(): string
     {
         return view('admin/radiologi/tambah_permintaan_rad', [
             'judul'         => 'Tambah ' . $this->title,
@@ -215,7 +218,7 @@ final class PermintaanRadController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
 
     #[\Override]
-    final public function update_page(int|string $id): string
+    public function update_page(int|string $id): string
     {
         $baris = $this->model->find($id);
 
@@ -297,7 +300,7 @@ final class PermintaanRadController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
 
     #[\Override]
-    final public function delete(int|string $id): string|RedirectResponse
+    public function delete(int|string $id): string|RedirectResponse
     {
         if ($id == 0)
             return $this->home();

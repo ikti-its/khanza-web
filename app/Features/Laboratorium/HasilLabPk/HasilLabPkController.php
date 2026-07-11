@@ -47,7 +47,7 @@ final class HasilLabPkController extends ControllerTemplate
     {
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn($f) => !in_array(
+            static fn($f) => !in_array(
                 $f[2],
                 [
                     'id_hasil_pk',
@@ -251,7 +251,10 @@ final class HasilLabPkController extends ControllerTemplate
             if ($idItem <= 0)
                 continue;
 
-            $filledParams = array_filter($item['parameter'] ?? [], fn($p) => trim($p['nilai_hasil'] ?? '') !== '');
+            $filledParams = array_filter(
+                $item['parameter'] ?? [],
+                static fn($p) => trim($p['nilai_hasil'] ?? '') !== '',
+            );
             if (empty($filledParams))
                 continue;
 
@@ -374,7 +377,7 @@ final class HasilLabPkController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
 
     #[\Override]
-    final public function create_page(): string
+    public function create_page(): string
     {
         return view('admin/laboratorium/tambah_hasil_pk', [
             'judul'       => 'Tambah ' . $this->title,
@@ -452,7 +455,7 @@ final class HasilLabPkController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
 
     #[\Override]
-    final public function update_page(int|string $id): string
+    public function update_page(int|string $id): string
     {
         $idPermintaanLab = (int) $id;
 
@@ -605,7 +608,7 @@ final class HasilLabPkController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
 
     #[\Override]
-    final public function index(): string
+    public function index(): string
     {
         $hasilSub =
             '(SELECT DISTINCT ON (id_permintaan_lab) id_permintaan_lab, id_dokter_pj, id_petugas_lab, tgl_jam_hasil'

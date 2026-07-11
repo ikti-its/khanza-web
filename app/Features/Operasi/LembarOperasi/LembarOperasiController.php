@@ -104,7 +104,7 @@ final class LembarOperasiController extends ControllerTemplate
         $existingRecords = $this->model->db->query($sql, $bindings)->getRowArray() ?? [];
 
         // Helper mapper untuk array
-        $entry = fn(string $label, string $slug, string $table): array => [
+        $entry = static fn(string $label, string $slug, string $table): array => [
             'label'     => $label,
             'tambah'    => "/operasi/{$slug}/tambah",
             'ubah'      => "/operasi/{$slug}/edit",
@@ -142,7 +142,7 @@ final class LembarOperasiController extends ControllerTemplate
     // -------------------------------------------------------------------------
 
     #[\Override]
-    final public function index(): string|RedirectResponse
+    public function index(): string|RedirectResponse
     {
         $idJadwal = (int) ($this->request->getGet('id_jadwal') ?? 0);
 

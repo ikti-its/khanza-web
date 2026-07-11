@@ -24,7 +24,7 @@ final class PapanJadwalOperasiController extends ControllerTemplate
     }
 
     #[\Override]
-    final public function index(): string|RedirectResponse
+    public function index(): string|RedirectResponse
     {
         $tanggal  = $this->request->getGet('tanggal') ?: date('Y-m-d');
         $slots    = $this->fetchSlots();

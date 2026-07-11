@@ -158,7 +158,7 @@ final class JadwalOperasiController extends ControllerTemplate
                     ['role.dokter d',  'd.id_dokter = j.id_dokter_bedah'],
                     ['person.orang o', 'o.id_orang = d.id_orang'],
                 ],
-                'label'  => fn(array $r) => "Dokter Bedah {$r['nama']}",
+                'label'  => static fn(array $r) => "Dokter Bedah {$r['nama']}",
                 'select' => "{$kolomWaktu}, o.nama",
             ],
             [
@@ -167,13 +167,13 @@ final class JadwalOperasiController extends ControllerTemplate
                     ['role.dokter d',  'd.id_dokter = j.id_dokter_anestesi'],
                     ['person.orang o', 'o.id_orang = d.id_orang'],
                 ],
-                'label'  => fn(array $r) => "Dokter Anestesi {$r['nama']}",
+                'label'  => static fn(array $r) => "Dokter Anestesi {$r['nama']}",
                 'select' => "{$kolomWaktu}, o.nama",
             ],
             [
                 'col'    => 'id_ruangan',
                 'join'   => [['ruangan.ruangan r', 'r.id_ruangan = j.id_ruangan']],
-                'label'  => fn(array $r) => "Ruangan {$r['nama_ruangan']}",
+                'label'  => static fn(array $r) => "Ruangan {$r['nama_ruangan']}",
                 'select' => "{$kolomWaktu}, r.nama_ruangan",
             ],
         ];
@@ -287,7 +287,7 @@ final class JadwalOperasiController extends ControllerTemplate
     }
 
     #[\Override]
-    final public function update_page(int|string $id): string
+    public function update_page(int|string $id): string
     {
         $baris = $this->model->find($id) ?? [];
 

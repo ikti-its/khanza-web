@@ -39,7 +39,7 @@ final class HasilRadFotoController extends ControllerTemplate
     {
         $dir = ROOTPATH . 'public/uploads/radiologi/';
         if (!is_dir($dir))
-            mkdir($dir, 0755, true);
+            mkdir($dir, 0o755, true);
         return $dir;
     }
 

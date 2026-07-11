@@ -71,7 +71,7 @@ final class PermintaanLabPaController extends ControllerTemplate
                 false,
                 true,
             ),
-            fn($f) => !in_array(
+            static fn($f) => !in_array(
                 $f[2],
                 [
                     'id_permintaan',
@@ -191,7 +191,7 @@ final class PermintaanLabPaController extends ControllerTemplate
             return;
 
         // Menggunakan Batch Insert untuk efisiensi eksekusi database
-        $data = array_map(fn($idItem) => [
+        $data = array_map(static fn($idItem) => [
             'id_permintaan_lab'   => $idPermintaanLab,
             'id_item_pemeriksaan' => (int) $idItem,
         ], $idItems);
@@ -235,7 +235,7 @@ final class PermintaanLabPaController extends ControllerTemplate
     // -------------------------------------------------------------------------
 
     #[\Override]
-    final public function create_page(): string
+    public function create_page(): string
     {
         return view('admin/laboratorium/tambah_permintaan_pa', [
             'judul'         => 'Tambah ' . $this->title,
@@ -251,7 +251,7 @@ final class PermintaanLabPaController extends ControllerTemplate
     }
 
     #[\Override]
-    final public function update_page(int|string $id): string
+    public function update_page(int|string $id): string
     {
         $idPermintaanLab = (int) $id;
 
@@ -421,7 +421,7 @@ final class PermintaanLabPaController extends ControllerTemplate
     }
 
     #[\Override]
-    final public function delete(int|string $id): string|RedirectResponse
+    public function delete(int|string $id): string|RedirectResponse
     {
         if ($id == 0)
             return $this->home();
@@ -490,7 +490,7 @@ final class PermintaanLabPaController extends ControllerTemplate
     // -------------------------------------------------------------------------
 
     #[\Override]
-    final public function index(): string
+    public function index(): string
     {
         $rows = $this->fetchPermintaanLabHeaders();
 

@@ -64,7 +64,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
     {
         return array_values(array_filter(
             $this->get_fields_with_options($isUpdate, true),
-            fn($f) => !in_array($f[2], ['id_skrining', 'no_rm', 'id_unit', 'id_petugas'], true),
+            static fn($f) => !in_array($f[2], ['id_skrining', 'no_rm', 'id_unit', 'id_petugas'], true),
         ));
     }
 
@@ -108,7 +108,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
 
     #[\Override]
-    final public function create_page(): string
+    public function create_page(): string
     {
         $mockBaris = [
             'id_skrining'     => '',
@@ -140,7 +140,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
     }
 
     #[\Override]
-    final public function update_page(int|string $id): string
+    public function update_page(int|string $id): string
     {
         $baris = $this->model->find_one($id);
 

@@ -46,7 +46,7 @@ final class HasilRadController extends ControllerTemplate
     {
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn($f) => !in_array(
+            static fn($f) => !in_array(
                 $f[2],
                 [
                     'id_hasil_rad',
@@ -70,7 +70,7 @@ final class HasilRadController extends ControllerTemplate
             ->get()
             ->getResultArray();
 
-        return array_map(function ($t) {
+        return array_map(static function ($t) {
             $t['isi_teks_ekspertise'] = str_replace('\n', "\n", $t['isi_teks_ekspertise']);
             return $t;
         }, $templates);
@@ -139,7 +139,7 @@ final class HasilRadController extends ControllerTemplate
     {
         $uploadDir = ROOTPATH . 'public/uploads/radiologi/';
         if (!is_dir($uploadDir))
-            mkdir($uploadDir, 0755, true);
+            mkdir($uploadDir, 0o755, true);
 
         $fotoModel = new \App\Features\Radiologi\HasilRadFoto\HasilRadFotoModel();
         foreach ($this->request->getFiles()['foto'] ?? [] as $file) {
@@ -160,7 +160,7 @@ final class HasilRadController extends ControllerTemplate
     {
         // 1. Insert Tindakan (Batch)
         if (!empty($tindakanList)) {
-            $batchTindakan = array_map(fn($tindakan) => [
+            $batchTindakan = array_map(static fn($tindakan) => [
                 'id_hasil_rad'            => $idHasilRad,
                 'id_permintaan_item'      => (int) ($tindakan['id_permintaan_item'] ?? 0),
                 'proyeksi'                => $tindakan['proyeksi'] ?? '' ?: null,
@@ -231,7 +231,7 @@ final class HasilRadController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
 
     #[\Override]
-    final public function create_page(): string
+    public function create_page(): string
     {
         return view('admin/radiologi/tambah_hasil_rad', [
             'judul'            => 'Tambah ' . $this->title,
@@ -312,7 +312,7 @@ final class HasilRadController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
 
     #[\Override]
-    final public function update_page(int|string $id): string
+    public function update_page(int|string $id): string
     {
         $baris = $this->model->find($id);
 

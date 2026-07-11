@@ -204,10 +204,12 @@ final class SignoutSebelumTutupLukaController extends ControllerTemplate
             'is_konfirmasi_anestesi',
             'is_konfirmasi_perawat',
         ] as $field) {
-            if (isset($record[$field])) {
-                $isTrue         = $record[$field] === true || $record[$field] == 1 || $record[$field] === 't';
-                $record[$field] = $isTrue ? '1' : '0';
+            if (!isset($record[$field])) {
+                continue;
             }
+
+            $isTrue         = $record[$field] === true || $record[$field] == 1 || $record[$field] === 't';
+            $record[$field] = $isTrue ? '1' : '0';
         }
 
         return view('admin/operasi/tambah_signout_sebelum_tutupluka', $this->buildViewData(

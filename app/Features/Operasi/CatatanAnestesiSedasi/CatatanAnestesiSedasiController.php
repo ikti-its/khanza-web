@@ -160,7 +160,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
             ->get()
             ->getResultArray();
 
-        return array_map(function (array $row): array {
+        return array_map(static function (array $row): array {
             $isTrue              = in_array($row['is_digunakan'], [true, 1, 't'], true);
             $row['is_digunakan'] = $isTrue ? '1' : '0';
             return $row;
@@ -177,7 +177,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
             ->get()
             ->getResultArray();
 
-        return array_map(function (array $row): array {
+        return array_map(static function (array $row): array {
             $isTrue              = in_array($row['is_digunakan'], [true, 1, 't'], true);
             $row['is_digunakan'] = $isTrue ? '1' : '0';
             return $row;
@@ -381,10 +381,12 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
             'is_blok_perifer',
             'is_batal_tindakan',
         ] as $field) {
-            if (isset($record[$field])) {
-                $isTrue         = in_array($record[$field], [true, 1, 't'], true);
-                $record[$field] = $isTrue ? '1' : '0';
+            if (!isset($record[$field])) {
+                continue;
             }
+
+            $isTrue         = in_array($record[$field], [true, 1, 't'], true);
+            $record[$field] = $isTrue ? '1' : '0';
         }
 
         return view('admin/operasi/tambah_catatan_anestesi_sedasi', $this->buildViewData(

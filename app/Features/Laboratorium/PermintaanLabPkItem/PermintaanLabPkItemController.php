@@ -64,7 +64,7 @@ final class PermintaanLabPkItemController extends ControllerTemplate
                 false,
                 true,
             ),
-            fn($f) => !in_array(
+            static fn($f) => !in_array(
                 $f[2],
                 [
                     'id_permintaan',
@@ -277,7 +277,7 @@ final class PermintaanLabPkItemController extends ControllerTemplate
     // -------------------------------------------------------------------------
 
     #[\Override]
-    final public function create_page(): string
+    public function create_page(): string
     {
         return view('admin/laboratorium/tambah_permintaan_pk', [
             'judul'         => 'Tambah ' . $this->title,
@@ -293,7 +293,7 @@ final class PermintaanLabPkItemController extends ControllerTemplate
     }
 
     #[\Override]
-    final public function update_page(int|string $id): string
+    public function update_page(int|string $id): string
     {
         $idPermintaanLab = (int) $id;
 
@@ -451,7 +451,7 @@ final class PermintaanLabPkItemController extends ControllerTemplate
     }
 
     #[\Override]
-    final public function delete(int|string $id): string|RedirectResponse
+    public function delete(int|string $id): string|RedirectResponse
     {
         if ($id == 0)
             return $this->home();
@@ -519,7 +519,7 @@ final class PermintaanLabPkItemController extends ControllerTemplate
     // -------------------------------------------------------------------------
 
     #[\Override]
-    final public function index(): string
+    public function index(): string
     {
         $rows = $this->fetchPermintaanLabHeaders();
 

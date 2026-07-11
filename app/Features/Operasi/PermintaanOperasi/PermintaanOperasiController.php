@@ -46,7 +46,7 @@ final class PermintaanOperasiController extends ControllerTemplate
     {
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn($f) => !in_array(
+            static fn($f) => !in_array(
                 $f[2],
                 [
                     'id_permintaan',
@@ -84,7 +84,7 @@ final class PermintaanOperasiController extends ControllerTemplate
 
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): array
     {
-        $row = $this->model
+        return $this->model
             ->db
             ->table("role.{$tabel} t")
             ->select(['t.id_dokter', 't.kode_dokter', 'o.nama AS nama_dokter'])
@@ -92,7 +92,6 @@ final class PermintaanOperasiController extends ControllerTemplate
             ->where("t.{$idKolom}", $idValue)
             ->get()
             ->getRowArray() ?? [];
-        return $row;
     }
 
     private function fetchTindakan(int $idTindakan): array
@@ -160,7 +159,7 @@ final class PermintaanOperasiController extends ControllerTemplate
     // -------------------------------------------------------------------------
 
     #[\Override]
-    final public function create_page(): string
+    public function create_page(): string
     {
         return view('admin/operasi/tambah_permintaan_operasi', [
             'judul'       => 'Tambah ' . $this->title,
@@ -174,7 +173,7 @@ final class PermintaanOperasiController extends ControllerTemplate
     }
 
     #[\Override]
-    final public function update_page(int|string $id): string
+    public function update_page(int|string $id): string
     {
         $baris = $this->model->find($id) ?? [];
 
@@ -295,7 +294,7 @@ final class PermintaanOperasiController extends ControllerTemplate
     }
 
     #[\Override]
-    final public function delete(int|string $id): string|RedirectResponse
+    public function delete(int|string $id): string|RedirectResponse
     {
         if ($id == 0)
             return $this->home();

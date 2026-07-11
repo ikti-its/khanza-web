@@ -186,8 +186,8 @@ final class TagihanOperasiController extends ControllerTemplate
             'id_onloop_5',
         ];
 
-        $dokterIds  = array_values(array_filter(array_map(fn($k) => $baris[$k] ?? null, $dokterCols)));
-        $petugasIds = array_values(array_filter(array_map(fn($k) => $baris[$k] ?? null, $petugasCols)));
+        $dokterIds  = array_values(array_filter(array_map(static fn($k) => $baris[$k] ?? null, $dokterCols)));
+        $petugasIds = array_values(array_filter(array_map(static fn($k) => $baris[$k] ?? null, $petugasCols)));
 
         $dokterNames  = [];
         $petugasNames = [];
@@ -236,7 +236,7 @@ final class TagihanOperasiController extends ControllerTemplate
     // -------------------------------------------------------------------------
 
     #[\Override]
-    final public function create_page(): string
+    public function create_page(): string
     {
         $idJadwal = (int) ($this->request->getGet('id_jadwal') ?? 0);
         $jadwal   = $idJadwal ? $this->fetchJadwal($idJadwal) : [];
@@ -276,7 +276,7 @@ final class TagihanOperasiController extends ControllerTemplate
     }
 
     #[\Override]
-    final public function update_page(int|string $id): string
+    public function update_page(int|string $id): string
     {
         $baris = $this->model->find($id) ?? [];
 
