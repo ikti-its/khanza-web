@@ -144,31 +144,108 @@ final class HasilLabPaController extends ControllerTemplate
         ], $hasilRows);
     }
  
-    private function insertHasilPaItems(
+    private function fetchItemUntukForm(int $idPermintaanLab): array
+    {
+        return $this->model->db
+            ->table('laboratorium.permintaan_lab_pa_item pai')
+            ->select([
+                'pai.id_permintaan_pa_item',
+                'ri.kode_periksa',
+                'ri.nama_item',
+                'h.diagnosa_klinis',
+                'h.makroskopik',
+                'h.mikroskopik',
+                'h.kesimpulan',
+                'h.kesan',
+            ])
+            ->join('laboratorium.ref_item_pemeriksaan_lab ri', 'ri.id_item_lab = pai.id_item_pemeriksaan')
+            ->join('laboratorium.hasil_lab_pa h',
+                'h.id_permintaan_pa_item = pai.id_permintaan_pa_item AND h.id_permintaan_lab = pai.id_permintaan_lab',
+                'left')
+            ->where('pai.id_permintaan_lab', $idPermintaanLab)
+            ->orderBy('pai.id_permintaan_pa_item', 'ASC')
+            ->get()->getResultArray();
+    }
+
+    // Sebuah item PA dianggap "lengkap" hanya bila semua field wajibnya terisi —
+    // laporan PA yang setengah jadi (mis. makroskopik tanpa mikroskopik) tidak disimpan.
+    private function isItemLengkap(array $item): bool
+    {
+        foreach (['diagnosa_klinis', 'makroskopik', 'mikroskopik', 'kesimpulan'] as $field) {
+            if (trim($item[$field] ?? '') === '') return false;
+        }
+        return true;
+    }
+
+    private function validateHasilList(array $hasilList): ?string
+    {
+        foreach ($hasilList as $item) {
+            if ($this->isItemLengkap($item)) return null;
+        }
+        return 'Isi minimal satu hasil pemeriksaan lengkap (Diagnosa Klinis, Makroskopik, Mikroskopik, Kesimpulan) sebelum menyimpan.';
+    }
+
+    private function upsertHasilPaItems(
         array $hasilList,
-        ?int $idPermintaanLab,
+        int $idPermintaanLab,
         ?int $idDokterPj,
         ?int $idPetugasLab,
         string $tglJamHasil,
     ): void {
-        if (empty($hasilList)) return;
+        $existingByItem = array_column(
+            $this->model->where('id_permintaan_lab', $idPermintaanLab)->findAll(),
+            null,
+            'id_permintaan_pa_item'
+        );
 
-        $batchData = array_map(fn($item) => [
-            'id_permintaan_lab'     => $idPermintaanLab,
-            'id_permintaan_pa_item' => (int) ($item['id_permintaan_pa_item'] ?? 0),
-            'id_dokter_pj'          => $idDokterPj,
-            'id_petugas_lab'        => $idPetugasLab,
-            'tgl_jam_hasil'         => $tglJamHasil,
-            'diagnosa_klinis'       => trim($item['diagnosa_klinis'] ?? ''),
-            'makroskopik'           => trim($item['makroskopik']     ?? ''),
-            'mikroskopik'           => trim($item['mikroskopik']     ?? ''),
-            'kesimpulan'            => trim($item['kesimpulan']      ?? ''),
-            'kesan'                 => trim($item['kesan']           ?? '') ?: null,
-        ], $hasilList);
+        foreach ($hasilList as $item) {
+            $idItem = (int) ($item['id_permintaan_pa_item'] ?? 0);
+            if ($idItem <= 0 || !$this->isItemLengkap($item)) continue;
 
-        $this->model->insertBatch($batchData);
+            $data = [
+                'id_dokter_pj'    => $idDokterPj,
+                'id_petugas_lab'  => $idPetugasLab,
+                'tgl_jam_hasil'   => $tglJamHasil,
+                'diagnosa_klinis' => trim($item['diagnosa_klinis']),
+                'makroskopik'     => trim($item['makroskopik']),
+                'mikroskopik'     => trim($item['mikroskopik']),
+                'kesimpulan'      => trim($item['kesimpulan']),
+                'kesan'           => trim($item['kesan'] ?? '') ?: null,
+            ];
+
+            if (isset($existingByItem[$idItem])) {
+                $this->model->update((int) $existingByItem[$idItem]['id_hasil_pa'], $data);
+            } else {
+                $this->model->insert($data + [
+                    'id_permintaan_lab'     => $idPermintaanLab,
+                    'id_permintaan_pa_item' => $idItem,
+                ]);
+            }
+        }
     }
- 
+
+    private function recomputeStatusPermintaan(int $idPermintaanLab): void
+    {
+        $total = $this->model->db
+            ->table('laboratorium.permintaan_lab_pa_item')
+            ->where('id_permintaan_lab', $idPermintaanLab)
+            ->countAllResults();
+
+        $filled = $this->model->db
+            ->table('laboratorium.hasil_lab_pa')
+            ->where('id_permintaan_lab', $idPermintaanLab)
+            ->where("TRIM(diagnosa_klinis) <> '' AND TRIM(makroskopik) <> '' AND TRIM(mikroskopik) <> '' AND TRIM(kesimpulan) <> ''", null, false)
+            ->countAllResults();
+
+        $status = ($total > 0 && $filled >= $total) ? 3 : 2;
+
+        $this->model->db
+            ->table('laboratorium.permintaan_lab_header')
+            ->where('id_permintaan', $idPermintaanLab)
+            ->set('id_status_permintaan', $status)
+            ->update();
+    }
+
     private function deleteHasilPaByPermintaan(int $idPermintaanLab): void
     {
         $this->model->db
@@ -192,35 +269,39 @@ final class HasilLabPaController extends ControllerTemplate
             'konfig'        => $this->getKonfig(),
             'baris'         => [],
             'form_action'   => '/submittambah',
-            'item_terpilih' => [],
         ]);
     }
- 
+
     // ──────────────────────────────────────────────────────────
     // PROSES SIMPAN
     // ──────────────────────────────────────────────────────────
- 
+
     #[\Override]
     public function create(): string|RedirectResponse
     {
         $rawPost = $this->request->getPost();
- 
+
         $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
         $idDokterPj      = (int) ($rawPost['id_dokter_pj']      ?? 0) ?: null;
         $idPetugasLab    = (int) ($rawPost['id_petugas_lab']    ?? 0) ?: null;
         $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
         $hasilList       = $rawPost['hasil'] ?? [];
- 
-        $this->model->db->transStart();
- 
-        try {
-            $this->insertHasilPaItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil);
 
-            $this->model->db
-                ->table('laboratorium.permintaan_lab_header')
-                ->where('id_permintaan', $idPermintaanLab)
-                ->set('id_status_permintaan', 3)
-                ->update();
+        if (!$idPermintaanLab) {
+            session()->setFlashdata('error', 'Permintaan laboratorium wajib dipilih.');
+            return redirect()->back()->withInput();
+        }
+
+        if ($err = $this->validateHasilList($hasilList)) {
+            session()->setFlashdata('error', $err);
+            return redirect()->back()->withInput();
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $this->upsertHasilPaItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil);
+            $this->recomputeStatusPermintaan($idPermintaanLab);
 
             $this->model->db->transComplete();
 
@@ -273,38 +354,41 @@ final class HasilLabPaController extends ControllerTemplate
             'konfig'        => $this->getKonfig(),
             'baris'         => $baris,
             'form_action'   => '/submitedit/' . $id,
-            'item_terpilih' => $this->fetchItemTerpilih($idPermintaanLab),
         ]);
     }
- 
+
     // ──────────────────────────────────────────────────────────
     // PROSES UPDATE
     // ──────────────────────────────────────────────────────────
- 
+
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         if ($id == 0) return $this->home();
- 
+
         $rawPost = $this->request->getPost();
- 
+
         $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
         $idDokterPj      = (int) ($rawPost['id_dokter_pj']      ?? 0) ?: null;
         $idPetugasLab    = (int) ($rawPost['id_petugas_lab']    ?? 0) ?: null;
         $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
         $hasilList       = $rawPost['hasil'] ?? [];
- 
-        $this->model->db->transStart();
- 
-        try {
-            $this->deleteHasilPaByPermintaan($idPermintaanLab);
-            $this->insertHasilPaItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil);
 
-            $this->model->db
-                ->table('laboratorium.permintaan_lab_header')
-                ->where('id_permintaan', $idPermintaanLab)
-                ->set('id_status_permintaan', 3)
-                ->update();
+        if (!$idPermintaanLab) {
+            session()->setFlashdata('error', 'Permintaan laboratorium wajib dipilih.');
+            return redirect()->back()->withInput();
+        }
+
+        if ($err = $this->validateHasilList($hasilList)) {
+            session()->setFlashdata('error', $err);
+            return redirect()->back()->withInput();
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            $this->upsertHasilPaItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil);
+            $this->recomputeStatusPermintaan($idPermintaanLab);
 
             $this->model->db->transComplete();
 
@@ -324,9 +408,22 @@ final class HasilLabPaController extends ControllerTemplate
     }
  
     // ──────────────────────────────────────────────────────────
+    // MODAL LIST — item permintaan digabung dengan hasil yang sudah ada
+    // ──────────────────────────────────────────────────────────
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $idPermintaanLab = (int) ($this->request->getGet('id_permintaan') ?? 0);
+
+        return $this->response->setJSON([
+            'data' => $idPermintaanLab > 0 ? $this->fetchItemUntukForm($idPermintaanLab) : [],
+        ]);
+    }
+
+    // ──────────────────────────────────────────────────────────
     // DELETE — hapus semua baris hasil PA per permintaan
     // ──────────────────────────────────────────────────────────
- 
+
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {

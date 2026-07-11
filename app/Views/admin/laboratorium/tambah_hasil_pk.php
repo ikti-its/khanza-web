@@ -135,8 +135,6 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
 </div>
 
 <script>
-    const _itemTerpilih = <?= json_encode($item_terpilih ?? []) ?>;
-
     // ════════════════════════════════════════════
     // AUTOFILL dari modal permintaan
     // ════════════════════════════════════════════
@@ -185,7 +183,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
         const container = document.getElementById('hasilPkContainer');
         container.innerHTML = '<div class="text-center py-6 text-gray-400 text-sm">Memuat item pemeriksaan...</div>';
 
-        fetch(`/laboratorium/permintaan-lab-pk/modal/list?id_permintaan=${idPermintaan}`)
+        fetch(`<?= $modul_path ?>/modal/list?id_permintaan=${idPermintaan}`)
             .then(res => res.json())
             .then(result => renderHasilPk(result.data || []))
             .catch(() => {
@@ -270,7 +268,6 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                                        name="${pParam}[nilai_hasil]"
                                        value="${escAttr(nilaiAwal)}"
                                        placeholder="Nilai hasil..."
-                                       required
                                        class="w-full border border-gray-300 rounded p-1 text-sm dark:bg-slate-900 dark:border-gray-600 dark:text-white nilai-hasil-input">
                             </td>
                             <td class="p-2 border dark:border-gray-700">
@@ -314,8 +311,9 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
     // INIT
     // ════════════════════════════════════════════
     document.addEventListener('DOMContentLoaded', function () {
-        if (_itemTerpilih.length > 0) {
-            renderHasilPk(_itemTerpilih);
+        const idPermintaanLab = document.getElementById('id_permintaan_lab').value;
+        if (idPermintaanLab) {
+            fetchItemPk(idPermintaanLab);
         }
 
         document.getElementById('myForm').addEventListener('submit', function (e) {
@@ -358,13 +356,10 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
         }
 
         clearError('hasilPkContainer');
-        let nilaiValid = true;
-        document.querySelectorAll('.nilai-hasil-input').forEach(input => {
-            input.classList.toggle('!border-red-500', !input.value.trim());
-            if (!input.value.trim()) nilaiValid = false;
-        });
-        if (!nilaiValid) {
-            showError('hasilPkContainer', 'Nilai hasil untuk semua parameter wajib diisi.');
+        const nilaiInputs = document.querySelectorAll('.nilai-hasil-input');
+        const adaYangTerisi = Array.from(nilaiInputs).some(input => input.value.trim());
+        if (nilaiInputs.length > 0 && !adaYangTerisi) {
+            showError('hasilPkContainer', 'Isi minimal satu hasil pemeriksaan sebelum menyimpan.');
             return false;
         }
 

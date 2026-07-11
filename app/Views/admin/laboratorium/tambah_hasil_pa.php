@@ -124,6 +124,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                     Pilih permintaan terlebih dahulu untuk mengisi hasil pemeriksaan.
                 </div>
             </div>
+            <p id="err_hasilPaContainer" class="hidden text-red-500 text-xs mt-1"></p>
 
             <div class="flex justify-end gap-x-2 mt-8">
                 <?= view('components/form/submit_button') ?>
@@ -133,8 +134,6 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
 </div>
 
 <script>
-    const _itemTerpilih = <?= json_encode($item_terpilih ?? []) ?>;
-
     // ════════════════════════════════════════════
     // AUTOFILL dari modal permintaan
     // ════════════════════════════════════════════
@@ -183,7 +182,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
         const container = document.getElementById('hasilPaContainer');
         container.innerHTML = '<div class="text-center py-6 text-gray-400 text-sm">Memuat item pemeriksaan...</div>';
 
-        fetch(`/laboratorium/permintaan-lab-pa/modal/list?id_permintaan=${idPermintaan}`)
+        fetch(`<?= $modul_path ?>/modal/list?id_permintaan=${idPermintaan}`)
             .then(res => res.json())
             .then(result => renderHasilPa(result.data || []))
             .catch(() => {
@@ -219,7 +218,7 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
             const knAwal  = item.kesan           ?? '';
 
             html += `
-            <div class="mb-6 border rounded-xl overflow-hidden dark:border-gray-700">
+            <div class="pa-item-block mb-6 border rounded-xl overflow-hidden dark:border-gray-700">
                 <!-- Header item -->
                 <div class="flex items-center gap-x-3 px-4 py-3" style="background-color: #E6F2EF;">
                     <span class="text-sm font-bold text-gray-700 dark:text-gray-200 font-mono">${escHtml(item.kode_periksa)}</span>
@@ -231,27 +230,27 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                 <div class="p-5 grid grid-cols-1 gap-y-4">
                     <div>
                         <label class="${lblClass}">Diagnosa Klinis <span class="text-red-500">*</span></label>
-                        <textarea name="${p}[diagnosa_klinis]" rows="3" required
+                        <textarea name="${p}[diagnosa_klinis]" rows="3"
                                   placeholder="Tuliskan diagnosa klinis..."
-                                  class="${taClass}">${escHtml(dkAwal)}</textarea>
+                                  class="pa-required-field ${taClass}">${escHtml(dkAwal)}</textarea>
                     </div>
                     <div>
                         <label class="${lblClass}">Makroskopik <span class="text-red-500">*</span></label>
-                        <textarea name="${p}[makroskopik]" rows="4" required
+                        <textarea name="${p}[makroskopik]" rows="4"
                                   placeholder="Tuliskan deskripsi makroskopik..."
-                                  class="${taClass}">${escHtml(mkAwal)}</textarea>
+                                  class="pa-required-field ${taClass}">${escHtml(mkAwal)}</textarea>
                     </div>
                     <div>
                         <label class="${lblClass}">Mikroskopik <span class="text-red-500">*</span></label>
-                        <textarea name="${p}[mikroskopik]" rows="4" required
+                        <textarea name="${p}[mikroskopik]" rows="4"
                                   placeholder="Tuliskan deskripsi mikroskopik..."
-                                  class="${taClass}">${escHtml(miAwal)}</textarea>
+                                  class="pa-required-field ${taClass}">${escHtml(miAwal)}</textarea>
                     </div>
                     <div>
                         <label class="${lblClass}">Kesimpulan <span class="text-red-500">*</span></label>
-                        <textarea name="${p}[kesimpulan]" rows="3" required
+                        <textarea name="${p}[kesimpulan]" rows="3"
                                   placeholder="Tuliskan kesimpulan..."
-                                  class="${taClass}">${escHtml(ksAwal)}</textarea>
+                                  class="pa-required-field ${taClass}">${escHtml(ksAwal)}</textarea>
                     </div>
                     <div>
                         <label class="${lblClass}">Kesan <span class="text-gray-400 text-xs">(opsional)</span></label>
@@ -282,8 +281,9 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
     // INIT
     // ════════════════════════════════════════════
     document.addEventListener('DOMContentLoaded', function () {
-        if (_itemTerpilih.length > 0) {
-            renderHasilPa(_itemTerpilih);
+        const idPermintaanLab = document.getElementById('id_permintaan_lab').value;
+        if (idPermintaanLab) {
+            fetchItemPa(idPermintaanLab);
         }
 
         document.getElementById('myForm').addEventListener('submit', function (e) {
@@ -323,6 +323,15 @@ $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="
                 alert(f.msg);
                 return false;
             }
+        }
+
+        clearError('hasilPaContainer');
+        const adaItemLengkap = Array.from(document.querySelectorAll('.pa-item-block')).some(block =>
+            Array.from(block.querySelectorAll('.pa-required-field')).every(field => field.value.trim())
+        );
+        if (!adaItemLengkap) {
+            showError('hasilPaContainer', 'Isi minimal satu hasil pemeriksaan lengkap (Diagnosa Klinis, Makroskopik, Mikroskopik, Kesimpulan) sebelum menyimpan.');
+            return false;
         }
 
         if (!document.getElementById('myForm').checkValidity()) {

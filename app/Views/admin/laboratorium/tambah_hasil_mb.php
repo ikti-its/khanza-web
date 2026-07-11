@@ -137,9 +137,6 @@ $themeBtn   = 'bg-[#0A2040] text-[#ACF2E7] hover:bg-[#13594E]';
 </div>
 
 <script>
-    // Data dari PHP
-    const _itemTerpilih = <?= json_encode($item_terpilih ?? []) ?>;
-
     // ════════════════════════════════════════════
     // AUTOFILL dari modal permintaan
     // ════════════════════════════════════════════
@@ -188,7 +185,7 @@ $themeBtn   = 'bg-[#0A2040] text-[#ACF2E7] hover:bg-[#13594E]';
         const container = document.getElementById('hasilMbContainer');
         container.innerHTML = '<div class="text-center py-6 text-gray-400 text-sm">Memuat item pemeriksaan...</div>';
 
-        fetch(`/laboratorium/permintaan-lab-mb/modal/list?id_permintaan=${idPermintaan}`)
+        fetch(`<?= $modul_path ?>/modal/list?id_permintaan=${idPermintaan}`)
             .then(res => res.json())
             .then(result => renderHasilMb(result.data || []))
             .catch(() => {
@@ -263,7 +260,6 @@ $themeBtn   = 'bg-[#0A2040] text-[#ACF2E7] hover:bg-[#13594E]';
                     const pParam    = `${pBase}[parameter][${paramIdx}]`;
                     const nilaiAwal = param.nilai_hasil ?? '';
                     const ketAwal   = param.keterangan_hasil ?? '';
-                    const nilaiId   = `nilai_hasil_${itemIdx}_${paramIdx}`;
 
                     html += `
                         <tr class="border-b dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors">
@@ -282,13 +278,10 @@ $themeBtn   = 'bg-[#0A2040] text-[#ACF2E7] hover:bg-[#13594E]';
                             </td>
                             <td class="p-2 border dark:border-gray-700">
                                 <input type="text"
-                                        id="${nilaiId}"
                                         name="${pParam}[nilai_hasil]"
                                         value="${escAttr(nilaiAwal)}"
                                         placeholder="Nilai hasil..."
-                                        oninput="clearError('${nilaiId}')"
                                         class="w-full border border-gray-300 rounded p-1 text-sm dark:bg-slate-900 dark:border-gray-600 dark:text-white">
-                                <p id="err_${nilaiId}" class="hidden text-red-500 text-xs mt-0.5"></p>
                             </td>
                             <td class="p-2 border dark:border-gray-700">
                                 <input type="text"
@@ -331,9 +324,9 @@ $themeBtn   = 'bg-[#0A2040] text-[#ACF2E7] hover:bg-[#13594E]';
     // INIT
     // ════════════════════════════════════════════
     document.addEventListener('DOMContentLoaded', function () {
-        // Mode ubah — langsung render dari data PHP
-        if (_itemTerpilih.length > 0) {
-            renderHasilMb(_itemTerpilih);
+        const idPermintaanLab = document.getElementById('id_permintaan_lab').value;
+        if (idPermintaanLab) {
+            fetchItemMb(idPermintaanLab);
         }
 
         document.getElementById('myForm').addEventListener('submit', function (e) {
@@ -387,13 +380,12 @@ $themeBtn   = 'bg-[#0A2040] text-[#ACF2E7] hover:bg-[#13594E]';
         }
 
         if (hasilContainer) {
-            hasilContainer.querySelectorAll('input[name*="[nilai_hasil]"]').forEach(input => {
-                clearError(input.id);
-                if (!input.value.trim()) {
-                    showError(input.id, 'Wajib diisi.');
-                    valid = false;
-                }
-            });
+            const nilaiInputs = hasilContainer.querySelectorAll('input[name*="[nilai_hasil]"]');
+            const adaYangTerisi = Array.from(nilaiInputs).some(input => input.value.trim());
+            if (nilaiInputs.length > 0 && !adaYangTerisi) {
+                showError('hasilMbContainer', 'Isi minimal satu hasil pemeriksaan sebelum menyimpan.');
+                valid = false;
+            }
         }
 
         if (!valid) return false;

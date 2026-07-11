@@ -144,18 +144,72 @@ final class HasilLabMbController extends ControllerTemplate
 
         return $hasilRows;
     }
- 
+
+    private function fetchItemUntukForm(int $idPermintaanLab): array
+    {
+        $rows = $this->model->db
+            ->table('laboratorium.permintaan_lab_mb_item pmi')
+            ->select([
+                'pmi.id_permintaan_mb_item',
+                'ri.kode_periksa',
+                'ri.nama_item',
+                'pmp.id_parameter',
+                'rp.nama_parameter',
+                'rp.satuan',
+                'rp.nilai_rujukan',
+                'hp.nilai_hasil',
+                'hp.keterangan_hasil',
+            ])
+            ->join('laboratorium.ref_item_pemeriksaan_lab ri',      'ri.id_item_lab = pmi.id_item_pemeriksaan')
+            ->join('laboratorium.permintaan_lab_mb_parameter pmp',  'pmp.id_permintaan_mb_item = pmi.id_permintaan_mb_item')
+            ->join('laboratorium.ref_parameter_pemeriksaan_lab rp', 'rp.id_parameter = pmp.id_parameter')
+            ->join('laboratorium.hasil_lab_mb h',
+                'h.id_permintaan_mb_item = pmi.id_permintaan_mb_item AND h.id_permintaan_lab = pmi.id_permintaan_lab',
+                'left')
+            ->join('laboratorium.hasil_lab_mb_parameter hp',
+                'hp.id_hasil_mb = h.id_hasil_mb AND hp.id_parameter = pmp.id_parameter',
+                'left')
+            ->where('pmi.id_permintaan_lab', $idPermintaanLab)
+            ->orderBy('pmi.id_permintaan_mb_item', 'ASC')
+            ->orderBy('pmp.id_parameter', 'ASC')
+            ->get()->getResultArray();
+
+        $items = [];
+        foreach ($rows as $row) {
+            $idItem = $row['id_permintaan_mb_item'];
+
+            if (!isset($items[$idItem])) {
+                $items[$idItem] = [
+                    'id_permintaan_mb_item' => $idItem,
+                    'kode_periksa'          => $row['kode_periksa'],
+                    'nama_item'             => $row['nama_item'],
+                    'parameter'             => [],
+                ];
+            }
+
+            $items[$idItem]['parameter'][] = [
+                'id_parameter'     => $row['id_parameter'],
+                'nama_parameter'   => $row['nama_parameter'],
+                'satuan'           => $row['satuan'],
+                'nilai_rujukan'    => $row['nilai_rujukan'],
+                'nilai_hasil'      => $row['nilai_hasil'],
+                'keterangan_hasil' => $row['keterangan_hasil'],
+            ];
+        }
+
+        return array_values($items);
+    }
+
     private function validateHasilList(array $hasilList): ?string
     {
         foreach ($hasilList as $item) {
             foreach ($item['parameter'] ?? [] as $param) {
-                if ((int) ($param['id_parameter'] ?? 0) <= 0) continue;
-                if (trim($param['nilai_hasil'] ?? '') === '') {
-                    return 'Semua nilai hasil parameter wajib diisi sebelum disimpan.';
+                if (trim($param['nilai_hasil'] ?? '') !== '') {
+                    return null;
                 }
             }
         }
-        return null;
+        return 'Isi minimal satu hasil pemeriksaan sebelum menyimpan.';
     }
 
     private function validateInput(
@@ -172,45 +226,99 @@ final class HasilLabMbController extends ControllerTemplate
         return $this->validateHasilList($hasilList);
     }
 
-    private function insertHasilMbItems(
+    private function upsertHasilMbItems(
         array $hasilList,
-        ?int $idPermintaanLab,
+        int $idPermintaanLab,
         ?int $idDokterPj,
         ?int $idPetugasLab,
         string $tglJamHasil,
         \App\Features\Laboratorium\HasilLabMbParameter\HasilLabMbParameterModel $modelParam,
     ): void {
-        $paramBatch =[];
+        $existingByItem = array_column(
+            $this->model->where('id_permintaan_lab', $idPermintaanLab)->findAll(),
+            null,
+            'id_permintaan_mb_item'
+        );
 
         foreach ($hasilList as $item) {
-            $this->model->insert([
-                'id_permintaan_lab'     => $idPermintaanLab,
-                'id_permintaan_mb_item' => (int) ($item['id_permintaan_mb_item'] ?? 0),
-                'id_dokter_pj'          => $idDokterPj,
-                'id_petugas_lab'        => $idPetugasLab,
-                'tgl_jam_hasil'         => $tglJamHasil,
-            ]);
-            $idHasilMb = $this->model->getInsertID();
- 
-            foreach ($item['parameter'] ?? [] as $param) {
+            $idItem = (int) ($item['id_permintaan_mb_item'] ?? 0);
+            if ($idItem <= 0) continue;
+
+            $filledParams = array_filter(
+                $item['parameter'] ?? [],
+                fn($p) => trim($p['nilai_hasil'] ?? '') !== ''
+            );
+            if (empty($filledParams)) continue;
+
+            $headerData = [
+                'id_dokter_pj'   => $idDokterPj,
+                'id_petugas_lab' => $idPetugasLab,
+                'tgl_jam_hasil'  => $tglJamHasil,
+            ];
+
+            if (isset($existingByItem[$idItem])) {
+                $idHasilMb = (int) $existingByItem[$idItem]['id_hasil_mb'];
+                $this->model->update($idHasilMb, $headerData);
+            } else {
+                $this->model->insert($headerData + [
+                    'id_permintaan_lab'     => $idPermintaanLab,
+                    'id_permintaan_mb_item' => $idItem,
+                ]);
+                $idHasilMb = (int) $this->model->getInsertID();
+                $existingByItem[$idItem] = ['id_hasil_mb' => $idHasilMb];
+            }
+
+            $existingParamByParam = array_column(
+                $modelParam->where('id_hasil_mb', $idHasilMb)->findAll(),
+                null,
+                'id_parameter'
+            );
+
+            foreach ($filledParams as $param) {
                 $idParameter = (int) ($param['id_parameter'] ?? 0);
                 if ($idParameter <= 0) continue;
 
-                // Mengumpulkan parameter untuk insertBatch
-                $paramBatch[] = [
-                    'id_hasil_mb'      => $idHasilMb,
-                    'id_parameter'     => $idParameter,
+                $paramData = [
                     'nilai_hasil'      => trim($param['nilai_hasil']      ?? ''),
                     'keterangan_hasil' => trim($param['keterangan_hasil'] ?? '') ?: null,
                 ];
+
+                if (isset($existingParamByParam[$idParameter])) {
+                    $modelParam->update((int) $existingParamByParam[$idParameter]['id_hasil_mb_parameter'], $paramData);
+                } else {
+                    $modelParam->insert($paramData + [
+                        'id_hasil_mb'  => $idHasilMb,
+                        'id_parameter' => $idParameter,
+                    ]);
+                }
             }
         }
-        // Eksekusi semua parameter sekaligus
-        if (!empty($paramBatch)) {
-            $modelParam->insertBatch($paramBatch);
-        }
     }
- 
+
+    private function recomputeStatusPermintaan(int $idPermintaanLab): void
+    {
+        $total = $this->model->db
+            ->table('laboratorium.permintaan_lab_mb_parameter pmp')
+            ->join('laboratorium.permintaan_lab_mb_item pmi', 'pmi.id_permintaan_mb_item = pmp.id_permintaan_mb_item')
+            ->where('pmi.id_permintaan_lab', $idPermintaanLab)
+            ->countAllResults();
+
+        $filled = $this->model->db
+            ->table('laboratorium.hasil_lab_mb_parameter hp')
+            ->join('laboratorium.hasil_lab_mb h', 'h.id_hasil_mb = hp.id_hasil_mb')
+            ->where('h.id_permintaan_lab', $idPermintaanLab)
+            ->where("TRIM(hp.nilai_hasil) <> ''", null, false)
+            ->countAllResults();
+
+        $status = ($total > 0 && $filled >= $total) ? 3 : 2;
+
+        $this->model->db
+            ->table('laboratorium.permintaan_lab_header')
+            ->where('id_permintaan', $idPermintaanLab)
+            ->set('id_status_permintaan', $status)
+            ->update();
+    }
+
     private function deleteHasilMbByPermintaan(
         int $idPermintaanLab,
         \App\Features\Laboratorium\HasilLabMbParameter\HasilLabMbParameterModel $modelParam,
@@ -249,14 +357,13 @@ final class HasilLabMbController extends ControllerTemplate
             'konfig'        => $this->getKonfig(),
             'baris'         => [],
             'form_action'   => '/submittambah',
-            'item_terpilih' => [],
         ]);
     }
- 
+
     // ──────────────────────────────────────────────────────────
     // PROSES SIMPAN
     // ──────────────────────────────────────────────────────────
- 
+
     #[\Override]
     public function create(): string|RedirectResponse
     {
@@ -281,13 +388,8 @@ final class HasilLabMbController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
-            $this->insertHasilMbItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil, $modelParam);
-
-            $this->model->db
-                ->table('laboratorium.permintaan_lab_header')
-                ->where('id_permintaan', $idPermintaanLab)
-                ->set('id_status_permintaan', 3)
-                ->update();
+            $this->upsertHasilMbItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil, $modelParam);
+            $this->recomputeStatusPermintaan($idPermintaanLab);
 
             $this->model->db->transComplete();
 
@@ -340,14 +442,13 @@ final class HasilLabMbController extends ControllerTemplate
             'konfig'        => $this->getKonfig(),
             'baris'         => $baris,
             'form_action'   => '/submitedit/' . $id,
-            'item_terpilih' => $this->fetchItemTerpilih($idPermintaanLab),
         ]);
     }
- 
+
     // ──────────────────────────────────────────────────────────
     // PROSES UPDATE
     // ──────────────────────────────────────────────────────────
- 
+
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
@@ -374,14 +475,8 @@ final class HasilLabMbController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
-            $this->deleteHasilMbByPermintaan($idPermintaanLab, $modelParam);
-            $this->insertHasilMbItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil, $modelParam);
-
-            $this->model->db
-                ->table('laboratorium.permintaan_lab_header')
-                ->where('id_permintaan', $idPermintaanLab)
-                ->set('id_status_permintaan', 3)
-                ->update();
+            $this->upsertHasilMbItems($hasilList, $idPermintaanLab, $idDokterPj, $idPetugasLab, $tglJamHasil, $modelParam);
+            $this->recomputeStatusPermintaan($idPermintaanLab);
 
             $this->model->db->transComplete();
 
@@ -401,9 +496,22 @@ final class HasilLabMbController extends ControllerTemplate
     }
  
     // ──────────────────────────────────────────────────────────
+    // MODAL LIST — item+parameter permintaan digabung dengan hasil yang sudah ada
+    // ──────────────────────────────────────────────────────────
+
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $idPermintaanLab = (int) ($this->request->getGet('id_permintaan') ?? 0);
+
+        return $this->response->setJSON([
+            'data' => $idPermintaanLab > 0 ? $this->fetchItemUntukForm($idPermintaanLab) : [],
+        ]);
+    }
+
+    // ──────────────────────────────────────────────────────────
     // DELETE — cascade hapus parameter lalu header
     // ──────────────────────────────────────────────────────────
- 
+
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
