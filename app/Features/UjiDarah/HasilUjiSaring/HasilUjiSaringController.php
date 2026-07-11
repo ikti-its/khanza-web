@@ -43,6 +43,15 @@ final class HasilUjiSaringController extends ControllerTemplate
     }
 
     /**
+     * OVERRIDE: Mengurutkan data terbaru di atas sebelum ditampilkan
+     */
+    #[\Override]
+    protected function before_read(): void
+    {
+        $this->model->set_order('id_uji_saring', 'DESC');
+    }
+
+    /**
      * OVERRIDE: Menampilkan Form Hasil Uji Saring
      */
     #[\Override]
