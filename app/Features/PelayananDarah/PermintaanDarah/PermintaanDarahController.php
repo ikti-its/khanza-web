@@ -22,9 +22,10 @@ final class PermintaanDarahController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_permintaan',        'ID Permintaan'],
@@ -464,6 +465,103 @@ final class PermintaanDarahController extends ControllerTemplate
         }
 
         return $this->home();
+    }
+
+    /**
+     * Menampilkan Halaman Detail Permintaan Darah
+     */
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataPermintaan = $this->model->find($id);
+        if (!$dataPermintaan) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Permintaan Darah tidak ditemukan.');
+        }
+
+        $dataRawatInap  = [];
+        $dataRegistrasi = [];
+        $dataPasien     = [];
+        $dataOrang      = [];
+        $dataDokter     = [];
+
+        if (!empty($dataPermintaan['id_registrasi'])) {
+            $modelRegistrasi = new \App\Features\Registrasi\Registrasi\RegistrasiModel();
+            $dataRegistrasi  = $modelRegistrasi->find($dataPermintaan['id_registrasi']) ?? [];
+
+            if (!empty($dataRegistrasi['id_pasien'])) {
+                $modelPasien = new \App\Features\Role\Pasien\PasienModel();
+                $dataPasien  = $modelPasien->find($dataRegistrasi['id_pasien']) ?? [];
+
+                if (!empty($dataPasien['id_orang'])) {
+                    $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                    $dataOrang  = $modelOrang->find($dataPasien['id_orang']) ?? [];
+                }
+            }
+        }
+
+        $modelRawatInap = new \App\Features\RawatInap\Registrasi\RegistrasiModel();
+        $ranapResult    = $modelRawatInap->where('id_registrasi', $dataPermintaan['id_registrasi'])->first();
+        if ($ranapResult && !empty($ranapResult['kamar'])) {
+            $dataRawatInap['kamar'] = $ranapResult['kamar'];
+        }
+
+        if (!empty($dataPermintaan['id_dokter_pengirim'])) {
+            $modelDokterUser = new \App\Features\Role\Dokter\DokterModel();
+            $dataDokterRole  = $modelDokterUser->find($dataPermintaan['id_dokter_pengirim']) ?? [];
+
+            if (!empty($dataDokterRole['id_orang'])) {
+                $modelOrangDokter          = new \App\Features\Person\Orang\OrangModel();
+                $dataOrangDokter           = $modelOrangDokter->find($dataDokterRole['id_orang']) ?? [];
+                $dataDokter['nama_dokter'] = $dataOrangDokter['nama'] ?? '';
+            }
+        }
+
+        $baris = array_merge($dataOrang, $dataPasien, $dataRegistrasi, $dataRawatInap, $dataDokter, $dataPermintaan);
+
+        $konfigPermintaan = $this->get_fields_with_options(false, true);
+        foreach ($konfigPermintaan as $field) {
+            $colName = $field[2];
+            $options = $field[5] ?? [];
+
+            if (!empty($options) && isset($baris[$colName])) {
+                $idMentah = $baris[$colName];
+                foreach ($options as $opt) {
+                    if ((string)$opt[1] === (string)$idMentah) {
+                        $baris[$colName] = $opt[0];
+                        break;
+                    }
+                }
+            }
+        }
+
+        $detailPermintaanRaw = $this->model->db
+            ->table('pelayanan_darah.permintaan_darah_detail pdd')
+            ->select('kd.nama_komponen, gd.nama_golongan_darah, r.kode_rhesus, pdd.jumlah')
+            ->join('inventori_darah.komponen_darah kd', 'kd.id_komponen = pdd.id_komponen', 'inner')
+            ->join('darah.golongan_darah gd', 'gd.id_golongan_darah = pdd.id_golongan_darah', 'left')
+            ->join('darah.rhesus r', 'r.id_rhesus = pdd.id_rhesus', 'left')
+            ->where('pdd.id_permintaan', $id)
+            ->get()
+            ->getResultArray();
+
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail']
+        ];
+
+        return view('admin/pelayanandarah/detail_permintaandarah', [
+            'judul'             => 'Detail ' . $this->title,
+            'breadcrumbs'       => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'        => $this->get_uri_path(),
+            'baris'             => $baris,
+            'detail_permintaan' => $detailPermintaanRaw,
+        ]);
     }
 
     /**
