@@ -3,7 +3,7 @@ $no_rm  = urlencode($baris['no_rm']  ?? '');
 $id_unit = (int) ($baris['id_unit'] ?? 0);
 
 $registrasi_url = (isset($baris['id_keputusan']) && (int) $baris['id_keputusan'] === 2)
-    ? '/ugd/registrasi/tambah?no_rm=' . $no_rm
+    ? '/unit-gawat-darurat/registrasi/tambah?no_rm=' . $no_rm
     : '/registrasi/registrasi/tambah?no_rm=' . $no_rm . ($id_unit > 0 ? '&unit=' . $id_unit : '');
 ?>
 <div class="px-3 py-1.5">
