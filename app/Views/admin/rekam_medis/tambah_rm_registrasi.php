@@ -132,6 +132,10 @@ function autofillUnitFields(item) {
 function autofillOrangFields(item) {
     document.getElementById('id_pj_pasien').value   = item.id_orang ?? '';
     document.getElementById('nama_pj_display').value = item.nama  ?? '';
+    autofillAlamatFields({
+        id_alamat:      item.id_alamat      ?? '',
+        alamat_lengkap: item.alamat_lengkap ?? '',
+    });
 }
 
 function autofillAlamatFields(item) {
