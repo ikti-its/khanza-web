@@ -278,7 +278,7 @@
                     </div>
 
                     <div class="border-t border-dashed border-gray-200 pt-5 mt-5 dark:border-gray-700">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Indikator Penilaian Skor Triase</h4>
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Indikator Penilaian Skor Triase<span class="text-red-600 font-normal">*</span></h4>
                     </div>
 
                     <div id="hiddenInputsContainer"></div>
@@ -315,7 +315,7 @@
                             </div>
                             
                             <div class="mt-2 flex items-center gap-x-2 px-1">
-                                <span class="text-xs font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">Key Word :</span>
+                                <span class="text-xs font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">Cari :</span>
                                 <input type="text" id="searchPemeriksaan" onkeyup="filterPemeriksaan()" 
                                        class="border border-gray-300 dark:border-gray-700 text-xs rounded-full px-3 py-1 w-44 focus:outline-none focus:border-blue-500 dark:bg-slate-800 dark:text-white">
                                 
@@ -368,7 +368,7 @@
                             </div>
 
                             <div class="mt-2 flex items-center gap-x-2 px-1">
-                                <span class="text-xs font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">Key Word :</span>
+                                <span class="text-xs font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">Cari :</span>
                                 <input type="text" id="searchSkala" onkeyup="filterSkalaIndikator()" 
                                        class="border border-gray-300 dark:border-gray-700 text-xs rounded-full px-3 py-1 w-44 focus:outline-none focus:border-red-500 dark:bg-slate-800 dark:text-white">
                                 <button type="button"
@@ -455,7 +455,7 @@
                             </div>
 
                             <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                                Dokter/Petugas IGD<span class="text-red-600">*</span>
+                                Petugas UGD<span class="text-red-600">*</span>
                             </label>
                             <input type="hidden" name="id_petugas" id="id_petugas" value="<?= $baris['id_petugas'] ?? '' ?>" required>
                             <div class="w-full lg:w-1/4 flex gap-x-2">
@@ -934,7 +934,12 @@
             alert("Gagal Menyimpan! Anda wajib menentukan kategori macam kasus klinis terlebih dahulu.");
             return false;
         }
-        
+
+        if (checkedSkalaIds.length === 0) {
+            alert("Gagal Menyimpan! Anda wajib mencentang minimal 1 indikator penilaian skor triase.");
+            return false;
+        }
+
         const tabAktif = document.getElementById('triase_tab_aktif').value;
         if (tabAktif === 'primer') {
             document.getElementById('anamnesa_singkat').value = "";
