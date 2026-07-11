@@ -46,7 +46,11 @@ BEGIN
             ELSE
                 -- Handle SELECTs
                 -- schema-qualified: app's DB connection resets search_path to "public"
-                decrypt_select := decrypt_select || format('convert_from(pgp_sym_decrypt(%I, ''%s'')::bytea, ''UTF-8'')::%s AS %I, ',
+                -- pgp_sym_decrypt() returns text; casting it to ::bytea (legacy escape
+                -- format) blows up on any decrypted value with a lone backslash not
+                -- part of a valid octal escape (e.g. literal "\n"). Use
+                -- pgp_sym_decrypt_bytea() instead, which decrypts straight to bytea.
+                decrypt_select := decrypt_select || format('convert_from(pgp_sym_decrypt_bytea(%I, ''%s''), ''UTF-8'')::%s AS %I, ',
                     col.column_name,
                     encryption_key,
                     CASE WHEN col.data_type = 'USER-DEFINED' THEN format('%I.%I', col.udt_schema, col.udt_name) ELSE col.data_type END,
@@ -57,7 +61,7 @@ BEGIN
 
         RAISE NOTICE '%', decrypt_select;
         extra_audit_view_values := format(
-            'convert_from(pgp_sym_decrypt(changed_by, ''%s'')::bytea, ''UTF-8'')::UUID AS changed_by,'
+            'convert_from(pgp_sym_decrypt_bytea(changed_by, ''%s''), ''UTF-8'')::UUID AS changed_by,'
             'pgp_sym_decrypt(user_ip, ''%s'')::TEXT AS user_ip,'
             'pgp_sym_decrypt(user_mac, ''%s'')::TEXT AS user_mac,'
             'pgp_sym_decrypt(action, ''%s'')::VARCHAR(10) AS action,'
