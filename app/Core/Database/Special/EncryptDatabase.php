@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace App\Core\Database\Special;
 
 final class EncryptDatabase
-{    
+{
     public function run(string $arg): void
     {
-        $config = new \Config\Database()->default;
+        $config             = new \Config\Database()->default;
         $config['database'] = env('database.default.khanza_db');
-        $db = \Config\Database::connect($config);
+        $db                 = \Config\Database::connect($config);
         $db->query('CREATE EXTENSION IF NOT EXISTS pgcrypto;');
         $prefix = APPPATH . 'Core/Database/Encrypt/';
 
@@ -21,7 +21,7 @@ final class EncryptDatabase
             'drop_view'      => 'drop_encrypted_view.sql',
             'drop_table'     => 'drop_encrypted_table.sql',
             'original_table' => 'rename_structures_table_to_original.sql',
-            default => die("Argument {$arg} not found"),
+            default          => die("Argument {$arg} not found"),
         };
         $db->query(file_get_contents($prefix . $sql));
     }

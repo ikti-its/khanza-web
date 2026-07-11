@@ -10,9 +10,9 @@ final readonly class ForgeType
     public function __construct(
         private string $type,
         private string|int|null $constraint = null,
-        private ?string $check   = null,
-        private bool    $null    = false,
-        private ?RawSql $default = null,
+        private null|string $check = null,
+        private bool $null = false,
+        private null|RawSql $default = null,
     ) {}
 
     /**
@@ -23,7 +23,8 @@ final readonly class ForgeType
      *     default?: RawSql,
      * }
      */
-    public function definition(): array { 
+    public function definition(): array
+    {
         $arr = [
             'type' => $this->type,
             'null' => $this->null,
@@ -40,13 +41,14 @@ final readonly class ForgeType
         return $arr;
     }
 
-    public function nullable(): self {
+    public function nullable(): self
+    {
         return new self(
-            type:       $this->type,
+            type: $this->type,
             constraint: $this->constraint,
-            check:      $this->check,
-            null:       true,
-            default:    $this->default,
+            check: $this->check,
+            null: true,
+            default: $this->default,
         );
     }
 }

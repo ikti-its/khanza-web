@@ -15,7 +15,7 @@ final class RiwayatTanggalDonorController extends ControllerTemplate
         parent::__construct(
             new RiwayatTanggalDonorModel(),
             [
-                ['Role', 'role'],
+                ['Role',                  'role'],
                 ['Riwayat Tanggal Donor', 'riwayat_tanggal_donor'],
             ],
             'Riwayat Tanggal Donor',
@@ -47,7 +47,7 @@ final class RiwayatTanggalDonorController extends ControllerTemplate
         $offset = ($page - 1) * $size;
 
         $totalRows  = $this->model->count_filtered();
-        $totalPages = ($totalRows > 0) ? (int) ceil($totalRows / $size) : 1;
+        $totalPages = $totalRows > 0 ? (int) ceil($totalRows / $size) : 1;
         $page       = min($page, $totalPages);
         $offset     = ($page - 1) * $size;
 

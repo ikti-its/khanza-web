@@ -21,8 +21,8 @@ final class BarangModel extends ModelTemplate
                 'harga_satuan' => V::DEFAULT(),
             ],
             [
-                'id_satuan'                 => ['nama_satuan'],
-                'id_jenis_barang'           => ['nama_jenis_barang'],
+                'id_satuan'       => ['nama_satuan'],
+                'id_jenis_barang' => ['nama_jenis_barang'],
             ],
         );
     }

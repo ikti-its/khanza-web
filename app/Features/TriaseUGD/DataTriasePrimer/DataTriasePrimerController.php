@@ -26,14 +26,14 @@ final class DataTriasePrimerController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_triase_primer',    'ID Triase Primer'],
-                [SHOW, REQUIRED, I::INDEX, 'id_triase',           'ID Triase'],
-                [SHOW, REQUIRED, I::TEXT,  'keluhan_utama',       'Keluhan Utama'],
-                [SHOW, REQUIRED, I::SELECT,'id_kebutuhan_khusus', 'Kebutuhan Khusus'],
-                [SHOW, REQUIRED, I::TEXT,  'catatan',             'Catatan'],
-                [SHOW, REQUIRED, I::SELECT,'id_plan_primer',      'Plan Primer'],
-                [SHOW, REQUIRED, I::DTIME, 'tanggal_triase',      'Tanggal Triase'],
-                [SHOW, REQUIRED, I::INDEX, 'id_petugas',          'Petugas'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_triase_primer',    'ID Triase Primer'],
+                [SHOW, REQUIRED, I::INDEX,  'id_triase',           'ID Triase'],
+                [SHOW, REQUIRED, I::TEXT,   'keluhan_utama',       'Keluhan Utama'],
+                [SHOW, REQUIRED, I::SELECT, 'id_kebutuhan_khusus', 'Kebutuhan Khusus'],
+                [SHOW, REQUIRED, I::TEXT,   'catatan',             'Catatan'],
+                [SHOW, REQUIRED, I::SELECT, 'id_plan_primer',      'Plan Primer'],
+                [SHOW, REQUIRED, I::DTIME,  'tanggal_triase',      'Tanggal Triase'],
+                [SHOW, REQUIRED, I::INDEX,  'id_petugas',          'Petugas'],
             ],
         );
     }

@@ -16,8 +16,8 @@ final class PelayananDarahRoutes extends RouteTemplate
                 \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailController::class => 'HIDE',
                 \App\Features\PelayananDarah\PenyerahanDarah\PenyerahanDarahController::class,
                 \App\Features\PelayananDarah\PenyerahanDarahDetail\PenyerahanDarahDetailController::class => 'HIDE',
-                \App\Features\PelayananDarah\StatusPermintaan\StatusPermintaanController::class => 'HIDE',
-                \App\Features\PelayananDarah\StatusPembayaran\StatusPembayaranController::class => 'HIDE',
+                \App\Features\PelayananDarah\StatusPermintaan\StatusPermintaanController::class           => 'HIDE',
+                \App\Features\PelayananDarah\StatusPembayaran\StatusPembayaranController::class           => 'HIDE',
             ],
             'pelayanan_darah.svg',
         );

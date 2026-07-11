@@ -44,7 +44,7 @@ final class PermintaanDarahController extends ControllerTemplate
     public function create_page(): string
     {
         $breadcrumbs = [
-            ['title' => 'Tambah', 'icon' => 'tambah']
+            ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
         $konfigPermintaan = $this->get_fields_with_options(false, true);
@@ -73,15 +73,17 @@ final class PermintaanDarahController extends ControllerTemplate
         $tahunSekarang = date('Y');
         $bulanSekarang = date('m');
 
-        $jumlahPermintaanBulanIni = $this->model->db->table('pelayanan_darah.permintaan_darah')
+        $jumlahPermintaanBulanIni = $this->model
+            ->db
+            ->table('pelayanan_darah.permintaan_darah')
             ->where('EXTRACT(YEAR FROM tanggal_permintaan)', $tahunSekarang)
             ->where('EXTRACT(MONTH FROM tanggal_permintaan)', $bulanSekarang)
             ->countAllResults();
 
         $nextUrutan = $jumlahPermintaanBulanIni + 1;
-        
-        $stringUrutan = str_pad((string)$nextUrutan, 5, '0', STR_PAD_LEFT);
-        
+
+        $stringUrutan = str_pad((string) $nextUrutan, 5, '0', STR_PAD_LEFT);
+
         $nomorPermintaanOtomatis = "{$tahunSekarang}/{$bulanSekarang}/REQ{$stringUrutan}";
 
         foreach ($konfigPermintaan as $fieldPermintaan) {
@@ -91,19 +93,22 @@ final class PermintaanDarahController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggal = ($fieldPermintaan[3] === 'tanggal' || str_contains($columnPermintaan, 'tanggal') || $fieldPermintaan[3] === 'dtime');
+            $isTanggal =
+                $fieldPermintaan[3] === 'tanggal'
+                || str_contains($columnPermintaan, 'tanggal')
+                || $fieldPermintaan[3] === 'dtime';
             $mockBaris[$columnPermintaan] = $isTanggal ? date('Y-m-d\TH:i') : '';
 
             if ($columnPermintaan === 'no_permintaan') {
                 $mockBaris[$columnPermintaan] = $nomorPermintaanOtomatis;
-                $fieldPermintaan[3] = 'indeks';
+                $fieldPermintaan[3]           = 'indeks';
             }
 
             if ($columnPermintaan === 'id_registrasi') {
                 foreach ($konfigRegistrasi as $fieldRegistrasi) {
                     if ($fieldRegistrasi[2] === 'nomor_rawat') {
                         $mockBaris['nomor_rawat'] = '';
-                        $konfigGabungan[] = $fieldRegistrasi;
+                        $konfigGabungan[]         = $fieldRegistrasi;
                         break;
                     }
                 }
@@ -111,7 +116,7 @@ final class PermintaanDarahController extends ControllerTemplate
                 foreach ($konfigPasien as $fieldPasien) {
                     if ($fieldPasien[2] === 'nomor_rm') {
                         $mockBaris['nomor_rm'] = '';
-                        $konfigGabungan[] = $fieldPasien;
+                        $konfigGabungan[]      = $fieldPasien;
                         break;
                     }
                 }
@@ -119,7 +124,7 @@ final class PermintaanDarahController extends ControllerTemplate
                 foreach ($konfigOrang as $fieldOrang) {
                     if ($fieldOrang[2] === 'nama') {
                         $mockBaris['nama'] = '';
-                        $konfigGabungan[] = $fieldOrang;
+                        $konfigGabungan[]  = $fieldOrang;
                         break;
                     }
                 }
@@ -127,7 +132,7 @@ final class PermintaanDarahController extends ControllerTemplate
                 foreach ($konfigRawatInap as $fieldRanap) {
                     if ($fieldRanap[2] === 'kamar') {
                         $mockBaris['kamar'] = '';
-                        $konfigGabungan[] = $fieldRanap;
+                        $konfigGabungan[]   = $fieldRanap;
                         break;
                     }
                 }
@@ -138,16 +143,16 @@ final class PermintaanDarahController extends ControllerTemplate
         }
 
         return view('admin/pelayanandarah/tambah_permintaandarah', [
-            'judul'           => 'Tambah ' . $this->title,
-            'breadcrumbs'     => array_merge($this->breadcrumbs, $breadcrumbs),
-            'modul_path'      => $this->get_uri_path(),
-            'kolom_id'        => $this->model->primaryKey,
-            'konfig'          => $konfigGabungan,
-            'baris'           => $mockBaris,
-            'master_komponen' => $masterKomponen,
-            'master_gol_darah'=> $masterGolDarah,
-            'master_rhesus'   => $masterRhesus,
-            'form_action'     => '/submittambah',
+            'judul'            => 'Tambah ' . $this->title,
+            'breadcrumbs'      => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'       => $this->get_uri_path(),
+            'kolom_id'         => $this->model->primaryKey,
+            'konfig'           => $konfigGabungan,
+            'baris'            => $mockBaris,
+            'master_komponen'  => $masterKomponen,
+            'master_gol_darah' => $masterGolDarah,
+            'master_rhesus'    => $masterRhesus,
+            'form_action'      => '/submittambah',
         ]);
     }
 
@@ -184,14 +189,15 @@ final class PermintaanDarahController extends ControllerTemplate
                 $modelDetail = new \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailModel();
 
                 foreach ($listKomponen as $index => $idKomponen) {
-                    if (empty($idKomponen)) continue;
+                    if (empty($idKomponen))
+                        continue;
 
                     $modelDetail->insert([
                         'id_permintaan'     => $idPermintaan,
                         'id_komponen'       => $idKomponen,
                         'id_golongan_darah' => $listGolDarah[$index],
                         'id_rhesus'         => $listRhesus[$index],
-                        'jumlah'            => (int)$listJumlah[$index],
+                        'jumlah'            => (int) $listJumlah[$index],
                     ]);
                 }
             }
@@ -199,15 +205,14 @@ final class PermintaanDarahController extends ControllerTemplate
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException("Gagal menyimpan data permintaan darah.");
+                throw new \RuntimeException('Gagal menyimpan data permintaan darah.');
             }
 
             session()->setFlashdata('success', 'Data permintaan darah berhasil disimpan.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
-                ? $this->friendly_db_error($e) 
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
         }
@@ -221,7 +226,8 @@ final class PermintaanDarahController extends ControllerTemplate
     #[\Override]
     public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataPermintaan = $this->model->find($id);
         if (!$dataPermintaan) {
@@ -254,14 +260,14 @@ final class PermintaanDarahController extends ControllerTemplate
         if ($ranapResult && !empty($ranapResult['kamar'])) {
             $dataRawatInap['kamar'] = $ranapResult['kamar'];
         }
-        
+
         if (!empty($dataPermintaan['id_dokter_pengirim'])) {
             $modelDokterUser = new \App\Features\Role\Dokter\DokterModel(); // Sesuai nama model role dokter kelompokmu
-            $dataDokterRole  = $modelDokterUser->find($dataPermintaan['id_dokter_pengirim']) ?? [];
-            
+            $dataDokterRole = $modelDokterUser->find($dataPermintaan['id_dokter_pengirim']) ?? [];
+
             if (!empty($dataDokterRole['id_orang'])) {
-                $modelOrangDokter = new \App\Features\Person\Orang\OrangModel();
-                $dataOrangDokter  = $modelOrangDokter->find($dataDokterRole['id_orang']) ?? [];
+                $modelOrangDokter          = new \App\Features\Person\Orang\OrangModel();
+                $dataOrangDokter           = $modelOrangDokter->find($dataDokterRole['id_orang']) ?? [];
                 $dataDokter['nama_dokter'] = $dataOrangDokter['nama'] ?? '';
             }
         }
@@ -284,13 +290,22 @@ final class PermintaanDarahController extends ControllerTemplate
 
             if ($columnPermintaan === 'id_registrasi') {
                 foreach ($konfigRegistrasi as $fieldRegistrasi) {
-                    if ($fieldRegistrasi[2] === 'nomor_rawat') { $konfigGabungan[] = $fieldRegistrasi; break; }
+                    if ($fieldRegistrasi[2] === 'nomor_rawat') {
+                        $konfigGabungan[] = $fieldRegistrasi;
+                        break;
+                    }
                 }
                 foreach ($konfigPasien as $fieldPasien) {
-                    if ($fieldPasien[2] === 'nomor_rm') { $konfigGabungan[] = $fieldPasien; break; }
+                    if ($fieldPasien[2] === 'nomor_rm') {
+                        $konfigGabungan[] = $fieldPasien;
+                        break;
+                    }
                 }
                 foreach ($konfigRawatInap as $fieldRanap) {
-                    if ($fieldRanap[2] === 'kamar') { $konfigGabungan[] = $fieldRanap; break; }
+                    if ($fieldRanap[2] === 'kamar') {
+                        $konfigGabungan[] = $fieldRanap;
+                        break;
+                    }
                 }
                 continue;
             }
@@ -305,28 +320,30 @@ final class PermintaanDarahController extends ControllerTemplate
         $masterGolDarah = $modelGolDarah->findAll();
         $masterRhesus   = $modelRhesus->findAll();
 
-        $modelDetail = new \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailModel();
+        $modelDetail         = new \App\Features\PelayananDarah\PermintaanDarahDetail\PermintaanDarahDetailModel();
         $dataDetailTersimpan = $modelDetail->where('id_permintaan', $id)->findAll();
 
-        $detailBisaDiubah = (int)($dataPermintaan['id_status_permintaan'] ?? PermintaanDarahModel::STATUS_BELUM_DIPROSES) === PermintaanDarahModel::STATUS_BELUM_DIPROSES;
+        $detailBisaDiubah =
+            (int) ($dataPermintaan['id_status_permintaan'] ?? PermintaanDarahModel::STATUS_BELUM_DIPROSES)
+            === PermintaanDarahModel::STATUS_BELUM_DIPROSES;
 
         $breadcrumbs = [
-            ['title' => 'Ubah', 'icon' => 'ubah']
+            ['title' => 'Ubah', 'icon' => 'ubah'],
         ];
 
         return view('admin/pelayanandarah/tambah_permintaandarah', [
-            'judul'             => 'Ubah ' . $this->title,
-            'breadcrumbs'       => array_merge($this->breadcrumbs, $breadcrumbs),
-            'modul_path'        => $this->get_uri_path(),
-            'kolom_id'          => $this->model->primaryKey,
-            'konfig'            => $konfigGabungan,
-            'baris'             => $baris,
-            'master_komponen'   => $masterKomponen,
-            'master_gol_darah'  => $masterGolDarah,
-            'master_rhesus'     => $masterRhesus,
-            'detail_tersimpan'  => $dataDetailTersimpan,
-            'detail_bisa_diubah'=> $detailBisaDiubah,
-            'form_action'       => '/submitedit/' . $id,
+            'judul'              => 'Ubah ' . $this->title,
+            'breadcrumbs'        => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'         => $this->get_uri_path(),
+            'kolom_id'           => $this->model->primaryKey,
+            'konfig'             => $konfigGabungan,
+            'baris'              => $baris,
+            'master_komponen'    => $masterKomponen,
+            'master_gol_darah'   => $masterGolDarah,
+            'master_rhesus'      => $masterRhesus,
+            'detail_tersimpan'   => $dataDetailTersimpan,
+            'detail_bisa_diubah' => $detailBisaDiubah,
+            'form_action'        => '/submitedit/' . $id,
         ]);
     }
 
@@ -336,7 +353,8 @@ final class PermintaanDarahController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $rawPost = $this->request->getPost();
 
@@ -361,7 +379,9 @@ final class PermintaanDarahController extends ControllerTemplate
                 $dataPermintaan['id_status_permintaan'] = $dataLama['id_status_permintaan'];
             }
 
-            $detailBisaDiubah = (int)($dataLama['id_status_permintaan'] ?? PermintaanDarahModel::STATUS_BELUM_DIPROSES) === PermintaanDarahModel::STATUS_BELUM_DIPROSES;
+            $detailBisaDiubah =
+                (int) ($dataLama['id_status_permintaan'] ?? PermintaanDarahModel::STATUS_BELUM_DIPROSES)
+                === PermintaanDarahModel::STATUS_BELUM_DIPROSES;
 
             $this->model->update($id, $dataPermintaan);
 
@@ -372,14 +392,15 @@ final class PermintaanDarahController extends ControllerTemplate
 
                 if (!empty($listKomponen) && is_array($listKomponen)) {
                     foreach ($listKomponen as $index => $idKomponen) {
-                        if (empty($idKomponen)) continue;
+                        if (empty($idKomponen))
+                            continue;
 
                         $modelDetail->insert([
                             'id_permintaan'     => $id,
                             'id_komponen'       => $idKomponen,
                             'id_golongan_darah' => $listGolDarah[$index],
                             'id_rhesus'         => $listRhesus[$index],
-                            'jumlah'            => (int)$listJumlah[$index],
+                            'jumlah'            => (int) $listJumlah[$index],
                         ]);
                     }
                 }
@@ -388,15 +409,14 @@ final class PermintaanDarahController extends ControllerTemplate
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException("Gagal memperbarui data permintaan darah.");
+                throw new \RuntimeException('Gagal memperbarui data permintaan darah.');
             }
 
             session()->setFlashdata('success', 'Data permintaan darah berhasil diperbarui.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
-                ? $this->friendly_db_error($e) 
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
         }
@@ -410,8 +430,9 @@ final class PermintaanDarahController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
-        
+        if ($id == 0)
+            return $this->home();
+
         $dataPermintaan = $this->model->find($id);
         if (!$dataPermintaan) {
             session()->setFlashdata('error', 'Gagal menghapus. Data permintaan darah tidak ditemukan.');
@@ -434,7 +455,6 @@ final class PermintaanDarahController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data permintaan darah berhasil dihapus.');
-
         } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
             $this->model->db->transRollback();
             session()->setFlashdata('error', $this->friendly_db_error($e));
@@ -453,7 +473,8 @@ final class PermintaanDarahController extends ControllerTemplate
     {
         $tabel = $this->model->table;
 
-        $data = $this->model->builder()
+        $data = $this->model
+            ->builder()
             ->select("
                 {$tabel}.id_permintaan,
                 {$tabel}.no_permintaan,
@@ -464,14 +485,18 @@ final class PermintaanDarahController extends ControllerTemplate
             ->join('registrasi.registrasi', "registrasi.registrasi.id_registrasi = {$tabel}.id_registrasi", 'inner')
             ->join('role.pasien', 'role.pasien.id_pasien = registrasi.registrasi.id_pasien', 'inner')
             ->join('person.orang', 'person.orang.id_orang = role.pasien.id_orang', 'inner')
-            ->join('pelayanan_darah.status_permintaan', "pelayanan_darah.status_permintaan.id_status_permintaan = {$tabel}.id_status_permintaan", 'inner')
+            ->join(
+                'pelayanan_darah.status_permintaan',
+                "pelayanan_darah.status_permintaan.id_status_permintaan = {$tabel}.id_status_permintaan",
+                'inner',
+            )
             ->where("{$tabel}.id_status_permintaan !=", 3)
             ->orderBy("{$tabel}.tanggal_permintaan", 'ASC')
             ->get()
             ->getResultArray();
 
         return $this->response->setJSON([
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

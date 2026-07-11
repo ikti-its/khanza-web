@@ -29,20 +29,20 @@ final class RegistrasiController extends ControllerTemplate
                 A::FILTER,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_registrasi',     'ID Registrasi'],
-                [SHOW, REQUIRED, I::INDEX,  'nomor_reg',         'Nomor Registrasi'],
-                [SHOW, REQUIRED, I::INDEX,  'nomor_rawat',       'Nomor Rawat'],
-                [SHOW, REQUIRED, I::DTIME,  'tanggal_reg',       'Tanggal Registrasi'],
-                [SHOW, REQUIRED, I::INDEX,  'id_pasien',         'ID Pasien'],
-                [SHOW, REQUIRED, I::INDEX,  'id_dokter',         'ID Dokter'],
-                [HIDE, REQUIRED, I::INDEX,  'id_pj_pasien',      'ID Penanggung Jawab'],
-                [SHOW, REQUIRED, I::SELECT, 'hubungan_pj',       'Hubungan Penanggung Jawab'],
-                [HIDE, REQUIRED, I::INDEX,  'id_alamat_pj',      'Alamat Penanggung Jawab'],
-                [HIDE, REQUIRED, I::MONEY,  'biaya_registrasi',  'Biaya Registrasi'],
-                [SHOW, REQUIRED, I::SELECT, 'status_rawat',      'Status Rawat'],
-                [SHOW, REQUIRED, I::SELECT, 'jenis_bayar',       'Jenis Bayar'],
-                [SHOW, REQUIRED, I::SELECT, 'status_bayar',      'Status Bayar'],
-                [SHOW, REQUIRED, I::SELECT, 'id_status_triase',  'Status Triase'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_registrasi',    'ID Registrasi'],
+                [SHOW, REQUIRED, I::INDEX,  'nomor_reg',        'Nomor Registrasi'],
+                [SHOW, REQUIRED, I::INDEX,  'nomor_rawat',      'Nomor Rawat'],
+                [SHOW, REQUIRED, I::DTIME,  'tanggal_reg',      'Tanggal Registrasi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_pasien',        'ID Pasien'],
+                [SHOW, REQUIRED, I::INDEX,  'id_dokter',        'ID Dokter'],
+                [HIDE, REQUIRED, I::INDEX,  'id_pj_pasien',     'ID Penanggung Jawab'],
+                [SHOW, REQUIRED, I::SELECT, 'hubungan_pj',      'Hubungan Penanggung Jawab'],
+                [HIDE, REQUIRED, I::INDEX,  'id_alamat_pj',     'Alamat Penanggung Jawab'],
+                [HIDE, REQUIRED, I::MONEY,  'biaya_registrasi', 'Biaya Registrasi'],
+                [SHOW, REQUIRED, I::SELECT, 'status_rawat',     'Status Rawat'],
+                [SHOW, REQUIRED, I::SELECT, 'jenis_bayar',      'Jenis Bayar'],
+                [SHOW, REQUIRED, I::SELECT, 'status_bayar',     'Status Bayar'],
+                [SHOW, REQUIRED, I::SELECT, 'id_status_triase', 'Status Triase'],
             ],
         );
     }
@@ -75,7 +75,11 @@ final class RegistrasiController extends ControllerTemplate
     {
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn($f) => !in_array($f[2], ['id_registrasi', 'nomor_reg', 'nomor_rawat', 'id_pasien', 'id_dokter', 'id_status_triase'], true)
+            fn($f) => !in_array(
+                $f[2],
+                ['id_registrasi', 'nomor_reg', 'nomor_rawat', 'id_pasien', 'id_dokter', 'id_status_triase'],
+                true,
+            ),
         ));
     }
 
@@ -83,7 +87,8 @@ final class RegistrasiController extends ControllerTemplate
     {
         helper('autonomor');
 
-        $lastNo = $this->model->db
+        $lastNo = $this->model
+            ->db
             ->table('registrasi.registrasi')
             ->select('nomor_reg')
             ->like('nomor_reg', 'REG-' . date('Ymd'), 'after')
@@ -99,7 +104,8 @@ final class RegistrasiController extends ControllerTemplate
     {
         helper('autonomor');
 
-        $lastNo = $this->model->db
+        $lastNo = $this->model
+            ->db
             ->table('registrasi.registrasi')
             ->select('nomor_rawat')
             ->orderBy('nomor_rawat', 'DESC')
@@ -110,9 +116,10 @@ final class RegistrasiController extends ControllerTemplate
         return generateNextNoRawat($lastNo['nomor_rawat'] ?? null);
     }
 
-    private function fetchPasienByRm(string $noRm): ?array
+    private function fetchPasienByRm(string $noRm): null|array
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('role.pasien p')
             ->select('p.id_pasien, p.nomor_rm, o.nama')
             ->join('person.orang o', 'o.id_orang = p.id_orang')
@@ -126,16 +133,16 @@ final class RegistrasiController extends ControllerTemplate
     private function buildPostData(): array
     {
         return [
-            'tanggal_reg'       => $this->request->getPost('tanggal_reg'),
-            'id_pasien'         => (int) $this->request->getPost('id_pasien'),
-            'id_dokter'         => (int) $this->request->getPost('id_dokter'),
-            'id_pj_pasien'      => (int) $this->request->getPost('id_pj_pasien'),
-            'id_alamat_pj'      => (int) $this->request->getPost('id_alamat_pj'),
-            'hubungan_pj'       => (int) $this->request->getPost('hubungan_pj'),
-            'biaya_registrasi'  => (float) $this->request->getPost('biaya_registrasi'),
-            'jenis_bayar'       => (int) $this->request->getPost('jenis_bayar'),
-            'status_rawat'      => (int) $this->request->getPost('status_rawat'),
-            'status_bayar'      => (int) $this->request->getPost('status_bayar'),
+            'tanggal_reg'      => $this->request->getPost('tanggal_reg'),
+            'id_pasien'        => (int) $this->request->getPost('id_pasien'),
+            'id_dokter'        => (int) $this->request->getPost('id_dokter'),
+            'id_pj_pasien'     => (int) $this->request->getPost('id_pj_pasien'),
+            'id_alamat_pj'     => (int) $this->request->getPost('id_alamat_pj'),
+            'hubungan_pj'      => (int) $this->request->getPost('hubungan_pj'),
+            'biaya_registrasi' => (float) $this->request->getPost('biaya_registrasi'),
+            'jenis_bayar'      => (int) $this->request->getPost('jenis_bayar'),
+            'status_rawat'     => (int) $this->request->getPost('status_rawat'),
+            'status_bayar'     => (int) $this->request->getPost('status_bayar'),
         ];
     }
 
@@ -146,7 +153,8 @@ final class RegistrasiController extends ControllerTemplate
     #[\Override]
     final public function create_page(): string
     {
-        $ugdUnit = $this->model->db
+        $ugdUnit = $this->model
+            ->db
             ->table('unit.unit')
             ->select('biaya_registrasi_baru')
             ->where('id_unit', 22)
@@ -154,23 +162,23 @@ final class RegistrasiController extends ControllerTemplate
             ->getRowArray();
 
         $mockBaris = [
-            'id_registrasi'     => '',
-            'nomor_reg'         => $this->generateNomorReg(),
-            'nomor_rawat'       => $this->generateNomorRawat(),
-            'tanggal_reg'       => date('Y-m-d H:i:s'),
-            'id_pasien'         => '',
-            'id_dokter'         => '',
-            'id_pj_pasien'      => '',
-            'id_alamat_pj'      => '',
-            'hubungan_pj'       => '',
-            'biaya_default'     => (int) ($ugdUnit['biaya_registrasi_baru'] ?? 0),
-            'status_rawat'      => '',
-            'jenis_bayar'       => '',
-            'status_bayar'      => '',
+            'id_registrasi' => '',
+            'nomor_reg'     => $this->generateNomorReg(),
+            'nomor_rawat'   => $this->generateNomorRawat(),
+            'tanggal_reg'   => date('Y-m-d H:i:s'),
+            'id_pasien'     => '',
+            'id_dokter'     => '',
+            'id_pj_pasien'  => '',
+            'id_alamat_pj'  => '',
+            'hubungan_pj'   => '',
+            'biaya_default' => (int) ($ugdUnit['biaya_registrasi_baru'] ?? 0),
+            'status_rawat'  => '',
+            'jenis_bayar'   => '',
+            'status_bayar'  => '',
         ];
 
         $dataPasien = null;
-        $noRm = $this->request->getGet('no_rm') ?? '';
+        $noRm       = $this->request->getGet('no_rm') ?? '';
         if ($noRm !== '') {
             $dataPasien = $this->fetchPasienByRm($noRm);
             if ($dataPasien) {
@@ -179,7 +187,7 @@ final class RegistrasiController extends ControllerTemplate
         }
 
         $mockBaris['redirect_to'] = $this->request->getGet('redirect_to') ?? '';
-        
+
         return view('admin/ugd/tambah_ugd_registrasi', [
             'judul'       => 'Tambah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
@@ -195,10 +203,12 @@ final class RegistrasiController extends ControllerTemplate
     #[\Override]
     public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $data = $this->model->find_one($id);
-        if (!$data) return $this->home();
+        if (!$data)
+            return $this->home();
 
         $dataPasien = [
             'nomor_rm' => $data['nomor_rm'] ?? '',
@@ -226,25 +236,35 @@ final class RegistrasiController extends ControllerTemplate
     {
         helper('autonomor');
 
-        $lastRmReg = $this->model->db
+        $lastRmReg = $this->model
+            ->db
             ->table('registrasi.registrasi')
             ->select('nomor_reg')
             ->like('nomor_reg', 'REG-' . date('Ymd'), 'after')
             ->orderBy('nomor_reg', 'DESC')
-            ->limit(1)->get()->getRowArray();
+            ->limit(1)
+            ->get()
+            ->getRowArray();
 
-        $lastRmRawat = $this->model->db
+        $lastRmRawat = $this->model
+            ->db
             ->table('registrasi.registrasi')
             ->select('nomor_rawat')
             ->orderBy('nomor_rawat', 'DESC')
-            ->limit(1)->get()->getRowArray();
+            ->limit(1)
+            ->get()
+            ->getRowArray();
 
         $nomorReg   = generateNextNoRegistrasi($lastRmReg['nomor_reg'] ?? null);
         $nomorRawat = generateNextNoRawat($lastRmRawat['nomor_rawat'] ?? null);
 
-        $shared = $this->buildPostData();
-        $ugdData = array_merge($shared, ['nomor_reg' => $nomorReg, 'nomor_rawat' => $nomorRawat, 'id_status_triase'  => 1]);
-        $rmData  = array_merge($shared, [
+        $shared  = $this->buildPostData();
+        $ugdData = array_merge($shared, [
+            'nomor_reg'        => $nomorReg,
+            'nomor_rawat'      => $nomorRawat,
+            'id_status_triase' => 1,
+        ]);
+        $rmData = array_merge($shared, [
             'nomor_reg'         => $nomorReg,
             'nomor_rawat'       => $nomorRawat,
             'unit'              => 22,
@@ -269,11 +289,9 @@ final class RegistrasiController extends ControllerTemplate
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil disimpan.');
             $redirect_to = $this->request->getPost('redirect_to');
             return $redirect_to ? redirect()->to($redirect_to) : $this->home();
-        } catch (\ReflectionException | DatabaseException $e) {
+        } catch (\ReflectionException|DatabaseException $e) {
             $db->transRollback();
-            $msg = $e instanceof DatabaseException
-                ? $this->friendly_db_error($e)
-                : $e->getMessage();
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $msg);
             return redirect()->back()->withInput();
         }
@@ -282,10 +300,12 @@ final class RegistrasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $current = $this->model->find($id);
-        if (!is_array($current)) return $this->home();
+        if (!is_array($current))
+            return $this->home();
 
         $shared  = $this->buildPostData();
         $ugdData = $shared;
@@ -300,9 +320,7 @@ final class RegistrasiController extends ControllerTemplate
         $db->transBegin();
         try {
             $this->model->update($id, $ugdData);
-            $db->table('registrasi.registrasi')
-                ->where('nomor_reg', $current['nomor_reg'])
-                ->update($rmData);
+            $db->table('registrasi.registrasi')->where('nomor_reg', $current['nomor_reg'])->update($rmData);
 
             if ($db->transStatus() === false) {
                 $db->transRollback();
@@ -313,11 +331,9 @@ final class RegistrasiController extends ControllerTemplate
             $db->transCommit();
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil diperbarui.');
             return $this->home();
-        } catch (\ReflectionException | DatabaseException $e) {
+        } catch (\ReflectionException|DatabaseException $e) {
             $db->transRollback();
-            $msg = $e instanceof DatabaseException
-                ? $this->friendly_db_error($e)
-                : $e->getMessage();
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $msg);
             return redirect()->back()->withInput();
         }
@@ -326,17 +342,17 @@ final class RegistrasiController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $current = $this->model->find($id);
-        if (!is_array($current)) return $this->home();
+        if (!is_array($current))
+            return $this->home();
 
         $db = $this->model->db;
         $db->transBegin();
         try {
-            $db->table('registrasi.registrasi')
-                ->where('nomor_reg', $current['nomor_reg'])
-                ->delete();
+            $db->table('registrasi.registrasi')->where('nomor_reg', $current['nomor_reg'])->delete();
             $this->model->delete($id);
 
             if ($db->transStatus() === false) {
@@ -364,7 +380,8 @@ final class RegistrasiController extends ControllerTemplate
 
         $filter = $this->request->getGet('filter');
 
-        $builder = $this->model->builder($tabel . ' r')
+        $builder = $this->model
+            ->builder($tabel . ' r')
             ->select([
                 'r.id_registrasi',
                 'r.nomor_reg',
@@ -376,25 +393,22 @@ final class RegistrasiController extends ControllerTemplate
                 'o.nama AS nama_pasien',
                 'o.tanggal_lahir',
                 'od.nama AS nama_dokter',
-                'st.nama_status_triase'
+                'st.nama_status_triase',
             ])
-            ->join('role.pasien p',   'p.id_pasien = r.id_pasien', 'inner')
-            ->join('person.orang o',  'o.id_orang  = p.id_orang', 'inner')
-            ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
-            ->join('person.orang od', 'od.id_orang = d.id_orang',  'left')
+            ->join('role.pasien p', 'p.id_pasien = r.id_pasien', 'inner')
+            ->join('person.orang o', 'o.id_orang  = p.id_orang', 'inner')
+            ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
             ->join('ugd.status_triase st', 'st.id_status_triase = r.id_status_triase', 'left');
 
         if ($filter === 'belum_ditriase') {
             $builder->where('r.id_status_triase', 1);
         }
 
-        $data = $builder
-            ->orderBy('r.tanggal_reg', 'DESC')
-            ->get()
-            ->getResultArray();
+        $data = $builder->orderBy('r.tanggal_reg', 'DESC')->get()->getResultArray();
 
         return $this->response->setJSON([
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

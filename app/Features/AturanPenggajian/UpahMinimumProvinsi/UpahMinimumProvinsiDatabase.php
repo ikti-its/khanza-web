@@ -31,7 +31,7 @@ final class UpahMinimumProvinsiDatabase extends DatabaseTemplate
                 ],
             ],
             true,
-            'ump.csv'
+            'ump.csv',
         );
     }
 }

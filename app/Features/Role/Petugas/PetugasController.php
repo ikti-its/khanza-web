@@ -42,16 +42,16 @@ final class PetugasController extends ControllerTemplate
         $allOptions = $orangModel->get_all_options();
 
         $konfig = [
-            [SHOW, 'NIK',                 'nik',                'teks',    REQUIRED],
-            [SHOW, 'Nama',                'nama',               'nama',    REQUIRED],
-            [SHOW, 'Jenis Kelamin',       'id_jenis_kelamin',   'status',  REQUIRED, $allOptions['id_jenis_kelamin']  ?? []],
-            [SHOW, 'Agama',               'id_agama',           'status',  REQUIRED, $allOptions['id_agama']          ?? []],
-            [SHOW, 'Status Pernikahan',   'id_pernikahan',      'status',  REQUIRED, $allOptions['id_pernikahan']     ?? []],
-            [SHOW, 'Golongan Darah',      'id_golongan_darah',  'status',  REQUIRED, $allOptions['id_golongan_darah'] ?? []],
-            [SHOW, 'Alamat',              'id_alamat',          'status',  REQUIRED, $allOptions['id_alamat']         ?? []],
-            [SHOW, 'Tempat Lahir',        'tempat_lahir_kota',  'status',  REQUIRED, $allOptions['tempat_lahir_kota'] ?? []],
-            [SHOW, 'Tanggal Lahir',       'tanggal_lahir',      'tanggal', REQUIRED],
-            [SHOW, 'Deskripsi / Jabatan', 'deskripsi',          'teks',    OPTIONAL],
+            [SHOW, 'NIK', 'nik', 'teks', REQUIRED],
+            [SHOW, 'Nama', 'nama', 'nama', REQUIRED],
+            [SHOW, 'Jenis Kelamin', 'id_jenis_kelamin', 'status', REQUIRED, $allOptions['id_jenis_kelamin'] ?? []],
+            [SHOW, 'Agama', 'id_agama', 'status', REQUIRED, $allOptions['id_agama'] ?? []],
+            [SHOW, 'Status Pernikahan', 'id_pernikahan', 'status', REQUIRED, $allOptions['id_pernikahan'] ?? []],
+            [SHOW, 'Golongan Darah', 'id_golongan_darah', 'status', REQUIRED, $allOptions['id_golongan_darah'] ?? []],
+            [SHOW, 'Alamat', 'id_alamat', 'status', REQUIRED, $allOptions['id_alamat'] ?? []],
+            [SHOW, 'Tempat Lahir', 'tempat_lahir_kota', 'status', REQUIRED, $allOptions['tempat_lahir_kota'] ?? []],
+            [SHOW, 'Tanggal Lahir', 'tanggal_lahir', 'tanggal', REQUIRED],
+            [SHOW, 'Deskripsi / Jabatan', 'deskripsi', 'teks', OPTIONAL],
         ];
 
         $breadcrumbs = [['title' => 'Tambah', 'icon', 'tambah']];
@@ -82,13 +82,13 @@ final class PetugasController extends ControllerTemplate
         $orangData = [
             'nik'               => $this->request->getPost('nik'),
             'nama'              => $this->request->getPost('nama'),
-            'id_jenis_kelamin'  => $this->request->getPost('id_jenis_kelamin')  ?: null,
-            'id_agama'          => $this->request->getPost('id_agama')           ?: null,
-            'id_pernikahan'     => $this->request->getPost('id_pernikahan')      ?: null,
-            'id_golongan_darah' => $this->request->getPost('id_golongan_darah')  ?: null,
-            'id_alamat'         => $this->request->getPost('id_alamat')          ?: null,
-            'tempat_lahir_kota' => $this->request->getPost('tempat_lahir_kota')  ?: null,
-            'tanggal_lahir'     => $this->request->getPost('tanggal_lahir')      ?: null,
+            'id_jenis_kelamin'  => $this->request->getPost('id_jenis_kelamin') ?: null,
+            'id_agama'          => $this->request->getPost('id_agama') ?: null,
+            'id_pernikahan'     => $this->request->getPost('id_pernikahan') ?: null,
+            'id_golongan_darah' => $this->request->getPost('id_golongan_darah') ?: null,
+            'id_alamat'         => $this->request->getPost('id_alamat') ?: null,
+            'tempat_lahir_kota' => $this->request->getPost('tempat_lahir_kota') ?: null,
+            'tanggal_lahir'     => $this->request->getPost('tanggal_lahir') ?: null,
         ];
         $deskripsi = $this->request->getPost('deskripsi') ?: null;
 
@@ -113,9 +113,7 @@ final class PetugasController extends ControllerTemplate
             session()->setFlashdata('success', 'Data Petugas berhasil disimpan.');
         } catch (\ReflectionException|DatabaseException $e) {
             $db->transRollback();
-            $msg = $e instanceof DatabaseException
-                ? $this->friendly_db_error($e)
-                : $e->getMessage();
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $msg);
             return $this->create_page();
         }
@@ -126,7 +124,8 @@ final class PetugasController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $data = $this->model->builder()
+        $data = $this->model
+            ->builder()
             ->select('
                 role.petugas.id_petugas,
                 role.petugas.deskripsi,
@@ -137,7 +136,7 @@ final class PetugasController extends ControllerTemplate
             ->getResultArray();
 
         return $this->response->setJSON([
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

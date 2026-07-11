@@ -15,8 +15,8 @@ final class StokDarahController extends ControllerTemplate
         parent::__construct(
             new StokDarahModel(),
             [
-                ['Inventori Darah',  'inventori_darah'],
-                ['Stok Darah',       'stok_darah'],
+                ['Inventori Darah', 'inventori_darah'],
+                ['Stok Darah',      'stok_darah'],
             ],
             'Stok Darah',
             [
@@ -51,7 +51,7 @@ final class StokDarahController extends ControllerTemplate
         $this->model->updateStatusKadaluarsa(date('Y-m-d'));
         $this->model->set_order('tanggal_kadaluarsa', 'ASC');
     }
-    
+
     /**
      * OVERRIDE: Menampilkan Halaman Utama Data Stok Darah
      */
@@ -62,7 +62,7 @@ final class StokDarahController extends ControllerTemplate
             'karantina'     => 'Karantina',
             'tersedia'      => 'Tersedia',
             'tidak_layak'   => 'Tidak Layak',
-            'terdistribusi' => 'Terdistribusi'
+            'terdistribusi' => 'Terdistribusi',
         ];
 
         $this->active_filter = $this->request->getGet('filter') ?: null;
@@ -70,7 +70,7 @@ final class StokDarahController extends ControllerTemplate
         if ($this->active_filter !== null && array_key_exists($this->active_filter, $this->filters)) {
             $this->model->applyFilter($this->active_filter);
         }
-    
+
         return parent::index();
     }
 
@@ -81,7 +81,7 @@ final class StokDarahController extends ControllerTemplate
     final public function create_page(): string
     {
         $breadcrumbs = [
-            ['title' => 'Tambah', 'icon' => 'tambah']
+            ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
         $konfigFields = $this->get_fields_with_options(false, true);
@@ -89,7 +89,8 @@ final class StokDarahController extends ControllerTemplate
         $mockBaris = [];
         foreach ($this->fields as $field) {
             $namaKolom = $field[2];
-            if ($namaKolom === 'id_stok_darah') continue;
+            if ($namaKolom === 'id_stok_darah')
+                continue;
 
             $mockBaris[$namaKolom] = '';
         }
@@ -111,7 +112,7 @@ final class StokDarahController extends ControllerTemplate
     #[\Override]
     final public function create(): string|RedirectResponse
     {
-        $dataStok = $this->request->getPost();
+        $dataStok                   = $this->request->getPost();
         $dataStok['id_status_stok'] = 2;
 
         $this->model->db->transStart();
@@ -125,10 +126,9 @@ final class StokDarahController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data stok darah berhasil disimpan.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -144,7 +144,8 @@ final class StokDarahController extends ControllerTemplate
     #[\Override]
     final public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $baris = $this->model->find($id);
         if (!$baris) {
@@ -161,7 +162,7 @@ final class StokDarahController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Ubah', 'icon' => 'Ubah']
+            ['title' => 'Ubah', 'icon' => 'Ubah'],
         ];
 
         return view('/admin/inventoridarah/tambah_stokdarah', [
@@ -181,15 +182,16 @@ final class StokDarahController extends ControllerTemplate
     #[\Override]
     final public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
-        
+        if ($id == 0)
+            return $this->index();
+
         $dataLama = $this->model->find($id);
         if (!$dataLama) {
             session()->setFlashdata('error', 'Gagal memperbarui. Data stok darah tidak ditemukan.');
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
-        $dataStok = $this->request->getPost();
+        $dataStok                   = $this->request->getPost();
         $dataStok['id_status_stok'] = $dataLama['id_status_stok'];
 
         $this->model->db->transStart();
@@ -203,10 +205,9 @@ final class StokDarahController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data stok darah berhasil diperbarui.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -221,11 +222,12 @@ final class StokDarahController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataStok = $this->model->find($id);
 
-        $baris = $dataStok;
+        $baris        = $dataStok;
         $konfigFields = $this->get_fields_with_options(false, true);
 
         foreach ($konfigFields as $field) {
@@ -235,7 +237,7 @@ final class StokDarahController extends ControllerTemplate
             if (!empty($options) && isset($baris[$colName])) {
                 $idMentah = $baris[$colName];
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $baris[$colName] = $opt[0];
                         break;
                     }
@@ -250,7 +252,7 @@ final class StokDarahController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Detail', 'icon' => 'detail']
+            ['title' => 'Detail', 'icon' => 'detail'],
         ];
 
         return view('/admin/inventoridarah/detail_stokdarah', [
@@ -267,14 +269,14 @@ final class StokDarahController extends ControllerTemplate
     public function list()
     {
         $hariIni = date('Y-m-d');
-        $data = $this->model->get_stok_siap_pakai($hariIni);
+        $data    = $this->model->get_stok_siap_pakai($hariIni);
 
         foreach ($data as &$row) {
             $row['tanggal_kadaluarsa'] = date('d-m-Y', strtotime($row['tanggal_kadaluarsa']));
         }
 
         return $this->response->setJSON([
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

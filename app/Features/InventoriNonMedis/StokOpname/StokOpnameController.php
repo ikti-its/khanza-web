@@ -70,7 +70,8 @@ final class StokOpnameController extends ControllerTemplate
     public function update(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);
-        if (!is_array($current)) return $this->home();
+        if (!is_array($current))
+            return $this->home();
 
         $current_status = (int) ($current['id_status_stok_opname'] ?? 0);
 
@@ -79,8 +80,8 @@ final class StokOpnameController extends ControllerTemplate
             return $this->home();
         }
 
-        $new_status      = (int) ($this->request->getPost('id_status_stok_opname') ?? 0);
-        $is_new_selesai  = ($new_status === 2 && $current_status !== 2);
+        $new_status     = (int) ($this->request->getPost('id_status_stok_opname') ?? 0);
+        $is_new_selesai = $new_status === 2 && $current_status !== 2;
 
         if ($is_new_selesai) {
             $error = $this->validate_before_selesai((int) $id);
@@ -97,7 +98,10 @@ final class StokOpnameController extends ControllerTemplate
                 $this->create_transaksi_stok_opname((int) $id);
             } catch (\Throwable $e) {
                 log_message('error', '[StokOpname] create_transaksi_stok_opname: ' . $e->getMessage());
-                session()->setFlashdata('error', 'Status berhasil diubah, namun gagal membuat transaksi stok: ' . $e->getMessage());
+                session()->setFlashdata(
+                    'error',
+                    'Status berhasil diubah, namun gagal membuat transaksi stok: ' . $e->getMessage(),
+                );
             }
         }
 
@@ -105,17 +109,16 @@ final class StokOpnameController extends ControllerTemplate
     }
 
     // minimal 1 detail harus ada sebelum bisa Selesai
-    private function validate_before_selesai(int $id): ?string
+    private function validate_before_selesai(int $id): null|string
     {
-        $has_items = $this->get_db()
+        $has_items = $this
+            ->get_db()
             ->table('inventori_non_medis.stok_opname_detail')
             ->where('id_opname', $id)
             ->where('id_barang >', 0)
             ->countAllResults() > 0;
 
-        return $has_items
-            ? null
-            : 'Isi detail stok opname terlebih dahulu sebelum mengubah status menjadi Selesai.';
+        return $has_items ? null : 'Isi detail stok opname terlebih dahulu sebelum mengubah status menjadi Selesai.';
     }
 
     // catat penyesuaian stok, update stok barang ke nilai fisik (hanya yang ada selisih)
@@ -123,14 +126,17 @@ final class StokOpnameController extends ControllerTemplate
     {
         $db = $this->get_db();
 
-        $details = $db->table('inventori_non_medis.stok_opname_detail')
+        $details = $db
+            ->table('inventori_non_medis.stok_opname_detail')
             ->select('id_barang, stok_sistem, stok_fisik, selisih')
             ->where('id_opname', $id_opname)
             ->where('id_barang >', 0)
             ->where('selisih !=', 0)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
-        if (empty($details)) return;
+        if (empty($details))
+            return;
 
         $now = date('Y-m-d H:i:s');
         $db->transBegin();
@@ -156,7 +162,8 @@ final class StokOpnameController extends ControllerTemplate
                 'stok_sesudah' => $stok_fisik,
             ]);
 
-            $db->table('inventori_non_medis.barang')
+            $db
+                ->table('inventori_non_medis.barang')
                 ->where('id_barang', (int) $d['id_barang'])
                 ->set('stok', $stok_fisik)
                 ->update();

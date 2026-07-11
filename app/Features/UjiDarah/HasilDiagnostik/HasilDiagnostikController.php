@@ -44,7 +44,7 @@ final class HasilDiagnostikController extends ControllerTemplate
     public function create_page(): string
     {
         $breadcrumbs = [
-            ['title' => 'Tambah', 'icon' => 'tambah']
+            ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
         $mockBaris = [
@@ -77,9 +77,9 @@ final class HasilDiagnostikController extends ControllerTemplate
     {
         $rawPost = $this->request->getPost();
 
-        $idKasus          = $rawPost['id_kasus'];
-        $idParameterUji   = $rawPost['id_parameter_uji'] ?? [];
-        $nilaiDiagnostik  = $rawPost['id_nilai_diagnostik'] ?? [];
+        $idKasus         = $rawPost['id_kasus'];
+        $idParameterUji  = $rawPost['id_parameter_uji'] ?? [];
+        $nilaiDiagnostik = $rawPost['id_nilai_diagnostik'] ?? [];
 
         $modelKasus = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
         $dataKasus  = $modelKasus->find($idKasus);
@@ -110,7 +110,7 @@ final class HasilDiagnostikController extends ControllerTemplate
             $this->model->insert($dataDiagnostik);
             $idDiagnostik = $this->model->getInsertID();
 
-            $modelDetail = new \App\Features\UjiDarah\HasilDiagnostikDetail\HasilDiagnostikDetailModel();
+            $modelDetail            = new \App\Features\UjiDarah\HasilDiagnostikDetail\HasilDiagnostikDetailModel();
             $nilaiDiagnostikDipilih = [];
 
             foreach ($idParameterUji as $idParameter) {
@@ -129,7 +129,7 @@ final class HasilDiagnostikController extends ControllerTemplate
             $modelPencekalan->updateDariHasilDiagnostik(
                 $dataUjiSaring,
                 $rawPost['tanggal_hasil'],
-                $nilaiDiagnostikDipilih
+                $nilaiDiagnostikDipilih,
             );
 
             $modelKasus->selesaikanKasus($idKasus);
@@ -141,10 +141,9 @@ final class HasilDiagnostikController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data hasil diagnostik berhasil disimpan.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -160,51 +159,46 @@ final class HasilDiagnostikController extends ControllerTemplate
     #[\Override]
     public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
-    
+        if ($id == 0)
+            return $this->index();
+
         $dataDiagnostik = $this->model->find($id);
-    
+
         if (!$dataDiagnostik) {
             session()->setFlashdata('error', 'Data hasil diagnostik tidak ditemukan.');
             return $this->index();
         }
-    
+
         $modelKasus = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
         $dataKasus  = $modelKasus->find($dataDiagnostik['id_kasus']) ?? [];
-    
+
         $modelUjiSaring = new \App\Features\UjiDarah\HasilUjiSaring\HasilUjiSaringModel();
         $dataUjiSaring  = $modelUjiSaring->find($dataKasus['id_uji_saring'] ?? 0) ?? [];
-    
-        $parameterDiagnostik = !empty($dataUjiSaring)
-            ? $modelKasus->getParameterReaktifDetail($dataUjiSaring)
-            : [];
-    
-        $detailDiagnostik = $this->model->db
+
+        $parameterDiagnostik = !empty($dataUjiSaring) ? $modelKasus->getParameterReaktifDetail($dataUjiSaring) : [];
+
+        $detailDiagnostik = $this->model
+            ->db
             ->table('uji_darah.hasil_diagnostik_detail')
             ->where('id_diagnostik', $id)
             ->get()
             ->getResultArray();
-    
-        $nilaiDiagnostikTerpilih = array_column(
-            $detailDiagnostik,
-            'id_nilai_diagnostik',
-            'id_parameter_uji'
-        );
-    
+
+        $nilaiDiagnostikTerpilih = array_column($detailDiagnostik, 'id_nilai_diagnostik', 'id_parameter_uji');
+
         foreach ($parameterDiagnostik as $index => $parameter) {
             $idParameter = $parameter['id_parameter_uji'];
-    
-            $parameterDiagnostik[$index]['id_nilai_diagnostik'] =
-                $nilaiDiagnostikTerpilih[$idParameter] ?? '';
+
+            $parameterDiagnostik[$index]['id_nilai_diagnostik'] = $nilaiDiagnostikTerpilih[$idParameter] ?? '';
         }
-    
+
         $modelNilaiDiagnostik = new \App\Features\UjiDarah\NilaiDiagnostik\NilaiDiagnostikModel();
         $nilaiDiagnostik      = $modelNilaiDiagnostik->findAll();
-    
+
         $breadcrumbs = [
-            ['title' => 'Ubah', 'icon' => 'Ubah']
+            ['title' => 'Ubah', 'icon' => 'Ubah'],
         ];
-    
+
         return view('admin/ujidarah/tambah_hasildiagnostik', [
             'judul'                => 'Ubah ' . $this->title,
             'breadcrumbs'          => array_merge($this->breadcrumbs, $breadcrumbs),
@@ -223,9 +217,10 @@ final class HasilDiagnostikController extends ControllerTemplate
     #[\Override]
     final public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
-        $rawPost = $this->request->getPost();
+        $rawPost            = $this->request->getPost();
         $dataDiagnostikLama = $this->model->find($id);
 
         if (!$dataDiagnostikLama) {
@@ -233,7 +228,7 @@ final class HasilDiagnostikController extends ControllerTemplate
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
-        $idKasus = $dataDiagnostikLama['id_kasus'];
+        $idKasus         = $dataDiagnostikLama['id_kasus'];
         $idParameterUji  = $rawPost['id_parameter_uji'] ?? [];
         $nilaiDiagnostik = $rawPost['id_nilai_diagnostik'] ?? [];
 
@@ -264,12 +259,9 @@ final class HasilDiagnostikController extends ControllerTemplate
         try {
             $this->model->update($id, $dataDiagnostik);
 
-            $this->model->db
-                ->table('uji_darah.hasil_diagnostik_detail')
-                ->where('id_diagnostik', $id)
-                ->delete();
+            $this->model->db->table('uji_darah.hasil_diagnostik_detail')->where('id_diagnostik', $id)->delete();
 
-            $modelDetail = new \App\Features\UjiDarah\HasilDiagnostikDetail\HasilDiagnostikDetailModel();
+            $modelDetail            = new \App\Features\UjiDarah\HasilDiagnostikDetail\HasilDiagnostikDetailModel();
             $nilaiDiagnostikDipilih = [];
 
             foreach ($idParameterUji as $idParameter) {
@@ -292,7 +284,7 @@ final class HasilDiagnostikController extends ControllerTemplate
             $modelPencekalan->updateDariHasilDiagnostik(
                 $dataUjiSaring,
                 $rawPost['tanggal_hasil'],
-                $nilaiDiagnostikDipilih
+                $nilaiDiagnostikDipilih,
             );
 
             $modelKasus->selesaikanKasus($idKasus);
@@ -304,10 +296,9 @@ final class HasilDiagnostikController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data hasil diagnostik berhasil diperbarui.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -323,59 +314,56 @@ final class HasilDiagnostikController extends ControllerTemplate
     #[\Override]
     final public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
-    
+        if ($id == 0)
+            return $this->index();
+
         $dataDiagnostik = $this->model->find($id);
-    
+
         if (!$dataDiagnostik) {
             session()->setFlashdata('error', 'Data hasil diagnostik tidak ditemukan.');
             return redirect()->to($this->get_uri_path() . '/data');
         }
-    
+
         $idKasus = $dataDiagnostik['id_kasus'];
-    
+
         $modelKasus = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
         $dataKasus  = $modelKasus->find($idKasus);
-    
+
         if (!$dataKasus) {
             session()->setFlashdata('error', 'Gagal menghapus! Data kasus reaktif tidak ditemukan.');
             return redirect()->to($this->get_uri_path() . '/data');
         }
-    
+
         $modelUjiSaring = new \App\Features\UjiDarah\HasilUjiSaring\HasilUjiSaringModel();
         $dataUjiSaring  = $modelUjiSaring->find($dataKasus['id_uji_saring']);
-    
+
         if (!$dataUjiSaring) {
             session()->setFlashdata('error', 'Gagal menghapus! Data hasil uji saring sumber kasus tidak ditemukan.');
             return redirect()->to($this->get_uri_path() . '/data');
         }
-    
+
         $this->model->db->transStart();
-    
+
         try {
-            $this->model->db
-                ->table('uji_darah.hasil_diagnostik_detail')
-                ->where('id_diagnostik', $id)
-                ->delete();
-    
+            $this->model->db->table('uji_darah.hasil_diagnostik_detail')->where('id_diagnostik', $id)->delete();
+
             $this->model->delete($id);
-    
+
             $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
             $modelPencekalan->resetPencekalanDiagnostik($dataUjiSaring);
 
             $modelKasus->bukaKembaliKasus($idKasus);
-    
+
             $this->model->db->transComplete();
-    
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal menghapus data hasil diagnostik.');
             }
-    
+
             session()->setFlashdata('success', 'Data hasil diagnostik berhasil dihapus.');
-    
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -389,11 +377,14 @@ final class HasilDiagnostikController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataDiagnostik = $this->model->find($id);
         if (!$dataDiagnostik) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Hasil Tes Diagnostik tidak ditemukan.');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound(
+                'Data Hasil Tes Diagnostik tidak ditemukan.',
+            );
         }
 
         $modelKasus = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
@@ -409,7 +400,7 @@ final class HasilDiagnostikController extends ControllerTemplate
             if (!empty($options) && isset($baris[$colName])) {
                 $idMentah = $baris[$colName];
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $baris[$colName] = $opt[0];
                         break;
                     }
@@ -417,7 +408,8 @@ final class HasilDiagnostikController extends ControllerTemplate
             }
         }
 
-        $detailDiagnostikRaw = $this->model->db
+        $detailDiagnostikRaw = $this->model
+            ->db
             ->table('uji_darah.hasil_diagnostik_detail hdd')
             ->select('pu.nama_parameter, nd.nama_nilai_diagnostik')
             ->join('uji_darah.parameter_uji pu', 'pu.id_parameter_uji = hdd.id_parameter_uji', 'inner')
@@ -433,7 +425,7 @@ final class HasilDiagnostikController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Detail', 'icon' => 'detail']
+            ['title' => 'Detail', 'icon' => 'detail'],
         ];
 
         return view('admin/ujidarah/detail_hasildiagnostik', [

@@ -28,7 +28,7 @@ final class AkunController extends ControllerTemplate
             [
                 [SHOW, REQUIRED, I::INDEX, 'id',       'ID Akun'],
                 [SHOW, REQUIRED, I::TEXT,  'email',    'Email'],
-                [SHOW, REQUIRED, I::TEXT, 'password', 'Password'],
+                [SHOW, REQUIRED, I::TEXT,  'password', 'Password'],
                 [SHOW, REQUIRED, I::TEXT,  'role',     'Role'],
             ],
         );

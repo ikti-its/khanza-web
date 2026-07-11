@@ -6,8 +6,8 @@ use CodeIgniter\CLI\BaseCommand;
 
 class DatabaseEncrypt extends BaseCommand
 {
-    protected $group = 'Omnia';
-    protected $name = 'omnia:encrypt';
+    protected $group       = 'Omnia';
+    protected $name        = 'omnia:encrypt';
     protected $description = 'Run the encryption PLpgsql script';
 
     public function run(array $_params)

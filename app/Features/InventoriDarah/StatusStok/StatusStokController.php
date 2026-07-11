@@ -14,8 +14,8 @@ final class StatusStokController extends ControllerTemplate
         parent::__construct(
             new StatusStokModel(),
             [
-                ['Inventori Darah',  'inventori_darah'],
-                ['Status Stok',      'status_stok'],
+                ['Inventori Darah', 'inventori_darah'],
+                ['Status Stok',     'status_stok'],
             ],
             'Status Stok',
             [

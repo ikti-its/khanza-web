@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Core\Controller;
+
 use App\Core\Model\ModelTemplate;
 use CodeIgniter\Controller;
 use CodeIgniter\Database\BaseConnection;
@@ -12,7 +13,7 @@ use CodeIgniter\HTTP\RedirectResponse;
 class ControllerTemplate extends Controller
 {
     public private(set) ModelTemplate $model;
-    
+
     /** @var list<array{
      *    title: string,
      *    icon: string,
@@ -24,8 +25,7 @@ class ControllerTemplate extends Controller
 
     /** @var array<string, bool> */
     public private(set) array $actions = [];
-    
-    
+
     /** @var array<int, array{
      *  0: 0|1,
      *  1: string,
@@ -41,17 +41,17 @@ class ControllerTemplate extends Controller
     /** @var array{value: string, threshold: string}|array{} */
     protected array $row_alert = [];
 
-    protected ?string $child_path  = null;
-    protected ?string $child_fk    = null;
-    protected ?string $parent_fk    = null;
-    protected bool    $hide_zero_id = true;
+    protected null|string $child_path   = null;
+    protected null|string $child_fk     = null;
+    protected null|string $parent_fk    = null;
+    protected bool        $hide_zero_id = true;
     /** @var array<string, mixed> */
-    protected array   $home_params  = [];
-    protected array $filters = [];
-    protected ?string $active_filter = null;
+    protected array       $home_params   = [];
+    protected array       $filters       = [];
+    protected null|string $active_filter = null;
 
     public function __construct(
-        ?ModelTemplate $model = null,
+        null|ModelTemplate $model = null,
         /** @var list<list<string>> */
         array $breadcrumbs = [],
         /** @var non-empty-string */
@@ -66,33 +66,36 @@ class ControllerTemplate extends Controller
          *  4: string,
          * }> */
         array $fields = [],
-        ?string $child_path = null,
-        ?string $child_fk   = null,
-        ?string $parent_fk  = null,
+        null|string $child_path = null,
+        null|string $child_fk = null,
+        null|string $parent_fk = null,
     ) {
         $this->child_path  = $child_path;
         $this->child_fk    = $child_fk;
         $this->parent_fk   = $parent_fk;
-        $this->model = $model;
-        $this->title = $title;
+        $this->model       = $model;
+        $this->title       = $title;
         $this->primary_key = $this->model->primaryKey;
-        $this->meta_data = ['page' => 1, 'size' => 10, 'total' => 1];
-        for($i = 0; $i < count($breadcrumbs); $i++){
-            [$title, $icon] = $breadcrumbs[$i];    
-            $this->breadcrumbs[$i] = ['title' => $title, 'icon'  => $icon];
+        $this->meta_data   = ['page' => 1, 'size' => 10, 'total' => 1];
+        for ($i = 0; $i < count($breadcrumbs); $i++) {
+            [$title, $icon] = $breadcrumbs[$i];
+            $this->breadcrumbs[$i] = ['title' => $title, 'icon' => $icon];
         }
-        foreach ($actions as $a){
-            if ($a === ActionType::READ) continue;
+        foreach ($actions as $a) {
+            if ($a === ActionType::READ)
+                continue;
             $this->actions[$a->value] = true;
         }
-        for($i = 0; $i < count($fields); $i++){
+        for ($i = 0; $i < count($fields); $i++) {
             [$show, $required, $type, $column, $name] = $fields[$i];
             $this->fields[$i] = [$show, $name, $column, $type->value, $required];
-            if (isset($fields[$i][5])) $this->fields[$i][5] = $fields[$i][5];
+            if (isset($fields[$i][5]))
+                $this->fields[$i][5] = $fields[$i][5];
         }
     }
 
-    protected function get_uri_path(): string {
+    protected function get_uri_path(): string
+    {
         $segments = $this->request->getUri()->getSegments();
         while (count($segments) > 2) {
             array_pop($segments);
@@ -108,7 +111,8 @@ class ControllerTemplate extends Controller
 
     private function fk_from_get(): void
     {
-        if ($this->parent_fk === null) return;
+        if ($this->parent_fk === null)
+            return;
         $id = $this->request->getGet($this->parent_fk);
         if ($id !== null) {
             $this->model->set_filter($this->parent_fk, (int) $id);
@@ -118,7 +122,8 @@ class ControllerTemplate extends Controller
 
     private function fk_from_post(): void
     {
-        if ($this->parent_fk === null) return;
+        if ($this->parent_fk === null)
+            return;
         $id = $this->request->getPost($this->parent_fk);
         if ($id !== null) {
             $this->home_params = [$this->parent_fk => (int) $id];
@@ -127,7 +132,8 @@ class ControllerTemplate extends Controller
 
     private function fk_from_row(int|string $id): void
     {
-        if ($this->parent_fk === null) return;
+        if ($this->parent_fk === null)
+            return;
         $row = $this->model->find($id);
         if (is_array($row) && isset($row[$this->parent_fk])) {
             $this->home_params = [$this->parent_fk => (int) $row[$this->parent_fk]];
@@ -143,8 +149,10 @@ class ControllerTemplate extends Controller
         foreach ($this->fields as $f) {
             [$_show, $_name, $column, $type, $_required] = $f;
 
-            if ($column === $this->primary_key) continue;
-            if ($_show === TABLE_ONLY) continue;
+            if ($column === $this->primary_key)
+                continue;
+            if ($_show === TABLE_ONLY)
+                continue;
 
             $raw_data = $this->request->getPost($column);
             if (in_array($type, ['jumlah', 'uang', 'suhu'])) {
@@ -166,11 +174,12 @@ class ControllerTemplate extends Controller
 
         $this->before_read();
         $this->fk_from_get();
-        if ($this->hide_zero_id) $this->model->exclude_zero_pk();
+        if ($this->hide_zero_id)
+            $this->model->exclude_zero_pk();
 
         $total_rows  = $this->model->count_filtered();
-        $total_pages = ($total_rows > 0) ? (int) ceil($total_rows / $size) : 1;
-        $page = min($page, $total_pages);
+        $total_pages = $total_rows > 0 ? (int) ceil($total_rows / $size) : 1;
+        $page        = min($page, $total_pages);
 
         $offset    = ($page - 1) * $size;
         $meta_data = [
@@ -180,16 +189,14 @@ class ControllerTemplate extends Controller
         ];
 
         $konfig_kolom = $this->build_modular_columns();
-        $data_tabel = $this->model->findAll($size, $offset);
+        $data_tabel   = $this->model->findAll($size, $offset);
 
-        $child_link = ($this->child_path !== null && $this->child_fk !== null)
-            ? ['path' => $this->child_path, 'fk' => $this->child_fk]
-            : null;
+        $child_link =
+            $this->child_path !== null && $this->child_fk !== null
+                ? ['path' => $this->child_path, 'fk' => $this->child_fk]
+                : null;
 
-        $extra_params = array_diff_key(
-            $this->request->getGet() ?? [],
-            ['page' => null, 'size' => null]
-        );
+        $extra_params = array_diff_key($this->request->getGet() ?? [], ['page' => null, 'size' => null]);
         $query_string = !empty($extra_params) ? http_build_query($extra_params) : '';
 
         $back_url = null;
@@ -197,7 +204,7 @@ class ControllerTemplate extends Controller
             $count = count($this->breadcrumbs);
             if ($count >= 2) {
                 $segments = [];
-                for ($i = 0; $i < $count - 1; $i++) {
+                for ($i = 0; $i < ($count - 1); $i++) {
                     $segments[] = str_replace('_', '-', $this->breadcrumbs[$i]['icon']);
                 }
                 $back_url = '/' . implode('/', $segments) . '/data';
@@ -238,7 +245,11 @@ class ControllerTemplate extends Controller
                 $aliases      = $leaf_aliases[$column] ?? [];
                 $parent_label = $field[1];
                 foreach ($aliases as $i => $alias) {
-                    $konfig_kolom[] = $this->make_join_column_config($alias, $i === 0 ? $parent_label : null, $field[0]);
+                    $konfig_kolom[] = $this->make_join_column_config(
+                        $alias,
+                        $i === 0 ? $parent_label : null,
+                        $field[0],
+                    );
                 }
             } else {
                 $konfig_kolom[] = $field;
@@ -248,23 +259,23 @@ class ControllerTemplate extends Controller
         return $konfig_kolom;
     }
 
-    private function make_join_column_config(string $col_name, ?string $label = null, int $visible = SHOW): array
+    private function make_join_column_config(string $col_name, null|string $label = null, int $visible = SHOW): array
     {
         $label ??= ucwords(str_replace('_', ' ', $col_name));
-        $type = match(true) {
+        $type  = match (true) {
             str_contains($col_name, 'tanggal') => 'tanggal',
             str_starts_with($col_name, 'is_')  => 'bool',
             str_contains($col_name, 'status') || str_contains($col_name, 'tipe') => 'status',
-            default                            => 'teks',
+            default => 'teks',
         };
 
         return [$visible, $label, $col_name, $type, 0];
     }
 
     /**
-    * @param array<int|string, mixed> $spec
-    * @return list<string>
-    */
+     * @param array<int|string, mixed> $spec
+     * @return list<string>
+     */
     private function extract_leaf_columns(array $spec): array
     {
         $cols = [];
@@ -282,15 +293,15 @@ class ControllerTemplate extends Controller
     {
         $audit_konfig = [
             // [1, 'Nomor Perubahan'  , 'change_id' , 'indeks'],
-            [1, 'Nama', 'nama', 'teks'],
-            [1, 'Aksi Perubahan', 'action', 'status'],
-            [1, 'IP Address', 'user_ip', 'teks'],
-            [1, 'MAC Address', 'user_mac', 'teks'],
+            [1, 'Nama',              'nama',       'teks'],
+            [1, 'Aksi Perubahan',    'action',     'status'],
+            [1, 'IP Address',        'user_ip',    'teks'],
+            [1, 'MAC Address',       'user_mac',   'teks'],
             // [1, 'Pengubah'         , 'changed_by', 'indeks'],
             [1, 'Tanggal Perubahan', 'changed_at', 'tanggal'],
         ];
         $breadcrumbs = [
-            ['title' => 'Audit', 'icon', 'audit']
+            ['title' => 'Audit', 'icon', 'audit'],
         ];
         return view('/layouts/audit', [
             'judul'       => 'Audit ' . $this->title,
@@ -306,7 +317,7 @@ class ControllerTemplate extends Controller
     protected function get_fields_with_options(bool $include_pk = false, bool $is_form = false): array
     {
         $all_options = $this->model->get_all_options();
-        $result = [];
+        $result      = [];
 
         foreach ($this->fields as $field) {
             [$visible, $display, $column, $type] = $field;
@@ -319,7 +330,8 @@ class ControllerTemplate extends Controller
                 if ($visible === HIDE && !($include_pk && $column === $this->primary_key)) {
                     continue;
                 }
-                if ($visible === TABLE_ONLY) continue;
+                if ($visible === TABLE_ONLY)
+                    continue;
             } elseif ($visible === HIDE && $column === $this->primary_key) {
                 continue;
             }
@@ -355,12 +367,13 @@ class ControllerTemplate extends Controller
 
     public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $breadcrumbs = [
-            ['title' => 'Ubah', 'icon', 'Ubah']
+            ['title' => 'Ubah', 'icon', 'Ubah'],
         ];
-        $data  = $this->model->find_one($id);
+        $data = $this->model->find_one($id);
         return view('/layouts/tambah_ubah', [
             'judul'       => 'Ubah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
@@ -397,17 +410,24 @@ class ControllerTemplate extends Controller
 
     protected function get_last(string $table, string $column, string $pk): mixed
     {
-        return $this->get_db()
-            ->table($table)
-            ->select($column)
-            ->orderBy($pk, 'DESC')
-            ->limit(1)
-            ->get()->getRowArray()[$column] ?? null;
+        return (
+            $this
+                ->get_db()
+                ->table($table)
+                ->select($column)
+                ->orderBy($pk, 'DESC')
+                ->limit(1)
+                ->get()
+                ->getRowArray()[$column] ?? null
+        );
     }
 
     protected function before_read(): void {}
+
     protected function after_read(array &$data_tabel): void {}
+
     protected function before_create(array &$postData): void {}
+
     protected function before_update(array &$postData, int|string $id): void {}
 
     public function create(): string|RedirectResponse
@@ -422,10 +442,8 @@ class ControllerTemplate extends Controller
                 return $this->create_view($postData);
             }
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil disimpan.');
-        } catch (\ReflectionException | DatabaseException $e) {
-            $msg = $e instanceof DatabaseException
-                ? $this->friendly_db_error($e)
-                : $e->getMessage();
+        } catch (\ReflectionException|DatabaseException $e) {
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $msg);
             return $this->create_view($postData);
         }
@@ -436,7 +454,8 @@ class ControllerTemplate extends Controller
 
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         /** @var array<string, scalar|null> $postData */
         $postData = $this->get_post_data();
@@ -448,10 +467,10 @@ class ControllerTemplate extends Controller
                 return $this->update_error_view($id, $this->format_validation_errors());
             }
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil diperbarui.');
-        } catch(\ReflectionException $e){
+        } catch (\ReflectionException $e) {
             session()->setFlashdata('error', $e->getMessage());
             return $this->home();
-        } catch(DatabaseException $e){
+        } catch (DatabaseException $e) {
             return $this->update_error_view($id, $this->friendly_db_error($e));
         }
 
@@ -463,7 +482,7 @@ class ControllerTemplate extends Controller
     {
         session()->setFlashdata('error', $msg);
         $breadcrumbs = [
-            ['title' => 'Ubah', 'icon', 'Ubah']
+            ['title' => 'Ubah', 'icon', 'Ubah'],
         ];
         $data = $this->model->find_one($id);
         return view('/layouts/tambah_ubah', [
@@ -481,20 +500,19 @@ class ControllerTemplate extends Controller
     private function format_validation_errors(): string
     {
         $errors = $this->model->errors();
-        return !empty($errors)
-            ? implode(' ', $errors)
-            : 'Data ' . $this->title . ' gagal disimpan karena tidak valid.';
+        return !empty($errors) ? implode(' ', $errors) : 'Data ' . $this->title . ' gagal disimpan karena tidak valid.';
     }
 
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $this->fk_from_row($id);
         try {
             $this->model->delete($id);
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil dihapus.');
-        } catch(DatabaseException $e){
+        } catch (DatabaseException $e) {
             session()->setFlashdata('error', $this->friendly_db_error($e));
         }
 

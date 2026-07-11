@@ -2,9 +2,10 @@
 declare(strict_types=1);
 
 namespace App\Core\Model;
+
+use App\Core\Database\Template\DatabaseTemplate;
 use CodeIgniter\Database\BaseResult;
 use CodeIgniter\Model;
-use App\Core\Database\Template\DatabaseTemplate;
 
 /** @mago-expect lint:excessive-parameter-list */
 class ModelTemplate extends Model
@@ -12,18 +13,18 @@ class ModelTemplate extends Model
     public private(set) DatabaseTemplate $database;
     /** @var 'BASE'| 'JOIN'| 'REFS' */
     public private(set) string $type;
-    
+
     /** @var array<non-empty-string, ValidationType> */
     public private(set) array $fields = [];
-    public private(set) array $join = [];
+    public private(set) array $join   = [];
     /** @var array<string, true> */
     private array $selected_aliases = [];
 
     /** @var array<string, mixed> */
     protected array $runtime_filters = [];
     /** @var array<string, string> */
-    protected array $runtime_orders  = [];
-    private bool  $exclude_zero_pk  = false;
+    protected array $runtime_orders = [];
+    private bool $exclude_zero_pk = false;
 
     public function set_filter(string $col, mixed $val): static
     {
@@ -64,21 +65,20 @@ class ModelTemplate extends Model
         array $fields,
         array $join,
     ) {
-        $this->database = $database;
-        $this->table = "{$this->database->schema}.{$this->database->table}";
+        $this->database   = $database;
+        $this->table      = "{$this->database->schema}.{$this->database->table}";
         $this->primaryKey = $this->database->primary_key;
-        
+
         $this->allowedFields = array_keys($fields);
         if (($key = array_search($this->primaryKey, $this->allowedFields)) !== false) {
             unset($this->allowedFields[$key]);
         }
-        
-        assert(array_intersect_key($fields, $join) === [], 
-            "Fields intersects with join in {$this->table}");
-        $this->allowedFields = array_merge($this->allowedFields, array_keys($join));
-        $this->join = $join;
 
-        $config = new \Config\Database()->default;
+        assert(array_intersect_key($fields, $join) === [], "Fields intersects with join in {$this->table}");
+        $this->allowedFields = array_merge($this->allowedFields, array_keys($join));
+        $this->join          = $join;
+
+        $config             = new \Config\Database()->default;
         $config['database'] = env('database.default.khanza_db');
         parent::__construct(\Config\Database::connect($config));
 
@@ -91,8 +91,8 @@ class ModelTemplate extends Model
             $base_type = strtoupper(explode(' ', $def['type'] ?? '')[0]);
 
             if (isset($def['constraint']) && in_array($base_type, ['CHAR', 'VARCHAR'], true)) {
-                $rules[] = "max_length[{$def['constraint']}]";
-                $namaKolom = str_replace('_', ' ', $col);
+                $rules[]                      = "max_length[{$def['constraint']}]";
+                $namaKolom                    = str_replace('_', ' ', $col);
                 $messages[$col]['max_length'] = "Field {$namaKolom} tidak boleh lebih dari {$def['constraint']} karakter.";
             }
 
@@ -112,28 +112,23 @@ class ModelTemplate extends Model
          * which properties exist on the Model class
          * DO NOT DELETE NOR UNCOMMENT THE CODE BELOW
          */
-
         // $this->useAutoIncrement = true;
-
         //// CRUD settings
         // $this->returnType        = 'array';
         // $this->useSoftDeletes    = false;
         // $this->allowEmptyInserts = false;
         // $this->updateOnlyChanged = true;
-
         //// Validation
         // $this->skipValidation       = false;
         // $this->cleanValidationRules = true;
         // $this->validationMessages   = [];
         // $this->validationRules      = [],
-
         //// Dates
         // $this->useTimestamps = false;
         // $this->dateFormat   = 'datetime';
         // $this->createdField = 'created_at';
         // $this->updatedField = 'updated_at';
         // $this->deletedField = 'deleted_at';
-
         //// Callbacks
         // $this->allowCallbacks = false;
         // $this->beforeInsert = [];
@@ -169,7 +164,7 @@ class ModelTemplate extends Model
             $alias = "{$root_fk}_{$col_name}";
         } else {
             $this->selected_aliases[$col_name] = true;
-            $alias = $col_name;
+            $alias                             = $col_name;
         }
         $builder->select("{$table_alias}.{$col_name} AS {$alias}");
     }
@@ -185,9 +180,11 @@ class ModelTemplate extends Model
         string $root_fk = '',
     ): void {
         $fk_lookup = $this->build_fk_lookup($parent_db);
-        if (!isset($fk_lookup[$fk_col])) return;
+        if (!isset($fk_lookup[$fk_col]))
+            return;
 
-        if ($root_fk === '') $root_fk = $fk_col;
+        if ($root_fk === '')
+            $root_fk = $fk_col;
 
         /** @var class-string<DatabaseTemplate> $ref_class */
         [$ref_class, $ref_on] = $fk_lookup[$fk_col];
@@ -197,15 +194,11 @@ class ModelTemplate extends Model
         $ref_alias = "j{$idx}";
         $idx++;
 
-        $builder->join(
-            "{$ref_table} {$ref_alias}",
-            "{$parent_alias}.{$fk_col} = {$ref_alias}.{$ref_on}",
-            'left'
-        );
+        $builder->join("{$ref_table} {$ref_alias}", "{$parent_alias}.{$fk_col} = {$ref_alias}.{$ref_on}", 'left');
 
         foreach ($spec as $k => $v) {
             if (is_int($k)) {
-                assert(is_string($v), "Leaf value di join spec harus string, dapat: " . gettype($v));
+                assert(is_string($v), 'Leaf value di join spec harus string, dapat: ' . gettype($v));
                 $this->select_once($builder, $ref_alias, $v, $root_fk);
             } else {
                 assert(is_array($v), "Nested join spec untuk key '{$k}' harus array");
@@ -223,7 +216,7 @@ class ModelTemplate extends Model
      */
     public function compute_leaf_aliases(): array
     {
-        $used   = []; // col_name => alias (mirrors selected_aliases)
+        $used = []; // col_name => alias (mirrors selected_aliases)
         $result = [];
 
         foreach ($this->join as $root_fk => $spec) {
@@ -242,8 +235,8 @@ class ModelTemplate extends Model
                 if (isset($used[$v])) {
                     $alias = $root_fk !== '' ? "{$root_fk}_{$v}" : $v;
                 } else {
-                    $alias        = $v;
-                    $used[$v]     = $alias;
+                    $alias    = $v;
+                    $used[$v] = $alias;
                 }
                 $aliases[] = $alias;
             } elseif (is_string($k) && is_array($v)) {
@@ -280,20 +273,10 @@ class ModelTemplate extends Model
                 $ref_alias = "j{$idx}";
                 $idx++;
 
-                $builder->join(
-                    "{$ref_table} {$ref_alias}",
-                    "{$parent_alias}.{$k} = {$ref_alias}.{$ref_on}",
-                    'left'
-                );
+                $builder->join("{$ref_table} {$ref_alias}", "{$parent_alias}.{$k} = {$ref_alias}.{$ref_on}", 'left');
 
                 $next_spec = is_array($v) ? $v : [$v];
-                $resolved = $this->resolve_option_source(
-                    $builder,
-                    $next_spec,
-                    $ref_alias,
-                    $ref_db,
-                    $idx,
-                );
+                $resolved  = $this->resolve_option_source($builder, $next_spec, $ref_alias, $ref_db, $idx);
 
                 if ($resolved !== null) {
                     return $resolved;
@@ -307,13 +290,7 @@ class ModelTemplate extends Model
             }
 
             if (is_array($v)) {
-                $resolved = $this->resolve_option_source(
-                    $builder,
-                    $v,
-                    $parent_alias,
-                    $parent_db,
-                    $idx,
-                );
+                $resolved = $this->resolve_option_source($builder, $v, $parent_alias, $parent_db, $idx);
 
                 if ($resolved !== null) {
                     return $resolved;
@@ -338,8 +315,8 @@ class ModelTemplate extends Model
         }
 
         $this->selected_aliases = [];
-        $main    = 'm';
-        $builder = $this->db->table("{$this->table} {$main}");
+        $main                   = 'm';
+        $builder                = $this->db->table("{$this->table} {$main}");
         $builder->select("{$main}.*");
 
         $idx = 0;
@@ -350,8 +327,7 @@ class ModelTemplate extends Model
         $builder->where("{$main}.{$this->primaryKey}", $id);
 
         $result = $builder->get();
-        assert($result instanceof BaseResult,
-            "find_one JOIN query failed on table: {$this->table}");
+        assert($result instanceof BaseResult, "find_one JOIN query failed on table: {$this->table}");
 
         $row = $result->getRowArray();
         return is_array($row) ? $row : null;
@@ -389,9 +365,7 @@ class ModelTemplate extends Model
         }
 
         foreach ($this->runtime_filters as $col => $val) {
-            is_array($val)
-                ? $builder->whereIn("{$main}.{$col}", $val)
-                : $builder->where("{$main}.{$col}", $val);
+            is_array($val) ? $builder->whereIn("{$main}.{$col}", $val) : $builder->where("{$main}.{$col}", $val);
         }
         foreach ($this->runtime_orders as $col => $dir) {
             $builder->orderBy($col, $dir);
@@ -405,8 +379,7 @@ class ModelTemplate extends Model
         }
 
         $result = $builder->get();
-        assert($result instanceof BaseResult,
-            "findAll JOIN query failed on table: {$this->table}");
+        assert($result instanceof BaseResult, "findAll JOIN query failed on table: {$this->table}");
 
         /** @var list<array<string, mixed>> */
         return $result->getResultArray();
@@ -415,12 +388,14 @@ class ModelTemplate extends Model
     /** @return array<string, list<list<string>>> */
     public function get_all_options(): array
     {
-        if (empty($this->join)) return [];
+        if (empty($this->join))
+            return [];
 
         $options = [];
         foreach ($this->join as $fk_col => $display_cols) {
             $fk_lookup = $this->build_fk_lookup($this->database);
-            if (!isset($fk_lookup[$fk_col])) continue;
+            if (!isset($fk_lookup[$fk_col]))
+                continue;
 
             /** @var class-string<DatabaseTemplate> $ref_class */
             [$ref_class, $ref_id_col] = $fk_lookup[$fk_col];
@@ -431,16 +406,11 @@ class ModelTemplate extends Model
             $builder   = $this->db->table("{$ref_table} {$main}");
             $idx       = 0;
 
-            $specs = is_array($display_cols) ? $display_cols : [$display_cols];
-            $resolved = $this->resolve_option_source(
-                $builder,
-                $specs,
-                $main,
-                $ref_db,
-                $idx,
-            );
+            $specs    = is_array($display_cols) ? $display_cols : [$display_cols];
+            $resolved = $this->resolve_option_source($builder, $specs, $main, $ref_db, $idx);
 
-            if ($resolved === null) continue;
+            if ($resolved === null)
+                continue;
 
             [$display_alias, $display_col] = $resolved;
 
@@ -448,20 +418,20 @@ class ModelTemplate extends Model
             $builder->select("{$display_alias}.{$display_col} AS display_value");
 
             $query = $builder->get();
-            assert($query instanceof BaseResult,
-                "get_all_options query failed for: {$fk_col}");
+            assert($query instanceof BaseResult, "get_all_options query failed for: {$fk_col}");
 
-            $rows = $query->getResultArray();
-            $options[$fk_col] = array_map(
-                fn(array $row): array => [$row['display_value'], (string)$row['option_value']],
-                $rows
-            );
+            $rows             = $query->getResultArray();
+            $options[$fk_col] = array_map(fn(array $row): array => [
+                $row['display_value'],
+                (string) $row['option_value'],
+            ], $rows);
         }
 
         return $options;
     }
 
-    final public function audit(): array {
+    final public function audit(): array
+    {
         $view = "{$this->database->schema}.{$this->database->table}_audit_view";
         $sql  = "SELECT * FROM {$view}
             LEFT OUTER JOIN
@@ -475,7 +445,8 @@ class ModelTemplate extends Model
             return [];
         }
 
-        if (! $query instanceof BaseResult) return [];
+        if (!$query instanceof BaseResult)
+            return [];
         return $query->getResultArray();
     }
 }

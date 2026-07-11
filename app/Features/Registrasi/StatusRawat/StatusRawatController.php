@@ -14,7 +14,7 @@ final class StatusRawatController extends ControllerTemplate
         parent::__construct(
             new StatusRawatModel(),
             [
-                ['Registrasi',          'registrasi'],
+                ['Registrasi',   'registrasi'],
                 ['Status Rawat', 'status_rawat'],
             ],
             'Status Rawat',

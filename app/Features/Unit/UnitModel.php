@@ -13,9 +13,9 @@ final class UnitModel extends ModelTemplate
         parent::__construct(
             new UnitDatabase(),
             [
-                'id_unit'         => V::DEFAULT(),
-                'kode_unit'       => V::DEFAULT(),
-                'nama_unit'       => V::DEFAULT(),
+                'id_unit'               => V::DEFAULT(),
+                'kode_unit'             => V::DEFAULT(),
+                'nama_unit'             => V::DEFAULT(),
                 'biaya_registrasi_baru' => V::DEFAULT(),
                 'biaya_registrasi_lama' => V::DEFAULT(),
             ],

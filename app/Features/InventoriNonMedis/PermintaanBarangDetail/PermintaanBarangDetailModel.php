@@ -23,7 +23,7 @@ final class PermintaanBarangDetailModel extends ModelTemplate
                 'id_permintaan' => [
                     'tanggal',
                 ],
-                'id_barang' => [
+                'id_barang'     => [
                     'kode_barang',
                     'nama_barang',
                     'id_satuan' => ['nama_satuan'],

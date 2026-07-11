@@ -14,7 +14,7 @@ final class MetodePembayaranController extends ControllerTemplate
         parent::__construct(
             new MetodePembayaranModel(),
             [
-                ['Finansial', 'finansial'],
+                ['Finansial',         'finansial'],
                 ['Metode Pembayaran', 'metode-pembayaran'],
             ],
             'Metode Pembayaran',

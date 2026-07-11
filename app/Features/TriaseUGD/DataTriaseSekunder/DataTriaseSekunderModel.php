@@ -20,11 +20,11 @@ final class DataTriaseSekunderModel extends ModelTemplate
             ],
             [
                 'id_triase'        => [
-                    'id_registrasi' => ['nomor_rawat']
+                    'id_registrasi' => ['nomor_rawat'],
                 ],
                 'id_plan_sekunder' => ['nama_plan_sekunder'],
                 'id_petugas'       => [
-                    'id_orang'      => ['nama']
+                    'id_orang' => ['nama'],
                 ],
             ],
         );

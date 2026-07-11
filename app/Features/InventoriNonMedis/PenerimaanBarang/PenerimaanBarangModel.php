@@ -13,12 +13,12 @@ final class PenerimaanBarangModel extends ModelTemplate
         parent::__construct(
             new PenerimaanBarangDatabase(),
             [
-                'id_penerimaan'               => V::DEFAULT(),
-                'tanggal'                     => V::DEFAULT(),
-                'status'                      => V::DEFAULT(),
-                'catatan'                     => V::DEFAULT(),
-                'no_penerimaan'               => V::DEFAULT(),
-                'no_masuk'                    => V::DEFAULT(),
+                'id_penerimaan' => V::DEFAULT(),
+                'tanggal'       => V::DEFAULT(),
+                'status'        => V::DEFAULT(),
+                'catatan'       => V::DEFAULT(),
+                'no_penerimaan' => V::DEFAULT(),
+                'no_masuk'      => V::DEFAULT(),
             ],
             [
                 'id_pengadaan'                => ['no_pengadaan'],
@@ -34,7 +34,7 @@ final class PenerimaanBarangModel extends ModelTemplate
         $options = parent::get_all_options();
 
         if (isset($options['id_pengadaan'])) {
-            $rows = $this->db->query("
+            $rows = $this->db->query('
                 SELECT DISTINCT pbd.id_pengadaan
                 FROM inventori_non_medis.pengadaan_barang_detail pbd
                 WHERE pbd.id_barang > 0
@@ -47,16 +47,15 @@ final class PenerimaanBarangModel extends ModelTemplate
                       AND prbd.id_barang = pbd.id_barang
                       AND prb.id_status_penerimaan_barang = 2
                   ) < pbd.qty
-            ")->getResultArray();
+            ')->getResultArray();
 
             $available = array_map(fn(array $r) => (string) $r['id_pengadaan'], $rows);
 
-            $options['id_pengadaan'] = array_values(
-                array_filter(
-                    $options['id_pengadaan'],
-                    fn(array $opt) => in_array($opt[1], $available, true),
-                )
-            );
+            $options['id_pengadaan'] = array_values(array_filter($options['id_pengadaan'], fn(array $opt) => in_array(
+                $opt[1],
+                $available,
+                true,
+            )));
         }
 
         return $options;

@@ -30,17 +30,17 @@ final class PengambilanDarahController extends ControllerTemplate
                 A::TEST,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,   'id_pengambilan_darah',  'ID Pengambilan Darah'],
-                [SHOW, REQUIRED, I::TEXT,    'nomor_pengambilan',     'Nomor Pengambilan'],
-                [SHOW, REQUIRED, I::INDEX,   'id_kunjungan',          'ID Kunjungan'],
-                [SHOW, REQUIRED, I::DATE,    'tanggal_pengambilan',   'Tanggal Pengambilan'],
-                [SHOW, REQUIRED, I::SELECT,  'id_shift',              'Shift'],
-                [SHOW, REQUIRED, I::TEXT,    'no_bag',                'Nomor Bag'],
-                [SHOW, REQUIRED, I::SELECT,  'id_jenis_bag',          'Jenis Bag'],
-                [SHOW, REQUIRED, I::SELECT,  'id_jenis_donor',        'Jenis Donor'],
-                [SHOW, REQUIRED, I::SELECT,  'id_lokasi_pengambilan', 'Lokasi Pengambilan'],
-                [SHOW, REQUIRED, I::INDEX,   'id_petugas',            'ID Petugas'],
-                [SHOW, OPTIONAL, I::SELECT,  'id_status_pengambilan', 'Status Pengambilan'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_pengambilan_darah',  'ID Pengambilan Darah'],
+                [SHOW, REQUIRED, I::TEXT,   'nomor_pengambilan',     'Nomor Pengambilan'],
+                [SHOW, REQUIRED, I::INDEX,  'id_kunjungan',          'ID Kunjungan'],
+                [SHOW, REQUIRED, I::DATE,   'tanggal_pengambilan',   'Tanggal Pengambilan'],
+                [SHOW, REQUIRED, I::SELECT, 'id_shift',              'Shift'],
+                [SHOW, REQUIRED, I::TEXT,   'no_bag',                'Nomor Bag'],
+                [SHOW, REQUIRED, I::SELECT, 'id_jenis_bag',          'Jenis Bag'],
+                [SHOW, REQUIRED, I::SELECT, 'id_jenis_donor',        'Jenis Donor'],
+                [SHOW, REQUIRED, I::SELECT, 'id_lokasi_pengambilan', 'Lokasi Pengambilan'],
+                [SHOW, REQUIRED, I::INDEX,  'id_petugas',            'ID Petugas'],
+                [SHOW, OPTIONAL, I::SELECT, 'id_status_pengambilan', 'Status Pengambilan'],
             ],
         );
     }
@@ -61,17 +61,21 @@ final class PengambilanDarahController extends ControllerTemplate
         $this->after_read($data_tabel);
 
         $konfig = [
-            [1, 'No. Pengambilan', 'nomor_pengambilan',         'teks',    0],
-            [1, 'Nomor Bag',       'no_bag',                    'teks',    0],
-            [1, 'Nama Pendonor',   'nama',                      'teks',    0],
-            [1, 'Jenis Bag',       'nama_jenis_bag',            'teks',    0],
-            [1, 'Status',          'nama_status_pengambilan',   'status',  0],
+            [1, 'No. Pengambilan', 'nomor_pengambilan',       'teks',   0],
+            [1, 'Nomor Bag',       'no_bag',                  'teks',   0],
+            [1, 'Nama Pendonor',   'nama',                    'teks',   0],
+            [1, 'Jenis Bag',       'nama_jenis_bag',          'teks',   0],
+            [1, 'Status',          'nama_status_pengambilan', 'status', 0],
         ];
 
         return view('/layouts/data', [
             'judul'        => $this->title,
             'breadcrumbs'  => $this->breadcrumbs,
-            'meta_data'    => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'meta_data'    => [
+                'page'  => $currentPage,
+                'size'  => count($data_tabel),
+                'total' => ceil($totalRows / $perPage),
+            ],
             'modul_path'   => $this->get_uri_path(),
             'kolom_id'     => $this->primary_key,
             'konfig'       => $konfig,
@@ -93,7 +97,7 @@ final class PengambilanDarahController extends ControllerTemplate
             $idPengambilan = $baris['id_pengambilan_darah'];
 
             $data_tabel[$index]['sudah_dipisahkan'] = $this->model->apakahSudahDipisahkan($idPengambilan);
-            
+
             $data_tabel[$index]['sudah_diuji'] = $this->model->apakahSudahDiuji($idPengambilan);
         }
     }
@@ -105,7 +109,7 @@ final class PengambilanDarahController extends ControllerTemplate
     final public function create_page(): string
     {
         $breadcrumbs = [
-            ['title' => 'Tambah', 'icon' => 'tambah']
+            ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
         $konfigPengambilan = $this->get_fields_with_options(false, true);
@@ -121,51 +125,59 @@ final class PengambilanDarahController extends ControllerTemplate
         $modelBhpMedis    = new \App\Features\LogistikUTD\PengambilanMedis\PengambilanMedisModel();
         $modelBhpNonMedis = new \App\Features\LogistikUTD\PengambilanPenunjang\PengambilanPenunjangModel();
 
-        $rawMedis    = $modelBhpMedis->get_katalog_dan_stok_ruangan();
+        $rawMedis     = $modelBhpMedis->get_katalog_dan_stok_ruangan();
         $rawPenunjang = $modelBhpNonMedis->get_katalog_dan_stok_ruangan();
 
         $masterBhpMedis = [];
         foreach ($rawMedis as $row) {
-            $sisaStok = (int)$row['total_masuk'] - (int)$row['total_terpakai_donor'] - (int)$row['total_terpakai_pemisahan'] - (int)$row['total_terpakai_penyerahan'] - (int)$row['total_rusak'];
-            
-            if ((int)$row['total_masuk'] > 0) {
+            $sisaStok =
+                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
+                    - (int) $row['total_terpakai_penyerahan']
+                - (int) $row['total_rusak'];
+
+            if ((int) $row['total_masuk'] > 0) {
                 $masterBhpMedis[] = [
                     'id_barang'   => $row['id_barang'],
                     'kode_barang' => $row['kode_barang'],
                     'nama_barang' => $row['nama_barang'],
                     'harga'       => $row['harga'],
-                    'stok'        => $sisaStok
+                    'stok'        => $sisaStok,
                 ];
             }
         }
 
         $masterBhpNonMedis = [];
         foreach ($rawPenunjang as $row) {
-            $sisaStokNon = (int)$row['total_masuk'] - (int)$row['total_terpakai_donor'] - (int)$row['total_terpakai_pemisahan'] - (int)$row['total_terpakai_penyerahan'] - (int)$row['total_rusak'];
-            
-            if ((int)$row['total_masuk'] > 0) {
+            $sisaStokNon =
+                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
+                    - (int) $row['total_terpakai_penyerahan']
+                - (int) $row['total_rusak'];
+
+            if ((int) $row['total_masuk'] > 0) {
                 $masterBhpNonMedis[] = [
                     'id_barang'   => $row['id_barang'],
                     'kode_barang' => $row['kode_barang'],
                     'nama_barang' => $row['nama_barang'],
                     'harga'       => $row['harga'],
-                    'stok'        => $sisaStokNon
+                    'stok'        => $sisaStokNon,
                 ];
             }
         }
 
         $tahunBulanIni = date('Y-m');
-        
-        $jumlahTransaksiBulanIni = $this->model->db->table('donor.pengambilan_darah')
+
+        $jumlahTransaksiBulanIni = $this->model
+            ->db
+            ->table('donor.pengambilan_darah')
             ->where("TO_CHAR(tanggal_pengambilan, 'YYYY-MM')", $tahunBulanIni)
             ->countAllResults();
 
         $nextUrutanUTD = $jumlahTransaksiBulanIni + 1;
-        $nomorUrutPad  = str_pad((string)$nextUrutanUTD, 4, '0', STR_PAD_LEFT);
+        $nomorUrutPad  = str_pad((string) $nextUrutanUTD, 4, '0', STR_PAD_LEFT);
 
         $nomorPengambilanOtomatis = date('Y') . '-' . date('m') . '-UTD' . $nomorUrutPad;
 
-        $mockBaris = [];
+        $mockBaris      = [];
         $konfigGabungan = [];
 
         foreach ($konfigPengambilan as $fieldPengambilan) {
@@ -175,19 +187,19 @@ final class PengambilanDarahController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggal = ($fieldPengambilan[3] === 'tanggal' || str_contains($columnPengambilan, 'tanggal'));
+            $isTanggal = $fieldPengambilan[3] === 'tanggal' || str_contains($columnPengambilan, 'tanggal');
             $mockBaris[$columnPengambilan] = $isTanggal ? date('Y-m-d') : '';
 
             if ($columnPengambilan === 'nomor_pengambilan') {
                 $mockBaris[$columnPengambilan] = $nomorPengambilanOtomatis;
-                $fieldPengambilan[3] = 'indeks';
+                $fieldPengambilan[3]           = 'indeks';
             }
 
             if ($columnPengambilan === 'id_kunjungan') {
                 foreach ($konfigKunjungan as $fieldKunjungan) {
                     if ($fieldKunjungan[2] === 'nomor_kunjungan') {
                         $mockBaris['nomor_kunjungan'] = '';
-                        $konfigGabungan[] = $fieldKunjungan;
+                        $konfigGabungan[]             = $fieldKunjungan;
                         break;
                     }
                 }
@@ -195,7 +207,7 @@ final class PengambilanDarahController extends ControllerTemplate
                 foreach ($konfigPendonor as $fieldPendonor) {
                     if ($fieldPendonor[2] === 'nomor_pendonor') {
                         $mockBaris['nomor_pendonor'] = '';
-                        $konfigGabungan[] = $fieldPendonor;
+                        $konfigGabungan[]            = $fieldPendonor;
                         break;
                     }
                 }
@@ -203,7 +215,7 @@ final class PengambilanDarahController extends ControllerTemplate
                 foreach ($konfigOrang as $fieldOrang) {
                     if ($fieldOrang[2] === 'nama') {
                         $mockBaris['nama'] = '';
-                        $konfigGabungan[] = $fieldOrang;
+                        $konfigGabungan[]  = $fieldOrang;
                         break;
                     }
                 }
@@ -225,7 +237,7 @@ final class PengambilanDarahController extends ControllerTemplate
             'form_action'       => '/submittambah',
         ]);
     }
-    
+
     /**
      * OVERRIDE: Memproses simpan data pengambilan darah & penggunaan BHP
      */
@@ -240,9 +252,9 @@ final class PengambilanDarahController extends ControllerTemplate
         $hargaNonMedis = $this->request->getPost('harga_penunjang');
 
         $dataPengambilan = [];
-        
+
         foreach ($this->fields as $field) {
-            $namaKolom = $field[2]; 
+            $namaKolom = $field[2];
 
             if (array_key_exists($namaKolom, $rawPost)) {
                 $dataPengambilan[$namaKolom] = $rawPost[$namaKolom];
@@ -267,13 +279,14 @@ final class PengambilanDarahController extends ControllerTemplate
                 $modelMedisDonor = new \App\Features\LogistikUTD\MedisDonor\MedisDonorModel();
 
                 foreach ($bhpMedis as $idBarang => $jumlah) {
-                    if ((int)$jumlah <= 0) continue;
+                    if ((int) $jumlah <= 0)
+                        continue;
 
                     $modelMedisDonor->insert([
-                        'id_pengambilan_darah' => $idPengambilan, 
+                        'id_pengambilan_darah' => $idPengambilan,
                         'id_barang'            => $idBarang,
-                        'jumlah'               => (int)$jumlah,
-                        'harga'                => (float)($hargaMedis[$idBarang] ?? 0),
+                        'jumlah'               => (int) $jumlah,
+                        'harga'                => (float) ($hargaMedis[$idBarang] ?? 0),
                     ]);
                 }
             }
@@ -282,31 +295,31 @@ final class PengambilanDarahController extends ControllerTemplate
                 $modelPenunjangDonor = new \App\Features\LogistikUTD\PenunjangDonor\PenunjangDonorModel();
 
                 foreach ($bhpNonMedis as $idBarang => $jumlah) {
-                    if ((int)$jumlah <= 0) continue;
+                    if ((int) $jumlah <= 0)
+                        continue;
 
                     $modelPenunjangDonor->insert([
                         'id_pengambilan_darah' => $idPengambilan,
                         'id_barang'            => $idBarang,
-                        'jumlah'               => (int)$jumlah,
-                        'harga'                => (float)($hargaNonMedis[$idBarang] ?? 0),
+                        'jumlah'               => (int) $jumlah,
+                        'harga'                => (float) ($hargaNonMedis[$idBarang] ?? 0),
                     ]);
                 }
             }
 
-            $idStatus = (int)($dataPengambilan['id_status_pengambilan'] ?? 0);
+            $idStatus = (int) ($dataPengambilan['id_status_pengambilan'] ?? 0);
             $this->model->syncTanggalDonorTerakhir($idStatus, $dataPengambilan);
 
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException("Gagal menyimpan data pengambilan darah dan BHP.");
+                throw new \RuntimeException('Gagal menyimpan data pengambilan darah dan BHP.');
             }
 
             session()->setFlashdata('success', 'Data pengambilan darah dan BHP berhasil disimpan.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -314,23 +327,24 @@ final class PengambilanDarahController extends ControllerTemplate
 
         return redirect()->to($this->get_uri_path() . '/data');
     }
-    
+
     /**
      * OVERRIDE: Menampilkan Halaman Ubah Data Pengambilan Darah & Penggunaan BHP
      */
     #[\Override]
     public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataPengambilan = $this->model->find($id);
         if (!$dataPengambilan) {
             $dataPengambilan = [];
         }
 
-        $dataKunjungan = [];
-        $dataPendonor  = [];
-        $dataOrang     = [];
+        $dataKunjungan    = [];
+        $dataPendonor     = [];
+        $dataOrang        = [];
         $dataPetugasMedis = [];
 
         if (!empty($dataPengambilan['id_kunjungan'])) {
@@ -355,7 +369,7 @@ final class PengambilanDarahController extends ControllerTemplate
             if (!empty($petugasRow['id_orang'])) {
                 $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
                 $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
-                
+
                 if (isset($orangPetugasRow['nama'])) {
                     $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
                 }
@@ -379,33 +393,39 @@ final class PengambilanDarahController extends ControllerTemplate
         $modelBhpMedis    = new \App\Features\LogistikUTD\PengambilanMedis\PengambilanMedisModel();
         $modelBhpNonMedis = new \App\Features\LogistikUTD\PengambilanPenunjang\PengambilanPenunjangModel();
 
-        $rawMedis    = $modelBhpMedis->get_katalog_dan_stok_ruangan();
+        $rawMedis     = $modelBhpMedis->get_katalog_dan_stok_ruangan();
         $rawPenunjang = $modelBhpNonMedis->get_katalog_dan_stok_ruangan();
 
         $masterBhpMedis = [];
         foreach ($rawMedis as $row) {
-            $sisaStok = (int)$row['total_masuk'] - (int)$row['total_terpakai_donor'] - (int)$row['total_terpakai_pemisahan'] - (int)$row['total_terpakai_penyerahan'] - (int)$row['total_rusak'];
-            if ((int)$row['total_masuk'] > 0) {
+            $sisaStok =
+                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
+                    - (int) $row['total_terpakai_penyerahan']
+                - (int) $row['total_rusak'];
+            if ((int) $row['total_masuk'] > 0) {
                 $masterBhpMedis[] = [
                     'id_barang'   => $row['id_barang'],
                     'kode_barang' => $row['kode_barang'],
                     'nama_barang' => $row['nama_barang'],
                     'harga'       => $row['harga'],
-                    'stok'        => $sisaStok
+                    'stok'        => $sisaStok,
                 ];
             }
         }
 
         $masterBhpNonMedis = [];
         foreach ($rawPenunjang as $row) {
-            $sisaStokNon = (int)$row['total_masuk'] - (int)$row['total_terpakai_donor'] - (int)$row['total_terpakai_pemisahan'] - (int)$row['total_terpakai_penyerahan'] - (int)$row['total_rusak'];
-            if ((int)$row['total_masuk'] > 0) {
+            $sisaStokNon =
+                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
+                    - (int) $row['total_terpakai_penyerahan']
+                - (int) $row['total_rusak'];
+            if ((int) $row['total_masuk'] > 0) {
                 $masterBhpNonMedis[] = [
                     'id_barang'   => $row['id_barang'],
                     'kode_barang' => $row['kode_barang'],
                     'nama_barang' => $row['nama_barang'],
                     'harga'       => $row['harga'],
-                    'stok'        => $sisaStokNon
+                    'stok'        => $sisaStokNon,
                 ];
             }
         }
@@ -454,7 +474,7 @@ final class PengambilanDarahController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Ubah', 'icon' => 'Ubah']
+            ['title' => 'Ubah', 'icon' => 'Ubah'],
         ];
 
         return view('/admin/donor/tambah_pengambilandarah', [
@@ -478,9 +498,10 @@ final class PengambilanDarahController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
-        $rawPost = $this->request->getPost();
+        $rawPost             = $this->request->getPost();
         $dataPengambilanLama = $this->model->find($id);
 
         if (!$dataPengambilanLama) {
@@ -488,10 +509,10 @@ final class PengambilanDarahController extends ControllerTemplate
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
-        $bhpMedisUpdate      = $this->request->getPost('id_medis_donor');
-        $hargaMedis          = $this->request->getPost('harga_medis');
-        $bhpPenunjangUpdate  = $this->request->getPost('id_penunjang_donor');
-        $hargaPenunjang      = $this->request->getPost('harga_penunjang');
+        $bhpMedisUpdate     = $this->request->getPost('id_medis_donor');
+        $hargaMedis         = $this->request->getPost('harga_medis');
+        $bhpPenunjangUpdate = $this->request->getPost('id_penunjang_donor');
+        $hargaPenunjang     = $this->request->getPost('harga_penunjang');
 
         $dataPengambilan = [];
         foreach ($this->fields as $field) {
@@ -520,13 +541,14 @@ final class PengambilanDarahController extends ControllerTemplate
 
             if (!empty($bhpMedisUpdate) && is_array($bhpMedisUpdate)) {
                 foreach ($bhpMedisUpdate as $idBarang => $jumlah) {
-                    if ((int)$jumlah <= 0) continue;
+                    if ((int) $jumlah <= 0)
+                        continue;
 
                     $modelMedisDonor->insert([
                         'id_pengambilan_darah' => $id,
                         'id_barang'            => $idBarang,
-                        'jumlah'               => (int)$jumlah,
-                        'harga'                => (float)($hargaMedis[$idBarang] ?? 0),
+                        'jumlah'               => (int) $jumlah,
+                        'harga'                => (float) ($hargaMedis[$idBarang] ?? 0),
                     ]);
                 }
             }
@@ -537,32 +559,32 @@ final class PengambilanDarahController extends ControllerTemplate
 
             if (!empty($bhpPenunjangUpdate) && is_array($bhpPenunjangUpdate)) {
                 foreach ($bhpPenunjangUpdate as $idBarang => $jumlah) {
-                    if ((int)$jumlah <= 0) continue;
+                    if ((int) $jumlah <= 0)
+                        continue;
 
                     $modelPenunjangDonor->insert([
                         'id_pengambilan_darah' => $id,
                         'id_barang'            => $idBarang,
-                        'jumlah'               => (int)$jumlah,
-                        'harga'                => (float)($hargaPenunjang[$idBarang] ?? 0),
+                        'jumlah'               => (int) $jumlah,
+                        'harga'                => (float) ($hargaPenunjang[$idBarang] ?? 0),
                     ]);
                 }
             }
 
-            $idStatus = (int)($dataPengambilan['id_status_pengambilan'] ?? 0);
+            $idStatus = (int) ($dataPengambilan['id_status_pengambilan'] ?? 0);
             $this->model->syncTanggalDonorTerakhir($idStatus, $dataPengambilan, $dataPengambilanLama);
 
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException("Gagal memperbarui data pengambilan darah dan logistik BHP.");
+                throw new \RuntimeException('Gagal memperbarui data pengambilan darah dan logistik BHP.');
             }
 
             session()->setFlashdata('success', 'Data pengambilan darah dan penggunaan BHP berhasil diperbarui.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
-                ? $this->friendly_db_error($e) 
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
         }
@@ -576,8 +598,9 @@ final class PengambilanDarahController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
-        
+        if ($id == 0)
+            return $this->home();
+
         $dataPengambilan = $this->model->find($id);
         if (!$dataPengambilan) {
             session()->setFlashdata('error', 'Gagal menghapus. Data pengambilan darah tidak ditemukan.');
@@ -587,7 +610,7 @@ final class PengambilanDarahController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
-            $modelMedisDonor    = new \App\Features\LogistikUTD\MedisDonor\MedisDonorModel();
+            $modelMedisDonor     = new \App\Features\LogistikUTD\MedisDonor\MedisDonorModel();
             $modelPenunjangDonor = new \App\Features\LogistikUTD\PenunjangDonor\PenunjangDonorModel();
 
             $modelMedisDonor->where('id_pengambilan_darah', $id)->delete();
@@ -604,7 +627,6 @@ final class PengambilanDarahController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data pengambilan darah dan penggunaan BHP berhasil dihapus.');
-
         } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
             $this->model->db->transRollback();
             session()->setFlashdata('error', $this->friendly_db_error($e));
@@ -621,13 +643,14 @@ final class PengambilanDarahController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataPengambilan = $this->model->find($id);
 
-        $dataKunjungan = [];
-        $dataPendonor  = [];
-        $dataOrang     = [];
+        $dataKunjungan    = [];
+        $dataPendonor     = [];
+        $dataOrang        = [];
         $dataPetugasMedis = [];
 
         if (!empty($dataPengambilan['id_kunjungan'])) {
@@ -652,14 +675,14 @@ final class PengambilanDarahController extends ControllerTemplate
             if (!empty($petugasRow['id_orang'])) {
                 $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
                 $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
-                
+
                 if (isset($orangPetugasRow['nama'])) {
                     $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
                 }
             }
         }
 
-        $bhpMedis = $this->model->getBhpMedisDetail($id);
+        $bhpMedis     = $this->model->getBhpMedisDetail($id);
         $bhpPenunjang = $this->model->getBhpPenunjangDetail($id);
 
         $baris = array_merge($dataOrang, $dataPendonor, $dataKunjungan, $dataPetugasMedis, $dataPengambilan);
@@ -668,12 +691,12 @@ final class PengambilanDarahController extends ControllerTemplate
         foreach ($optionsFields as $field) {
             $colName = $field[2];
             $options = $field[5] ?? [];
-            
+
             if (!empty($options) && isset($baris[$colName])) {
                 $idMentah = $baris[$colName];
-                
+
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $baris[$colName] = $opt[0];
                         break;
                     }
@@ -682,16 +705,16 @@ final class PengambilanDarahController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Detail', 'icon' => 'detail']
+            ['title' => 'Detail', 'icon' => 'detail'],
         ];
 
         return view('/admin/donor/detail_pengambilandarah', [
-            'judul'          => 'Detail ' . $this->title,
-            'breadcrumbs'    => array_merge($this->breadcrumbs, $breadcrumbs),
-            'modul_path'     => $this->get_uri_path(),
-            'baris'          => $baris,
-            'bhp_medis'      => $bhpMedis,
-            'bhp_penunjang'  => $bhpPenunjang,
+            'judul'         => 'Detail ' . $this->title,
+            'breadcrumbs'   => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'    => $this->get_uri_path(),
+            'baris'         => $baris,
+            'bhp_medis'     => $bhpMedis,
+            'bhp_penunjang' => $bhpPenunjang,
         ]);
     }
 }

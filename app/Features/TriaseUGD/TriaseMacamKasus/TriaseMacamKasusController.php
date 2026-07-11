@@ -40,7 +40,8 @@ final class TriaseMacamKasusController extends ControllerTemplate
     {
         $tabel = $this->model->table;
 
-        $data = $this->model->builder()
+        $data = $this->model
+            ->builder()
             ->select("
                 {$tabel}.id_macam_kasus,
                 {$tabel}.kode_macam_kasus,
@@ -51,7 +52,7 @@ final class TriaseMacamKasusController extends ControllerTemplate
             ->getResultArray();
 
         return $this->response->setJSON([
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

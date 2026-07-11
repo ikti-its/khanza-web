@@ -17,7 +17,7 @@ final class DataTriaseDetailModel extends ModelTemplate
             ],
             [
                 'id_triase' => [
-                    'id_registrasi' => ['nomor_rawat']
+                    'id_registrasi' => ['nomor_rawat'],
                 ],
                 'id_skala'  => ['pengkajian'],
             ],

@@ -24,11 +24,11 @@ final class KasusReaktifModel extends ModelTemplate
                         'id_kunjungan' => [
                             'id_pendonor' => [
                                 'nomor_pendonor',
-                                'id_orang' => ['nama']
+                                'id_orang' => ['nama'],
                             ],
                         ],
                     ],
-                    'tanggal_uji'
+                    'tanggal_uji',
                 ],
                 'id_status_kasus' => ['nama_status_kasus'],
             ],
@@ -41,25 +41,26 @@ final class KasusReaktifModel extends ModelTemplate
     /**
      * Membuat nomor kasus reaktif otomatis dengan format KR-YYYY-XXXX
      */
-    public function generateNomorKasus(?string $tanggalDitetapkan = null): string
+    public function generateNomorKasus(null|string $tanggalDitetapkan = null): string
     {
         $tanggal = $tanggalDitetapkan ?: date('Y-m-d');
         $tahun   = date('Y', strtotime($tanggal));
-    
+
         $prefix = 'KR-' . $tahun . '-';
-    
-        $kasusTerakhir = $this->select('nomor_kasus')
+
+        $kasusTerakhir = $this
+            ->select('nomor_kasus')
             ->like('nomor_kasus', $prefix, 'after')
             ->orderBy('nomor_kasus', 'DESC')
             ->first();
-    
+
         $urutanBerikutnya = 1;
-    
+
         if (!empty($kasusTerakhir['nomor_kasus'])) {
             $urutanTerakhir   = (int) substr((string) $kasusTerakhir['nomor_kasus'], -4);
             $urutanBerikutnya = $urutanTerakhir + 1;
         }
-    
+
         return $prefix . str_pad((string) $urutanBerikutnya, 4, '0', STR_PAD_LEFT);
     }
 
@@ -96,11 +97,11 @@ final class KasusReaktifModel extends ModelTemplate
      * @param array<string, mixed> $opsi
      * @return list<array<string, mixed>>
      */
-    public function get_data_tabel(?int $limit = null, int $offset = 0, array $opsi = []): array
+    public function get_data_tabel(null|int $limit = null, int $offset = 0, array $opsi = []): array
     {
-        $denganParameter   = $opsi['dengan_parameter'] ?? false;
-        $untukModal        = $opsi['untuk_modal'] ?? false;
-        $belumDiagnostik   = $opsi['belum_diagnostik'] ?? false;
+        $denganParameter = $opsi['dengan_parameter'] ?? false;
+        $untukModal      = $opsi['untuk_modal'] ?? false;
+        $belumDiagnostik = $opsi['belum_diagnostik'] ?? false;
 
         $select = [
             'kr.id_kasus',
@@ -134,9 +135,11 @@ final class KasusReaktifModel extends ModelTemplate
             ->orderBy('kr.nomor_kasus', 'DESC');
 
         if ($belumDiagnostik) {
-            $builder
-                ->join('uji_darah.hasil_diagnostik hd', 'hd.id_kasus = kr.id_kasus', 'left')
-                ->where('hd.id_diagnostik IS NULL', null, false);
+            $builder->join('uji_darah.hasil_diagnostik hd', 'hd.id_kasus = kr.id_kasus', 'left')->where(
+                'hd.id_diagnostik IS NULL',
+                null,
+                false,
+            );
         }
 
         if ($limit !== null && $limit > 0) {
@@ -183,9 +186,7 @@ final class KasusReaktifModel extends ModelTemplate
             }
         }
 
-        return !empty($parameterReaktif)
-            ? implode(', ', $parameterReaktif)
-            : '-';
+        return !empty($parameterReaktif) ? implode(', ', $parameterReaktif) : '-';
     }
 
     /**

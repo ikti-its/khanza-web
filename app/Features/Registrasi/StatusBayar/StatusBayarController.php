@@ -14,7 +14,7 @@ final class StatusBayarController extends ControllerTemplate
         parent::__construct(
             new StatusBayarModel(),
             [
-                ['Registrasi', 'registrasi'],
+                ['Registrasi',   'registrasi'],
                 ['Status Bayar', 'status_bayar'],
             ],
             'Status Bayar',

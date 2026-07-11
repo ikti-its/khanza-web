@@ -15,13 +15,13 @@ final class PenerimaanBarangDetailModel extends ModelTemplate
         parent::__construct(
             new PenerimaanBarangDetailDatabase(),
             [
-                'id_detail'     => V::DEFAULT(),
-                'qty_diterima'  => V::DEFAULT(),
-                'harga_satuan'  => V::DEFAULT(),
+                'id_detail'    => V::DEFAULT(),
+                'qty_diterima' => V::DEFAULT(),
+                'harga_satuan' => V::DEFAULT(),
             ],
             [
                 'id_penerimaan' => ['tanggal', 'status'],
-                'id_barang' => [
+                'id_barang'     => [
                     'nama_barang',
                     'kode_barang',
                     'id_satuan' => ['nama_satuan'],
@@ -38,14 +38,14 @@ final class PenerimaanBarangDetailModel extends ModelTemplate
             ->select('b.nama_barang, b.kode_barang')
             ->select('s.nama_satuan')
             ->select('pbd.qty AS qty_pengadaan')
-            ->join('inventori_non_medis.barang b',
-                   'm.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s',
-                   'b.id_satuan = s.id_satuan', 'left')
-            ->join('inventori_non_medis.penerimaan_barang pb',
-                   'm.id_penerimaan = pb.id_penerimaan', 'left')
-            ->join('inventori_non_medis.pengadaan_barang_detail pbd',
-                   'pb.id_pengadaan = pbd.id_pengadaan AND pbd.id_barang = m.id_barang', 'left');
+            ->join('inventori_non_medis.barang b', 'm.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->join('inventori_non_medis.penerimaan_barang pb', 'm.id_penerimaan = pb.id_penerimaan', 'left')
+            ->join(
+                'inventori_non_medis.pengadaan_barang_detail pbd',
+                'pb.id_pengadaan = pbd.id_pengadaan AND pbd.id_barang = m.id_barang',
+                'left',
+            );
     }
 
     #[\Override]

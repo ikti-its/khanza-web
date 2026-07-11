@@ -24,9 +24,9 @@ final class UnitController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_unit',         'ID Unit'],
-                [SHOW, REQUIRED, I::TEXT,  'kode_unit',       'Kode Unit'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_unit',       'Nama Unit'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_unit',               'ID Unit'],
+                [SHOW, REQUIRED, I::TEXT,  'kode_unit',             'Kode Unit'],
+                [SHOW, REQUIRED, I::TEXT,  'nama_unit',             'Nama Unit'],
                 [SHOW, REQUIRED, I::MONEY, 'biaya_registrasi_baru', 'Biaya Registrasi Baru'],
                 [SHOW, REQUIRED, I::MONEY, 'biaya_registrasi_lama', 'Biaya Registrasi Lama'],
             ],
@@ -35,7 +35,8 @@ final class UnitController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $builder = $this->model->db
+        $builder = $this->model
+            ->db
             ->table('unit.unit')
             ->select('id_unit, kode_unit, nama_unit, biaya_registrasi_baru, biaya_registrasi_lama')
             ->orderBy('kode_unit');

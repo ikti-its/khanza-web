@@ -14,8 +14,8 @@ final class SekolahController extends ControllerTemplate
         parent::__construct(
             new SekolahModel(),
             [
-                ['Pendidikan',  'pendidikan'],
-                ['Sekolah', 'sekolah'],
+                ['Pendidikan', 'pendidikan'],
+                ['Sekolah',    'sekolah'],
             ],
             'Sekolah',
             [

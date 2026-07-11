@@ -41,7 +41,8 @@ final class KotaController extends ControllerTemplate
     {
         $tabel = $this->model->table;
 
-        $data = $this->model->builder()
+        $data = $this->model
+            ->builder()
             ->select("
                 {$tabel}.id_kota,
                 {$tabel}.nama_kota
@@ -51,7 +52,7 @@ final class KotaController extends ControllerTemplate
             ->getResultArray();
 
         return $this->response->setJSON([
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

@@ -14,7 +14,7 @@ final class JabatanController extends ControllerTemplate
         parent::__construct(
             new JabatanModel(),
             [
-                ['User', 'user'],
+                ['User',    'user'],
                 ['Jabatan', 'jabatan'],
             ],
             'Jabatan',

@@ -33,7 +33,7 @@ final class RiwayatTanggalDonorModel extends ModelTemplate
      * @param int $offset
      * @return list<array<string, mixed>>
      */
-    public function get_data_tabel(?int $limit = null, int $offset = 0): array
+    public function get_data_tabel(null|int $limit = null, int $offset = 0): array
     {
         $builder = $this->db
             ->table('role.riwayat_tanggal_donor rtd')
@@ -64,9 +64,10 @@ final class RiwayatTanggalDonorModel extends ModelTemplate
      * @param int|string $idPendonor
      * @return array<string, mixed>|null
      */
-    public function getRiwayatAktif(int|string $idPendonor): ?array
+    public function getRiwayatAktif(int|string $idPendonor): null|array
     {
-        $row = $this->builder()
+        $row = $this
+            ->builder()
             ->where('id_pendonor', $idPendonor)
             ->where('end_valid IS NULL', null, false)
             ->orderBy('start_valid', 'DESC')
@@ -84,10 +85,13 @@ final class RiwayatTanggalDonorModel extends ModelTemplate
      * @param string|null $tanggalDonor
      * @param string|null $startValid
      */
-    public function catatTanggalDonor(int|string $idPendonor, ?string $tanggalDonor, ?string $startValid = null): void
-    {
+    public function catatTanggalDonor(
+        int|string $idPendonor,
+        null|string $tanggalDonor,
+        null|string $startValid = null,
+    ): void {
         $tanggalDonor = $this->normalisasiTanggal($tanggalDonor);
-        $startValid ??= date('Y-m-d H:i:s');
+        $startValid   ??= date('Y-m-d H:i:s');
 
         $riwayatAktif = $this->getRiwayatAktif($idPendonor);
         $tanggalAktif = $this->normalisasiTanggal($riwayatAktif['tanggal_donor'] ?? null);
@@ -96,7 +100,8 @@ final class RiwayatTanggalDonorModel extends ModelTemplate
             return;
         }
 
-        $this->builder()
+        $this
+            ->builder()
             ->where('id_pendonor', $idPendonor)
             ->where('end_valid IS NULL', null, false)
             ->update(['end_valid' => $startValid]);
@@ -115,20 +120,19 @@ final class RiwayatTanggalDonorModel extends ModelTemplate
      * @param string|null $startValid
      * @return string|null
      */
-    public function rollbackKeRiwayatSebelumnya(int|string $idPendonor, ?string $startValid = null): ?string
+    public function rollbackKeRiwayatSebelumnya(int|string $idPendonor, null|string $startValid = null): null|string
     {
-        $startValid ??= date('Y-m-d H:i:s');
+        $startValid   ??= date('Y-m-d H:i:s');
         $riwayatAktif = $this->getRiwayatAktif($idPendonor);
 
         if (empty($riwayatAktif)) {
             return null;
         }
 
-        $this->builder()
-            ->where('id_riwayat', $riwayatAktif['id_riwayat'])
-            ->update(['end_valid' => $startValid]);
+        $this->builder()->where('id_riwayat', $riwayatAktif['id_riwayat'])->update(['end_valid' => $startValid]);
 
-        $riwayatSebelumnya = $this->builder()
+        $riwayatSebelumnya = $this
+            ->builder()
             ->where('id_pendonor', $idPendonor)
             ->where('id_riwayat !=', $riwayatAktif['id_riwayat'])
             ->orderBy('start_valid', 'DESC')
@@ -136,7 +140,7 @@ final class RiwayatTanggalDonorModel extends ModelTemplate
             ->limit(1)
             ->get()
             ->getRowArray();
-        
+
         $tanggalRollback = $this->normalisasiTanggal($riwayatSebelumnya['tanggal_donor'] ?? null);
 
         $this->insert([
@@ -152,7 +156,7 @@ final class RiwayatTanggalDonorModel extends ModelTemplate
     /**
      * Menyamakan format tanggal menjadi YYYY-MM-DD atau null
      */
-    private function normalisasiTanggal(?string $tanggal): ?string
+    private function normalisasiTanggal(null|string $tanggal): null|string
     {
         if ($tanggal === null || $tanggal === '') {
             return null;

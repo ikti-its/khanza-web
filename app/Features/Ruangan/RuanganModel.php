@@ -18,7 +18,7 @@ final class RuanganModel extends ModelTemplate
                 'nama_ruangan'    => V::DEFAULT(),
                 'jenis_instalasi' => V::DEFAULT(),
             ],
-            []
+            [],
         );
     }
 }

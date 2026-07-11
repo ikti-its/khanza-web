@@ -14,7 +14,7 @@ final class ProviderController extends ControllerTemplate
         parent::__construct(
             new ProviderModel(),
             [
-                ['Kontak', 'kontak'],
+                ['Kontak',   'kontak'],
                 ['Provider', 'provider'],
             ],
             'Provider',
@@ -26,8 +26,8 @@ final class ProviderController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [SHOW, REQUIRED, I::INDEX,  'id_provider',   'ID'],
-                [SHOW, REQUIRED, I::TEXT,   'nama_provider', 'Provider'],
+                [SHOW, REQUIRED, I::INDEX, 'id_provider',   'ID'],
+                [SHOW, REQUIRED, I::TEXT,  'nama_provider', 'Provider'],
             ],
         );
     }

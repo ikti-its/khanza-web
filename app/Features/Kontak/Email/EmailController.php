@@ -26,9 +26,9 @@ final class EmailController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [SHOW, REQUIRED, I::INDEX,  'id_email',     'ID Email'],
-                [SHOW, REQUIRED, I::TEXT,   'alamat_email', 'Email'],
-                [SHOW, REQUIRED, I::TEXT,   'nama',         'Nama Orang'],
+                [SHOW, REQUIRED, I::INDEX, 'id_email',     'ID Email'],
+                [SHOW, REQUIRED, I::TEXT,  'alamat_email', 'Email'],
+                [SHOW, REQUIRED, I::TEXT,  'nama',         'Nama Orang'],
             ],
         );
     }

@@ -24,21 +24,21 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
                 A::UPDATE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,    'id_pengajuan',               'ID'],
-                [SHOW, OPTIONAL, I::READONLY, 'no_pengajuan',               'No. Pengajuan'],
+                [HIDE,       OPTIONAL, I::INDEX,    'id_pengajuan',               'ID'],
+                [SHOW,       OPTIONAL, I::READONLY, 'no_pengajuan',               'No. Pengajuan'],
                 [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal',                    'Tanggal Pengajuan'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal',                    'Tanggal Pengajuan'],
-                [TABLE_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang', 'Pemohon'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama',           'Pemohon'],
-                [TABLE_ONLY, OPTIONAL, I::MONEY,    'total_harga',    'Total Harga'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'total_harga',    'Total Harga'],
-                [SHOW, REQUIRED, I::SELECT,   'id_status_pengajuan_barang', 'Status'],
-                [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal_diproses',          'Tanggal Diproses'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',          'Tanggal Diproses'],
-                [SHOW, REQUIRED, I::SELECT,   'atasan_logistik',            'Pengelola'],
+                [TABLE_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang',             'Pemohon'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama',                       'Pemohon'],
+                [TABLE_ONLY, OPTIONAL, I::MONEY,    'total_harga',                'Total Harga'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'total_harga',                'Total Harga'],
+                [SHOW,       REQUIRED, I::SELECT,   'id_status_pengajuan_barang', 'Status'],
+                [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal_diproses',           'Tanggal Diproses'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',           'Tanggal Diproses'],
+                [SHOW,       REQUIRED, I::SELECT,   'atasan_logistik',            'Pengelola'],
             ],
             child_path: '/inventori-non-medis/ringkasan-pengajuan-barang-detail',
-            child_fk:   'id_pengajuan',
+            child_fk: 'id_pengajuan',
         );
     }
 
@@ -55,18 +55,21 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
         $new_status = (int) ($postData['id_status_pengajuan_barang'] ?? 0);
 
         if (!in_array($new_status, [2, 3], true)) {
-            $current = $this->model->find($id);
+            $current                                = $this->model->find($id);
             $postData['id_status_pengajuan_barang'] = (int) ($current['id_status_pengajuan_barang'] ?? 4);
             return;
         }
 
         $current = $this->model->find($id);
-        if (!is_array($current)) return;
-        if ((int) ($current['id_status_pengajuan_barang'] ?? 0) === 2) return;
+        if (!is_array($current))
+            return;
+        if ((int) ($current['id_status_pengajuan_barang'] ?? 0) === 2)
+            return;
 
         $postData['tanggal_diproses'] = date('Y-m-d H:i:s');
 
-        if ($new_status !== 2) return;
+        if ($new_status !== 2)
+            return;
     }
 
     // validasi atasan & qty sebelum approve
@@ -90,7 +93,8 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
                 return $this->home();
             }
 
-            $has_approved = $this->get_db()
+            $has_approved = $this
+                ->get_db()
                 ->table('inventori_non_medis.pengajuan_barang_detail')
                 ->where('id_pengajuan', (int) $id)
                 ->where('qty_disetujui >', 0)

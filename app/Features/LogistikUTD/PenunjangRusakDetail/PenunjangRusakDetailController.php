@@ -14,7 +14,7 @@ final class PenunjangRusakDetailController extends ControllerTemplate
         parent::__construct(
             new PenunjangRusakDetailModel(),
             [
-                ['Logistik UTD',    'logistik_utd'],
+                ['Logistik UTD',               'logistik_utd'],
                 ['BHP Non Medis Rusak Detail', 'bhp_non_medis_rusak_detail'],
             ],
             'BHP Non Medis Rusak Detail',

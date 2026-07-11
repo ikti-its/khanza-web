@@ -13,7 +13,7 @@ final class JenisBarangModel extends ModelTemplate
         parent::__construct(
             new JenisBarangDatabase(),
             [
-                'id_jenis_barang'          => V::DEFAULT(),
+                'id_jenis_barang'   => V::DEFAULT(),
                 'kode_jenis_barang' => V::DEFAULT(),
                 'nama_jenis_barang' => V::DEFAULT(),
             ],

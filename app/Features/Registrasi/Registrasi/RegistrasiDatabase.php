@@ -53,7 +53,7 @@ final class RegistrasiDatabase extends DatabaseTemplate
                 [
                     ['id_alamat_pj'],
                     \App\Features\Lokasi\Alamat\AlamatDatabase::class,
-                    ['id_alamat']
+                    ['id_alamat'],
                 ],
                 [
                     ['unit'],
@@ -92,7 +92,7 @@ final class RegistrasiDatabase extends DatabaseTemplate
                 ],
             ],
             false,
-            'registrasi.csv'
+            'registrasi.csv',
         );
     }
 }

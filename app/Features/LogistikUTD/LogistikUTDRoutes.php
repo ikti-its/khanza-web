@@ -12,11 +12,11 @@ final class LogistikUTDRoutes extends RouteTemplate
         parent::__construct(
             'Logistik UTD',
             [
-                \App\Features\LogistikUTD\MedisDonor\MedisDonorController::class => 'HIDE',
-                \App\Features\LogistikUTD\PenunjangDonor\PenunjangDonorController::class => 'HIDE',
-                \App\Features\LogistikUTD\MedisPemisahan\MedisPemisahanController::class => 'HIDE',
-                \App\Features\LogistikUTD\PenunjangPemisahan\PenunjangPemisahanController::class => 'HIDE',
-                \App\Features\LogistikUTD\MedisPenyerahan\MedisPenyerahanController::class => 'HIDE',
+                \App\Features\LogistikUTD\MedisDonor\MedisDonorController::class                   => 'HIDE',
+                \App\Features\LogistikUTD\PenunjangDonor\PenunjangDonorController::class           => 'HIDE',
+                \App\Features\LogistikUTD\MedisPemisahan\MedisPemisahanController::class           => 'HIDE',
+                \App\Features\LogistikUTD\PenunjangPemisahan\PenunjangPemisahanController::class   => 'HIDE',
+                \App\Features\LogistikUTD\MedisPenyerahan\MedisPenyerahanController::class         => 'HIDE',
                 \App\Features\LogistikUTD\PenunjangPenyerahan\PenunjangPenyerahanController::class => 'HIDE',
                 \App\Features\LogistikUTD\MedisRusak\MedisRusakController::class,
                 \App\Features\LogistikUTD\MedisRusakDetail\MedisRusakDetailController::class => 'HIDE',

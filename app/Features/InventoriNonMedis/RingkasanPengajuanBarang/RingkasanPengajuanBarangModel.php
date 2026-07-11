@@ -14,11 +14,11 @@ final class RingkasanPengajuanBarangModel extends ModelTemplate
         parent::__construct(
             new PengajuanBarangDatabase(),
             [
-                'id_pengajuan'      => V::DEFAULT(),
-                'no_pengajuan'      => V::DEFAULT(),
-                'tanggal'           => V::DEFAULT(),
-                'tanggal_diproses'  => V::DEFAULT(),
-                'total_harga'       => V::DEFAULT(),
+                'id_pengajuan'     => V::DEFAULT(),
+                'no_pengajuan'     => V::DEFAULT(),
+                'tanggal'          => V::DEFAULT(),
+                'tanggal_diproses' => V::DEFAULT(),
+                'total_harga'      => V::DEFAULT(),
             ],
             [
                 'petugas_gudang'             => ['id_orang' => ['nama']],
@@ -34,12 +34,11 @@ final class RingkasanPengajuanBarangModel extends ModelTemplate
         $options = parent::get_all_options();
 
         if (isset($options['id_status_pengajuan_barang'])) {
-            $options['id_status_pengajuan_barang'] = array_values(
-                array_filter(
-                    $options['id_status_pengajuan_barang'],
-                    fn(array $opt) => in_array($opt[1], ['2', '3', '4'], true),
-                )
-            );
+            $options['id_status_pengajuan_barang'] = array_values(array_filter($options['id_status_pengajuan_barang'], fn(array $opt) => in_array(
+                $opt[1],
+                ['2', '3', '4'],
+                true,
+            )));
         }
 
         return $options;

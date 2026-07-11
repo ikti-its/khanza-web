@@ -14,12 +14,11 @@ final class UnitDatabase extends DatabaseTemplate
             'unit',
             'unit',
             [
-                'id_unit'         => T::ID(1_000),
-                'kode_unit'       => T::CODE(10),
-                'nama_unit'       => T::NAME(100),
+                'id_unit'               => T::ID(1_000),
+                'kode_unit'             => T::CODE(10),
+                'nama_unit'             => T::NAME(100),
                 'biaya_registrasi_baru' => T::MONEY(),
                 'biaya_registrasi_lama' => T::MONEY(),
-
             ],
             'id_unit',
             [
@@ -28,7 +27,7 @@ final class UnitDatabase extends DatabaseTemplate
             ],
             [],
             false,
-            'unit.csv'
+            'unit.csv',
         );
     }
 }

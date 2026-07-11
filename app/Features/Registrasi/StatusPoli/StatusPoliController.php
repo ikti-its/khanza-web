@@ -14,7 +14,7 @@ final class StatusPoliController extends ControllerTemplate
         parent::__construct(
             new StatusPoliModel(),
             [
-                ['Registrasi',          'registrasi'],
+                ['Registrasi',  'registrasi'],
                 ['Status Poli', 'status_poli'],
             ],
             'Status Poli',

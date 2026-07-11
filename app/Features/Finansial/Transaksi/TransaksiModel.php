@@ -13,9 +13,9 @@ final class TransaksiModel extends ModelTemplate
         parent::__construct(
             new TransaksiDatabase(),
             [
-                'id_transaksi'      => V::DEFAULT(),
-                'waktu_transaksi'   => V::DEFAULT(),
-                'nominal'           => V::DEFAULT(),
+                'id_transaksi'    => V::DEFAULT(),
+                'waktu_transaksi' => V::DEFAULT(),
+                'nominal'         => V::DEFAULT(),
             ],
             [
                 'rekening_sumber'   => ['nama_akun'],

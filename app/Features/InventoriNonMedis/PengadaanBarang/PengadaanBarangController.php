@@ -10,7 +10,7 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 final class PengadaanBarangController extends ControllerTemplate
 {
-    private ?string $new_no_pengadaan = null;
+    private null|string $new_no_pengadaan = null;
 
     public function __construct()
     {
@@ -30,20 +30,20 @@ final class PengadaanBarangController extends ControllerTemplate
                 A::PRINT,
             ],
             [
-                [HIDE,       OPTIONAL, I::INDEX,    'id_pengadaan',                'ID'],
-                [TABLE_ONLY, OPTIONAL, I::READONLY, 'no_pengajuan',                'No. Pengajuan'],
-                [FORM_ONLY,  REQUIRED, I::SELECT,   'id_pengajuan',                'Pengajuan'],
-                [SHOW,       OPTIONAL, I::READONLY, 'no_pengadaan',                'No. Pengadaan'],
-                [TABLE_ONLY, OPTIONAL, I::MONEY,    'total_harga',                 'Total Harga'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'total_harga',                 'Total Harga'],
-                [SHOW,       OPTIONAL, I::SELECT,   'id_suplier',                  'Suplier'],
-                [SHOW,       REQUIRED, I::DTIME,    'tanggal',                     'Tanggal Pengadaan'],
+                [HIDE,       OPTIONAL, I::INDEX,    'id_pengadaan',                 'ID'],
+                [TABLE_ONLY, OPTIONAL, I::READONLY, 'no_pengajuan',                 'No. Pengajuan'],
+                [FORM_ONLY,  REQUIRED, I::SELECT,   'id_pengajuan',                 'Pengajuan'],
+                [SHOW,       OPTIONAL, I::READONLY, 'no_pengadaan',                 'No. Pengadaan'],
+                [TABLE_ONLY, OPTIONAL, I::MONEY,    'total_harga',                  'Total Harga'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'total_harga',                  'Total Harga'],
+                [SHOW,       OPTIONAL, I::SELECT,   'id_suplier',                   'Suplier'],
+                [SHOW,       REQUIRED, I::DTIME,    'tanggal',                      'Tanggal Pengadaan'],
                 [TABLE_ONLY, OPTIONAL, I::SELECT,   'id_status_pengadaan_barang',   'Status'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_status_pengadaan_barang', 'Status'],
-                [SHOW,       OPTIONAL, I::TEXT,     'catatan',                     'Catatan'],
+                [SHOW,       OPTIONAL, I::TEXT,     'catatan',                      'Catatan'],
             ],
             child_path: '/inventori-non-medis/detail-pengadaan-barang',
-            child_fk:   'id_pengadaan',
+            child_fk: 'id_pengadaan',
         );
     }
 
@@ -80,14 +80,18 @@ final class PengadaanBarangController extends ControllerTemplate
         // blokir jika pengajuan masih punya barang baru yang belum dipetakan ke master
         $id_pengajuan = (int) ($this->request->getPost('id_pengajuan') ?? 0);
         if ($id_pengajuan > 0) {
-            $unmapped = $this->get_db()
+            $unmapped = $this
+                ->get_db()
                 ->table('inventori_non_medis.pengajuan_barang_detail')
                 ->where('id_pengajuan', $id_pengajuan)
                 ->where('id_barang IS NULL')
                 ->where('qty_disetujui >', 0)
                 ->countAllResults();
             if ($unmapped > 0) {
-                session()->setFlashdata('error', 'Terdapat barang baru pada pengajuan yang belum dipetakan ke master barang. Petakan terlebih dahulu melalui menu Ringkasan Pengajuan Barang.');
+                session()->setFlashdata(
+                    'error',
+                    'Terdapat barang baru pada pengajuan yang belum dipetakan ke master barang. Petakan terlebih dahulu melalui menu Ringkasan Pengajuan Barang.',
+                );
                 return $this->home();
             }
         }
@@ -95,11 +99,13 @@ final class PengadaanBarangController extends ControllerTemplate
         $result = parent::create();
 
         if ($result instanceof RedirectResponse && $this->new_no_pengadaan !== null) {
-            $row = $this->get_db()
+            $row = $this
+                ->get_db()
                 ->table('inventori_non_medis.pengadaan_barang')
                 ->select('id_pengadaan')
                 ->where('no_pengadaan', $this->new_no_pengadaan)
-                ->get()->getRowArray();
+                ->get()
+                ->getRowArray();
 
             $this->new_no_pengadaan = null;
 
@@ -116,22 +122,28 @@ final class PengadaanBarangController extends ControllerTemplate
     {
         $db = $this->get_db();
 
-        $pengadaan = $db->table('inventori_non_medis.pengadaan_barang')
+        $pengadaan = $db
+            ->table('inventori_non_medis.pengadaan_barang')
             ->select('id_pengajuan')
             ->where('id_pengadaan', $id_pengadaan)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
 
-        if (!is_array($pengadaan)) return;
+        if (!is_array($pengadaan))
+            return;
 
         $id_pengajuan = (int) ($pengadaan['id_pengajuan'] ?? 0);
-        if ($id_pengajuan === 0) return;
+        if ($id_pengajuan === 0)
+            return;
 
-        $items = $db->table('inventori_non_medis.pengajuan_barang_detail')
+        $items = $db
+            ->table('inventori_non_medis.pengajuan_barang_detail')
             ->select('id_barang, harga')
             ->where('id_pengajuan', $id_pengajuan)
             ->where('id_barang >', 0)
             ->where('qty_disetujui >', 0)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         foreach ($items as $item) {
             $db->table('inventori_non_medis.pengadaan_barang_detail')->insert([
@@ -149,31 +161,35 @@ final class PengadaanBarangController extends ControllerTemplate
     {
         $db = $this->get_db();
 
-        $header = $db->table('inventori_non_medis.pengadaan_barang pb')
-            ->join('inventori_non_medis.suplier s',           'pb.id_suplier = s.id_suplier',       'left')
-            ->join('finansial.rekening r',                    's.id_rekening = r.id_rekening',       'left')
-            ->join('finansial.bank bk',                       'r.bank = bk.id_bank',                'left')
-            ->join('inventori_non_medis.pengajuan_barang pj', 'pb.id_pengajuan = pj.id_pengajuan',   'left')
-            ->join('role.petugas pt',                         'pj.petugas_gudang = pt.id_petugas',  'left')
-            ->join('person.orang o',                          'pt.id_orang = o.id_orang',            'left')
+        $header = $db
+            ->table('inventori_non_medis.pengadaan_barang pb')
+            ->join('inventori_non_medis.suplier s', 'pb.id_suplier = s.id_suplier', 'left')
+            ->join('finansial.rekening r', 's.id_rekening = r.id_rekening', 'left')
+            ->join('finansial.bank bk', 'r.bank = bk.id_bank', 'left')
+            ->join('inventori_non_medis.pengajuan_barang pj', 'pb.id_pengajuan = pj.id_pengajuan', 'left')
+            ->join('role.petugas pt', 'pj.petugas_gudang = pt.id_petugas', 'left')
+            ->join('person.orang o', 'pt.id_orang = o.id_orang', 'left')
             ->select('pb.no_pengadaan, pb.tanggal, pb.catatan,
                       s.nama_suplier, s.no_telp, s.alamat,
                       r.nomor_rekening, r.nama_akun, bk.nama_bank,
                       pj.no_pengajuan, o.nama AS nama_petugas')
             ->where('pb.id_pengadaan', (int) $id)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
 
         if (!is_array($header)) {
             return $this->index();
         }
 
-        $items = $db->table('inventori_non_medis.pengadaan_barang_detail pbd')
-            ->join('inventori_non_medis.barang b',  'pbd.id_barang = b.id_barang',   'left')
-            ->join('inventori_non_medis.satuan sat', 'b.id_satuan = sat.id_satuan',  'left')
+        $items = $db
+            ->table('inventori_non_medis.pengadaan_barang_detail pbd')
+            ->join('inventori_non_medis.barang b', 'pbd.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan sat', 'b.id_satuan = sat.id_satuan', 'left')
             ->select('b.nama_barang, sat.nama_satuan, pbd.qty, pbd.harga_satuan')
             ->where('pbd.id_pengadaan', (int) $id)
             ->where('pbd.id_barang >', 0)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         return view('components/cetak/cetak_surat_pemesanan', [
             'header' => $header,

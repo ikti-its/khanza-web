@@ -25,7 +25,7 @@ final class HasilUjiSaringModel extends ModelTemplate
                 'id_pengambilan_darah' => ['nomor_pengambilan', 'no_bag'],
                 'id_metode_uji'        => ['nama_metode'],
                 'id_petugas'           => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
             ],
         );
@@ -40,7 +40,8 @@ final class HasilUjiSaringModel extends ModelTemplate
      */
     public function validasiTanggalUji(string $idPengambilan, string $tanggalUjiInput): void
     {
-        $pengambilan = $this->db->table('donor.pengambilan_darah')
+        $pengambilan = $this->db
+            ->table('donor.pengambilan_darah')
             ->select('tanggal_pengambilan')
             ->where('id_pengambilan_darah', $idPengambilan)
             ->get()
@@ -52,11 +53,15 @@ final class HasilUjiSaringModel extends ModelTemplate
             $hariIni        = new \DateTime(date('Y-m-d'));
 
             if ($tglUji < $tglPengambilan) {
-                throw new \InvalidArgumentException('Gagal menyimpan! Tanggal uji saring tidak boleh mendahului tanggal pengambilan darah.');
+                throw new \InvalidArgumentException(
+                    'Gagal menyimpan! Tanggal uji saring tidak boleh mendahului tanggal pengambilan darah.',
+                );
             }
 
             if ($tglUji > $hariIni) {
-                throw new \InvalidArgumentException('Gagal menyimpan! Tanggal uji saring tidak boleh melebihi tanggal hari ini.');
+                throw new \InvalidArgumentException(
+                    'Gagal menyimpan! Tanggal uji saring tidak boleh melebihi tanggal hari ini.',
+                );
             }
         }
     }

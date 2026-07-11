@@ -26,13 +26,13 @@ final class DataTriaseSekunderController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_triase_sekunder', 'ID Triase Sekunder'],
-                [SHOW, REQUIRED, I::INDEX, 'id_triase',          'ID Triase'],
-                [HIDE, REQUIRED, I::TEXT,  'anamnesa_singkat',   'Anamnesa Singkat'],
-                [HIDE, REQUIRED, I::TEXT,  'catatan',            'Catatan'],
-                [SHOW, REQUIRED, I::SELECT,'id_plan_sekunder',   'Plan Sekunder'],
-                [SHOW, REQUIRED, I::DTIME, 'tanggal_triase',     'Tanggal Triase'],
-                [SHOW, REQUIRED, I::INDEX, 'id_petugas',         'ID Petugas'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_triase_sekunder', 'ID Triase Sekunder'],
+                [SHOW, REQUIRED, I::INDEX,  'id_triase',          'ID Triase'],
+                [HIDE, REQUIRED, I::TEXT,   'anamnesa_singkat',   'Anamnesa Singkat'],
+                [HIDE, REQUIRED, I::TEXT,   'catatan',            'Catatan'],
+                [SHOW, REQUIRED, I::SELECT, 'id_plan_sekunder',   'Plan Sekunder'],
+                [SHOW, REQUIRED, I::DTIME,  'tanggal_triase',     'Tanggal Triase'],
+                [SHOW, REQUIRED, I::INDEX,  'id_petugas',         'ID Petugas'],
             ],
         );
     }

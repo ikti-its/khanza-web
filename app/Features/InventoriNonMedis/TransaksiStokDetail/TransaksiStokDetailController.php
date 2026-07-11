@@ -16,7 +16,7 @@ final class TransaksiStokDetailController extends ControllerTemplate
             [
                 ['Inventori Non Medis', 'inventori_non_medis'],
                 ['Transaksi Stok',      'transaksi_stok'],
-                ['Detail',             'detail'],
+                ['Detail',              'detail'],
             ],
             'Transaksi Stok Detail',
             [

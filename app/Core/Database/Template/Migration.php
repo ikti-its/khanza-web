@@ -12,6 +12,6 @@ final class Migration
         public readonly string $path,
         public readonly string $class,
         public readonly string $namespace,
-        public readonly string $uid
-    ){}
+        public readonly string $uid,
+    ) {}
 }

@@ -14,8 +14,8 @@ final class GelarController extends ControllerTemplate
         parent::__construct(
             new GelarModel(),
             [
-                ['Pendidikan',  'pendidikan'],
-                ['Gelar', 'gelar'],
+                ['Pendidikan', 'pendidikan'],
+                ['Gelar',      'gelar'],
             ],
             'Gelar',
             [

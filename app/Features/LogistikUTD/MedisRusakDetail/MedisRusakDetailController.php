@@ -14,7 +14,7 @@ final class MedisRusakDetailController extends ControllerTemplate
         parent::__construct(
             new MedisRusakDetailModel(),
             [
-                ['Logistik UTD',    'logistik_utd'],
+                ['Logistik UTD',           'logistik_utd'],
                 ['BHP Medis Rusak Detail', 'bhp_medis_rusak_detail'],
             ],
             'BHP Medis Rusak Detail',

@@ -13,11 +13,11 @@ final class PengadaanBarangModel extends ModelTemplate
         parent::__construct(
             new PengadaanBarangDatabase(),
             [
-                'id_pengadaan'               => V::DEFAULT(),
-                'no_pengadaan'               => V::DEFAULT(),
-                'tanggal'                    => V::DEFAULT(),
-                'catatan'                    => V::DEFAULT(),
-                'total_harga'               => V::DEFAULT(),
+                'id_pengadaan' => V::DEFAULT(),
+                'no_pengadaan' => V::DEFAULT(),
+                'tanggal'      => V::DEFAULT(),
+                'catatan'      => V::DEFAULT(),
+                'total_harga'  => V::DEFAULT(),
             ],
             [
                 'id_pengajuan'               => ['no_pengajuan'],
@@ -34,7 +34,7 @@ final class PengadaanBarangModel extends ModelTemplate
         $options = parent::get_all_options();
 
         if (isset($options['id_pengajuan'])) {
-            $rows = $this->db->query("
+            $rows = $this->db->query('
                 SELECT DISTINCT pjd.id_pengajuan
                 FROM inventori_non_medis.pengajuan_barang_detail pjd
                 JOIN inventori_non_medis.pengajuan_barang pj ON pjd.id_pengajuan = pj.id_pengajuan
@@ -55,16 +55,15 @@ final class PengadaanBarangModel extends ModelTemplate
                       AND unmapped.id_barang IS NULL
                       AND unmapped.qty_disetujui > 0
                   )
-            ")->getResultArray();
+            ')->getResultArray();
 
             $available = array_map(fn(array $r) => (string) $r['id_pengajuan'], $rows);
 
-            $options['id_pengajuan'] = array_values(
-                array_filter(
-                    $options['id_pengajuan'],
-                    fn(array $opt) => in_array($opt[1], $available, true),
-                )
-            );
+            $options['id_pengajuan'] = array_values(array_filter($options['id_pengajuan'], fn(array $opt) => in_array(
+                $opt[1],
+                $available,
+                true,
+            )));
         }
 
         return $options;

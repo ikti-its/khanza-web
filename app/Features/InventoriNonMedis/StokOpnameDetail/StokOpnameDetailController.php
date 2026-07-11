@@ -29,16 +29,27 @@ final class StokOpnameDetailController extends ControllerTemplate
                 // A::DELETE,
             ],
             [
-                [HIDE,       OPTIONAL, I::INDEX,    'id_detail',   'ID Detail'],
-                [HIDE,       OPTIONAL, I::INDEX,    'id_opname',   'ID Opname'],
-                [TABLE_ONLY, OPTIONAL, I::TEXT,     'nama_barang', 'Barang'],
-                [FORM_ONLY,  REQUIRED, I::MODAL,    'id_barang',   'Barang',  ['modal' => 'modalBarang', 'display_column' => 'nama_barang', 'placeholder' => 'Klik cari barang...']],
-                [HIDE,       OPTIONAL, I::READONLY, 'kode_barang', 'Kode Barang'],
-                [HIDE,       OPTIONAL, I::READONLY, 'nama_satuan', 'Satuan'],
-                [SHOW,       OPTIONAL, I::READONLY, 'stok_sistem', 'Stok Sistem'],
-                [SHOW,       REQUIRED, I::NUMBER,   'stok_fisik',  'Stok Fisik'],
-                [TABLE_ONLY, OPTIONAL, I::SELECT,   'selisih',     'Selisih'],
-                [SHOW,       OPTIONAL, I::TEXT,     'catatan',     'Catatan'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_detail', 'ID Detail'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_opname', 'ID Opname'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT, 'nama_barang', 'Barang'],
+                [
+                    FORM_ONLY,
+                    REQUIRED,
+                    I::MODAL,
+                    'id_barang',
+                    'Barang',
+                    [
+                        'modal'          => 'modalBarang',
+                        'display_column' => 'nama_barang',
+                        'placeholder'    => 'Klik cari barang...',
+                    ],
+                ],
+                [HIDE, OPTIONAL, I::READONLY, 'kode_barang', 'Kode Barang'],
+                [HIDE, OPTIONAL, I::READONLY, 'nama_satuan', 'Satuan'],
+                [SHOW, OPTIONAL, I::READONLY, 'stok_sistem', 'Stok Sistem'],
+                [SHOW, REQUIRED, I::NUMBER, 'stok_fisik', 'Stok Fisik'],
+                [TABLE_ONLY, OPTIONAL, I::SELECT, 'selisih', 'Selisih'],
+                [SHOW, OPTIONAL, I::TEXT, 'catatan', 'Catatan'],
             ],
             parent_fk: 'id_opname',
         );
@@ -61,11 +72,13 @@ final class StokOpnameDetailController extends ControllerTemplate
     // ambil status opname induk
     private function get_parent_status(int $id_opname): int
     {
-        $row = $this->get_db()
+        $row = $this
+            ->get_db()
             ->table('inventori_non_medis.stok_opname')
             ->select('id_status_stok_opname')
             ->where('id_opname', $id_opname)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return (int) ($row['id_status_stok_opname'] ?? 0);
     }
 
@@ -81,14 +94,18 @@ final class StokOpnameDetailController extends ControllerTemplate
 
         $id_barang = (int) ($this->request->getPost('id_barang') ?? 0);
         if ($id_barang > 0 && $id_opname > 0) {
-            $exists = $this->get_db()
+            $exists = $this
+                ->get_db()
                 ->table('inventori_non_medis.stok_opname_detail')
                 ->where('id_opname', $id_opname)
                 ->where('id_barang', $id_barang)
                 ->countAllResults();
             if ($exists > 0) {
                 $this->home_params = ['id_opname' => $id_opname];
-                session()->setFlashdata('error', 'Barang tersebut sudah ada pada stok opname ini. Ubah data yang sudah ada jika ingin mengubah jumlah stoknya.');
+                session()->setFlashdata(
+                    'error',
+                    'Barang tersebut sudah ada pada stok opname ini. Ubah data yang sudah ada jika ingin mengubah jumlah stoknya.',
+                );
                 return $this->home();
             }
         }
@@ -103,11 +120,13 @@ final class StokOpnameDetailController extends ControllerTemplate
         $stok_sistem = 0;
 
         if ($id_barang > 0) {
-            $row = $this->get_db()
+            $row = $this
+                ->get_db()
                 ->table('inventori_non_medis.barang')
                 ->select('stok')
                 ->where('id_barang', $id_barang)
-                ->get()->getRowArray();
+                ->get()
+                ->getRowArray();
             $stok_sistem = (int) ($row['stok'] ?? 0);
         }
 
@@ -119,7 +138,7 @@ final class StokOpnameDetailController extends ControllerTemplate
     public function update(int|string $id): string|RedirectResponse
     {
         $row       = $this->model->find((int) $id);
-        $id_opname = (int) (is_array($row) ? ($row['id_opname'] ?? 0) : 0);
+        $id_opname = (int) (is_array($row) ? $row['id_opname'] ?? 0 : 0);
 
         if ($this->get_parent_status($id_opname) === 2) {
             $this->home_params = ['id_opname' => $id_opname];
@@ -134,7 +153,7 @@ final class StokOpnameDetailController extends ControllerTemplate
     protected function before_update(array &$postData, int|string $id): void
     {
         $row         = $this->model->find((int) $id);
-        $stok_sistem = (int) (is_array($row) ? ($row['stok_sistem'] ?? 0) : 0);
+        $stok_sistem = (int) (is_array($row) ? $row['stok_sistem'] ?? 0 : 0);
 
         $postData['stok_sistem'] = $stok_sistem;
         $postData['selisih']     = (int) ($postData['stok_fisik'] ?? 0) - $stok_sistem;

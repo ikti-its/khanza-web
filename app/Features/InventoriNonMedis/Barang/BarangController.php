@@ -26,15 +26,15 @@ final class BarangController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE,       OPTIONAL, I::INDEX,  'id_barang',       'ID Barang'],
-                [SHOW,       REQUIRED, I::TEXT,   'kode_barang',     'Kode Barang'],
-                [SHOW,       REQUIRED, I::NAME,   'nama_barang',     'Nama Barang'],
-                [SHOW,       REQUIRED, I::SELECT, 'id_satuan',       'Satuan'],
-                [SHOW,       REQUIRED, I::SELECT, 'id_jenis_barang', 'Jenis'],
-                [TABLE_ONLY, OPTIONAL, I::NUMBER,   'stok',         'Stok'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'stok',         'Stok'],
-                [FORM_ONLY,  OPTIONAL, I::NUMBER,   'stok_minimum', 'Stok Minimum'],
-                [SHOW,       OPTIONAL, I::MONEY,  'harga_satuan',    'Harga Satuan'],
+                [HIDE,       OPTIONAL, I::INDEX,    'id_barang',       'ID Barang'],
+                [SHOW,       REQUIRED, I::TEXT,     'kode_barang',     'Kode Barang'],
+                [SHOW,       REQUIRED, I::NAME,     'nama_barang',     'Nama Barang'],
+                [SHOW,       REQUIRED, I::SELECT,   'id_satuan',       'Satuan'],
+                [SHOW,       REQUIRED, I::SELECT,   'id_jenis_barang', 'Jenis'],
+                [TABLE_ONLY, OPTIONAL, I::NUMBER,   'stok',            'Stok'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'stok',            'Stok'],
+                [FORM_ONLY,  OPTIONAL, I::NUMBER,   'stok_minimum',    'Stok Minimum'],
+                [SHOW,       OPTIONAL, I::MONEY,    'harga_satuan',    'Harga Satuan'],
             ],
         );
     }
@@ -60,11 +60,19 @@ final class BarangController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $rows = $this->model->builder()
-            ->join('inventori_non_medis.satuan', 'inventori_non_medis.satuan.id_satuan = inventori_non_medis.barang.id_satuan', 'left')
-            ->select('inventori_non_medis.barang.id_barang, inventori_non_medis.barang.kode_barang, inventori_non_medis.barang.nama_barang, inventori_non_medis.satuan.nama_satuan, inventori_non_medis.barang.stok, inventori_non_medis.barang.harga_satuan')
+        $rows = $this->model
+            ->builder()
+            ->join(
+                'inventori_non_medis.satuan',
+                'inventori_non_medis.satuan.id_satuan = inventori_non_medis.barang.id_satuan',
+                'left',
+            )
+            ->select(
+                'inventori_non_medis.barang.id_barang, inventori_non_medis.barang.kode_barang, inventori_non_medis.barang.nama_barang, inventori_non_medis.satuan.nama_satuan, inventori_non_medis.barang.stok, inventori_non_medis.barang.harga_satuan',
+            )
             ->orderBy('inventori_non_medis.barang.nama_barang', 'ASC')
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }

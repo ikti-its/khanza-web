@@ -17,7 +17,7 @@ final class EmailModel extends ModelTemplate
                 'alamat_email' => V::DEFAULT(),
             ],
             [
-                'id_orang' => ['nama']
+                'id_orang' => ['nama'],
             ],
         );
     }

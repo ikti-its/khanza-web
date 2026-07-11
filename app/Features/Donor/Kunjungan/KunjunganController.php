@@ -15,7 +15,7 @@ final class KunjunganController extends ControllerTemplate
         parent::__construct(
             new KunjunganModel(),
             [
-                ['Donor',     'donor'],
+                ['Donor',                'donor'],
                 ['Registrasi Kunjungan', 'registrasi_kunjungan'],
             ],
             'Registrasi Kunjungan',
@@ -59,7 +59,11 @@ final class KunjunganController extends ControllerTemplate
         return view('/layouts/data', [
             'judul'        => $this->title,
             'breadcrumbs'  => $this->breadcrumbs,
-            'meta_data'    => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'meta_data'    => [
+                'page'  => $currentPage,
+                'size'  => count($data_tabel),
+                'total' => ceil($totalRows / $perPage),
+            ],
             'modul_path'   => $this->get_uri_path(),
             'kolom_id'     => $this->primary_key,
             'konfig'       => $konfig,
@@ -78,27 +82,29 @@ final class KunjunganController extends ControllerTemplate
     final public function create_page(): string
     {
         $breadcrumbs = [
-            ['title' => 'Tambah', 'icon' => 'tambah']
+            ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
         $fieldsKunjunganMatang = $this->fields;
-        
-        $controllerPendonor = new \App\Features\Role\Pendonor\PendonorController();
+
+        $controllerPendonor   = new \App\Features\Role\Pendonor\PendonorController();
         $fieldsPendonorMatang = $controllerPendonor->fields;
 
-        $mockBaris = [];
+        $mockBaris      = [];
         $konfigGabungan = [];
 
         $tanggalHariIni = date('Y-m-d H:i:s');
-        
-        $jumlahKunjunganHariIni = $this->model->db->table('donor.kunjungan')
+
+        $jumlahKunjunganHariIni = $this->model
+            ->db
+            ->table('donor.kunjungan')
             ->where('DATE(tanggal_kunjungan)', $tanggalHariIni)
             ->countAllResults();
 
-        $nextUrutan = $jumlahKunjunganHariIni + 1;
-        $suffixUrutan = str_pad((string)$nextUrutan, 3, '0', STR_PAD_LEFT);
+        $nextUrutan   = $jumlahKunjunganHariIni + 1;
+        $suffixUrutan = str_pad((string) $nextUrutan, 3, '0', STR_PAD_LEFT);
 
-        $formatTanggalPendek = date('Ymd');
+        $formatTanggalPendek    = date('Ymd');
         $nomorKunjunganOtomatis = 'REG-' . $formatTanggalPendek . '-' . $suffixUrutan;
 
         foreach ($fieldsKunjunganMatang as $fieldKunjungan) {
@@ -112,7 +118,7 @@ final class KunjunganController extends ControllerTemplate
                 $mockBaris[$columnKunjungan] = $tanggalHariIni;
             } elseif ($columnKunjungan === 'nomor_kunjungan') {
                 $mockBaris[$columnKunjungan] = $nomorKunjunganOtomatis;
-                $fieldKunjungan[3] = 'indeks';
+                $fieldKunjungan[3]           = 'indeks';
             } else {
                 $mockBaris[$columnKunjungan] = '';
             }
@@ -121,7 +127,7 @@ final class KunjunganController extends ControllerTemplate
                 foreach ($fieldsPendonorMatang as $fieldPendonor) {
                     if ($fieldPendonor[2] === 'nomor_pendonor') {
                         $mockBaris['nomor_pendonor'] = '';
-                        
+
                         $konfigGabungan[] = $fieldPendonor;
                         break;
                     }
@@ -137,7 +143,7 @@ final class KunjunganController extends ControllerTemplate
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->model->primaryKey,
-            'konfig'      => $konfigGabungan, 
+            'konfig'      => $konfigGabungan,
             'baris'       => $mockBaris,
             'form_action' => '/submittambah',
         ]);
@@ -149,8 +155,8 @@ final class KunjunganController extends ControllerTemplate
     #[\Override]
     final public function create(): string|RedirectResponse
     {
-        $rawPost     = $this->request->getPost();
-        $idPendonor  = $rawPost['id_pendonor'] ?? null;
+        $rawPost           = $this->request->getPost();
+        $idPendonor        = $rawPost['id_pendonor'] ?? null;
         $tglKunjunganInput = $rawPost['tanggal_kunjungan'] ?? date('Y-m-d H:i:s');
 
         $validasiRegistrasi = $this->model->cekSyaratRegistrasiKunjungan($idPendonor, $tglKunjunganInput);
@@ -180,11 +186,10 @@ final class KunjunganController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data registrasi kunjungan berhasil disimpan.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
-                ? $this->friendly_db_error($e) 
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
         }
@@ -198,22 +203,23 @@ final class KunjunganController extends ControllerTemplate
     #[\Override]
     final public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataKunjungan = $this->model->find($id);
         if (!$dataKunjungan) {
             $dataKunjungan = [];
         }
 
-        $dataOrang = [];
+        $dataOrang    = [];
         $dataPendonor = [];
         if (!empty($dataKunjungan['id_pendonor'])) {
             $pendonorModel = new \App\Features\Role\Pendonor\PendonorModel();
-            $dataPendonor = $pendonorModel->find($dataKunjungan['id_pendonor']) ?? [];
+            $dataPendonor  = $pendonorModel->find($dataKunjungan['id_pendonor']) ?? [];
 
             if (!empty($dataPendonor['id_orang'])) {
                 $modelOrang = new \App\Features\Person\Orang\OrangModel();
-                $dataOrang = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
             }
         }
 
@@ -223,11 +229,11 @@ final class KunjunganController extends ControllerTemplate
             $baris['tanggal_kunjungan'] = date('Y-m-d H:i:s', strtotime($baris['tanggal_kunjungan']));
         }
 
-        $controllerOrang = new \App\Features\Person\Orang\OrangController();
+        $controllerOrang    = new \App\Features\Person\Orang\OrangController();
         $controllerPendonor = new \App\Features\Role\Pendonor\PendonorController();
 
-        $konfigOrang = $controllerOrang->get_fields_with_options(false, true);
-        $konfigPendonor = $controllerPendonor->get_fields_with_options(false, true);
+        $konfigOrang     = $controllerOrang->get_fields_with_options(false, true);
+        $konfigPendonor  = $controllerPendonor->get_fields_with_options(false, true);
         $konfigKunjungan = $this->get_fields_with_options(false, true);
 
         $konfigGabungan = [];
@@ -259,7 +265,7 @@ final class KunjunganController extends ControllerTemplate
             if ($tipeField === 'status' && !empty($options) && isset($card[$namaKolom])) {
                 $idMentah = $card[$namaKolom];
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $card[$namaKolom] = $opt[0];
                         break;
                     }
@@ -275,7 +281,7 @@ final class KunjunganController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Ubah', 'icon', 'Ubah']
+            ['title' => 'Ubah', 'icon', 'Ubah'],
         ];
 
         return view('/admin/donor/tambah_kunjungan', [
@@ -321,14 +327,14 @@ final class KunjunganController extends ControllerTemplate
 
         if ($pendonorBerubah || $tanggalKunjunganBerubah) {
             if ($this->model->kunjunganSudahDiproses($id)) {
-                session()->setFlashdata('error', 'Nomor pendonor atau tanggal kunjungan tidak dapat diubah karena kunjungan sudah diproses.');
+                session()->setFlashdata(
+                    'error',
+                    'Nomor pendonor atau tanggal kunjungan tidak dapat diubah karena kunjungan sudah diproses.',
+                );
                 return redirect()->to($this->get_uri_path() . '/data');
             }
 
-            $validasiRegistrasi = $this->model->cekSyaratRegistrasiKunjungan(
-                $idPendonorBaru,
-                $tanggalBaru
-            );
+            $validasiRegistrasi = $this->model->cekSyaratRegistrasiKunjungan($idPendonorBaru, $tanggalBaru);
 
             if ($validasiRegistrasi['status'] === false) {
                 session()->setFlashdata('error', $validasiRegistrasi['message']);
@@ -344,7 +350,8 @@ final class KunjunganController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataKunjungan = $this->model->find($id);
 
@@ -379,7 +386,7 @@ final class KunjunganController extends ControllerTemplate
             if (!empty($options) && isset($baris[$colName])) {
                 $idMentah = $baris[$colName];
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $baris[$colName] = $opt[0];
                         break;
                     }
@@ -394,7 +401,7 @@ final class KunjunganController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Detail', 'icon' => 'detail']
+            ['title' => 'Detail', 'icon' => 'detail'],
         ];
 
         return view('/admin/donor/detail_kunjungan', [
@@ -415,7 +422,7 @@ final class KunjunganController extends ControllerTemplate
         $data = $this->model->get_data_tabel(null, 0, $filter);
 
         return $this->response->setJSON([
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

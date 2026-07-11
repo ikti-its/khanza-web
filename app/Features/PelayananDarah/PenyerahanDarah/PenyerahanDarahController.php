@@ -52,65 +52,73 @@ final class PenyerahanDarahController extends ControllerTemplate
     public function create_page(): string
     {
         $breadcrumbs = [
-            ['title' => 'Tambah', 'icon' => 'tambah']
+            ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
         $konfigPenyerahan = $this->get_fields_with_options(false, true);
 
         $controllerPermintaan = new \App\Features\PelayananDarah\PermintaanDarah\PermintaanDarahController();
-        $konfigPermintaan = $controllerPermintaan->fields;
+        $konfigPermintaan     = $controllerPermintaan->fields;
 
         $modelBhpMedis    = new \App\Features\LogistikUTD\PengambilanMedis\PengambilanMedisModel();
         $modelBhpNonMedis = new \App\Features\LogistikUTD\PengambilanPenunjang\PengambilanPenunjangModel();
 
-        $rawMedis    = $modelBhpMedis->get_katalog_dan_stok_ruangan();
+        $rawMedis     = $modelBhpMedis->get_katalog_dan_stok_ruangan();
         $rawPenunjang = $modelBhpNonMedis->get_katalog_dan_stok_ruangan();
 
         $masterBhpMedis = [];
         foreach ($rawMedis as $row) {
-            $sisaStok = (int)$row['total_masuk'] - (int)$row['total_terpakai_donor'] - (int)$row['total_terpakai_pemisahan'] - (int)$row['total_terpakai_penyerahan'] - (int)$row['total_rusak'];
-            
-            if ((int)$row['total_masuk'] > 0) {
+            $sisaStok =
+                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
+                    - (int) $row['total_terpakai_penyerahan']
+                - (int) $row['total_rusak'];
+
+            if ((int) $row['total_masuk'] > 0) {
                 $masterBhpMedis[] = [
                     'id_barang'   => $row['id_barang'],
                     'kode_barang' => $row['kode_barang'],
                     'nama_barang' => $row['nama_barang'],
                     'harga'       => $row['harga'],
-                    'stok'        => $sisaStok
+                    'stok'        => $sisaStok,
                 ];
             }
         }
 
         $masterBhpNonMedis = [];
         foreach ($rawPenunjang as $row) {
-            $sisaStokNon = (int)$row['total_masuk'] - (int)$row['total_terpakai_donor'] - (int)$row['total_terpakai_pemisahan'] - (int)$row['total_terpakai_penyerahan'] - (int)$row['total_rusak'];
-            
-            if ((int)$row['total_masuk'] > 0) {
+            $sisaStokNon =
+                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
+                    - (int) $row['total_terpakai_penyerahan']
+                - (int) $row['total_rusak'];
+
+            if ((int) $row['total_masuk'] > 0) {
                 $masterBhpNonMedis[] = [
                     'id_barang'   => $row['id_barang'],
                     'kode_barang' => $row['kode_barang'],
                     'nama_barang' => $row['nama_barang'],
                     'harga'       => $row['harga'],
-                    'stok'        => $sisaStokNon
+                    'stok'        => $sisaStokNon,
                 ];
             }
         }
 
-        $mockBaris = [];
+        $mockBaris      = [];
         $konfigGabungan = [];
 
         $tahunSekarang = date('Y');
         $bulanSekarang = date('m');
 
-        $jumlahPenyerahanBulanIni = $this->model->db->table('pelayanan_darah.penyerahan_darah')
+        $jumlahPenyerahanBulanIni = $this->model
+            ->db
+            ->table('pelayanan_darah.penyerahan_darah')
             ->where('EXTRACT(YEAR FROM tanggal_penyerahan)', $tahunSekarang)
             ->where('EXTRACT(MONTH FROM tanggal_penyerahan)', $bulanSekarang)
             ->countAllResults();
 
         $nextUrutan = $jumlahPenyerahanBulanIni + 1;
-        
-        $stringUrutan = str_pad((string)$nextUrutan, 5, '0', STR_PAD_LEFT);
-        
+
+        $stringUrutan = str_pad((string) $nextUrutan, 5, '0', STR_PAD_LEFT);
+
         $nomorPenyerahanOtomatis = "{$tahunSekarang}-{$bulanSekarang}-PD{$stringUrutan}";
 
         foreach ($konfigPenyerahan as $fieldPenyerahan) {
@@ -120,7 +128,10 @@ final class PenyerahanDarahController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggal = ($fieldPenyerahan[3] === 'tanggal' || str_contains($columnPenyerahan, 'tanggal') || $fieldPenyerahan[3] === 'dtime');
+            $isTanggal =
+                $fieldPenyerahan[3] === 'tanggal'
+                || str_contains($columnPenyerahan, 'tanggal')
+                || $fieldPenyerahan[3] === 'dtime';
             $mockBaris[$columnPenyerahan] = $isTanggal ? date('Y-m-d\TH:i') : '';
 
             if ($columnPenyerahan === 'besar_ppn') {
@@ -129,14 +140,14 @@ final class PenyerahanDarahController extends ControllerTemplate
 
             if ($columnPenyerahan === 'no_penyerahan') {
                 $mockBaris[$columnPenyerahan] = $nomorPenyerahanOtomatis;
-                $fieldPenyerahan[3] = 'indeks';
+                $fieldPenyerahan[3]           = 'indeks';
             }
 
             if ($columnPenyerahan === 'id_permintaan') {
                 foreach ($konfigPermintaan as $fieldPermintaan) {
                     if ($fieldPermintaan[2] === 'no_permintaan') {
                         $mockBaris['no_permintaan'] = '';
-                        $konfigGabungan[] = $fieldPermintaan;
+                        $konfigGabungan[]           = $fieldPermintaan;
                         break;
                     }
                 }
@@ -165,14 +176,14 @@ final class PenyerahanDarahController extends ControllerTemplate
     #[\Override]
     final public function create(): string|RedirectResponse
     {
-        $rawPost = $this->request->getPost();
+        $rawPost           = $this->request->getPost();
         $idPermintaan      = $rawPost['id_permintaan'] ?? null;
         $stokDarahTerpilih = $this->request->getPost('id_stok_darah');
 
-        $bhpMedis          = $this->request->getPost('id_medis_donor');
-        $hargaMedis        = $this->request->getPost('harga_medis');
-        $bhpNonMedis       = $this->request->getPost('id_penunjang_donor');
-        $hargaNonMedis     = $this->request->getPost('harga_penunjang');
+        $bhpMedis      = $this->request->getPost('id_medis_donor');
+        $hargaMedis    = $this->request->getPost('harga_medis');
+        $bhpNonMedis   = $this->request->getPost('id_penunjang_donor');
+        $hargaNonMedis = $this->request->getPost('harga_penunjang');
 
         $dataPenyerahan = [];
         foreach ($this->fields as $field) {
@@ -186,31 +197,33 @@ final class PenyerahanDarahController extends ControllerTemplate
 
         try {
             if (empty($idPermintaan)) {
-                throw new \RuntimeException("Gagal menyimpan! Data permintaan darah tidak terdeteksi.");
+                throw new \RuntimeException('Gagal menyimpan! Data permintaan darah tidak terdeteksi.');
             }
 
-            $this->model->validasiDanHitungKuota((int)$idPermintaan, $stokDarahTerpilih);
+            $this->model->validasiDanHitungKuota((int) $idPermintaan, $stokDarahTerpilih);
 
             $this->model->insert($dataPenyerahan);
             $idPenyerahan = $this->model->getInsertID();
 
             if (!empty($stokDarahTerpilih) && is_array($stokDarahTerpilih)) {
-                $modelDetail     = new \App\Features\PelayananDarah\PenyerahanDarahDetail\PenyerahanDarahDetailModel();
-                $modelStokDarah  = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
-                $modelKomponen   = new \App\Features\InventoriDarah\KomponenDarah\KomponenDarahModel();
+                $modelDetail    = new \App\Features\PelayananDarah\PenyerahanDarahDetail\PenyerahanDarahDetailModel();
+                $modelStokDarah = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
+                $modelKomponen  = new \App\Features\InventoriDarah\KomponenDarah\KomponenDarahModel();
 
                 foreach ($stokDarahTerpilih as $idStokDarah) {
-                    if (empty($idStokDarah)) continue;
+                    if (empty($idStokDarah))
+                        continue;
 
                     $stok = $modelStokDarah->find($idStokDarah);
-                    if (!$stok) continue;
+                    if (!$stok)
+                        continue;
 
                     $masterKomp = $modelKomponen->find($stok['id_komponen']);
-                    
-                    $jasaSarana = (float)($masterKomp['jasa_sarana'] ?? 0);
-                    $paketBhp   = (float)($masterKomp['paket_bhp'] ?? 0);
-                    $kso        = (float)($masterKomp['kso'] ?? 0);
-                    $manajemen  = (float)($masterKomp['manajemen'] ?? 0);
+
+                    $jasaSarana = (float) ($masterKomp['jasa_sarana'] ?? 0);
+                    $paketBhp   = (float) ($masterKomp['paket_bhp'] ?? 0);
+                    $kso        = (float) ($masterKomp['kso'] ?? 0);
+                    $manajemen  = (float) ($masterKomp['manajemen'] ?? 0);
 
                     $modelDetail->insert([
                         'id_penyerahan' => $idPenyerahan,
@@ -222,7 +235,7 @@ final class PenyerahanDarahController extends ControllerTemplate
                     ]);
 
                     $modelStokDarah->update($idStokDarah, [
-                        'id_status_stok' => 4 
+                        'id_status_stok' => 4,
                     ]);
                 }
             }
@@ -231,13 +244,14 @@ final class PenyerahanDarahController extends ControllerTemplate
                 $modelMedisPenyerahan = new \App\Features\LogistikUTD\MedisPenyerahan\MedisPenyerahanModel(); // Sesuai penamaan skema timmu
 
                 foreach ($bhpMedis as $idBarang => $jumlah) {
-                    if ((int)$jumlah <= 0) continue;
+                    if ((int) $jumlah <= 0)
+                        continue;
 
                     $modelMedisPenyerahan->insert([
                         'id_penyerahan' => $idPenyerahan,
                         'id_barang'     => $idBarang,
-                        'jumlah'        => (int)$jumlah,
-                        'harga'         => (float)($hargaMedis[$idBarang] ?? 0),
+                        'jumlah'        => (int) $jumlah,
+                        'harga'         => (float) ($hargaMedis[$idBarang] ?? 0),
                     ]);
                 }
             }
@@ -246,30 +260,30 @@ final class PenyerahanDarahController extends ControllerTemplate
                 $modelPenunjangPenyerahan = new \App\Features\LogistikUTD\PenunjangPenyerahan\PenunjangPenyerahanModel(); // Sesuai penamaan skema timmu
 
                 foreach ($bhpNonMedis as $idBarang => $jumlah) {
-                    if ((int)$jumlah <= 0) continue;
+                    if ((int) $jumlah <= 0)
+                        continue;
 
                     $modelPenunjangPenyerahan->insert([
                         'id_penyerahan' => $idPenyerahan,
                         'id_barang'     => $idBarang,
-                        'jumlah'        => (int)$jumlah,
-                        'harga'         => (float)($hargaNonMedis[$idBarang] ?? 0),
+                        'jumlah'        => (int) $jumlah,
+                        'harga'         => (float) ($hargaNonMedis[$idBarang] ?? 0),
                     ]);
                 }
             }
 
-            $this->model->sinkronisasiStatusPermintaan((int)$idPermintaan);
-            
+            $this->model->sinkronisasiStatusPermintaan((int) $idPermintaan);
+
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException("Gagal menyimpan data penyerahan darah dan penggunaan BHP.");
+                throw new \RuntimeException('Gagal menyimpan data penyerahan darah dan penggunaan BHP.');
             }
 
             session()->setFlashdata('success', 'Data penyerahan darah dan penggunaan BHP berhasil disimpan.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -284,7 +298,8 @@ final class PenyerahanDarahController extends ControllerTemplate
     #[\Override]
     final public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $dataPenyerahan = $this->model->find($id);
         if (!$dataPenyerahan) {
@@ -300,14 +315,17 @@ final class PenyerahanDarahController extends ControllerTemplate
             $modelMedisPenyerahan     = new \App\Features\LogistikUTD\MedisPenyerahan\MedisPenyerahanModel();
             $modelPenunjangPenyerahan = new \App\Features\LogistikUTD\PenunjangPenyerahan\PenunjangPenyerahanModel();
 
-            $daftarDetailTersimpan = $modelDetail->db->table($modelDetail->table)
+            $daftarDetailTersimpan = $modelDetail
+                ->db
+                ->table($modelDetail->table)
                 ->where('id_penyerahan', $id)
                 ->get()
                 ->getResultArray();
-            
+
             if (!empty($daftarDetailTersimpan) && is_array($daftarDetailTersimpan)) {
                 foreach ($daftarDetailTersimpan as $detail) {
-                    $modelStokDarah->builder()
+                    $modelStokDarah
+                        ->builder()
                         ->where($modelStokDarah->primaryKey, $detail['id_stok_darah'])
                         ->update(['id_status_stok' => 2]);
                 }
@@ -318,7 +336,7 @@ final class PenyerahanDarahController extends ControllerTemplate
 
             $modelDetail->where('id_penyerahan', $id)->delete();
 
-            $idPermintaanAsal = (int)$dataPenyerahan['id_permintaan'];
+            $idPermintaanAsal = (int) $dataPenyerahan['id_permintaan'];
 
             $this->model->delete($id);
 
@@ -331,7 +349,6 @@ final class PenyerahanDarahController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data penyerahan darah dan penggunaan BHP berhasil dihapus.');
-
         } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
             $this->model->db->transRollback();
             session()->setFlashdata('error', $this->friendly_db_error($e));
@@ -351,7 +368,7 @@ final class PenyerahanDarahController extends ControllerTemplate
         $idStatusSudahBayar = 2;
 
         $this->model->update($id, [
-            'id_status_pembayaran' => $idStatusSudahBayar
+            'id_status_pembayaran' => $idStatusSudahBayar,
         ]);
 
         session()->setFlashdata('success', 'Pembayaran berhasil dikonfirmasi lunas.');

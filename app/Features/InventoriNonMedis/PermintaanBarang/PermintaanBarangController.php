@@ -27,20 +27,38 @@ final class PermintaanBarangController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,    'id_permintaan',                 'ID'],
-                [SHOW, OPTIONAL, I::READONLY, 'no_permintaan',                 'No. Permintaan'],
-                [SHOW, REQUIRED, I::DTIME,    'tanggal',                       'Tanggal Permintaan'],
-                [SHOW, REQUIRED, I::MODAL,    'petugas',                       'Pemohon', ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pemohon...']],
-                [SHOW, REQUIRED, I::MODAL,    'master_ruangan',                'Ruangan', ['modal' => 'modalPilihRuangan', 'display_column' => 'nama_ruangan', 'placeholder' => 'Klik cari ruangan...']],
+                [HIDE, OPTIONAL, I::INDEX, 'id_permintaan', 'ID'],
+                [SHOW, OPTIONAL, I::READONLY, 'no_permintaan', 'No. Permintaan'],
+                [SHOW, REQUIRED, I::DTIME, 'tanggal', 'Tanggal Permintaan'],
+                [
+                    SHOW,
+                    REQUIRED,
+                    I::MODAL,
+                    'petugas',
+                    'Pemohon',
+                    ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pemohon...'],
+                ],
+                [
+                    SHOW,
+                    REQUIRED,
+                    I::MODAL,
+                    'master_ruangan',
+                    'Ruangan',
+                    [
+                        'modal'          => 'modalPilihRuangan',
+                        'display_column' => 'nama_ruangan',
+                        'placeholder'    => 'Klik cari ruangan...',
+                    ],
+                ],
                 [SHOW, OPTIONAL, I::SELECT, 'id_status_permintaan_barang', 'Status'],
-                [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal_diproses',             'Tanggal Diproses'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',             'Tanggal Diproses'],
-                [TABLE_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang',      'Pengelola'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'petugas_gudang_nama', 'Pengelola'],
-                [SHOW, OPTIONAL, I::READONLY, 'no_keluar',                     'No. Keluar'],
+                [TABLE_ONLY, OPTIONAL, I::DTIME, 'tanggal_diproses', 'Tanggal Diproses'],
+                [FORM_ONLY, OPTIONAL, I::READONLY, 'tanggal_diproses', 'Tanggal Diproses'],
+                [TABLE_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang', 'Pengelola'],
+                [FORM_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang_nama', 'Pengelola'],
+                [SHOW, OPTIONAL, I::READONLY, 'no_keluar', 'No. Keluar'],
             ],
             child_path: '/inventori-non-medis/detail-permintaan-barang',
-            child_fk:   'id_permintaan',
+            child_fk: 'id_permintaan',
         );
     }
 
@@ -66,7 +84,7 @@ final class PermintaanBarangController extends ControllerTemplate
     {
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.permintaan_barang', 'no_permintaan', 'id_permintaan');
-        $postData['no_permintaan']               = generateNextNoPermintaanBarang($lastNo, $postData['tanggal'] ?? null);
+        $postData['no_permintaan'] = generateNextNoPermintaanBarang($lastNo, $postData['tanggal'] ?? null);
         $postData['id_status_permintaan_barang'] = 1;
 
         // convert empty FK modal fields to null agar tidak kirim '' ke kolom integer
@@ -82,7 +100,7 @@ final class PermintaanBarangController extends ControllerTemplate
     {
         $new_status = (int) ($postData['id_status_permintaan_barang'] ?? 0);
         if (!in_array($new_status, [1, 4], true)) {
-            $current = $this->model->find($id);
+            $current                                 = $this->model->find($id);
             $postData['id_status_permintaan_barang'] = (int) ($current['id_status_permintaan_barang'] ?? 1);
         }
     }
@@ -99,12 +117,16 @@ final class PermintaanBarangController extends ControllerTemplate
 
         $new_status = (int) ($this->request->getPost('id_status_permintaan_barang') ?? 0);
         if ($new_status === 4) {
-            $has_detail = $this->get_db()
+            $has_detail = $this
+                ->get_db()
                 ->table('inventori_non_medis.permintaan_barang_detail')
                 ->where('id_permintaan', (int) $id)
                 ->countAllResults() > 0;
             if (!$has_detail) {
-                session()->setFlashdata('error', 'Tambahkan detail barang terlebih dahulu sebelum mengajukan permintaan.');
+                session()->setFlashdata(
+                    'error',
+                    'Tambahkan detail barang terlebih dahulu sebelum mengajukan permintaan.',
+                );
                 return $this->home();
             }
         }

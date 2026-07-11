@@ -14,7 +14,7 @@ final class TeleponController extends ControllerTemplate
         parent::__construct(
             new TeleponModel(),
             [
-                ['Kontak', 'kontak'],
+                ['Kontak',  'kontak'],
                 ['Telepon', 'telepon'],
             ],
             'Telepon',
@@ -26,12 +26,12 @@ final class TeleponController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [SHOW, REQUIRED, I::INDEX,  'id_telepon',    'ID'],
-                [SHOW, REQUIRED, I::TEXT,   'nomor_telepon', 'Nomor'],
-                [SHOW, REQUIRED, I::TEXT,   'nama_jenis',    'Jenis Telepon'],
-                [SHOW, REQUIRED, I::TEXT,   'nama_provider', 'Provider'],
-                [SHOW, REQUIRED, I::TEXT,   'nik',           'NIK'],
-                [SHOW, REQUIRED, I::TEXT,   'nama',          'Nama Lengkap'],
+                [SHOW, REQUIRED, I::INDEX, 'id_telepon',    'ID'],
+                [SHOW, REQUIRED, I::TEXT,  'nomor_telepon', 'Nomor'],
+                [SHOW, REQUIRED, I::TEXT,  'nama_jenis',    'Jenis Telepon'],
+                [SHOW, REQUIRED, I::TEXT,  'nama_provider', 'Provider'],
+                [SHOW, REQUIRED, I::TEXT,  'nik',           'NIK'],
+                [SHOW, REQUIRED, I::TEXT,  'nama',          'Nama Lengkap'],
             ],
         );
     }

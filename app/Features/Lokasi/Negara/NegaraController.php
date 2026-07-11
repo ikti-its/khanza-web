@@ -26,9 +26,9 @@ final class NegaraController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [SHOW, REQUIRED, I::INDEX,  'id_negara',    'ID'],
-                [SHOW, REQUIRED, I::TEXT,   'nama_negara',  'Negara'],
-                [SHOW, REQUIRED, I::TEXT,   'kode_telepon', 'Kode Telepon'],
+                [SHOW, REQUIRED, I::INDEX, 'id_negara',    'ID'],
+                [SHOW, REQUIRED, I::TEXT,  'nama_negara',  'Negara'],
+                [SHOW, REQUIRED, I::TEXT,  'kode_telepon', 'Kode Telepon'],
             ],
         );
     }

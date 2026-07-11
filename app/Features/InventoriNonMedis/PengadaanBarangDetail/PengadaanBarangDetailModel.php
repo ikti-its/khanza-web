@@ -38,14 +38,14 @@ final class PengadaanBarangDetailModel extends ModelTemplate
             ->select('b.nama_barang, b.kode_barang')
             ->select('s.nama_satuan')
             ->select('pjd.qty_disetujui')
-            ->join('inventori_non_medis.barang b',
-                   'm.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s',
-                   'b.id_satuan = s.id_satuan', 'left')
-            ->join('inventori_non_medis.pengadaan_barang pb',
-                   'm.id_pengadaan = pb.id_pengadaan', 'left')
-            ->join('inventori_non_medis.pengajuan_barang_detail pjd',
-                   'pb.id_pengajuan = pjd.id_pengajuan AND pjd.id_barang = m.id_barang', 'left');
+            ->join('inventori_non_medis.barang b', 'm.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->join('inventori_non_medis.pengadaan_barang pb', 'm.id_pengadaan = pb.id_pengadaan', 'left')
+            ->join(
+                'inventori_non_medis.pengajuan_barang_detail pjd',
+                'pb.id_pengajuan = pjd.id_pengajuan AND pjd.id_barang = m.id_barang',
+                'left',
+            );
     }
 
     #[\Override]

@@ -27,9 +27,9 @@ final class DataTriaseModel extends ModelTemplate
             [
                 'id_registrasi'        => [
                     'nomor_rawat',
-                    'id_pasien'    => [
+                    'id_pasien' => [
                         'nomor_rm',
-                        'id_orang' => ['nama']
+                        'id_orang' => ['nama'],
                     ],
                 ],
                 'id_cara_masuk'        => ['nama_cara'],

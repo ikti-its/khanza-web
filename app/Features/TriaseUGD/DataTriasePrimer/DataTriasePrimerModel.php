@@ -20,12 +20,12 @@ final class DataTriasePrimerModel extends ModelTemplate
             ],
             [
                 'id_triase'           => [
-                    'id_registrasi' => ['nomor_rawat']
+                    'id_registrasi' => ['nomor_rawat'],
                 ],
                 'id_kebutuhan_khusus' => ['nama_kebutuhan'],
                 'id_plan_primer'      => ['nama_plan_primer'],
                 'id_petugas'          => [
-                    'id_orang'      => ['nama']
+                    'id_orang' => ['nama'],
                 ],
             ],
         );

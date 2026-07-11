@@ -13,20 +13,20 @@ class RouteTemplate
         /** @var list<class-string<ControllerTemplate>> $feature_group */
         public private(set) array $features = [],
         public private(set) string $icon = '',
-    ){}
+    ) {}
 
     final public function get_icon_path(): string
     {
         try {
             $reflection = new \ReflectionClass($this);
-        } catch (\ReflectionException $e){
+        } catch (\ReflectionException $e) {
             die($e->getMessage());
         }
 
         $filename = $reflection->getFileName();
         assert($filename !== false, 'File name for Routes not found');
-        
-        $dir = dirname($filename);
+
+        $dir       = dirname($filename);
         $icon_path = $dir . '/' . $this->icon;
         assert(file_exists($icon_path), "Icon file '{$icon_path}' does not exist");
 

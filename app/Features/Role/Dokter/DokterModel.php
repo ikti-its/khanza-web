@@ -14,7 +14,7 @@ final class DokterModel extends ModelTemplate
             new DokterDatabase(),
             [
                 'id_dokter'   => V::DEFAULT(),
-                'kode_dokter' => V::DEFAULT(),   
+                'kode_dokter' => V::DEFAULT(),
                 'spesialis'   => V::DEFAULT(),
             ],
             [

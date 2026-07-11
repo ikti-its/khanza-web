@@ -19,7 +19,7 @@ final class AlamatModel extends ModelTemplate
                 'alamat_lengkap' => V::DEFAULT(),
             ],
             [
-                'id_provinsi'   => ['nama_provinsi'], 
+                'id_provinsi'   => ['nama_provinsi'],
                 'id_kota_lokal' => ['nama_kota'],
                 'id_kec_lokal'  => ['nama_kecamatan'],
                 'id_desa_lokal' => ['nama_desa'],
@@ -30,7 +30,7 @@ final class AlamatModel extends ModelTemplate
     /**
      * Mengambil data alamat lengkap beserta nama wilayahnya
      */
-    public function get_detail_wilayah(int|string $idAlamat): ?array
+    public function get_detail_wilayah(int|string $idAlamat): null|array
     {
         $alamat = $this->find($idAlamat);
         if (!$alamat) {
@@ -46,7 +46,7 @@ final class AlamatModel extends ModelTemplate
             'id_provinsi'   => $alamat['id_provinsi'],
             'id_kota_lokal' => $alamat['id_kota_lokal'],
             'id_kec_lokal'  => $alamat['id_kec_lokal'],
-            'id_desa_lokal' => $alamat['id_desa_lokal']
+            'id_desa_lokal' => $alamat['id_desa_lokal'],
         ])->first();
         if ($desa) {
             $alamat['nama_desa'] = $desa['nama_desa'];
@@ -55,7 +55,7 @@ final class AlamatModel extends ModelTemplate
         $kec = (new \App\Features\Lokasi\Kecamatan\KecamatanModel())->where([
             'id_provinsi'   => $alamat['id_provinsi'],
             'id_kota_lokal' => $alamat['id_kota_lokal'],
-            'id_kec_lokal'  => $alamat['id_kec_lokal']
+            'id_kec_lokal'  => $alamat['id_kec_lokal'],
         ])->first();
         if ($kec) {
             $alamat['nama_kecamatan'] = $kec['nama_kecamatan'];
@@ -63,7 +63,7 @@ final class AlamatModel extends ModelTemplate
 
         $kota = (new \App\Features\Lokasi\Kota\KotaModel())->where([
             'id_provinsi'   => $alamat['id_provinsi'],
-            'id_kota_lokal' => $alamat['id_kota_lokal']
+            'id_kota_lokal' => $alamat['id_kota_lokal'],
         ])->first();
         if ($kota) {
             $alamat['nama_kota_wilayah'] = $kota['nama_kota'];

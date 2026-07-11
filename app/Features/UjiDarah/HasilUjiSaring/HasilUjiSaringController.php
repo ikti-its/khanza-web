@@ -33,11 +33,11 @@ final class HasilUjiSaringController extends ControllerTemplate
                 [SHOW,      REQUIRED, I::DATE,   'tanggal_uji',          'Tanggal Hasil Uji'],
                 [SHOW,      REQUIRED, I::SELECT, 'id_metode_uji',        'Metode Uji'],
                 [SHOW,      REQUIRED, I::INDEX,  'id_petugas',           'Petugas'],
-                [FORM_ONLY, REQUIRED, I::BOOL,  'hbsag',                'HBsAg'],
-                [FORM_ONLY, REQUIRED, I::BOOL,  'hcv',                  'HCV'],
-                [FORM_ONLY, REQUIRED, I::BOOL,  'hiv',                  'HIV'],
-                [FORM_ONLY, REQUIRED, I::BOOL,  'sifilis',              'Sifilis'],
-                [FORM_ONLY, REQUIRED, I::BOOL,  'malaria',              'Malaria'],
+                [FORM_ONLY, REQUIRED, I::BOOL,   'hbsag',                'HBsAg'],
+                [FORM_ONLY, REQUIRED, I::BOOL,   'hcv',                  'HCV'],
+                [FORM_ONLY, REQUIRED, I::BOOL,   'hiv',                  'HIV'],
+                [FORM_ONLY, REQUIRED, I::BOOL,   'sifilis',              'Sifilis'],
+                [FORM_ONLY, REQUIRED, I::BOOL,   'malaria',              'Malaria'],
             ],
         );
     }
@@ -58,7 +58,7 @@ final class HasilUjiSaringController extends ControllerTemplate
     public function create_page(): string
     {
         $breadcrumbs = [
-            ['title' => 'Tambah', 'icon' => 'tambah']
+            ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
         $konfigUjiSaring = $this->get_fields_with_options(false, true);
@@ -75,15 +75,15 @@ final class HasilUjiSaringController extends ControllerTemplate
             if ($namaKolom === 'id_uji_saring') {
                 continue;
             }
-            
-            $isTanggal = ($field[3] === 'tanggal' || str_contains($namaKolom, 'tanggal'));
+
+            $isTanggal             = $field[3] === 'tanggal' || str_contains($namaKolom, 'tanggal');
             $mockBaris[$namaKolom] = $isTanggal ? date('Y-m-d') : '';
 
             if ($namaKolom === 'id_pengambilan_darah') {
                 foreach ($konfigPengambilan as $fPengambilan) {
                     if ($fPengambilan[2] === 'nomor_pengambilan') {
                         $mockBaris['nomor_pengambilan'] = '';
-                        $konfigGabungan[] = $fPengambilan; 
+                        $konfigGabungan[]               = $fPengambilan;
                         break;
                     }
                 }
@@ -106,13 +106,13 @@ final class HasilUjiSaringController extends ControllerTemplate
         }
 
         return view('admin/ujidarah/tambah_ujisaring', [
-            'judul'          => 'Tambah ' . $this->title,
-            'breadcrumbs'    => array_merge($this->breadcrumbs, $breadcrumbs),
-            'modul_path'     => $this->get_uri_path(),
-            'kolom_id'       => $this->model->primaryKey,
-            'konfig'         => $konfigGabungan,
-            'baris'          => $mockBaris,
-            'form_action'    => '/submittambah',
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->model->primaryKey,
+            'konfig'      => $konfigGabungan,
+            'baris'       => $mockBaris,
+            'form_action' => '/submittambah',
         ]);
     }
 
@@ -158,7 +158,7 @@ final class HasilUjiSaringController extends ControllerTemplate
             $this->model->insert($dataUjiSaring);
             $idUjiSaring = $this->model->getInsertID();
 
-            $daftarReaktif = $this->getDaftarReaktif($rawPost);
+            $daftarReaktif  = $this->getDaftarReaktif($rawPost);
             $modelStokDarah = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
 
             if (!empty($daftarReaktif)) {
@@ -175,51 +175,53 @@ final class HasilUjiSaringController extends ControllerTemplate
                 ]);
 
                 if (!empty($nomorPengambilan)) {
-                    $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
-                                   ->set(['id_status_stok' => 3])
-                                   ->update();
+                    $modelStokDarah
+                        ->like('no_kantong', $nomorPengambilan, 'before')
+                        ->set(['id_status_stok' => 3])
+                        ->update();
                 }
 
                 if (empty($dataPengambilan['id_kunjungan'])) {
-                    throw new \RuntimeException('Data kunjungan tidak ditemukan, sehingga form pencekalan tidak dapat dibuka.');
+                    throw new \RuntimeException(
+                        'Data kunjungan tidak ditemukan, sehingga form pencekalan tidak dapat dibuka.',
+                    );
                 }
 
                 $queryPencekalan = [
-                    'kunjungan'  => $dataPengambilan['id_kunjungan'],
-                    'petugas'    => $dataUjiSaring['id_petugas'] ?? '',
-                    'reaktif'    => implode(',', $daftarReaktif),
+                    'kunjungan' => $dataPengambilan['id_kunjungan'],
+                    'petugas'   => $dataUjiSaring['id_petugas'] ?? '',
+                    'reaktif'   => implode(',', $daftarReaktif),
                 ];
 
                 $pencekalanUrl = '/penanganan-donor/pencekalan/tambah?' . http_build_query($queryPencekalan);
-
             } else {
                 if (!empty($nomorPengambilan)) {
-                    $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
-                                   ->set(['id_status_stok' => 2])
-                                   ->update();
+                    $modelStokDarah
+                        ->like('no_kantong', $nomorPengambilan, 'before')
+                        ->set(['id_status_stok' => 2])
+                        ->update();
                 }
             }
 
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException("Gagal menyimpan data hasil uji saring.");
+                throw new \RuntimeException('Gagal menyimpan data hasil uji saring.');
             }
 
             if ($pencekalanUrl !== null) {
                 session()->set('pencekalan_url', $pencekalanUrl);
                 session()->set(
                     'pencekalan_message',
-                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil uji saring reaktif.'
+                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil uji saring reaktif.',
                 );
             } else {
                 session()->setFlashdata('success', 'Data hasil uji saring berhasil disimpan.');
             }
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
-                ? $this->friendly_db_error($e) 
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
             return redirect()->back()->withInput();
@@ -234,7 +236,8 @@ final class HasilUjiSaringController extends ControllerTemplate
     #[\Override]
     public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataUjiSaring = $this->model->find($id);
         if (!$dataUjiSaring) {
@@ -247,7 +250,7 @@ final class HasilUjiSaringController extends ControllerTemplate
         if (!empty($dataUjiSaring['id_pengambilan_darah'])) {
             $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
             $pengambilanRow   = $modelPengambilan->find($dataUjiSaring['id_pengambilan_darah']);
-            
+
             if ($pengambilanRow) {
                 $dataPengambilan['nomor_pengambilan'] = $pengambilanRow['nomor_pengambilan'] ?? '';
             }
@@ -260,7 +263,7 @@ final class HasilUjiSaringController extends ControllerTemplate
             if (!empty($petugasRow['id_orang'])) {
                 $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
                 $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
-                
+
                 if (isset($orangPetugasRow['nama'])) {
                     $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
                 }
@@ -272,13 +275,13 @@ final class HasilUjiSaringController extends ControllerTemplate
         $kolomUji = ['hbsag', 'hcv', 'hiv', 'sifilis', 'malaria'];
         foreach ($kolomUji as $kolom) {
             if (array_key_exists($kolom, $baris) && $baris[$kolom] !== null && $baris[$kolom] !== '') {
-                $isTrue = ($baris[$kolom] === true || $baris[$kolom] == 1 || $baris[$kolom] === 't');
+                $isTrue        = $baris[$kolom] === true || $baris[$kolom] == 1 || $baris[$kolom] === 't';
                 $baris[$kolom] = $isTrue ? '1' : '0';
             }
         }
 
         $controllerPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahController();
-        
+
         $konfigUjiSaring   = $this->get_fields_with_options(false, true);
         $konfigPengambilan = $controllerPengambilan->get_fields_with_options(false, true);
 
@@ -312,7 +315,7 @@ final class HasilUjiSaringController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Ubah', 'icon' => 'Ubah']
+            ['title' => 'Ubah', 'icon' => 'Ubah'],
         ];
 
         return view('admin/ujidarah/tambah_ujisaring', [
@@ -391,12 +394,15 @@ final class HasilUjiSaringController extends ControllerTemplate
                     ]);
                 }
 
-                $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
-                               ->set(['id_status_stok' => 3])
-                               ->update();
+                $modelStokDarah
+                    ->like('no_kantong', $nomorPengambilan, 'before')
+                    ->set(['id_status_stok' => 3])
+                    ->update();
 
                 if (empty($idKunjungan)) {
-                    throw new \RuntimeException('Data kunjungan tidak ditemukan, sehingga form pencekalan tidak dapat dibuka.');
+                    throw new \RuntimeException(
+                        'Data kunjungan tidak ditemukan, sehingga form pencekalan tidak dapat dibuka.',
+                    );
                 }
 
                 if ($this->hasPencekalan($idKunjungan)) {
@@ -412,9 +418,10 @@ final class HasilUjiSaringController extends ControllerTemplate
 
                 $this->hapusPencekalan($idKunjungan);
 
-                $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
-                               ->set(['id_status_stok' => 2])
-                               ->update();
+                $modelStokDarah
+                    ->like('no_kantong', $nomorPengambilan, 'before')
+                    ->set(['id_status_stok' => 2])
+                    ->update();
 
                 $hapusSesiWajib = true;
             }
@@ -422,7 +429,7 @@ final class HasilUjiSaringController extends ControllerTemplate
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException("Gagal memperbarui data hasil uji saring.");
+                throw new \RuntimeException('Gagal memperbarui data hasil uji saring.');
             }
 
             if ($hapusSesiWajib) {
@@ -433,16 +440,15 @@ final class HasilUjiSaringController extends ControllerTemplate
                 session()->set('pencekalan_url', $pencekalanUrl);
                 session()->set(
                     'pencekalan_message',
-                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil uji saring reaktif.'
+                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil uji saring reaktif.',
                 );
             } else {
                 session()->setFlashdata('success', 'Data hasil uji saring berhasil diperbarui.');
             }
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
-                ? $this->friendly_db_error($e) 
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
             return redirect()->back()->withInput();
@@ -457,7 +463,8 @@ final class HasilUjiSaringController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $dataUjiSaring = $this->model->find($id);
         if (!$dataUjiSaring) {
@@ -491,9 +498,10 @@ final class HasilUjiSaringController extends ControllerTemplate
             $this->hapusPencekalan($idKunjungan);
 
             if (!empty($nomorPengambilan)) {
-                $modelStokDarah->like('no_kantong', $nomorPengambilan, 'before')
-                               ->set(['id_status_stok' => 1])
-                               ->update();
+                $modelStokDarah
+                    ->like('no_kantong', $nomorPengambilan, 'before')
+                    ->set(['id_status_stok' => 1])
+                    ->update();
             }
 
             $this->model->delete($id);
@@ -507,7 +515,6 @@ final class HasilUjiSaringController extends ControllerTemplate
             $this->clearPencekalanSession();
 
             session()->setFlashdata('success', 'Data hasil uji saring berhasil dihapus.');
-
         } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
             $this->model->db->transRollback();
             session()->setFlashdata('error', $this->friendly_db_error($e));
@@ -524,11 +531,14 @@ final class HasilUjiSaringController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataUjiSaring = $this->model->find($id);
         if (!$dataUjiSaring) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Hasil Uji Saring tidak ditemukan.');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound(
+                'Data Hasil Uji Saring tidak ditemukan.',
+            );
         }
 
         $dataPengambilan  = [];
@@ -537,7 +547,7 @@ final class HasilUjiSaringController extends ControllerTemplate
         if (!empty($dataUjiSaring['id_pengambilan_darah'])) {
             $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
             $pengambilanRow   = $modelPengambilan->find($dataUjiSaring['id_pengambilan_darah']);
-            
+
             if ($pengambilanRow) {
                 $dataPengambilan['nomor_pengambilan'] = $pengambilanRow['nomor_pengambilan'] ?? '';
             }
@@ -550,7 +560,7 @@ final class HasilUjiSaringController extends ControllerTemplate
             if (!empty($petugasRow['id_orang'])) {
                 $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
                 $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
-                
+
                 if (isset($orangPetugasRow['nama'])) {
                     $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
                 }
@@ -562,13 +572,13 @@ final class HasilUjiSaringController extends ControllerTemplate
         $kolomUji = ['hbsag', 'hcv', 'hiv', 'sifilis', 'malaria'];
         foreach ($kolomUji as $kolom) {
             if (array_key_exists($kolom, $baris) && $baris[$kolom] !== null && $baris[$kolom] !== '') {
-                $isTrue = ($baris[$kolom] === true || $baris[$kolom] == 1 || $baris[$kolom] === 't');
+                $isTrue        = $baris[$kolom] === true || $baris[$kolom] == 1 || $baris[$kolom] === 't';
                 $baris[$kolom] = $isTrue ? '1' : '0';
             }
         }
 
         $controllerPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahController();
-        
+
         $konfigUjiSaring   = $this->get_fields_with_options(false, true);
         $konfigPengambilan = $controllerPengambilan->get_fields_with_options(false, true);
 
@@ -581,7 +591,7 @@ final class HasilUjiSaringController extends ControllerTemplate
             if (!empty($options) && isset($baris[$colName])) {
                 $idMentah = $baris[$colName];
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $baris[$colName] = $opt[0];
                         break;
                     }
@@ -596,7 +606,7 @@ final class HasilUjiSaringController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Detail', 'icon' => 'detail']
+            ['title' => 'Detail', 'icon' => 'detail'],
         ];
 
         return view('admin/ujidarah/detail_ujisaring', [
@@ -619,18 +629,18 @@ final class HasilUjiSaringController extends ControllerTemplate
             'sifilis' => 'Sifilis',
             'malaria' => 'Malaria',
         ];
-    
+
         $daftarReaktif = [];
-    
+
         foreach ($daftarUji as $kolom => $label) {
             if (isset($rawPost[$kolom]) && (string) $rawPost[$kolom] === '1') {
                 $daftarReaktif[] = $label;
             }
         }
-    
+
         return $daftarReaktif;
     }
-    
+
     /**
      * Membuat keterangan pencekalan berdasarkan hasil uji saring reaktif
      */
@@ -638,7 +648,7 @@ final class HasilUjiSaringController extends ControllerTemplate
     {
         return 'Reaktif ' . implode(', ', $daftarReaktif) . ' pada uji saring IMLTD';
     }
-    
+
     /**
      * Membuat URL form pencekalan dari hasil uji saring reaktif
      */
@@ -649,10 +659,10 @@ final class HasilUjiSaringController extends ControllerTemplate
             'petugas'   => $dataUjiSaring['id_petugas'] ?? '',
             'reaktif'   => implode(',', $daftarReaktif),
         ];
-    
+
         return '/penanganan-donor/pencekalan/tambah?' . http_build_query($queryPencekalan);
     }
-    
+
     /**
      * Mengecek apakah pencekalan dari hasil uji saring IMLTD sudah ada
      */
@@ -661,14 +671,12 @@ final class HasilUjiSaringController extends ControllerTemplate
         if (empty($idKunjungan)) {
             return false;
         }
-    
+
         $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
-    
-        return $modelPencekalan
-            ->where('id_kunjungan', $idKunjungan)
-            ->first() !== null;
+
+        return $modelPencekalan->where('id_kunjungan', $idKunjungan)->first() !== null;
     }
-    
+
     /**
      * Menghapus pencekalan yang berasal dari hasil uji saring IMLTD
      */
@@ -677,14 +685,12 @@ final class HasilUjiSaringController extends ControllerTemplate
         if (empty($idKunjungan)) {
             return;
         }
-    
+
         $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
-    
-        $modelPencekalan
-            ->where('id_kunjungan', $idKunjungan)
-            ->delete();
+
+        $modelPencekalan->where('id_kunjungan', $idKunjungan)->delete();
     }
-    
+
     /**
      * Memperbarui keterangan pencekalan jika hasil reaktif berubah.
      */
@@ -693,9 +699,9 @@ final class HasilUjiSaringController extends ControllerTemplate
         if (empty($idKunjungan)) {
             return;
         }
-    
+
         $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
-    
+
         $modelPencekalan
             ->where('id_kunjungan', $idKunjungan)
             ->set([
@@ -703,7 +709,7 @@ final class HasilUjiSaringController extends ControllerTemplate
             ])
             ->update();
     }
-    
+
     /**
      * Menghapus session pengisian pencekalan
      */

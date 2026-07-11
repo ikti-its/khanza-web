@@ -14,7 +14,7 @@ final class JenisTeleponController extends ControllerTemplate
         parent::__construct(
             new JenisTeleponModel(),
             [
-                ['Kontak', 'kontak'],
+                ['Kontak',        'kontak'],
                 ['Jenis Telepon', 'jenis-telepon'],
             ],
             'Jenis Telepon',
@@ -26,8 +26,8 @@ final class JenisTeleponController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [SHOW, REQUIRED, I::INDEX,  'id_jenis',   'ID'],
-                [SHOW, REQUIRED, I::TEXT,   'nama_jenis', 'Jenis Telepon'],
+                [SHOW, REQUIRED, I::INDEX, 'id_jenis',   'ID'],
+                [SHOW, REQUIRED, I::TEXT,  'nama_jenis', 'Jenis Telepon'],
             ],
         );
     }

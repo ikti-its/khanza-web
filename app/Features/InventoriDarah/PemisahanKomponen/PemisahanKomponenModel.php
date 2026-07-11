@@ -20,7 +20,7 @@ final class PemisahanKomponenModel extends ModelTemplate
                 'id_pengambilan_darah' => ['nomor_pengambilan'],
                 'id_shift'             => ['nama_shift'],
                 'id_petugas'           => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
             ],
         );
@@ -52,7 +52,7 @@ final class PemisahanKomponenModel extends ModelTemplate
                 'pd.nomor_pengambilan',
                 'pd.no_bag',
                 's.nama_shift',
-                'o_petugas.nama AS nama_petugas'
+                'o_petugas.nama AS nama_petugas',
             ])
             ->join('donor.pengambilan_darah pd', 'pd.id_pengambilan_darah = pk.id_pengambilan_darah', 'inner')
             ->join('operasional.shift s', 's.id_shift = pk.id_shift', 'left')
@@ -73,7 +73,8 @@ final class PemisahanKomponenModel extends ModelTemplate
      */
     public function validasiTanggalPemisahan(string $idPengambilan, string $tanggalPemisahanInput): void
     {
-        $pengambilan = $this->db->table('donor.pengambilan_darah')
+        $pengambilan = $this->db
+            ->table('donor.pengambilan_darah')
             ->select('tanggal_pengambilan')
             ->where('id_pengambilan_darah', $idPengambilan)
             ->get()
@@ -84,7 +85,9 @@ final class PemisahanKomponenModel extends ModelTemplate
             $tglPemisahan   = new \DateTime($tanggalPemisahanInput);
 
             if ($tglPemisahan < $tglPengambilan) {
-                throw new \InvalidArgumentException('Gagal Menyimpan! Tanggal pemisahan komponen tidak boleh mendahului tanggal pengambilan darah.');
+                throw new \InvalidArgumentException(
+                    'Gagal Menyimpan! Tanggal pemisahan komponen tidak boleh mendahului tanggal pengambilan darah.',
+                );
             }
         }
     }
@@ -96,7 +99,8 @@ final class PemisahanKomponenModel extends ModelTemplate
      */
     public function getBatasKomponen(string|int $idPengambilan): array
     {
-        $row = $this->db->table('donor.pengambilan_darah pd')
+        $row = $this->db
+            ->table('donor.pengambilan_darah pd')
             ->select('jb.kode_jenis_bag, jb.nama_jenis_bag')
             ->join('donor.jenis_bag jb', 'jb.id_jenis_bag = pd.id_jenis_bag', 'left')
             ->where('pd.id_pengambilan_darah', $idPengambilan)
@@ -129,7 +133,7 @@ final class PemisahanKomponenModel extends ModelTemplate
 
         if (count($komponenTerpilih) > $batas) {
             throw new \InvalidArgumentException(
-                "Gagal Menyimpan! Jenis bag {$batasKomponen['nama_jenis_bag']} maksimal {$batas} komponen darah."
+                "Gagal Menyimpan! Jenis bag {$batasKomponen['nama_jenis_bag']} maksimal {$batas} komponen darah.",
             );
         }
     }
@@ -139,7 +143,8 @@ final class PemisahanKomponenModel extends ModelTemplate
      */
     public function getHasilPemisahan(int|string $idPemisahan): array
     {
-        return $this->db->table('inventori_darah.pemisahan_komponen_detail as pkd')
+        return $this->db
+            ->table('inventori_darah.pemisahan_komponen_detail as pkd')
             ->select('pkd.*, k.kode_komponen, k.nama_komponen, k.masa_berlaku_hari')
             ->join('inventori_darah.komponen_darah k', 'k.id_komponen = pkd.id_komponen')
             ->where('pkd.id_pemisahan', $idPemisahan)
@@ -152,14 +157,15 @@ final class PemisahanKomponenModel extends ModelTemplate
      */
     public function getBhpMedisDetail(int|string $idPemisahan): array
     {
-        $bhpMedis = $this->db->table('logistik_utd.medis_pemisahan')
+        $bhpMedis = $this->db
+            ->table('logistik_utd.medis_pemisahan')
             ->where('id_pemisahan', $idPemisahan)
             ->get()
             ->getResultArray();
 
         $modelMasterMedis = new \App\Features\InventoriMedis\DataBarang\DataBarangModel();
         foreach ($bhpMedis as $k => $v) {
-            $masterItem = $modelMasterMedis->find($v['id_barang']);
+            $masterItem                  = $modelMasterMedis->find($v['id_barang']);
             $bhpMedis[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
             $bhpMedis[$k]['nama_barang'] = $masterItem['nama'];
         }
@@ -172,14 +178,15 @@ final class PemisahanKomponenModel extends ModelTemplate
      */
     public function getBhpPenunjangDetail(int|string $idPemisahan): array
     {
-        $bhpPenunjang = $this->db->table('logistik_utd.penunjang_pemisahan')
+        $bhpPenunjang = $this->db
+            ->table('logistik_utd.penunjang_pemisahan')
             ->where('id_pemisahan', $idPemisahan)
             ->get()
             ->getResultArray();
 
         $modelMasterPenunjang = new \App\Features\InventoriNonMedis\Barang\BarangModel();
         foreach ($bhpPenunjang as $k => $v) {
-            $masterItem = $modelMasterPenunjang->find($v['id_barang']);
+            $masterItem                      = $modelMasterPenunjang->find($v['id_barang']);
             $bhpPenunjang[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
             $bhpPenunjang[$k]['nama_barang'] = $masterItem['nama_barang'];
         }

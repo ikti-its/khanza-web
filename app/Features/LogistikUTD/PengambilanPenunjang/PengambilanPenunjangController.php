@@ -43,30 +43,29 @@ final class PengambilanPenunjangController extends ControllerTemplate
     public function list()
     {
         $modelPengambilanPenunjang = new \App\Features\LogistikUTD\PengambilanPenunjang\PengambilanPenunjangModel();
-        $rawPenunjang = $modelPengambilanPenunjang->get_katalog_dan_stok_ruangan();
+        $rawPenunjang              = $modelPengambilanPenunjang->get_katalog_dan_stok_ruangan();
 
         $dataModal = [];
         foreach ($rawPenunjang as $row) {
-            $sisaStok = (int)$row['total_masuk'] - 
-                        (int)$row['total_terpakai_donor'] - 
-                        (int)$row['total_terpakai_pemisahan'] - 
-                        (int)$row['total_terpakai_penyerahan'] - 
-                        (int)$row['total_rusak'];
+            $sisaStok =
+                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
+                    - (int) $row['total_terpakai_penyerahan']
+                - (int) $row['total_rusak'];
 
-            if ((int)$row['total_masuk'] > 0) {
+            if ((int) $row['total_masuk'] > 0) {
                 $dataModal[] = [
                     'id_barang'       => $row['id_barang'],
                     'kode_barang'     => $row['kode_barang'],
                     'nama_barang'     => $row['nama_barang'],
-                    'harga'           => (float)($row['harga'] ?? 0),
-                    'harga_formatted' => 'Rp ' . number_format((float)($row['harga'] ?? 0), 0, ',', '.'),
-                    'stok'            => $sisaStok
+                    'harga'           => (float) ($row['harga'] ?? 0),
+                    'harga_formatted' => 'Rp ' . number_format((float) ($row['harga'] ?? 0), 0, ',', '.'),
+                    'stok'            => $sisaStok,
                 ];
             }
         }
 
         return $this->response->setJSON([
-            'data' => $dataModal
+            'data' => $dataModal,
         ]);
     }
 }

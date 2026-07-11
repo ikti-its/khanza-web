@@ -21,7 +21,7 @@ final class PendonorModel extends ModelTemplate
             [
                 'id_orang'  => [
                     'nama',
-                    'nik', 
+                    'nik',
                     'id_jenis_kelamin'  => ['nama_jenis_kelamin'],
                     'tempat_lahir_kota' => ['nama_kota'],
                     'tanggal_lahir',
@@ -39,24 +39,24 @@ final class PendonorModel extends ModelTemplate
      * @param int $offset
      * @return list<array<string, mixed>>
      */
-    public function get_data_tabel(?int $limit = null, int $offset = 0): array
+    public function get_data_tabel(null|int $limit = null, int $offset = 0): array
     {
         $builder = $this->db
             ->table('role.pendonor p')
             ->select([
-                'p.id_pendonor', 
-                'p.nomor_pendonor', 
-                'p.nomor_telepon', 
+                'p.id_pendonor',
+                'p.nomor_pendonor',
+                'p.nomor_telepon',
                 'p.tanggal_donor_terakhir',
                 'p.id_rhesus',
-                'o.nama', 
+                'o.nama',
                 'o.nik',
                 'o.id_jenis_kelamin',
                 'o.id_golongan_darah',
                 'o.tanggal_lahir',
                 'jk.nama_jenis_kelamin',
-                'g.nama_golongan_darah', 
-                'r.kode_rhesus'
+                'g.nama_golongan_darah',
+                'r.kode_rhesus',
             ])
             ->join('person.orang o', 'o.id_orang = p.id_orang', 'inner')
             ->join('person.jenis_kelamin jk', 'jk.id_jenis_kelamin = o.id_jenis_kelamin', 'left')
@@ -81,11 +81,13 @@ final class PendonorModel extends ModelTemplate
         $tglLahir    = new \DateTime($tanggalLahir);
         $tglSekarang = new \DateTime(); // Hari ini
 
-        $selisih = $tglLahir->diff($tglSekarang);
+        $selisih   = $tglLahir->diff($tglSekarang);
         $tahunUmur = (int) $selisih->format('%r%y');
 
         if ($tahunUmur < 17) {
-            throw new \RuntimeException("Gagal Menyimpan! Usia calon pendonor saat ini adalah {$tahunUmur} Tahun. Syarat menjadi pendonor darah adalah minimal berusia 17 Tahun.");
+            throw new \RuntimeException(
+                "Gagal Menyimpan! Usia calon pendonor saat ini adalah {$tahunUmur} Tahun. Syarat menjadi pendonor darah adalah minimal berusia 17 Tahun.",
+            );
         }
     }
 
@@ -95,8 +97,11 @@ final class PendonorModel extends ModelTemplate
      * @param string|null $tanggalDonor
      * @param string|null $waktuValid
      */
-    public function setTanggalDonorTerakhir(int|string $idPendonor, ?string $tanggalDonor, ?string $waktuValid = null): void
-    {
+    public function setTanggalDonorTerakhir(
+        int|string $idPendonor,
+        null|string $tanggalDonor,
+        null|string $waktuValid = null,
+    ): void {
         $tanggalDonor = $this->normalisasiTanggal($tanggalDonor);
 
         $modelRiwayat = new \App\Features\Role\RiwayatTanggalDonor\RiwayatTanggalDonorModel();
@@ -112,9 +117,9 @@ final class PendonorModel extends ModelTemplate
      * @param int|string $idPendonor
      * @param string|null $waktuValid
      */
-    public function rollbackTanggalDonorTerakhir(int|string $idPendonor, ?string $waktuValid = null): void
+    public function rollbackTanggalDonorTerakhir(int|string $idPendonor, null|string $waktuValid = null): void
     {
-        $modelRiwayat = new \App\Features\Role\RiwayatTanggalDonor\RiwayatTanggalDonorModel();
+        $modelRiwayat    = new \App\Features\Role\RiwayatTanggalDonor\RiwayatTanggalDonorModel();
         $tanggalRollback = $modelRiwayat->rollbackKeRiwayatSebelumnya($idPendonor, $waktuValid);
 
         $this->update($idPendonor, [
@@ -125,7 +130,7 @@ final class PendonorModel extends ModelTemplate
     /**
      * Menyamakan format tanggal menjadi YYYY-MM-DD atau null
      */
-    private function normalisasiTanggal(?string $tanggal): ?string
+    private function normalisasiTanggal(null|string $tanggal): null|string
     {
         if ($tanggal === null || $tanggal === '') {
             return null;

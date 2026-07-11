@@ -57,16 +57,20 @@ final class SkriningDonorController extends ControllerTemplate
         $data_tabel = $this->model->get_data_tabel($perPage, $offset);
 
         $konfig = [
-            [1, 'Nomor Kunjungan',  'nomor_kunjungan',      'teks',   0],
-            [1, 'Nomor Pendonor',   'nomor_pendonor',       'teks',   0],
-            [1, 'Nama Lengkap',     'nama',                 'teks',   0],
-            [1, 'Status Skrining',  'nama_status_skrining', 'status', 0],
+            [1, 'Nomor Kunjungan', 'nomor_kunjungan',      'teks',   0],
+            [1, 'Nomor Pendonor',  'nomor_pendonor',       'teks',   0],
+            [1, 'Nama Lengkap',    'nama',                 'teks',   0],
+            [1, 'Status Skrining', 'nama_status_skrining', 'status', 0],
         ];
 
         return view('/layouts/data', [
             'judul'        => $this->title,
             'breadcrumbs'  => $this->breadcrumbs,
-            'meta_data'    => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'meta_data'    => [
+                'page'  => $currentPage,
+                'size'  => count($data_tabel),
+                'total' => ceil($totalRows / $perPage),
+            ],
             'modul_path'   => $this->get_uri_path(),
             'kolom_id'     => $this->primary_key,
             'konfig'       => $konfig,
@@ -85,7 +89,7 @@ final class SkriningDonorController extends ControllerTemplate
     public function create_page(): string
     {
         $breadcrumbs = [
-            ['title' => 'Tambah', 'icon' => 'tambah']
+            ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
         $controllerKunjungan = new \App\Features\Donor\Kunjungan\KunjunganController();
@@ -94,10 +98,10 @@ final class SkriningDonorController extends ControllerTemplate
 
         $konfigSkrining  = $this->get_fields_with_options(false, true);
         $konfigKunjungan = $controllerKunjungan->fields;
-        $konfigPendonor = $controllerPendonor->fields;
-        $konfigOrang = $controllerOrang->fields;
+        $konfigPendonor  = $controllerPendonor->fields;
+        $konfigOrang     = $controllerOrang->fields;
 
-        $mockBaris = [];
+        $mockBaris      = [];
         $konfigGabungan = [];
 
         foreach ($konfigSkrining as $fieldSkrining) {
@@ -113,7 +117,7 @@ final class SkriningDonorController extends ControllerTemplate
                 foreach ($konfigKunjungan as $fieldKunjungan) {
                     if ($fieldKunjungan[2] === 'nomor_kunjungan') {
                         $mockBaris['nomor_kunjungan'] = '';
-                        $konfigGabungan[] = $fieldKunjungan;
+                        $konfigGabungan[]             = $fieldKunjungan;
                         break;
                     }
                 }
@@ -121,7 +125,7 @@ final class SkriningDonorController extends ControllerTemplate
                 foreach ($konfigPendonor as $fieldPendonor) {
                     if ($fieldPendonor[2] === 'nomor_pendonor') {
                         $mockBaris['nomor_pendonor'] = '';
-                        $konfigGabungan[] = $fieldPendonor;
+                        $konfigGabungan[]            = $fieldPendonor;
                         break;
                     }
                 }
@@ -129,7 +133,7 @@ final class SkriningDonorController extends ControllerTemplate
                 foreach ($konfigOrang as $fieldOrang) {
                     if ($fieldOrang[2] === 'nama') {
                         $mockBaris['nama'] = '';
-                        $konfigGabungan[] = $fieldOrang;
+                        $konfigGabungan[]  = $fieldOrang;
                         break;
                     }
                 }
@@ -159,9 +163,9 @@ final class SkriningDonorController extends ControllerTemplate
         $rawPost  = $this->request->getPost();
         $jawabanQ = $rawPost['q'] ?? [];
 
-        $hasilSkrining     = $this->model->hitungOtomatisStatusSkrining($rawPost);
-        $idStatusSkrining  = $hasilSkrining['status'];
-        $daftarAlasan      = $hasilSkrining['alasan'];
+        $hasilSkrining    = $this->model->hitungOtomatisStatusSkrining($rawPost);
+        $idStatusSkrining = $hasilSkrining['status'];
+        $daftarAlasan     = $hasilSkrining['alasan'];
 
         $dataSkrining = [];
         foreach ($this->fields as $field) {
@@ -174,9 +178,9 @@ final class SkriningDonorController extends ControllerTemplate
         $dataSkrining['id_status_skrining'] = $idStatusSkrining;
         $dataSkrining['jawaban_kuesioner']  = !empty($jawabanQ) ? json_encode($jawabanQ) : null;
 
-        $anamnesisTidakMemenuhiSyarat = (int)($rawPost['id_hasil_anamnesis'] ?? 0) !== 1;
-        $idKunjungan   = $dataSkrining['id_kunjungan'] ?? null;
-        $pencekalanUrl = null;
+        $anamnesisTidakMemenuhiSyarat = (int) ($rawPost['id_hasil_anamnesis'] ?? 0) !== 1;
+        $idKunjungan                  = $dataSkrining['id_kunjungan'] ?? null;
+        $pencekalanUrl                = null;
 
         $this->model->db->transStart();
         try {
@@ -197,18 +201,20 @@ final class SkriningDonorController extends ControllerTemplate
                 session()->set('pencekalan_title', 'Hasil Anamnesis Tidak Memenuhi Syarat');
                 session()->set(
                     'pencekalan_message',
-                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil anamnesis donor yang tidak memenuhi syarat.'
+                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil anamnesis donor yang tidak memenuhi syarat.',
                 );
             } elseif ($idStatusSkrining === 1) {
                 session()->setFlashdata('success', 'Data skrining berhasil disimpan. Pendonor dinyatakan LOLOS.');
             } else {
                 $teksAlasan = implode(', ', $daftarAlasan);
-                session()->setFlashdata('success', "Data skrining berhasil disimpan. Pendonor dinyatakan GAGAL/DITUNDA karena indikator: {$teksAlasan}.");
+                session()->setFlashdata(
+                    'success',
+                    "Data skrining berhasil disimpan. Pendonor dinyatakan GAGAL/DITUNDA karena indikator: {$teksAlasan}.",
+                );
             }
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -223,7 +229,8 @@ final class SkriningDonorController extends ControllerTemplate
     #[\Override]
     public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataSkrining = $this->model->find($id);
         if (!$dataSkrining) {
@@ -255,10 +262,10 @@ final class SkriningDonorController extends ControllerTemplate
         $controllerPendonor  = new \App\Features\Role\Pendonor\PendonorController();
         $controllerOrang     = new \App\Features\Person\Orang\OrangController();
 
-        $konfigSkrining = $this->get_fields_with_options(false, true);
+        $konfigSkrining  = $this->get_fields_with_options(false, true);
         $konfigKunjungan = $controllerKunjungan->fields;
-        $konfigPendonor = $controllerPendonor->fields;
-        $konfigOrang = $controllerOrang->fields;
+        $konfigPendonor  = $controllerPendonor->fields;
+        $konfigOrang     = $controllerOrang->fields;
 
         $konfigGabungan = [];
 
@@ -304,7 +311,7 @@ final class SkriningDonorController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Ubah', 'icon' => 'Ubah']
+            ['title' => 'Ubah', 'icon' => 'Ubah'],
         ];
 
         return view('/admin/donor/tambah_skriningdonor', [
@@ -324,14 +331,15 @@ final class SkriningDonorController extends ControllerTemplate
     #[\Override]
     final public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
-        
+        if ($id == 0)
+            return $this->index();
+
         $rawPost  = $this->request->getPost();
         $jawabanQ = $rawPost['q'] ?? [];
 
-        $hasilSkrining     = $this->model->hitungOtomatisStatusSkrining($rawPost);
-        $idStatusSkrining  = $hasilSkrining['status'];
-        $daftarAlasan      = $hasilSkrining['alasan'];
+        $hasilSkrining    = $this->model->hitungOtomatisStatusSkrining($rawPost);
+        $idStatusSkrining = $hasilSkrining['status'];
+        $daftarAlasan     = $hasilSkrining['alasan'];
 
         $dataSkrining = [];
         foreach ($this->fields as $field) {
@@ -340,17 +348,17 @@ final class SkriningDonorController extends ControllerTemplate
                 $dataSkrining[$namaKolom] = $rawPost[$namaKolom];
             }
         }
-        
+
         $dataSkrining['id_status_skrining'] = $idStatusSkrining;
         $dataSkrining['jawaban_kuesioner']  = !empty($jawabanQ) ? json_encode($jawabanQ) : null;
 
-        $anamnesisTidakMemenuhiSyarat = (int)($rawPost['id_hasil_anamnesis'] ?? 0) !== 1;
-        $idKunjungan   = $dataSkrining['id_kunjungan'] ?? null;
-        $pencekalanUrl = null;
+        $anamnesisTidakMemenuhiSyarat = (int) ($rawPost['id_hasil_anamnesis'] ?? 0) !== 1;
+        $idKunjungan                  = $dataSkrining['id_kunjungan'] ?? null;
+        $pencekalanUrl                = null;
 
         $this->model->db->transStart();
         try {
-            $dataLama = $this->model->find($id);
+            $dataLama         = $this->model->find($id);
             $statusSebelumnya = (int) ($dataLama['id_status_skrining'] ?? 0);
 
             $this->model->update($id, $dataSkrining);
@@ -372,26 +380,24 @@ final class SkriningDonorController extends ControllerTemplate
                 session()->set('pencekalan_title', 'Hasil Anamnesis Tidak Memenuhi Syarat');
                 session()->set(
                     'pencekalan_message',
-                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil anamnesis donor yang tidak memenuhi syarat.'
+                    'Silakan lengkapi data pencekalan terlebih dahulu sebagai tindak lanjut hasil anamnesis donor yang tidak memenuhi syarat.',
                 );
-            }
-            elseif ($statusSebelumnya === 1 && $idStatusSkrining === 1) {
+            } elseif ($statusSebelumnya === 1 && $idStatusSkrining === 1) {
                 session()->setFlashdata('success', 'Data skrining berhasil diperbarui.');
-            }
-            elseif ($statusSebelumnya === 1 && $idStatusSkrining === 2) {
+            } elseif ($statusSebelumnya === 1 && $idStatusSkrining === 2) {
                 $teksAlasan = implode(', ', $daftarAlasan);
-                session()->setFlashdata('success', "Data skrining berhasil diperbarui. Pendonor dinyatakan GAGAL/DITUNDA karena indikator: {$teksAlasan}.");
-            }
-            elseif ($statusSebelumnya === 2 && $idStatusSkrining === 1) {
+                session()->setFlashdata(
+                    'success',
+                    "Data skrining berhasil diperbarui. Pendonor dinyatakan GAGAL/DITUNDA karena indikator: {$teksAlasan}.",
+                );
+            } elseif ($statusSebelumnya === 2 && $idStatusSkrining === 1) {
                 session()->setFlashdata('success', 'Data skrining berhasil diperbarui. Pendonor dinyatakan LOLOS.');
-            }
-            elseif ($statusSebelumnya === 2 && $idStatusSkrining === 2) {
+            } elseif ($statusSebelumnya === 2 && $idStatusSkrining === 2) {
                 session()->setFlashdata('success', 'Data skrining berhasil diperbarui.');
             }
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -405,7 +411,8 @@ final class SkriningDonorController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataSkrining = $this->model->find($id);
 
@@ -448,7 +455,7 @@ final class SkriningDonorController extends ControllerTemplate
             if (!empty($options) && isset($baris[$colName])) {
                 $idMentah = $baris[$colName];
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $baris[$colName] = $opt[0];
                         break;
                     }
@@ -463,7 +470,7 @@ final class SkriningDonorController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Detail', 'icon' => 'detail']
+            ['title' => 'Detail', 'icon' => 'detail'],
         ];
 
         return view('/admin/donor/detail_skriningdonor', [
@@ -497,9 +504,7 @@ final class SkriningDonorController extends ControllerTemplate
 
         $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
 
-        return $modelPencekalan
-            ->where('id_kunjungan', $idKunjungan)
-            ->first() !== null;
+        return $modelPencekalan->where('id_kunjungan', $idKunjungan)->first() !== null;
     }
 
     /**
@@ -513,8 +518,6 @@ final class SkriningDonorController extends ControllerTemplate
 
         $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
 
-        $modelPencekalan
-            ->where('id_kunjungan', $idKunjungan)
-            ->delete();
+        $modelPencekalan->where('id_kunjungan', $idKunjungan)->delete();
     }
 }

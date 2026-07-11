@@ -18,7 +18,7 @@ final class KotaModel extends ModelTemplate
                 'nama_kota'     => V::DEFAULT(),
             ],
             [
-                'id_provinsi'     => ['nama_provinsi'],
+                'id_provinsi' => ['nama_provinsi'],
             ],
         );
     }

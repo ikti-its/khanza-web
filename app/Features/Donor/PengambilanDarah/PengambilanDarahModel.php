@@ -25,7 +25,7 @@ final class PengambilanDarahModel extends ModelTemplate
                 'id_jenis_donor'        => ['nama_jenis_donor'],
                 'id_lokasi_pengambilan' => ['nama_lokasi'],
                 'id_petugas'            => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_status_pengambilan' => ['nama_status_pengambilan'],
             ],
@@ -50,7 +50,7 @@ final class PengambilanDarahModel extends ModelTemplate
                 'o.nama',
                 'jb.nama_jenis_bag',
                 'sp.id_status_pengambilan',
-                'sp.nama_status_pengambilan'
+                'sp.nama_status_pengambilan',
             ])
             ->join('donor.kunjungan k', 'k.id_kunjungan = pd.id_kunjungan', 'inner')
             ->join('role.pendonor p', 'p.id_pendonor = k.id_pendonor', 'inner')
@@ -74,14 +74,18 @@ final class PengambilanDarahModel extends ModelTemplate
         $tglSekarang = new \DateTime();
 
         if ($tglDonasi->format('Y-m-d') > $tglSekarang->format('Y-m-d')) {
-            throw new \InvalidArgumentException("Gagal Menyimpan! Tanggal pengambilan darah tidak boleh melebihi waktu saat ini.");
+            throw new \InvalidArgumentException(
+                'Gagal Menyimpan! Tanggal pengambilan darah tidak boleh melebihi waktu saat ini.',
+            );
         }
 
-        $selisih = $tglDonasi->diff($tglSekarang);
+        $selisih     = $tglDonasi->diff($tglSekarang);
         $selisihHari = (int) $selisih->format('%r%a');
 
         if ($selisihHari > 2) {
-            throw new \InvalidArgumentException("Gagal Menyimpan! Batas keterlambatan input data pengambilan darah untuk petugas maksimal adalah 2 hari ke belakang. Jika ingin menginput data Mobile Unit yang lebih lama, harap laporkan ke Supervisor / Kepala Ruangan.");
+            throw new \InvalidArgumentException(
+                'Gagal Menyimpan! Batas keterlambatan input data pengambilan darah untuk petugas maksimal adalah 2 hari ke belakang. Jika ingin menginput data Mobile Unit yang lebih lama, harap laporkan ke Supervisor / Kepala Ruangan.',
+            );
         }
     }
 
@@ -91,8 +95,11 @@ final class PengambilanDarahModel extends ModelTemplate
      * @param array $dataPengambilan
      * @param array|null $dataPengambilanSebelumnya
      */
-    public function syncTanggalDonorTerakhir(int $idStatusPengambilan, array $dataPengambilan, ?array $dataPengambilanSebelumnya = null): void
-    {
+    public function syncTanggalDonorTerakhir(
+        int $idStatusPengambilan,
+        array $dataPengambilan,
+        null|array $dataPengambilanSebelumnya = null,
+    ): void {
         $idKunjungan = $dataPengambilan['id_kunjungan'] ?? $dataPengambilanSebelumnya['id_kunjungan'] ?? null;
 
         if (empty($idKunjungan)) {
@@ -109,11 +116,13 @@ final class PengambilanDarahModel extends ModelTemplate
         $idPendonor    = $kunjunganRow['id_pendonor'];
         $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
         $dataPendonor  = $modelPendonor->find($idPendonor) ?? [];
-        
+
         $tanggalAktif       = $this->normalisasiTanggal($dataPendonor['tanggal_donor_terakhir'] ?? null);
         $tanggalPengambilan = $this->normalisasiTanggal($dataPengambilan['tanggal_pengambilan'] ?? null);
         $tanggalSebelumnya  = $this->normalisasiTanggal($dataPengambilanSebelumnya['tanggal_pengambilan'] ?? null);
-        $statusSebelumnya   = (int)($dataPengambilanSebelumnya['id_status_pengambilan'] ?? $dataPengambilan['id_status_pengambilan'] ?? 0);
+        $statusSebelumnya   = (int) (
+            $dataPengambilanSebelumnya['id_status_pengambilan'] ?? $dataPengambilan['id_status_pengambilan'] ?? 0
+        );
 
         if ($idStatusPengambilan === 1) {
             $tanggalDonorBaru = $tanggalPengambilan ?? date('Y-m-d');
@@ -139,7 +148,7 @@ final class PengambilanDarahModel extends ModelTemplate
     /**
      * Menyamakan format tanggal menjadi YYYY-MM-DD atau null
      */
-    private function normalisasiTanggal(?string $tanggal): ?string
+    private function normalisasiTanggal(null|string $tanggal): null|string
     {
         if ($tanggal === null || $tanggal === '') {
             return null;
@@ -155,9 +164,12 @@ final class PengambilanDarahModel extends ModelTemplate
      */
     public function apakahSudahDipisahkan(string|int $idPengambilanDarah): bool
     {
-        return $this->db->table('inventori_darah.pemisahan_komponen')
-            ->where('id_pengambilan_darah', $idPengambilanDarah)
-            ->countAllResults() > 0;
+        return (
+            $this->db
+                ->table('inventori_darah.pemisahan_komponen')
+                ->where('id_pengambilan_darah', $idPengambilanDarah)
+                ->countAllResults() > 0
+        );
     }
 
     /**
@@ -167,9 +179,12 @@ final class PengambilanDarahModel extends ModelTemplate
      */
     public function apakahSudahDiuji(string|int $idPengambilanDarah): bool
     {
-        return $this->db->table('uji_darah.hasil_uji_saring')
-            ->where('id_pengambilan_darah', $idPengambilanDarah)
-            ->countAllResults() > 0;
+        return (
+            $this->db
+                ->table('uji_darah.hasil_uji_saring')
+                ->where('id_pengambilan_darah', $idPengambilanDarah)
+                ->countAllResults() > 0
+        );
     }
 
     /**
@@ -177,14 +192,15 @@ final class PengambilanDarahModel extends ModelTemplate
      */
     public function getBhpMedisDetail(int|string $idPengambilan): array
     {
-        $bhpMedis = $this->db->table('logistik_utd.medis_donor')
+        $bhpMedis = $this->db
+            ->table('logistik_utd.medis_donor')
             ->where('id_pengambilan_darah', $idPengambilan)
             ->get()
             ->getResultArray();
 
         $modelMasterMedis = new \App\Features\InventoriMedis\DataBarang\DataBarangModel();
         foreach ($bhpMedis as $k => $v) {
-            $masterItem = $modelMasterMedis->find($v['id_barang']);
+            $masterItem                  = $modelMasterMedis->find($v['id_barang']);
             $bhpMedis[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
             $bhpMedis[$k]['nama_barang'] = $masterItem['nama'];
         }
@@ -197,14 +213,15 @@ final class PengambilanDarahModel extends ModelTemplate
      */
     public function getBhpPenunjangDetail(int|string $idPengambilan): array
     {
-        $bhpPenunjang = $this->db->table('logistik_utd.penunjang_donor')
+        $bhpPenunjang = $this->db
+            ->table('logistik_utd.penunjang_donor')
             ->where('id_pengambilan_darah', $idPengambilan)
             ->get()
             ->getResultArray();
 
         $modelMasterPenunjang = new \App\Features\InventoriNonMedis\Barang\BarangModel();
         foreach ($bhpPenunjang as $k => $v) {
-            $masterItem = $modelMasterPenunjang->find($v['id_barang']);
+            $masterItem                      = $modelMasterPenunjang->find($v['id_barang']);
             $bhpPenunjang[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
             $bhpPenunjang[$k]['nama_barang'] = $masterItem['nama_barang'];
         }

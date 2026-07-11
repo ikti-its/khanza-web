@@ -43,16 +43,15 @@ final class SuplierController extends ControllerTemplate
     protected function get_fields_with_options(bool $include_pk = false, bool $is_form = false): array
     {
         $fields = parent::get_fields_with_options($include_pk, $is_form);
-        if (!$is_form) return $fields;
+        if (!$is_form)
+            return $fields;
 
-        $banks = $this->get_db()
-            ->query("SELECT id_bank, nama_bank FROM finansial.bank WHERE id_bank > 0 ORDER BY nama_bank")
+        $banks = $this
+            ->get_db()
+            ->query('SELECT id_bank, nama_bank FROM finansial.bank WHERE id_bank > 0 ORDER BY nama_bank')
             ->getResultArray();
 
-        $bank_options = array_map(
-            fn(array $b): array => [$b['nama_bank'] ?? '-', (string) $b['id_bank']],
-            $banks,
-        );
+        $bank_options = array_map(fn(array $b): array => [$b['nama_bank'] ?? '-', (string) $b['id_bank']], $banks);
 
         foreach ($fields as &$field) {
             if ($field[2] === 'id_bank') {
@@ -67,7 +66,8 @@ final class SuplierController extends ControllerTemplate
     // load data rekening terkait suplier ke form ubah
     public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $data = $this->model->find($id);
 
@@ -75,10 +75,11 @@ final class SuplierController extends ControllerTemplate
             $data += ['id_bank' => null, 'nomor_rekening' => null, 'nama_akun' => null];
 
             if (!empty($data['id_rekening'])) {
-                $rekening = $this->get_db()
+                $rekening = $this
+                    ->get_db()
                     ->query(
-                        "SELECT bank AS id_bank, nomor_rekening, nama_akun
-                         FROM finansial.rekening WHERE id_rekening = ?",
+                        'SELECT bank AS id_bank, nomor_rekening, nama_akun
+                         FROM finansial.rekening WHERE id_rekening = ?',
                         [(int) $data['id_rekening']],
                     )
                     ->getRowArray();
@@ -104,13 +105,9 @@ final class SuplierController extends ControllerTemplate
     // generate kode suplier format S0001, S0002, dst
     private function generate_kode(): string
     {
-        $row = $this->get_db()
-            ->query(
-                "SELECT MAX(CAST(SUBSTRING(TRIM(kode_suplier) FROM 2) AS INTEGER)) AS max_num
+        $row = $this->get_db()->query("SELECT MAX(CAST(SUBSTRING(TRIM(kode_suplier) FROM 2) AS INTEGER)) AS max_num
                  FROM inventori_non_medis.suplier
-                 WHERE TRIM(kode_suplier) ~ '^S[0-9]+$'"
-            )
-            ->getRowArray();
+                 WHERE TRIM(kode_suplier) ~ '^S[0-9]+$'")->getRowArray();
 
         $next = (int) ($row['max_num'] ?? 0) + 1;
         return 'S' . str_pad((string) $next, 4, '0', STR_PAD_LEFT);
@@ -125,12 +122,14 @@ final class SuplierController extends ControllerTemplate
     // pre-fill kode_suplier dengan kode otomatis, custom view dengan modal kota
     public function create_page(): string
     {
-        $banks = $this->get_db()
+        $banks = $this
+            ->get_db()
             ->table('finansial.bank')
             ->select('id_bank, nama_bank')
             ->where('id_bank >', 0)
             ->orderBy('nama_bank', 'ASC')
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         return view('admin/inventorinonmedis/tambah_suplier', [
             'judul'        => 'Tambah ' . $this->title,
@@ -144,10 +143,12 @@ final class SuplierController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $data = $this->model->builder()
+        $data = $this->model
+            ->builder()
             ->select('id_suplier, kode_suplier, nama_suplier')
             ->orderBy('nama_suplier', 'ASC')
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         return $this->response->setJSON(['data' => $data]);
     }
@@ -155,13 +156,14 @@ final class SuplierController extends ControllerTemplate
     // simpan rekening baru ke finansial.rekening, link id_rekening ke suplier
     protected function before_create(array &$postData): void
     {
-        $id_bank        = $postData['id_bank']        ?? null;
+        $id_bank        = $postData['id_bank'] ?? null;
         $nomor_rekening = $postData['nomor_rekening'] ?? null;
-        $nama_akun      = $postData['nama_akun']      ?? null;
+        $nama_akun      = $postData['nama_akun'] ?? null;
 
         unset($postData['id_bank'], $postData['nomor_rekening'], $postData['nama_akun']);
 
-        if (!$id_bank || !$nomor_rekening || !$nama_akun) return;
+        if (!$id_bank || !$nomor_rekening || !$nama_akun)
+            return;
 
         $db = $this->get_db();
         $db->table('finansial.rekening')->insert([
@@ -175,13 +177,14 @@ final class SuplierController extends ControllerTemplate
     // update rekening yang sudah ada, atau insert baru kalau belum punya rekening
     protected function before_update(array &$postData, int|string $id): void
     {
-        $id_bank        = $postData['id_bank']        ?? null;
+        $id_bank        = $postData['id_bank'] ?? null;
         $nomor_rekening = $postData['nomor_rekening'] ?? null;
-        $nama_akun      = $postData['nama_akun']      ?? null;
+        $nama_akun      = $postData['nama_akun'] ?? null;
 
         unset($postData['id_bank'], $postData['nomor_rekening'], $postData['nama_akun']);
 
-        if (!$id_bank && !$nomor_rekening && !$nama_akun) return;
+        if (!$id_bank && !$nomor_rekening && !$nama_akun)
+            return;
 
         $suplier     = $this->model->find($id);
         $id_rekening = $suplier['id_rekening'] ?? null;
@@ -189,7 +192,8 @@ final class SuplierController extends ControllerTemplate
         $db = $this->get_db();
 
         if ($id_rekening) {
-            $db->table('finansial.rekening')
+            $db
+                ->table('finansial.rekening')
                 ->where('id_rekening', $id_rekening)
                 ->update([
                     'bank'           => $id_bank,

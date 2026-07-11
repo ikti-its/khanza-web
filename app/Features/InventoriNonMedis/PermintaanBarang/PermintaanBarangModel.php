@@ -32,12 +32,11 @@ final class PermintaanBarangModel extends ModelTemplate
         $options = parent::get_all_options();
 
         if (isset($options['id_status_permintaan_barang'])) {
-            $options['id_status_permintaan_barang'] = array_values(
-                array_filter(
-                    $options['id_status_permintaan_barang'],
-                    fn(array $opt) => in_array($opt[1], ['1', '4'], true),
-                )
-            );
+            $options['id_status_permintaan_barang'] = array_values(array_filter($options['id_status_permintaan_barang'], fn(array $opt) => in_array(
+                $opt[1],
+                ['1', '4'],
+                true,
+            )));
         }
 
         return $options;

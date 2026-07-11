@@ -17,7 +17,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         parent::__construct(
             new RingkasanPermintaanBarangModel(),
             [
-                ['Inventori Non Medis',        'inventori_non_medis'],
+                ['Inventori Non Medis',         'inventori_non_medis'],
                 ['Ringkasan Permintaan Barang', 'ringkasan_permintaan_barang'],
             ],
             'Ringkasan Permintaan Barang',
@@ -31,8 +31,8 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
                 [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal',                     'Tanggal Permintaan'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal',                     'Tanggal Permintaan'],
                 [SHOW,       REQUIRED, I::SELECT,   'id_status_permintaan_barang', 'Status'],
-                [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal_diproses',           'Tanggal Diproses'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',           'Tanggal Diproses'],
+                [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal_diproses',            'Tanggal Diproses'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',            'Tanggal Diproses'],
                 [TABLE_ONLY, OPTIONAL, I::READONLY, 'petugas',                     'Pemohon'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'petugas_nama',                'Pemohon'],
                 [TABLE_ONLY, OPTIONAL, I::SELECT,   'master_ruangan',              'Ruangan'],
@@ -41,7 +41,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
                 [SHOW,       OPTIONAL, I::READONLY, 'no_keluar',                   'No. Keluar'],
             ],
             child_path: '/inventori-non-medis/ringkasan-permintaan-barang-detail',
-            child_fk:   'id_permintaan',
+            child_fk: 'id_permintaan',
         );
     }
 
@@ -58,24 +58,27 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         $new_status = (int) ($postData['id_status_permintaan_barang'] ?? 0);
 
         if (!in_array($new_status, [2, 3], true)) {
-            $current = $this->model->find($id);
+            $current                                 = $this->model->find($id);
             $postData['id_status_permintaan_barang'] = (int) ($current['id_status_permintaan_barang'] ?? 4);
             return;
         }
 
         $current = $this->model->find($id);
-        if (!is_array($current)) return;
-        if ((int) ($current['id_status_permintaan_barang'] ?? 0) === 2) return;
+        if (!is_array($current))
+            return;
+        if ((int) ($current['id_status_permintaan_barang'] ?? 0) === 2)
+            return;
 
         $postData['tanggal_diproses'] = date('Y-m-d H:i:s');
 
-        if ($new_status !== 2) return;
+        if ($new_status !== 2)
+            return;
 
         // generate no_keluar hanya saat Disetujui
         helper('autonomor');
-        $lastNo = $this->get_last('inventori_non_medis.permintaan_barang', 'no_keluar', 'id_permintaan');
-        $postData['no_keluar']  = generateNextNoKeluarBarang($lastNo);
-        $this->pending_keluar   = true;
+        $lastNo                = $this->get_last('inventori_non_medis.permintaan_barang', 'no_keluar', 'id_permintaan');
+        $postData['no_keluar'] = generateNextNoKeluarBarang($lastNo);
+        $this->pending_keluar  = true;
     }
 
     // validasi petugas, qty & stok sebelum approve, buat transaksi keluar setelah
@@ -99,13 +102,17 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
                 return $this->home();
             }
 
-            $has_approved_items = $this->get_db()
+            $has_approved_items = $this
+                ->get_db()
                 ->table('inventori_non_medis.permintaan_barang_detail')
                 ->where('id_permintaan', (int) $id)
                 ->where('qty_disetujui >', 0)
                 ->countAllResults() > 0;
             if (!$has_approved_items) {
-                session()->setFlashdata('error', 'Isi qty disetujui pada detail permintaan terlebih dahulu sebelum menyetujui.');
+                session()->setFlashdata(
+                    'error',
+                    'Isi qty disetujui pada detail permintaan terlebih dahulu sebelum menyetujui.',
+                );
                 return $this->home();
             }
 
@@ -120,13 +127,16 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
 
         if ($this->pending_keluar) {
             $this->pending_keluar = false;
-            $saved = $this->model->find((int) $id);
+            $saved                = $this->model->find((int) $id);
             if (is_array($saved) && !empty($saved['no_keluar'])) {
                 try {
                     $this->create_transaksi_stok_keluar((int) $id, (string) $saved['no_keluar']);
                 } catch (\Throwable $e) {
                     log_message('error', '[Approval] create_transaksi_stok_keluar: ' . $e->getMessage());
-                    session()->setFlashdata('error', 'Status berhasil disetujui, namun gagal membuat transaksi stok: ' . $e->getMessage());
+                    session()->setFlashdata(
+                        'error',
+                        'Status berhasil disetujui, namun gagal membuat transaksi stok: ' . $e->getMessage(),
+                    );
                 }
             }
         }
@@ -135,16 +145,18 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
     }
 
     // cek stok cukup untuk semua item yang disetujui
-    private function validate_stock(int $id): ?string
+    private function validate_stock(int $id): null|string
     {
-        $details = $this->get_db()
+        $details = $this
+            ->get_db()
             ->table('inventori_non_medis.permintaan_barang_detail d')
             ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
             ->select('d.id_barang, d.qty_disetujui, b.stok, b.nama_barang')
             ->where('d.id_permintaan', $id)
             ->where('d.id_barang >', 0)
             ->where('d.qty_disetujui >', 0)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         foreach ($details as $d) {
             if ((float) $d['qty_disetujui'] > (float) ($d['stok'] ?? 0)) {
@@ -159,30 +171,36 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
     {
         $db = $this->get_db();
 
-        $row = $db->table('inventori_non_medis.permintaan_barang pb')
-            ->join('ruangan.ruangan r',      'pb.master_ruangan = r.id_ruangan',         'left')
-            ->join('role.petugas p_pemohon', 'pb.petugas = p_pemohon.id_petugas',        'left')
-            ->join('person.orang o_pemohon', 'p_pemohon.id_orang = o_pemohon.id_orang',  'left')
-            ->join('role.petugas p_pengelola', 'pb.petugas_gudang = p_pengelola.id_petugas',    'left')
-            ->join('person.orang o_pengelola', 'p_pengelola.id_orang = o_pengelola.id_orang',   'left')
-            ->select('pb.no_permintaan, r.nama_ruangan, o_pemohon.nama AS nama_pemohon, o_pengelola.nama AS nama_pengelola')
+        $row = $db
+            ->table('inventori_non_medis.permintaan_barang pb')
+            ->join('ruangan.ruangan r', 'pb.master_ruangan = r.id_ruangan', 'left')
+            ->join('role.petugas p_pemohon', 'pb.petugas = p_pemohon.id_petugas', 'left')
+            ->join('person.orang o_pemohon', 'p_pemohon.id_orang = o_pemohon.id_orang', 'left')
+            ->join('role.petugas p_pengelola', 'pb.petugas_gudang = p_pengelola.id_petugas', 'left')
+            ->join('person.orang o_pengelola', 'p_pengelola.id_orang = o_pengelola.id_orang', 'left')
+            ->select(
+                'pb.no_permintaan, r.nama_ruangan, o_pemohon.nama AS nama_pemohon, o_pengelola.nama AS nama_pengelola',
+            )
             ->where('pb.id_permintaan', $id)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
 
         $keterangan = trim(implode(', ', array_filter([
-            $row['no_permintaan']    ?? '',
-            ($row['nama_ruangan']   ?? '') !== '' ? 'Ruangan ' . $row['nama_ruangan']        : '',
-            ($row['nama_pemohon']   ?? '') !== '' ? 'Pemohon: ' . $row['nama_pemohon']       : '',
-            ($row['nama_pengelola'] ?? '') !== '' ? 'Pengelola: ' . $row['nama_pengelola']   : '',
+            $row['no_permintaan'] ?? '',
+            ($row['nama_ruangan'] ?? '') !== '' ? 'Ruangan ' . $row['nama_ruangan'] : '',
+            ($row['nama_pemohon'] ?? '') !== '' ? 'Pemohon: ' . $row['nama_pemohon'] : '',
+            ($row['nama_pengelola'] ?? '') !== '' ? 'Pengelola: ' . $row['nama_pengelola'] : '',
         ])));
 
-        $details = $db->table('inventori_non_medis.permintaan_barang_detail pbd')
+        $details = $db
+            ->table('inventori_non_medis.permintaan_barang_detail pbd')
             ->join('inventori_non_medis.barang b', 'pbd.id_barang = b.id_barang', 'left')
             ->select('pbd.id_barang, pbd.qty_disetujui, b.stok, b.harga_satuan')
             ->where('pbd.id_permintaan', $id)
             ->where('pbd.id_barang >', 0)
             ->where('pbd.qty_disetujui >', 0)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         $now = date('Y-m-d H:i:s');
         $db->transBegin();
@@ -202,11 +220,14 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
                 'id_transaksi' => $id_transaksi,
                 'id_barang'    => (int) $d['id_barang'],
                 'qty'          => $qty,
-                'harga_satuan' => isset($d['harga_satuan']) && (float) $d['harga_satuan'] > 0 ? $d['harga_satuan'] : null,
+                'harga_satuan' => isset($d['harga_satuan']) && (float) $d['harga_satuan'] > 0
+                    ? $d['harga_satuan']
+                    : null,
                 'stok_sebelum' => $stok_sebelum,
                 'stok_sesudah' => $stok_sebelum - $qty,
             ]);
-            $db->table('inventori_non_medis.barang')
+            $db
+                ->table('inventori_non_medis.barang')
                 ->where('id_barang', (int) $d['id_barang'])
                 ->set('stok', 'stok - ' . $qty, false)
                 ->update();

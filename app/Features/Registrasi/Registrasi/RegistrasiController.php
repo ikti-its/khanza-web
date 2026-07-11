@@ -16,7 +16,7 @@ final class RegistrasiController extends ControllerTemplate
         parent::__construct(
             new RegistrasiModel(),
             [
-                ['Registrasi',  'registrasi'],
+                ['Registrasi', 'registrasi'],
             ],
             'Registrasi',
             [
@@ -47,6 +47,7 @@ final class RegistrasiController extends ControllerTemplate
             ],
         );
     }
+
     // ──────────────────────────────────────────────────────────
     // PRIVATE HELPERS
     // ──────────────────────────────────────────────────────────
@@ -55,11 +56,21 @@ final class RegistrasiController extends ControllerTemplate
     {
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn($f) => !in_array($f[2], [
-                'id_registrasi', 'nomor_reg', 'nomor_rawat',
-                'id_dokter', 'id_pasien', 'unit', 'id_pj_pasien', 'id_alamat_pj',
-                'biaya_registrasi',
-            ], true)
+            fn($f) => !in_array(
+                $f[2],
+                [
+                    'id_registrasi',
+                    'nomor_reg',
+                    'nomor_rawat',
+                    'id_dokter',
+                    'id_pasien',
+                    'unit',
+                    'id_pj_pasien',
+                    'id_alamat_pj',
+                    'biaya_registrasi',
+                ],
+                true,
+            ),
         ));
     }
 
@@ -67,7 +78,8 @@ final class RegistrasiController extends ControllerTemplate
     {
         helper('autonomor');
 
-        $lastNo = $this->model->db
+        $lastNo = $this->model
+            ->db
             ->table('registrasi.registrasi')
             ->select('nomor_reg')
             ->like('nomor_reg', 'REG-' . date('Ymd'), 'after')
@@ -83,7 +95,8 @@ final class RegistrasiController extends ControllerTemplate
     {
         helper('autonomor');
 
-        $lastNo = $this->model->db
+        $lastNo = $this->model
+            ->db
             ->table('registrasi.registrasi')
             ->select('nomor_rawat')
             ->orderBy('nomor_rawat', 'DESC')
@@ -94,9 +107,10 @@ final class RegistrasiController extends ControllerTemplate
         return generateNextNoRawat($lastNo['nomor_rawat'] ?? null);
     }
 
-    private function fetchPasienByRm(string $noRm): ?array
+    private function fetchPasienByRm(string $noRm): null|array
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('role.pasien p')
             ->select('p.id_pasien, p.nomor_rm, o.nama')
             ->join('person.orang o', 'o.id_orang = p.id_orang')
@@ -107,9 +121,10 @@ final class RegistrasiController extends ControllerTemplate
         return $row ?: null;
     }
 
-    private function fetchUnitById(int $id): ?array
+    private function fetchUnitById(int $id): null|array
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('unit.unit')
             ->select('id_unit, nama_unit, biaya_registrasi_baru')
             ->where('id_unit', $id)
@@ -199,10 +214,12 @@ final class RegistrasiController extends ControllerTemplate
     #[\Override]
     public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $data = $this->model->find_one($id);
-        if (!$data) return $this->home();
+        if (!$data)
+            return $this->home();
 
         return view('admin/rekam_medis/tambah_rm_registrasi', [
             'judul'       => 'Ubah ' . $this->title,
@@ -226,10 +243,8 @@ final class RegistrasiController extends ControllerTemplate
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil disimpan.');
             $redirect_to = $this->request->getPost('redirect_to');
             return $redirect_to ? redirect()->to($redirect_to) : $this->home();
-        } catch (\ReflectionException | DatabaseException $e) {
-            $msg = $e instanceof DatabaseException
-                ? $this->friendly_db_error($e)
-                : $e->getMessage();
+        } catch (\ReflectionException|DatabaseException $e) {
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $msg);
             return redirect()->back()->withInput();
         }
@@ -238,16 +253,15 @@ final class RegistrasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         try {
             $this->model->update($id, $this->buildPostData());
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil diperbarui.');
             return $this->home();
-        } catch (\ReflectionException | DatabaseException $e) {
-            $msg = $e instanceof DatabaseException
-                ? $this->friendly_db_error($e)
-                : $e->getMessage();
+        } catch (\ReflectionException|DatabaseException $e) {
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $msg);
             return redirect()->back()->withInput();
         }
@@ -257,7 +271,8 @@ final class RegistrasiController extends ControllerTemplate
     {
         $tabel = $this->model->table;
 
-        $data = $this->model->builder($tabel . ' r')
+        $data = $this->model
+            ->builder($tabel . ' r')
             ->select([
                 'r.id_registrasi',
                 'r.nomor_reg',
@@ -268,12 +283,12 @@ final class RegistrasiController extends ControllerTemplate
                 'd.kode_dokter',
                 'od.nama AS nama_dokter',
                 'r.id_dokter',
-                "COALESCE(ri.kamar, '-') AS kamar"
+                "COALESCE(ri.kamar, '-') AS kamar",
             ])
-            ->join('role.pasien p',   'p.id_pasien = r.id_pasien', 'inner')
-            ->join('person.orang o',  'o.id_orang  = p.id_orang', 'inner')
-            ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
-            ->join('person.orang od', 'od.id_orang = d.id_orang',  'left')
+            ->join('role.pasien p', 'p.id_pasien = r.id_pasien', 'inner')
+            ->join('person.orang o', 'o.id_orang  = p.id_orang', 'inner')
+            ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
             ->join('rawat_inap.registrasi ri', 'ri.id_registrasi = r.id_registrasi', 'left')
             ->orderBy('r.tanggal_reg', 'DESC')
             ->get()

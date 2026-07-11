@@ -15,7 +15,7 @@ final class PoliRawatJalanController extends ControllerTemplate
         parent::__construct(
             new RegistrasiModel(),
             [
-                ['Rawat Jalan', 'rawat_jalan'],
+                ['Rawat Jalan',      'rawat_jalan'],
                 ['Poli Rawat Jalan', 'poli_rawat_jalan'],
             ],
             'Poli Rawat Jalan',
@@ -36,7 +36,8 @@ final class PoliRawatJalanController extends ControllerTemplate
     #[\Override]
     final public function index(): string
     {
-        $unitList = $this->model->db
+        $unitList = $this->model
+            ->db
             ->table('unit.unit')
             ->select(['id_unit', 'nama_unit'])
             ->orderBy('nama_unit', 'ASC')
@@ -53,12 +54,13 @@ final class PoliRawatJalanController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $idUnit  = $this->request->getGet('id_unit');
-        $dari    = $this->request->getGet('dari');
-        $sampai  = $this->request->getGet('sampai');
-        $status  = $this->request->getGet('status');
+        $idUnit = $this->request->getGet('id_unit');
+        $dari   = $this->request->getGet('dari');
+        $sampai = $this->request->getGet('sampai');
+        $status = $this->request->getGet('status');
 
-        $builder = $this->model->db
+        $builder = $this->model
+            ->db
             ->table('registrasi.registrasi r')
             ->select([
                 'r.nomor_reg',
@@ -70,11 +72,11 @@ final class PoliRawatJalanController extends ControllerTemplate
                 'sp.nama_status_poli',
                 'r.status_poli AS id_status_poli',
             ])
-            ->join('role.pasien p',              'p.id_pasien       = r.id_pasien',   'left')
-            ->join('person.orang o',             'o.id_orang        = p.id_orang',    'left')
-            ->join('unit.unit u',                'u.id_unit         = r.unit',         'left')
-            ->join('role.dokter d',              'd.id_dokter       = r.id_dokter',    'left')
-            ->join('person.orang od',            'od.id_orang       = d.id_orang',     'left')
+            ->join('role.pasien p', 'p.id_pasien       = r.id_pasien', 'left')
+            ->join('person.orang o', 'o.id_orang        = p.id_orang', 'left')
+            ->join('unit.unit u', 'u.id_unit         = r.unit', 'left')
+            ->join('role.dokter d', 'd.id_dokter       = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang       = d.id_orang', 'left')
             ->join('registrasi.status_poli sp', 'sp.id_status_poli = r.status_poli', 'left')
             ->where('r.status_rawat', 2)
             ->orderBy('r.tanggal_reg', 'ASC');
@@ -109,7 +111,8 @@ final class PoliRawatJalanController extends ControllerTemplate
             return $this->response->setJSON(['data' => null]);
         }
 
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('skrining_rawat_jalan.skrining_rawat_jalan s')
             ->select([
                 's.tgl_skrining',
@@ -125,20 +128,21 @@ final class PoliRawatJalanController extends ControllerTemplate
                 'kp.skrining_keputusan',
                 'o.nama AS nama_petugas',
             ])
-            ->join('skrining_rawat_jalan.ref_skrining_kesadaran k',  'k.id_kesadaran   = s.id_kesadaran',  'left')
+            ->join('skrining_rawat_jalan.ref_skrining_kesadaran k', 'k.id_kesadaran   = s.id_kesadaran', 'left')
             ->join('skrining_rawat_jalan.ref_skrining_pernafasan p', 'p.id_pernafasan  = s.id_pernafasan', 'left')
-            ->join('skrining_rawat_jalan.ref_skrining_skala_nyeri sn','sn.id_skala_nyeri = s.id_skala_nyeri','left')
+            ->join('skrining_rawat_jalan.ref_skrining_skala_nyeri sn', 'sn.id_skala_nyeri = s.id_skala_nyeri', 'left')
             ->join('skrining_rawat_jalan.ref_skrining_nyeri_dada nd', 'nd.id_nyeri_dada  = s.id_nyeri_dada', 'left')
-            ->join('skrining_rawat_jalan.ref_skrining_batuk b',       'b.id_batuk        = s.id_batuk',      'left')
-            ->join('unit.unit u',                                      'u.id_unit         = s.id_unit',       'left')
-            ->join('skrining_rawat_jalan.ref_skrining_keputusan kp',  'kp.id_keputusan   = s.id_keputusan',  'left')
-            ->join('role.petugas pt',                                  'pt.id_petugas     = s.id_petugas',    'left')
-            ->join('person.orang o',                                   'o.id_orang        = pt.id_orang',     'left')
+            ->join('skrining_rawat_jalan.ref_skrining_batuk b', 'b.id_batuk        = s.id_batuk', 'left')
+            ->join('unit.unit u', 'u.id_unit         = s.id_unit', 'left')
+            ->join('skrining_rawat_jalan.ref_skrining_keputusan kp', 'kp.id_keputusan   = s.id_keputusan', 'left')
+            ->join('role.petugas pt', 'pt.id_petugas     = s.id_petugas', 'left')
+            ->join('person.orang o', 'o.id_orang        = pt.id_orang', 'left')
             ->where('s.no_rm', $noRm)
             ->orderBy('s.tgl_skrining', 'DESC')
             ->orderBy('s.jam_skrining', 'DESC')
             ->limit(1)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
 
         return $this->response->setJSON(['data' => $row ?? null]);
     }

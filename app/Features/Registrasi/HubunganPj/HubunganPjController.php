@@ -14,7 +14,7 @@ final class HubunganPjController extends ControllerTemplate
         parent::__construct(
             new HubunganPjModel(),
             [
-                ['Registrasi',          'registrasi'],
+                ['Registrasi',                'registrasi'],
                 ['Hubungan Penanggung Jawab', 'hubungan_pj'],
             ],
             'Hubungan Penanggung Jawab',

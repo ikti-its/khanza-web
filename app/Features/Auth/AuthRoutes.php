@@ -12,7 +12,7 @@ final class AuthRoutes extends RouteTemplate
         parent::__construct(
             'Auth',
             [
-                \App\Features\Auth\Akun\AkunController::class,    
+                \App\Features\Auth\Akun\AkunController::class,
             ],
             'auth.svg',
         );

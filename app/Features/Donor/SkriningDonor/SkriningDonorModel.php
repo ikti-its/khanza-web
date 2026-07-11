@@ -13,21 +13,21 @@ final class SkriningDonorModel extends ModelTemplate
         parent::__construct(
             new SkriningDonorDatabase(),
             [
-                'id_skrining'      => V::DEFAULT(),
-                'berat_badan'      => V::DEFAULT(),
-                'sistolik'         => V::DEFAULT(),
-                'diastolik'        => V::DEFAULT(),
-                'nadi'             => V::DEFAULT(),
-                'suhu_tubuh'       => V::DEFAULT(),
-                'kadar_hemoglobin' => V::DEFAULT(),
-                'jawaban_kuesioner'=> V::DEFAULT(),
+                'id_skrining'       => V::DEFAULT(),
+                'berat_badan'       => V::DEFAULT(),
+                'sistolik'          => V::DEFAULT(),
+                'diastolik'         => V::DEFAULT(),
+                'nadi'              => V::DEFAULT(),
+                'suhu_tubuh'        => V::DEFAULT(),
+                'kadar_hemoglobin'  => V::DEFAULT(),
+                'jawaban_kuesioner' => V::DEFAULT(),
             ],
             [
                 'id_kunjungan'       => [
                     'nomor_kunjungan',
                     'id_pendonor' => [
                         'nomor_pendonor',
-                        'id_orang' => ['nama']
+                        'id_orang' => ['nama'],
                     ],
                 ],
                 'id_hasil_anamnesis' => ['nama_hasil'],
@@ -51,7 +51,7 @@ final class SkriningDonorModel extends ModelTemplate
                 'k.nomor_kunjungan',
                 'p.nomor_pendonor',
                 'o.nama',
-                'ss.nama_status_skrining'
+                'ss.nama_status_skrining',
             ])
             ->join('donor.kunjungan k', 'k.id_kunjungan = sd.id_kunjungan', 'inner')
             ->join('role.pendonor p', 'p.id_pendonor = k.id_pendonor', 'inner')
@@ -70,13 +70,13 @@ final class SkriningDonorModel extends ModelTemplate
      */
     public function hitungOtomatisStatusSkrining(array $rawPost): array
     {
-        $beratBadan = (float)  ($rawPost['berat_badan'] ?? 0);
-        $sistolik   = (int)    ($rawPost['sistolik'] ?? 0);
-        $diastolik  = (int)    ($rawPost['diastolik'] ?? 0);
-        $nadi       = (int)    ($rawPost['nadi'] ?? 0);
-        $suhu       = (float)  ($rawPost['suhu_tubuh'] ?? 0);
-        $hb         = (float)  ($rawPost['kadar_hemoglobin'] ?? 0);
-        $anamnesis  = (int)    ($rawPost['id_hasil_anamnesis'] ?? 0);
+        $beratBadan = (float) ($rawPost['berat_badan'] ?? 0);
+        $sistolik   = (int) ($rawPost['sistolik'] ?? 0);
+        $diastolik  = (int) ($rawPost['diastolik'] ?? 0);
+        $nadi       = (int) ($rawPost['nadi'] ?? 0);
+        $suhu       = (float) ($rawPost['suhu_tubuh'] ?? 0);
+        $hb         = (float) ($rawPost['kadar_hemoglobin'] ?? 0);
+        $anamnesis  = (int) ($rawPost['id_hasil_anamnesis'] ?? 0);
 
         $alasanGagal = [];
 
@@ -109,13 +109,13 @@ final class SkriningDonorModel extends ModelTemplate
         if (!empty($alasanGagal)) {
             return [
                 'status' => 2,
-                'alasan' => $alasanGagal
+                'alasan' => $alasanGagal,
             ];
         }
 
         return [
             'status' => 1,
-            'alasan' => []
+            'alasan' => [],
         ];
     }
 }

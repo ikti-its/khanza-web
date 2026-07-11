@@ -14,7 +14,7 @@ final class ProvinsiController extends ControllerTemplate
         parent::__construct(
             new ProvinsiModel(),
             [
-                ['Lokasi', 'lokasi'],
+                ['Lokasi',   'lokasi'],
                 ['Provinsi', 'provinsi'],
             ],
             'Provinsi',

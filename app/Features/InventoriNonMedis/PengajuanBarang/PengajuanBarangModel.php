@@ -31,12 +31,11 @@ final class PengajuanBarangModel extends ModelTemplate
         $options = parent::get_all_options();
 
         if (isset($options['id_status_pengajuan_barang'])) {
-            $options['id_status_pengajuan_barang'] = array_values(
-                array_filter(
-                    $options['id_status_pengajuan_barang'],
-                    fn(array $opt) => in_array($opt[1], ['1', '4'], true),
-                )
-            );
+            $options['id_status_pengajuan_barang'] = array_values(array_filter($options['id_status_pengajuan_barang'], fn(array $opt) => in_array(
+                $opt[1],
+                ['1', '4'],
+                true,
+            )));
         }
 
         return $options;

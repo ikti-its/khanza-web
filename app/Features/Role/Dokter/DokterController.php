@@ -17,8 +17,8 @@ final class DokterController extends ControllerTemplate
         parent::__construct(
             new DokterModel(),
             [
-                ['Role',    'role'],
-                ['Dokter',  'dokter'],
+                ['Role', 'role'],
+                ['Dokter', 'dokter'],
             ],
             'Dokter',
             [
@@ -43,17 +43,17 @@ final class DokterController extends ControllerTemplate
         $allOptions = $orangModel->get_all_options();
 
         $konfig = [
-            [SHOW, 'Kode Dokter',       'kode_dokter',        'teks',    REQUIRED],
-            [SHOW, 'Nama',              'nama',               'nama',    REQUIRED],
-            [SHOW, 'NIK',               'nik',                'teks',    REQUIRED],
-            [SHOW, 'Spesialis',         'spesialis',          'teks',    REQUIRED],
-            [SHOW, 'Jenis Kelamin',     'id_jenis_kelamin',   'status',  REQUIRED, $allOptions['id_jenis_kelamin']  ?? []],
-            [SHOW, 'Agama',             'id_agama',           'status',  REQUIRED, $allOptions['id_agama']          ?? []],
-            [SHOW, 'Status Pernikahan', 'id_pernikahan',      'status',  REQUIRED, $allOptions['id_pernikahan']     ?? []],
-            [SHOW, 'Golongan Darah',    'id_golongan_darah',  'status',  REQUIRED, $allOptions['id_golongan_darah'] ?? []],
-            [SHOW, 'Alamat',            'id_alamat',          'status',  REQUIRED, $allOptions['id_alamat']         ?? []],
-            [SHOW, 'Tempat Lahir',      'tempat_lahir_kota',  'status',  REQUIRED, $allOptions['tempat_lahir_kota'] ?? []],
-            [SHOW, 'Tanggal Lahir',     'tanggal_lahir',      'tanggal', REQUIRED],
+            [SHOW, 'Kode Dokter', 'kode_dokter', 'teks', REQUIRED],
+            [SHOW, 'Nama', 'nama', 'nama', REQUIRED],
+            [SHOW, 'NIK', 'nik', 'teks', REQUIRED],
+            [SHOW, 'Spesialis', 'spesialis', 'teks', REQUIRED],
+            [SHOW, 'Jenis Kelamin', 'id_jenis_kelamin', 'status', REQUIRED, $allOptions['id_jenis_kelamin'] ?? []],
+            [SHOW, 'Agama', 'id_agama', 'status', REQUIRED, $allOptions['id_agama'] ?? []],
+            [SHOW, 'Status Pernikahan', 'id_pernikahan', 'status', REQUIRED, $allOptions['id_pernikahan'] ?? []],
+            [SHOW, 'Golongan Darah', 'id_golongan_darah', 'status', REQUIRED, $allOptions['id_golongan_darah'] ?? []],
+            [SHOW, 'Alamat', 'id_alamat', 'status', REQUIRED, $allOptions['id_alamat'] ?? []],
+            [SHOW, 'Tempat Lahir', 'tempat_lahir_kota', 'status', REQUIRED, $allOptions['tempat_lahir_kota'] ?? []],
+            [SHOW, 'Tanggal Lahir', 'tanggal_lahir', 'tanggal', REQUIRED],
         ];
 
         $breadcrumbs = [['title' => 'Tambah', 'icon', 'tambah']];
@@ -85,13 +85,13 @@ final class DokterController extends ControllerTemplate
         $orangData = [
             'nik'               => $this->request->getPost('nik'),
             'nama'              => $this->request->getPost('nama'),
-            'id_jenis_kelamin'  => $this->request->getPost('id_jenis_kelamin')  ?: null,
-            'id_agama'          => $this->request->getPost('id_agama')           ?: null,
-            'id_pernikahan'     => $this->request->getPost('id_pernikahan')      ?: null,
-            'id_golongan_darah' => $this->request->getPost('id_golongan_darah')  ?: null,
-            'id_alamat'         => $this->request->getPost('id_alamat')          ?: null,
-            'tempat_lahir_kota' => $this->request->getPost('tempat_lahir_kota')  ?: null,
-            'tanggal_lahir'     => $this->request->getPost('tanggal_lahir')      ?: null,
+            'id_jenis_kelamin'  => $this->request->getPost('id_jenis_kelamin') ?: null,
+            'id_agama'          => $this->request->getPost('id_agama') ?: null,
+            'id_pernikahan'     => $this->request->getPost('id_pernikahan') ?: null,
+            'id_golongan_darah' => $this->request->getPost('id_golongan_darah') ?: null,
+            'id_alamat'         => $this->request->getPost('id_alamat') ?: null,
+            'tempat_lahir_kota' => $this->request->getPost('tempat_lahir_kota') ?: null,
+            'tanggal_lahir'     => $this->request->getPost('tanggal_lahir') ?: null,
         ];
         $dokterData = [
             'kode_dokter' => $this->request->getPost('kode_dokter'),
@@ -119,9 +119,7 @@ final class DokterController extends ControllerTemplate
             session()->setFlashdata('success', 'Data Dokter berhasil disimpan.');
         } catch (\ReflectionException|DatabaseException $e) {
             $db->transRollback();
-            $msg = $e instanceof DatabaseException
-                ? $this->friendly_db_error($e)
-                : $e->getMessage();
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $msg);
             return $this->create_page();
         }
@@ -132,9 +130,15 @@ final class DokterController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $rows = $this->model->db
+        $rows = $this->model
+            ->db
             ->table('role.dokter')
-            ->select(['role.dokter.id_dokter', 'role.dokter.kode_dokter', 'person.orang.nama AS nama_dokter', 'role.dokter.spesialis'])
+            ->select([
+                'role.dokter.id_dokter',
+                'role.dokter.kode_dokter',
+                'person.orang.nama AS nama_dokter',
+                'role.dokter.spesialis',
+            ])
             ->join('person.orang', 'person.orang.id_orang = role.dokter.id_orang')
             ->orderBy('person.orang.nama', 'ASC')
             ->get()

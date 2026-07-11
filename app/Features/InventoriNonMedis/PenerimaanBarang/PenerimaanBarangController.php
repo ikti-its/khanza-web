@@ -10,8 +10,8 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 final class PenerimaanBarangController extends ControllerTemplate
 {
-    private bool    $pending_masuk      = false;
-    private ?string $new_no_penerimaan  = null;
+    private bool        $pending_masuk     = false;
+    private null|string $new_no_penerimaan = null;
 
     public function __construct()
     {
@@ -40,7 +40,7 @@ final class PenerimaanBarangController extends ControllerTemplate
                 [SHOW, OPTIONAL, I::TEXT,     'catatan',                     'Catatan'],
             ],
             child_path: '/inventori-non-medis/penerimaan-barang-detail',
-            child_fk:   'id_penerimaan',
+            child_fk: 'id_penerimaan',
         );
     }
 
@@ -56,10 +56,10 @@ final class PenerimaanBarangController extends ControllerTemplate
         $options = $this->model->get_all_options();
 
         return view('admin/inventorinonmedis/tambah_penerimaan_barang', [
-            'judul'            => 'Tambah ' . $this->title,
-            'breadcrumbs'      => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
-            'modul_path'       => $this->get_uri_path(),
-            'form_action'      => '/submittambah/',
+            'judul'             => 'Tambah ' . $this->title,
+            'breadcrumbs'       => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
+            'modul_path'        => $this->get_uri_path(),
+            'form_action'       => '/submittambah/',
             'options_pengadaan' => $options['id_pengadaan'] ?? [],
         ]);
     }
@@ -69,7 +69,7 @@ final class PenerimaanBarangController extends ControllerTemplate
     {
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.penerimaan_barang', 'no_penerimaan', 'id_penerimaan');
-        $postData['no_penerimaan']               = generateNextNoPenerimaanBarang($lastNo, $postData['tanggal'] ?? null);
+        $postData['no_penerimaan'] = generateNextNoPenerimaanBarang($lastNo, $postData['tanggal'] ?? null);
         $postData['id_status_penerimaan_barang'] = 1;
         $postData['status']                      = '-';
         $this->new_no_penerimaan                 = $postData['no_penerimaan'];
@@ -81,11 +81,13 @@ final class PenerimaanBarangController extends ControllerTemplate
         $result = parent::create();
 
         if ($result instanceof RedirectResponse && $this->new_no_penerimaan !== null) {
-            $row = $this->get_db()
+            $row = $this
+                ->get_db()
                 ->table('inventori_non_medis.penerimaan_barang')
                 ->select('id_penerimaan')
                 ->where('no_penerimaan', $this->new_no_penerimaan)
-                ->get()->getRowArray();
+                ->get()
+                ->getRowArray();
 
             $this->new_no_penerimaan = null;
 
@@ -101,16 +103,19 @@ final class PenerimaanBarangController extends ControllerTemplate
     protected function before_update(array &$postData, int|string $id): void
     {
         $new_status = (int) ($postData['id_status_penerimaan_barang'] ?? 0);
-        if ($new_status !== 2) return;
+        if ($new_status !== 2)
+            return;
 
         $current = $this->model->find($id);
-        if (!is_array($current)) return;
-        if ((int) ($current['id_status_penerimaan_barang'] ?? 0) === 2) return;
+        if (!is_array($current))
+            return;
+        if ((int) ($current['id_status_penerimaan_barang'] ?? 0) === 2)
+            return;
 
         helper('autonomor');
-        $lastNo = $this->get_last('inventori_non_medis.penerimaan_barang', 'no_masuk', 'id_penerimaan');
-        $postData['no_masuk']  = generateNextNoMasukBarang($lastNo);
-        $this->pending_masuk   = true;
+        $lastNo               = $this->get_last('inventori_non_medis.penerimaan_barang', 'no_masuk', 'id_penerimaan');
+        $postData['no_masuk'] = generateNextNoMasukBarang($lastNo);
+        $this->pending_masuk  = true;
     }
 
     // validasi detail sebelum → Lengkap, buat transaksi stok masuk & update status pengadaan
@@ -120,14 +125,15 @@ final class PenerimaanBarangController extends ControllerTemplate
         $current_status = is_array($current) ? (int) ($current['id_status_penerimaan_barang'] ?? 0) : 0;
 
         if (in_array($current_status, [2, 3], true)) {
-            session()->setFlashdata('error', 'Penerimaan barang yang sudah dikonfirmasi atau dibatalkan tidak dapat diubah.');
+            session()->setFlashdata(
+                'error',
+                'Penerimaan barang yang sudah dikonfirmasi atau dibatalkan tidak dapat diubah.',
+            );
             return $this->home();
         }
 
         $new_status     = (int) ($this->request->getPost('id_status_penerimaan_barang') ?? 0);
-        $is_new_lengkap = $new_status === 2
-            && is_array($current)
-            && $current_status !== 2;
+        $is_new_lengkap = $new_status === 2 && is_array($current) && $current_status !== 2;
 
         if ($is_new_lengkap) {
             $error = $this->validate_penerimaan((int) $id);
@@ -141,14 +147,17 @@ final class PenerimaanBarangController extends ControllerTemplate
 
         if ($this->pending_masuk) {
             $this->pending_masuk = false;
-            $saved = $this->model->find((int) $id);
+            $saved               = $this->model->find((int) $id);
             if (is_array($saved) && !empty($saved['no_masuk'])) {
                 try {
                     $this->create_transaksi_stok_masuk((int) $id, (string) $saved['no_masuk']);
                     $this->update_pengadaan_status((int) ($saved['id_pengadaan'] ?? 0));
                 } catch (\Throwable $e) {
                     log_message('error', '[Penerimaan] create_transaksi_stok_masuk: ' . $e->getMessage());
-                    session()->setFlashdata('error', 'Status berhasil diubah, namun gagal membuat transaksi stok: ' . $e->getMessage());
+                    session()->setFlashdata(
+                        'error',
+                        'Status berhasil diubah, namun gagal membuat transaksi stok: ' . $e->getMessage(),
+                    );
                 }
             }
         }
@@ -157,9 +166,10 @@ final class PenerimaanBarangController extends ControllerTemplate
     }
 
     // cek minimal 1 item punya qty_diterima > 0
-    private function validate_penerimaan(int $id): ?string
+    private function validate_penerimaan(int $id): null|string
     {
-        $has_items = $this->get_db()
+        $has_items = $this
+            ->get_db()
             ->table('inventori_non_medis.penerimaan_barang_detail')
             ->where('id_penerimaan', $id)
             ->where('id_barang >', 0)
@@ -174,21 +184,27 @@ final class PenerimaanBarangController extends ControllerTemplate
     {
         $db = $this->get_db();
 
-        $penerimaan = $db->table('inventori_non_medis.penerimaan_barang')
+        $penerimaan = $db
+            ->table('inventori_non_medis.penerimaan_barang')
             ->select('id_pengadaan')
             ->where('id_penerimaan', $id_penerimaan)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
 
-        if (!is_array($penerimaan)) return;
+        if (!is_array($penerimaan))
+            return;
 
         $id_pengadaan = (int) ($penerimaan['id_pengadaan'] ?? 0);
-        if ($id_pengadaan === 0) return;
+        if ($id_pengadaan === 0)
+            return;
 
-        $items = $db->table('inventori_non_medis.pengadaan_barang_detail')
+        $items = $db
+            ->table('inventori_non_medis.pengadaan_barang_detail')
             ->select('id_barang, harga_satuan')
             ->where('id_pengadaan', $id_pengadaan)
             ->where('id_barang >', 0)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         foreach ($items as $item) {
             $db->table('inventori_non_medis.penerimaan_barang_detail')->insert([
@@ -205,28 +221,32 @@ final class PenerimaanBarangController extends ControllerTemplate
     {
         $db = $this->get_db();
 
-        $row = $db->table('inventori_non_medis.penerimaan_barang pb')
+        $row = $db
+            ->table('inventori_non_medis.penerimaan_barang pb')
             ->join('inventori_non_medis.pengadaan_barang pg', 'pb.id_pengadaan = pg.id_pengadaan', 'left')
-            ->join('inventori_non_medis.suplier s',           'pg.id_suplier = s.id_suplier',       'left')
-            ->join('role.petugas pt',                         'pb.petugas = pt.id_petugas',          'left')
-            ->join('person.orang o',                          'pt.id_orang = o.id_orang',            'left')
+            ->join('inventori_non_medis.suplier s', 'pg.id_suplier = s.id_suplier', 'left')
+            ->join('role.petugas pt', 'pb.petugas = pt.id_petugas', 'left')
+            ->join('person.orang o', 'pt.id_orang = o.id_orang', 'left')
             ->select('s.nama_suplier, pb.no_penerimaan, o.nama')
             ->where('pb.id_penerimaan', $id)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
 
         $keterangan = trim(implode(', ', array_filter([
             $row['no_penerimaan'] ?? '',
             ($row['nama_suplier'] ?? '') !== '' ? 'Suplier ' . $row['nama_suplier'] : '',
-            ($row['nama'] ?? '')         !== '' ? 'Penerima: ' . $row['nama']       : '',
+            ($row['nama'] ?? '') !== '' ? 'Penerima: ' . $row['nama'] : '',
         ])));
 
-        $details = $db->table('inventori_non_medis.penerimaan_barang_detail pbd')
+        $details = $db
+            ->table('inventori_non_medis.penerimaan_barang_detail pbd')
             ->join('inventori_non_medis.barang b', 'pbd.id_barang = b.id_barang', 'left')
             ->select('pbd.id_barang, pbd.qty_diterima, pbd.harga_satuan, b.stok')
             ->where('pbd.id_penerimaan', $id)
             ->where('pbd.id_barang >', 0)
             ->where('pbd.qty_diterima >', 0)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         $now = date('Y-m-d H:i:s');
         $db->transBegin();
@@ -246,11 +266,14 @@ final class PenerimaanBarangController extends ControllerTemplate
                 'id_transaksi' => $id_transaksi,
                 'id_barang'    => (int) $d['id_barang'],
                 'qty'          => $qty,
-                'harga_satuan' => isset($d['harga_satuan']) && (float) $d['harga_satuan'] > 0 ? $d['harga_satuan'] : null,
+                'harga_satuan' => isset($d['harga_satuan']) && (float) $d['harga_satuan'] > 0
+                    ? $d['harga_satuan']
+                    : null,
                 'stok_sebelum' => $stok_sebelum,
                 'stok_sesudah' => $stok_sebelum + $qty,
             ]);
-            $db->table('inventori_non_medis.barang')
+            $db
+                ->table('inventori_non_medis.barang')
                 ->where('id_barang', (int) $d['id_barang'])
                 ->set('stok', 'stok + ' . $qty, false)
                 ->update();
@@ -262,31 +285,45 @@ final class PenerimaanBarangController extends ControllerTemplate
     // kalau semua item sudah diterima penuh, set status pengadaan → Selesai
     private function update_pengadaan_status(int $id_pengadaan): void
     {
-        if ($id_pengadaan === 0) return;
+        if ($id_pengadaan === 0)
+            return;
 
         $db = $this->get_db();
 
-        $ordered = $db->table('inventori_non_medis.pengadaan_barang_detail')
+        $ordered = $db
+            ->table('inventori_non_medis.pengadaan_barang_detail')
             ->select('id_barang, qty')
             ->where('id_pengadaan', $id_pengadaan)
             ->where('id_barang >', 0)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
-        if (empty($ordered)) return;
+        if (empty($ordered))
+            return;
 
         foreach ($ordered as $item) {
-            $total_received = (float) ($db->table('inventori_non_medis.penerimaan_barang pb')
-                ->join('inventori_non_medis.penerimaan_barang_detail pbd', 'pb.id_penerimaan = pbd.id_penerimaan', 'left')
-                ->selectSum('pbd.qty_diterima', 'total')
-                ->where('pb.id_pengadaan', $id_pengadaan)
-                ->where('pb.id_status_penerimaan_barang', 2)
-                ->where('pbd.id_barang', (int) $item['id_barang'])
-                ->get()->getRowArray()['total'] ?? 0);
+            $total_received = (float) (
+                $db
+                    ->table('inventori_non_medis.penerimaan_barang pb')
+                    ->join(
+                        'inventori_non_medis.penerimaan_barang_detail pbd',
+                        'pb.id_penerimaan = pbd.id_penerimaan',
+                        'left',
+                    )
+                    ->selectSum('pbd.qty_diterima', 'total')
+                    ->where('pb.id_pengadaan', $id_pengadaan)
+                    ->where('pb.id_status_penerimaan_barang', 2)
+                    ->where('pbd.id_barang', (int) $item['id_barang'])
+                    ->get()
+                    ->getRowArray()['total'] ?? 0
+            );
 
-            if ($total_received < (float) $item['qty']) return;
+            if ($total_received < (float) $item['qty'])
+                return;
         }
 
-        $db->table('inventori_non_medis.pengadaan_barang')
+        $db
+            ->table('inventori_non_medis.pengadaan_barang')
             ->where('id_pengadaan', $id_pengadaan)
             ->set('id_status_pengadaan_barang', 2)
             ->update();

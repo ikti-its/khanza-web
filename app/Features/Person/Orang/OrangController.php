@@ -42,7 +42,8 @@ final class OrangController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $data = $this->model->db
+        $data = $this->model
+            ->db
             ->table('person.orang o')
             ->select('o.id_orang, o.nik, o.nama, o.id_alamat, a.alamat_lengkap')
             ->join('lokasi.alamat a', 'a.id_alamat = o.id_alamat', 'left')

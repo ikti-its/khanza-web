@@ -15,9 +15,9 @@ final class PenerimaanBarangDetailController extends ControllerTemplate
         parent::__construct(
             new PenerimaanBarangDetailModel(),
             [
-                ['Inventori Non Medis',  'inventori_non_medis'],
-                ['Penerimaan Barang',    'penerimaan_barang'],
-                ['Detail',               'detail'],
+                ['Inventori Non Medis', 'inventori_non_medis'],
+                ['Penerimaan Barang',   'penerimaan_barang'],
+                ['Detail',              'detail'],
             ],
             'Penerimaan Barang Detail',
             [
@@ -28,10 +28,10 @@ final class PenerimaanBarangDetailController extends ControllerTemplate
                 // A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_detail',     'ID'],
-                [HIDE, OPTIONAL, I::INDEX,  'id_penerimaan', 'ID Penerimaan'],
-                [TABLE_ONLY, OPTIONAL, I::TEXT,     'nama_barang', 'Barang'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_barang', 'Barang'],
+                [HIDE,       OPTIONAL, I::INDEX,    'id_detail',     'ID'],
+                [HIDE,       OPTIONAL, I::INDEX,    'id_penerimaan', 'ID Penerimaan'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,     'nama_barang',   'Barang'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_barang',   'Barang'],
                 [TABLE_ONLY, OPTIONAL, I::TEXT,     'nama_satuan',   'Satuan'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_satuan',   'Satuan'],
                 [TABLE_ONLY, OPTIONAL, I::NUMBER,   'qty_pengadaan', 'Qty Pengadaan'],
@@ -53,18 +53,26 @@ final class PenerimaanBarangDetailController extends ControllerTemplate
             $qty_diterima  = (float) ($this->request->getPost('qty_diterima') ?? 0);
 
             if ($id_penerimaan > 0 && $id_barang > 0 && $qty_diterima > 0) {
-                $limit = $this->get_db()
+                $limit = $this
+                    ->get_db()
                     ->table('inventori_non_medis.penerimaan_barang pb')
-                    ->join('inventori_non_medis.pengadaan_barang_detail pbd',
-                           'pb.id_pengadaan = pbd.id_pengadaan', 'left')
+                    ->join(
+                        'inventori_non_medis.pengadaan_barang_detail pbd',
+                        'pb.id_pengadaan = pbd.id_pengadaan',
+                        'left',
+                    )
                     ->select('pbd.qty')
                     ->where('pb.id_penerimaan', $id_penerimaan)
                     ->where('pbd.id_barang', $id_barang)
-                    ->get()->getRowArray();
+                    ->get()
+                    ->getRowArray();
 
                 if (is_array($limit) && (float) ($limit['qty'] ?? 0) > 0) {
                     if ($qty_diterima > (float) $limit['qty']) {
-                        session()->setFlashdata('error', "Qty diterima ({$qty_diterima}) tidak boleh melebihi qty yang dipesan ({$limit['qty']}).");
+                        session()->setFlashdata(
+                            'error',
+                            "Qty diterima ({$qty_diterima}) tidak boleh melebihi qty yang dipesan ({$limit['qty']}).",
+                        );
                         return $this->home();
                     }
                 }

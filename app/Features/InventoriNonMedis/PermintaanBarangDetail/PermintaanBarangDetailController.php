@@ -29,16 +29,27 @@ final class PermintaanBarangDetailController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE,       OPTIONAL, I::INDEX,    'id_detail',        'ID Detail'],
-                [HIDE,       OPTIONAL, I::INDEX,    'id_permintaan',    'ID Permintaan'],
-                [TABLE_ONLY, OPTIONAL, I::TEXT,     'nama_barang',      'Barang'],
-                [FORM_ONLY,  OPTIONAL, I::MODAL,    'id_barang',        'Barang',  ['modal' => 'modalBarang', 'display_column' => 'nama_barang', 'placeholder' => 'Klik cari barang...']],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_satuan',      'Satuan'],
-                [SHOW,       OPTIONAL, I::TEXT,     'nama_barang_baru', 'Nama Barang Baru'],
-                [SHOW,       REQUIRED, I::NUMBER,   'qty',              'Qty'],
-                [TABLE_ONLY, OPTIONAL, I::NUMBER,   'qty_disetujui',    'Qty Disetujui'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'qty_disetujui',    'Qty Disetujui'],
-                [SHOW,       OPTIONAL, I::TEXT,     'catatan',          'Catatan'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_detail', 'ID Detail'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_permintaan', 'ID Permintaan'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT, 'nama_barang', 'Barang'],
+                [
+                    FORM_ONLY,
+                    OPTIONAL,
+                    I::MODAL,
+                    'id_barang',
+                    'Barang',
+                    [
+                        'modal'          => 'modalBarang',
+                        'display_column' => 'nama_barang',
+                        'placeholder'    => 'Klik cari barang...',
+                    ],
+                ],
+                [FORM_ONLY, OPTIONAL, I::READONLY, 'nama_satuan', 'Satuan'],
+                [SHOW, OPTIONAL, I::TEXT, 'nama_barang_baru', 'Nama Barang Baru'],
+                [SHOW, REQUIRED, I::NUMBER, 'qty', 'Qty'],
+                [TABLE_ONLY, OPTIONAL, I::NUMBER, 'qty_disetujui', 'Qty Disetujui'],
+                [FORM_ONLY, OPTIONAL, I::READONLY, 'qty_disetujui', 'Qty Disetujui'],
+                [SHOW, OPTIONAL, I::TEXT, 'catatan', 'Catatan'],
             ],
             parent_fk: 'id_permintaan',
         );
@@ -47,12 +58,15 @@ final class PermintaanBarangDetailController extends ControllerTemplate
     // true jika status permintaan bukan Draf (1) — detail tidak boleh diubah
     private function is_locked(int $id_permintaan): bool
     {
-        if ($id_permintaan <= 0) return false;
-        $row = $this->get_db()
+        if ($id_permintaan <= 0)
+            return false;
+        $row = $this
+            ->get_db()
             ->table('inventori_non_medis.permintaan_barang')
             ->select('id_status_permintaan_barang')
             ->where('id_permintaan', $id_permintaan)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return is_array($row) && (int) ($row['id_status_permintaan_barang'] ?? 0) !== 1;
     }
 
@@ -67,14 +81,18 @@ final class PermintaanBarangDetailController extends ControllerTemplate
 
         $id_barang = (int) ($this->request->getPost('id_barang') ?? 0);
         if ($id_barang > 0 && $id_permintaan > 0) {
-            $exists = $this->get_db()
+            $exists = $this
+                ->get_db()
                 ->table('inventori_non_medis.permintaan_barang_detail')
                 ->where('id_permintaan', $id_permintaan)
                 ->where('id_barang', $id_barang)
                 ->countAllResults();
             if ($exists > 0) {
                 $this->home_params = ['id_permintaan' => $id_permintaan];
-                session()->setFlashdata('error', 'Barang tersebut sudah ada pada permintaan ini. Ubah data yang sudah ada jika ingin mengubah jumlahnya.');
+                session()->setFlashdata(
+                    'error',
+                    'Barang tersebut sudah ada pada permintaan ini. Ubah data yang sudah ada jika ingin mengubah jumlahnya.',
+                );
                 return $this->home();
             }
         }

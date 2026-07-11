@@ -17,7 +17,7 @@ final class PasienController extends ControllerTemplate
         parent::__construct(
             new PasienModel(),
             [
-                ['Role',   'role'],
+                ['Role', 'role'],
                 ['Pasien', 'pasien'],
             ],
             'Pasien',
@@ -41,26 +41,29 @@ final class PasienController extends ControllerTemplate
         $orangModel = new OrangModel();
         $allOptions = $orangModel->get_all_options();
 
-        $last = $this->model->db
-            ->table('role.pasien')
-            ->select('nomor_rm')
-            ->orderBy('id_pasien', 'DESC')
-            ->limit(1)
-            ->get()->getRowArray()['nomor_rm'] ?? null;
+        $last =
+            $this->model
+                ->db
+                ->table('role.pasien')
+                ->select('nomor_rm')
+                ->orderBy('id_pasien', 'DESC')
+                ->limit(1)
+                ->get()
+                ->getRowArray()['nomor_rm'] ?? null;
 
         $nomor_rm = generateNextNoRM($last);
 
         $konfig = [
-            [SHOW, 'No. Rekam Medis',   'nomor_rm',           'readonly', REQUIRED],
-            [SHOW, 'NIK',               'nik',                'teks',     REQUIRED],
-            [SHOW, 'Nama',              'nama',               'nama',     REQUIRED],
-            [SHOW, 'Jenis Kelamin',     'id_jenis_kelamin',   'status',   REQUIRED, $allOptions['id_jenis_kelamin']  ?? []],
-            [SHOW, 'Agama',             'id_agama',           'status',   REQUIRED, $allOptions['id_agama']          ?? []],
-            [SHOW, 'Status Pernikahan', 'id_pernikahan',      'status',   REQUIRED, $allOptions['id_pernikahan']     ?? []],
-            [SHOW, 'Golongan Darah',    'id_golongan_darah',  'status',   REQUIRED, $allOptions['id_golongan_darah'] ?? []],
-            [SHOW, 'Alamat',            'id_alamat',          'status',   REQUIRED, $allOptions['id_alamat']         ?? []],
-            [SHOW, 'Tempat Lahir',      'tempat_lahir_kota',  'status',   REQUIRED, $allOptions['tempat_lahir_kota'] ?? []],
-            [SHOW, 'Tanggal Lahir',     'tanggal_lahir',      'tanggal',  REQUIRED],
+            [SHOW, 'No. Rekam Medis', 'nomor_rm', 'readonly', REQUIRED],
+            [SHOW, 'NIK', 'nik', 'teks', REQUIRED],
+            [SHOW, 'Nama', 'nama', 'nama', REQUIRED],
+            [SHOW, 'Jenis Kelamin', 'id_jenis_kelamin', 'status', REQUIRED, $allOptions['id_jenis_kelamin'] ?? []],
+            [SHOW, 'Agama', 'id_agama', 'status', REQUIRED, $allOptions['id_agama'] ?? []],
+            [SHOW, 'Status Pernikahan', 'id_pernikahan', 'status', REQUIRED, $allOptions['id_pernikahan'] ?? []],
+            [SHOW, 'Golongan Darah', 'id_golongan_darah', 'status', REQUIRED, $allOptions['id_golongan_darah'] ?? []],
+            [SHOW, 'Alamat', 'id_alamat', 'status', REQUIRED, $allOptions['id_alamat'] ?? []],
+            [SHOW, 'Tempat Lahir', 'tempat_lahir_kota', 'status', REQUIRED, $allOptions['tempat_lahir_kota'] ?? []],
+            [SHOW, 'Tanggal Lahir', 'tanggal_lahir', 'tanggal', REQUIRED],
         ];
 
         $breadcrumbs = [['title' => 'Tambah', 'icon', 'tambah']];
@@ -91,13 +94,13 @@ final class PasienController extends ControllerTemplate
         $orangData = [
             'nik'               => $this->request->getPost('nik'),
             'nama'              => $this->request->getPost('nama'),
-            'id_jenis_kelamin'  => $this->request->getPost('id_jenis_kelamin')  ?: null,
-            'id_agama'          => $this->request->getPost('id_agama')           ?: null,
-            'id_pernikahan'     => $this->request->getPost('id_pernikahan')      ?: null,
-            'id_golongan_darah' => $this->request->getPost('id_golongan_darah')  ?: null,
-            'id_alamat'         => $this->request->getPost('id_alamat')          ?: null,
-            'tempat_lahir_kota' => $this->request->getPost('tempat_lahir_kota')  ?: null,
-            'tanggal_lahir'     => $this->request->getPost('tanggal_lahir')      ?: null,
+            'id_jenis_kelamin'  => $this->request->getPost('id_jenis_kelamin') ?: null,
+            'id_agama'          => $this->request->getPost('id_agama') ?: null,
+            'id_pernikahan'     => $this->request->getPost('id_pernikahan') ?: null,
+            'id_golongan_darah' => $this->request->getPost('id_golongan_darah') ?: null,
+            'id_alamat'         => $this->request->getPost('id_alamat') ?: null,
+            'tempat_lahir_kota' => $this->request->getPost('tempat_lahir_kota') ?: null,
+            'tanggal_lahir'     => $this->request->getPost('tanggal_lahir') ?: null,
         ];
         $nomor_rm = $this->request->getPost('nomor_rm');
 
@@ -122,9 +125,7 @@ final class PasienController extends ControllerTemplate
             session()->setFlashdata('success', 'Data Pasien berhasil disimpan.');
         } catch (\ReflectionException|DatabaseException $e) {
             $db->transRollback();
-            $msg = $e instanceof DatabaseException
-                ? $this->friendly_db_error($e)
-                : $e->getMessage();
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $msg);
             return $this->create_page();
         }
@@ -135,7 +136,8 @@ final class PasienController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $builder = $this->model->db
+        $builder = $this->model
+            ->db
             ->table('role.pasien p')
             ->select('p.id_pasien, p.nomor_rm, o.nama, o.nik, o.tanggal_lahir, jk.nama_jenis_kelamin as jenis_kelamin')
             ->join('person.orang o', 'o.id_orang = p.id_orang')

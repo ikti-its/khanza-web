@@ -14,7 +14,7 @@ final class KecamatanController extends ControllerTemplate
         parent::__construct(
             new KecamatanModel(),
             [
-                ['Lokasi', 'lokasi'],
+                ['Lokasi',    'lokasi'],
                 ['Kecamatan', 'kecamatan'],
             ],
             'Kecamatan',

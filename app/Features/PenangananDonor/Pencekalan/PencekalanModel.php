@@ -23,15 +23,15 @@ final class PencekalanModel extends ModelTemplate
                 'id_jenis_pencekalan'  => ['nama_jenis_pencekalan'],
                 'id_shift'             => ['nama_shift'],
                 'id_petugas'           => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_status_pencekalan' => ['nama_status_pencekalan'],
             ],
         );
     }
 
-    private const STATUS_AKTIF   = 1;
-    private const STATUS_SELESAI = 2;
+    private const STATUS_AKTIF               = 1;
+    private const STATUS_SELESAI             = 2;
     private const JENIS_PENCEKALAN_SEMENTARA = 1;
     private const JENIS_PENCEKALAN_PERMANEN  = 2;
 
@@ -40,7 +40,8 @@ final class PencekalanModel extends ModelTemplate
      */
     public function sinkronkanStatusPencekalan(): void
     {
-        $this->builder()
+        $this
+            ->builder()
             ->set('id_status_pencekalan', self::STATUS_SELESAI)
             ->where('tanggal_selesai IS NOT NULL', null, false)
             ->where('tanggal_selesai <', date('Y-m-d'))
@@ -59,7 +60,7 @@ final class PencekalanModel extends ModelTemplate
     /**
      * Menentukan status pencekalan berdasarkan tanggal selesai
      */
-    public function tentukanStatusPencekalan(?string $tanggalSelesai): int
+    public function tentukanStatusPencekalan(null|string $tanggalSelesai): int
     {
         if ($tanggalSelesai === null || $tanggalSelesai === '') {
             return self::STATUS_AKTIF;
@@ -88,8 +89,11 @@ final class PencekalanModel extends ModelTemplate
     /**
      * Memperbarui pencekalan berdasarkan hasil diagnostik
      */
-    public function updateDariHasilDiagnostik(array $dataUjiSaring, string $tanggalHasil, array $nilaiDiagnostikDipilih): void
-    {
+    public function updateDariHasilDiagnostik(
+        array $dataUjiSaring,
+        string $tanggalHasil,
+        array $nilaiDiagnostikDipilih,
+    ): void {
         $idPengambilanDarah = $dataUjiSaring['id_pengambilan_darah'] ?? null;
 
         $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
@@ -99,7 +103,8 @@ final class PencekalanModel extends ModelTemplate
             throw new \RuntimeException('Data kunjungan donor tidak ditemukan.');
         }
 
-        $dataPencekalan = $this->where('id_kunjungan', $dataPengambilan['id_kunjungan'])
+        $dataPencekalan = $this
+            ->where('id_kunjungan', $dataPengambilan['id_kunjungan'])
             ->orderBy('id_pencekalan', 'DESC')
             ->first();
 
@@ -136,22 +141,22 @@ final class PencekalanModel extends ModelTemplate
         if (empty($nilaiDiagnostikDipilih)) {
             return false;
         }
-    
+
         $dataNilai = $this->db
             ->table('uji_darah.nilai_diagnostik')
             ->select('nama_nilai_diagnostik')
             ->whereIn('id_nilai_diagnostik', $nilaiDiagnostikDipilih)
             ->get()
             ->getResultArray();
-    
+
         foreach ($dataNilai as $nilai) {
             $namaNilai = strtolower(trim((string) ($nilai['nama_nilai_diagnostik'] ?? '')));
-    
+
             if ($namaNilai === 'positif') {
                 return true;
             }
         }
-    
+
         return false;
     }
 
@@ -169,7 +174,8 @@ final class PencekalanModel extends ModelTemplate
             throw new \RuntimeException('Data kunjungan donor tidak ditemukan.');
         }
 
-        $dataPencekalan = $this->where('id_kunjungan', $dataPengambilan['id_kunjungan'])
+        $dataPencekalan = $this
+            ->where('id_kunjungan', $dataPengambilan['id_kunjungan'])
             ->orderBy('id_pencekalan', 'DESC')
             ->first();
 

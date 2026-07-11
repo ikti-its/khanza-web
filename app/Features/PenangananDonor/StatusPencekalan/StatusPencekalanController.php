@@ -14,7 +14,7 @@ final class StatusPencekalanController extends ControllerTemplate
         parent::__construct(
             new StatusPencekalanModel(),
             [
-                ['Penanganan Donor', 'penanganan_donor'],
+                ['Penanganan Donor',  'penanganan_donor'],
                 ['Status Pencekalan', 'status_pencekalan'],
             ],
             'Status Pencekalan',
@@ -22,13 +22,13 @@ final class StatusPencekalanController extends ControllerTemplate
                 A::READ,
                 // A::CREATE,
                 // A::AUDIT,
-                // A::UPDATE, 
+                // A::UPDATE,
                 // A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_status_pencekalan', 'ID Status Pencekalan'],
-                [SHOW, REQUIRED, I::TEXT, 'nama_status_pencekalan', 'Nama Status Pencekalan'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_status_pencekalan',   'ID Status Pencekalan'],
+                [SHOW, REQUIRED, I::TEXT,  'nama_status_pencekalan', 'Nama Status Pencekalan'],
             ],
         );
-    }   
+    }
 }

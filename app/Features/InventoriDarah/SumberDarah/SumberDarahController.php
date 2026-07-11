@@ -14,8 +14,8 @@ final class SumberDarahController extends ControllerTemplate
         parent::__construct(
             new SumberDarahModel(),
             [
-                ['Inventori Darah',  'inventori_darah'],
-                ['Sumber Darah',     'sumber_darah'],
+                ['Inventori Darah', 'inventori_darah'],
+                ['Sumber Darah',    'sumber_darah'],
             ],
             'Sumber Darah',
             [

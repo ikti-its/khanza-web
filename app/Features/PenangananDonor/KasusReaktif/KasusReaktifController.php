@@ -24,7 +24,7 @@ final class KasusReaktifController extends ControllerTemplate
                 // A::AUDIT,
                 // A::UPDATE,
                 // A::DELETE,
-                A::DETAIL
+                A::DETAIL,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_kasus',           'ID Kasus'],
@@ -60,7 +60,11 @@ final class KasusReaktifController extends ControllerTemplate
         return view('/layouts/data', [
             'judul'        => $this->title,
             'breadcrumbs'  => $this->breadcrumbs,
-            'meta_data'    => ['page'  => $currentPage, 'size'  => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'meta_data'    => [
+                'page'  => $currentPage,
+                'size'  => count($data_tabel),
+                'total' => ceil($totalRows / $perPage),
+            ],
             'modul_path'   => $this->get_uri_path(),
             'kolom_id'     => $this->primary_key,
             'konfig'       => $konfig,
@@ -77,7 +81,8 @@ final class KasusReaktifController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataKasus = $this->model->find($id) ?? [];
 
@@ -129,7 +134,7 @@ final class KasusReaktifController extends ControllerTemplate
                 $idMentah = $baris[$colName];
 
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $baris[$colName] = $opt[0];
                         break;
                     }
@@ -144,7 +149,7 @@ final class KasusReaktifController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Detail', 'icon' => 'detail']
+            ['title' => 'Detail', 'icon' => 'detail'],
         ];
 
         return view('/admin/penanganandonor/detail_kasusreaktif', [
@@ -161,7 +166,7 @@ final class KasusReaktifController extends ControllerTemplate
     public function list()
     {
         $data = $this->model->get_data_tabel(null, 0, [
-            'untuk_modal' => true,
+            'untuk_modal'      => true,
             'dengan_parameter' => true,
             'belum_diagnostik' => true,
         ]);

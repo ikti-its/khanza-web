@@ -15,7 +15,7 @@ final class JenisBarangController extends ControllerTemplate
             new JenisBarangModel(),
             [
                 ['Inventori Non Medis', 'inventori_non_medis'],
-                ['Jenis Barang',     'jenis_barang'],
+                ['Jenis Barang',        'jenis_barang'],
             ],
             'Jenis Barang',
             [
@@ -26,7 +26,7 @@ final class JenisBarangController extends ControllerTemplate
                 // A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_jenis_barang',          'ID'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_jenis_barang',   'ID'],
                 [SHOW, REQUIRED, I::TEXT,  'kode_jenis_barang', 'Kode Jenis'],
                 [SHOW, REQUIRED, I::NAME,  'nama_jenis_barang', 'Jenis Barang'],
             ],
@@ -35,10 +35,12 @@ final class JenisBarangController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $data = $this->model->builder()
+        $data = $this->model
+            ->builder()
             ->select('id_jenis_barang, kode_jenis_barang, nama_jenis_barang')
             ->orderBy('nama_jenis_barang', 'ASC')
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         return $this->response->setJSON(['data' => $data]);
     }

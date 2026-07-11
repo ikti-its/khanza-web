@@ -28,7 +28,7 @@ final class UpahMinimumKotakabController extends ControllerTemplate
             [
                 [SHOW, REQUIRED, I::INDEX,  'no_umr',       'Nomor UMR'],
                 [SHOW, REQUIRED, I::NUMBER, 'tahun',        'Tahun'],
-                [SHOW, REQUIRED, I::TEXT,   'nama_kota',      'Kota/Kabupaten'],
+                [SHOW, REQUIRED, I::TEXT,   'nama_kota',    'Kota/Kabupaten'],
                 [SHOW, REQUIRED, I::MONEY,  'upah_minimum', 'Upah Minimum'],
             ],
         );

@@ -15,7 +15,7 @@ final class RekeningController extends ControllerTemplate
             new RekeningModel(),
             [
                 ['Finansial', 'finansial'],
-                ['Rekening', 'rekening'],
+                ['Rekening',  'rekening'],
             ],
             'Rekening',
             [
@@ -28,7 +28,7 @@ final class RekeningController extends ControllerTemplate
             [
                 [SHOW, REQUIRED, I::INDEX, 'id_rekening',    'ID'],
                 [SHOW, REQUIRED, I::TEXT,  'nama_akun',      'Akun'],
-                [SHOW, REQUIRED, I::TEXT, 'nama_bank',      'Bank'],
+                [SHOW, REQUIRED, I::TEXT,  'nama_bank',      'Bank'],
                 [SHOW, REQUIRED, I::TEXT,  'nomor_rekening', 'Nomor Rekening'],
             ],
         );

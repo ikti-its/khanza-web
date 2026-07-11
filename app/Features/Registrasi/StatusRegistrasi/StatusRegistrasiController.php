@@ -14,7 +14,7 @@ final class StatusRegistrasiController extends ControllerTemplate
         parent::__construct(
             new StatusRegistrasiModel(),
             [
-                ['Registrasi',          'registrasi'],
+                ['Registrasi',        'registrasi'],
                 ['Status Registrasi', 'status_registrasi'],
             ],
             'Status Registrasi',

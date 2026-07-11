@@ -27,10 +27,10 @@ final class PenunjangRusakController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_penunjang_rusak', 'ID Penunjang Rusak'],
-                [SHOW, REQUIRED, I::INDEX,  'id_petugas',         'ID Petugas'],
-                [SHOW, REQUIRED, I::DTIME,  'tanggal_rusak',      'Tanggal Rusak'],
-                [SHOW, REQUIRED, I::TEXT,   'keterangan',         'Keterangan'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_penunjang_rusak', 'ID Penunjang Rusak'],
+                [SHOW, REQUIRED, I::INDEX, 'id_petugas',         'ID Petugas'],
+                [SHOW, REQUIRED, I::DTIME, 'tanggal_rusak',      'Tanggal Rusak'],
+                [SHOW, REQUIRED, I::TEXT,  'keterangan',         'Keterangan'],
             ],
         );
     }
@@ -42,12 +42,12 @@ final class PenunjangRusakController extends ControllerTemplate
     public function create_page(): string
     {
         $breadcrumbs = [
-            ['title' => 'Tambah', 'icon' => 'tambah']
+            ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
         $konfigPenunjangRusak = $this->get_fields_with_options(false, true);
 
-        $mockBaris = [];
+        $mockBaris      = [];
         $konfigGabungan = [];
 
         foreach ($konfigPenunjangRusak as $fieldRusak) {
@@ -57,20 +57,20 @@ final class PenunjangRusakController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggal = ($fieldRusak[3] === 'tanggal' || str_contains($columnRusak, 'tanggal'));
+            $isTanggal               = $fieldRusak[3] === 'tanggal' || str_contains($columnRusak, 'tanggal');
             $mockBaris[$columnRusak] = $isTanggal ? date('Y-m-d\TH:i') : '';
 
             $konfigGabungan[] = $fieldRusak;
         }
 
         return view('admin/logistikutd/tambah_penunjangrusak', [
-            'judul'             => 'Tambah ' . $this->title,
-            'breadcrumbs'       => array_merge($this->breadcrumbs, $breadcrumbs),
-            'modul_path'        => $this->get_uri_path(),
-            'kolom_id'          => $this->model->primaryKey,
-            'konfig'            => $konfigGabungan,
-            'baris'             => $mockBaris,
-            'form_action'       => '/submittambah',
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->model->primaryKey,
+            'konfig'      => $konfigGabungan,
+            'baris'       => $mockBaris,
+            'form_action' => '/submittambah',
         ]);
     }
 
@@ -104,13 +104,14 @@ final class PenunjangRusakController extends ControllerTemplate
                 $modelDetail = new \App\Features\LogistikUTD\PenunjangRusakDetail\PenunjangRusakDetailModel();
 
                 foreach ($listBarang as $index => $idBarang) {
-                    if (empty($idBarang)) continue;
+                    if (empty($idBarang))
+                        continue;
 
                     $modelDetail->insert([
                         'id_penunjang_rusak' => $idPenunjangRusak,
                         'id_barang'          => $idBarang,
                         'jumlah'             => $listJumlah[$index],
-                        'harga_beli'         => (float)($listHarga[$index] ?? 0),
+                        'harga_beli'         => (float) ($listHarga[$index] ?? 0),
                     ]);
                 }
             }
@@ -118,14 +119,13 @@ final class PenunjangRusakController extends ControllerTemplate
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException("Gagal menyimpan data kerusakan BHP non medis.");
+                throw new \RuntimeException('Gagal menyimpan data kerusakan BHP non medis.');
             }
 
             session()->setFlashdata('success', 'Data kerusakan BHP non medis berhasil disimpan.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException)
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -140,7 +140,8 @@ final class PenunjangRusakController extends ControllerTemplate
     #[\Override]
     final public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $dataPenunjangRusak = $this->model->find($id);
         if (!$dataPenunjangRusak) {
@@ -164,7 +165,6 @@ final class PenunjangRusakController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data kerusakan BHP non medis berhasil dihapus.');
-
         } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
             $this->model->db->transRollback();
             session()->setFlashdata('error', $this->friendly_db_error($e));

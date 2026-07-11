@@ -14,7 +14,7 @@ final class KewarganegaraanController extends ControllerTemplate
         parent::__construct(
             new KewarganegaraanModel(),
             [
-                ['Person',  'person'],
+                ['Person',          'person'],
                 ['Kewarganegaraan', 'kewarganegaraan'],
             ],
             'Kewarganegaraan',

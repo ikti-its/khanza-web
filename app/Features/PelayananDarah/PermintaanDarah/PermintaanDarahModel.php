@@ -22,11 +22,11 @@ final class PermintaanDarahModel extends ModelTemplate
                     'nomor_rawat',
                     'id_pasien' => [
                         'nomor_rm',
-                        'id_orang' => ['nama']
+                        'id_orang' => ['nama'],
                     ],
                 ],
                 'id_dokter_pengirim'   => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_status_permintaan' => ['nama_status_permintaan'],
             ],
@@ -47,6 +47,6 @@ final class PermintaanDarahModel extends ModelTemplate
     {
         $row = $this->find($idPermintaan);
 
-        return (int)($row['id_status_permintaan'] ?? self::STATUS_BELUM_DIPROSES) === self::STATUS_BELUM_DIPROSES;
+        return (int) ($row['id_status_permintaan'] ?? self::STATUS_BELUM_DIPROSES) === self::STATUS_BELUM_DIPROSES;
     }
 }

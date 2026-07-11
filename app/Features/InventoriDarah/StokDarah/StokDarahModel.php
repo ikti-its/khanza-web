@@ -36,11 +36,12 @@ final class StokDarahModel extends ModelTemplate
         $idStatusLayak      = 2;
         $idStatusTidakLayak = 3;
 
-        $this->builder()
+        $this
+            ->builder()
             ->where('tanggal_kadaluarsa <', $hariIni)
             ->where('id_status_stok', $idStatusLayak)
             ->update([
-                'id_status_stok' => $idStatusTidakLayak
+                'id_status_stok' => $idStatusTidakLayak,
             ]);
     }
 
@@ -49,7 +50,8 @@ final class StokDarahModel extends ModelTemplate
      */
     public function get_stok_siap_pakai(string $hariIni): array
     {
-        return $this->builder()
+        return $this
+            ->builder()
             ->select("
                 {$this->table}.id_stok_darah,
                 {$this->table}.no_kantong,
@@ -63,7 +65,7 @@ final class StokDarahModel extends ModelTemplate
             ->join('darah.golongan_darah g', 'g.id_golongan_darah = ' . $this->table . '.id_golongan_darah', 'left')
             ->join('darah.rhesus r', 'r.id_rhesus = ' . $this->table . '.id_rhesus', 'left')
             ->where($this->table . '.tanggal_kadaluarsa >=', $hariIni)
-            ->where($this->table . '.id_status_stok', 2) 
+            ->where($this->table . '.id_status_stok', 2)
             ->orderBy($this->table . '.tanggal_kadaluarsa', 'ASC')
             ->get()
             ->getResultArray();

@@ -5,7 +5,7 @@ namespace App\Features\Registrasi\HubunganPj;
 
 use App\Core\Database\Template\DatabaseTemplate;
 use App\Core\Database\Template\SemanticType as T;
-    
+
 final class HubunganPjDatabase extends DatabaseTemplate
 {
     public function __construct()

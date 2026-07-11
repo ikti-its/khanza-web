@@ -14,7 +14,7 @@ final class PemilikBankController extends ControllerTemplate
         parent::__construct(
             new PemilikBankModel(),
             [
-                ['Finansial', 'finansial'],
+                ['Finansial',    'finansial'],
                 ['Pemilik Bank', 'pemilik_bank'],
             ],
             'Pemilik Bank',

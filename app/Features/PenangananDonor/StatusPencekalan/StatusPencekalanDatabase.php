@@ -8,7 +8,8 @@ use App\Core\Database\Template\SemanticType as T;
 
 final class StatusPencekalanDatabase extends DatabaseTemplate
 {
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct(
             'penanganan_donor',
             'status_pencekalan',
@@ -20,7 +21,7 @@ final class StatusPencekalanDatabase extends DatabaseTemplate
             ['nama_status_pencekalan'],
             [],
             true,
-            'status_pencekalan.csv'
+            'status_pencekalan.csv',
         );
     }
 }

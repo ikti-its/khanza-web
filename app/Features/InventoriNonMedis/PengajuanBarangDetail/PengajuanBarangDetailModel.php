@@ -25,7 +25,7 @@ final class PengajuanBarangDetailModel extends ModelTemplate
                     'tanggal',
                     'id_status_pengajuan_barang' => ['nama_status_pengajuan_barang'],
                 ],
-                'id_barang' => [
+                'id_barang'    => [
                     'nama_barang',
                     'kode_barang',
                     'id_satuan' => ['nama_satuan'],
@@ -33,5 +33,4 @@ final class PengajuanBarangDetailModel extends ModelTemplate
             ],
         );
     }
-
 }

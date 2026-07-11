@@ -8,7 +8,8 @@ use App\Core\Model\ValidationType as V;
 
 final class AkunModel extends ModelTemplate
 {
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct(
             new AkunDatabase(),
             [

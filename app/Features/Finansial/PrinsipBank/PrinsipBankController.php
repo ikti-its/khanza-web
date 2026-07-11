@@ -14,7 +14,7 @@ final class PrinsipBankController extends ControllerTemplate
         parent::__construct(
             new PrinsipBankModel(),
             [
-                ['Finansial', 'finansial'],
+                ['Finansial',    'finansial'],
                 ['Prinsip Bank', 'prinsip_bank'],
             ],
             'Prinsip Bank',

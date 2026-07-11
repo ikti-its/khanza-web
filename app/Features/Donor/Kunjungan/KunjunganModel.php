@@ -25,9 +25,9 @@ final class KunjunganModel extends ModelTemplate
                         'nik',
                         'tanggal_lahir',
                         'id_jenis_kelamin'  => ['nama_jenis_kelamin'],
-                        'id_golongan_darah' => ['nama_golongan_darah']
+                        'id_golongan_darah' => ['nama_golongan_darah'],
                     ],
-                    'id_rhesus' => ['kode_rhesus']
+                    'id_rhesus' => ['kode_rhesus'],
                 ],
             ],
         );
@@ -40,7 +40,7 @@ final class KunjunganModel extends ModelTemplate
      * @param string|null $filter
      * @return list<array<string, mixed>>
      */
-    public function get_data_tabel(?int $limit = null, int $offset = 0, ?string $filter = null): array
+    public function get_data_tabel(null|int $limit = null, int $offset = 0, null|string $filter = null): array
     {
         $builder = $this->db
             ->table('donor.kunjungan k')
@@ -50,15 +50,17 @@ final class KunjunganModel extends ModelTemplate
                 'k.tanggal_kunjungan',
                 'p.id_pendonor',
                 'p.nomor_pendonor',
-                'o.nama'
+                'o.nama',
             ])
             ->join('role.pendonor p', 'p.id_pendonor = k.id_pendonor', 'inner')
             ->join('person.orang o', 'o.id_orang = p.id_orang', 'inner')
             ->orderBy('k.tanggal_kunjungan', 'DESC');
 
         if ($filter === 'lolos_skrining') {
-            $builder->join('donor.skrining_donor sd', 'sd.id_kunjungan = k.id_kunjungan', 'inner')
-                    ->where('sd.id_status_skrining', 1);
+            $builder->join('donor.skrining_donor sd', 'sd.id_kunjungan = k.id_kunjungan', 'inner')->where(
+                'sd.id_status_skrining',
+                1,
+            );
         }
 
         if ($limit !== null && $limit > 0) {
@@ -85,16 +87,16 @@ final class KunjunganModel extends ModelTemplate
             $tglDonorTerakhir = new \DateTime($dataPendonor['tanggal_donor_terakhir']);
             $tglKunjunganBaru = new \DateTime($tglKunjunganInput);
 
-            $selisih = $tglDonorTerakhir->diff($tglKunjunganBaru);
+            $selisih    = $tglDonorTerakhir->diff($tglKunjunganBaru);
             $jumlahHari = (int) $selisih->format('%r%a');
 
             if ($jumlahHari < $minimalJedaHari) {
-                $sisaHari = $minimalJedaHari - $jumlahHari;
+                $sisaHari   = $minimalJedaHari - $jumlahHari;
                 $sisaMinggu = (int) ceil($sisaHari / 7);
-                
+
                 return [
                     'status'  => false,
-                    'message' => "Gagal Mendaftarkan Kunjungan! Sesuai regulasi Kemenkes, syarat interval jeda donor minimal adalah 3 bulan / 12 minggu. Calon pendonor baru bisa donor kembali dalam {$sisaHari} hari lagi (sekitar {$sisaMinggu} minggu)."
+                    'message' => "Gagal Mendaftarkan Kunjungan! Sesuai regulasi Kemenkes, syarat interval jeda donor minimal adalah 3 bulan / 12 minggu. Calon pendonor baru bisa donor kembali dalam {$sisaHari} hari lagi (sekitar {$sisaMinggu} minggu).",
                 ];
             }
         }
@@ -130,7 +132,7 @@ final class KunjunganModel extends ModelTemplate
 
             return [
                 'status'  => false,
-                'message' => "Gagal Mendaftarkan Kunjungan! Pendonor masih memiliki pencekalan aktif pada kunjungan {$dataPencekalan['nomor_kunjungan']}. Tanggal selesai pencekalan: {$tanggalSelesai}."
+                'message' => "Gagal Mendaftarkan Kunjungan! Pendonor masih memiliki pencekalan aktif pada kunjungan {$dataPencekalan['nomor_kunjungan']}. Tanggal selesai pencekalan: {$tanggalSelesai}.",
             ];
         }
 
@@ -148,7 +150,7 @@ final class KunjunganModel extends ModelTemplate
         if (empty($idPendonor)) {
             return [
                 'status'  => false,
-                'message' => 'Gagal Mendaftarkan Kunjungan! Data pendonor belum dipilih.'
+                'message' => 'Gagal Mendaftarkan Kunjungan! Data pendonor belum dipilih.',
             ];
         }
 
@@ -180,18 +182,15 @@ final class KunjunganModel extends ModelTemplate
             'donor.pengambilan_darah',
             'penanganan_donor.pencekalan',
         ];
-    
+
         foreach ($daftarTabel as $tabel) {
-            $jumlahData = $this->db
-                ->table($tabel)
-                ->where('id_kunjungan', $idKunjungan)
-                ->countAllResults();
-    
+            $jumlahData = $this->db->table($tabel)->where('id_kunjungan', $idKunjungan)->countAllResults();
+
             if ($jumlahData > 0) {
                 return true;
             }
         }
-    
+
         return false;
     }
 }

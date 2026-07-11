@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Core\Config;
+
 use App\Core\Database\Template\DatabaseTemplate;
 use App\Core\Database\Template\Migration;
 use CodeIgniter\Database\MigrationRunner;
@@ -11,32 +12,31 @@ final class KhanzaMigrationRunner extends MigrationRunner
 {
     /** @var string */
     protected $regex = '/\A(\w+Database)\z/';
-    
+
     /** @var array<class-string<DatabaseTemplate>, DatabaseTemplate> */
     private static array $ref_class_cache = [];
 
-    /** @param array<class-string<DatabaseTemplate>, Migration> $ref_table_classes 
-     * @return array<class-string<DatabaseTemplate>, list<class-string<DatabaseTemplate>>> 
-    */
+    /** @param array<class-string<DatabaseTemplate>, Migration> $ref_table_classes
+     * @return array<class-string<DatabaseTemplate>, list<class-string<DatabaseTemplate>>>
+     */
     private static function buildGraph(array $ref_table_classes): array
     {
-        $graph = [];
+        $graph   = [];
         $classes = array_keys($ref_table_classes);
-        $all = [];
-        foreach ($classes as $class){
+        $all     = [];
+        foreach ($classes as $class) {
             $all[$class] = true;
         }
-            
+
         foreach ($classes as $class) {
             /** @mago-expect analysis:unsafe-instantiation */
-            if(!isset(self::$ref_class_cache[$class])){
+            if (!isset(self::$ref_class_cache[$class])) {
                 self::$ref_class_cache[$class] = new $class();
             }
             $ref_table = self::$ref_class_cache[$class];
-            $deps = $ref_table->dependencies();
+            $deps      = $ref_table->dependencies();
             foreach ($deps as $dep) {
-                assert(isset($all[$dep]),
-                    "Migration dependency not found: {$dep} -> {$class}");
+                assert(isset($all[$dep]), "Migration dependency not found: {$dep} -> {$class}");
             }
             $graph[$class] = $deps;
         }
@@ -60,13 +60,7 @@ final class KhanzaMigrationRunner extends MigrationRunner
         $result = [];
 
         foreach (array_keys($graph) as $node) {
-            self::visitNode(
-                $node,
-                $graph,
-                $visited,
-                $visiting,
-                $result
-            );
+            self::visitNode($node, $graph, $visited, $visiting, $result);
         }
 
         return $result;
@@ -84,30 +78,24 @@ final class KhanzaMigrationRunner extends MigrationRunner
         array $graph,
         array &$visited,
         array &$visiting,
-        array &$result
+        array &$result,
     ): void {
-        if (isset($visited[$node])){
+        if (isset($visited[$node])) {
             return;
-        } 
+        }
 
-        assert(! isset($visiting[$node]),  "Circular dependency detected at {$node}");
+        assert(!isset($visiting[$node]), "Circular dependency detected at {$node}");
 
         $visiting[$node] = true;
 
         // Recurse through dependencies
         foreach ($graph[$node] as $dep) {
-            self::visitNode(
-                $dep,
-                $graph,
-                $visited,
-                $visiting,
-                $result
-            );
+            self::visitNode($dep, $graph, $visited, $visiting, $result);
         }
 
         unset($visiting[$node]);
         $visited[$node] = true;
-        $result[] = $node;
+        $result[]       = $node;
     }
 
     /**
@@ -117,9 +105,9 @@ final class KhanzaMigrationRunner extends MigrationRunner
     private static function assignVersions(array $ordered): array
     {
         $versions = [];
-        for($i = 0; $i < count($ordered); $i++) {
-            $class = $ordered[$i];
-            $versions[$class] = str_pad((string)($i+1), 14, '0', STR_PAD_LEFT);
+        for ($i = 0; $i < count($ordered); $i++) {
+            $class            = $ordered[$i];
+            $versions[$class] = str_pad((string) ($i + 1), 14, '0', STR_PAD_LEFT);
         }
 
         return $versions;
@@ -139,15 +127,8 @@ final class KhanzaMigrationRunner extends MigrationRunner
         $ci_migrations = parent::findMigrations();
 
         $migrations = [];
-        foreach ($ci_migrations as $key => $m){
-            $migration = new Migration(
-                $m->version,
-                $m->name,
-                $m->path,
-                $m->class,
-                $m->namespace,
-                $m->uid,
-            );
+        foreach ($ci_migrations as $key => $m) {
+            $migration        = new Migration($m->version, $m->name, $m->path, $m->class, $m->namespace, $m->uid);
             $migrations[$key] = $migration;
         }
 
@@ -157,8 +138,8 @@ final class KhanzaMigrationRunner extends MigrationRunner
         unset($migrations[\App\Core\Database\Special\SearchPathDatabase::class]);
         unset($migrations[\App\Core\Database\Special\EncryptDatabase::class]);
         unset($migrations[\App\Core\Database\Special\AuditDatabase::class]);
-        $graph    = self::buildGraph($migrations);
-        $ordered  = self::topoSort($graph);
+        $graph   = self::buildGraph($migrations);
+        $ordered = self::topoSort($graph);
 
         /**
          * @var list<class-string<DatabaseTemplate>> $ordered
@@ -173,15 +154,15 @@ final class KhanzaMigrationRunner extends MigrationRunner
         $result = [];
 
         foreach ($ordered as $class) {
-            $migration = $all_migrations[$class];
-            $migration->version = $versions[$class];
+            $migration                 = $all_migrations[$class];
+            $migration->version        = $versions[$class];
             $result[$versions[$class]] = $migration;
         }
-        
+
         return $result;
     }
 
-    #[\Override()]
+    #[\Override]
     protected function getMigrationName(string $migration): string
     {
         $matches = [];
@@ -203,7 +184,7 @@ final class KhanzaMigrationRunner extends MigrationRunner
         $migrations = [];
         $locator    = service('locator', true);
 
-        if (! empty($this->path)) {
+        if (!empty($this->path)) {
             helper('filesystem');
             $dir   = rtrim($this->path, DIRECTORY_SEPARATOR) . '/';
             $files = get_filenames($dir, true, false, false);
@@ -229,22 +210,22 @@ final class KhanzaMigrationRunner extends MigrationRunner
      * @return bool
      */
     #[\Override]
-    protected function migrate( $direction, $migration): bool
+    protected function migrate($direction, $migration): bool
     {
-        if($migration instanceof Migration){
+        if ($migration instanceof Migration) {
             /** @var string $path */
             include_once $migration->path;
             $this->setName($migration->name);
-            
+
             /** @var class-string<DatabaseTemplate> */
             $class = $migration->class;
             /** @mago-expect analysis:unsafe-instantiation */
             $instance = new $class();
 
             match ($direction) {
-                'up'   => $instance->up(),
-                'down' => $instance->down(),
-                default=> die("Wrong migrate direction {$direction}")
+                'up'    => $instance->up(),
+                'down'  => $instance->down(),
+                default => die("Wrong migrate direction {$direction}"),
             };
         }
 

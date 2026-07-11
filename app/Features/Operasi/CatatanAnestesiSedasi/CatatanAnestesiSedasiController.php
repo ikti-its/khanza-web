@@ -350,6 +350,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
         ));
     }
 
+    #[\Override]
     public function update_page(int|string $id): string
     {
         $record   = $this->model->find_one($id);

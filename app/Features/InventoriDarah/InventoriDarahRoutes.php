@@ -16,7 +16,7 @@ final class InventoriDarahRoutes extends RouteTemplate
                 \App\Features\InventoriDarah\PemisahanKomponen\PemisahanKomponenController::class,
                 \App\Features\InventoriDarah\PemisahanKomponenDetail\PemisahanKomponenDetailController::class => 'HIDE',
                 \App\Features\InventoriDarah\StokDarah\StokDarahController::class,
-                \App\Features\InventoriDarah\StatusStok\StatusStokController::class => 'HIDE',
+                \App\Features\InventoriDarah\StatusStok\StatusStokController::class   => 'HIDE',
                 \App\Features\InventoriDarah\SumberDarah\SumberDarahController::class => 'HIDE',
             ],
             'inventaris_darah.svg',

@@ -78,7 +78,7 @@ final class PencekalanController extends ControllerTemplate
     public function create_page(): string
     {
         $breadcrumbs = [
-            ['title' => 'Tambah', 'icon' => 'tambah']
+            ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
         $konfigPencekalan = $this->get_fields_with_options(false, true);
@@ -107,7 +107,7 @@ final class PencekalanController extends ControllerTemplate
                 foreach ($konfigKunjungan as $fieldKunjungan) {
                     if ($fieldKunjungan[2] === 'nomor_kunjungan') {
                         $mockBaris['nomor_kunjungan'] = '';
-                        $konfigGabungan[] = $fieldKunjungan;
+                        $konfigGabungan[]             = $fieldKunjungan;
                         break;
                     }
                 }
@@ -115,7 +115,7 @@ final class PencekalanController extends ControllerTemplate
                 foreach ($konfigPendonor as $fieldPendonor) {
                     if ($fieldPendonor[2] === 'nomor_pendonor') {
                         $mockBaris['nomor_pendonor'] = '';
-                        $konfigGabungan[] = $fieldPendonor;
+                        $konfigGabungan[]            = $fieldPendonor;
                         break;
                     }
                 }
@@ -123,7 +123,7 @@ final class PencekalanController extends ControllerTemplate
                 foreach ($konfigOrang as $fieldOrang) {
                     if ($fieldOrang[2] === 'nama') {
                         $mockBaris['nama'] = '';
-                        $konfigGabungan[] = $fieldOrang;
+                        $konfigGabungan[]  = $fieldOrang;
                         break;
                     }
                 }
@@ -176,17 +176,18 @@ final class PencekalanController extends ControllerTemplate
         }
 
         if (!empty($reaktif)) {
-            $mockBaris['keterangan'] = 'Reaktif ' . str_replace(',', ', ', (string) $reaktif) . ' pada uji saring IMLTD';
+            $mockBaris['keterangan'] =
+                'Reaktif ' . str_replace(',', ', ', (string) $reaktif) . ' pada uji saring IMLTD';
         }
 
         return view('admin/penanganandonor/tambah_pencekalan', [
-            'judul'          => 'Tambah ' . $this->title,
-            'breadcrumbs'    => array_merge($this->breadcrumbs, $breadcrumbs),
-            'modul_path'     => $this->get_uri_path(),
-            'kolom_id'       => $this->model->primaryKey,
-            'konfig'         => $konfigGabungan,
-            'baris'          => $mockBaris,
-            'form_action'    => '/submittambah',
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->model->primaryKey,
+            'konfig'      => $konfigGabungan,
+            'baris'       => $mockBaris,
+            'form_action' => '/submittambah',
         ]);
     }
 
@@ -224,16 +225,17 @@ final class PencekalanController extends ControllerTemplate
     #[\Override]
     public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataPencekalan = $this->model->find($id);
         if (!$dataPencekalan) {
             $dataPencekalan = [];
         }
 
-        $dataKunjungan = [];
-        $dataPendonor  = [];
-        $dataOrang     = [];
+        $dataKunjungan    = [];
+        $dataPendonor     = [];
+        $dataOrang        = [];
         $dataPetugasMedis = [];
 
         if (!empty($dataPencekalan['id_kunjungan'])) {
@@ -258,7 +260,7 @@ final class PencekalanController extends ControllerTemplate
             if (!empty($petugasRow['id_orang'])) {
                 $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
                 $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
-                
+
                 if (isset($orangPetugasRow['nama'])) {
                     $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
                 }
@@ -320,17 +322,17 @@ final class PencekalanController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Ubah', 'icon' => 'Ubah']
+            ['title' => 'Ubah', 'icon' => 'Ubah'],
         ];
 
         return view('admin/penanganandonor/tambah_pencekalan', [
-            'judul'          => 'Ubah ' . $this->title,
-            'breadcrumbs'    => array_merge($this->breadcrumbs, $breadcrumbs),
-            'modul_path'     => $this->get_uri_path(),
-            'kolom_id'       => $this->model->primaryKey,
-            'konfig'         => $konfigGabungan,
-            'baris'          => $baris,
-            'form_action'    => '/submitedit/' . $id,
+            'judul'       => 'Ubah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->model->primaryKey,
+            'konfig'      => $konfigGabungan,
+            'baris'       => $baris,
+            'form_action' => '/submitedit/' . $id,
         ]);
     }
 
@@ -341,7 +343,7 @@ final class PencekalanController extends ControllerTemplate
     protected function before_update(array &$postData, int|string $id): void
     {
         $postData['id_status_pencekalan'] = $this->model->tentukanStatusPencekalan(
-            $postData['tanggal_selesai'] ?? null
+            $postData['tanggal_selesai'] ?? null,
         );
     }
 
@@ -350,16 +352,17 @@ final class PencekalanController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataPencekalan = $this->model->find($id);
         if (!$dataPencekalan) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Pencekalan tidak ditemukan.');
         }
 
-        $dataKunjungan = [];
-        $dataPendonor  = [];
-        $dataOrang     = [];
+        $dataKunjungan    = [];
+        $dataPendonor     = [];
+        $dataOrang        = [];
         $dataPetugasMedis = [];
 
         if (!empty($dataPencekalan['id_kunjungan'])) {
@@ -384,7 +387,7 @@ final class PencekalanController extends ControllerTemplate
             if (!empty($petugasRow['id_orang'])) {
                 $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
                 $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
-                
+
                 if (isset($orangPetugasRow['nama'])) {
                     $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
                 }
@@ -411,7 +414,7 @@ final class PencekalanController extends ControllerTemplate
             if (!empty($options) && isset($baris[$colName])) {
                 $idMentah = $baris[$colName];
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $baris[$colName] = $opt[0];
                         break;
                     }
@@ -426,7 +429,7 @@ final class PencekalanController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Detail', 'icon' => 'detail']
+            ['title' => 'Detail', 'icon' => 'detail'],
         ];
 
         return view('admin/penanganandonor/detail_pencekalan', [

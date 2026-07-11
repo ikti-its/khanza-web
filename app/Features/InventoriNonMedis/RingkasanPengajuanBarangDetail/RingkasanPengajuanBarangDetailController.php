@@ -50,19 +50,23 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
     // true jika pengajuan sudah Disetujui (2) atau Ditolak (3) — qty tidak bisa diubah lagi
     private function is_locked(int $id_pengajuan): bool
     {
-        if ($id_pengajuan <= 0) return false;
-        $row = $this->get_db()
+        if ($id_pengajuan <= 0)
+            return false;
+        $row = $this
+            ->get_db()
             ->table('inventori_non_medis.pengajuan_barang')
             ->select('id_status_pengajuan_barang')
             ->where('id_pengajuan', $id_pengajuan)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return is_array($row) && in_array((int) ($row['id_status_pengajuan_barang'] ?? 0), [2, 3], true);
     }
 
     // jika id_barang sudah terpetakan, tampilkan nama_barang (readonly) bukan SELECT pemetaan
     public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $data   = $this->model->find_one((int) $id);
         $konfig = $this->get_fields_with_options(false, true);
@@ -94,7 +98,8 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
     protected function before_update(array &$postData, int|string $id): void
     {
         $existing = $this->model->find($id);
-        if (!is_array($existing)) return;
+        if (!is_array($existing))
+            return;
 
         // jika id_barang sudah terpetakan, form tidak mengirim field ini — jangan overwrite
         if ((int) ($existing['id_barang'] ?? 0) > 0) {
@@ -143,12 +148,15 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
     private function recalculate_total(int $id_pengajuan): void
     {
         $db  = $this->get_db();
-        $row = $db->table('inventori_non_medis.pengajuan_barang_detail')
+        $row = $db
+            ->table('inventori_non_medis.pengajuan_barang_detail')
             ->selectSum('subtotal')
             ->where('id_pengajuan', $id_pengajuan)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
 
-        $db->table('inventori_non_medis.pengajuan_barang')
+        $db
+            ->table('inventori_non_medis.pengajuan_barang')
             ->where('id_pengajuan', $id_pengajuan)
             ->set('total_harga', (float) ($row['subtotal'] ?? 0))
             ->update();

@@ -15,7 +15,7 @@ final class BankController extends ControllerTemplate
             new BankModel(),
             [
                 ['Finansial', 'finansial'],
-                ['Bank', 'bank'],
+                ['Bank',      'bank'],
             ],
             'Bank',
             [
@@ -33,18 +33,20 @@ final class BankController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT, 'nama_prinsip',   'Prinsip'],
                 [SHOW, REQUIRED, I::BOOL, 'is_bank_devisa', 'Bank Devisa'],
                 [SHOW, REQUIRED, I::TEXT, 'mobile_app',     'Aplikasi Mobile'],
-                [SHOW, REQUIRED, I::TEXT, 'link_playstore', 'Playstore'],  
+                [SHOW, REQUIRED, I::TEXT, 'link_playstore', 'Playstore'],
             ],
         );
     }
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $data = $this->model->builder()
+        $data = $this->model
+            ->builder()
             ->select('id_bank, nama_bank')
             ->where('id_bank >', 0)
             ->orderBy('nama_bank', 'ASC')
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         return $this->response->setJSON(['data' => $data]);
     }

@@ -14,7 +14,7 @@ final class JenisPendidikanController extends ControllerTemplate
         parent::__construct(
             new JenisPendidikanModel(),
             [
-                ['Pendidikan',  'pendidikan'],
+                ['Pendidikan',       'pendidikan'],
                 ['Jenis Pendidikan', 'jenis-pendidikan'],
             ],
             'Jenis Pendidikan',

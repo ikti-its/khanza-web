@@ -26,21 +26,21 @@ final class RegistrasiController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, REQUIRED, I::INDEX,  'id_rawat_inap',    'ID Rawat Inap'],
-                [SHOW, REQUIRED, I::INDEX,  'id_registrasi',    'ID Registrasi'],
-                [HIDE, REQUIRED, I::SELECT, 'jenis_bayar',      'Jenis Bayar'],
-                [SHOW, REQUIRED, I::TEXT,   'kamar',            'Kamar'],
-                [HIDE, REQUIRED, I::MONEY,  'tarif_kamar',      'Tarif Kamar'],
-                [SHOW, REQUIRED, I::TEXT,   'diagnosa_awal',    'Diagnosa Awal'],
-                [HIDE, OPTIONAL, I::TEXT,   'diagnosa_akhir',   'Diagnosa Akhir'],
-                [HIDE, REQUIRED, I::DATE,   'tanggal_masuk',    'Tanggal Masuk'],
-                [HIDE, OPTIONAL, I::DATE,   'tanggal_keluar',   'Tanggal Keluar'],
-                [HIDE, OPTIONAL, I::SELECT, 'status_pulang',    'Status Pulang'],
-                [HIDE, OPTIONAL, I::TIME,   'jam_keluar',       'Jam Keluar'],
-                [HIDE, REQUIRED, I::NUMBER, 'lama_ranap',       'Lama Rawat Inap'],
-                [SHOW, REQUIRED, I::INDEX,  'dokter_pj',        'Dokter Penanggung Jawab'],
-                [HIDE, REQUIRED, I::MONEY,  'total_biaya',      'Total Biaya'],
-                [HIDE, OPTIONAL, I::SELECT, 'status_bayar',     'Status Bayar'],
+                [HIDE, REQUIRED, I::INDEX,  'id_rawat_inap',  'ID Rawat Inap'],
+                [SHOW, REQUIRED, I::INDEX,  'id_registrasi',  'ID Registrasi'],
+                [HIDE, REQUIRED, I::SELECT, 'jenis_bayar',    'Jenis Bayar'],
+                [SHOW, REQUIRED, I::TEXT,   'kamar',          'Kamar'],
+                [HIDE, REQUIRED, I::MONEY,  'tarif_kamar',    'Tarif Kamar'],
+                [SHOW, REQUIRED, I::TEXT,   'diagnosa_awal',  'Diagnosa Awal'],
+                [HIDE, OPTIONAL, I::TEXT,   'diagnosa_akhir', 'Diagnosa Akhir'],
+                [HIDE, REQUIRED, I::DATE,   'tanggal_masuk',  'Tanggal Masuk'],
+                [HIDE, OPTIONAL, I::DATE,   'tanggal_keluar', 'Tanggal Keluar'],
+                [HIDE, OPTIONAL, I::SELECT, 'status_pulang',  'Status Pulang'],
+                [HIDE, OPTIONAL, I::TIME,   'jam_keluar',     'Jam Keluar'],
+                [HIDE, REQUIRED, I::NUMBER, 'lama_ranap',     'Lama Rawat Inap'],
+                [SHOW, REQUIRED, I::INDEX,  'dokter_pj',      'Dokter Penanggung Jawab'],
+                [HIDE, REQUIRED, I::MONEY,  'total_biaya',    'Total Biaya'],
+                [HIDE, OPTIONAL, I::SELECT, 'status_bayar',   'Status Bayar'],
             ],
         );
     }
@@ -52,7 +52,8 @@ final class RegistrasiController extends ControllerTemplate
     {
         $tabel = $this->model->table;
 
-        $data = $this->model->builder()
+        $data = $this->model
+            ->builder()
             ->select("
                 {$tabel}.id_rawat_inap,
                 {$tabel}.kamar,
@@ -71,7 +72,7 @@ final class RegistrasiController extends ControllerTemplate
             ->getResultArray();
 
         return $this->response->setJSON([
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

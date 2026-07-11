@@ -6,8 +6,8 @@ use CodeIgniter\CLI\BaseCommand;
 
 class DatabaseAudit extends BaseCommand
 {
-    protected $group = 'Omnia';
-    protected $name = 'omnia:audit';
+    protected $group       = 'Omnia';
+    protected $name        = 'omnia:audit';
     protected $description = 'Run the audit PLpgsql script';
 
     public function run(array $_params)

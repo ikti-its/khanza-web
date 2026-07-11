@@ -17,7 +17,7 @@ final class FinansialRoutes extends RouteTemplate
                 \App\Features\Finansial\PrinsipBank\PrinsipBankController::class,
                 \App\Features\Finansial\MetodePembayaran\MetodePembayaranController::class,
                 \App\Features\Finansial\Rekening\RekeningController::class,
-                \App\Features\Finansial\Transaksi\TransaksiController::class
+                \App\Features\Finansial\Transaksi\TransaksiController::class,
             ],
             'finansial.svg',
         );

@@ -35,7 +35,8 @@ final class RuanganController extends ControllerTemplate
 
     public function list()
     {
-        $rows = $this->model->db
+        $rows = $this->model
+            ->db
             ->table('ruangan.ruangan')
             ->select(['id_ruangan', 'kode_ruangan', 'nama_ruangan', 'jenis_instalasi'])
             ->orderBy('nama_ruangan', 'ASC')

@@ -19,7 +19,7 @@ final class PenunjangRusakModel extends ModelTemplate
             ],
             [
                 'id_petugas' => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
             ],
         );

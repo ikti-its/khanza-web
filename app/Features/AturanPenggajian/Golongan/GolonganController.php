@@ -14,7 +14,7 @@ final class GolonganController extends ControllerTemplate
         parent::__construct(
             new GolonganModel(),
             [
-                ['User', 'user'],
+                ['User',     'user'],
                 ['Golongan', 'golongan'],
             ],
             'Golongan',

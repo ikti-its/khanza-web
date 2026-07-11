@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Core\Controller\Legacy;
+
 use App\Core\Controller\ErrorController;
 
 /** @deprecated "Migrate to ControllerTemplate inheritence" */
@@ -11,12 +12,8 @@ final readonly class CURL
      * @param 'GET'|'POST'|'PUT'|'DELETE' $method
      * @return array{data: array|null, kode: int}
      */
-    public static function call(
-        string $method, 
-        string $path, 
-        array|null $data = null
-    ): array {
-        
+    public static function call(string $method, string $path, array|null $data = null): array
+    {
         $allowed_methods = ['GET', 'POST', 'PUT', 'DELETE'];
         if (!in_array($method, $allowed_methods, true)) {
             echo ErrorController::renderErrorView(405);
@@ -27,16 +24,16 @@ final readonly class CURL
         }
 
         /** @var string */
-        $token = session()->get('jwt_token');
+        $token   = session()->get('jwt_token');
         $headers = [
             'Authorization: Bearer ' . $token,
             'Accept: application/json',
         ];
 
         /** @var string */
-        $url = getenv('api_URL');
+        $url      = getenv('api_URL');
         $full_url = $url . $path;
-        $ch = curl_init($full_url);
+        $ch       = curl_init($full_url);
         assert($ch !== false, "Curl initialization failed for {$full_url}");
 
         if ($method === 'POST' || $method === 'PUT') {
@@ -52,11 +49,11 @@ final readonly class CURL
 
         // Set method
         match ($method) {
-            'POST' => curl_setopt($ch, CURLOPT_POST, true),
+            'POST'          => curl_setopt($ch, CURLOPT_POST, true),
             'PUT', 'DELETE' => curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method),
-            default => "Unknown HTTP Method '{$method}'"
+            default         => "Unknown HTTP Method '{$method}'",
         };
-    
+
         $response = curl_exec($ch);
         assert($response !== true && $response !== false, "Error executing curl for  {$full_url}");
 
@@ -64,7 +61,7 @@ final readonly class CURL
 
         /** @var array<string, mixed>|null $return_data */
         $return_data = json_decode($response, true);
-        
+
         $http_success_codes = [200, 201, 204];
         if (!in_array($http_status_code, $http_success_codes, true)) {
             echo ErrorController::renderErrorView($http_status_code);
@@ -75,7 +72,7 @@ final readonly class CURL
         }
         return [
             'data' => $return_data,
-            'kode' => $http_status_code
-        ];    
+            'kode' => $http_status_code,
+        ];
     }
 }

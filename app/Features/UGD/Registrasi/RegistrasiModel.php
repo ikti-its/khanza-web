@@ -22,12 +22,12 @@ final class RegistrasiModel extends ModelTemplate
             [
                 'id_dokter'        => [
                     'kode_dokter',
-                    'id_orang'     => ['nama'],
-                    'spesialis'
+                    'id_orang' => ['nama'],
+                    'spesialis',
                 ],
                 'id_pasien'        => [
-                    'id_orang'     => ['nama'],
-                    'nomor_rm'
+                    'id_orang' => ['nama'],
+                    'nomor_rm',
                 ],
                 'id_pj_pasien'     => ['nama'],
                 'id_alamat_pj'     => ['alamat_lengkap'],
@@ -62,7 +62,8 @@ final class RegistrasiModel extends ModelTemplate
      */
     public function updateStatusTriase(int|string $idRegistrasi, int $idStatusTriase): bool
     {
-        return $this->db->table('ugd.registrasi')
+        return $this->db
+            ->table('ugd.registrasi')
             ->where('id_registrasi', $idRegistrasi)
             ->update([
                 'id_status_triase' => $idStatusTriase,

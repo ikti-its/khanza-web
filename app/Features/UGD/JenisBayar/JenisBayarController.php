@@ -14,7 +14,7 @@ final class JenisBayarController extends ControllerTemplate
         parent::__construct(
             new JenisBayarModel(),
             [
-                ['UGD',          'ugd'],
+                ['UGD',         'ugd'],
                 ['Jenis Bayar', 'jenis_bayar'],
             ],
             'Jenis Bayar',

@@ -8,6 +8,7 @@ use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\RedirectResponse;
+
 final class PendonorController extends ControllerTemplate
 {
     public function __construct()
@@ -29,12 +30,12 @@ final class PendonorController extends ControllerTemplate
                 A::PRINT,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_pendonor',            'ID Pendonor'],
-                [SHOW, REQUIRED, I::TEXT,  'nomor_pendonor',         'Nomor Pendonor'],
-                [SHOW, REQUIRED, I::INDEX, 'id_orang',               'ID Orang'],
-                [SHOW, REQUIRED, I::SELECT,'id_rhesus',              'Rhesus'],
-                [SHOW, REQUIRED, I::TEXT,  'nomor_telepon',          'Nomor Telepon'],
-                [SHOW, OPTIONAL, I::DATE,  'tanggal_donor_terakhir', 'Tanggal Donor Terakhir'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_pendonor',            'ID Pendonor'],
+                [SHOW, REQUIRED, I::TEXT,   'nomor_pendonor',         'Nomor Pendonor'],
+                [SHOW, REQUIRED, I::INDEX,  'id_orang',               'ID Orang'],
+                [SHOW, REQUIRED, I::SELECT, 'id_rhesus',              'Rhesus'],
+                [SHOW, REQUIRED, I::TEXT,   'nomor_telepon',          'Nomor Telepon'],
+                [SHOW, OPTIONAL, I::DATE,   'tanggal_donor_terakhir', 'Tanggal Donor Terakhir'],
             ],
         );
     }
@@ -51,8 +52,8 @@ final class PendonorController extends ControllerTemplate
         }
 
         $modelOrang = new \App\Features\Person\Orang\OrangModel();
-        $idOrang = $dataPendonor['id_orang'] ?? null;
-        $dataOrang = $idOrang ? $modelOrang->find($idOrang) : [];
+        $idOrang    = $dataPendonor['id_orang'] ?? null;
+        $dataOrang  = $idOrang ? $modelOrang->find($idOrang) : [];
 
         $baris = array_merge($dataOrang, $dataPendonor);
 
@@ -87,7 +88,7 @@ final class PendonorController extends ControllerTemplate
             'baris' => $baris,
         ]);
     }
-    
+
     /**
      * OVERRIDE: Halaman Utama Pendonor
      */
@@ -95,25 +96,29 @@ final class PendonorController extends ControllerTemplate
     final public function index(): string
     {
         $currentPage = max(1, (int) ($this->request->getGet('page') ?? 1));
-        $perPage = 10;
-        $offset  = ($currentPage - 1) * $perPage;
+        $perPage     = 10;
+        $offset      = ($currentPage - 1) * $perPage;
 
-        $totalRows = $this->model->count_filtered();
+        $totalRows  = $this->model->count_filtered();
         $data_tabel = $this->model->get_data_tabel($perPage, $offset);
 
         $konfig = [
-            [1, 'Nomor Pendonor',    'nomor_pendonor',         'teks',    0],
-            [1, 'Nama Lengkap',      'nama',                   'teks',    0],
-            [1, 'Golongan Darah',    'nama_golongan_darah',    'teks',    0],
-            [1, 'Rhesus',            'kode_rhesus',            'teks',    0],
-            [1, 'Nomor Telepon',     'nomor_telepon',          'teks',    0],
-            [1, 'Donor Terakhir',    'tanggal_donor_terakhir', 'tanggal', 0],
+            [1, 'Nomor Pendonor', 'nomor_pendonor',         'teks',    0],
+            [1, 'Nama Lengkap',   'nama',                   'teks',    0],
+            [1, 'Golongan Darah', 'nama_golongan_darah',    'teks',    0],
+            [1, 'Rhesus',         'kode_rhesus',            'teks',    0],
+            [1, 'Nomor Telepon',  'nomor_telepon',          'teks',    0],
+            [1, 'Donor Terakhir', 'tanggal_donor_terakhir', 'tanggal', 0],
         ];
 
         return view('/layouts/data', [
             'judul'        => $this->title,
             'breadcrumbs'  => $this->breadcrumbs,
-            'meta_data'    => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'meta_data'    => [
+                'page'  => $currentPage,
+                'size'  => count($data_tabel),
+                'total' => ceil($totalRows / $perPage),
+            ],
             'modul_path'   => $this->get_uri_path(),
             'kolom_id'     => $this->primary_key,
             'konfig'       => $konfig,
@@ -132,26 +137,26 @@ final class PendonorController extends ControllerTemplate
     final public function create_page(): string
     {
         $breadcrumbs = [
-            ['title' => 'Tambah', 'icon', 'tambah']
+            ['title' => 'Tambah', 'icon', 'tambah'],
         ];
 
         $controllerOrang = new \App\Features\Person\Orang\OrangController();
-        $fieldsOrang = $controllerOrang->fields;
-        $fieldsPendonor = $this->fields;
+        $fieldsOrang     = $controllerOrang->fields;
+        $fieldsPendonor  = $this->fields;
 
-        $modelOrang = new \App\Features\Person\Orang\OrangModel();
-        $opsiOrang = $modelOrang->get_all_options();
+        $modelOrang   = new \App\Features\Person\Orang\OrangModel();
+        $opsiOrang    = $modelOrang->get_all_options();
         $opsiPendonor = $this->model->get_all_options();
 
-        $terakhir = $this->model->orderBy($this->model->primaryKey, 'DESC')->first();
+        $terakhir   = $this->model->orderBy($this->model->primaryKey, 'DESC')->first();
         $nextNumber = 1;
         if ($terakhir !== null && isset($terakhir['nomor_pendonor'])) {
             $cleanNumber = str_replace('UTD', '', $terakhir['nomor_pendonor']);
-            $nextNumber = ((int) $cleanNumber) + 1;
+            $nextNumber  = (int) $cleanNumber + 1;
         }
-        $nomorPendonorOtomatis = 'UTD' . str_pad((string)$nextNumber, 6, '0', STR_PAD_LEFT);
+        $nomorPendonorOtomatis = 'UTD' . str_pad((string) $nextNumber, 6, '0', STR_PAD_LEFT);
 
-        $mockBaris = [];
+        $mockBaris      = [];
         $konfigGabungan = [];
 
         foreach ($fieldsPendonor as $fieldPendonor) {
@@ -159,7 +164,7 @@ final class PendonorController extends ControllerTemplate
 
             if ($columnPendonor === 'nomor_pendonor') {
                 $mockBaris[$columnPendonor] = $nomorPendonorOtomatis;
-                $fieldPendonor[3] = 'indeks';
+                $fieldPendonor[3]           = 'indeks';
             } elseif ($columnPendonor !== 'id_pendonor') {
                 $mockBaris[$columnPendonor] = '';
             }
@@ -212,9 +217,9 @@ final class PendonorController extends ControllerTemplate
     #[\Override]
     final public function create(): string|RedirectResponse
     {
-        $modelAlamat  = new \App\Features\Lokasi\Alamat\AlamatModel();
-        $modelOrang   = new \App\Features\Person\Orang\OrangModel();
-        $rawPost      = $this->request->getPost();
+        $modelAlamat = new \App\Features\Lokasi\Alamat\AlamatModel();
+        $modelOrang  = new \App\Features\Person\Orang\OrangModel();
+        $rawPost     = $this->request->getPost();
 
         $dataPendonor = $this->get_post_data_custom();
 
@@ -224,11 +229,11 @@ final class PendonorController extends ControllerTemplate
             $this->model->validasiUsiaMinimal($rawPost['tanggal_lahir']);
 
             $dataAlamat = [
-                'alamat_lengkap'  => $rawPost['alamat_lengkap'] ?? null,
-                'id_provinsi'     => isset($rawPost['id_provinsi']) ? (int)$rawPost['id_provinsi'] : null,
-                'id_kota_lokal'   => isset($rawPost['id_kota_lokal']) ? (int)$rawPost['id_kota_lokal'] : null,
-                'id_kec_lokal'    => isset($rawPost['id_kec_lokal']) ? (int)$rawPost['id_kec_lokal'] : null,
-                'id_desa_lokal'   => isset($rawPost['id_desa_lokal']) ? (int)$rawPost['id_desa_lokal'] : null,
+                'alamat_lengkap' => $rawPost['alamat_lengkap'] ?? null,
+                'id_provinsi'    => isset($rawPost['id_provinsi']) ? (int) $rawPost['id_provinsi'] : null,
+                'id_kota_lokal'  => isset($rawPost['id_kota_lokal']) ? (int) $rawPost['id_kota_lokal'] : null,
+                'id_kec_lokal'   => isset($rawPost['id_kec_lokal']) ? (int) $rawPost['id_kec_lokal'] : null,
+                'id_desa_lokal'  => isset($rawPost['id_desa_lokal']) ? (int) $rawPost['id_desa_lokal'] : null,
             ];
 
             if (!$modelAlamat->insert($dataAlamat)) {
@@ -240,14 +245,13 @@ final class PendonorController extends ControllerTemplate
             $dataOrang = [];
             foreach ($modelOrang->allowedFields as $field) {
                 $value = $rawPost[$field] ?? '';
-    
+
                 if ($value === '') {
                     $value = null;
-                } 
-                else if (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
+                } else if (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
                     $value = (int) $value;
                 }
-    
+
                 $dataOrang[$field] = $value;
             }
 
@@ -257,7 +261,7 @@ final class PendonorController extends ControllerTemplate
                 throw new \RuntimeException('Sistem gagal menyimpan identitas Orang.');
             }
 
-            $idOrang = $modelOrang->insertID();
+            $idOrang                  = $modelOrang->insertID();
             $dataPendonor['id_orang'] = $idOrang;
 
             if (!$this->model->insert($dataPendonor)) {
@@ -265,10 +269,7 @@ final class PendonorController extends ControllerTemplate
             }
 
             $idPendonor = $this->model->insertID();
-            $this->model->setTanggalDonorTerakhir(
-                $idPendonor,
-                $dataPendonor['tanggal_donor_terakhir'] ?? null
-            );
+            $this->model->setTanggalDonorTerakhir($idPendonor, $dataPendonor['tanggal_donor_terakhir'] ?? null);
 
             $this->model->db->transComplete();
 
@@ -277,11 +278,10 @@ final class PendonorController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data pendonor berhasil disimpan.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
-                ? $this->friendly_db_error($e) 
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
         }
@@ -296,7 +296,7 @@ final class PendonorController extends ControllerTemplate
     private function get_post_data_custom(): array
     {
         $postData = [];
-        $rawPost = $this->request->getPost();
+        $rawPost  = $this->request->getPost();
 
         $fieldsPendonor = $this->fields;
 
@@ -312,14 +312,13 @@ final class PendonorController extends ControllerTemplate
 
             if ($value === '') {
                 $value = null;
-            }
-            else if (str_contains($column, 'id_') || $type === 'indeks') {
+            } else if (str_contains($column, 'id_') || $type === 'indeks') {
                 $value = (int) $value;
             }
 
             $postData[$column] = $value;
         }
-        
+
         return $postData;
     }
 
@@ -329,7 +328,8 @@ final class PendonorController extends ControllerTemplate
     #[\Override]
     final public function update_page(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataPendonor = $this->model->find($id);
         if (!$dataPendonor) {
@@ -350,7 +350,7 @@ final class PendonorController extends ControllerTemplate
 
             if (!empty($dataOrang['tempat_lahir_kota'])) {
                 $modelKotaLahir = new \App\Features\Lokasi\Kota\KotaModel();
-                $kotaLahir = $modelKotaLahir->find($dataOrang['tempat_lahir_kota']);
+                $kotaLahir      = $modelKotaLahir->find($dataOrang['tempat_lahir_kota']);
                 if ($kotaLahir) {
                     $dataAlamat['nama_kota'] = $kotaLahir['nama_kota'] ?? '';
                 }
@@ -360,8 +360,8 @@ final class PendonorController extends ControllerTemplate
         $baris = array_merge($dataAlamat, $dataOrang, $dataPendonor);
 
         $controllerOrang = new \App\Features\Person\Orang\OrangController();
-        $konfigOrang = $controllerOrang->get_fields_with_options(false, true);
-        $konfigPendonor = $this->get_fields_with_options(false, true);
+        $konfigOrang     = $controllerOrang->get_fields_with_options(false, true);
+        $konfigPendonor  = $this->get_fields_with_options(false, true);
 
         $konfigGabungan = [];
 
@@ -387,7 +387,7 @@ final class PendonorController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Ubah', 'icon', 'Ubah']
+            ['title' => 'Ubah', 'icon', 'Ubah'],
         ];
 
         return view('/admin/role/tambah_pendonor', [
@@ -407,12 +407,13 @@ final class PendonorController extends ControllerTemplate
     #[\Override]
     final public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $rawPost = $this->request->getPost();
 
         $dataPendonorLama = $this->model->find($id);
-        $idOrang = $dataPendonorLama['id_orang'];
+        $idOrang          = $dataPendonorLama['id_orang'];
 
         $modelAlamat = new \App\Features\Lokasi\Alamat\AlamatModel();
         $modelOrang  = new \App\Features\Person\Orang\OrangModel();
@@ -426,11 +427,11 @@ final class PendonorController extends ControllerTemplate
             $this->model->validasiUsiaMinimal($rawPost['tanggal_lahir']);
 
             $dataAlamat = [
-                'alamat_lengkap'  => $rawPost['alamat_lengkap'] ?? null,
-                'id_provinsi'     => isset($rawPost['id_provinsi']) ? (int)$rawPost['id_provinsi'] : null,
-                'id_kota_lokal'   => isset($rawPost['id_kota_lokal']) ? (int)$rawPost['id_kota_lokal'] : null,
-                'id_kec_lokal'    => isset($rawPost['id_kec_lokal']) ? (int)$rawPost['id_kec_lokal'] : null,
-                'id_desa_lokal'   => isset($rawPost['id_desa_lokal']) ? (int)$rawPost['id_desa_lokal'] : null,
+                'alamat_lengkap' => $rawPost['alamat_lengkap'] ?? null,
+                'id_provinsi'    => isset($rawPost['id_provinsi']) ? (int) $rawPost['id_provinsi'] : null,
+                'id_kota_lokal'  => isset($rawPost['id_kota_lokal']) ? (int) $rawPost['id_kota_lokal'] : null,
+                'id_kec_lokal'   => isset($rawPost['id_kec_lokal']) ? (int) $rawPost['id_kec_lokal'] : null,
+                'id_desa_lokal'  => isset($rawPost['id_desa_lokal']) ? (int) $rawPost['id_desa_lokal'] : null,
             ];
 
             if (!empty($idAlamatLama)) {
@@ -457,7 +458,7 @@ final class PendonorController extends ControllerTemplate
 
             $modelOrang->update($idOrang, $dataOrang);
 
-            $dataPendonor = $this->get_post_data_custom();
+            $dataPendonor             = $this->get_post_data_custom();
             $dataPendonor['id_orang'] = $idOrang;
 
             $tanggalDonorLama = $dataPendonorLama['tanggal_donor_terakhir'] ?? null;
@@ -476,11 +477,10 @@ final class PendonorController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil diperbarui.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = ($e instanceof \CodeIgniter\Database\Exceptions\DatabaseException) 
-                ? $this->friendly_db_error($e) 
+            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
         }
@@ -493,8 +493,9 @@ final class PendonorController extends ControllerTemplate
      */
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
-        
+        if ($id == 0)
+            return $this->home();
+
         $pendonor = $this->model->find($id);
         if (!$pendonor) {
             session()->setFlashdata('error', 'Data pendonor tidak ditemukan.');
@@ -531,7 +532,6 @@ final class PendonorController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data pendonor berhasil dihapus.');
-
         } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
             $this->model->db->transRollback();
             session()->setFlashdata('error', $this->friendly_db_error($e));
@@ -548,7 +548,8 @@ final class PendonorController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataPendonor = $this->model->find($id);
 
@@ -566,7 +567,7 @@ final class PendonorController extends ControllerTemplate
 
             if (!empty($dataOrang['tempat_lahir_kota'])) {
                 $modelKotaLahir = new \App\Features\Lokasi\Kota\KotaModel();
-                $kotaLahir = $modelKotaLahir->find($dataOrang['tempat_lahir_kota']);
+                $kotaLahir      = $modelKotaLahir->find($dataOrang['tempat_lahir_kota']);
                 if ($kotaLahir) {
                     $dataAlamat['nama_kota_lahir'] = $kotaLahir['nama_kota'] ?? '';
                 }
@@ -583,12 +584,12 @@ final class PendonorController extends ControllerTemplate
         foreach ($konfigGabungan as $field) {
             $colName = $field[2];
             $options = $field[5] ?? [];
-            
+
             if (!empty($options) && isset($baris[$colName])) {
                 $idMentah = $baris[$colName];
-                
+
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $baris[$colName] = $opt[0];
                         break;
                     }
@@ -603,7 +604,7 @@ final class PendonorController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Detail', 'icon' => 'detail']
+            ['title' => 'Detail', 'icon' => 'detail'],
         ];
 
         return view('/admin/role/detail_pendonor', [
@@ -622,7 +623,7 @@ final class PendonorController extends ControllerTemplate
         $data = $this->model->get_data_tabel();
 
         return $this->response->setJSON([
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

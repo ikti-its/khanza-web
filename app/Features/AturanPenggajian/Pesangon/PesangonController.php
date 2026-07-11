@@ -14,7 +14,7 @@ final class PesangonController extends ControllerTemplate
         parent::__construct(
             new PesangonModel(),
             [
-                ['User', 'user'],
+                ['User',     'user'],
                 ['Pesangon', 'pesangon'],
             ],
             'Pesangon',
