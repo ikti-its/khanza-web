@@ -25,6 +25,7 @@ final class PencekalanController extends ControllerTemplate
                 A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
                 A::FILTER,
             ],
             [
@@ -342,5 +343,97 @@ final class PencekalanController extends ControllerTemplate
         $postData['id_status_pencekalan'] = $this->model->tentukanStatusPencekalan(
             $postData['tanggal_selesai'] ?? null
         );
+    }
+
+    /**
+     * Menampilkan Halaman Detail Pencekalan
+     */
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataPencekalan = $this->model->find($id);
+        if (!$dataPencekalan) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Pencekalan tidak ditemukan.');
+        }
+
+        $dataKunjungan = [];
+        $dataPendonor  = [];
+        $dataOrang     = [];
+        $dataPetugasMedis = [];
+
+        if (!empty($dataPencekalan['id_kunjungan'])) {
+            $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
+            $dataKunjungan  = $modelKunjungan->find($dataPencekalan['id_kunjungan']) ?? [];
+
+            if (!empty($dataKunjungan['id_pendonor'])) {
+                $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
+                $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']) ?? [];
+
+                if (!empty($dataPendonor['id_orang'])) {
+                    $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                    $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                }
+            }
+        }
+
+        if (!empty($dataPencekalan['id_petugas'])) {
+            $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
+            $petugasRow   = $modelPetugas->find($dataPencekalan['id_petugas']) ?? [];
+
+            if (!empty($petugasRow['id_orang'])) {
+                $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
+                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+                
+                if (isset($orangPetugasRow['nama'])) {
+                    $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
+                }
+            }
+        }
+
+        $baris = array_merge($dataOrang, $dataPendonor, $dataKunjungan, $dataPetugasMedis, $dataPencekalan);
+
+        $controllerKunjungan = new \App\Features\Donor\Kunjungan\KunjunganController();
+        $controllerPendonor  = new \App\Features\Role\Pendonor\PendonorController();
+        $controllerOrang     = new \App\Features\Person\Orang\OrangController();
+
+        $konfigPencekalan = $this->get_fields_with_options(false, true);
+        $konfigKunjungan  = $controllerKunjungan->get_fields_with_options(false, true);
+        $konfigPendonor   = $controllerPendonor->get_fields_with_options(false, true);
+        $konfigOrang      = $controllerOrang->get_fields_with_options(false, true);
+
+        $konfigGabungan = array_merge($konfigOrang, $konfigPendonor, $konfigKunjungan, $konfigPencekalan);
+
+        foreach ($konfigGabungan as $field) {
+            $colName = $field[2];
+            $options = $field[5] ?? [];
+
+            if (!empty($options) && isset($baris[$colName])) {
+                $idMentah = $baris[$colName];
+                foreach ($options as $opt) {
+                    if ((string)$opt[1] === (string)$idMentah) {
+                        $baris[$colName] = $opt[0];
+                        break;
+                    }
+                }
+            }
+        }
+
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail']
+        ];
+
+        return view('admin/penanganandonor/detail_pencekalan', [
+            'judul'       => 'Detail ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'baris'       => $baris,
+        ]);
     }
 }
