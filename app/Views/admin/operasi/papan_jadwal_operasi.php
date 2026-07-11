@@ -94,8 +94,13 @@
                             $status   = (int) ($jadwal['id_status'] ?? 2);
                             $idJadwal = (int) $jadwal['id_jadwal'];
 
+                            $isStartDay   = $jadwal['is_start_day'];
+                            $isEndDay     = $jadwal['is_end_day'];
+                            $tanggalMulai = $jadwal['tanggal'];
+                            $tanggalAkhir = $jadwal['tanggal_selesai'] ?? $tanggalMulai;
+
                             $waktuSelesai = substr($jadwal['waktu_selesai'] ?? '', 0, 8);
-                            $isOvertime   = $isToday && $status === 3 && $waktuSelesai !== '' && $now > $waktuSelesai;
+                            $isOvertime   = $isToday && $isEndDay && $status === 3 && $waktuSelesai !== '' && $now > $waktuSelesai;
 
                             [$bg, $border, $text] = match($status) {
                                 4       => ['#d1fae5', '#34d399', '#065f46'],
@@ -122,6 +127,11 @@
                                             <?php endif; ?>
                                             <?php if ($isOvertime): ?>
                                                 <span style="display:inline-block;background:#f97316;color:#fff;font-weight:700;font-size:8px;padding:0 3px;border-radius:2px;margin-left:3px;vertical-align:middle;line-height:14px;">Overtime</span>
+                                            <?php endif; ?>
+                                            <?php if (!$isEndDay): ?>
+                                                <span style="display:inline-block;background:#6366f1;color:#fff;font-weight:700;font-size:8px;padding:0 3px;border-radius:2px;margin-left:3px;vertical-align:middle;line-height:14px;">lanjut <?= esc(date('d/m', strtotime($tanggalAkhir))) ?></span>
+                                            <?php elseif (!$isStartDay): ?>
+                                                <span style="display:inline-block;background:#8b5cf6;color:#fff;font-weight:700;font-size:8px;padding:0 3px;border-radius:2px;margin-left:3px;vertical-align:middle;line-height:14px;">dari <?= esc(date('d/m', strtotime($tanggalMulai))) ?></span>
                                             <?php endif; ?>
                                         </p>
                                         <p style="font-size:10px; opacity:0.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;">

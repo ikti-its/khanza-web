@@ -26,26 +26,57 @@ final class PapanJadwalOperasiController extends ControllerTemplate
     #[\Override]
     final public function index(): string|RedirectResponse
     {
-        $tanggal = $this->request->getGet('tanggal') ?: date('Y-m-d');
+        $tanggal  = $this->request->getGet('tanggal') ?: date('Y-m-d');
+        $slots    = $this->fetchSlots();
+        $ruangans = $this->fetchRuangans();
+        $jadwals  = $this->fetchJadwals($tanggal);
 
-        $slots = $this->model->db
+        $grid  = $this->buildGrid($jadwals, $slots);
+        $spans = $this->buildSpans($ruangans, $slots, $grid);
+
+        return view('admin/operasi/papan_jadwal_operasi', [
+            'judul'      => 'Papan Jadwal Operasi',
+            'breadcrumbs'=> array_merge($this->breadcrumbs, [['title' => 'Papan Jadwal', 'icon' => 'detail']]),
+            'tanggal'    => $tanggal,
+            'slots'      => $slots,
+            'ruangans'   => $ruangans,
+            'grid'       => $grid,
+            'spans'      => $spans,
+        ]);
+    }
+
+    private function fetchSlots(): array
+    {
+        return $this->model->db
             ->table('operasi.ref_slot_operasi')
             ->orderBy('id_slot', 'ASC')
             ->get()->getResultArray();
+    }
 
-        $ruangans = $this->model->db
+    private function fetchRuangans(): array
+    {
+        return $this->model->db
             ->table('ruangan.ruangan')
             ->select(['id_ruangan', 'nama_ruangan', 'kode_ruangan'])
             ->like('kode_ruangan', 'OK', 'after')
             ->orderBy('kode_ruangan', 'ASC')
             ->get()->getResultArray();
+    }
 
+    /** 
+     * Ambil jadwal yang masih berlangsung di $tanggal (bukan cuma yang mulai di situ), 
+     * lalu tandai is_start_day/is_end_day untuk buildGrid() dan badge di view. 
+     **/
+    private function fetchJadwals(string $tanggal): array
+    {
         $jadwals = $this->model->db
             ->table('operasi.jadwal_operasi j')
             ->select([
                 'j.id_jadwal',
                 'j.id_ruangan',
+                'j.tanggal',
                 'j.waktu_mulai',
+                'j.tanggal_selesai',
                 'j.waktu_selesai',
                 'j.id_status',
                 'j.nomor_operasi',
@@ -64,37 +95,45 @@ final class PapanJadwalOperasiController extends ControllerTemplate
             ->join('person.orang ob',                    'ob.id_orang      = db.id_orang',        'left')
             ->join('role.dokter da',                     'da.id_dokter     = j.id_dokter_anestesi', 'left')
             ->join('person.orang oa',                    'oa.id_orang      = da.id_orang',        'left')
-            ->where('j.tanggal', $tanggal)
+            ->where('j.tanggal <=', $tanggal)
+            ->where('COALESCE(j.tanggal_selesai, j.tanggal) >=', $tanggal)
             ->where('j.id_status !=', 5)
             ->get()->getResultArray();
 
-        $jadwalSlots = [];
-        if (!empty($jadwals)) {
-            $idJadwals = array_column($jadwals, 'id_jadwal');
-            $slotRows  = $this->model->db
-                ->table('operasi.jadwal_operasi_slot')
-                ->select(['id_jadwal', 'id_slot'])
-                ->whereIn('id_jadwal', $idJadwals)
-                ->get()->getResultArray();
+        return array_map(static function (array $j) use ($tanggal): array {
+            $j['is_start_day'] = $j['tanggal'] === $tanggal;
+            $j['is_end_day']   = ($j['tanggal_selesai'] ?? $j['tanggal']) === $tanggal;
+            return $j;
+        }, $jadwals);
+    }
 
-            foreach ($slotRows as $sr) {
-                $jadwalSlots[(int) $sr['id_jadwal']][] = (int) $sr['id_slot'];
-            }
-        }
-
-        // grid[id_slot][id_ruangan] = jadwal row
+    /** 
+     * grid[id_slot][id_ruangan] = jadwal. Slot dihitung langsung dari waktu 
+     * per hari (bukan tabel lookup) karena satu jadwal bisa lewat tengah malam. 
+     **/
+    private function buildGrid(array $jadwals, array $slots): array
+    {
         $grid = [];
         foreach ($jadwals as $j) {
-            $idJadwal  = (int) $j['id_jadwal'];
-            $idRuangan = (int) $j['id_ruangan'];
-            $usedSlots = $jadwalSlots[$idJadwal] ?? [];
+            $idRuangan  = (int) $j['id_ruangan'];
+            $startBound = $j['is_start_day'] ? $j['waktu_mulai'] : '00:00:00';
+            $endBound   = $j['is_end_day'] ? ($j['waktu_selesai'] ?? '23:59:59') : null;
 
-            foreach ($usedSlots as $idSlot) {
-                $grid[$idSlot][$idRuangan] = $j;
+            foreach ($slots as $slot) {
+                $waktuSlot = $slot['waktu_slot'];
+                if ($waktuSlot < $startBound) continue;
+                if ($endBound !== null && $waktuSlot >= $endBound) continue;
+                $grid[(int) $slot['id_slot']][$idRuangan] = $j;
             }
         }
+        return $grid;
+    }
 
-        // Calculate rowspan: consecutive slots of the same jadwal in the same room merge into one cell
+    /** 
+     * Slot berurutan milik jadwal yang sama di ruangan yang sama digabung jadi satu rowspan. 
+     **/
+    private function buildSpans(array $ruangans, array $slots, array $grid): array
+    {
         $spans = [];
         foreach ($ruangans as $ruangan) {
             $idRuangan  = (int) $ruangan['id_ruangan'];
@@ -116,15 +155,6 @@ final class PapanJadwalOperasiController extends ControllerTemplate
                 }
             }
         }
-
-        return view('admin/operasi/papan_jadwal_operasi', [
-            'judul'      => 'Papan Jadwal Operasi',
-            'breadcrumbs'=> array_merge($this->breadcrumbs, [['title' => 'Papan Jadwal', 'icon' => 'detail']]),
-            'tanggal'    => $tanggal,
-            'slots'      => $slots,
-            'ruangans'   => $ruangans,
-            'grid'       => $grid,
-            'spans'      => $spans,
-        ]);
+        return $spans;
     }
 }
