@@ -19,7 +19,12 @@ final class PencekalanModel extends ModelTemplate
                 'keterangan'      => V::DEFAULT(),
             ],
             [
-                'id_kunjungan'         => ['nomor_kunjungan'],
+                'id_kunjungan'         => [
+                    'nomor_kunjungan',
+                    'id_pendonor'   => [
+                        'id_orang'  => ['nama']
+                    ],
+                ],
                 'id_jenis_pencekalan'  => ['nama_jenis_pencekalan'],
                 'id_shift'             => ['nama_shift'],
                 'id_petugas'           => [
@@ -34,6 +39,42 @@ final class PencekalanModel extends ModelTemplate
     private const STATUS_SELESAI             = 2;
     private const JENIS_PENCEKALAN_SEMENTARA = 1;
     private const JENIS_PENCEKALAN_PERMANEN  = 2;
+
+    /**
+     * Mengambil data pencekalan
+     * @param int $limit
+     * @param int $offset
+     * @return list<array<string, mixed>>
+     */
+    public function get_data_tabel(int $limit, int $offset): array
+    {
+        $builder = $this->db
+            ->table('penanganan_donor.pencekalan pc')
+            ->select([
+                'pc.id_pencekalan',
+                'k.nomor_kunjungan',
+                'o.nama',
+                'jp.nama_jenis_pencekalan',
+                'pc.tanggal_mulai',
+                'pc.tanggal_selesai',
+                'sp.nama_status_pencekalan',
+            ])
+            ->join('donor.kunjungan k', 'k.id_kunjungan = pc.id_kunjungan', 'inner')
+            ->join('role.pendonor p', 'p.id_pendonor = k.id_pendonor', 'inner')
+            ->join('person.orang o', 'o.id_orang = p.id_orang', 'inner')
+            ->join('penanganan_donor.jenis_pencekalan jp', 'jp.id_jenis_pencekalan = pc.id_jenis_pencekalan', 'left')
+            ->join('penanganan_donor.status_pencekalan sp', 'sp.id_status_pencekalan = pc.id_status_pencekalan', 'left');
+
+        foreach ($this->runtime_filters as $col => $val) {
+            is_array($val) ? $builder->whereIn("pc.{$col}", $val) : $builder->where("pc.{$col}", $val);
+        }
+
+        return $builder
+            ->orderBy('pc.id_pencekalan', 'DESC')
+            ->limit($limit, $offset)
+            ->get()
+            ->getResultArray();
+    }
 
     /**
      * Menyinkronkan status pencekalan menjadi selesai jika tanggal selesai sudah lewat
