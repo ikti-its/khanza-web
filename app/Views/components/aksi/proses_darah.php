@@ -20,13 +20,13 @@ if (!$isBerhasil) {
 <div class="<?= $isBerhasil ? 'hs-dropdown' : '' ?> relative inline-flex px-2 py-1.5" <?= !$isBerhasil ? 'title="' . esc($pesanKunci) . '"' : '' ?>>
     
     <?php if ($isBerhasil): ?>
-        <button id="hs-dropdown-olah-lab-trigger" type="button" 
-                class="hs-dropdown-toggle inline-flex items-center gap-x-1 text-sm font-semibold text-blue-600 hover:underline dark:text-blue-400 focus:outline-none">
+        <button id="hs-dropdown-olah-lab-trigger" type="button"
+                class="hs-dropdown-toggle inline-flex items-center gap-x-1 rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-600 hover:bg-blue-100 hs-dropdown-open:bg-blue-100 dark:border-blue-900/60 dark:bg-blue-950/20 dark:text-blue-400 dark:hover:bg-blue-900/40 dark:hs-dropdown-open:bg-blue-900/40 focus:outline-none transition-colors">
             Proses Darah
             <svg class="hs-dropdown-open:rotate-180 size-4 text-blue-600 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </button>
 
-        <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-40 bg-white shadow-md rounded-lg p-1 space-y-0.5 mt-2 z-10 dark:bg-neutral-800 dark:border dark:border-neutral-700 text-left" aria-labelledby="hs-dropdown-olah-lab-trigger">
+        <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-40 bg-white shadow-md rounded-lg p-1 space-y-0.5 mt-2 z-10 border border-gray-200 dark:bg-neutral-800 dark:border-neutral-700 text-left" aria-labelledby="hs-dropdown-olah-lab-trigger">
             <?php 
             if (isset($aksi['pisah']) && $aksi['pisah'] === true) {
                 echo view('components/aksi/pemisahan_komponen', $data);
