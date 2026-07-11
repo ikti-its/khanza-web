@@ -22,13 +22,14 @@ final class HasilDiagnostikController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_diagnostik',     'ID Diagnostik'],
-                [SHOW, REQUIRED, I::INDEX, 'id_kasus',          'Kasus Reaktif'],
+                [SHOW, REQUIRED, I::INDEX, 'id_kasus',          'Nomor Kasus Reaktif'],
                 [SHOW, REQUIRED, I::DATE,  'tanggal_hasil',     'Tanggal Hasil'],
                 [SHOW, REQUIRED, I::NAME,  'fasyankes_rujukan', 'Fasyankes Rujukan'],
                 [SHOW, REQUIRED, I::NAME,  'dokter_pemeriksa',  'Dokter Pemeriksa'],
@@ -381,5 +382,66 @@ final class HasilDiagnostikController extends ControllerTemplate
         }
 
         return redirect()->to($this->get_uri_path() . '/data');
+    }
+
+    /**
+     * Menampilkan Halaman Detail Hasil Tes Diagnostik
+     */
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataDiagnostik = $this->model->find($id);
+        if (!$dataDiagnostik) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Hasil Tes Diagnostik tidak ditemukan.');
+        }
+
+        $modelKasus = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
+        $dataKasus  = $modelKasus->find($dataDiagnostik['id_kasus']) ?? [];
+
+        $baris = array_merge($dataKasus, $dataDiagnostik);
+
+        $konfigFields = $this->get_fields_with_options(false, true);
+        foreach ($konfigFields as $field) {
+            $colName = $field[2];
+            $options = $field[5] ?? [];
+
+            if (!empty($options) && isset($baris[$colName])) {
+                $idMentah = $baris[$colName];
+                foreach ($options as $opt) {
+                    if ((string)$opt[1] === (string)$idMentah) {
+                        $baris[$colName] = $opt[0];
+                        break;
+                    }
+                }
+            }
+        }
+
+        $detailDiagnostikRaw = $this->model->db
+            ->table('uji_darah.hasil_diagnostik_detail hdd')
+            ->select('pu.nama_parameter, nd.nama_nilai_diagnostik')
+            ->join('uji_darah.parameter_uji pu', 'pu.id_parameter_uji = hdd.id_parameter_uji', 'inner')
+            ->join('uji_darah.nilai_diagnostik nd', 'nd.id_nilai_diagnostik = hdd.id_nilai_diagnostik', 'inner')
+            ->where('hdd.id_diagnostik', $id)
+            ->get()
+            ->getResultArray();
+
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail']
+        ];
+
+        return view('admin/ujidarah/detail_hasildiagnostik', [
+            'judul'             => 'Detail ' . $this->title,
+            'breadcrumbs'       => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'        => $this->get_uri_path(),
+            'baris'             => $baris,
+            'detail_diagnostik' => $detailDiagnostikRaw,
+        ]);
     }
 }
