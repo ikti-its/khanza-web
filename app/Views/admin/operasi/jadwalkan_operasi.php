@@ -94,7 +94,7 @@ $peranSelectClass = "$baseInput bg-slate-50 tim-peran";
                 <input type="date" name="tanggal" id="tanggal"
                        value="<?= esc($baris['tanggal'] ?? '') ?>"
                        required class="<?= $timeClass ?> lg:w-1/4"
-                       onchange="updateBoardLink()">
+                       oninput="updateBoardLink(); updateDurasi();">
             </div>
 
             <!-- Waktu Mulai | Waktu Selesai -->
@@ -102,11 +102,23 @@ $peranSelectClass = "$baseInput bg-slate-50 tim-peran";
                 <label class="<?= $labelLeft ?>">Waktu Mulai <span class="text-red-500">*</span></label>
                 <input type="time" name="waktu_mulai" id="waktu_mulai"
                        value="<?= esc(substr($baris['waktu_mulai'] ?? '', 0, 5)) ?>"
-                       required class="<?= $timeClass ?> lg:w-1/4">
+                       required class="<?= $timeClass ?> lg:w-1/4" oninput="updateDurasi()">
                 <label class="<?= $labelRight ?>">Waktu Selesai</label>
                 <input type="time" name="waktu_selesai" id="waktu_selesai"
                        value="<?= esc(substr($baris['waktu_selesai'] ?? '', 0, 5)) ?>"
-                       class="<?= $timeClass ?> lg:w-1/4">
+                       class="<?= $timeClass ?> lg:w-1/4" oninput="updateDurasi()">
+            </div>
+
+            <!-- Tanggal Selesai (untuk operasi yang lewat tengah malam / multi-hari) -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="<?= $labelLeft ?>">Tanggal Selesai</label>
+                <input type="date" name="tanggal_selesai" id="tanggal_selesai"
+                       value="<?= esc($baris['tanggal_selesai'] ?? '') ?>"
+                       class="<?= $timeClass ?> lg:w-1/4" oninput="updateDurasi()">
+                <div class="mt-5 md:mt-0 md:ml-10 flex items-center gap-2 text-sm text-gray-900 dark:text-white">
+                    <span>Durasi:</span>
+                    <span id="durasiText" class="text-gray-600 dark:text-gray-300"></span>
+                </div>
             </div>
 
             <!-- Lihat Papan Jadwal -->
@@ -287,6 +299,43 @@ function updateBoardLink() {
     document.getElementById('boardLink').href = tanggal ? `${base}?tanggal=${tanggal}` : base;
 }
 
+function tambahSatuHari(tanggalStr) {
+    const d = new Date(`${tanggalStr}T00:00:00`);
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().slice(0, 10);
+}
+
+// Kalau tanggal_selesai kosong, tebak: lewat tengah malam (waktu_selesai < waktu_mulai) -> +1 hari, selain itu hari yang sama.
+function tebakTanggalSelesai(tanggal, waktuMulai, waktuSelesai, tanggalSelesaiInput) {
+    if (tanggalSelesaiInput) return tanggalSelesaiInput;
+    return waktuSelesai < waktuMulai ? tambahSatuHari(tanggal) : tanggal;
+}
+
+function updateDurasi() {
+    const tanggal      = document.getElementById('tanggal').value;
+    const waktuMulai   = document.getElementById('waktu_mulai').value;
+    const waktuSelesai = document.getElementById('waktu_selesai').value;
+    const durasiEl      = document.getElementById('durasiText');
+
+    if (!tanggal || !waktuMulai || !waktuSelesai) { durasiEl.textContent = ''; return; }
+
+    const tanggalSelesai = tebakTanggalSelesai(tanggal, waktuMulai, waktuSelesai, document.getElementById('tanggal_selesai').value);
+    const diffMenit = Math.round((new Date(`${tanggalSelesai}T${waktuSelesai}:00`) - new Date(`${tanggal}T${waktuMulai}:00`)) / 60000);
+
+    if (diffMenit <= 0) { durasiEl.textContent = 'Waktu selesai tidak valid.'; return; }
+
+    const hari  = Math.floor(diffMenit / 1440);
+    const jam   = Math.floor((diffMenit % 1440) / 60);
+    const menit = diffMenit % 60;
+
+    const parts = [];
+    if (hari > 0)  parts.push(`${hari} hari`);
+    if (jam > 0)   parts.push(`${jam} jam`);
+    if (menit > 0 || parts.length === 0) parts.push(`${menit} menit`);
+
+    durasiEl.textContent = parts.join(' ') + (hari > 0 ? ' (lebih dari 24 jam)' : '');
+}
+
 function validateForm() {
     if (!document.getElementById('id_ruangan').value) {
         alert('Silakan pilih ruangan terlebih dahulu.'); return false;
@@ -310,6 +359,7 @@ function validateForm() {
 
 document.addEventListener('DOMContentLoaded', () => {
     updateBoardLink();
+    updateDurasi();
     refreshPeranOptions();
 });
 </script>
