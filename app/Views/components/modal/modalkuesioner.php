@@ -190,6 +190,7 @@ if (!empty($baris['jawaban_kuesioner'])) {
                     font-weight: 700;
                 ">
                     <?= esc($kelompok['judul']) ?>
+                    <span style="color: #dc2626; font-weight: 700;">*</span>
                 </div>
 
                 <?php foreach ($kelompok['items'] as $nomor => $pertanyaan) : ?>
