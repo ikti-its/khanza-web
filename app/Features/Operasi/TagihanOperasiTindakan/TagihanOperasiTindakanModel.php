@@ -16,8 +16,8 @@ final class TagihanOperasiTindakanModel extends ModelTemplate
                 'id_tagihan_tindakan' => V::DEFAULT(),
             ],
             [
-                'id_tagihan'  => [],
-                'id_tindakan' => [],
+                'id_tagihan' => [],
+                'id_paket'   => [],
             ],
         );
     }

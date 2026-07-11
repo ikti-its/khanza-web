@@ -16,7 +16,7 @@ final class TagihanOperasiTindakanDatabase extends DatabaseTemplate
             [
                 'id_tagihan_tindakan' => T::ID(300_000_000),
                 'id_tagihan'          => T::FK_AUTO(),
-                'id_tindakan'         => T::FK_AUTO(),
+                'id_paket'            => T::FK_AUTO(),
             ],
             'id_tagihan_tindakan',
             [],
@@ -27,9 +27,9 @@ final class TagihanOperasiTindakanDatabase extends DatabaseTemplate
                     ['id_tagihan'],
                 ],
                 [
-                    ['id_tindakan'],
-                    \App\Features\Operasi\RefTindakanOperasi\RefTindakanOperasiDatabase::class,
-                    ['id_tindakan'],
+                    ['id_paket'],
+                    \App\Features\Operasi\PaketTindakanOperasi\PaketTindakanOperasiDatabase::class,
+                    ['id_paket'],
                 ],
             ],
         );

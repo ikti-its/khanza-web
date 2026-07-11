@@ -245,8 +245,8 @@ final class TagihanOperasiController extends ControllerTemplate
         }
 
         return view('admin/operasi/tagihan_operasi_form', [
-            'judul'             => 'Edit Tagihan Operasi',
-            'breadcrumbs'       => [...$this->breadcrumbs, ['title' => 'Edit', 'icon' => 'ubah']],
+            'judul'             => 'Ubah Tagihan Operasi',
+            'breadcrumbs'       => [...$this->breadcrumbs, ['title' => 'Ubah', 'icon' => 'ubah']],
             'modul_path'        => $this->get_uri_path(),
             'kolom_id'          => $this->model->primaryKey,
             'form_action'       => "/submitedit/{$id}",
@@ -272,10 +272,23 @@ final class TagihanOperasiController extends ControllerTemplate
 
             $idTagihan = $this->model->insert($data);
 
-            $this->savePaket((int) $idTagihan, $rawPost['paket'] ?? []);
-            $this->saveObat((int) $idTagihan, $rawPost['obat'] ?? []);
+            if ($this->model->db->transStatus() !== false) {
+                $this->savePaket((int) $idTagihan, $rawPost['paket'] ?? []);
+            }
+            if ($this->model->db->transStatus() !== false) {
+                $this->saveObat((int) $idTagihan, $rawPost['obat'] ?? []);
+            }
+
+            // Ambil pesan error DB sebelum transComplete()/ROLLBACK menghapus jejaknya.
+            $dbErrorMsg = $this->model->db->transStatus() === false
+                ? ($this->model->db->error()['message'] ?: 'Gagal menyimpan tagihan operasi.')
+                : null;
 
             $this->model->db->transComplete();
+
+            if ($dbErrorMsg !== null) {
+                throw new \CodeIgniter\Database\Exceptions\DatabaseException($dbErrorMsg);
+            }
 
             session()->setFlashdata('success', 'Tagihan operasi berhasil dibuat.');
             return redirect()->to($this->get_uri_path() . '/data');
@@ -302,13 +315,29 @@ final class TagihanOperasiController extends ControllerTemplate
 
             $this->model->update($id, $data);
 
-            $this->model->db->table('operasi.tagihan_operasi_tindakan')->where('id_tagihan', $id)->delete();
-            $this->savePaket((int) $id, $rawPost['paket'] ?? []);
+            if ($this->model->db->transStatus() !== false) {
+                $this->model->db->table('operasi.tagihan_operasi_tindakan')->where('id_tagihan', $id)->delete();
+            }
+            if ($this->model->db->transStatus() !== false) {
+                $this->savePaket((int) $id, $rawPost['paket'] ?? []);
+            }
+            if ($this->model->db->transStatus() !== false) {
+                $this->model->db->table('operasi.tagihan_operasi_obat')->where('id_tagihan', $id)->delete();
+            }
+            if ($this->model->db->transStatus() !== false) {
+                $this->saveObat((int) $id, $rawPost['obat'] ?? []);
+            }
 
-            $this->model->db->table('operasi.tagihan_operasi_obat')->where('id_tagihan', $id)->delete();
-            $this->saveObat((int) $id, $rawPost['obat'] ?? []);
+            // Ambil pesan error DB sebelum transComplete()/ROLLBACK menghapus jejaknya.
+            $dbErrorMsg = $this->model->db->transStatus() === false
+                ? ($this->model->db->error()['message'] ?: 'Gagal memperbarui tagihan operasi.')
+                : null;
 
             $this->model->db->transComplete();
+
+            if ($dbErrorMsg !== null) {
+                throw new \CodeIgniter\Database\Exceptions\DatabaseException($dbErrorMsg);
+            }
 
             session()->setFlashdata('success', 'Tagihan operasi berhasil diperbarui.');
             return redirect()->to($this->get_uri_path() . '/data');
@@ -373,6 +402,7 @@ final class TagihanOperasiController extends ControllerTemplate
                 'id_tagihan' => $idTagihan,
                 'id_paket'   => (int) $paket['id_paket'],
             ]);
+            if ($this->model->db->transStatus() === false) return;
         }
     }
 
@@ -385,6 +415,7 @@ final class TagihanOperasiController extends ControllerTemplate
                 'id_barang'  => (int) $obat['id_barang'],
                 'jumlah'     => (int) $obat['jumlah'],
             ]);
+            if ($this->model->db->transStatus() === false) return;
         }
     }
 }
