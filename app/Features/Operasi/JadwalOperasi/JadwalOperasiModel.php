@@ -18,6 +18,7 @@ final class JadwalOperasiModel extends ModelTemplate
                 'tanggal'              => V::DEFAULT(),
                 'waktu_mulai'          => V::DEFAULT(),
                 'waktu_selesai'        => V::DEFAULT(),
+                'tanggal_selesai'      => V::DEFAULT(),
             ],
             [
                 'id_permintaan' => [

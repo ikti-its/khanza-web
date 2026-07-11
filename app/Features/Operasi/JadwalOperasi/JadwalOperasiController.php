@@ -38,6 +38,7 @@ final class JadwalOperasiController extends ControllerTemplate
                 [SHOW,       REQUIRED, I::DATE,  'tanggal',            'Tanggal'],
                 [SHOW,       REQUIRED, I::TIME,  'waktu_mulai',        'Waktu Mulai'],
                 [SHOW,       OPTIONAL, I::TIME,  'waktu_selesai',      'Waktu Selesai'],
+                [SHOW,       OPTIONAL, I::DATE,  'tanggal_selesai',    'Tanggal Selesai'],
                 [TABLE_ONLY, OPTIONAL, I::INDEX, 'id_status',          'Status'],
             ],
         );

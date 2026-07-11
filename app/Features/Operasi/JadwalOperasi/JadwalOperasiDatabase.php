@@ -23,6 +23,7 @@ final class JadwalOperasiDatabase extends DatabaseTemplate
                 'tanggal'              => T::DATE()->nullable(),
                 'waktu_mulai'          => T::TIME()->nullable(),
                 'waktu_selesai'        => T::TIME()->nullable(),
+                'tanggal_selesai'      => T::DATE()->nullable(),
                 'id_status'            => T::FK_AUTO(),
             ],
             'id_jadwal',
