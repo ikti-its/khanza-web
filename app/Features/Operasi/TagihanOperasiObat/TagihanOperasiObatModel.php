@@ -13,8 +13,8 @@ final class TagihanOperasiObatModel extends ModelTemplate
         parent::__construct(
             new TagihanOperasiObatDatabase(),
             [
-                'id_detail'    => V::DEFAULT(),
-                'jumlah'       => V::DEFAULT(),
+                'id_detail' => V::DEFAULT(),
+                'jumlah'    => V::DEFAULT(),
             ],
             [
                 'id_tagihan' => [],

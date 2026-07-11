@@ -44,10 +44,11 @@ final class PermintaanLabHeaderController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
     // PRIVATE HELPERS
     // ──────────────────────────────────────────────────────────
- 
+
     private function baseListBuilder(): \CodeIgniter\Database\BaseBuilder
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_header plh')
             ->select([
                 'plh.id_permintaan',
@@ -62,37 +63,37 @@ final class PermintaanLabHeaderController extends ControllerTemplate
                 'r.id_dokter AS id_dokter_perujuk',
                 'od.nama AS nama_dokter_perujuk',
             ])
-            ->join('registrasi.registrasi r',              'r.nomor_reg = plh.nomor_reg')
-            ->join('role.pasien p',                         'p.id_pasien = r.id_pasien',                  'left')
-            ->join('person.orang o',                        'o.id_orang  = p.id_orang',                   'left')
-            ->join('laboratorium.ref_status_permintaan s',  's.id_status = plh.id_status_permintaan',     'left')
-            ->join('role.dokter d',                         'd.id_dokter = r.id_dokter',                  'left')
-            ->join('person.orang od',                       'od.id_orang = d.id_orang',                   'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg = plh.nomor_reg')
+            ->join('role.pasien p', 'p.id_pasien = r.id_pasien', 'left')
+            ->join('person.orang o', 'o.id_orang  = p.id_orang', 'left')
+            ->join('laboratorium.ref_status_permintaan s', 's.id_status = plh.id_status_permintaan', 'left')
+            ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
             ->orderBy('plh.tgl_permintaan', 'DESC');
     }
- 
+
     // ──────────────────────────────────────────────────────────
     // LIST — untuk modal pilih permintaan
     // ──────────────────────────────────────────────────────────
- 
+
     public function list()
     {
         $builder = $this->baseListBuilder();
- 
+
         $status = $this->request->getGet('status');
         if ($status !== null) {
             $builder->where('plh.id_status_permintaan', (int) $status);
         }
- 
+
         $kategori = (int) ($this->request->getGet('kategori') ?? 0);
- 
+
         $tabelItem = match ($kategori) {
             ID_KATEGORI_MB => 'laboratorium.permintaan_lab_mb_item',
             ID_KATEGORI_PA => 'laboratorium.permintaan_lab_pa_item',
             ID_KATEGORI_PK => 'laboratorium.permintaan_lab_pk_item',
             default        => null,
         };
- 
+
         if ($tabelItem !== null) {
             $builder->where("EXISTS (
                 SELECT 1
@@ -102,7 +103,7 @@ final class PermintaanLabHeaderController extends ControllerTemplate
                 AND ri.id_kategori = {$kategori}
             )");
         }
- 
+
         return $this->response->setJSON(['data' => $builder->get()->getResultArray()]);
     }
 }

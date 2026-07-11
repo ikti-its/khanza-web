@@ -14,7 +14,7 @@ final class PermintaanLabPaItemController extends ControllerTemplate
         parent::__construct(
             new PermintaanLabPaItemModel(),
             [
-                ['Laboratorium',          'laboratorium'],
+                ['Laboratorium',           'laboratorium'],
                 ['Item Permintaan Lab PA', 'permintaan_lab_pa_item'],
             ],
             'Item Permintaan Lab PA',

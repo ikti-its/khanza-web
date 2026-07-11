@@ -37,7 +37,8 @@ final class RefItemRadController extends ControllerTemplate
 
     public function list()
     {
-        $rows = $this->model->db
+        $rows = $this->model
+            ->db
             ->table('radiologi.ref_item_rad')
             ->select(['id_item', 'kode_periksa', 'nama_pemeriksaan', 'tarif_dasar', 'tarif_baca'])
             ->orderBy('kode_periksa', 'ASC')

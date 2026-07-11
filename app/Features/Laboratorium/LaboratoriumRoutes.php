@@ -22,14 +22,13 @@ final class LaboratoriumRoutes extends RouteTemplate
                 \App\Features\Laboratorium\HasilLabPk\HasilLabPkController::class,
                 \App\Features\Laboratorium\HasilLabPa\HasilLabPaController::class,
                 \App\Features\Laboratorium\HasilLabMb\HasilLabMbController::class,
-                \App\Features\Laboratorium\RefItemPemeriksaanLab\RefItemPemeriksaanLabController::class => 'HIDE',
-                \App\Features\Laboratorium\RefParameterPemeriksaanLab\RefParameterPemeriksaanLabController::class => 'HIDE',  
-                \App\Features\Laboratorium\RefKategoriLab\RefKategoriLabController::class => 'HIDE',
-                \App\Features\Laboratorium\RefKategoriUsiaLab\RefKategoriUsiaLabController::class => 'HIDE',
-                \App\Features\Laboratorium\RefStatusPermintaan\RefStatusPermintaanController::class => 'HIDE',
+                \App\Features\Laboratorium\RefItemPemeriksaanLab\RefItemPemeriksaanLabController::class           => 'HIDE',
+                \App\Features\Laboratorium\RefParameterPemeriksaanLab\RefParameterPemeriksaanLabController::class => 'HIDE',
+                \App\Features\Laboratorium\RefKategoriLab\RefKategoriLabController::class                         => 'HIDE',
+                \App\Features\Laboratorium\RefKategoriUsiaLab\RefKategoriUsiaLabController::class                 => 'HIDE',
+                \App\Features\Laboratorium\RefStatusPermintaan\RefStatusPermintaanController::class               => 'HIDE',
             ],
             'laboratorium.svg',
         );
     }
 }
-

@@ -14,7 +14,7 @@ final class PermintaanLabPkParameterController extends ControllerTemplate
         parent::__construct(
             new PermintaanLabPkParameterModel(),
             [
-                ['Laboratorium',               'laboratorium'],
+                ['Laboratorium',                'laboratorium'],
                 ['Parameter Permintaan Lab PK', 'permintaan_lab_pk_parameter'],
             ],
             'Parameter Permintaan Lab PK',

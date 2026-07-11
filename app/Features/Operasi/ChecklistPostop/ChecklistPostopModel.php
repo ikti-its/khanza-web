@@ -21,7 +21,7 @@ final class ChecklistPostopModel extends ModelTemplate
                 'catatan_luka_operasi' => V::DEFAULT(),
             ],
             [
-                'id_jadwal' => [
+                'id_jadwal'            => [
                     'tanggal',
                     'id_permintaan' => [
                         'nomor_reg',
@@ -34,23 +34,23 @@ final class ChecklistPostopModel extends ModelTemplate
                 ],
                 'id_tindakan'          => ['nama_tindakan'],
                 'id_sn_cn'             => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_dokter_bedah'      => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_dokter_anestesi'   => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_kesadaran_pascaop' => ['nama_kesadaran'],
                 'id_jaringan_pa_vc'    => ['nama_ketersediaan'],
                 'id_kateter_urine'     => ['nama_ketersediaan'],
                 'id_warna_urine'       => ['nama_warna'],
                 'id_petugas_anestesi'  => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_petugas_ok'        => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
             ],
         );

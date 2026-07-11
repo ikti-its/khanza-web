@@ -16,8 +16,8 @@ final class PermintaanLabPaItemModel extends ModelTemplate
                 'id_permintaan_pk_item' => V::DEFAULT(),
             ],
             [
-                'id_permintaan_lab'     => ['no_permintaan'],
-                'id_item_pemeriksaan'   => ['kode_periksa', 'nama_item', 'tarif'],
+                'id_permintaan_lab'   => ['no_permintaan'],
+                'id_item_pemeriksaan' => ['kode_periksa', 'nama_item', 'tarif'],
             ],
         );
     }

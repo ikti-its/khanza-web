@@ -49,7 +49,8 @@ final class PermintaanRadController extends ControllerTemplate
     {
         helper('autonomor');
 
-        $lastNo = $this->model->db
+        $lastNo = $this->model
+            ->db
             ->table('radiologi.permintaan_rad')
             ->select('no_permintaan')
             ->like('no_permintaan', 'RAD' . date('Ymd'), 'after')
@@ -63,24 +64,25 @@ final class PermintaanRadController extends ControllerTemplate
 
     private function getKonfig(): array
     {
-        return array_values(array_filter(
-            $this->get_fields_with_options(false, true),
-            fn($f) => $f[2] !== 'nomor_reg'
-        ));
+        return array_values(array_filter($this->get_fields_with_options(false, true), fn($f) => $f[2] !== 'nomor_reg'));
     }
 
     private function fetchDetailRegistrasi(string $nomorReg): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('registrasi.registrasi r')
             ->select([
-                'r.nomor_reg', 'p.nomor_rm', 'o.nama',
-                'd.kode_dokter AS kode_dokter_perujuk', 'od.nama AS nama_dokter',
+                'r.nomor_reg',
+                'p.nomor_rm',
+                'o.nama',
+                'd.kode_dokter AS kode_dokter_perujuk',
+                'od.nama AS nama_dokter',
             ])
-            ->join('role.pasien p',   'p.id_pasien = r.id_pasien', 'left')
-            ->join('person.orang o',  'o.id_orang  = p.id_orang',  'left')
-            ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
-            ->join('person.orang od', 'od.id_orang = d.id_orang',  'left')
+            ->join('role.pasien p', 'p.id_pasien = r.id_pasien', 'left')
+            ->join('person.orang o', 'o.id_orang  = p.id_orang', 'left')
+            ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
             ->where('r.nomor_reg', $nomorReg)
             ->get()
             ->getRowArray() ?? [];
@@ -88,10 +90,16 @@ final class PermintaanRadController extends ControllerTemplate
 
     private function fetchItemTerpilih(int $idPermintaan): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('radiologi.permintaan_rad_item pri')
             ->select([
-                'pri.id_item', 'pri.is_baca_saja', 'r.kode_periksa', 'r.nama_pemeriksaan', 'r.tarif_dasar', 'r.tarif_baca',
+                'pri.id_item',
+                'pri.is_baca_saja',
+                'r.kode_periksa',
+                'r.nama_pemeriksaan',
+                'r.tarif_dasar',
+                'r.tarif_baca',
             ])
             ->join('radiologi.ref_item_rad r', 'r.id_item = pri.id_item')
             ->where('pri.id_permintaan', $idPermintaan)
@@ -101,15 +109,17 @@ final class PermintaanRadController extends ControllerTemplate
 
     private function buildHeaderData(array $rawPost, bool $isCreate = false): array
     {
-        $noPermintaan = !empty($rawPost['no_permintaan']) ? $rawPost['no_permintaan'] : ($isCreate ? $this->generateNomorPermintaan() : '');
+        $noPermintaan = !empty($rawPost['no_permintaan'])
+            ? $rawPost['no_permintaan']
+            : ($isCreate ? $this->generateNomorPermintaan() : '');
         $tglPermintaan = !empty($rawPost['tgl_jam_permintaan']) ? $rawPost['tgl_jam_permintaan'] : date('Y-m-d H:i:s');
 
         $data = [
             'no_permintaan'      => $noPermintaan,
-            'nomor_reg'          => $rawPost['nomor_reg']          ?? '',
+            'nomor_reg'          => $rawPost['nomor_reg'] ?? '',
             'tgl_jam_permintaan' => $tglPermintaan,
             'informasi_tambahan' => $rawPost['informasi_tambahan'] ?? '',
-            'indikasi_klinis'    => $rawPost['indikasi_klinis']    ?? '',
+            'indikasi_klinis'    => $rawPost['indikasi_klinis'] ?? '',
         ];
 
         if ($isCreate) {
@@ -121,15 +131,16 @@ final class PermintaanRadController extends ControllerTemplate
 
     private function hasHasil(int $idPermintaan): bool
     {
-        return $this->model->db
-            ->table('radiologi.hasil_rad')
-            ->where('id_permintaan_rad', $idPermintaan)
-            ->countAllResults() > 0;
+        return (
+            $this->model->db->table('radiologi.hasil_rad')->where('id_permintaan_rad', $idPermintaan)->countAllResults()
+            > 0
+        );
     }
 
     private function insertItems(int $idPermintaan, array $idItems, array $bacaSajaMap): void
     {
-        if (empty($idItems)) return;
+        if (empty($idItems))
+            return;
 
         $data = array_map(fn($idItem) => [
             'id_permintaan' => $idPermintaan,
@@ -166,7 +177,7 @@ final class PermintaanRadController extends ControllerTemplate
     #[\Override]
     public function create(): string|RedirectResponse
     {
-        $idItems    = $this->request->getPost('id_item')      ?? [];
+        $idItems     = $this->request->getPost('id_item') ?? [];
         $bacaSajaMap = $this->request->getPost('is_baca_saja') ?? [];
         if (empty($idItems)) {
             session()->setFlashdata('error', 'Pilih minimal satu item radiologi.');
@@ -189,10 +200,11 @@ final class PermintaanRadController extends ControllerTemplate
 
             session()->setFlashdata('success', 'Permintaan radiologi berhasil disimpan.');
             return redirect()->to($this->get_uri_path() . '/data');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
@@ -236,14 +248,15 @@ final class PermintaanRadController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         if ($this->hasHasil((int) $id)) {
             session()->setFlashdata('error', 'Permintaan tidak dapat diubah karena hasil radiologi sudah dicatat.');
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
-        $idItems     = $this->request->getPost('id_item')      ?? [];
+        $idItems     = $this->request->getPost('id_item') ?? [];
         $bacaSajaMap = $this->request->getPost('is_baca_saja') ?? [];
         if (empty($idItems)) {
             session()->setFlashdata('error', 'Pilih minimal satu item radiologi.');
@@ -269,10 +282,11 @@ final class PermintaanRadController extends ControllerTemplate
 
             session()->setFlashdata('success', 'Permintaan radiologi berhasil diperbarui.');
             return redirect()->to($this->get_uri_path() . '/data');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
@@ -285,7 +299,8 @@ final class PermintaanRadController extends ControllerTemplate
     #[\Override]
     final public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         if ($this->hasHasil((int) $id)) {
             session()->setFlashdata('error', 'Permintaan tidak dapat dihapus karena hasil radiologi sudah dicatat.');
@@ -295,7 +310,9 @@ final class PermintaanRadController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
-            (new \App\Features\Radiologi\PermintaanRadItem\PermintaanRadItemModel())->where('id_permintaan', $id)->delete();
+            (new \App\Features\Radiologi\PermintaanRadItem\PermintaanRadItemModel())
+                ->where('id_permintaan', $id)
+                ->delete();
             $this->model->delete($id);
 
             $this->model->db->transComplete();
@@ -305,10 +322,11 @@ final class PermintaanRadController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Permintaan radiologi berhasil dihapus.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
         }
 
@@ -321,7 +339,8 @@ final class PermintaanRadController extends ControllerTemplate
 
     public function sampel(int|string $id): RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         try {
             $this->model->update($id, [
@@ -370,19 +389,26 @@ final class PermintaanRadController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $builder = $this->model->db
+        $builder = $this->model
+            ->db
             ->table('radiologi.permintaan_rad pr')
             ->select([
-                'pr.id_permintaan', 'pr.no_permintaan', 'pr.nomor_reg', 'pr.tgl_jam_permintaan',
-                'p.nomor_rm', 'o.nama', 's.nama_status',
-                'r.id_dokter AS id_dokter_perujuk', 'od.nama AS nama_dokter_perujuk',
+                'pr.id_permintaan',
+                'pr.no_permintaan',
+                'pr.nomor_reg',
+                'pr.tgl_jam_permintaan',
+                'p.nomor_rm',
+                'o.nama',
+                's.nama_status',
+                'r.id_dokter AS id_dokter_perujuk',
+                'od.nama AS nama_dokter_perujuk',
             ])
-            ->join('registrasi.registrasi r',              'r.nomor_reg = pr.nomor_reg')
-            ->join('role.pasien p',                         'p.id_pasien = r.id_pasien')
-            ->join('person.orang o',                        'o.id_orang  = p.id_orang')
+            ->join('registrasi.registrasi r', 'r.nomor_reg = pr.nomor_reg')
+            ->join('role.pasien p', 'p.id_pasien = r.id_pasien')
+            ->join('person.orang o', 'o.id_orang  = p.id_orang')
             ->join('radiologi.ref_status_permintaan_rad s', 's.id_status = pr.id_status_permintaan', 'left')
-            ->join('role.dokter d',                         'd.id_dokter = r.id_dokter', 'left')
-            ->join('person.orang od',                       'od.id_orang = d.id_orang', 'left')
+            ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
             ->orderBy('pr.tgl_jam_permintaan', 'DESC');
 
         if (($status = $this->request->getGet('status')) !== null) {

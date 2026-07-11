@@ -13,15 +13,15 @@ final class SkorStewardModel extends ModelTemplate
         parent::__construct(
             new SkorStewardDatabase(),
             [
-                'id_skor_steward'    => V::DEFAULT(),
-                'waktu_penilaian'    => V::DEFAULT(),
+                'id_skor_steward' => V::DEFAULT(),
+                'waktu_penilaian' => V::DEFAULT(),
                 // 'total_skor'            => V::DEFAULT(),
                 'is_boleh_pindah' => V::DEFAULT(),
                 'catatan_keluar'  => V::DEFAULT(),
                 'instruksi_rr'    => V::DEFAULT(),
             ],
             [
-                'id_jadwal' => [
+                'id_jadwal'          => [
                     'tanggal',
                     'id_permintaan' => [
                         'nomor_reg',
@@ -33,10 +33,10 @@ final class SkorStewardModel extends ModelTemplate
                     ],
                 ],
                 'id_petugas'         => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_dokter_anestesi' => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'skor_kesadaran'     => ['nama_skala', 'nilai'],
                 'skor_respirasi'     => ['nama_skala', 'nilai'],

@@ -13,8 +13,8 @@ final class ChecklistPostopPenunjangModel extends ModelTemplate
         parent::__construct(
             new ChecklistPostopPenunjangDatabase(),
             [
-                'id_penunjang'       => V::DEFAULT(),
-                'keterangan'         => V::DEFAULT(),
+                'id_penunjang' => V::DEFAULT(),
+                'keterangan'   => V::DEFAULT(),
             ],
             [
                 'id_checklist_post'  => [],

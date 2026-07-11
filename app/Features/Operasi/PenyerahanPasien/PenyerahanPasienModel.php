@@ -38,7 +38,7 @@ final class PenyerahanPasienModel extends ModelTemplate
                 'tiba_keluhan'             => V::DEFAULT(),
             ],
             [
-                'id_jadwal' => [
+                'id_jadwal'              => [
                     'tanggal',
                     'id_permintaan' => [
                         'nomor_reg',
@@ -57,10 +57,10 @@ final class PenyerahanPasienModel extends ModelTemplate
                 'asal_id_keadaan'        => ['nama_keadaan'],
                 'tiba_id_keadaan'        => ['nama_keadaan'],
                 'id_perawat_menyerahkan' => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_perawat_menerima'    => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
             ],
         );

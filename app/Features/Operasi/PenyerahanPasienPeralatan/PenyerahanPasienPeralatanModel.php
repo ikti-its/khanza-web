@@ -13,8 +13,8 @@ final class PenyerahanPasienPeralatanModel extends ModelTemplate
         parent::__construct(
             new PenyerahanPasienPeralatanDatabase(),
             [
-                'id'            => V::DEFAULT(),
-                'keterangan'    => V::DEFAULT(),
+                'id'         => V::DEFAULT(),
+                'keterangan' => V::DEFAULT(),
             ],
             [
                 'id_penyerahan' => [],

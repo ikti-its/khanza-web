@@ -13,8 +13,8 @@ final class HasilRadModel extends ModelTemplate
         parent::__construct(
             new HasilRadDatabase(),
             [
-                'id_hasil_rad'        => V::DEFAULT(),
-                'tgl_jam_hasil'       => V::DEFAULT(),
+                'id_hasil_rad'  => V::DEFAULT(),
+                'tgl_jam_hasil' => V::DEFAULT(),
             ],
             [
                 'id_permintaan_rad' => [
@@ -26,10 +26,10 @@ final class HasilRadModel extends ModelTemplate
                     ],
                 ],
                 'id_dokter_pj'      => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_petugas_rad'    => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
             ],
         );

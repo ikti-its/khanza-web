@@ -14,9 +14,9 @@ final class PaketTindakanOperasiDatabase extends DatabaseTemplate
             'operasi',
             'paket_tindakan_operasi',
             [
-                'id_paket'    => T::ID(50),
-                'id_tindakan' => T::FK_AUTO(),
-                'id_komponen' => T::FK_AUTO(),
+                'id_paket'      => T::ID(50),
+                'id_tindakan'   => T::FK_AUTO(),
+                'id_komponen'   => T::FK_AUTO(),
                 'tarif_kelas_3' => T::MONEY(),
                 'tarif_kelas_2' => T::MONEY(),
                 'tarif_kelas_1' => T::MONEY(),

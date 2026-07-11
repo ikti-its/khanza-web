@@ -65,7 +65,8 @@ final class ChecklistPreOperasiController extends ControllerTemplate
 
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
                 'j.id_jadwal',
@@ -78,84 +79,102 @@ final class ChecklistPreOperasiController extends ControllerTemplate
                 'ob.nama AS nama_dokter_bedah',
                 'oa.nama AS nama_dokter_anestesi',
             ])
-            ->join('operasi.permintaan_operasi po',   'po.id_permintaan = j.id_permintaan',      'left')
-            ->join('registrasi.registrasi r',        'r.nomor_reg      = po.nomor_reg',         'left')
-            ->join('role.pasien p',                   'p.id_pasien      = r.id_pasien',          'left')
-            ->join('person.orang op',                 'op.id_orang      = p.id_orang',           'left')
-            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan',       'left')
-            ->join('role.dokter db',                  'db.id_dokter     = j.id_dokter_bedah',    'left')
-            ->join('person.orang ob',                 'ob.id_orang      = db.id_orang',          'left')
-            ->join('role.dokter da',                  'da.id_dokter     = j.id_dokter_anestesi', 'left')
-            ->join('person.orang oa',                 'oa.id_orang      = da.id_orang',          'left')
+            ->join('operasi.permintaan_operasi po', 'po.id_permintaan = j.id_permintaan', 'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg      = po.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien      = r.id_pasien', 'left')
+            ->join('person.orang op', 'op.id_orang      = p.id_orang', 'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
+            ->join('role.dokter db', 'db.id_dokter     = j.id_dokter_bedah', 'left')
+            ->join('person.orang ob', 'ob.id_orang      = db.id_orang', 'left')
+            ->join('role.dokter da', 'da.id_dokter     = j.id_dokter_anestesi', 'left')
+            ->join('person.orang oa', 'oa.id_orang      = da.id_orang', 'left')
             ->where('j.id_jadwal', $idJadwal)
-            ->get()->getRowArray() ?? [];
+            ->get()
+            ->getRowArray() ?? [];
     }
 
     private function fetchOptions(): array
     {
         $db = $this->model->db;
         return [
-            'keadaan_umum'    => $db->table('operasi.ref_keadaan_umum')
-                ->select('id_keadaan_umum, nama_keadaan')->get()->getResultArray(),
-            'ketersediaan'    => $db->table('operasi.ref_ketersediaan_status')
-                ->select('id_ketersediaan_status, nama_ketersediaan')->get()->getResultArray(),
-            'jenis_penunjang' => $db->table('operasi.ref_jenis_penunjang')
-                ->select('id_jenis_penunjang, nama_jenis')->get()->getResultArray(),
+            'keadaan_umum'    => $db
+                ->table('operasi.ref_keadaan_umum')
+                ->select('id_keadaan_umum, nama_keadaan')
+                ->get()
+                ->getResultArray(),
+            'ketersediaan'    => $db
+                ->table('operasi.ref_ketersediaan_status')
+                ->select('id_ketersediaan_status, nama_ketersediaan')
+                ->get()
+                ->getResultArray(),
+            'jenis_penunjang' => $db
+                ->table('operasi.ref_jenis_penunjang')
+                ->select('id_jenis_penunjang, nama_jenis')
+                ->get()
+                ->getResultArray(),
         ];
     }
 
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table("role.{$tabel} t")
             ->select('o.nama')
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
             ->where("t.{$idKolom}", $idValue)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return $row['nama'] ?? '';
     }
 
     private function fetchTindakanName(int $idTindakan): string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('operasi.ref_tindakan_operasi')
             ->select('nama_tindakan')
             ->where('id_tindakan', $idTindakan)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return $row['nama_tindakan'] ?? '';
     }
 
     private function fetchPenunjang(int $idChecklist): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.checklist_pre_operasi_penunjang p')
-            ->select('p.id_penunjang, p.id_jenis_penunjang, p.id_ketersediaan, j.nama_jenis, k.nama_ketersediaan, p.keterangan')
-            ->join('operasi.ref_jenis_penunjang j',     'j.id_jenis_penunjang     = p.id_jenis_penunjang', 'left')
-            ->join('operasi.ref_ketersediaan_status k', 'k.id_ketersediaan_status = p.id_ketersediaan',    'left')
+            ->select(
+                'p.id_penunjang, p.id_jenis_penunjang, p.id_ketersediaan, j.nama_jenis, k.nama_ketersediaan, p.keterangan',
+            )
+            ->join('operasi.ref_jenis_penunjang j', 'j.id_jenis_penunjang     = p.id_jenis_penunjang', 'left')
+            ->join('operasi.ref_ketersediaan_status k', 'k.id_ketersediaan_status = p.id_ketersediaan', 'left')
             ->where('p.id_checklist', $idChecklist)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
     }
 
     // Data Mapper for header
     private function buildHeaderData(array $rawPost): array
     {
         return [
-            'id_jadwal'              => (int) ($rawPost['id_jadwal']              ?? 0) ?: null,
-            'id_tindakan'            => (int) ($rawPost['id_tindakan']            ?? 0) ?: null,
-            'id_sn_cn'               => (int) ($rawPost['id_sn_cn']               ?? 0) ?: null,
-            'id_dokter_bedah'        => (int) ($rawPost['id_dokter_bedah']        ?? 0) ?: null,
-            'id_dokter_anestesi'     => (int) ($rawPost['id_dokter_anestesi']     ?? 0) ?: null,
-            'id_petugas_ruangan'     => (int) ($rawPost['id_petugas_ruangan']     ?? 0) ?: null,
-            'id_petugas_ok'          => (int) ($rawPost['id_petugas_ok']          ?? 0) ?: null,
-            'waktu_checklist'        => $rawPost['waktu_checklist']               ?? null,
-            'is_identitas_sesuai'    => $rawPost['is_identitas_sesuai']           ?? null,
-            'id_keadaan_umum'        => (int) ($rawPost['id_keadaan_umum']        ?? 0) ?: null,
-            'id_penandaan_area'      => (int) ($rawPost['id_penandaan_area']      ?? 0) ?: null,
-            'is_ijin_bedah'          => $rawPost['is_ijin_bedah']                 ?? null,
-            'is_ijin_anestesi'       => $rawPost['is_ijin_anestesi']              ?? null,
-            'id_ijin_transfusi'      => (int) ($rawPost['id_ijin_transfusi']      ?? 0) ?: null,
-            'id_persiapan_darah'     => (int) ($rawPost['id_persiapan_darah']     ?? 0) ?: null,
-            'ket_persiapan_darah'    => $rawPost['ket_persiapan_darah']           ?? null,
+            'id_jadwal'              => (int) ($rawPost['id_jadwal'] ?? 0) ?: null,
+            'id_tindakan'            => (int) ($rawPost['id_tindakan'] ?? 0) ?: null,
+            'id_sn_cn'               => (int) ($rawPost['id_sn_cn'] ?? 0) ?: null,
+            'id_dokter_bedah'        => (int) ($rawPost['id_dokter_bedah'] ?? 0) ?: null,
+            'id_dokter_anestesi'     => (int) ($rawPost['id_dokter_anestesi'] ?? 0) ?: null,
+            'id_petugas_ruangan'     => (int) ($rawPost['id_petugas_ruangan'] ?? 0) ?: null,
+            'id_petugas_ok'          => (int) ($rawPost['id_petugas_ok'] ?? 0) ?: null,
+            'waktu_checklist'        => $rawPost['waktu_checklist'] ?? null,
+            'is_identitas_sesuai'    => $rawPost['is_identitas_sesuai'] ?? null,
+            'id_keadaan_umum'        => (int) ($rawPost['id_keadaan_umum'] ?? 0) ?: null,
+            'id_penandaan_area'      => (int) ($rawPost['id_penandaan_area'] ?? 0) ?: null,
+            'is_ijin_bedah'          => $rawPost['is_ijin_bedah'] ?? null,
+            'is_ijin_anestesi'       => $rawPost['is_ijin_anestesi'] ?? null,
+            'id_ijin_transfusi'      => (int) ($rawPost['id_ijin_transfusi'] ?? 0) ?: null,
+            'id_persiapan_darah'     => (int) ($rawPost['id_persiapan_darah'] ?? 0) ?: null,
+            'ket_persiapan_darah'    => $rawPost['ket_persiapan_darah'] ?? null,
             'id_perlengkapan_khusus' => (int) ($rawPost['id_perlengkapan_khusus'] ?? 0) ?: null,
         ];
     }
@@ -166,7 +185,8 @@ final class ChecklistPreOperasiController extends ControllerTemplate
         $batchPenunjang = [];
         foreach ($penunjangList as $row) {
             $idJenis = (int) ($row['id_jenis_penunjang'] ?? 0);
-            if ($idJenis === 0) continue;
+            if ($idJenis === 0)
+                continue;
 
             $batchPenunjang[] = [
                 'id_checklist'       => $idChecklist,
@@ -177,15 +197,24 @@ final class ChecklistPreOperasiController extends ControllerTemplate
         }
 
         if (!empty($batchPenunjang)) {
-            (new \App\Features\Operasi\ChecklistPreOperasiPenunjang\ChecklistPreOperasiPenunjangModel())->insertBatch($batchPenunjang);
+            (new \App\Features\Operasi\ChecklistPreOperasiPenunjang\ChecklistPreOperasiPenunjangModel())->insertBatch(
+                $batchPenunjang,
+            );
         }
     }
 
-    private function buildViewData(array $jadwal, array $record, string $formAction, ?int $idChecklist = null): array
-    {
+    private function buildViewData(
+        array $jadwal,
+        array $record,
+        string $formAction,
+        null|int $idChecklist = null,
+    ): array {
         return [
             'judul'        => ($formAction === '/submittambah/' ? 'Tambah ' : 'Ubah ') . $this->title,
-            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => $formAction === '/submittambah/' ? 'Tambah' : 'Ubah', 'icon' => '']]),
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [[
+                'title' => $formAction === '/submittambah/' ? 'Tambah' : 'Ubah',
+                'icon'  => '',
+            ]]),
             'modul_path'   => $this->get_uri_path(),
             'form_action'  => $formAction,
             'baris'        => $record,
@@ -206,16 +235,19 @@ final class ChecklistPreOperasiController extends ControllerTemplate
         $idJadwal = (int) ($this->request->getGet('id_jadwal') ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
-        return view('admin/operasi/tambah_checklist_pre_operasi',
-            $this->buildViewData($jadwal, [
+        return view('admin/operasi/tambah_checklist_pre_operasi', $this->buildViewData(
+            $jadwal,
+            [
                 'id_jadwal'            => $idJadwal,
-                'id_tindakan'          => $jadwal['id_tindakan']          ?? '',
-                'nama_tindakan'        => $jadwal['nama_tindakan']        ?? '',
-                'id_dokter_bedah'      => $jadwal['id_dokter_bedah']      ?? '',
-                'nama_dokter_bedah'    => $jadwal['nama_dokter_bedah']    ?? '',
-                'id_dokter_anestesi'   => $jadwal['id_dokter_anestesi']   ?? '',
+                'id_tindakan'          => $jadwal['id_tindakan'] ?? '',
+                'nama_tindakan'        => $jadwal['nama_tindakan'] ?? '',
+                'id_dokter_bedah'      => $jadwal['id_dokter_bedah'] ?? '',
+                'nama_dokter_bedah'    => $jadwal['nama_dokter_bedah'] ?? '',
+                'id_dokter_anestesi'   => $jadwal['id_dokter_anestesi'] ?? '',
                 'nama_dokter_anestesi' => $jadwal['nama_dokter_anestesi'] ?? '',
-            ], '/submittambah/'));
+            ],
+            '/submittambah/',
+        ));
     }
 
     #[\Override]
@@ -244,8 +276,12 @@ final class ChecklistPreOperasiController extends ControllerTemplate
             $record['nama_petugas_ok'] = $this->fetchNamaRole('petugas', 'id_petugas', $idPo);
         }
 
-        return view('admin/operasi/tambah_checklist_pre_operasi',
-            $this->buildViewData($jadwal, $record, '/submitedit/' . $id, (int) $id));
+        return view('admin/operasi/tambah_checklist_pre_operasi', $this->buildViewData(
+            $jadwal,
+            $record,
+            '/submitedit/' . $id,
+            (int) $id,
+        ));
     }
 
     // -------------------------------------------------------------------------
@@ -255,7 +291,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
     #[\Override]
     public function create(): string|RedirectResponse
     {
-        $rawPost = $this->request->getPost();
+        $rawPost       = $this->request->getPost();
         $dataHeader    = $this->buildHeaderData($rawPost);
         $penunjangList = $rawPost['penunjang'] ?? [];
 
@@ -274,10 +310,11 @@ final class ChecklistPreOperasiController extends ControllerTemplate
             }
 
             return $this->home();
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
@@ -286,9 +323,10 @@ final class ChecklistPreOperasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
-        $rawPost = $this->request->getPost();
+        $rawPost       = $this->request->getPost();
         $dataHeader    = $this->buildHeaderData($rawPost);
         $penunjangList = $rawPost['penunjang'] ?? [];
 
@@ -297,8 +335,10 @@ final class ChecklistPreOperasiController extends ControllerTemplate
         try {
             $this->model->update($id, $dataHeader);
 
-            (new \App\Features\Operasi\ChecklistPreOperasiPenunjang\ChecklistPreOperasiPenunjangModel())->where('id_checklist', $id)->delete();
-            
+            (new \App\Features\Operasi\ChecklistPreOperasiPenunjang\ChecklistPreOperasiPenunjangModel())
+                ->where('id_checklist', $id)
+                ->delete();
+
             $this->insertPenunjangList((int) $id, $penunjangList);
 
             $this->model->db->transComplete();
@@ -308,10 +348,11 @@ final class ChecklistPreOperasiController extends ControllerTemplate
             }
 
             return $this->home();
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }

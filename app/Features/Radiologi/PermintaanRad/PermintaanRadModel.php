@@ -13,15 +13,15 @@ final class PermintaanRadModel extends ModelTemplate
         parent::__construct(
             new PermintaanRadDatabase(),
             [
-                'id_permintaan'        => V::DEFAULT(),
-                'no_permintaan'        => V::DEFAULT(),
-                'tgl_jam_permintaan'   => V::DEFAULT(),
-                'informasi_tambahan'   => V::DEFAULT(),
-                'indikasi_klinis'      => V::DEFAULT(),
-                'tgl_jam_sampel'       => V::DEFAULT(),
+                'id_permintaan'      => V::DEFAULT(),
+                'no_permintaan'      => V::DEFAULT(),
+                'tgl_jam_permintaan' => V::DEFAULT(),
+                'informasi_tambahan' => V::DEFAULT(),
+                'indikasi_klinis'    => V::DEFAULT(),
+                'tgl_jam_sampel'     => V::DEFAULT(),
             ],
             [
-                'nomor_reg' => [
+                'nomor_reg'            => [
                     'nomor_reg',
                     'id_pasien' => [
                         'nomor_rm',

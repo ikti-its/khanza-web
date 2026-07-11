@@ -27,7 +27,7 @@ final class HasilLabPaController extends ControllerTemplate
                 A::DELETE,
                 A::PRINT,
             ],
-             [
+            [
                 [HIDE, OPTIONAL, I::INDEX, 'id_hasil_pa',           'ID Hasil PA'],
                 [SHOW, REQUIRED, I::INDEX, 'id_permintaan_lab',     'No. Permintaan Lab'],
                 [HIDE, REQUIRED, I::INDEX, 'id_permintaan_pa_item', 'ID Permintaan PA Item'],
@@ -42,33 +42,38 @@ final class HasilLabPaController extends ControllerTemplate
             ],
         );
     }
-    
+
     // ──────────────────────────────────────────────────────────
     // PRIVATE HELPERS
     // ──────────────────────────────────────────────────────────
- 
+
     private function getKonfig(): array
     {
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn($f) => !in_array($f[2], [
-                'id_hasil_pa',
-                'id_permintaan_lab',
-                'id_permintaan_pa_item',
-                'id_dokter_pj',
-                'id_petugas_lab',
-                'diagnosa_klinis',
-                'makroskopik',
-                'mikroskopik',
-                'kesimpulan',
-                'kesan',
-            ], true)
+            fn($f) => !in_array(
+                $f[2],
+                [
+                    'id_hasil_pa',
+                    'id_permintaan_lab',
+                    'id_permintaan_pa_item',
+                    'id_dokter_pj',
+                    'id_petugas_lab',
+                    'diagnosa_klinis',
+                    'makroskopik',
+                    'mikroskopik',
+                    'kesimpulan',
+                    'kesan',
+                ],
+                true,
+            ),
         ));
     }
- 
+
     private function fetchHeaderPermintaan(int $idPermintaanLab): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_header plh')
             ->select([
                 'plh.id_permintaan',
@@ -78,42 +83,48 @@ final class HasilLabPaController extends ControllerTemplate
                 'od.nama AS nama_dokter_perujuk',
                 'r.id_dokter AS id_dokter_perujuk',
             ])
-            ->join('registrasi.registrasi r',  'r.nomor_reg = plh.nomor_reg')
-            ->join('role.pasien p',             'p.id_pasien = r.id_pasien',  'left')
-            ->join('person.orang o',            'o.id_orang  = p.id_orang',   'left')
-            ->join('role.dokter d',             'd.id_dokter = r.id_dokter',  'left')
-            ->join('person.orang od',           'od.id_orang = d.id_orang',   'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg = plh.nomor_reg')
+            ->join('role.pasien p', 'p.id_pasien = r.id_pasien', 'left')
+            ->join('person.orang o', 'o.id_orang  = p.id_orang', 'left')
+            ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
             ->where('plh.id_permintaan', $idPermintaanLab)
-            ->get()->getRowArray() ?? [];
+            ->get()
+            ->getRowArray() ?? [];
     }
- 
-    private function fetchNamaDokterPj(int $idDokterPj): ?string
+
+    private function fetchNamaDokterPj(int $idDokterPj): null|string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('role.dokter d')
             ->select(['o.nama AS nama_dokter_pj'])
             ->join('person.orang o', 'o.id_orang = d.id_orang')
             ->where('d.id_dokter', $idDokterPj)
-            ->get()->getRowArray();
- 
+            ->get()
+            ->getRowArray();
+
         return $row['nama_dokter_pj'] ?? null;
     }
- 
-    private function fetchNamaPetugas(int $idPetugas): ?string
+
+    private function fetchNamaPetugas(int $idPetugas): null|string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('role.petugas p')
             ->select(['o.nama AS nama_petugas'])
             ->join('person.orang o', 'o.id_orang = p.id_orang')
             ->where('p.id_petugas', $idPetugas)
-            ->get()->getRowArray();
- 
+            ->get()
+            ->getRowArray();
+
         return $row['nama_petugas'] ?? null;
     }
- 
+
     private function fetchItemTerpilih(int $idPermintaanLab): array
     {
-        $hasilRows = $this->model->db
+        $hasilRows = $this->model
+            ->db
             ->table('laboratorium.hasil_lab_pa h')
             ->select([
                 'h.id_hasil_pa',
@@ -126,11 +137,12 @@ final class HasilLabPaController extends ControllerTemplate
                 'h.kesimpulan',
                 'h.kesan',
             ])
-            ->join('laboratorium.permintaan_lab_pa_item pi',   'pi.id_permintaan_pa_item = h.id_permintaan_pa_item')
+            ->join('laboratorium.permintaan_lab_pa_item pi', 'pi.id_permintaan_pa_item = h.id_permintaan_pa_item')
             ->join('laboratorium.ref_item_pemeriksaan_lab ri', 'ri.id_item_lab = pi.id_item_pemeriksaan')
             ->where('h.id_permintaan_lab', $idPermintaanLab)
-            ->get()->getResultArray();
- 
+            ->get()
+            ->getResultArray();
+
         return array_map(fn($row) => [
             'id_hasil_pa'           => $row['id_hasil_pa'],
             'id_permintaan_pa_item' => $row['id_permintaan_pa_item'],
@@ -143,10 +155,11 @@ final class HasilLabPaController extends ControllerTemplate
             'kesan'                 => $row['kesan'],
         ], $hasilRows);
     }
- 
+
     private function fetchItemUntukForm(int $idPermintaanLab): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_pa_item pai')
             ->select([
                 'pai.id_permintaan_pa_item',
@@ -159,12 +172,15 @@ final class HasilLabPaController extends ControllerTemplate
                 'h.kesan',
             ])
             ->join('laboratorium.ref_item_pemeriksaan_lab ri', 'ri.id_item_lab = pai.id_item_pemeriksaan')
-            ->join('laboratorium.hasil_lab_pa h',
+            ->join(
+                'laboratorium.hasil_lab_pa h',
                 'h.id_permintaan_pa_item = pai.id_permintaan_pa_item AND h.id_permintaan_lab = pai.id_permintaan_lab',
-                'left')
+                'left',
+            )
             ->where('pai.id_permintaan_lab', $idPermintaanLab)
             ->orderBy('pai.id_permintaan_pa_item', 'ASC')
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
     }
 
     // Sebuah item PA dianggap "lengkap" hanya bila semua field wajibnya terisi —
@@ -172,15 +188,17 @@ final class HasilLabPaController extends ControllerTemplate
     private function isItemLengkap(array $item): bool
     {
         foreach (['diagnosa_klinis', 'makroskopik', 'mikroskopik', 'kesimpulan'] as $field) {
-            if (trim($item[$field] ?? '') === '') return false;
+            if (trim($item[$field] ?? '') === '')
+                return false;
         }
         return true;
     }
 
-    private function validateHasilList(array $hasilList): ?string
+    private function validateHasilList(array $hasilList): null|string
     {
         foreach ($hasilList as $item) {
-            if ($this->isItemLengkap($item)) return null;
+            if ($this->isItemLengkap($item))
+                return null;
         }
         return 'Isi minimal satu hasil pemeriksaan lengkap (Diagnosa Klinis, Makroskopik, Mikroskopik, Kesimpulan) sebelum menyimpan.';
     }
@@ -188,19 +206,20 @@ final class HasilLabPaController extends ControllerTemplate
     private function upsertHasilPaItems(
         array $hasilList,
         int $idPermintaanLab,
-        ?int $idDokterPj,
-        ?int $idPetugasLab,
+        null|int $idDokterPj,
+        null|int $idPetugasLab,
         string $tglJamHasil,
     ): void {
         $existingByItem = array_column(
             $this->model->where('id_permintaan_lab', $idPermintaanLab)->findAll(),
             null,
-            'id_permintaan_pa_item'
+            'id_permintaan_pa_item',
         );
 
         foreach ($hasilList as $item) {
             $idItem = (int) ($item['id_permintaan_pa_item'] ?? 0);
-            if ($idItem <= 0 || !$this->isItemLengkap($item)) continue;
+            if ($idItem <= 0 || !$this->isItemLengkap($item))
+                continue;
 
             $data = [
                 'id_dokter_pj'    => $idDokterPj,
@@ -216,30 +235,40 @@ final class HasilLabPaController extends ControllerTemplate
             if (isset($existingByItem[$idItem])) {
                 $this->model->update((int) $existingByItem[$idItem]['id_hasil_pa'], $data);
             } else {
-                $this->model->insert($data + [
-                    'id_permintaan_lab'     => $idPermintaanLab,
-                    'id_permintaan_pa_item' => $idItem,
-                ]);
+                $this->model->insert(
+                    $data
+                    + [
+                        'id_permintaan_lab'     => $idPermintaanLab,
+                        'id_permintaan_pa_item' => $idItem,
+                    ],
+                );
             }
         }
     }
 
     private function recomputeStatusPermintaan(int $idPermintaanLab): void
     {
-        $total = $this->model->db
+        $total = $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_pa_item')
             ->where('id_permintaan_lab', $idPermintaanLab)
             ->countAllResults();
 
-        $filled = $this->model->db
+        $filled = $this->model
+            ->db
             ->table('laboratorium.hasil_lab_pa')
             ->where('id_permintaan_lab', $idPermintaanLab)
-            ->where("TRIM(diagnosa_klinis) <> '' AND TRIM(makroskopik) <> '' AND TRIM(mikroskopik) <> '' AND TRIM(kesimpulan) <> ''", null, false)
+            ->where(
+                "TRIM(diagnosa_klinis) <> '' AND TRIM(makroskopik) <> '' AND TRIM(mikroskopik) <> '' AND TRIM(kesimpulan) <> ''",
+                null,
+                false,
+            )
             ->countAllResults();
 
-        $status = ($total > 0 && $filled >= $total) ? 3 : 2;
+        $status = $total > 0 && $filled >= $total ? 3 : 2;
 
-        $this->model->db
+        $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_header')
             ->where('id_permintaan', $idPermintaanLab)
             ->set('id_status_permintaan', $status)
@@ -248,27 +277,24 @@ final class HasilLabPaController extends ControllerTemplate
 
     private function deleteHasilPaByPermintaan(int $idPermintaanLab): void
     {
-        $this->model->db
-            ->table('laboratorium.hasil_lab_pa')
-            ->where('id_permintaan_lab', $idPermintaanLab)
-            ->delete();
+        $this->model->db->table('laboratorium.hasil_lab_pa')->where('id_permintaan_lab', $idPermintaanLab)->delete();
     }
- 
+
     // ──────────────────────────────────────────────────────────
     // HALAMAN TAMBAH
     // ──────────────────────────────────────────────────────────
- 
+
     #[\Override]
     final public function create_page(): string
     {
         return view('admin/laboratorium/tambah_hasil_pa', [
-            'judul'         => 'Tambah ' . $this->title,
-            'breadcrumbs'   => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
-            'modul_path'    => $this->get_uri_path(),
-            'kolom_id'      => $this->model->primaryKey,
-            'konfig'        => $this->getKonfig(),
-            'baris'         => [],
-            'form_action'   => '/submittambah',
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->model->primaryKey,
+            'konfig'      => $this->getKonfig(),
+            'baris'       => [],
+            'form_action' => '/submittambah',
         ]);
     }
 
@@ -282,8 +308,8 @@ final class HasilLabPaController extends ControllerTemplate
         $rawPost = $this->request->getPost();
 
         $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
-        $idDokterPj      = (int) ($rawPost['id_dokter_pj']      ?? 0) ?: null;
-        $idPetugasLab    = (int) ($rawPost['id_petugas_lab']    ?? 0) ?: null;
+        $idDokterPj      = (int) ($rawPost['id_dokter_pj'] ?? 0) ?: null;
+        $idPetugasLab    = (int) ($rawPost['id_petugas_lab'] ?? 0) ?: null;
         $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
         $hasilList       = $rawPost['hasil'] ?? [];
 
@@ -308,22 +334,23 @@ final class HasilLabPaController extends ControllerTemplate
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal menyimpan hasil lab PA.');
             }
- 
+
             session()->setFlashdata('success', 'Hasil Lab PA berhasil disimpan.');
             return redirect()->to($this->get_uri_path() . '/data');
- 
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
     }
- 
+
     // ──────────────────────────────────────────────────────────
     // HALAMAN UBAH
     // ──────────────────────────────────────────────────────────
- 
+
     #[\Override]
     final public function update_page(int|string $id): string
     {
@@ -337,23 +364,23 @@ final class HasilLabPaController extends ControllerTemplate
         }
 
         $baris = array_merge($baris, $this->fetchHeaderPermintaan($idPermintaanLab));
- 
+
         if (!empty($baris['id_dokter_pj'])) {
             $baris['nama_dokter_pj'] = $this->fetchNamaDokterPj((int) $baris['id_dokter_pj']) ?? '';
         }
- 
+
         if (!empty($baris['id_petugas_lab'])) {
             $baris['nama_petugas'] = $this->fetchNamaPetugas((int) $baris['id_petugas_lab']) ?? '';
         }
- 
+
         return view('admin/laboratorium/tambah_hasil_pa', [
-            'judul'         => 'Ubah ' . $this->title,
-            'breadcrumbs'   => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
-            'modul_path'    => $this->get_uri_path(),
-            'kolom_id'      => $this->model->primaryKey,
-            'konfig'        => $this->getKonfig(),
-            'baris'         => $baris,
-            'form_action'   => '/submitedit/' . $id,
+            'judul'       => 'Ubah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->model->primaryKey,
+            'konfig'      => $this->getKonfig(),
+            'baris'       => $baris,
+            'form_action' => '/submitedit/' . $id,
         ]);
     }
 
@@ -364,13 +391,14 @@ final class HasilLabPaController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $rawPost = $this->request->getPost();
 
         $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
-        $idDokterPj      = (int) ($rawPost['id_dokter_pj']      ?? 0) ?: null;
-        $idPetugasLab    = (int) ($rawPost['id_petugas_lab']    ?? 0) ?: null;
+        $idDokterPj      = (int) ($rawPost['id_dokter_pj'] ?? 0) ?: null;
+        $idPetugasLab    = (int) ($rawPost['id_petugas_lab'] ?? 0) ?: null;
         $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
         $hasilList       = $rawPost['hasil'] ?? [];
 
@@ -395,18 +423,19 @@ final class HasilLabPaController extends ControllerTemplate
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal memperbarui hasil lab PA.');
             }
- 
+
             session()->setFlashdata('success', 'Hasil Lab PA berhasil diperbarui.');
             return redirect()->to($this->get_uri_path() . '/data');
- 
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
     }
- 
+
     // ──────────────────────────────────────────────────────────
     // MODAL LIST — item permintaan digabung dengan hasil yang sudah ada
     // ──────────────────────────────────────────────────────────
@@ -428,7 +457,8 @@ final class HasilLabPaController extends ControllerTemplate
     public function delete(int|string $id): string|RedirectResponse
     {
         $idPermintaanLab = (int) $id;
-        if ($idPermintaanLab == 0) return $this->home();
+        if ($idPermintaanLab == 0)
+            return $this->home();
 
         if (!$this->model->where('id_permintaan_lab', $idPermintaanLab)->countAllResults()) {
             return $this->home();
@@ -438,21 +468,22 @@ final class HasilLabPaController extends ControllerTemplate
 
         try {
             $this->deleteHasilPaByPermintaan($idPermintaanLab);
- 
+
             $this->model->db->transComplete();
- 
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal menghapus hasil lab PA.');
             }
- 
+
             session()->setFlashdata('success', 'Hasil Lab PA berhasil dihapus.');
- 
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
         }
- 
+
         return $this->home();
     }
 
@@ -463,29 +494,34 @@ final class HasilLabPaController extends ControllerTemplate
     #[\Override]
     final public function index(): string
     {
-        $hasilSub = '(SELECT DISTINCT ON (id_permintaan_lab) id_permintaan_lab, id_dokter_pj, id_petugas_lab, tgl_jam_hasil'
-                  . ' FROM laboratorium.hasil_lab_pa'
-                  . ' ORDER BY id_permintaan_lab, tgl_jam_hasil DESC) h';
+        $hasilSub =
+            '(SELECT DISTINCT ON (id_permintaan_lab) id_permintaan_lab, id_dokter_pj, id_petugas_lab, tgl_jam_hasil'
+            . ' FROM laboratorium.hasil_lab_pa'
+            . ' ORDER BY id_permintaan_lab, tgl_jam_hasil DESC) h';
 
-        $rows = $this->model->db
+        $rows = $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_header plh')
             ->select([
                 'plh.id_permintaan AS id_permintaan_lab',
-                'plh.no_permintaan', 'plh.nomor_reg',
-                'p.nomor_rm', 'o.nama',
+                'plh.no_permintaan',
+                'plh.nomor_reg',
+                'p.nomor_rm',
+                'o.nama',
                 'h.tgl_jam_hasil',
                 'opj.nama AS nama_dokter_pj',
                 's.nama_status',
             ])
-            ->join('registrasi.registrasi r',             'r.nomor_reg = plh.nomor_reg',           'left')
-            ->join('role.pasien p',                        'p.id_pasien = r.id_pasien',             'left')
-            ->join('person.orang o',                       'o.id_orang  = p.id_orang',              'left')
-            ->join('laboratorium.ref_status_permintaan s', 's.id_status = plh.id_status_permintaan','left')
-            ->join($hasilSub,                              'h.id_permintaan_lab = plh.id_permintaan')
-            ->join('role.dokter dpj',                      'dpj.id_dokter = h.id_dokter_pj',        'left')
-            ->join('person.orang opj',                     'opj.id_orang  = dpj.id_orang',          'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg = plh.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien = r.id_pasien', 'left')
+            ->join('person.orang o', 'o.id_orang  = p.id_orang', 'left')
+            ->join('laboratorium.ref_status_permintaan s', 's.id_status = plh.id_status_permintaan', 'left')
+            ->join($hasilSub, 'h.id_permintaan_lab = plh.id_permintaan')
+            ->join('role.dokter dpj', 'dpj.id_dokter = h.id_dokter_pj', 'left')
+            ->join('person.orang opj', 'opj.id_orang  = dpj.id_orang', 'left')
             ->orderBy('h.tgl_jam_hasil', 'DESC')
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
 
         $konfig = [
             [1, 'No. Permintaan', 'no_permintaan',  'teks',    0],
@@ -527,27 +563,36 @@ final class HasilLabPaController extends ControllerTemplate
             return $this->index();
         }
 
-        $header = $this->model->db
+        $header = $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_header plh')
             ->select([
-                'plh.no_permintaan', 'plh.nomor_reg', 'plh.tgl_permintaan',
-                'p.nomor_rm', 'o.nama AS nama_pasien',
+                'plh.no_permintaan',
+                'plh.nomor_reg',
+                'plh.tgl_permintaan',
+                'p.nomor_rm',
+                'o.nama AS nama_pasien',
                 'od.nama AS nama_dokter_perujuk',
             ])
-            ->join('registrasi.registrasi r',  'r.nomor_reg = plh.nomor_reg',         'left')
-            ->join('role.pasien p',             'p.id_pasien = r.id_pasien',            'left')
-            ->join('person.orang o',            'o.id_orang  = p.id_orang',             'left')
-            ->join('role.dokter d',             'd.id_dokter = plh.id_dokter_perujuk',  'left')
-            ->join('person.orang od',           'od.id_orang = d.id_orang',             'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg = plh.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien = r.id_pasien', 'left')
+            ->join('person.orang o', 'o.id_orang  = p.id_orang', 'left')
+            ->join('role.dokter d', 'd.id_dokter = plh.id_dokter_perujuk', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
             ->where('plh.id_permintaan', $idPermintaanLab)
-            ->get()->getRowArray() ?? [];
+            ->get()
+            ->getRowArray() ?? [];
 
         return view('Views/components/cetak/cetak_hasil_lab_pa', [
             'header'         => $header,
             'items'          => $this->fetchItemTerpilih($idPermintaanLab),
             'tgl_jam_hasil'  => $firstHasil['tgl_jam_hasil'] ?? '',
-            'nama_dokter_pj' => !empty($firstHasil['id_dokter_pj'])   ? $this->fetchNamaDokterPj((int) $firstHasil['id_dokter_pj'])  : null,
-            'nama_petugas'   => !empty($firstHasil['id_petugas_lab']) ? $this->fetchNamaPetugas((int) $firstHasil['id_petugas_lab']) : null,
+            'nama_dokter_pj' => !empty($firstHasil['id_dokter_pj'])
+                ? $this->fetchNamaDokterPj((int) $firstHasil['id_dokter_pj'])
+                : null,
+            'nama_petugas'   => !empty($firstHasil['id_petugas_lab'])
+                ? $this->fetchNamaPetugas((int) $firstHasil['id_petugas_lab'])
+                : null,
         ]);
     }
 }

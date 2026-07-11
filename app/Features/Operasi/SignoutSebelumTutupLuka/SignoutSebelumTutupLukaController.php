@@ -65,7 +65,8 @@ final class SignoutSebelumTutupLukaController extends ControllerTemplate
 
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
                 'j.id_jadwal',
@@ -78,47 +79,54 @@ final class SignoutSebelumTutupLukaController extends ControllerTemplate
                 'ob.nama AS nama_dokter_bedah',
                 'oa.nama AS nama_dokter_anestesi',
             ])
-            ->join('operasi.permintaan_operasi po',   'po.id_permintaan = j.id_permintaan',      'left')
-            ->join('registrasi.registrasi r',        'r.nomor_reg      = po.nomor_reg',         'left')
-            ->join('role.pasien p',                   'p.id_pasien      = r.id_pasien',          'left')
-            ->join('person.orang op',                 'op.id_orang      = p.id_orang',           'left')
-            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan',       'left')
-            ->join('role.dokter db',                  'db.id_dokter     = j.id_dokter_bedah',    'left')
-            ->join('person.orang ob',                 'ob.id_orang      = db.id_orang',          'left')
-            ->join('role.dokter da',                  'da.id_dokter     = j.id_dokter_anestesi', 'left')
-            ->join('person.orang oa',                 'oa.id_orang      = da.id_orang',          'left')
+            ->join('operasi.permintaan_operasi po', 'po.id_permintaan = j.id_permintaan', 'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg      = po.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien      = r.id_pasien', 'left')
+            ->join('person.orang op', 'op.id_orang      = p.id_orang', 'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
+            ->join('role.dokter db', 'db.id_dokter     = j.id_dokter_bedah', 'left')
+            ->join('person.orang ob', 'ob.id_orang      = db.id_orang', 'left')
+            ->join('role.dokter da', 'da.id_dokter     = j.id_dokter_anestesi', 'left')
+            ->join('person.orang oa', 'oa.id_orang      = da.id_orang', 'left')
             ->where('j.id_jadwal', $idJadwal)
-            ->get()->getRowArray() ?? [];
+            ->get()
+            ->getRowArray() ?? [];
     }
 
     private function fetchOptions(): array
     {
         return [
-            'spesimen' => $this->model->db
+            'spesimen' => $this->model
+                ->db
                 ->table('operasi.ref_status_spesimen')
                 ->select('id_status_spesimen, nama_status')
-                ->get()->getResultArray(),
+                ->get()
+                ->getResultArray(),
         ];
     }
 
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table("role.{$tabel} t")
             ->select('o.nama')
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
             ->where("t.{$idKolom}", $idValue)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return $row['nama'] ?? '';
     }
 
     private function fetchTindakanName(int $idTindakan): string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('operasi.ref_tindakan_operasi')
             ->select('nama_tindakan')
             ->where('id_tindakan', $idTindakan)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return $row['nama_tindakan'] ?? '';
     }
 
@@ -127,7 +135,10 @@ final class SignoutSebelumTutupLukaController extends ControllerTemplate
         $isCreate = $formAction === '/submittambah/';
         return [
             'judul'       => ($isCreate ? 'Tambah ' : 'Ubah ') . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => $isCreate ? 'Tambah' : 'Ubah', 'icon' => '']]),
+            'breadcrumbs' => array_merge($this->breadcrumbs, [[
+                'title' => $isCreate ? 'Tambah' : 'Ubah',
+                'icon'  => '',
+            ]]),
             'modul_path'  => $this->get_uri_path(),
             'form_action' => $formAction,
             'baris'       => $record,
@@ -146,16 +157,19 @@ final class SignoutSebelumTutupLukaController extends ControllerTemplate
         $idJadwal = (int) ($this->request->getGet('id_jadwal') ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
-        return view('admin/operasi/tambah_signout_sebelum_tutupluka',
-            $this->buildViewData($jadwal, [
+        return view('admin/operasi/tambah_signout_sebelum_tutupluka', $this->buildViewData(
+            $jadwal,
+            [
                 'id_jadwal'            => $idJadwal,
-                'id_tindakan'          => $jadwal['id_tindakan']          ?? '',
-                'nama_tindakan'        => $jadwal['nama_tindakan']        ?? '',
-                'id_dokter_bedah'      => $jadwal['id_dokter_bedah']      ?? '',
-                'nama_dokter_bedah'    => $jadwal['nama_dokter_bedah']    ?? '',
-                'id_dokter_anestesi'   => $jadwal['id_dokter_anestesi']   ?? '',
+                'id_tindakan'          => $jadwal['id_tindakan'] ?? '',
+                'nama_tindakan'        => $jadwal['nama_tindakan'] ?? '',
+                'id_dokter_bedah'      => $jadwal['id_dokter_bedah'] ?? '',
+                'nama_dokter_bedah'    => $jadwal['nama_dokter_bedah'] ?? '',
+                'id_dokter_anestesi'   => $jadwal['id_dokter_anestesi'] ?? '',
                 'nama_dokter_anestesi' => $jadwal['nama_dokter_anestesi'] ?? '',
-            ], '/submittambah/'));
+            ],
+            '/submittambah/',
+        ));
     }
 
     #[\Override]
@@ -165,30 +179,41 @@ final class SignoutSebelumTutupLukaController extends ControllerTemplate
         $idJadwal = (int) ($record['id_jadwal'] ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
-        if (($idDb = (int) ($record['id_dokter_bedah']    ?? 0)) > 0) {
-            $record['nama_dokter_bedah']    = $this->fetchNamaRole('dokter', 'id_dokter', $idDb);
+        if (($idDb = (int) ($record['id_dokter_bedah'] ?? 0)) > 0) {
+            $record['nama_dokter_bedah'] = $this->fetchNamaRole('dokter', 'id_dokter', $idDb);
         }
         if (($idDa = (int) ($record['id_dokter_anestesi'] ?? 0)) > 0) {
             $record['nama_dokter_anestesi'] = $this->fetchNamaRole('dokter', 'id_dokter', $idDa);
         }
-        if (($idT  = (int) ($record['id_tindakan']        ?? 0)) > 0) {
-            $record['nama_tindakan']        = $this->fetchTindakanName($idT);
+        if (($idT = (int) ($record['id_tindakan'] ?? 0)) > 0) {
+            $record['nama_tindakan'] = $this->fetchTindakanName($idT);
         }
-        if (($idSn = (int) ($record['id_sn_cn']           ?? 0)) > 0) {
-            $record['nama_sn_cn']           = $this->fetchNamaRole('petugas', 'id_petugas', $idSn);
+        if (($idSn = (int) ($record['id_sn_cn'] ?? 0)) > 0) {
+            $record['nama_sn_cn'] = $this->fetchNamaRole('petugas', 'id_petugas', $idSn);
         }
-        if (($idPo = (int) ($record['id_perawat_ok']      ?? 0)) > 0) {
-            $record['nama_perawat_ok']      = $this->fetchNamaRole('petugas', 'id_petugas', $idPo);
+        if (($idPo = (int) ($record['id_perawat_ok'] ?? 0)) > 0) {
+            $record['nama_perawat_ok'] = $this->fetchNamaRole('petugas', 'id_petugas', $idPo);
         }
 
-        foreach (['is_nama_tindakan_sesuai', 'is_kasa_lengkap', 'is_instrumen_lengkap', 'is_alat_tajam_lengkap', 'is_konfirmasi_bedah', 'is_konfirmasi_anestesi', 'is_konfirmasi_perawat'] as $field) {
+        foreach ([
+            'is_nama_tindakan_sesuai',
+            'is_kasa_lengkap',
+            'is_instrumen_lengkap',
+            'is_alat_tajam_lengkap',
+            'is_konfirmasi_bedah',
+            'is_konfirmasi_anestesi',
+            'is_konfirmasi_perawat',
+        ] as $field) {
             if (isset($record[$field])) {
-                $isTrue = ($record[$field] === true || $record[$field] == 1 || $record[$field] === 't');
+                $isTrue         = $record[$field] === true || $record[$field] == 1 || $record[$field] === 't';
                 $record[$field] = $isTrue ? '1' : '0';
             }
         }
 
-        return view('admin/operasi/tambah_signout_sebelum_tutupluka',
-            $this->buildViewData($jadwal, $record, '/submitedit/' . $id));
+        return view('admin/operasi/tambah_signout_sebelum_tutupluka', $this->buildViewData(
+            $jadwal,
+            $record,
+            '/submitedit/' . $id,
+        ));
     }
 }

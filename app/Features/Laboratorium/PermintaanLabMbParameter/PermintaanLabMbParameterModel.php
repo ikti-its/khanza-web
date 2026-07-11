@@ -13,18 +13,18 @@ final class PermintaanLabMbParameterModel extends ModelTemplate
         parent::__construct(
             new PermintaanLabMbParameterDatabase(),
             [
-                'id_mb_parameter'       => V::DEFAULT(),
+                'id_mb_parameter' => V::DEFAULT(),
             ],
             [
                 'id_permintaan_mb_item' => [
                     'id_permintaan_lab',
-                    'id_item_pemeriksaan'
+                    'id_item_pemeriksaan',
                 ],
                 'id_parameter'          => [
                     'nama_parameter',
                     'satuan',
                     'nilai_rujukan',
-                    'biaya_item'
+                    'biaya_item',
                 ],
             ],
         );

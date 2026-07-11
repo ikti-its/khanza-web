@@ -18,7 +18,7 @@ final class PermintaanOperasiModel extends ModelTemplate
                 'is_cito'       => V::DEFAULT(),
             ],
             [
-                'nomor_reg' => [
+                'nomor_reg'   => [
                     'nomor_reg',
                     'id_pasien' => [
                         'nomor_rm',

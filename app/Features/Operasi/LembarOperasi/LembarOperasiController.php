@@ -14,8 +14,8 @@ final class LembarOperasiController extends ControllerTemplate
         parent::__construct(
             new JadwalOperasiModel(),
             [
-                ['Operasi',         'operasi'],
-                ['Lembar Operasi',  'lembar_operasi'],
+                ['Operasi',        'operasi'],
+                ['Lembar Operasi', 'lembar_operasi'],
             ],
             'Lembar Operasi',
             [],
@@ -29,7 +29,8 @@ final class LembarOperasiController extends ControllerTemplate
 
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
                 'j.id_jadwal',
@@ -50,38 +51,40 @@ final class LembarOperasiController extends ControllerTemplate
                 'ob.nama AS nama_dokter_bedah',
                 'oa.nama AS nama_dokter_anestesi',
             ])
-            ->join('operasi.permintaan_operasi po',      'po.id_permintaan = j.id_permintaan',   'left')
-            ->join('registrasi.registrasi r',           'r.nomor_reg      = po.nomor_reg',       'left')
-            ->join('role.pasien p',                      'p.id_pasien      = r.id_pasien',        'left')
-            ->join('person.orang op',                    'op.id_orang      = p.id_orang',         'left')
-            ->join('role.dokter d',                      'd.id_dokter      = po.id_dokter',       'left')
-            ->join('person.orang od',                    'od.id_orang      = d.id_orang',         'left')
-            ->join('operasi.ref_tindakan_operasi ti',    'ti.id_tindakan   = po.id_tindakan',     'left')
-            ->join('ruangan.ruangan ru',                 'ru.id_ruangan    = j.id_ruangan',       'left')
-            ->join('role.dokter db',                     'db.id_dokter     = j.id_dokter_bedah',  'left')
-            ->join('person.orang ob',                    'ob.id_orang      = db.id_orang',        'left')
-            ->join('role.dokter da',                     'da.id_dokter     = j.id_dokter_anestesi', 'left')
-            ->join('person.orang oa',                    'oa.id_orang      = da.id_orang',        'left')
-            ->join('operasi.ref_status_operasi rs',      'rs.id_status     = j.id_status',        'left')
+            ->join('operasi.permintaan_operasi po', 'po.id_permintaan = j.id_permintaan', 'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg      = po.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien      = r.id_pasien', 'left')
+            ->join('person.orang op', 'op.id_orang      = p.id_orang', 'left')
+            ->join('role.dokter d', 'd.id_dokter      = po.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang      = d.id_orang', 'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
+            ->join('ruangan.ruangan ru', 'ru.id_ruangan    = j.id_ruangan', 'left')
+            ->join('role.dokter db', 'db.id_dokter     = j.id_dokter_bedah', 'left')
+            ->join('person.orang ob', 'ob.id_orang      = db.id_orang', 'left')
+            ->join('role.dokter da', 'da.id_dokter     = j.id_dokter_anestesi', 'left')
+            ->join('person.orang oa', 'oa.id_orang      = da.id_orang', 'left')
+            ->join('operasi.ref_status_operasi rs', 'rs.id_status     = j.id_status', 'left')
             ->where('j.id_jadwal', $idJadwal)
             ->get()
             ->getRowArray() ?? [];
     }
 
-    public function fetchTagihanId(int $idJadwal): ?int
+    public function fetchTagihanId(int $idJadwal): null|int
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('operasi.tagihan_operasi')
             ->select('id_tagihan')
             ->where('id_jadwal', $idJadwal)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
 
         return $row ? (int) $row['id_tagihan'] : null;
     }
 
     private function buildForms(int $idJadwal): array
     {
-        $sql = "SELECT
+        $sql = 'SELECT
             (SELECT id_pengkajian_pre   FROM operasi.pengkajian_preop          WHERE id_jadwal = ?) AS pengkajian_preop,
             (SELECT id_pre_anestesi     FROM operasi.pengkajian_pre_anestesi   WHERE id_jadwal = ?) AS pengkajian_pre_anestesi,
             (SELECT id_checklist        FROM operasi.checklist_pre_operasi     WHERE id_jadwal = ?) AS checklist_pre_operasi,
@@ -95,9 +98,9 @@ final class LembarOperasiController extends ControllerTemplate
             (SELECT id_skor_aldrette    FROM operasi.skor_aldrette             WHERE id_jadwal = ?) AS skor_aldrette,
             (SELECT id_skor_steward     FROM operasi.skor_steward              WHERE id_jadwal = ?) AS skor_steward,
             (SELECT id_skor_bromage     FROM operasi.skor_bromage              WHERE id_jadwal = ?) AS skor_bromage,
-            (SELECT id_penyerahan       FROM operasi.penyerahan_pasien         WHERE id_jadwal = ?) AS penyerahan_pasien";
+            (SELECT id_penyerahan       FROM operasi.penyerahan_pasien         WHERE id_jadwal = ?) AS penyerahan_pasien';
 
-        $bindings = array_fill(0, 14, $idJadwal);
+        $bindings        = array_fill(0, 14, $idJadwal);
         $existingRecords = $this->model->db->query($sql, $bindings)->getRowArray() ?? [];
 
         // Helper mapper untuk array
@@ -109,26 +112,26 @@ final class LembarOperasiController extends ControllerTemplate
         ];
 
         return [
-            'Pre-Operasi' => [
-                $entry('Pengkajian Pre-Operasi',  'pengkajian-pre-operasi',  'pengkajian_preop'),
+            'Pre-Operasi'   => [
+                $entry('Pengkajian Pre-Operasi', 'pengkajian-pre-operasi', 'pengkajian_preop'),
                 $entry('Pengkajian Pre-Anestesi', 'pengkajian-pre-anestesi', 'pengkajian_pre_anestesi'),
-                $entry('Checklist Pre-Operasi',   'checklist-pre-operasi',   'checklist_pre_operasi'),
+                $entry('Checklist Pre-Operasi', 'checklist-pre-operasi', 'checklist_pre_operasi'),
             ],
             'Intra-Operasi' => [
-                $entry('Sign-in Sebelum Anestesi',  'sign-in-sebelum-anestesi', 'signin_sebelum_anestesi'),
-                $entry('Pengkajian Pre-Induksi',    'pengkajian-pre-induksi',   'pengkajian_pre_induksi'),
-                $entry('Time Out Sebelum Insisi',   'time-out-sebelum-insisi',  'time_out_sebelum_insisi'),
-                $entry('Catatan Anestesi & Sedasi', 'catatan-anestesi-sedasi',  'catatan_anestesi_sedasi'),
+                $entry('Sign-in Sebelum Anestesi', 'sign-in-sebelum-anestesi', 'signin_sebelum_anestesi'),
+                $entry('Pengkajian Pre-Induksi', 'pengkajian-pre-induksi', 'pengkajian_pre_induksi'),
+                $entry('Time Out Sebelum Insisi', 'time-out-sebelum-insisi', 'time_out_sebelum_insisi'),
+                $entry('Catatan Anestesi & Sedasi', 'catatan-anestesi-sedasi', 'catatan_anestesi_sedasi'),
                 $entry('Sign-out Sebelum Tutup Luka', 'sign-out-sebelum-tutup-luka', 'signout_sebelum_tutupluka'),
             ],
-            'Post-Operasi' => [
-                $entry('Catatan Pasca Operasi',   'catatan-paska-operasi',  'catatan_paska_operasi'),
+            'Post-Operasi'  => [
+                $entry('Catatan Pasca Operasi', 'catatan-paska-operasi', 'catatan_paska_operasi'),
                 $entry('Checklist Post-Operasi', 'checklist-post-operasi', 'checklist_postop'),
-                $entry('Skor Aldrette',          'skor-aldrette',          'skor_aldrette'),
-                $entry('Skor Steward',           'skor-steward',           'skor_steward'),
-                $entry('Skor Bromage',           'skor-bromage',           'skor_bromage'),
+                $entry('Skor Aldrette', 'skor-aldrette', 'skor_aldrette'),
+                $entry('Skor Steward', 'skor-steward', 'skor_steward'),
+                $entry('Skor Bromage', 'skor-bromage', 'skor_bromage'),
             ],
-            'Transfer' => [
+            'Transfer'      => [
                 $entry('Penyerahan Pasien', 'penyerahan-pasien', 'penyerahan_pasien'),
             ],
         ];
@@ -173,7 +176,7 @@ final class LembarOperasiController extends ControllerTemplate
     public function update(int|string $id): string|RedirectResponse
     {
         $newStatus = (int) ($this->request->getPost('id_status') ?? 0);
-        
+
         if (!in_array($newStatus, [3, 4, 5], true)) {
             session()->setFlashdata('error', 'Status tidak valid.');
             return redirect()->to($this->get_uri_path() . '/data?id_jadwal=' . $id);
@@ -189,8 +192,8 @@ final class LembarOperasiController extends ControllerTemplate
             $this->model->update($id, ['id_status' => $newStatus]);
             session()->setFlashdata('success', $messages[$newStatus]);
         } catch (\Exception $e) {
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException 
-                ? $this->friendly_db_error($e) 
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
         }

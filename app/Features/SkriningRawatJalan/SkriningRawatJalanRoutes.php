@@ -13,10 +13,10 @@ final class SkriningRawatJalanRoutes extends RouteTemplate
             'Skrining Rawat Jalan',
             [
                 \App\Features\SkriningRawatJalan\SkriningRawatJalan\SkriningRawatJalanController::class,
-                \App\Features\SkriningRawatJalan\RefSkriningBatuk\RefSkriningBatukController::class => 'HIDE',
-                \App\Features\SkriningRawatJalan\RefSkriningKeputusan\RefSkriningKeputusanController::class => 'HIDE',
-                \App\Features\SkriningRawatJalan\RefSkriningKesadaran\RefSkriningKesadaranController::class => 'HIDE',
-                \App\Features\SkriningRawatJalan\RefSkriningNyeriDada\RefSkriningNyeriDadaController::class => 'HIDE',
+                \App\Features\SkriningRawatJalan\RefSkriningBatuk\RefSkriningBatukController::class           => 'HIDE',
+                \App\Features\SkriningRawatJalan\RefSkriningKeputusan\RefSkriningKeputusanController::class   => 'HIDE',
+                \App\Features\SkriningRawatJalan\RefSkriningKesadaran\RefSkriningKesadaranController::class   => 'HIDE',
+                \App\Features\SkriningRawatJalan\RefSkriningNyeriDada\RefSkriningNyeriDadaController::class   => 'HIDE',
                 \App\Features\SkriningRawatJalan\RefSkriningPernafasan\RefSkriningPernafasanController::class => 'HIDE',
                 \App\Features\SkriningRawatJalan\RefSkriningSkalaNyeri\RefSkriningSkalaNyeriController::class => 'HIDE',
             ],
@@ -24,4 +24,3 @@ final class SkriningRawatJalanRoutes extends RouteTemplate
         );
     }
 }
-

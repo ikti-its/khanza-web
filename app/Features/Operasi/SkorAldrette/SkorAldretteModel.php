@@ -13,14 +13,14 @@ final class SkorAldretteModel extends ModelTemplate
         parent::__construct(
             new SkorAldretteDatabase(),
             [
-                'id_skor_aldrette'   => V::DEFAULT(),
-                'waktu_penilaian'    => V::DEFAULT(),
-                'is_boleh_pindah' => V::DEFAULT(),
-                'catatan_keluar'  => V::DEFAULT(),
-                'instruksi_rr'    => V::DEFAULT(),
+                'id_skor_aldrette' => V::DEFAULT(),
+                'waktu_penilaian'  => V::DEFAULT(),
+                'is_boleh_pindah'  => V::DEFAULT(),
+                'catatan_keluar'   => V::DEFAULT(),
+                'instruksi_rr'     => V::DEFAULT(),
             ],
             [
-                'id_jadwal' => [
+                'id_jadwal'          => [
                     'tanggal',
                     'id_permintaan' => [
                         'nomor_reg',
@@ -32,10 +32,10 @@ final class SkorAldretteModel extends ModelTemplate
                     ],
                 ],
                 'id_petugas'         => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_dokter_anestesi' => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'skor_aktivitas'     => ['nama_skala', 'nilai'],
                 'skor_respirasi'     => ['nama_skala', 'nilai'],

@@ -13,15 +13,15 @@ final class JadwalOperasiModel extends ModelTemplate
         parent::__construct(
             new JadwalOperasiDatabase(),
             [
-                'id_jadwal'            => V::DEFAULT(),
-                'nomor_operasi'        => V::DEFAULT(),
-                'tanggal'              => V::DEFAULT(),
-                'waktu_mulai'          => V::DEFAULT(),
-                'waktu_selesai'        => V::DEFAULT(),
-                'tanggal_selesai'      => V::DEFAULT(),
+                'id_jadwal'       => V::DEFAULT(),
+                'nomor_operasi'   => V::DEFAULT(),
+                'tanggal'         => V::DEFAULT(),
+                'waktu_mulai'     => V::DEFAULT(),
+                'waktu_selesai'   => V::DEFAULT(),
+                'tanggal_selesai' => V::DEFAULT(),
             ],
             [
-                'id_permintaan' => [
+                'id_permintaan'      => [
                     'nomor_reg',
                     'nomor_reg' => [
                         'id_pasien' => [

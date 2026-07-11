@@ -40,7 +40,8 @@ final class RefTindakanOperasiController extends ControllerTemplate
 
     public function list()
     {
-        $rows = $this->model->db
+        $rows = $this->model
+            ->db
             ->table('operasi.ref_tindakan_operasi')
             ->select(['id_tindakan', 'kode_tindakan', 'nama_tindakan', 'tarif_kelas_3'])
             ->orderBy('nama_tindakan', 'ASC')

@@ -13,8 +13,8 @@ final class HasilLabPkModel extends ModelTemplate
         parent::__construct(
             new HasilLabPkDatabase(),
             [
-                'id_hasil_pk'      => V::DEFAULT(),
-                'tgl_jam_hasil'    => V::DEFAULT(),
+                'id_hasil_pk'   => V::DEFAULT(),
+                'tgl_jam_hasil' => V::DEFAULT(),
             ],
             [
                 'id_permintaan_lab'     => ['no_permintaan'],

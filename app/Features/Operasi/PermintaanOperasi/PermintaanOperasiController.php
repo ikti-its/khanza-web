@@ -46,19 +46,24 @@ final class PermintaanOperasiController extends ControllerTemplate
     {
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn($f) => !in_array($f[2], [
-                'id_permintaan',
-                'nomor_reg',
-                'id_dokter',
-                'tanggal_minta',
-                'is_cito',
-            ], true)
+            fn($f) => !in_array(
+                $f[2],
+                [
+                    'id_permintaan',
+                    'nomor_reg',
+                    'id_dokter',
+                    'tanggal_minta',
+                    'is_cito',
+                ],
+                true,
+            ),
         ));
     }
 
     private function fetchRegistrasi(string $nomorReg): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('registrasi.registrasi r')
             ->select([
                 'r.nomor_reg',
@@ -68,10 +73,10 @@ final class PermintaanOperasiController extends ControllerTemplate
                 'd.kode_dokter',
                 'od.nama AS nama_dokter',
             ])
-            ->join('role.pasien p',   'p.id_pasien = r.id_pasien')
-            ->join('person.orang o',  'o.id_orang  = p.id_orang')
-            ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
-            ->join('person.orang od', 'od.id_orang = d.id_orang',  'left')
+            ->join('role.pasien p', 'p.id_pasien = r.id_pasien')
+            ->join('person.orang o', 'o.id_orang  = p.id_orang')
+            ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
             ->where('r.nomor_reg', $nomorReg)
             ->get()
             ->getRowArray() ?? [];
@@ -79,18 +84,21 @@ final class PermintaanOperasiController extends ControllerTemplate
 
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): array
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table("role.{$tabel} t")
             ->select(['t.id_dokter', 't.kode_dokter', 'o.nama AS nama_dokter'])
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
             ->where("t.{$idKolom}", $idValue)
-            ->get()->getRowArray() ?? [];
+            ->get()
+            ->getRowArray() ?? [];
         return $row;
     }
 
     private function fetchTindakan(int $idTindakan): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.ref_tindakan_operasi')
             ->select(['id_tindakan', 'nama_tindakan'])
             ->where('id_tindakan', $idTindakan)
@@ -101,11 +109,11 @@ final class PermintaanOperasiController extends ControllerTemplate
     private function buildHeaderData(array $rawPost, bool $isCreate = false): array
     {
         return [
-            'nomor_reg'     => $rawPost['nomor_reg']     ?? '',
-            'id_dokter'     => $rawPost['id_dokter']     ?? '',
-            'id_tindakan'   => $rawPost['id_tindakan']   ?? '',
+            'nomor_reg'     => $rawPost['nomor_reg'] ?? '',
+            'id_dokter'     => $rawPost['id_dokter'] ?? '',
+            'id_tindakan'   => $rawPost['id_tindakan'] ?? '',
             'tanggal_minta' => $rawPost['tanggal_minta'] ?? ($isCreate ? date('Y-m-d H:i:s') : ''),
-            'is_cito'       => $rawPost['is_cito']       ?? 0,
+            'is_cito'       => $rawPost['is_cito'] ?? 0,
         ];
     }
 
@@ -122,11 +130,13 @@ final class PermintaanOperasiController extends ControllerTemplate
     #[\Override]
     protected function after_read(array &$data_tabel): void
     {
-        if (empty($data_tabel)) return;
+        if (empty($data_tabel))
+            return;
 
         $ids = array_column($data_tabel, 'id_permintaan');
 
-        $jadwals = $this->model->db
+        $jadwals = $this->model
+            ->db
             ->table('operasi.jadwal_operasi')
             ->select(['id_permintaan', 'id_jadwal', 'id_status'])
             ->whereIn('id_permintaan', $ids)
@@ -139,7 +149,7 @@ final class PermintaanOperasiController extends ControllerTemplate
         }
 
         foreach ($data_tabel as &$row) {
-            $j = $map[$row['id_permintaan']] ?? null;
+            $j                = $map[$row['id_permintaan']] ?? null;
             $row['id_jadwal'] = $j['id_jadwal'] ?? null;
             $row['id_status'] = $j['id_status'] ?? null;
         }
@@ -220,10 +230,11 @@ final class PermintaanOperasiController extends ControllerTemplate
 
             session()->setFlashdata('success', 'Permintaan operasi berhasil disimpan.');
             return redirect()->to($this->get_uri_path() . '/data');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
@@ -232,7 +243,8 @@ final class PermintaanOperasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $data = $this->buildHeaderData($this->request->getPost(), false);
 
@@ -241,9 +253,10 @@ final class PermintaanOperasiController extends ControllerTemplate
 
             session()->setFlashdata('success', 'Permintaan operasi berhasil diperbarui.');
             return redirect()->to($this->get_uri_path() . '/data');
-
         } catch (\Exception $e) {
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
@@ -251,7 +264,8 @@ final class PermintaanOperasiController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $rows = $this->model->db
+        $rows = $this->model
+            ->db
             ->table('operasi.permintaan_operasi po')
             ->select([
                 'po.id_permintaan',
@@ -265,13 +279,13 @@ final class PermintaanOperasiController extends ControllerTemplate
                 'jo.id_jadwal',
                 'jo.id_status',
             ])
-            ->join('registrasi.registrasi r',        'r.nomor_reg      = po.nomor_reg',     'left')
-            ->join('role.pasien p',                   'p.id_pasien      = r.id_pasien',      'left')
-            ->join('person.orang o',                  'o.id_orang       = p.id_orang',       'left')
-            ->join('role.dokter d',                   'd.id_dokter      = po.id_dokter',     'left')
-            ->join('person.orang od',                 'od.id_orang      = d.id_orang',       'left')
-            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan',   'left')
-            ->join('operasi.jadwal_operasi jo',       'jo.id_permintaan = po.id_permintaan', 'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg      = po.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien      = r.id_pasien', 'left')
+            ->join('person.orang o', 'o.id_orang       = p.id_orang', 'left')
+            ->join('role.dokter d', 'd.id_dokter      = po.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang      = d.id_orang', 'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
+            ->join('operasi.jadwal_operasi jo', 'jo.id_permintaan = po.id_permintaan', 'left')
             ->orderBy('po.is_cito', 'DESC')
             ->orderBy('po.tanggal_minta', 'DESC')
             ->get()
@@ -283,7 +297,8 @@ final class PermintaanOperasiController extends ControllerTemplate
     #[\Override]
     final public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $this->model->db->transStart();
 
@@ -300,14 +315,14 @@ final class PermintaanOperasiController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Permintaan operasi berhasil dihapus.');
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
         }
 
         return $this->home();
     }
-
 }

@@ -22,10 +22,10 @@ final class HasilLabMbModel extends ModelTemplate
                     'id_item_pemeriksaan' => ['kode_periksa', 'nama_item', 'tarif'],
                 ],
                 'id_dokter_pj'          => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_petugas_lab'        => [
-                    'id_orang' => ['nama']
+                    'id_orang' => ['nama'],
                 ],
             ],
         );

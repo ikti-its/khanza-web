@@ -14,7 +14,7 @@ final class RefKomponenJasaController extends ControllerTemplate
         parent::__construct(
             new RefKomponenJasaModel(),
             [
-                ['Operasi',               'operasi'],
+                ['Operasi',                 'operasi'],
                 ['Referensi Komponen Jasa', 'ref_komponen_jasa'],
             ],
             'Referensi Komponen Jasa',

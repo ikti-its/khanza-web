@@ -26,10 +26,10 @@ final class HasilRadBhpController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_rad_bhp',      'ID Radiologi BHP'],
-                [HIDE, REQUIRED, I::INDEX,  'id_hasil_rad',    'Hasil Radiologi'],
-                [SHOW, REQUIRED, I::INDEX,  'id_barang',       'BHP Radiologi'],
-                [SHOW, REQUIRED, I::NUMBER, 'jumlah_pakai',    'Jumlah Pakai'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_rad_bhp',   'ID Radiologi BHP'],
+                [HIDE, REQUIRED, I::INDEX,  'id_hasil_rad', 'Hasil Radiologi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_barang',    'BHP Radiologi'],
+                [SHOW, REQUIRED, I::NUMBER, 'jumlah_pakai', 'Jumlah Pakai'],
             ],
         );
     }

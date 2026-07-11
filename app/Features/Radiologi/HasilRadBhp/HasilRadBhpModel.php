@@ -13,15 +13,15 @@ final class HasilRadBhpModel extends ModelTemplate
         parent::__construct(
             new HasilRadBhpDatabase(),
             [
-                'id_rad_bhp'      => V::DEFAULT(),
-                'jumlah_pakai'    => V::DEFAULT(),
+                'id_rad_bhp'   => V::DEFAULT(),
+                'jumlah_pakai' => V::DEFAULT(),
             ],
             [
-                'id_hasil_rad'    => [],
-                'id_barang'       => [
+                'id_hasil_rad' => [],
+                'id_barang'    => [
                     'kode_barang',
                     'nama_barang',
-                    'id_satuan' =>['nama_satuan']
+                    'id_satuan' => ['nama_satuan'],
                 ],
             ],
         );

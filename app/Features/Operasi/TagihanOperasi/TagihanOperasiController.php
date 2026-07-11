@@ -15,8 +15,8 @@ final class TagihanOperasiController extends ControllerTemplate
         parent::__construct(
             new TagihanOperasiModel(),
             [
-                ['Operasi',          'operasi'],
-                ['Tagihan Operasi',  'tagihan_operasi'],
+                ['Operasi',         'operasi'],
+                ['Tagihan Operasi', 'tagihan_operasi'],
             ],
             'Tagihan Operasi',
             [
@@ -43,7 +43,8 @@ final class TagihanOperasiController extends ControllerTemplate
 
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
                 'j.id_jadwal',
@@ -61,15 +62,15 @@ final class TagihanOperasiController extends ControllerTemplate
                 'ob.nama AS nama_dokter_bedah',
                 'oa.nama AS nama_dokter_anestesi',
             ])
-            ->join('operasi.permintaan_operasi po',      'po.id_permintaan  = j.id_permintaan',   'left')
-            ->join('registrasi.registrasi r',            'r.nomor_reg       = po.nomor_reg',      'left')
-            ->join('role.pasien p',                      'p.id_pasien       = r.id_pasien',       'left')
-            ->join('person.orang op',                    'op.id_orang       = p.id_orang',        'left')
-            ->join('operasi.ref_tindakan_operasi ti',    'ti.id_tindakan    = po.id_tindakan',    'left')
-            ->join('role.dokter db',                     'db.id_dokter      = j.id_dokter_bedah', 'left')
-            ->join('person.orang ob',                    'ob.id_orang       = db.id_orang',       'left')
-            ->join('role.dokter da',                     'da.id_dokter      = j.id_dokter_anestesi', 'left')
-            ->join('person.orang oa',                    'oa.id_orang       = da.id_orang',       'left')
+            ->join('operasi.permintaan_operasi po', 'po.id_permintaan  = j.id_permintaan', 'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg       = po.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien       = r.id_pasien', 'left')
+            ->join('person.orang op', 'op.id_orang       = p.id_orang', 'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan    = po.id_tindakan', 'left')
+            ->join('role.dokter db', 'db.id_dokter      = j.id_dokter_bedah', 'left')
+            ->join('person.orang ob', 'ob.id_orang       = db.id_orang', 'left')
+            ->join('role.dokter da', 'da.id_dokter      = j.id_dokter_anestesi', 'left')
+            ->join('person.orang oa', 'oa.id_orang       = da.id_orang', 'left')
             ->where('j.id_jadwal', $idJadwal)
             ->get()
             ->getRowArray() ?? [];
@@ -77,21 +78,24 @@ final class TagihanOperasiController extends ControllerTemplate
 
     private function fetchTimJadwal(int $idJadwal): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.jadwal_operasi_tim jt')
             ->select('jt.id_dokter, jt.id_petugas, rp.kode AS peran, COALESCE(od.nama, op.nama) AS nama', false)
             ->join('operasi.ref_peran_tim_medis rp', 'rp.id_peran = jt.id_peran', 'left')
-            ->join('role.dokter d',   'd.id_dokter   = jt.id_dokter',  'left')
-            ->join('person.orang od', 'od.id_orang   = d.id_orang',    'left')
+            ->join('role.dokter d', 'd.id_dokter   = jt.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang   = d.id_orang', 'left')
             ->join('role.petugas pt', 'pt.id_petugas = jt.id_petugas', 'left')
-            ->join('person.orang op', 'op.id_orang   = pt.id_orang',   'left')
+            ->join('person.orang op', 'op.id_orang   = pt.id_orang', 'left')
             ->where('jt.id_jadwal', $idJadwal)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
     }
 
     private function fetchKategori(): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.ref_kategori_operasi')
             ->select(['id_kategori', 'nama_kategori'])
             ->orderBy('id_kategori', 'ASC')
@@ -101,12 +105,19 @@ final class TagihanOperasiController extends ControllerTemplate
 
     private function fetchPaketTagihan(int $idTagihan): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.tagihan_operasi_tindakan tt')
-            ->select(['tt.id_paket', 'p.id_tindakan', 'k.nama_komponen', 'p.tarif_kelas_3 AS tarif', 'ti.nama_tindakan'])
-            ->join('operasi.paket_tindakan_operasi p', 'p.id_paket = tt.id_paket',  'left')
-            ->join('operasi.ref_komponen_jasa k',      'k.id_komponen = p.id_komponen', 'left')
-            ->join('operasi.ref_tindakan_operasi ti',  'ti.id_tindakan = p.id_tindakan', 'left')
+            ->select([
+                'tt.id_paket',
+                'p.id_tindakan',
+                'k.nama_komponen',
+                'p.tarif_kelas_3 AS tarif',
+                'ti.nama_tindakan',
+            ])
+            ->join('operasi.paket_tindakan_operasi p', 'p.id_paket = tt.id_paket', 'left')
+            ->join('operasi.ref_komponen_jasa k', 'k.id_komponen = p.id_komponen', 'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan = p.id_tindakan', 'left')
             ->where('tt.id_tagihan', $idTagihan)
             ->get()
             ->getResultArray();
@@ -114,10 +125,11 @@ final class TagihanOperasiController extends ControllerTemplate
 
     private function fetchPaketByTindakan(int $idTindakan): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.paket_tindakan_operasi p')
             ->select(['p.id_paket', 'p.id_tindakan', 'k.nama_komponen', 'p.tarif_kelas_3 AS tarif', 'ti.nama_tindakan'])
-            ->join('operasi.ref_komponen_jasa k',     'k.id_komponen  = p.id_komponen',  'left')
+            ->join('operasi.ref_komponen_jasa k', 'k.id_komponen  = p.id_komponen', 'left')
             ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan = p.id_tindakan', 'left')
             ->where('p.id_tindakan', $idTindakan)
             ->orderBy('p.id_komponen', 'ASC')
@@ -127,9 +139,17 @@ final class TagihanOperasiController extends ControllerTemplate
 
     private function fetchObat(int $idTagihan): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.tagihan_operasi_obat o')
-            ->select(['o.id_detail', 'o.id_barang', 'b.kode_barang', 'b.nama AS nama_barang', 'o.jumlah', 'b.h_dasar AS harga'])
+            ->select([
+                'o.id_detail',
+                'o.id_barang',
+                'b.kode_barang',
+                'b.nama AS nama_barang',
+                'o.jumlah',
+                'b.h_dasar AS harga',
+            ])
             ->join('inventori_medis.data_barang b', 'b.id_barang = o.id_barang', 'left')
             ->where('o.id_tagihan', $idTagihan)
             ->get()
@@ -139,16 +159,31 @@ final class TagihanOperasiController extends ControllerTemplate
     private function resolveTimMedisNames(array $baris): array
     {
         $dokterCols = [
-            'id_operator_1', 'id_operator_2', 'id_operator_3',
-            'id_dokter_anestesi', 'id_dokter_anak', 'id_dokter_pj_anak', 'id_dokter_umum',
-            'id_ast_operator_1', 'id_ast_operator_2', 'id_ast_operator_3',
+            'id_operator_1',
+            'id_operator_2',
+            'id_operator_3',
+            'id_dokter_anestesi',
+            'id_dokter_anak',
+            'id_dokter_pj_anak',
+            'id_dokter_umum',
+            'id_ast_operator_1',
+            'id_ast_operator_2',
+            'id_ast_operator_3',
         ];
         $petugasCols = [
-            'id_bidan_1', 'id_bidan_2', 'id_bidan_3',
-            'id_perawat_luar', 'id_instrumen',
-            'id_ast_anestesi_1', 'id_ast_anestesi_2',
+            'id_bidan_1',
+            'id_bidan_2',
+            'id_bidan_3',
+            'id_perawat_luar',
+            'id_instrumen',
+            'id_ast_anestesi_1',
+            'id_ast_anestesi_2',
             'id_perawat_resus',
-            'id_onloop_1', 'id_onloop_2', 'id_onloop_3', 'id_onloop_4', 'id_onloop_5',
+            'id_onloop_1',
+            'id_onloop_2',
+            'id_onloop_3',
+            'id_onloop_4',
+            'id_onloop_5',
         ];
 
         $dokterIds  = array_values(array_filter(array_map(fn($k) => $baris[$k] ?? null, $dokterCols)));
@@ -158,33 +193,39 @@ final class TagihanOperasiController extends ControllerTemplate
         $petugasNames = [];
 
         if ($dokterIds) {
-            foreach ($this->model->db->table('role.dokter d')
+            foreach ($this->model
+                ->db
+                ->table('role.dokter d')
                 ->select(['d.id_dokter', 'o.nama'])
                 ->join('person.orang o', 'o.id_orang = d.id_orang', 'left')
                 ->whereIn('d.id_dokter', $dokterIds)
-                ->get()->getResultArray() as $row) {
+                ->get()
+                ->getResultArray() as $row) {
                 $dokterNames[(int) $row['id_dokter']] = $row['nama'];
             }
         }
 
         if ($petugasIds) {
-            foreach ($this->model->db->table('role.petugas pt')
+            foreach ($this->model
+                ->db
+                ->table('role.petugas pt')
                 ->select(['pt.id_petugas', 'o.nama'])
                 ->join('person.orang o', 'o.id_orang = pt.id_orang', 'left')
                 ->whereIn('pt.id_petugas', $petugasIds)
-                ->get()->getResultArray() as $row) {
+                ->get()
+                ->getResultArray() as $row) {
                 $petugasNames[(int) $row['id_petugas']] = $row['nama'];
             }
         }
 
         $names = [];
         foreach ($dokterCols as $col) {
-            $id = $baris[$col] ?? null;
-            $names['nama_' . substr($col, 3)] = $id ? ($dokterNames[(int) $id] ?? '') : '';
+            $id                               = $baris[$col] ?? null;
+            $names['nama_' . substr($col, 3)] = $id ? $dokterNames[(int) $id] ?? '' : '';
         }
         foreach ($petugasCols as $col) {
-            $id = $baris[$col] ?? null;
-            $names['nama_' . substr($col, 3)] = $id ? ($petugasNames[(int) $id] ?? '') : '';
+            $id                               = $baris[$col] ?? null;
+            $names['nama_' . substr($col, 3)] = $id ? $petugasNames[(int) $id] ?? '' : '';
         }
 
         return $names;
@@ -207,15 +248,16 @@ final class TagihanOperasiController extends ControllerTemplate
         }
 
         // Mapping dokter jadwal → field tagihan
-        $jadwal['id_operator_1']       = $jadwal['id_dokter_bedah']      ?? null;
-        $jadwal['nama_operator_1']     = $jadwal['nama_dokter_bedah']     ?? '';
+        $jadwal['id_operator_1']   = $jadwal['id_dokter_bedah'] ?? null;
+        $jadwal['nama_operator_1'] = $jadwal['nama_dokter_bedah'] ?? '';
         // id_dokter_anestesi dan nama_dokter_anestesi sudah same key, langsung tersedia
 
         // Tim medis tambahan dari jadwal → field tagihan sesuai kode peran
         if ($idJadwal) {
             foreach ($this->fetchTimJadwal($idJadwal) as $anggota) {
                 $peran = $anggota['peran'] ?? '';
-                if ($peran === '' || $peran === null) continue;
+                if ($peran === '' || $peran === null)
+                    continue;
                 $jadwal['id_' . $peran]   = $anggota['id_dokter'] ?: $anggota['id_petugas'];
                 $jadwal['nama_' . $peran] = $anggota['nama'] ?? '';
             }
@@ -245,15 +287,15 @@ final class TagihanOperasiController extends ControllerTemplate
         }
 
         return view('admin/operasi/tagihan_operasi_form', [
-            'judul'             => 'Ubah Tagihan Operasi',
-            'breadcrumbs'       => [...$this->breadcrumbs, ['title' => 'Ubah', 'icon' => 'ubah']],
-            'modul_path'        => $this->get_uri_path(),
-            'kolom_id'          => $this->model->primaryKey,
-            'form_action'       => "/submitedit/{$id}",
-            'baris'             => $baris,
+            'judul'          => 'Ubah Tagihan Operasi',
+            'breadcrumbs'    => [...$this->breadcrumbs, ['title' => 'Ubah', 'icon' => 'ubah']],
+            'modul_path'     => $this->get_uri_path(),
+            'kolom_id'       => $this->model->primaryKey,
+            'form_action'    => "/submitedit/{$id}",
+            'baris'          => $baris,
             'paket_terpilih' => $this->fetchPaketTagihan((int) $id),
-            'obat'              => $this->fetchObat((int) $id),
-            'kategori'          => $this->fetchKategori(),
+            'obat'           => $this->fetchObat((int) $id),
+            'kategori'       => $this->fetchKategori(),
         ]);
     }
 
@@ -292,7 +334,6 @@ final class TagihanOperasiController extends ControllerTemplate
 
             session()->setFlashdata('success', 'Tagihan operasi berhasil dibuat.');
             return redirect()->to($this->get_uri_path() . '/data');
-
         } catch (\Exception $e) {
             $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
@@ -305,7 +346,8 @@ final class TagihanOperasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $rawPost = $this->request->getPost();
         $data    = $this->buildData($rawPost);
@@ -341,7 +383,6 @@ final class TagihanOperasiController extends ControllerTemplate
 
             session()->setFlashdata('success', 'Tagihan operasi berhasil diperbarui.');
             return redirect()->to($this->get_uri_path() . '/data');
-
         } catch (\Exception $e) {
             $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
                 ? $this->friendly_db_error($e)
@@ -358,64 +399,74 @@ final class TagihanOperasiController extends ControllerTemplate
     private function buildData(array $post): array
     {
         return [
-            'id_jadwal'          => $post['id_jadwal']          ?? null,
-            'id_kategori'        => $post['id_kategori']        ?? null,
-            'jenis_anestesi'     => $post['jenis_anestesi']     ?? null,
-            'tanggal_mulai'      => $post['tanggal_mulai']      ?: null,
-            'tanggal_selesai'    => $post['tanggal_selesai']    ?: null,
-            'diagnosis_pre'      => $post['diagnosis_pre']      ?? null,
-            'diagnosis_post'     => $post['diagnosis_post']     ?? null,
-            'jaringan'           => $post['jaringan']           ?? null,
-            'laporan'            => $post['laporan']            ?? null,
+            'id_jadwal'          => $post['id_jadwal'] ?? null,
+            'id_kategori'        => $post['id_kategori'] ?? null,
+            'jenis_anestesi'     => $post['jenis_anestesi'] ?? null,
+            'tanggal_mulai'      => $post['tanggal_mulai'] ?: null,
+            'tanggal_selesai'    => $post['tanggal_selesai'] ?: null,
+            'diagnosis_pre'      => $post['diagnosis_pre'] ?? null,
+            'diagnosis_post'     => $post['diagnosis_post'] ?? null,
+            'jaringan'           => $post['jaringan'] ?? null,
+            'laporan'            => $post['laporan'] ?? null,
             'is_pa'              => isset($post['is_pa']),
-            'id_operator_1'      => $post['id_operator_1']      ?: null,
-            'id_operator_2'      => $post['id_operator_2']      ?: null,
-            'id_operator_3'      => $post['id_operator_3']      ?: null,
+            'id_operator_1'      => $post['id_operator_1'] ?: null,
+            'id_operator_2'      => $post['id_operator_2'] ?: null,
+            'id_operator_3'      => $post['id_operator_3'] ?: null,
             'id_dokter_anestesi' => $post['id_dokter_anestesi'] ?: null,
-            'id_dokter_anak'     => $post['id_dokter_anak']     ?: null,
-            'id_dokter_pj_anak'  => $post['id_dokter_pj_anak']  ?: null,
-            'id_dokter_umum'     => $post['id_dokter_umum']     ?: null,
-            'id_ast_operator_1'  => $post['id_ast_operator_1']  ?: null,
-            'id_ast_operator_2'  => $post['id_ast_operator_2']  ?: null,
-            'id_ast_operator_3'  => $post['id_ast_operator_3']  ?: null,
-            'id_bidan_1'         => $post['id_bidan_1']         ?: null,
-            'id_bidan_2'         => $post['id_bidan_2']         ?: null,
-            'id_bidan_3'         => $post['id_bidan_3']         ?: null,
-            'id_perawat_luar'    => $post['id_perawat_luar']    ?: null,
-            'id_instrumen'       => $post['id_instrumen']       ?: null,
-            'id_ast_anestesi_1'  => $post['id_ast_anestesi_1']  ?: null,
-            'id_ast_anestesi_2'  => $post['id_ast_anestesi_2']  ?: null,
-            'id_perawat_resus'   => $post['id_perawat_resus']   ?: null,
-            'id_onloop_1'        => $post['id_onloop_1']        ?: null,
-            'id_onloop_2'        => $post['id_onloop_2']        ?: null,
-            'id_onloop_3'        => $post['id_onloop_3']        ?: null,
-            'id_onloop_4'        => $post['id_onloop_4']        ?: null,
-            'id_onloop_5'        => $post['id_onloop_5']        ?: null,
+            'id_dokter_anak'     => $post['id_dokter_anak'] ?: null,
+            'id_dokter_pj_anak'  => $post['id_dokter_pj_anak'] ?: null,
+            'id_dokter_umum'     => $post['id_dokter_umum'] ?: null,
+            'id_ast_operator_1'  => $post['id_ast_operator_1'] ?: null,
+            'id_ast_operator_2'  => $post['id_ast_operator_2'] ?: null,
+            'id_ast_operator_3'  => $post['id_ast_operator_3'] ?: null,
+            'id_bidan_1'         => $post['id_bidan_1'] ?: null,
+            'id_bidan_2'         => $post['id_bidan_2'] ?: null,
+            'id_bidan_3'         => $post['id_bidan_3'] ?: null,
+            'id_perawat_luar'    => $post['id_perawat_luar'] ?: null,
+            'id_instrumen'       => $post['id_instrumen'] ?: null,
+            'id_ast_anestesi_1'  => $post['id_ast_anestesi_1'] ?: null,
+            'id_ast_anestesi_2'  => $post['id_ast_anestesi_2'] ?: null,
+            'id_perawat_resus'   => $post['id_perawat_resus'] ?: null,
+            'id_onloop_1'        => $post['id_onloop_1'] ?: null,
+            'id_onloop_2'        => $post['id_onloop_2'] ?: null,
+            'id_onloop_3'        => $post['id_onloop_3'] ?: null,
+            'id_onloop_4'        => $post['id_onloop_4'] ?: null,
+            'id_onloop_5'        => $post['id_onloop_5'] ?: null,
         ];
     }
 
     private function savePaket(int $idTagihan, array $paketList): void
     {
         foreach ($paketList as $paket) {
-            if (empty($paket['id_paket'])) continue;
-            $this->model->db->table('operasi.tagihan_operasi_tindakan')->insert([
-                'id_tagihan' => $idTagihan,
-                'id_paket'   => (int) $paket['id_paket'],
-            ]);
-            if ($this->model->db->transStatus() === false) return;
+            if (empty($paket['id_paket']))
+                continue;
+            $this->model
+                ->db
+                ->table('operasi.tagihan_operasi_tindakan')
+                ->insert([
+                    'id_tagihan' => $idTagihan,
+                    'id_paket'   => (int) $paket['id_paket'],
+                ]);
+            if ($this->model->db->transStatus() === false)
+                return;
         }
     }
 
     private function saveObat(int $idTagihan, array $obatList): void
     {
         foreach ($obatList as $obat) {
-            if (empty($obat['id_barang']) || empty($obat['jumlah'])) continue;
-            $this->model->db->table('operasi.tagihan_operasi_obat')->insert([
-                'id_tagihan' => $idTagihan,
-                'id_barang'  => (int) $obat['id_barang'],
-                'jumlah'     => (int) $obat['jumlah'],
-            ]);
-            if ($this->model->db->transStatus() === false) return;
+            if (empty($obat['id_barang']) || empty($obat['jumlah']))
+                continue;
+            $this->model
+                ->db
+                ->table('operasi.tagihan_operasi_obat')
+                ->insert([
+                    'id_tagihan' => $idTagihan,
+                    'id_barang'  => (int) $obat['id_barang'],
+                    'jumlah'     => (int) $obat['jumlah'],
+                ]);
+            if ($this->model->db->transStatus() === false)
+                return;
         }
     }
 }

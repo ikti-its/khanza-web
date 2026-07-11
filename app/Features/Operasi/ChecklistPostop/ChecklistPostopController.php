@@ -64,7 +64,8 @@ final class ChecklistPostopController extends ControllerTemplate
 
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
                 'j.id_jadwal',
@@ -77,71 +78,92 @@ final class ChecklistPostopController extends ControllerTemplate
                 'ob.nama AS nama_dokter_bedah',
                 'oa.nama AS nama_dokter_anestesi',
             ])
-            ->join('operasi.permintaan_operasi po',   'po.id_permintaan = j.id_permintaan',      'left')
-            ->join('registrasi.registrasi r',        'r.nomor_reg      = po.nomor_reg',         'left')
-            ->join('role.pasien p',                   'p.id_pasien      = r.id_pasien',          'left')
-            ->join('person.orang op',                 'op.id_orang      = p.id_orang',           'left')
-            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan',       'left')
-            ->join('role.dokter db',                  'db.id_dokter     = j.id_dokter_bedah',    'left')
-            ->join('person.orang ob',                 'ob.id_orang      = db.id_orang',          'left')
-            ->join('role.dokter da',                  'da.id_dokter     = j.id_dokter_anestesi', 'left')
-            ->join('person.orang oa',                 'oa.id_orang      = da.id_orang',          'left')
+            ->join('operasi.permintaan_operasi po', 'po.id_permintaan = j.id_permintaan', 'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg      = po.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien      = r.id_pasien', 'left')
+            ->join('person.orang op', 'op.id_orang      = p.id_orang', 'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
+            ->join('role.dokter db', 'db.id_dokter     = j.id_dokter_bedah', 'left')
+            ->join('person.orang ob', 'ob.id_orang      = db.id_orang', 'left')
+            ->join('role.dokter da', 'da.id_dokter     = j.id_dokter_anestesi', 'left')
+            ->join('person.orang oa', 'oa.id_orang      = da.id_orang', 'left')
             ->where('j.id_jadwal', $idJadwal)
-            ->get()->getRowArray() ?? [];
+            ->get()
+            ->getRowArray() ?? [];
     }
 
     private function fetchOptions(): array
     {
         $db = $this->model->db;
         return [
-            'kesadaran_pascaop' => $db->table('operasi.ref_kesadaran_pascaop')
-                ->select('id_kesadaran, nama_kesadaran')->get()->getResultArray(),
-            'ketersediaan'      => $db->table('operasi.ref_ketersediaan_status')
-                ->select('id_ketersediaan_status, nama_ketersediaan')->get()->getResultArray(),
-            'warna_urine'       => $db->table('operasi.ref_warna_urine')
-                ->select('id_warna_urine, nama_warna')->get()->getResultArray(),
-            'jenis_penunjang'   => $db->table('operasi.ref_jenis_penunjang')
-                ->select('id_jenis_penunjang, nama_jenis')->get()->getResultArray(),
+            'kesadaran_pascaop' => $db
+                ->table('operasi.ref_kesadaran_pascaop')
+                ->select('id_kesadaran, nama_kesadaran')
+                ->get()
+                ->getResultArray(),
+            'ketersediaan'      => $db
+                ->table('operasi.ref_ketersediaan_status')
+                ->select('id_ketersediaan_status, nama_ketersediaan')
+                ->get()
+                ->getResultArray(),
+            'warna_urine'       => $db
+                ->table('operasi.ref_warna_urine')
+                ->select('id_warna_urine, nama_warna')
+                ->get()
+                ->getResultArray(),
+            'jenis_penunjang'   => $db
+                ->table('operasi.ref_jenis_penunjang')
+                ->select('id_jenis_penunjang, nama_jenis')
+                ->get()
+                ->getResultArray(),
         ];
     }
 
     private function fetchDrains(int $idChecklistPost): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.checklist_postop_drain d')
             ->select('d.id_drain, d.id_ketersediaan, d.jumlah, d.letak, d.warna, k.nama_ketersediaan')
             ->join('operasi.ref_ketersediaan_status k', 'k.id_ketersediaan_status = d.id_ketersediaan', 'left')
             ->where('d.id_checklist_post', $idChecklistPost)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
     }
 
     private function fetchPenunjang(int $idChecklistPost): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.checklist_postop_penunjang p')
             ->select('p.id_penunjang, p.id_jenis_penunjang, p.id_ketersediaan, p.keterangan')
             ->where('p.id_checklist_post', $idChecklistPost)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
     }
 
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table("role.{$tabel} t")
             ->select('o.nama')
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
             ->where("t.{$idKolom}", $idValue)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return $row['nama'] ?? '';
     }
 
     private function fetchTindakanName(int $idTindakan): string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('operasi.ref_tindakan_operasi')
             ->select('nama_tindakan')
             ->where('id_tindakan', $idTindakan)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return $row['nama_tindakan'] ?? '';
     }
 
@@ -149,22 +171,22 @@ final class ChecklistPostopController extends ControllerTemplate
     private function buildHeaderData(array $rawPost): array
     {
         return [
-            'id_jadwal'            => (int) ($rawPost['id_jadwal']            ?? 0) ?: null,
-            'id_tindakan'          => (int) ($rawPost['id_tindakan']          ?? 0) ?: null,
-            'id_sn_cn'             => (int) ($rawPost['id_sn_cn']             ?? 0) ?: null,
-            'id_dokter_bedah'      => (int) ($rawPost['id_dokter_bedah']      ?? 0) ?: null,
-            'id_dokter_anestesi'   => (int) ($rawPost['id_dokter_anestesi']   ?? 0) ?: null,
-            'waktu_checklist'      => $rawPost['waktu_checklist']             ?? null,
+            'id_jadwal'            => (int) ($rawPost['id_jadwal'] ?? 0) ?: null,
+            'id_tindakan'          => (int) ($rawPost['id_tindakan'] ?? 0) ?: null,
+            'id_sn_cn'             => (int) ($rawPost['id_sn_cn'] ?? 0) ?: null,
+            'id_dokter_bedah'      => (int) ($rawPost['id_dokter_bedah'] ?? 0) ?: null,
+            'id_dokter_anestesi'   => (int) ($rawPost['id_dokter_anestesi'] ?? 0) ?: null,
+            'waktu_checklist'      => $rawPost['waktu_checklist'] ?? null,
             'id_kesadaran_pascaop' => (int) ($rawPost['id_kesadaran_pascaop'] ?? 0) ?: null,
-            'jenis_cairan_infus'   => $rawPost['jenis_cairan_infus']          ?? null,
-            'id_jaringan_pa_vc'    => (int) ($rawPost['id_jaringan_pa_vc']    ?? 0) ?: null,
-            'id_kateter_urine'     => (int) ($rawPost['id_kateter_urine']     ?? 0) ?: null,
-            'waktu_pasang_kateter' => $rawPost['waktu_pasang_kateter']        ?? null,
-            'id_warna_urine'       => (int) ($rawPost['id_warna_urine']       ?? 0) ?: null,
-            'jumlah_urine_cc'      => $rawPost['jumlah_urine_cc']             ?? null,
-            'catatan_luka_operasi' => $rawPost['catatan_luka_operasi']        ?? null,
-            'id_petugas_anestesi'  => (int) ($rawPost['id_petugas_anestesi']  ?? 0) ?: null,
-            'id_petugas_ok'        => (int) ($rawPost['id_petugas_ok']        ?? 0) ?: null,
+            'jenis_cairan_infus'   => $rawPost['jenis_cairan_infus'] ?? null,
+            'id_jaringan_pa_vc'    => (int) ($rawPost['id_jaringan_pa_vc'] ?? 0) ?: null,
+            'id_kateter_urine'     => (int) ($rawPost['id_kateter_urine'] ?? 0) ?: null,
+            'waktu_pasang_kateter' => $rawPost['waktu_pasang_kateter'] ?? null,
+            'id_warna_urine'       => (int) ($rawPost['id_warna_urine'] ?? 0) ?: null,
+            'jumlah_urine_cc'      => $rawPost['jumlah_urine_cc'] ?? null,
+            'catatan_luka_operasi' => $rawPost['catatan_luka_operasi'] ?? null,
+            'id_petugas_anestesi'  => (int) ($rawPost['id_petugas_anestesi'] ?? 0) ?: null,
+            'id_petugas_ok'        => (int) ($rawPost['id_petugas_ok'] ?? 0) ?: null,
         ];
     }
 
@@ -174,14 +196,15 @@ final class ChecklistPostopController extends ControllerTemplate
         $batchDrain = [];
         foreach ($drainList as $row) {
             $idKetersediaan = (int) ($row['id_ketersediaan'] ?? 0);
-            if ($idKetersediaan === 0) continue;
-            
+            if ($idKetersediaan === 0)
+                continue;
+
             $batchDrain[] = [
                 'id_checklist_post' => $idChecklistPost,
                 'id_ketersediaan'   => $idKetersediaan,
                 'jumlah'            => $row['jumlah'] ?? null,
-                'letak'             => $row['letak']  ?? '',
-                'warna'             => $row['warna']  ?? '',
+                'letak'             => $row['letak'] ?? '',
+                'warna'             => $row['warna'] ?? '',
             ];
         }
         if (!empty($batchDrain)) {
@@ -191,8 +214,9 @@ final class ChecklistPostopController extends ControllerTemplate
         $batchPenunjang = [];
         foreach ($penunjangList as $row) {
             $idJenis = (int) ($row['id_jenis_penunjang'] ?? 0);
-            if ($idJenis === 0) continue;
-            
+            if ($idJenis === 0)
+                continue;
+
             $batchPenunjang[] = [
                 'id_checklist_post'  => $idChecklistPost,
                 'id_jenis_penunjang' => $idJenis,
@@ -201,21 +225,26 @@ final class ChecklistPostopController extends ControllerTemplate
             ];
         }
         if (!empty($batchPenunjang)) {
-            (new \App\Features\Operasi\ChecklistPostopPenunjang\ChecklistPostopPenunjangModel())->insertBatch($batchPenunjang);
+            (new \App\Features\Operasi\ChecklistPostopPenunjang\ChecklistPostopPenunjangModel())->insertBatch(
+                $batchPenunjang,
+            );
         }
     }
-    
+
     private function buildViewData(
         array $jadwal,
         array $record,
         string $formAction,
         array $drain = [],
-        array $penunjang = []
+        array $penunjang = [],
     ): array {
         $isCreate = $formAction === '/submittambah/';
         return [
             'judul'       => ($isCreate ? 'Tambah ' : 'Ubah ') . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => $isCreate ? 'Tambah' : 'Ubah', 'icon' => '']]),
+            'breadcrumbs' => array_merge($this->breadcrumbs, [[
+                'title' => $isCreate ? 'Tambah' : 'Ubah',
+                'icon'  => '',
+            ]]),
             'modul_path'  => $this->get_uri_path(),
             'form_action' => $formAction,
             'baris'       => $record,
@@ -236,16 +265,19 @@ final class ChecklistPostopController extends ControllerTemplate
         $idJadwal = (int) ($this->request->getGet('id_jadwal') ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
-        return view('admin/operasi/tambah_checklist_postop',
-            $this->buildViewData($jadwal, [
+        return view('admin/operasi/tambah_checklist_postop', $this->buildViewData(
+            $jadwal,
+            [
                 'id_jadwal'            => $idJadwal,
-                'id_tindakan'          => $jadwal['id_tindakan']          ?? '',
-                'nama_tindakan'        => $jadwal['nama_tindakan']        ?? '',
-                'id_dokter_bedah'      => $jadwal['id_dokter_bedah']      ?? '',
-                'nama_dokter_bedah'    => $jadwal['nama_dokter_bedah']    ?? '',
-                'id_dokter_anestesi'   => $jadwal['id_dokter_anestesi']   ?? '',
+                'id_tindakan'          => $jadwal['id_tindakan'] ?? '',
+                'nama_tindakan'        => $jadwal['nama_tindakan'] ?? '',
+                'id_dokter_bedah'      => $jadwal['id_dokter_bedah'] ?? '',
+                'nama_dokter_bedah'    => $jadwal['nama_dokter_bedah'] ?? '',
+                'id_dokter_anestesi'   => $jadwal['id_dokter_anestesi'] ?? '',
                 'nama_dokter_anestesi' => $jadwal['nama_dokter_anestesi'] ?? '',
-            ], '/submittambah/'));
+            ],
+            '/submittambah/',
+        ));
     }
 
     #[\Override]
@@ -256,33 +288,32 @@ final class ChecklistPostopController extends ControllerTemplate
         $jadwal          = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
         $idChecklistPost = (int) $id;
 
-        if (($idDb = (int) ($record['id_dokter_bedah']    ?? 0)) > 0) {
-            $record['nama_dokter_bedah']     = $this->fetchNamaRole('dokter', 'id_dokter', $idDb);
+        if (($idDb = (int) ($record['id_dokter_bedah'] ?? 0)) > 0) {
+            $record['nama_dokter_bedah'] = $this->fetchNamaRole('dokter', 'id_dokter', $idDb);
         }
         if (($idDa = (int) ($record['id_dokter_anestesi'] ?? 0)) > 0) {
-            $record['nama_dokter_anestesi']  = $this->fetchNamaRole('dokter', 'id_dokter', $idDa);
+            $record['nama_dokter_anestesi'] = $this->fetchNamaRole('dokter', 'id_dokter', $idDa);
         }
-        if (($idT  = (int) ($record['id_tindakan']        ?? 0)) > 0) {
-            $record['nama_tindakan']         = $this->fetchTindakanName($idT);
+        if (($idT = (int) ($record['id_tindakan'] ?? 0)) > 0) {
+            $record['nama_tindakan'] = $this->fetchTindakanName($idT);
         }
-        if (($idSn = (int) ($record['id_sn_cn']           ?? 0)) > 0) {
-            $record['nama_sn_cn']            = $this->fetchNamaRole('petugas', 'id_petugas', $idSn);
+        if (($idSn = (int) ($record['id_sn_cn'] ?? 0)) > 0) {
+            $record['nama_sn_cn'] = $this->fetchNamaRole('petugas', 'id_petugas', $idSn);
         }
         if (($idPa = (int) ($record['id_petugas_anestesi'] ?? 0)) > 0) {
             $record['nama_petugas_anestesi'] = $this->fetchNamaRole('petugas', 'id_petugas', $idPa);
         }
-        if (($idPo = (int) ($record['id_petugas_ok']       ?? 0)) > 0) {
-            $record['nama_petugas_ok']       = $this->fetchNamaRole('petugas', 'id_petugas', $idPo);
+        if (($idPo = (int) ($record['id_petugas_ok'] ?? 0)) > 0) {
+            $record['nama_petugas_ok'] = $this->fetchNamaRole('petugas', 'id_petugas', $idPo);
         }
 
-        return view('admin/operasi/tambah_checklist_postop',
-            $this->buildViewData(
-                $jadwal,
-                $record,
-                '/submitedit/' . $id,
-                $this->fetchDrains($idChecklistPost),
-                $this->fetchPenunjang($idChecklistPost),
-            ));
+        return view('admin/operasi/tambah_checklist_postop', $this->buildViewData(
+            $jadwal,
+            $record,
+            '/submitedit/' . $id,
+            $this->fetchDrains($idChecklistPost),
+            $this->fetchPenunjang($idChecklistPost),
+        ));
     }
 
     // -------------------------------------------------------------------------
@@ -294,7 +325,7 @@ final class ChecklistPostopController extends ControllerTemplate
     {
         $rawPost       = $this->request->getPost();
         $dataHeader    = $this->buildHeaderData($rawPost);
-        $drainList     = $rawPost['drain']     ?? [];
+        $drainList     = $rawPost['drain'] ?? [];
         $penunjangList = $rawPost['penunjang'] ?? [];
 
         $this->model->db->transStart();
@@ -312,10 +343,11 @@ final class ChecklistPostopController extends ControllerTemplate
             }
 
             return $this->home();
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
@@ -324,11 +356,12 @@ final class ChecklistPostopController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $rawPost       = $this->request->getPost();
         $dataHeader    = $this->buildHeaderData($rawPost);
-        $drainList     = $rawPost['drain']     ?? [];
+        $drainList     = $rawPost['drain'] ?? [];
         $penunjangList = $rawPost['penunjang'] ?? [];
 
         $this->model->db->transStart();
@@ -336,8 +369,12 @@ final class ChecklistPostopController extends ControllerTemplate
         try {
             $this->model->update($id, $dataHeader);
 
-            (new \App\Features\Operasi\ChecklistPostopDrain\ChecklistPostopDrainModel())->where('id_checklist_post', $id)->delete();
-            (new \App\Features\Operasi\ChecklistPostopPenunjang\ChecklistPostopPenunjangModel())->where('id_checklist_post', $id)->delete();
+            (new \App\Features\Operasi\ChecklistPostopDrain\ChecklistPostopDrainModel())
+                ->where('id_checklist_post', $id)
+                ->delete();
+            (new \App\Features\Operasi\ChecklistPostopPenunjang\ChecklistPostopPenunjangModel())
+                ->where('id_checklist_post', $id)
+                ->delete();
 
             $this->insertDrainAndPenunjang((int) $id, $drainList, $penunjangList);
 
@@ -348,10 +385,11 @@ final class ChecklistPostopController extends ControllerTemplate
             }
 
             return $this->home();
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }

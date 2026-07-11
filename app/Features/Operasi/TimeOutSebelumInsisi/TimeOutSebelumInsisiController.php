@@ -69,7 +69,8 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
 
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
                 'j.id_jadwal',
@@ -78,59 +79,72 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
                 'ti.nama_tindakan',
                 'op.nama AS nama_pasien',
             ])
-            ->join('operasi.permintaan_operasi po',   'po.id_permintaan = j.id_permintaan', 'left')
-            ->join('registrasi.registrasi r',        'r.nomor_reg      = po.nomor_reg',    'left')
-            ->join('role.pasien p',                   'p.id_pasien      = r.id_pasien',     'left')
-            ->join('person.orang op',                 'op.id_orang      = p.id_orang',      'left')
-            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan',  'left')
+            ->join('operasi.permintaan_operasi po', 'po.id_permintaan = j.id_permintaan', 'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg      = po.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien      = r.id_pasien', 'left')
+            ->join('person.orang op', 'op.id_orang      = p.id_orang', 'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
             ->where('j.id_jadwal', $idJadwal)
-            ->get()->getRowArray() ?? [];
+            ->get()
+            ->getRowArray() ?? [];
     }
 
     private function fetchOptions(): array
     {
         $db = $this->model->db;
         return [
-            'ketersediaan'      => $db->table('operasi.ref_ketersediaan_status')
+            'ketersediaan'      => $db
+                ->table('operasi.ref_ketersediaan_status')
                 ->select('id_ketersediaan_status, nama_ketersediaan')
-                ->get()->getResultArray(),
-            'jenis_penunjang'   => $db->table('operasi.ref_jenis_penunjang')
+                ->get()
+                ->getResultArray(),
+            'jenis_penunjang'   => $db
+                ->table('operasi.ref_jenis_penunjang')
                 ->select('id_jenis_penunjang, nama_jenis')
                 ->whereIn('nama_jenis', ['Radiologi', 'CT Scan', 'MRI'])
-                ->get()->getResultArray(),
-            'status_penayangan' => $db->table('operasi.ref_status_penayangan')
+                ->get()
+                ->getResultArray(),
+            'status_penayangan' => $db
+                ->table('operasi.ref_status_penayangan')
                 ->select('id_status_penayangan, nama_status')
-                ->get()->getResultArray(),
+                ->get()
+                ->getResultArray(),
         ];
     }
 
     private function fetchPenunjang(int $idTimeout): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.time_out_sebelum_insisi_penunjang')
             ->select('id_jenis_penunjang, id_status')
             ->where('id_timeout', $idTimeout)
-            ->get()->getResultArray();
+            ->get()
+            ->getResultArray();
     }
 
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table("role.{$tabel} t")
             ->select('o.nama')
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
             ->where("t.{$idKolom}", $idValue)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return $row['nama'] ?? '';
     }
 
     private function fetchTindakanName(int $idTindakan): string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('operasi.ref_tindakan_operasi')
             ->select('nama_tindakan')
             ->where('id_tindakan', $idTindakan)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return $row['nama_tindakan'] ?? '';
     }
 
@@ -166,23 +180,29 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
         $batch = [];
         foreach ($penunjangList as $row) {
             $idJenis = (int) ($row['id_jenis_penunjang'] ?? 0);
-            if ($idJenis === 0) continue;
+            if ($idJenis === 0)
+                continue;
             $batch[] = [
                 'id_timeout'         => $idTimeout,
                 'id_jenis_penunjang' => $idJenis,
                 'id_status'          => (int) ($row['id_status'] ?? 0) ?: null,
             ];
         }
-        if (!empty($batch)) (new \App\Features\Operasi\TimeOutSebelumInsisiPenunjang\TimeOutSebelumInsisiPenunjangModel())
-            ->insertBatch($batch);
+        if (!empty($batch))
+            (new \App\Features\Operasi\TimeOutSebelumInsisiPenunjang\TimeOutSebelumInsisiPenunjangModel())->insertBatch(
+                $batch,
+            );
     }
 
-    private function buildViewData(array $jadwal, array $record, string $formAction, ?int $idTimeout = null): array
+    private function buildViewData(array $jadwal, array $record, string $formAction, null|int $idTimeout = null): array
     {
         $isCreate = $formAction === '/submittambah/';
         return [
             'judul'       => ($isCreate ? 'Tambah ' : 'Ubah ') . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => $isCreate ? 'Tambah' : 'Ubah', 'icon' => '']]),
+            'breadcrumbs' => array_merge($this->breadcrumbs, [[
+                'title' => $isCreate ? 'Tambah' : 'Ubah',
+                'icon'  => '',
+            ]]),
             'modul_path'  => $this->get_uri_path(),
             'form_action' => $formAction,
             'baris'       => $record,
@@ -202,12 +222,15 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
         $idJadwal = (int) ($this->request->getGet('id_jadwal') ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
-        return view('admin/operasi/tambah_time_out_sebelum_insisi',
-            $this->buildViewData($jadwal, [
+        return view('admin/operasi/tambah_time_out_sebelum_insisi', $this->buildViewData(
+            $jadwal,
+            [
                 'id_jadwal'     => $idJadwal,
-                'id_tindakan'   => $jadwal['id_tindakan']   ?? '',
+                'id_tindakan'   => $jadwal['id_tindakan'] ?? '',
                 'nama_tindakan' => $jadwal['nama_tindakan'] ?? '',
-            ], '/submittambah/'));
+            ],
+            '/submittambah/',
+        ));
     }
 
     #[\Override]
@@ -233,8 +256,12 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
             $record['nama_perawat_ok'] = $this->fetchNamaRole('petugas', 'id_petugas', $idPo);
         }
 
-        return view('admin/operasi/tambah_time_out_sebelum_insisi',
-            $this->buildViewData($jadwal, $record, '/submitedit/' . $id, (int) $id));
+        return view('admin/operasi/tambah_time_out_sebelum_insisi', $this->buildViewData(
+            $jadwal,
+            $record,
+            '/submitedit/' . $id,
+            (int) $id,
+        ));
     }
 
     // -------------------------------------------------------------------------
@@ -258,10 +285,14 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
             }
 
             return $this->home();
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage());
+            session()->setFlashdata(
+                'error',
+                $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                    ? $this->friendly_db_error($e)
+                    : $e->getMessage(),
+            );
             return redirect()->back()->withInput();
         }
     }
@@ -269,16 +300,18 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
+        if ($id == 0)
+            return $this->home();
 
         $this->model->db->transStart();
 
         try {
             $this->model->update($id, $this->buildHeaderData($this->request->getPost()));
 
-            $modelPenunjang = new \App\Features\Operasi\TimeOutSebelumInsisiPenunjang\TimeOutSebelumInsisiPenunjangModel();
+            $modelPenunjang =
+                new \App\Features\Operasi\TimeOutSebelumInsisiPenunjang\TimeOutSebelumInsisiPenunjangModel();
             $modelPenunjang->where('id_timeout', $id)->delete();
-            
+
             $this->insertPenunjangList((int) $id, $this->request->getPost('penunjang') ?? []);
 
             $this->model->db->transComplete();
@@ -288,10 +321,14 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
             }
 
             return $this->home();
-
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            session()->setFlashdata('error', $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage());
+            session()->setFlashdata(
+                'error',
+                $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                    ? $this->friendly_db_error($e)
+                    : $e->getMessage(),
+            );
             return redirect()->back()->withInput();
         }
     }

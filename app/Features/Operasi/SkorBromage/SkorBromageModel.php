@@ -13,14 +13,14 @@ final class SkorBromageModel extends ModelTemplate
         parent::__construct(
             new SkorBromageDatabase(),
             [
-                'id_skor_bromage'    => V::DEFAULT(),
-                'waktu_penilaian'    => V::DEFAULT(),
-                'is_boleh_pindah'    => V::DEFAULT(),
-                'catatan_keluar'     => V::DEFAULT(),
-                'instruksi_rr'       => V::DEFAULT(),
+                'id_skor_bromage' => V::DEFAULT(),
+                'waktu_penilaian' => V::DEFAULT(),
+                'is_boleh_pindah' => V::DEFAULT(),
+                'catatan_keluar'  => V::DEFAULT(),
+                'instruksi_rr'    => V::DEFAULT(),
             ],
             [
-                'id_jadwal' => [
+                'id_jadwal'          => [
                     'tanggal',
                     'id_permintaan' => [
                         'nomor_reg',
@@ -32,10 +32,10 @@ final class SkorBromageModel extends ModelTemplate
                     ],
                 ],
                 'id_petugas'         => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_dokter_anestesi' => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'skor_bromage'       => ['nama_skala', 'tingkat_blok', 'nilai', 'gambar'],
             ],

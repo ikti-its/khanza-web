@@ -34,7 +34,7 @@ final class SigninSebelumAnestesiController extends ControllerTemplate
                 [TABLE_ONLY, REQUIRED, I::INDEX,  'id_dokter_bedah',           'Dokter Bedah'],
                 [TABLE_ONLY, REQUIRED, I::INDEX,  'id_dokter_anestesi',        'Dokter Anestesi'],
                 [HIDE,       REQUIRED, I::INDEX,  'id_perawat_ok',             'Perawat OK'],
-                [SHOW,       REQUIRED, I::DTIME,   'waktu_signin',              'Waktu Sign In'],
+                [SHOW,       REQUIRED, I::DTIME,  'waktu_signin',              'Waktu Sign In'],
                 [FORM_ONLY,  REQUIRED, I::SELECT, 'is_identitas_sesuai',       'Identitas Sesuai'],
                 [FORM_ONLY,  REQUIRED, I::TEXT,   'alergi',                    'Alergi'],
                 [FORM_ONLY,  REQUIRED, I::INDEX,  'id_penandaan_area',         'Penandaan Area'],
@@ -65,7 +65,8 @@ final class SigninSebelumAnestesiController extends ControllerTemplate
 
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
                 'j.id_jadwal',
@@ -78,48 +79,59 @@ final class SigninSebelumAnestesiController extends ControllerTemplate
                 'ob.nama AS nama_dokter_bedah',
                 'oa.nama AS nama_dokter_anestesi',
             ])
-            ->join('operasi.permintaan_operasi po',   'po.id_permintaan = j.id_permintaan',      'left')
-            ->join('registrasi.registrasi r',        'r.nomor_reg      = po.nomor_reg',         'left')
-            ->join('role.pasien p',                   'p.id_pasien      = r.id_pasien',          'left')
-            ->join('person.orang op',                 'op.id_orang      = p.id_orang',           'left')
-            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan',       'left')
-            ->join('role.dokter db',                  'db.id_dokter     = j.id_dokter_bedah',    'left')
-            ->join('person.orang ob',                 'ob.id_orang      = db.id_orang',          'left')
-            ->join('role.dokter da',                  'da.id_dokter     = j.id_dokter_anestesi', 'left')
-            ->join('person.orang oa',                 'oa.id_orang      = da.id_orang',          'left')
+            ->join('operasi.permintaan_operasi po', 'po.id_permintaan = j.id_permintaan', 'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg      = po.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien      = r.id_pasien', 'left')
+            ->join('person.orang op', 'op.id_orang      = p.id_orang', 'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
+            ->join('role.dokter db', 'db.id_dokter     = j.id_dokter_bedah', 'left')
+            ->join('person.orang ob', 'ob.id_orang      = db.id_orang', 'left')
+            ->join('role.dokter da', 'da.id_dokter     = j.id_dokter_anestesi', 'left')
+            ->join('person.orang oa', 'oa.id_orang      = da.id_orang', 'left')
             ->where('j.id_jadwal', $idJadwal)
-            ->get()->getRowArray() ?? [];
+            ->get()
+            ->getRowArray() ?? [];
     }
 
     private function fetchOptions(): array
     {
         $db = $this->model->db;
         return [
-            'ketersediaan'      => $db->table('operasi.ref_ketersediaan_status')
-                ->select('id_ketersediaan_status, nama_ketersediaan')->get()->getResultArray(),
-            'kesiapan_anestesi' => $db->table('operasi.ref_kesiapan_anestesi')
-                ->select('id_kesiapan, nama_kesiapan')->get()->getResultArray(),
+            'ketersediaan'      => $db
+                ->table('operasi.ref_ketersediaan_status')
+                ->select('id_ketersediaan_status, nama_ketersediaan')
+                ->get()
+                ->getResultArray(),
+            'kesiapan_anestesi' => $db
+                ->table('operasi.ref_kesiapan_anestesi')
+                ->select('id_kesiapan, nama_kesiapan')
+                ->get()
+                ->getResultArray(),
         ];
     }
 
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table("role.{$tabel} t")
             ->select('o.nama')
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
             ->where("t.{$idKolom}", $idValue)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return $row['nama'] ?? '';
     }
 
     private function fetchTindakanName(int $idTindakan): string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('operasi.ref_tindakan_operasi')
             ->select('nama_tindakan')
             ->where('id_tindakan', $idTindakan)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return $row['nama_tindakan'] ?? '';
     }
 
@@ -128,7 +140,10 @@ final class SigninSebelumAnestesiController extends ControllerTemplate
         $isCreate = $formAction === '/submittambah/';
         return [
             'judul'       => ($isCreate ? 'Tambah ' : 'Ubah ') . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => $isCreate ? 'Tambah' : 'Ubah', 'icon' => '']]),
+            'breadcrumbs' => array_merge($this->breadcrumbs, [[
+                'title' => $isCreate ? 'Tambah' : 'Ubah',
+                'icon'  => '',
+            ]]),
             'modul_path'  => $this->get_uri_path(),
             'form_action' => $formAction,
             'baris'       => $record,
@@ -147,16 +162,19 @@ final class SigninSebelumAnestesiController extends ControllerTemplate
         $idJadwal = (int) ($this->request->getGet('id_jadwal') ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
-        return view('admin/operasi/tambah_signin_sebelum_anestesi',
-            $this->buildViewData($jadwal, [
+        return view('admin/operasi/tambah_signin_sebelum_anestesi', $this->buildViewData(
+            $jadwal,
+            [
                 'id_jadwal'            => $idJadwal,
-                'id_tindakan'          => $jadwal['id_tindakan']          ?? '',
-                'nama_tindakan'        => $jadwal['nama_tindakan']        ?? '',
-                'id_dokter_bedah'      => $jadwal['id_dokter_bedah']      ?? '',
-                'nama_dokter_bedah'    => $jadwal['nama_dokter_bedah']    ?? '',
-                'id_dokter_anestesi'   => $jadwal['id_dokter_anestesi']   ?? '',
+                'id_tindakan'          => $jadwal['id_tindakan'] ?? '',
+                'nama_tindakan'        => $jadwal['nama_tindakan'] ?? '',
+                'id_dokter_bedah'      => $jadwal['id_dokter_bedah'] ?? '',
+                'nama_dokter_bedah'    => $jadwal['nama_dokter_bedah'] ?? '',
+                'id_dokter_anestesi'   => $jadwal['id_dokter_anestesi'] ?? '',
                 'nama_dokter_anestesi' => $jadwal['nama_dokter_anestesi'] ?? '',
-            ], '/submittambah/'));
+            ],
+            '/submittambah/',
+        ));
     }
 
     #[\Override]
@@ -166,23 +184,26 @@ final class SigninSebelumAnestesiController extends ControllerTemplate
         $idJadwal = (int) ($record['id_jadwal'] ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
-        if (($idDb = (int) ($record['id_dokter_bedah']    ?? 0)) > 0) {
-            $record['nama_dokter_bedah']    = $this->fetchNamaRole('dokter', 'id_dokter', $idDb);
+        if (($idDb = (int) ($record['id_dokter_bedah'] ?? 0)) > 0) {
+            $record['nama_dokter_bedah'] = $this->fetchNamaRole('dokter', 'id_dokter', $idDb);
         }
         if (($idDa = (int) ($record['id_dokter_anestesi'] ?? 0)) > 0) {
             $record['nama_dokter_anestesi'] = $this->fetchNamaRole('dokter', 'id_dokter', $idDa);
         }
-        if (($idT  = (int) ($record['id_tindakan']        ?? 0)) > 0) {
-            $record['nama_tindakan']        = $this->fetchTindakanName($idT);
+        if (($idT = (int) ($record['id_tindakan'] ?? 0)) > 0) {
+            $record['nama_tindakan'] = $this->fetchTindakanName($idT);
         }
-        if (($idSn = (int) ($record['id_sn_cn']           ?? 0)) > 0) {
-            $record['nama_sn_cn']           = $this->fetchNamaRole('petugas', 'id_petugas', $idSn);
+        if (($idSn = (int) ($record['id_sn_cn'] ?? 0)) > 0) {
+            $record['nama_sn_cn'] = $this->fetchNamaRole('petugas', 'id_petugas', $idSn);
         }
-        if (($idPo = (int) ($record['id_perawat_ok']      ?? 0)) > 0) {
-            $record['nama_perawat_ok']      = $this->fetchNamaRole('petugas', 'id_petugas', $idPo);
+        if (($idPo = (int) ($record['id_perawat_ok'] ?? 0)) > 0) {
+            $record['nama_perawat_ok'] = $this->fetchNamaRole('petugas', 'id_petugas', $idPo);
         }
 
-        return view('admin/operasi/tambah_signin_sebelum_anestesi',
-            $this->buildViewData($jadwal, $record, '/submitedit/' . $id));
+        return view('admin/operasi/tambah_signin_sebelum_anestesi', $this->buildViewData(
+            $jadwal,
+            $record,
+            '/submitedit/' . $id,
+        ));
     }
 }

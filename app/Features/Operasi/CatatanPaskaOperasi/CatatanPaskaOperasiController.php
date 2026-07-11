@@ -60,7 +60,8 @@ final class CatatanPaskaOperasiController extends ControllerTemplate
 
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
                 'j.id_jadwal',
@@ -71,25 +72,28 @@ final class CatatanPaskaOperasiController extends ControllerTemplate
                 'op.nama AS nama_pasien',
                 'ob.nama AS nama_dokter_bedah',
             ])
-            ->join('operasi.permintaan_operasi po',   'po.id_permintaan = j.id_permintaan',   'left')
-            ->join('registrasi.registrasi r',        'r.nomor_reg      = po.nomor_reg',      'left')
-            ->join('role.pasien p',                   'p.id_pasien      = r.id_pasien',       'left')
-            ->join('person.orang op',                 'op.id_orang      = p.id_orang',        'left')
-            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan',    'left')
-            ->join('role.dokter db',                  'db.id_dokter     = j.id_dokter_bedah', 'left')
-            ->join('person.orang ob',                 'ob.id_orang      = db.id_orang',       'left')
+            ->join('operasi.permintaan_operasi po', 'po.id_permintaan = j.id_permintaan', 'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg      = po.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien      = r.id_pasien', 'left')
+            ->join('person.orang op', 'op.id_orang      = p.id_orang', 'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
+            ->join('role.dokter db', 'db.id_dokter     = j.id_dokter_bedah', 'left')
+            ->join('person.orang ob', 'ob.id_orang      = db.id_orang', 'left')
             ->where('j.id_jadwal', $idJadwal)
-            ->get()->getRowArray() ?? [];
+            ->get()
+            ->getRowArray() ?? [];
     }
 
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): string
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table("role.{$tabel} t")
             ->select('o.nama')
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
             ->where("t.{$idKolom}", $idValue)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
         return $row['nama'] ?? '';
     }
 
@@ -97,7 +101,10 @@ final class CatatanPaskaOperasiController extends ControllerTemplate
     {
         return [
             'judul'       => ($formAction === '/submittambah/' ? 'Tambah ' : 'Ubah ') . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => $formAction === '/submittambah/' ? 'Tambah' : 'Ubah', 'icon' => '']]),
+            'breadcrumbs' => array_merge($this->breadcrumbs, [[
+                'title' => $formAction === '/submittambah/' ? 'Tambah' : 'Ubah',
+                'icon'  => '',
+            ]]),
             'modul_path'  => $this->get_uri_path(),
             'form_action' => $formAction,
             'baris'       => $record,
@@ -115,12 +122,15 @@ final class CatatanPaskaOperasiController extends ControllerTemplate
         $idJadwal = (int) ($this->request->getGet('id_jadwal') ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
-        return view('admin/operasi/tambah_catatan_paska_operasi',
-            $this->buildViewData($jadwal, [
+        return view('admin/operasi/tambah_catatan_paska_operasi', $this->buildViewData(
+            $jadwal,
+            [
                 'id_jadwal'         => $idJadwal,
-                'id_dokter_bedah'   => $jadwal['id_dokter_bedah']   ?? '',
+                'id_dokter_bedah'   => $jadwal['id_dokter_bedah'] ?? '',
                 'nama_dokter_bedah' => $jadwal['nama_dokter_bedah'] ?? '',
-            ], '/submittambah/'));
+            ],
+            '/submittambah/',
+        ));
     }
 
     #[\Override]
@@ -134,7 +144,10 @@ final class CatatanPaskaOperasiController extends ControllerTemplate
             $record['nama_dokter_bedah'] = $this->fetchNamaRole('dokter', 'id_dokter', $idDb);
         }
 
-        return view('admin/operasi/tambah_catatan_paska_operasi',
-            $this->buildViewData($jadwal, $record, '/submitedit/' . $id));
+        return view('admin/operasi/tambah_catatan_paska_operasi', $this->buildViewData(
+            $jadwal,
+            $record,
+            '/submitedit/' . $id,
+        ));
     }
 }

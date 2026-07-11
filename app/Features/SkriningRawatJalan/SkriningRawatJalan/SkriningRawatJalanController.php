@@ -27,20 +27,20 @@ final class SkriningRawatJalanController extends ControllerTemplate
                 A::PRINT,
             ],
             [
-                [HIDE,      OPTIONAL, I::INDEX,   'id_skrining',      'ID Skrining'],
-                [SHOW,      REQUIRED, I::TEXT,    'no_rm',            'No. Rekam Medis'],
-                [SHOW,      REQUIRED, I::DATE,    'tgl_skrining',     'Tanggal Skrining'],
-                [SHOW,      REQUIRED, I::TIME,    'jam_skrining',     'Jam Skrining'],
-                [FORM_ONLY, REQUIRED, I::SELECT,  'id_kesadaran',     'Kesadaran'],
-                [FORM_ONLY, REQUIRED, I::SELECT,  'id_pernafasan',    'Pernafasan'],
-                [FORM_ONLY, REQUIRED, I::SELECT,  'id_skala_nyeri',   'Skala Nyeri'],
-                [FORM_ONLY, REQUIRED, I::SELECT,  'id_nyeri_dada',    'Nyeri Dada'],
-                [FORM_ONLY, REQUIRED, I::SELECT,  'id_batuk',         'Batuk'],
-                [FORM_ONLY, REQUIRED, I::BOOL,    'is_geriatri',      'Geriatri'],
-                [FORM_ONLY, REQUIRED, I::BOOL,    'is_risiko_jatuh',  'Risiko Jatuh'],
-                [SHOW,      OPTIONAL, I::SELECT,  'id_unit',          'Unit Tujuan'],
-                [SHOW,      REQUIRED, I::SELECT,  'id_petugas',       'Petugas'],
-                [SHOW,      REQUIRED, I::SELECT,  'id_keputusan',     'Keputusan'],
+                [HIDE,      OPTIONAL, I::INDEX,  'id_skrining',     'ID Skrining'],
+                [SHOW,      REQUIRED, I::TEXT,   'no_rm',           'No. Rekam Medis'],
+                [SHOW,      REQUIRED, I::DATE,   'tgl_skrining',    'Tanggal Skrining'],
+                [SHOW,      REQUIRED, I::TIME,   'jam_skrining',    'Jam Skrining'],
+                [FORM_ONLY, REQUIRED, I::SELECT, 'id_kesadaran',    'Kesadaran'],
+                [FORM_ONLY, REQUIRED, I::SELECT, 'id_pernafasan',   'Pernafasan'],
+                [FORM_ONLY, REQUIRED, I::SELECT, 'id_skala_nyeri',  'Skala Nyeri'],
+                [FORM_ONLY, REQUIRED, I::SELECT, 'id_nyeri_dada',   'Nyeri Dada'],
+                [FORM_ONLY, REQUIRED, I::SELECT, 'id_batuk',        'Batuk'],
+                [FORM_ONLY, REQUIRED, I::BOOL,   'is_geriatri',     'Geriatri'],
+                [FORM_ONLY, REQUIRED, I::BOOL,   'is_risiko_jatuh', 'Risiko Jatuh'],
+                [SHOW,      OPTIONAL, I::SELECT, 'id_unit',         'Unit Tujuan'],
+                [SHOW,      REQUIRED, I::SELECT, 'id_petugas',      'Petugas'],
+                [SHOW,      REQUIRED, I::SELECT, 'id_keputusan',    'Keputusan'],
             ],
         );
 
@@ -51,7 +51,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
     protected function after_read(array &$data_tabel): void
     {
         foreach ($data_tabel as &$row) {
-            $row['alert_igd'] = ((int) ($row['id_keputusan'] ?? 1)) === 2 ? 0 : 1;
+            $row['alert_igd'] = (int) ($row['id_keputusan'] ?? 1) === 2 ? 0 : 1;
             $row['alert_max'] = 1;
         }
     }
@@ -64,13 +64,14 @@ final class SkriningRawatJalanController extends ControllerTemplate
     {
         return array_values(array_filter(
             $this->get_fields_with_options($isUpdate, true),
-            fn($f) => !in_array($f[2], ['id_skrining', 'no_rm', 'id_unit', 'id_petugas'], true)
+            fn($f) => !in_array($f[2], ['id_skrining', 'no_rm', 'id_unit', 'id_petugas'], true),
         ));
     }
 
     private function fetchDataPasienByRm(string $noRm): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('role.pasien p')
             ->select('p.nomor_rm, o.nama, o.nik, o.tanggal_lahir, jk.nama_jenis_kelamin as jenis_kelamin')
             ->join('person.orang o', 'o.id_orang = p.id_orang')
@@ -110,12 +111,21 @@ final class SkriningRawatJalanController extends ControllerTemplate
     final public function create_page(): string
     {
         $mockBaris = [
-            'id_skrining' => '', 'no_rm' => $this->request->getGet('no_rm') ?? '',
-            'tgl_skrining' => date('Y-m-d'), 'jam_skrining' => date('H:i:s'),
-            'id_kesadaran' => '', 'id_pernafasan' => '', 'id_skala_nyeri' => '',
-            'id_nyeri_dada' => '', 'id_batuk' => '', 'is_geriatri' => '',
-            'is_risiko_jatuh' => '', 'id_unit' => '', 'nama_unit' => '',
-            'id_keputusan' => '', 'id_petugas' => '',
+            'id_skrining'     => '',
+            'no_rm'           => $this->request->getGet('no_rm') ?? '',
+            'tgl_skrining'    => date('Y-m-d'),
+            'jam_skrining'    => date('H:i:s'),
+            'id_kesadaran'    => '',
+            'id_pernafasan'   => '',
+            'id_skala_nyeri'  => '',
+            'id_nyeri_dada'   => '',
+            'id_batuk'        => '',
+            'is_geriatri'     => '',
+            'is_risiko_jatuh' => '',
+            'id_unit'         => '',
+            'nama_unit'       => '',
+            'id_keputusan'    => '',
+            'id_petugas'      => '',
         ];
 
         return view('admin/skrining_rawat_jalan/tambah_skrining_rj', [
@@ -133,7 +143,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
     final public function update_page(int|string $id): string
     {
         $baris = $this->model->find_one($id);
-        
+
         if (empty($baris)) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();

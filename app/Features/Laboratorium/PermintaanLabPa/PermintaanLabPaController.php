@@ -46,12 +46,13 @@ final class PermintaanLabPaController extends ControllerTemplate
     // -------------------------------------------------------------------------
     // Private Helpers
     // -------------------------------------------------------------------------
- 
+
     private function generateNomorPermintaan(): string
     {
         helper('autonomor');
- 
-        $lastNo = $this->model->db
+
+        $lastNo = $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_header')
             ->select('no_permintaan')
             ->like('no_permintaan', 'PA' . date('Ymd'), 'after')
@@ -59,29 +60,37 @@ final class PermintaanLabPaController extends ControllerTemplate
             ->limit(1)
             ->get()
             ->getRowArray();
- 
+
         return generateNextNoPermintaanPa($lastNo['no_permintaan'] ?? null);
     }
- 
+
     private function filterKonfig(): array
     {
         return array_values(array_filter(
-            (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderController())->get_fields_with_options(false, true),
-            fn($f) => !in_array($f[2], [
-                'id_permintaan',
-                'no_permintaan',
-                'nomor_reg',
-                'id_kategori_lab',
-                'id_dokter_perujuk',
-                'id_status_permintaan',
-                'tgl_jam_sampel',
-            ], true)
+            (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderController())->get_fields_with_options(
+                false,
+                true,
+            ),
+            fn($f) => !in_array(
+                $f[2],
+                [
+                    'id_permintaan',
+                    'no_permintaan',
+                    'nomor_reg',
+                    'id_kategori_lab',
+                    'id_dokter_perujuk',
+                    'id_status_permintaan',
+                    'tgl_jam_sampel',
+                ],
+                true,
+            ),
         ));
     }
- 
+
     private function fetchRegistrasi(string $nomorReg): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('registrasi.registrasi r')
             ->select([
                 'r.nomor_reg',
@@ -91,18 +100,19 @@ final class PermintaanLabPaController extends ControllerTemplate
                 'd.kode_dokter',
                 'od.nama AS nama_dokter',
             ])
-            ->join('role.pasien p',   'p.id_pasien = r.id_pasien')
-            ->join('person.orang o',  'o.id_orang  = p.id_orang')
-            ->join('role.dokter d',   'd.id_dokter = r.id_dokter', 'left')
-            ->join('person.orang od', 'od.id_orang = d.id_orang',  'left')
+            ->join('role.pasien p', 'p.id_pasien = r.id_pasien')
+            ->join('person.orang o', 'o.id_orang  = p.id_orang')
+            ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
+            ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
             ->where('r.nomor_reg', $nomorReg)
             ->get()
             ->getRowArray() ?? [];
     }
- 
+
     private function fetchDokter(string|int $idDokter): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('role.dokter d')
             ->select(['d.kode_dokter', 'o.nama AS nama_dokter'])
             ->join('person.orang o', 'o.id_orang = d.id_orang')
@@ -110,10 +120,11 @@ final class PermintaanLabPaController extends ControllerTemplate
             ->get()
             ->getRowArray() ?? [];
     }
- 
+
     private function fetchItemTerpilih(int $idPermintaanLab): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_pa_item pai')
             ->select([
                 'pai.id_permintaan_pa_item',
@@ -127,10 +138,11 @@ final class PermintaanLabPaController extends ControllerTemplate
             ->get()
             ->getResultArray();
     }
- 
+
     private function isEditable(int $idPermintaanLab): bool
     {
-        $row = $this->model->db
+        $row = $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_header')
             ->select('id_status_permintaan')
             ->where('id_permintaan', $idPermintaanLab)
@@ -142,37 +154,41 @@ final class PermintaanLabPaController extends ControllerTemplate
 
     private function buildHeaderData(array $rawPost, bool $withStatus = false): array
     {
-        return array_merge([
-            'no_permintaan'      => $rawPost['no_permintaan']      ?? '',
-            'nomor_reg'          => $rawPost['nomor_reg']          ?? '',
-            'id_kategori_lab'    => ID_KATEGORI_PA,
-            'id_dokter_perujuk'  => trim($rawPost['id_dokter_perujuk'] ?? ''),
-            'tgl_permintaan'     => $rawPost['tgl_permintaan']     ?? date('Y-m-d H:i:s'),
-            'indikasi_klinis'    => $rawPost['indikasi_klinis']    ?? '',
-            'informasi_tambahan' => $rawPost['informasi_tambahan'] ?? '',
-        ], $withStatus ? ['id_status_permintaan' => 1] : []);
+        return array_merge(
+            [
+                'no_permintaan'      => $rawPost['no_permintaan'] ?? '',
+                'nomor_reg'          => $rawPost['nomor_reg'] ?? '',
+                'id_kategori_lab'    => ID_KATEGORI_PA,
+                'id_dokter_perujuk'  => trim($rawPost['id_dokter_perujuk'] ?? ''),
+                'tgl_permintaan'     => $rawPost['tgl_permintaan'] ?? date('Y-m-d H:i:s'),
+                'indikasi_klinis'    => $rawPost['indikasi_klinis'] ?? '',
+                'informasi_tambahan' => $rawPost['informasi_tambahan'] ?? '',
+            ],
+            $withStatus ? ['id_status_permintaan' => 1] : [],
+        );
     }
- 
+
     private function buildSpesimenData(array $rawPost): array
     {
         return [
-            'tgl_pengambilan_bahan'       => $rawPost['tgl_pengambilan_bahan']       ?? null,
-            'metode_diperoleh'            => $rawPost['metode_diperoleh']            ?? '',
-            'lokasi_jaringan'             => $rawPost['lokasi_jaringan']             ?? '',
-            'bahan_pengawet'              => $rawPost['bahan_pengawet']              ?? '',
-            'riwayat_lokasi_lab'          => $rawPost['riwayat_lokasi_lab']          ?? '',
-            'riwayat_tgl_sebelumnya'      => $rawPost['riwayat_tgl_sebelumnya']      ?? null,
-            'riwayat_no_pa_sebelumnya'    => $rawPost['riwayat_no_pa_sebelumnya']    ?? '',
+            'tgl_pengambilan_bahan'       => $rawPost['tgl_pengambilan_bahan'] ?? null,
+            'metode_diperoleh'            => $rawPost['metode_diperoleh'] ?? '',
+            'lokasi_jaringan'             => $rawPost['lokasi_jaringan'] ?? '',
+            'bahan_pengawet'              => $rawPost['bahan_pengawet'] ?? '',
+            'riwayat_lokasi_lab'          => $rawPost['riwayat_lokasi_lab'] ?? '',
+            'riwayat_tgl_sebelumnya'      => $rawPost['riwayat_tgl_sebelumnya'] ?? null,
+            'riwayat_no_pa_sebelumnya'    => $rawPost['riwayat_no_pa_sebelumnya'] ?? '',
             'riwayat_diagnosa_sebelumnya' => $rawPost['riwayat_diagnosa_sebelumnya'] ?? '',
         ];
     }
- 
+
     private function insertItems(
         int $idPermintaanLab,
         array $idItems,
         \App\Features\Laboratorium\PermintaanLabPaItem\PermintaanLabPaItemModel $modelItem,
     ): void {
-        if (empty($idItems)) return;
+        if (empty($idItems))
+            return;
 
         // Menggunakan Batch Insert untuk efisiensi eksekusi database
         $data = array_map(fn($idItem) => [
@@ -186,29 +202,38 @@ final class PermintaanLabPaController extends ControllerTemplate
     // // Centralize query for index() and list()
     private function fetchPermintaanLabHeaders(): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_header h')
             ->select([
-                'h.id_permintaan', 'h.no_permintaan', 'h.nomor_reg', 'h.tgl_permintaan',
+                'h.id_permintaan',
+                'h.no_permintaan',
+                'h.nomor_reg',
+                'h.tgl_permintaan',
                 'h.id_status_permintaan',
-                'p.nomor_rm', 'o.nama', 'o.tanggal_lahir', 'd.kode_dokter', 'od.nama AS nama_dokter', 's.nama_status',
+                'p.nomor_rm',
+                'o.nama',
+                'o.tanggal_lahir',
+                'd.kode_dokter',
+                'od.nama AS nama_dokter',
+                's.nama_status',
             ])
-            ->join('registrasi.registrasi r',             'r.nomor_reg  = h.nomor_reg',            'left')
-            ->join('role.pasien p',                        'p.id_pasien  = r.id_pasien',            'left')
-            ->join('person.orang o',                       'o.id_orang   = p.id_orang',             'left')
-            ->join('role.dokter d',                        'd.id_dokter  = h.id_dokter_perujuk',    'left')
-            ->join('person.orang od',                      'od.id_orang  = d.id_orang',             'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg  = h.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien  = r.id_pasien', 'left')
+            ->join('person.orang o', 'o.id_orang   = p.id_orang', 'left')
+            ->join('role.dokter d', 'd.id_dokter  = h.id_dokter_perujuk', 'left')
+            ->join('person.orang od', 'od.id_orang  = d.id_orang', 'left')
             ->join('laboratorium.ref_status_permintaan s', 's.id_status  = h.id_status_permintaan', 'left')
             ->where('h.id_kategori_lab', ID_KATEGORI_PA)
             ->orderBy('h.tgl_permintaan', 'DESC')
             ->get()
             ->getResultArray();
     }
- 
+
     // -------------------------------------------------------------------------
     // Pages
     // -------------------------------------------------------------------------
- 
+
     #[\Override]
     final public function create_page(): string
     {
@@ -224,15 +249,16 @@ final class PermintaanLabPaController extends ControllerTemplate
             'item_terpilih' => [],
         ]);
     }
- 
+
     #[\Override]
     final public function update_page(int|string $id): string
     {
         $idPermintaanLab = (int) $id;
- 
+
         $paRow = $this->model->where('id_permintaan_lab', $idPermintaanLab)->first();
- 
-        $baris = $this->model->db
+
+        $baris = $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_header h')
             ->select([
                 'h.id_permintaan AS id_permintaan_lab',
@@ -254,24 +280,24 @@ final class PermintaanLabPaController extends ControllerTemplate
                 'tgl_pengambilan_bahan'       => $paRow['tgl_pengambilan_bahan']
                     ? date('Y-m-d\TH:i', strtotime($paRow['tgl_pengambilan_bahan']))
                     : '',
-                'metode_diperoleh'            => $paRow['metode_diperoleh']            ?? '',
-                'lokasi_jaringan'             => $paRow['lokasi_jaringan']             ?? '',
-                'bahan_pengawet'              => $paRow['bahan_pengawet']              ?? '',
-                'riwayat_lokasi_lab'          => $paRow['riwayat_lokasi_lab']          ?? '',
-                'riwayat_tgl_sebelumnya'      => $paRow['riwayat_tgl_sebelumnya']      ?? '',
-                'riwayat_no_pa_sebelumnya'    => $paRow['riwayat_no_pa_sebelumnya']    ?? '',
+                'metode_diperoleh'            => $paRow['metode_diperoleh'] ?? '',
+                'lokasi_jaringan'             => $paRow['lokasi_jaringan'] ?? '',
+                'bahan_pengawet'              => $paRow['bahan_pengawet'] ?? '',
+                'riwayat_lokasi_lab'          => $paRow['riwayat_lokasi_lab'] ?? '',
+                'riwayat_tgl_sebelumnya'      => $paRow['riwayat_tgl_sebelumnya'] ?? '',
+                'riwayat_no_pa_sebelumnya'    => $paRow['riwayat_no_pa_sebelumnya'] ?? '',
                 'riwayat_diagnosa_sebelumnya' => $paRow['riwayat_diagnosa_sebelumnya'] ?? '',
             ]);
         }
- 
+
         if (!empty($baris['nomor_reg'])) {
             $baris = array_merge($baris, $this->fetchRegistrasi($baris['nomor_reg']));
         }
- 
+
         if (!empty($baris['id_dokter_perujuk'])) {
             $baris = array_merge($baris, $this->fetchDokter($baris['id_dokter_perujuk']));
         }
- 
+
         return view('admin/laboratorium/tambah_permintaan_pa', [
             'judul'         => 'Ubah ' . $this->title,
             'breadcrumbs'   => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
@@ -284,62 +310,66 @@ final class PermintaanLabPaController extends ControllerTemplate
             'item_terpilih' => $this->fetchItemTerpilih($idPermintaanLab),
         ]);
     }
- 
+
     // -------------------------------------------------------------------------
     // CRUD
     // -------------------------------------------------------------------------
- 
+
     #[\Override]
     public function create(): string|RedirectResponse
     {
         $rawPost = $this->request->getPost();
         $idItems = $this->request->getPost('id_item');
- 
+
         if (empty($idItems)) {
             session()->setFlashdata('error', 'Pilih minimal satu item pemeriksaan.');
             return redirect()->back()->withInput();
         }
- 
-        $noPermintaan = !empty($rawPost['no_permintaan']) ? $rawPost['no_permintaan'] : $this->generateNomorPermintaan();
- 
-        $header   = array_merge($this->buildHeaderData($rawPost, true), ['no_permintaan' => $noPermintaan]);
-        $spesimen = $this->buildSpesimenData($rawPost);
+
+        $noPermintaan = !empty($rawPost['no_permintaan'])
+            ? $rawPost['no_permintaan']
+            : $this->generateNomorPermintaan();
+
+        $header      = array_merge($this->buildHeaderData($rawPost, true), ['no_permintaan' => $noPermintaan]);
+        $spesimen    = $this->buildSpesimenData($rawPost);
         $modelHeader = new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel();
         $modelItem   = new \App\Features\Laboratorium\PermintaanLabPaItem\PermintaanLabPaItemModel();
- 
+
         $this->model->db->transStart();
- 
+
         try {
             $modelHeader->insert($header);
             $idPermintaanLab = $modelHeader->getInsertID();
- 
+
             $this->model->insert(array_merge($spesimen, ['id_permintaan_lab' => $idPermintaanLab]));
             $this->insertItems($idPermintaanLab, $idItems, $modelItem);
- 
+
             $this->model->db->transComplete();
- 
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal menyimpan permintaan lab PA.');
             }
- 
+
             session()->setFlashdata('success', 'Permintaan lab PA berhasil disimpan.');
             return redirect()->to($this->get_uri_path() . '/data');
- 
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
     }
- 
+
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
- 
+        if ($id == 0)
+            return $this->home();
+
         $idPermintaanLab = (int) $id;
- 
+
         if (!$idPermintaanLab) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return redirect()->back();
@@ -352,93 +382,98 @@ final class PermintaanLabPaController extends ControllerTemplate
 
         $rawPost = $this->request->getPost();
         $idItems = $this->request->getPost('id_item') ?? [];
- 
+
         if (empty($idItems)) {
             session()->setFlashdata('error', 'Pilih minimal satu item pemeriksaan.');
             return redirect()->back()->withInput();
         }
- 
+
         $spesimen    = $this->buildSpesimenData($rawPost);
         $modelHeader = new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel();
         $modelItem   = new \App\Features\Laboratorium\PermintaanLabPaItem\PermintaanLabPaItemModel();
- 
+
         $this->model->db->transStart();
- 
+
         try {
             $modelHeader->update($idPermintaanLab, $this->buildHeaderData($rawPost));
- 
+
             $this->model->where('id_permintaan_lab', $idPermintaanLab)->set($spesimen)->update();
- 
+
             $modelItem->where('id_permintaan_lab', $idPermintaanLab)->delete();
             $this->insertItems($idPermintaanLab, $idItems, $modelItem);
- 
+
             $this->model->db->transComplete();
- 
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal memperbarui permintaan lab PA.');
             }
- 
+
             session()->setFlashdata('success', 'Permintaan lab PA berhasil diperbarui.');
             return redirect()->to($this->get_uri_path() . '/data');
- 
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
     }
- 
+
     #[\Override]
     final public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->home();
- 
+        if ($id == 0)
+            return $this->home();
+
         $idPermintaanLab = (int) $id;
-        if (!$idPermintaanLab) return $this->home();
- 
+        if (!$idPermintaanLab)
+            return $this->home();
+
         $modelHeader = new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel();
         $modelItem   = new \App\Features\Laboratorium\PermintaanLabPaItem\PermintaanLabPaItemModel();
- 
+
         $this->model->db->transStart();
- 
+
         try {
             $modelItem->where('id_permintaan_lab', $idPermintaanLab)->delete();
             $this->model->where('id_permintaan_lab', $idPermintaanLab)->delete();
- 
+
             $modelHeader->delete($idPermintaanLab);
- 
+
             $this->model->db->transComplete();
- 
+
             if ($this->model->db->transStatus() === false) {
                 throw new \RuntimeException('Gagal menghapus permintaan lab PA.');
             }
- 
+
             session()->setFlashdata('success', 'Permintaan lab PA berhasil dihapus.');
- 
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
             session()->setFlashdata('error', $errorMsg);
         }
- 
+
         return $this->home();
     }
- 
+
     // -------------------------------------------------------------------------
     // Sampel
     // -------------------------------------------------------------------------
- 
+
     public function sampel(int|string $id): RedirectResponse
     {
-        if ($id == 0) return $this->home();
- 
+        if ($id == 0)
+            return $this->home();
+
         $idPermintaanLab = (int) $id;
-        if (!$idPermintaanLab) return $this->home();
- 
+        if (!$idPermintaanLab)
+            return $this->home();
+
         try {
-            (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel())->update($idPermintaanLab,
-            [
+            (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel())->update($idPermintaanLab, [
                 'tgl_jam_sampel'       => $this->request->getPost('tgl_jam_sampel') ?: date('Y-m-d H:i:s'),
                 'id_status_permintaan' => 2,
             ]);
@@ -446,19 +481,19 @@ final class PermintaanLabPaController extends ControllerTemplate
         } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
             session()->setFlashdata('error', $this->friendly_db_error($e));
         }
- 
+
         return $this->home();
     }
- 
+
     // -------------------------------------------------------------------------
     // Index
     // -------------------------------------------------------------------------
- 
+
     #[\Override]
     final public function index(): string
     {
         $rows = $this->fetchPermintaanLabHeaders();
- 
+
         $konfig = [
             [1, 'No. Permintaan', 'no_permintaan',  'teks',    0],
             [1, 'No. Registrasi', 'nomor_reg',      'teks',    0],
@@ -468,7 +503,7 @@ final class PermintaanLabPaController extends ControllerTemplate
             [1, 'Tgl Permintaan', 'tgl_permintaan', 'tanggal', 0],
             [1, 'Status',         'nama_status',    'status',  0],
         ];
- 
+
         return view('/layouts/data', [
             'judul'        => $this->title,
             'breadcrumbs'  => $this->breadcrumbs,
@@ -483,7 +518,7 @@ final class PermintaanLabPaController extends ControllerTemplate
             'query_string' => '',
         ]);
     }
- 
+
     // -------------------------------------------------------------------------
     // Cetak
     // -------------------------------------------------------------------------
@@ -493,21 +528,29 @@ final class PermintaanLabPaController extends ControllerTemplate
     {
         $idPermintaanLab = (int) $id;
 
-        $header = $this->model->db
+        $header = $this->model
+            ->db
             ->table('laboratorium.permintaan_lab_header plh')
             ->select([
-                'plh.id_permintaan', 'plh.no_permintaan', 'plh.nomor_reg',
-                'plh.tgl_permintaan', 'plh.indikasi_klinis', 'plh.informasi_tambahan',
-                'p.nomor_rm', 'o.nama AS nama_pasien',
-                'd.kode_dokter', 'od.nama AS nama_dokter',
+                'plh.id_permintaan',
+                'plh.no_permintaan',
+                'plh.nomor_reg',
+                'plh.tgl_permintaan',
+                'plh.indikasi_klinis',
+                'plh.informasi_tambahan',
+                'p.nomor_rm',
+                'o.nama AS nama_pasien',
+                'd.kode_dokter',
+                'od.nama AS nama_dokter',
             ])
-            ->join('registrasi.registrasi r',  'r.nomor_reg       = plh.nomor_reg',         'left')
-            ->join('role.pasien p',             'p.id_pasien       = r.id_pasien',           'left')
-            ->join('person.orang o',            'o.id_orang        = p.id_orang',            'left')
-            ->join('role.dokter d',             'd.id_dokter       = plh.id_dokter_perujuk', 'left')
-            ->join('person.orang od',           'od.id_orang       = d.id_orang',            'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg       = plh.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien       = r.id_pasien', 'left')
+            ->join('person.orang o', 'o.id_orang        = p.id_orang', 'left')
+            ->join('role.dokter d', 'd.id_dokter       = plh.id_dokter_perujuk', 'left')
+            ->join('person.orang od', 'od.id_orang       = d.id_orang', 'left')
             ->where('plh.id_permintaan', $idPermintaanLab)
-            ->get()->getRowArray() ?? [];
+            ->get()
+            ->getRowArray() ?? [];
 
         if (empty($header)) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');

@@ -49,7 +49,7 @@ final class CatatanAnestesiSedasiModel extends ModelTemplate
                 'alasan_batal'         => V::DEFAULT(),
             ],
             [
-                'id_jadwal' => [
+                'id_jadwal'           => [
                     'tanggal',
                     'id_permintaan' => [
                         'nomor_reg',

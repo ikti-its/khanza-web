@@ -24,7 +24,7 @@ final class PermintaanLabPaModel extends ModelTemplate
                 'riwayat_diagnosa_sebelumnya' => V::DEFAULT(),
             ],
             [
-                'id_permintaan_lab'   => [],
+                'id_permintaan_lab' => [],
             ],
         );
     }

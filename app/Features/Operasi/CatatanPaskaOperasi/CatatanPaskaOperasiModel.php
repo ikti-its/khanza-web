@@ -26,7 +26,7 @@ final class CatatanPaskaOperasiModel extends ModelTemplate
                 'instruksi_lainnya'       => V::DEFAULT(),
             ],
             [
-                'id_jadwal' => [
+                'id_jadwal'       => [
                     'tanggal',
                     'id_permintaan' => [
                         'nomor_reg',
@@ -38,7 +38,7 @@ final class CatatanPaskaOperasiModel extends ModelTemplate
                     ],
                 ],
                 'id_dokter_bedah' => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
             ],
         );

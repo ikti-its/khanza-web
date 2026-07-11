@@ -13,18 +13,18 @@ final class PermintaanLabPkParameterModel extends ModelTemplate
         parent::__construct(
             new PermintaanLabPkParameterDatabase(),
             [
-                'id_pk_parameter'       => V::DEFAULT(),
+                'id_pk_parameter' => V::DEFAULT(),
             ],
             [
                 'id_permintaan_pk_item' => [
                     'id_permintaan_lab',
-                    'id_item_pemeriksaan'
+                    'id_item_pemeriksaan',
                 ],
                 'id_parameter'          => [
                     'nama_parameter',
                     'satuan',
                     'nilai_rujukan',
-                    'biaya_item'
+                    'biaya_item',
                 ],
             ],
         );

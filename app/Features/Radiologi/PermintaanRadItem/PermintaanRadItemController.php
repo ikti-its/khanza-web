@@ -14,8 +14,8 @@ final class PermintaanRadItemController extends ControllerTemplate
         parent::__construct(
             new PermintaanRadItemModel(),
             [
-                ['Radiologi',             'radiologi'],
-                ['Permintaan Rad Item',   'permintaan_rad_item'],
+                ['Radiologi',           'radiologi'],
+                ['Permintaan Rad Item', 'permintaan_rad_item'],
             ],
             'Permintaan Rad Item',
             [
@@ -32,13 +32,22 @@ final class PermintaanRadItemController extends ControllerTemplate
             ],
         );
     }
+
     public function list()
     {
         $idPermintaan = $this->request->getGet('id_permintaan');
 
-        $rows = $this->model->db
+        $rows = $this->model
+            ->db
             ->table('radiologi.permintaan_rad_item pri')
-            ->select(['pri.id_permintaan_item', 'pri.id_item', 'pri.is_baca_saja', 'r.kode_periksa', 'r.nama_pemeriksaan', 'r.tarif_dasar'])
+            ->select([
+                'pri.id_permintaan_item',
+                'pri.id_item',
+                'pri.is_baca_saja',
+                'r.kode_periksa',
+                'r.nama_pemeriksaan',
+                'r.tarif_dasar',
+            ])
             ->join('radiologi.ref_item_rad r', 'r.id_item = pri.id_item')
             ->where('pri.id_permintaan', $idPermintaan)
             ->get()

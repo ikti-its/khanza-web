@@ -58,7 +58,8 @@ final class PengkajianPreopController extends ControllerTemplate
 
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model->db
+        return $this->model
+            ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
                 'j.id_jadwal',
@@ -68,15 +69,16 @@ final class PengkajianPreopController extends ControllerTemplate
                 'op.nama AS nama_pasien',
                 'ob.nama AS nama_dokter_bedah',
             ])
-            ->join('operasi.permintaan_operasi po',   'po.id_permintaan = j.id_permintaan', 'left')
-            ->join('registrasi.registrasi r',        'r.nomor_reg      = po.nomor_reg',    'left')
-            ->join('role.pasien p',                   'p.id_pasien      = r.id_pasien',     'left')
-            ->join('person.orang op',                 'op.id_orang      = p.id_orang',      'left')
-            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan',  'left')
-            ->join('role.dokter db',                  'db.id_dokter     = j.id_dokter_bedah', 'left')
-            ->join('person.orang ob',                 'ob.id_orang      = db.id_orang',     'left')
+            ->join('operasi.permintaan_operasi po', 'po.id_permintaan = j.id_permintaan', 'left')
+            ->join('registrasi.registrasi r', 'r.nomor_reg      = po.nomor_reg', 'left')
+            ->join('role.pasien p', 'p.id_pasien      = r.id_pasien', 'left')
+            ->join('person.orang op', 'op.id_orang      = p.id_orang', 'left')
+            ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
+            ->join('role.dokter db', 'db.id_dokter     = j.id_dokter_bedah', 'left')
+            ->join('person.orang ob', 'ob.id_orang      = db.id_orang', 'left')
             ->where('j.id_jadwal', $idJadwal)
-            ->get()->getRowArray() ?? [];
+            ->get()
+            ->getRowArray() ?? [];
     }
 
     private function buildViewData(array $jadwal, array $record, string $formAction): array
@@ -84,7 +86,10 @@ final class PengkajianPreopController extends ControllerTemplate
         $isCreate = $formAction === '/submittambah/';
         return [
             'judul'       => ($isCreate ? 'Tambah ' : 'Ubah ') . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => $isCreate ? 'Tambah' : 'Ubah', 'icon' => '']]),
+            'breadcrumbs' => array_merge($this->breadcrumbs, [[
+                'title' => $isCreate ? 'Tambah' : 'Ubah',
+                'icon'  => '',
+            ]]),
             'modul_path'  => $this->get_uri_path(),
             'form_action' => $formAction,
             'baris'       => $record,
@@ -102,13 +107,16 @@ final class PengkajianPreopController extends ControllerTemplate
         $idJadwal = (int) ($this->request->getGet('id_jadwal') ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
-        return view('admin/operasi/tambah_pengkajian_preop',
-            $this->buildViewData($jadwal, [
+        return view('admin/operasi/tambah_pengkajian_preop', $this->buildViewData(
+            $jadwal,
+            [
                 'id_jadwal'         => $idJadwal,
-                'id_dokter_bedah'   => $jadwal['id_dokter_bedah']   ?? '',
+                'id_dokter_bedah'   => $jadwal['id_dokter_bedah'] ?? '',
                 'nama_dokter_bedah' => $jadwal['nama_dokter_bedah'] ?? '',
-                'rencana_tindakan'  => $jadwal['nama_tindakan']     ?? '',
-            ], '/submittambah/'));
+                'rencana_tindakan'  => $jadwal['nama_tindakan'] ?? '',
+            ],
+            '/submittambah/',
+        ));
     }
 
     #[\Override]
@@ -120,7 +128,10 @@ final class PengkajianPreopController extends ControllerTemplate
 
         $record['nama_dokter_bedah'] = $jadwal['nama_dokter_bedah'] ?? '';
 
-        return view('admin/operasi/tambah_pengkajian_preop',
-            $this->buildViewData($jadwal, $record, '/submitedit/' . $id));
+        return view('admin/operasi/tambah_pengkajian_preop', $this->buildViewData(
+            $jadwal,
+            $record,
+            '/submitedit/' . $id,
+        ));
     }
 }

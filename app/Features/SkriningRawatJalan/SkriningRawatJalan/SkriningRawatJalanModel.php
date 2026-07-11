@@ -13,12 +13,12 @@ final class SkriningRawatJalanModel extends ModelTemplate
         parent::__construct(
             new SkriningRawatJalanDatabase(),
             [
-                'id_skrining'      => V::DEFAULT(),
-                'tgl_skrining'     => V::DEFAULT(),
-                'jam_skrining'     => V::DEFAULT(),
-                'is_geriatri'      => V::DEFAULT(),
-                'is_risiko_jatuh'  => V::DEFAULT(),
-                ],
+                'id_skrining'     => V::DEFAULT(),
+                'tgl_skrining'    => V::DEFAULT(),
+                'jam_skrining'    => V::DEFAULT(),
+                'is_geriatri'     => V::DEFAULT(),
+                'is_risiko_jatuh' => V::DEFAULT(),
+            ],
             [
                 'no_rm'          => [
                     'nomor_rm',
@@ -32,7 +32,7 @@ final class SkriningRawatJalanModel extends ModelTemplate
                 'id_unit'        => ['nama_unit'],
                 'id_keputusan'   => ['skrining_keputusan'],
                 'id_petugas'     => [
-                    'id_orang'   => ['nama'],
+                    'id_orang' => ['nama'],
                 ],
             ],
         );

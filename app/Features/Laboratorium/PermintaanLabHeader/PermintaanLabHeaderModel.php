@@ -13,18 +13,18 @@ final class PermintaanLabHeaderModel extends ModelTemplate
         parent::__construct(
             new PermintaanLabHeaderDatabase(),
             [
-                'id_permintaan'        => V::DEFAULT(),
-                'no_permintaan'        => V::DEFAULT(),
-                'tgl_permintaan'       => V::DEFAULT(),
-                'indikasi_klinis'      => V::DEFAULT(),
-                'informasi_tambahan'   => V::DEFAULT(),
-                'tgl_jam_sampel'       => V::DEFAULT(),
+                'id_permintaan'      => V::DEFAULT(),
+                'no_permintaan'      => V::DEFAULT(),
+                'tgl_permintaan'     => V::DEFAULT(),
+                'indikasi_klinis'    => V::DEFAULT(),
+                'informasi_tambahan' => V::DEFAULT(),
+                'tgl_jam_sampel'     => V::DEFAULT(),
             ],
             [
                 'nomor_reg'            => [],
                 'id_kategori_lab'      => ['nama_kategori'],
                 'id_dokter_perujuk'    => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_status_permintaan' => ['nama_status'],
             ],

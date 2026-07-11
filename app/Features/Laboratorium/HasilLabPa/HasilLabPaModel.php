@@ -13,13 +13,13 @@ final class HasilLabPaModel extends ModelTemplate
         parent::__construct(
             new HasilLabPaDatabase(),
             [
-                'id_hasil_pa'         => V::DEFAULT(),
-                'tgl_jam_hasil'       => V::DEFAULT(),
-                'diagnosa_klinis'     => V::DEFAULT(),
-                'makroskopik'         => V::DEFAULT(),
-                'mikroskopik'         => V::DEFAULT(),
-                'kesimpulan'          => V::DEFAULT(),
-                'kesan'               => V::DEFAULT(),
+                'id_hasil_pa'     => V::DEFAULT(),
+                'tgl_jam_hasil'   => V::DEFAULT(),
+                'diagnosa_klinis' => V::DEFAULT(),
+                'makroskopik'     => V::DEFAULT(),
+                'mikroskopik'     => V::DEFAULT(),
+                'kesimpulan'      => V::DEFAULT(),
+                'kesan'           => V::DEFAULT(),
             ],
             [
                 'id_permintaan_lab'     => ['nomor_reg'],

@@ -14,8 +14,8 @@ final class RefSlotOperasiController extends ControllerTemplate
         parent::__construct(
             new RefSlotOperasiModel(),
             [
-                ['Operasi',              'operasi'],
-                ['Slot Jadwal Operasi',  'ref_slot_operasi'],
+                ['Operasi',             'operasi'],
+                ['Slot Jadwal Operasi', 'ref_slot_operasi'],
             ],
             'Slot Jadwal Operasi',
             [
@@ -35,7 +35,8 @@ final class RefSlotOperasiController extends ControllerTemplate
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $rows = $this->model->db
+        $rows = $this->model
+            ->db
             ->table('operasi.ref_slot_operasi')
             ->select(['id_slot', 'nama_slot', 'waktu_slot'])
             ->orderBy('id_slot', 'ASC')

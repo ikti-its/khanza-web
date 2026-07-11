@@ -29,7 +29,7 @@ final class TimeOutSebelumInsisiModel extends ModelTemplate
                 'is_verifikasi_preop'     => V::DEFAULT(),
             ],
             [
-                'id_jadwal' => [
+                'id_jadwal'          => [
                     'tanggal',
                     'id_permintaan' => [
                         'nomor_reg',
@@ -40,20 +40,20 @@ final class TimeOutSebelumInsisiModel extends ModelTemplate
                         ],
                     ],
                 ],
-                'id_tindakan'          => [],
-                'id_sn_cn'             => [
-                    'id_orang'  => ['nama']
+                'id_tindakan'        => [],
+                'id_sn_cn'           => [
+                    'id_orang' => ['nama'],
                 ],
-                'id_dokter_bedah'      => [
-                    'id_orang'  => ['nama']
+                'id_dokter_bedah'    => [
+                    'id_orang' => ['nama'],
                 ],
-                'id_dokter_anestesi'   => [
-                    'id_orang'  => ['nama']
+                'id_dokter_anestesi' => [
+                    'id_orang' => ['nama'],
                 ],
-                'id_penandaan_area'    => ['nama_ketersediaan'],
-                'id_hal_khusus'        => ['nama_ketersediaan'],
-                'id_perawat_ok'        => [
-                    'id_orang'  => ['nama']
+                'id_penandaan_area'  => ['nama_ketersediaan'],
+                'id_hal_khusus'      => ['nama_ketersediaan'],
+                'id_perawat_ok'      => [
+                    'id_orang' => ['nama'],
                 ],
             ],
         );

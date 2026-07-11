@@ -25,7 +25,7 @@ final class SignoutSebelumTutupLukaModel extends ModelTemplate
                 'catatan_pemulihan'       => V::DEFAULT(),
             ],
             [
-                'id_jadwal' => [
+                'id_jadwal'            => [
                     'tanggal',
                     'id_permintaan' => [
                         'nomor_reg',
@@ -38,18 +38,18 @@ final class SignoutSebelumTutupLukaModel extends ModelTemplate
                 ],
                 'id_tindakan'          => [],
                 'id_sn_cn'             => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_dokter_bedah'      => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_dokter_anestesi'   => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
                 'id_label_spesimen'    => ['nama_status'],
                 'id_formulir_spesimen' => ['nama_status'],
                 'id_perawat_ok'        => [
-                    'id_orang'  => ['nama']
+                    'id_orang' => ['nama'],
                 ],
             ],
         );

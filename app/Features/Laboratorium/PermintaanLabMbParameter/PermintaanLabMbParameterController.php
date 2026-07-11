@@ -14,7 +14,7 @@ final class PermintaanLabMbParameterController extends ControllerTemplate
         parent::__construct(
             new PermintaanLabMbParameterModel(),
             [
-                ['Laboratorium',               'laboratorium'],
+                ['Laboratorium',                'laboratorium'],
                 ['Parameter Permintaan Lab MB', 'permintaan_lab_mb_parameter'],
             ],
             'Parameter Permintaan Lab MB',
