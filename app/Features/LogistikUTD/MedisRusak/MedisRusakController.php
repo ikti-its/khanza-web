@@ -22,9 +22,10 @@ final class MedisRusakController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 // A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_medis_rusak', 'ID Medis Rusak'],
@@ -173,5 +174,70 @@ final class MedisRusakController extends ControllerTemplate
         }
 
         return $this->home();
+    }
+
+    /**
+     * Menampilkan Halaman Detail BHP Medis Rusak
+     */
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataRusak = $this->model->find($id);
+        if (!$dataRusak) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Kerusakan BHP Medis tidak ditemukan.');
+        }
+
+        $dataPetugas = [];
+
+        if (!empty($dataRusak['id_petugas'])) {
+            $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
+            $petugasRow   = $modelPetugas->find($dataRusak['id_petugas']) ?? [];
+
+            if (!empty($petugasRow['id_orang'])) {
+                $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
+                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+
+                if (isset($orangPetugasRow['nama'])) {
+                    $dataPetugas['nama_petugas'] = $orangPetugasRow['nama'];
+                }
+            }
+        }
+
+        $baris = array_merge($dataRusak, $dataPetugas);
+
+        $detailRusakRaw = $this->model->db
+            ->table('logistik_utd.medis_rusak_detail mrd')
+            ->select('mrd.id_barang, mrd.jumlah, mrd.harga_beli')
+            ->where('mrd.id_medis_rusak', $id)
+            ->get()
+            ->getResultArray();
+
+        $modelMasterMedis = new \App\Features\InventoriMedis\DataBarang\DataBarangModel();
+        foreach ($detailRusakRaw as $k => $v) {
+            $idBarang = $v['id_barang'] ?? 0;
+            $masterItem = $modelMasterMedis->find($idBarang);
+            
+            $detailRusakRaw[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
+            $detailRusakRaw[$k]['nama_barang'] = $masterItem['nama'] ?? '-';
+        }
+
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail'],
+        ];
+
+        return view('admin/logistikutd/detail_medisrusak', [
+            'judul'        => 'Detail ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'   => $this->get_uri_path(),
+            'baris'        => $baris,
+            'detail_rusak' => $detailRusakRaw,
+        ]);
     }
 }
