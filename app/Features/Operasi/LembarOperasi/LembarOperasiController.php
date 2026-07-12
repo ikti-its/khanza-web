@@ -37,6 +37,7 @@ final class LembarOperasiController extends ControllerTemplate
                 'j.nomor_operasi',
                 'j.tanggal',
                 'j.waktu_mulai',
+                'j.tanggal_selesai',
                 'j.waktu_selesai',
                 'j.id_status',
                 'rs.nama_status',

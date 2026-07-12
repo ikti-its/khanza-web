@@ -50,6 +50,7 @@ final class TagihanOperasiController extends ControllerTemplate
                 'j.id_jadwal',
                 'j.tanggal',
                 'j.waktu_mulai',
+                'j.tanggal_selesai AS jadwal_tanggal_selesai',
                 'j.waktu_selesai',
                 'j.id_dokter_bedah',
                 'j.id_dokter_anestesi',
@@ -241,6 +242,15 @@ final class TagihanOperasiController extends ControllerTemplate
         $idJadwal = (int) ($this->request->getGet('id_jadwal') ?? 0);
         $jadwal   = $idJadwal ? $this->fetchJadwal($idJadwal) : [];
 
+        // Pre-fill tanggal mulai/selesai dari jadwal (tanggal + jam), tetap bisa diedit user
+        if (!empty($jadwal['tanggal']) && !empty($jadwal['waktu_mulai'])) {
+            $jadwal['tanggal_mulai'] = $jadwal['tanggal'] . ' ' . $jadwal['waktu_mulai'];
+        }
+        if (!empty($jadwal['tanggal']) && !empty($jadwal['waktu_selesai'])) {
+            $tanggalSelesai            = $jadwal['jadwal_tanggal_selesai'] ?: $jadwal['tanggal'];
+            $jadwal['tanggal_selesai'] = $tanggalSelesai . ' ' . $jadwal['waktu_selesai'];
+        }
+
         // Pre-fill paket komponen dari tindakan utama jadwal
         $paketTerpilih = [];
         if (!empty($jadwal['id_tindakan'])) {
@@ -392,6 +402,38 @@ final class TagihanOperasiController extends ControllerTemplate
             session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
+    }
+
+    #[\Override]
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) {
+            return $this->home();
+        }
+
+        try {
+            $this->model->db->transStart();
+
+            $this->model->db->table('operasi.tagihan_operasi_tindakan')->where('id_tagihan', $id)->delete();
+            $this->model->db->table('operasi.tagihan_operasi_obat')->where('id_tagihan', $id)->delete();
+            $this->model->delete($id);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus tagihan operasi.');
+            }
+
+            session()->setFlashdata('success', 'Tagihan operasi berhasil dihapus.');
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
+            session()->setFlashdata('error', $errorMsg);
+        }
+
+        return $this->home();
     }
 
     // -------------------------------------------------------------------------

@@ -26,6 +26,7 @@ $gridData = [
     'Dokter Bedah'     => $jadwal['nama_dokter_bedah']    ?? '-',
     'Dokter Anestesi'  => $jadwal['nama_dokter_anestesi'] ?? '-',
     'Tanggal Operasi'  => $jadwal['tanggal']              ?? '-',
+    'Tanggal Selesai'  => $jadwal['tanggal_selesai']      ?? '-',
     'Waktu Mulai'      => $jadwal['waktu_mulai']          ?? '-',
     'Waktu Selesai'    => $jadwal['waktu_selesai']        ?? '-',
 ];
