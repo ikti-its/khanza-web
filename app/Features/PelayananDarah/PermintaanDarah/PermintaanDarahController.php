@@ -39,6 +39,45 @@ final class PermintaanDarahController extends ControllerTemplate
     }
 
     /**
+     * OVERRIDE: Menampilkan Halaman Utama Permintaan Darah
+     */
+    #[\Override]
+    public function index(): string
+    {
+        $currentPage = max(1, (int) ($this->request->getGet('page') ?? 1));
+        $perPage     = 10;
+        $offset      = ($currentPage - 1) * $perPage;
+
+        $totalRows  = $this->model->count_filtered();
+        $data_tabel = $this->model->get_data_tabel($perPage, $offset);
+
+        $konfig = [
+            [1, 'No. Permintaan',      'no_permintaan',          'teks',        0],
+            [1, 'No. Rawat',           'nomor_rawat',            'teks',        0],
+            [1, 'No. Rekam Medis',     'nomor_rm',               'teks',        0],
+            [1, 'Nama Pasien',         'nama',                   'nama',        0],
+            [1, 'Tanggal Permintaan',  'tanggal_permintaan',     'tanggal_jam', 0],
+            [1, 'Status',              'nama_status_permintaan', 'status',      0],
+        ];
+
+        return view('/layouts/data', [
+            'judul'         => $this->title,
+            'breadcrumbs'   => $this->breadcrumbs,
+            'meta_data'     => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'modul_path'    => $this->get_uri_path(),
+            'kolom_id'      => $this->primary_key,
+            'konfig'        => $konfig,
+            'aksi'          => $this->actions,
+            'tabel'         => $data_tabel,
+            'row_alert'     => [],
+            'child_link'    => null,
+            'query_string'  => '',
+            'filters'       => $this->filters,
+            'active_filter' => $this->active_filter,
+        ]);
+    }
+
+    /**
      * OVERRIDE: Menampilkan Form Permintaan Darah
      */
     #[\Override]
@@ -569,29 +608,7 @@ final class PermintaanDarahController extends ControllerTemplate
      */
     public function list()
     {
-        $tabel = $this->model->table;
-
-        $data = $this->model
-            ->builder()
-            ->select("
-                {$tabel}.id_permintaan,
-                {$tabel}.no_permintaan,
-                pelayanan_darah.status_permintaan.nama_status_permintaan AS status,
-                CONCAT(role.pasien.nomor_rm, ' / ', registrasi.registrasi.nomor_rawat) AS identitas_rawat,
-                person.orang.nama
-            ")
-            ->join('registrasi.registrasi', "registrasi.registrasi.id_registrasi = {$tabel}.id_registrasi", 'inner')
-            ->join('role.pasien', 'role.pasien.id_pasien = registrasi.registrasi.id_pasien', 'inner')
-            ->join('person.orang', 'person.orang.id_orang = role.pasien.id_orang', 'inner')
-            ->join(
-                'pelayanan_darah.status_permintaan',
-                "pelayanan_darah.status_permintaan.id_status_permintaan = {$tabel}.id_status_permintaan",
-                'inner',
-            )
-            ->where("{$tabel}.id_status_permintaan !=", 3)
-            ->orderBy("{$tabel}.tanggal_permintaan", 'ASC')
-            ->get()
-            ->getResultArray();
+        $data = $this->model->get_data_tabel(hanyaBelumTerpenuhi: true);
 
         return $this->response->setJSON([
             'data' => $data,
