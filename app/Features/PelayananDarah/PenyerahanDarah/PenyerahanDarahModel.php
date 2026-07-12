@@ -103,7 +103,9 @@ final class PenyerahanDarahModel extends ModelTemplate
                 ->countAllResults();
         }
 
-        $jumlahBaruDiinput = !empty($stokDarahTerpilih) && is_array($stokDarahTerpilih) ? count($stokDarahTerpilih) : 0;
+        $jumlahBaruDiinput  = !empty($stokDarahTerpilih) && is_array($stokDarahTerpilih)
+            ? count($stokDarahTerpilih)
+            : 0;
         $akumulasiMasaDepan = $totalSudahDiserahkan + $jumlahBaruDiinput;
 
         if ($totalSudahDiserahkan >= $totalDiminta) {

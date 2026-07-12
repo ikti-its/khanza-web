@@ -187,8 +187,7 @@ final class PengambilanDarahController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggal                     = $fieldPengambilan[3] === 'tanggal'
-            || str_contains($columnPengambilan, 'tanggal');
+            $isTanggal = $fieldPengambilan[3] === 'tanggal' || str_contains($columnPengambilan, 'tanggal');
             $mockBaris[$columnPengambilan] = $isTanggal ? date('Y-m-d') : '';
 
             if ($columnPengambilan === 'nomor_pengambilan') {
