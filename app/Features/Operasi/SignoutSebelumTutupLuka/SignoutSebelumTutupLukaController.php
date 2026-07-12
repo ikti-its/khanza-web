@@ -208,7 +208,7 @@ final class SignoutSebelumTutupLukaController extends ControllerTemplate
                 continue;
             }
 
-            $isTrue         = $record[$field] === true || $record[$field] == 1 || $record[$field] === 't';
+            $isTrue         = in_array($record[$field], [true, 1, 't'], true);
             $record[$field] = $isTrue ? '1' : '0';
         }
 

@@ -196,8 +196,9 @@ final class ChecklistPostopController extends ControllerTemplate
         $batchDrain = [];
         foreach ($drainList as $row) {
             $idKetersediaan = (int) ($row['id_ketersediaan'] ?? 0);
-            if ($idKetersediaan === 0)
+            if ($idKetersediaan === 0) {
                 continue;
+            }
 
             $batchDrain[] = [
                 'id_checklist_post' => $idChecklistPost,
@@ -214,8 +215,9 @@ final class ChecklistPostopController extends ControllerTemplate
         $batchPenunjang = [];
         foreach ($penunjangList as $row) {
             $idJenis = (int) ($row['id_jenis_penunjang'] ?? 0);
-            if ($idJenis === 0)
+            if ($idJenis === 0) {
                 continue;
+            }
 
             $batchPenunjang[] = [
                 'id_checklist_post'  => $idChecklistPost,
@@ -356,8 +358,9 @@ final class ChecklistPostopController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $rawPost       = $this->request->getPost();
         $dataHeader    = $this->buildHeaderData($rawPost);

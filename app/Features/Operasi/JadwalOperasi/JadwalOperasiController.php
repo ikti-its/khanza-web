@@ -179,8 +179,9 @@ final class JadwalOperasiController extends ControllerTemplate
         ];
 
         foreach ($checks as $check) {
-            if (empty($data[$check['col']]))
+            if (empty($data[$check['col']])) {
                 continue;
+            }
 
             $builder = $this->model
                 ->db
@@ -263,8 +264,9 @@ final class JadwalOperasiController extends ControllerTemplate
         foreach ($tim as $anggota) {
             $idDokter  = (int) ($anggota['id_dokter'] ?? 0);
             $idPetugas = (int) ($anggota['id_petugas'] ?? 0);
-            if ($idDokter === 0 && $idPetugas === 0)
+            if ($idDokter === 0 && $idPetugas === 0) {
                 continue;
+            }
 
             $idPeran = (int) ($anggota['id_peran'] ?? 0);
             if (!isset($peranValid[$idPeran]) || isset($peranTerpakai[$idPeran])) {
@@ -281,8 +283,9 @@ final class JadwalOperasiController extends ControllerTemplate
             ];
         }
 
-        if (empty($rows))
+        if (empty($rows)) {
             return;
+        }
         $this->model->db->table('operasi.jadwal_operasi_tim')->insertBatch($rows);
     }
 
@@ -377,8 +380,9 @@ final class JadwalOperasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $rawPost        = $this->request->getPost();
         $tanggal        = $rawPost['tanggal'] ?? null;

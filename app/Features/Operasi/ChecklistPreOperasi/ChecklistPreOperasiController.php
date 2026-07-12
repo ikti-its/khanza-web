@@ -185,8 +185,9 @@ final class ChecklistPreOperasiController extends ControllerTemplate
         $batchPenunjang = [];
         foreach ($penunjangList as $row) {
             $idJenis = (int) ($row['id_jenis_penunjang'] ?? 0);
-            if ($idJenis === 0)
+            if ($idJenis === 0) {
                 continue;
+            }
 
             $batchPenunjang[] = [
                 'id_checklist'       => $idChecklist,
@@ -323,8 +324,9 @@ final class ChecklistPreOperasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $rawPost       = $this->request->getPost();
         $dataHeader    = $this->buildHeaderData($rawPost);

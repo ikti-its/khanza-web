@@ -271,8 +271,9 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
             $isDigunakan = ($row['is_digunakan'] ?? '') !== '' ? $row['is_digunakan'] : null;
             $keterangan  = ($row['keterangan'] ?? '') !== '' ? $row['keterangan'] : null;
 
-            if ($idAlat === 0 || $isDigunakan === null && $keterangan === null)
+            if ($idAlat === 0 || $isDigunakan === null && $keterangan === null) {
                 continue;
+            }
 
             $batchAlat[] = [
                 'id_catatan_anestesi' => $idCatatan,
@@ -294,8 +295,9 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
             $isDigunakan  = ($row['is_digunakan'] ?? '') !== '' ? $row['is_digunakan'] : null;
             $keterangan   = ($row['keterangan'] ?? '') !== '' ? $row['keterangan'] : null;
 
-            if ($idMonitoring === 0 || $isDigunakan === null && $keterangan === null)
+            if ($idMonitoring === 0 || $isDigunakan === null && $keterangan === null) {
                 continue;
+            }
 
             $batchMonitoring[] = [
                 'id_catatan_anestesi' => $idCatatan,
@@ -437,8 +439,9 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $rawPost        = $this->request->getPost();
         $dataHeader     = $this->buildHeaderData($rawPost);

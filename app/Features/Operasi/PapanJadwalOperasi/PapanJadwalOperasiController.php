@@ -127,10 +127,12 @@ final class PapanJadwalOperasiController extends ControllerTemplate
 
             foreach ($slots as $slot) {
                 $waktuSlot = $slot['waktu_slot'];
-                if ($waktuSlot < $startBound)
+                if ($waktuSlot < $startBound) {
                     continue;
-                if ($endBound !== null && $waktuSlot >= $endBound)
+                }
+                if ($endBound !== null && $waktuSlot >= $endBound) {
                     continue;
+                }
                 $grid[(int) $slot['id_slot']][$idRuangan] = $j;
             }
         }

@@ -138,13 +138,15 @@ final class HasilRadController extends ControllerTemplate
     private function processFotoUpload(int $idHasilRad): void
     {
         $uploadDir = ROOTPATH . 'public/uploads/radiologi/';
-        if (!is_dir($uploadDir))
+        if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0o755, true);
+        }
 
         $fotoModel = new \App\Features\Radiologi\HasilRadFoto\HasilRadFotoModel();
         foreach ($this->request->getFiles()['foto'] ?? [] as $file) {
-            if (!$file->isValid() || $file->hasMoved() || !str_starts_with($file->getMimeType(), 'image/'))
+            if (!$file->isValid() || $file->hasMoved() || !str_starts_with($file->getMimeType(), 'image/')) {
                 continue;
+            }
 
             $newName = $file->getRandomName();
             $file->move($uploadDir, $newName);
@@ -194,8 +196,9 @@ final class HasilRadController extends ControllerTemplate
         $batchBhp = [];
         foreach ($bhpList as $idBarang => $bhp) {
             $jumlahPakai = (int) ($bhp['jumlah_pakai'] ?? 0);
-            if ($jumlahPakai <= 0)
+            if ($jumlahPakai <= 0) {
                 continue;
+            }
 
             $batchBhp[] = [
                 'id_hasil_rad' => $idHasilRad,
@@ -215,12 +218,14 @@ final class HasilRadController extends ControllerTemplate
     {
         // Selesai (3) hanya jika semua tindakan sudah punya hasil ekspertise;
         // selain itu tetap Sedang Diproses (2) menunggu bacaan dokter.
-        if (empty($tindakanList))
+        if (empty($tindakanList)) {
             return 2;
+        }
 
         foreach ($tindakanList as $tindakan) {
-            if (trim($tindakan['hasil_ekspertise'] ?? '') === '')
+            if (trim($tindakan['hasil_ekspertise'] ?? '') === '') {
                 return 2;
+            }
         }
 
         return 3;
@@ -411,8 +416,9 @@ final class HasilRadController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $rawPost = $this->request->getPost();
 
@@ -483,8 +489,9 @@ final class HasilRadController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         // Fetch BHP lama sebelum transaksi agar tidak terblokir oleh abort
         $modelBhp = new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel();

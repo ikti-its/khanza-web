@@ -256,8 +256,9 @@ final class TagihanOperasiController extends ControllerTemplate
         if ($idJadwal) {
             foreach ($this->fetchTimJadwal($idJadwal) as $anggota) {
                 $peran = $anggota['peran'] ?? '';
-                if ($peran === '' || $peran === null)
+                if ($peran === '' || $peran === null) {
                     continue;
+                }
                 $jadwal['id_' . $peran]   = $anggota['id_dokter'] ?: $anggota['id_petugas'];
                 $jadwal['nama_' . $peran] = $anggota['nama'] ?? '';
             }
@@ -346,8 +347,9 @@ final class TagihanOperasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $rawPost = $this->request->getPost();
         $data    = $this->buildData($rawPost);
@@ -438,8 +440,9 @@ final class TagihanOperasiController extends ControllerTemplate
     private function savePaket(int $idTagihan, array $paketList): void
     {
         foreach ($paketList as $paket) {
-            if (empty($paket['id_paket']))
+            if (empty($paket['id_paket'])) {
                 continue;
+            }
             $this->model
                 ->db
                 ->table('operasi.tagihan_operasi_tindakan')
@@ -447,16 +450,18 @@ final class TagihanOperasiController extends ControllerTemplate
                     'id_tagihan' => $idTagihan,
                     'id_paket'   => (int) $paket['id_paket'],
                 ]);
-            if ($this->model->db->transStatus() === false)
+            if ($this->model->db->transStatus() === false) {
                 return;
+            }
         }
     }
 
     private function saveObat(int $idTagihan, array $obatList): void
     {
         foreach ($obatList as $obat) {
-            if (empty($obat['id_barang']) || empty($obat['jumlah']))
+            if (empty($obat['id_barang']) || empty($obat['jumlah'])) {
                 continue;
+            }
             $this->model
                 ->db
                 ->table('operasi.tagihan_operasi_obat')
@@ -465,8 +470,9 @@ final class TagihanOperasiController extends ControllerTemplate
                     'id_barang'  => (int) $obat['id_barang'],
                     'jumlah'     => (int) $obat['jumlah'],
                 ]);
-            if ($this->model->db->transStatus() === false)
+            if ($this->model->db->transStatus() === false) {
                 return;
+            }
         }
     }
 }

@@ -291,12 +291,14 @@ final class PenyerahanPasienController extends ControllerTemplate
     ): void {
         $batchData = [];
         foreach ($peralatanList as $row) {
-            if (($row['selected'] ?? '0') !== '1')
+            if (($row['selected'] ?? '0') !== '1') {
                 continue;
+            }
 
             $idPeralatan = (int) ($row['id_peralatan'] ?? 0);
-            if ($idPeralatan === 0)
+            if ($idPeralatan === 0) {
                 continue;
+            }
 
             $batchData[] = [
                 'id_penyerahan' => $idPenyerahan,
@@ -345,8 +347,9 @@ final class PenyerahanPasienController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $rawPost       = $this->request->getPost();
         $peralatanList = $rawPost['peralatan'] ?? [];

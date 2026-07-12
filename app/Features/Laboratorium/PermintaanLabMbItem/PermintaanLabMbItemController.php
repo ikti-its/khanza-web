@@ -133,8 +133,9 @@ final class PermintaanLabMbItemController extends ControllerTemplate
             ->get()
             ->getResultArray();
 
-        if (empty($items))
+        if (empty($items)) {
             return [];
+        }
 
         // Mengambil semua parameter sekaligus menggunakan whereIn
         $itemIds = array_column($items, 'id_permintaan_mb_item');
@@ -399,8 +400,9 @@ final class PermintaanLabMbItemController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
         $idPermintaanLab = (int) $id;
 
         if (!$idPermintaanLab) {
@@ -454,12 +456,14 @@ final class PermintaanLabMbItemController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $idPermintaanLab = (int) $id;
-        if (!$idPermintaanLab)
+        if (!$idPermintaanLab) {
             return $this->home();
+        }
 
         $modelHeader    = new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel();
         $modelItem      = new \App\Features\Laboratorium\PermintaanLabMbItem\PermintaanLabMbItemModel();
@@ -496,12 +500,14 @@ final class PermintaanLabMbItemController extends ControllerTemplate
 
     public function sampel(int|string $id): RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $idPermintaanLab = (int) $id;
-        if (!$idPermintaanLab)
+        if (!$idPermintaanLab) {
             return $this->home();
+        }
 
         try {
             (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel())->update($idPermintaanLab, [

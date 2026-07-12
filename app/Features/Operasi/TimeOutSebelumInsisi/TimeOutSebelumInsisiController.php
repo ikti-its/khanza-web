@@ -180,18 +180,20 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
         $batch = [];
         foreach ($penunjangList as $row) {
             $idJenis = (int) ($row['id_jenis_penunjang'] ?? 0);
-            if ($idJenis === 0)
+            if ($idJenis === 0) {
                 continue;
+            }
             $batch[] = [
                 'id_timeout'         => $idTimeout,
                 'id_jenis_penunjang' => $idJenis,
                 'id_status'          => (int) ($row['id_status'] ?? 0) ?: null,
             ];
         }
-        if (!empty($batch))
+        if (!empty($batch)) {
             (new \App\Features\Operasi\TimeOutSebelumInsisiPenunjang\TimeOutSebelumInsisiPenunjangModel())->insertBatch(
                 $batch,
             );
+        }
     }
 
     private function buildViewData(array $jadwal, array $record, string $formAction, null|int $idTimeout = null): array
@@ -300,8 +302,9 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $this->model->db->transStart();
 

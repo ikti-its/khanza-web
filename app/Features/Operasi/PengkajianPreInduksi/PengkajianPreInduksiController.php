@@ -203,8 +203,9 @@ final class PengkajianPreInduksiController extends ControllerTemplate
         $batchAirway = [];
         foreach ($airwayList as $row) {
             $idJenis = (int) ($row['id_jenis_airway'] ?? 0);
-            if ($idJenis === 0)
+            if ($idJenis === 0) {
                 continue;
+            }
 
             $batchAirway[] = [
                 'id_pengkajian'   => $idPengkajian,
@@ -322,8 +323,9 @@ final class PengkajianPreInduksiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $rawPost    = $this->request->getPost();
         $dataHeader = $this->buildHeaderData($rawPost);

@@ -129,8 +129,9 @@ final class PermintaanOperasiController extends ControllerTemplate
     #[\Override]
     protected function after_read(array &$data_tabel): void
     {
-        if (empty($data_tabel))
+        if (empty($data_tabel)) {
             return;
+        }
 
         $ids = array_column($data_tabel, 'id_permintaan');
 
@@ -242,8 +243,9 @@ final class PermintaanOperasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $data = $this->buildHeaderData($this->request->getPost(), false);
 
@@ -296,8 +298,9 @@ final class PermintaanOperasiController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $this->model->db->transStart();
 

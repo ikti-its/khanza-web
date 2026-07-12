@@ -188,8 +188,9 @@ final class HasilLabPaController extends ControllerTemplate
     private function isItemLengkap(array $item): bool
     {
         foreach (['diagnosa_klinis', 'makroskopik', 'mikroskopik', 'kesimpulan'] as $field) {
-            if (trim($item[$field] ?? '') === '')
+            if (trim($item[$field] ?? '') === '') {
                 return false;
+            }
         }
         return true;
     }
@@ -197,8 +198,9 @@ final class HasilLabPaController extends ControllerTemplate
     private function validateHasilList(array $hasilList): null|string
     {
         foreach ($hasilList as $item) {
-            if ($this->isItemLengkap($item))
+            if ($this->isItemLengkap($item)) {
                 return null;
+            }
         }
         return 'Isi minimal satu hasil pemeriksaan lengkap (Diagnosa Klinis, Makroskopik, Mikroskopik, Kesimpulan) sebelum menyimpan.';
     }
@@ -218,8 +220,9 @@ final class HasilLabPaController extends ControllerTemplate
 
         foreach ($hasilList as $item) {
             $idItem = (int) ($item['id_permintaan_pa_item'] ?? 0);
-            if ($idItem <= 0 || !$this->isItemLengkap($item))
+            if ($idItem <= 0 || !$this->isItemLengkap($item)) {
                 continue;
+            }
 
             $data = [
                 'id_dokter_pj'    => $idDokterPj,
@@ -318,7 +321,8 @@ final class HasilLabPaController extends ControllerTemplate
             return redirect()->back()->withInput();
         }
 
-        if ($err = $this->validateHasilList($hasilList)) {
+        $err = $this->validateHasilList($hasilList);
+        if ($err) {
             session()->setFlashdata('error', $err);
             return redirect()->back()->withInput();
         }
@@ -391,8 +395,9 @@ final class HasilLabPaController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $rawPost = $this->request->getPost();
 
@@ -407,7 +412,8 @@ final class HasilLabPaController extends ControllerTemplate
             return redirect()->back()->withInput();
         }
 
-        if ($err = $this->validateHasilList($hasilList)) {
+        $err = $this->validateHasilList($hasilList);
+        if ($err) {
             session()->setFlashdata('error', $err);
             return redirect()->back()->withInput();
         }
@@ -457,8 +463,9 @@ final class HasilLabPaController extends ControllerTemplate
     public function delete(int|string $id): string|RedirectResponse
     {
         $idPermintaanLab = (int) $id;
-        if ($idPermintaanLab == 0)
+        if ($idPermintaanLab == 0) {
             return $this->home();
+        }
 
         if (!$this->model->where('id_permintaan_lab', $idPermintaanLab)->countAllResults()) {
             return $this->home();

@@ -112,9 +112,13 @@ final class PermintaanRadController extends ControllerTemplate
 
     private function buildHeaderData(array $rawPost, bool $isCreate = false): array
     {
-        $noPermintaan = !empty($rawPost['no_permintaan'])
-            ? $rawPost['no_permintaan']
-            : ($isCreate ? $this->generateNomorPermintaan() : '');
+        if (!empty($rawPost['no_permintaan'])) {
+            $noPermintaan = $rawPost['no_permintaan'];
+        } elseif ($isCreate) {
+            $noPermintaan = $this->generateNomorPermintaan();
+        } else {
+            $noPermintaan = '';
+        }
         $tglPermintaan = !empty($rawPost['tgl_jam_permintaan']) ? $rawPost['tgl_jam_permintaan'] : date('Y-m-d H:i:s');
 
         $data = [
@@ -142,8 +146,9 @@ final class PermintaanRadController extends ControllerTemplate
 
     private function insertItems(int $idPermintaan, array $idItems, array $bacaSajaMap): void
     {
-        if (empty($idItems))
+        if (empty($idItems)) {
             return;
+        }
 
         $data = array_map(static fn($idItem) => [
             'id_permintaan' => $idPermintaan,
@@ -251,8 +256,9 @@ final class PermintaanRadController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         if ($this->hasHasil((int) $id)) {
             session()->setFlashdata('error', 'Permintaan tidak dapat diubah karena hasil radiologi sudah dicatat.');
@@ -302,8 +308,9 @@ final class PermintaanRadController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         if ($this->hasHasil((int) $id)) {
             session()->setFlashdata('error', 'Permintaan tidak dapat dihapus karena hasil radiologi sudah dicatat.');
@@ -342,8 +349,9 @@ final class PermintaanRadController extends ControllerTemplate
 
     public function sampel(int|string $id): RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         try {
             $this->model->update($id, [

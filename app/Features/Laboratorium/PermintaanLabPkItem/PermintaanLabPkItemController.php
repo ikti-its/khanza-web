@@ -132,8 +132,9 @@ final class PermintaanLabPkItemController extends ControllerTemplate
             ->get()
             ->getResultArray();
 
-        if (empty($items))
+        if (empty($items)) {
             return [];
+        }
 
         $itemIds = array_column($items, 'id_permintaan_pk_item');
 
@@ -397,8 +398,9 @@ final class PermintaanLabPkItemController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $idPermintaanLab = (int) $id;
 
@@ -453,12 +455,14 @@ final class PermintaanLabPkItemController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $idPermintaanLab = (int) $id;
-        if (!$idPermintaanLab)
+        if (!$idPermintaanLab) {
             return $this->home();
+        }
 
         $modelHeader    = new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel();
         $modelItem      = new \App\Features\Laboratorium\PermintaanLabPkItem\PermintaanLabPkItemModel();
@@ -494,12 +498,14 @@ final class PermintaanLabPkItemController extends ControllerTemplate
 
     public function sampel(int|string $id): RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $idPermintaanLab = (int) $id;
-        if (!$idPermintaanLab)
+        if (!$idPermintaanLab) {
             return $this->home();
+        }
 
         try {
             (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel())->update($idPermintaanLab, [

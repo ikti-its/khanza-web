@@ -131,8 +131,9 @@ final class HasilLabPkController extends ControllerTemplate
             ->get()
             ->getResultArray();
 
-        if (empty($hasilRows))
+        if (empty($hasilRows)) {
             return [];
+        }
 
         $idHasilPkList = array_column($hasilRows, 'id_hasil_pk');
 
@@ -248,15 +249,17 @@ final class HasilLabPkController extends ControllerTemplate
 
         foreach ($hasilList as $item) {
             $idItem = (int) ($item['id_permintaan_pk_item'] ?? 0);
-            if ($idItem <= 0)
+            if ($idItem <= 0) {
                 continue;
+            }
 
             $filledParams = array_filter(
                 $item['parameter'] ?? [],
                 static fn($p) => trim($p['nilai_hasil'] ?? '') !== '',
             );
-            if (empty($filledParams))
+            if (empty($filledParams)) {
                 continue;
+            }
 
             $headerData = [
                 'id_dokter_pj'     => $idDokterPj,
@@ -288,8 +291,9 @@ final class HasilLabPkController extends ControllerTemplate
 
             foreach ($filledParams as $param) {
                 $idParameter = (int) ($param['id_parameter'] ?? 0);
-                if ($idParameter <= 0)
+                if ($idParameter <= 0) {
                     continue;
+                }
 
                 $paramData = [
                     'nilai_hasil'      => trim($param['nilai_hasil'] ?? ''),
@@ -411,7 +415,8 @@ final class HasilLabPkController extends ControllerTemplate
             return redirect()->back()->withInput();
         }
 
-        if ($err = $this->validateHasilList($hasilList)) {
+        $err = $this->validateHasilList($hasilList);
+        if ($err) {
             session()->setFlashdata('error', $err);
             return redirect()->back()->withInput();
         }
@@ -494,8 +499,9 @@ final class HasilLabPkController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $rawPost = $this->request->getPost();
 
@@ -511,7 +517,8 @@ final class HasilLabPkController extends ControllerTemplate
             return redirect()->back()->withInput();
         }
 
-        if ($err = $this->validateHasilList($hasilList)) {
+        $err = $this->validateHasilList($hasilList);
+        if ($err) {
             session()->setFlashdata('error', $err);
             return redirect()->back()->withInput();
         }
@@ -571,8 +578,9 @@ final class HasilLabPkController extends ControllerTemplate
     public function delete(int|string $id): string|RedirectResponse
     {
         $idPermintaanLab = (int) $id;
-        if ($idPermintaanLab == 0)
+        if ($idPermintaanLab == 0) {
             return $this->home();
+        }
 
         if (!$this->model->where('id_permintaan_lab', $idPermintaanLab)->countAllResults()) {
             return $this->home();

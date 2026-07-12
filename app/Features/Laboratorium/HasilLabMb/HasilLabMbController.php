@@ -129,8 +129,9 @@ final class HasilLabMbController extends ControllerTemplate
             ->get()
             ->getResultArray();
 
-        if (empty($hasilRows))
+        if (empty($hasilRows)) {
             return [];
+        }
 
         $idHasilMbList = array_column($hasilRows, 'id_hasil_mb');
 
@@ -248,14 +249,18 @@ final class HasilLabMbController extends ControllerTemplate
         array $hasilList,
         string $emptyListMsg,
     ): null|string {
-        if (!$idPermintaanLab)
+        if (!$idPermintaanLab) {
             return 'Permintaan laboratorium wajib dipilih.';
-        if (!$idDokterPj)
+        }
+        if (!$idDokterPj) {
             return 'Dokter PJ wajib dipilih.';
-        if (!$idPetugasLab)
+        }
+        if (!$idPetugasLab) {
             return 'Petugas lab wajib dipilih.';
-        if (empty($hasilList))
+        }
+        if (empty($hasilList)) {
             return $emptyListMsg;
+        }
         return $this->validateHasilList($hasilList);
     }
 
@@ -275,15 +280,17 @@ final class HasilLabMbController extends ControllerTemplate
 
         foreach ($hasilList as $item) {
             $idItem = (int) ($item['id_permintaan_mb_item'] ?? 0);
-            if ($idItem <= 0)
+            if ($idItem <= 0) {
                 continue;
+            }
 
             $filledParams = array_filter(
                 $item['parameter'] ?? [],
                 static fn($p) => trim($p['nilai_hasil'] ?? '') !== '',
             );
-            if (empty($filledParams))
+            if (empty($filledParams)) {
                 continue;
+            }
 
             $headerData = [
                 'id_dokter_pj'   => $idDokterPj,
@@ -314,8 +321,9 @@ final class HasilLabMbController extends ControllerTemplate
 
             foreach ($filledParams as $param) {
                 $idParameter = (int) ($param['id_parameter'] ?? 0);
-                if ($idParameter <= 0)
+                if ($idParameter <= 0) {
                     continue;
+                }
 
                 $paramData = [
                     'nilai_hasil'      => trim($param['nilai_hasil'] ?? ''),
@@ -419,15 +427,14 @@ final class HasilLabMbController extends ControllerTemplate
         $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
         $hasilList       = $rawPost['hasil'] ?? [];
 
-        if (
-            $err = $this->validateInput(
-                $idPermintaanLab,
-                $idDokterPj,
-                $idPetugasLab,
-                $hasilList,
-                'Tidak ada item hasil pemeriksaan. Pilih permintaan dan pastikan item MB sudah termuat.',
-            )
-        ) {
+        $err = $this->validateInput(
+            $idPermintaanLab,
+            $idDokterPj,
+            $idPetugasLab,
+            $hasilList,
+            'Tidak ada item hasil pemeriksaan. Pilih permintaan dan pastikan item MB sudah termuat.',
+        );
+        if ($err) {
             session()->setFlashdata('error', $err);
             return redirect()->back()->withInput();
         }
@@ -509,8 +516,9 @@ final class HasilLabMbController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $rawPost = $this->request->getPost();
 
@@ -520,15 +528,14 @@ final class HasilLabMbController extends ControllerTemplate
         $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
         $hasilList       = $rawPost['hasil'] ?? [];
 
-        if (
-            $err = $this->validateInput(
-                $idPermintaanLab,
-                $idDokterPj,
-                $idPetugasLab,
-                $hasilList,
-                'Tidak ada item hasil pemeriksaan. Pastikan item MB masih termuat.',
-            )
-        ) {
+        $err = $this->validateInput(
+            $idPermintaanLab,
+            $idDokterPj,
+            $idPetugasLab,
+            $hasilList,
+            'Tidak ada item hasil pemeriksaan. Pastikan item MB masih termuat.',
+        );
+        if ($err) {
             session()->setFlashdata('error', $err);
             return redirect()->back()->withInput();
         }
@@ -587,8 +594,9 @@ final class HasilLabMbController extends ControllerTemplate
     public function delete(int|string $id): string|RedirectResponse
     {
         $idPermintaanLab = (int) $id;
-        if ($idPermintaanLab == 0)
+        if ($idPermintaanLab == 0) {
             return $this->home();
+        }
 
         if (!$this->model->where('id_permintaan_lab', $idPermintaanLab)->countAllResults()) {
             return $this->home();

@@ -187,8 +187,9 @@ final class PermintaanLabPaController extends ControllerTemplate
         array $idItems,
         \App\Features\Laboratorium\PermintaanLabPaItem\PermintaanLabPaItemModel $modelItem,
     ): void {
-        if (empty($idItems))
+        if (empty($idItems)) {
             return;
+        }
 
         // Menggunakan Batch Insert untuk efisiensi eksekusi database
         $data = array_map(static fn($idItem) => [
@@ -365,8 +366,9 @@ final class PermintaanLabPaController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $idPermintaanLab = (int) $id;
 
@@ -423,12 +425,14 @@ final class PermintaanLabPaController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $idPermintaanLab = (int) $id;
-        if (!$idPermintaanLab)
+        if (!$idPermintaanLab) {
             return $this->home();
+        }
 
         $modelHeader = new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel();
         $modelItem   = new \App\Features\Laboratorium\PermintaanLabPaItem\PermintaanLabPaItemModel();
@@ -465,12 +469,14 @@ final class PermintaanLabPaController extends ControllerTemplate
 
     public function sampel(int|string $id): RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->home();
+        }
 
         $idPermintaanLab = (int) $id;
-        if (!$idPermintaanLab)
+        if (!$idPermintaanLab) {
             return $this->home();
+        }
 
         try {
             (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel())->update($idPermintaanLab, [

@@ -38,8 +38,9 @@ final class HasilRadFotoController extends ControllerTemplate
     private function uploadDir(): string
     {
         $dir = ROOTPATH . 'public/uploads/radiologi/';
-        if (!is_dir($dir))
+        if (!is_dir($dir)) {
             mkdir($dir, 0o755, true);
+        }
         return $dir;
     }
 
@@ -49,8 +50,9 @@ final class HasilRadFotoController extends ControllerTemplate
         $uploaded = [];
 
         foreach ($this->request->getFiles()['foto'] ?? [] as $file) {
-            if (!$file->isValid() || $file->hasMoved() || !str_starts_with($file->getMimeType(), 'image/'))
+            if (!$file->isValid() || $file->hasMoved() || !str_starts_with($file->getMimeType(), 'image/')) {
                 continue;
+            }
 
             $newName = $file->getRandomName();
             $file->move($this->uploadDir(), $newName);
@@ -78,8 +80,9 @@ final class HasilRadFotoController extends ControllerTemplate
 
         if ($foto) {
             $path = $this->uploadDir() . $foto['nama_file'];
-            if (file_exists($path))
+            if (file_exists($path)) {
                 unlink($path);
+            }
             $this->model->delete($id);
         }
 
