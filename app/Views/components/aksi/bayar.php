@@ -16,7 +16,10 @@
         </div>
     <?php else: ?>
         <div class="px-3 py-1.5">
-            <a class="text-sm text-emerald-600 font-semibold" style="visibility:hidden">Konfirmasi Bayar</a>
+            <button type="button" disabled
+                    class="gap-x-1 text-sm text-gray-400 font-semibold cursor-not-allowed select-none dark:text-neutral-600">
+                Konfirmasi Bayar
+            </button>
         </div>
     <?php endif; ?>
 </div>
