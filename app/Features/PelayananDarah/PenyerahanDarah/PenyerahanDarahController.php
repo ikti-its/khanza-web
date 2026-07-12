@@ -25,6 +25,7 @@ final class PenyerahanDarahController extends ControllerTemplate
                 A::AUDIT,
                 // A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
                 A::PAY,
             ],
             [
@@ -358,6 +359,104 @@ final class PenyerahanDarahController extends ControllerTemplate
         }
 
         return $this->home();
+    }
+
+    /**
+     * Menampilkan Halaman Detail Penyerahan Darah & Penggunaan BHP
+     */
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataPenyerahan = $this->model->find($id);
+        if (!$dataPenyerahan) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Penyerahan Darah tidak ditemukan.');
+        }
+
+        $baris = $dataPenyerahan;
+        $dataPermintaan = [];
+        $dataPetugasCross = [];
+        $dataPj = [];
+
+        if (!empty($baris['id_permintaan'])) {
+            $modelPermintaan = new \App\Features\PelayananDarah\PermintaanDarah\PermintaanDarahModel();
+            $permintaanRow   = $modelPermintaan->find($baris['id_permintaan']);
+            if ($permintaanRow) {
+                $dataPermintaan['no_permintaan'] = $permintaanRow['no_permintaan'] ?? '-';
+            }
+        }
+
+        if (!empty($baris['id_petugas_cross'])) {
+            $modelPetugasCross = new \App\Features\Role\Petugas\PetugasModel();
+            $rowCross = $modelPetugasCross->find($baris['id_petugas_cross']);
+            if ($rowCross && !empty($rowCross['id_orang'])) {
+                $modelOrangCross = new \App\Features\Person\Orang\OrangModel();
+                $orangCross = $modelOrangCross->find($rowCross['id_orang']);
+                $dataPetugasCross['nama_petugas_cross'] = $orangCross['nama'] ?? '';
+            }
+        }
+
+        if (!empty($baris['id_penanggung_jawab'])) {
+            $modelPj = new \App\Features\Role\Petugas\PetugasModel();
+            $rowPj = $modelPj->find($baris['id_penanggung_jawab']);
+            if ($rowPj && !empty($rowPj['id_orang'])) {
+                $modelOrangPj = new \App\Features\Person\Orang\OrangModel();
+                $orangPj = $modelOrangPj->find($rowPj['id_orang']);
+                $dataPj['nama_pj'] = $orangPj['nama'] ?? '';
+            }
+        }
+
+        $baris = array_merge($dataPermintaan, $dataPetugasCross, $dataPj, $baris);
+
+        $konfigFields = $this->get_fields_with_options(false, true);
+        foreach ($konfigFields as $field) {
+            $colName = $field[2];
+            $options = $field[5] ?? [];
+
+            if (!empty($options) && isset($baris[$colName])) {
+                $idMentah = $baris[$colName];
+                foreach ($options as $opt) {
+                    if ((string)$opt[1] === (string)$idMentah) {
+                        $baris[$colName] = $opt[0];
+                        break;
+                    }
+                }
+            }
+        }
+
+        $detailDarah = $this->model->db
+            ->table('pelayanan_darah.penyerahan_darah_detail pdd')
+            ->select('sk.no_kantong, kd.nama_komponen, gd.nama_golongan_darah, r.kode_rhesus, pdd.jasa_sarana, pdd.paket_bhp, pdd.kso, pdd.manajemen')
+            ->join('inventori_darah.stok_darah sk', 'sk.id_stok_darah = pdd.id_stok_darah', 'inner')
+            ->join('inventori_darah.komponen_darah kd', 'kd.id_komponen = sk.id_komponen', 'inner')
+            ->join('darah.golongan_darah gd', 'gd.id_golongan_darah = sk.id_golongan_darah', 'left')
+            ->join('darah.rhesus r', 'r.id_rhesus = sk.id_rhesus', 'left')
+            ->where('pdd.id_penyerahan', $id)
+            ->get()
+            ->getResultArray();
+
+        $bhpMedis     = $this->model->getBhpMedisDetail($id);
+        $bhpPenunjang = $this->model->getBhpPenunjangDetail($id);
+
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail']
+        ];
+
+        return view('admin/pelayanandarah/detail_penyerahandarah', [
+            'judul'          => 'Detail ' . $this->title,
+            'breadcrumbs'    => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'     => $this->get_uri_path(),
+            'baris'          => $baris,
+            'detail_darah'   => $detailDarah,
+            'bhp_medis'      => $bhpMedis,
+            'bhp_penunjang'  => $bhpPenunjang,
+        ]);
     }
 
     /**
