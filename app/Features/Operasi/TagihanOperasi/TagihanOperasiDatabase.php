@@ -20,6 +20,7 @@ final class TagihanOperasiDatabase extends DatabaseTemplate
                 'jenis_anestesi'     => T::TEXT(),
                 'tanggal_mulai'      => T::DTIME()->nullable(),
                 'tanggal_selesai'    => T::DTIME()->nullable(),
+                'total_tagihan'      => T::MONEY(),
                 'diagnosis_pre'      => T::TEXT()->nullable(),
                 'diagnosis_post'     => T::TEXT()->nullable(),
                 'jaringan'           => T::TEXT()->nullable(),

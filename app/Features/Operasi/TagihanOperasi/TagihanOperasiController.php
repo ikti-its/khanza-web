@@ -21,18 +21,19 @@ final class TagihanOperasiController extends ControllerTemplate
             'Tagihan Operasi',
             [
                 A::READ,
-                A::CREATE,
+                // A::CREATE,
                 // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],
             [
-                [HIDE,      OPTIONAL, I::INDEX, 'id_tagihan',      'ID Tagihan'],
-                [SHOW,      OPTIONAL, I::INDEX, 'id_jadwal',       'Jadwal Operasi'],
-                [SHOW,      OPTIONAL, I::INDEX, 'id_kategori',     'Kategori Operasi'],
-                [FORM_ONLY, OPTIONAL, I::DATE,  'tanggal_mulai',   'Tgl. Mulai'],
-                [FORM_ONLY, OPTIONAL, I::TEXT,  'jenis_anestesi',  'Jenis Anestesi'],
-                [FORM_ONLY, OPTIONAL, I::DATE,  'tanggal_selesai', 'Tanggal Selesai'],
+                [HIDE,       OPTIONAL, I::INDEX, 'id_tagihan',      'ID Tagihan'],
+                [SHOW,       OPTIONAL, I::INDEX, 'id_jadwal',       'Jadwal Operasi'],
+                [SHOW,       OPTIONAL, I::INDEX, 'id_kategori',     'Kategori Operasi'],
+                [TABLE_ONLY, OPTIONAL, I::DTIME, 'tanggal_mulai',   'Tgl. Mulai'],
+                [TABLE_ONLY, OPTIONAL, I::DTIME, 'tanggal_selesai', 'Tanggal Selesai'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,  'jenis_anestesi',  'Jenis Anestesi'],
+                [TABLE_ONLY, OPTIONAL, I::MONEY, 'total_tagihan',   'Total Tagihan'],
             ],
         );
     }
@@ -155,6 +156,49 @@ final class TagihanOperasiController extends ControllerTemplate
             ->where('o.id_tagihan', $idTagihan)
             ->get()
             ->getResultArray();
+    }
+
+    /** Total tagihan dibekukan saat simpan, tidak dihitung ulang dari tarif referensi terkini. */
+    private function computeTotal(array $paketList, array $obatList): float
+    {
+        $idPaket = array_values(array_filter(array_map(
+            static fn(array $p) => (int) ($p['id_paket'] ?? 0),
+            $paketList,
+        )));
+
+        $totalPaket = $idPaket
+            ? (float) ($this->model
+                ->db
+                ->table('operasi.paket_tindakan_operasi')
+                ->selectSum('tarif_kelas_3')
+                ->whereIn('id_paket', $idPaket)
+                ->get()
+                ->getRowArray()['tarif_kelas_3'] ?? 0)
+            : 0.0;
+
+        $jumlahByBarang = [];
+        foreach ($obatList as $obat) {
+            if (empty($obat['id_barang']) || empty($obat['jumlah'])) {
+                continue;
+            }
+            $jumlahByBarang[(int) $obat['id_barang']] = (int) $obat['jumlah'];
+        }
+
+        $totalObat = 0.0;
+        if ($jumlahByBarang) {
+            $hargaRows = $this->model
+                ->db
+                ->table('inventori_medis.data_barang')
+                ->select(['id_barang', 'h_dasar'])
+                ->whereIn('id_barang', array_keys($jumlahByBarang))
+                ->get()
+                ->getResultArray();
+            foreach ($hargaRows as $row) {
+                $totalObat += (float) $row['h_dasar'] * $jumlahByBarang[(int) $row['id_barang']];
+            }
+        }
+
+        return $totalPaket + $totalObat;
     }
 
     private function resolveTimMedisNames(array $baris): array
@@ -448,6 +492,7 @@ final class TagihanOperasiController extends ControllerTemplate
             'jenis_anestesi'     => $post['jenis_anestesi'] ?? null,
             'tanggal_mulai'      => $post['tanggal_mulai'] ?: null,
             'tanggal_selesai'    => $post['tanggal_selesai'] ?: null,
+            'total_tagihan'      => $this->computeTotal($post['paket'] ?? [], $post['obat'] ?? []),
             'diagnosis_pre'      => $post['diagnosis_pre'] ?? null,
             'diagnosis_post'     => $post['diagnosis_post'] ?? null,
             'jaringan'           => $post['jaringan'] ?? null,

@@ -17,6 +17,7 @@ final class TagihanOperasiModel extends ModelTemplate
                 'jenis_anestesi'  => V::DEFAULT(),
                 'tanggal_mulai'   => V::DEFAULT(),
                 'tanggal_selesai' => V::DEFAULT(),
+                'total_tagihan'   => V::DEFAULT(),
                 'diagnosis_pre'   => V::DEFAULT(),
                 'diagnosis_post'  => V::DEFAULT(),
                 'jaringan'        => V::DEFAULT(),
