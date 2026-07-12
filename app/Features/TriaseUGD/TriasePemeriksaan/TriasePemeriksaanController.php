@@ -21,7 +21,7 @@ final class TriasePemeriksaanController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],
@@ -31,5 +31,14 @@ final class TriasePemeriksaanController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,  'nama_pemeriksaan', 'Nama Pemeriksaan'],
             ],
         );
+    }
+
+    /**
+     * OVERRIDE: Mengurutkan data sebelum ditampilkan
+     */
+    #[\Override]
+    protected function before_read(): void
+    {
+        $this->model->set_order('kode_pemeriksaan', 'ASC');
     }
 }
