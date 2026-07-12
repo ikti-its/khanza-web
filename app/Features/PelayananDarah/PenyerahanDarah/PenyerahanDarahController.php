@@ -22,7 +22,7 @@ final class PenyerahanDarahController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 // A::UPDATE,
                 A::DELETE,
                 A::DETAIL,
