@@ -11,6 +11,8 @@
     $nilai = static function (array $baris, string $key): string {
         return !empty($baris[$key]) ? (string) $baris[$key] : '-';
     };
+
+    $statusSelesai = strtolower($nilai($baris, 'id_status_kasus')) === 'selesai';
 ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto animate-fade-in">
@@ -34,8 +36,8 @@
                 </div>
 
                 <div class="flex flex-wrap items-center justify-center gap-3 mt-1">
-                    <span class="inline-flex items-center gap-x-1.5 py-1 px-2.5 rounded-lg text-sm font-semibold bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400">
-                        <span class="w-1.5 h-1.5 inline-block rounded-lg bg-red-500"></span>
+                    <span class="inline-flex items-center gap-x-1.5 py-1 px-2.5 rounded-lg text-sm font-semibold <?= $statusSelesai ? 'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-400' : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400' ?>">
+                        <span class="w-1.5 h-1.5 inline-block rounded-lg <?= $statusSelesai ? 'bg-teal-500' : 'bg-red-500' ?>"></span>
                         <?= esc($nilai($baris, 'id_status_kasus')) ?>
                     </span>
 
