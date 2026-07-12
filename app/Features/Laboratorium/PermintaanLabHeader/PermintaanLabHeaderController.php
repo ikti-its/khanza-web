@@ -21,7 +21,7 @@ final class PermintaanLabHeaderController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
                 A::SAMPEL,

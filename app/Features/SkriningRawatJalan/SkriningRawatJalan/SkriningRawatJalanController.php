@@ -20,7 +20,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
                 A::REGISTRASI,

@@ -22,7 +22,7 @@ final class JadwalOperasiController extends ControllerTemplate
             [
                 A::READ,
                 // A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
                 A::LEMBAR_OPERASI,
