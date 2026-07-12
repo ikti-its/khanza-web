@@ -502,6 +502,15 @@ final class PendonorController extends ControllerTemplate
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
+        $modelRiwayat = new \App\Features\Role\RiwayatTanggalDonor\RiwayatTanggalDonorModel();
+        if ($modelRiwayat->punyaRiwayat($id)) {
+            session()->setFlashdata(
+                'error',
+                'Data pendonor tidak dapat dihapus karena sudah memiliki riwayat donor darah. Riwayat donor wajib dipertahankan untuk keperluan traceability, sesuai prosedur UTD.',
+            );
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
         $idOrang = $pendonor['id_orang'] ?? null;
 
         if (!empty($idOrang)) {
@@ -513,6 +522,10 @@ final class PendonorController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            // Bersihkan baris riwayat kosong (tanggal_donor NULL) yang otomatis dibuat saat
+            // registrasi, karena punyaRiwayat() di atas sudah memastikan tidak ada riwayat donor asli.
+            $modelRiwayat->builder()->where('id_pendonor', $id)->delete();
+
             $this->model->delete($id);
 
             if (!empty($idOrang)) {

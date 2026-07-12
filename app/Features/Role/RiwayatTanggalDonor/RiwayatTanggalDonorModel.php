@@ -60,6 +60,19 @@ final class RiwayatTanggalDonorModel extends ModelTemplate
     }
 
     /**
+     * Memeriksa apakah pendonor sudah pernah benar-benar donor (punya tanggal_donor)
+     * @param int|string $idPendonor
+     * @return bool
+     */
+    public function punyaRiwayat(int|string $idPendonor): bool
+    {
+        return $this->builder()
+            ->where('id_pendonor', $idPendonor)
+            ->where('tanggal_donor IS NOT NULL', null, false)
+            ->countAllResults() > 0;
+    }
+
+    /**
      * Mengambil riwayat tanggal donor yang sedang aktif
      * @param int|string $idPendonor
      * @return array<string, mixed>|null
