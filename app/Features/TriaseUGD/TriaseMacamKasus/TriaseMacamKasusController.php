@@ -21,7 +21,7 @@ final class TriaseMacamKasusController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],
@@ -31,6 +31,15 @@ final class TriaseMacamKasusController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,  'nama_macam_kasus', 'Macam Kasus'],
             ],
         );
+    }
+
+    /**
+     * OVERRIDE: Mengurutkan data sebelum ditampilkan
+     */
+    #[\Override]
+    protected function before_read(): void
+    {
+        $this->model->set_order('kode_macam_kasus', 'ASC');
     }
 
     /**
