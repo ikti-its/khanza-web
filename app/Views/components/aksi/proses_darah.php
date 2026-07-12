@@ -17,11 +17,23 @@ if (!$isBerhasil) {
 }
 ?>
 
+<style>
+    /* Penanda sedang diklik/dibuka untuk tombol Proses Darah */
+    .hs-dropdown.open > .proses-darah-trigger {
+        background-color: #f3f4f6;
+        border-color: #d1d5db;
+    }
+    .dark .hs-dropdown.open > .proses-darah-trigger {
+        background-color: #404040;
+        border-color: #525252;
+    }
+</style>
+
 <div class="<?= $isBerhasil ? 'hs-dropdown' : '' ?> relative inline-flex px-2 py-1.5" <?= !$isBerhasil ? 'title="' . esc($pesanKunci) . '"' : '' ?>>
-    
+
     <?php if ($isBerhasil): ?>
         <button id="hs-dropdown-olah-lab-trigger" type="button"
-                class="hs-dropdown-toggle inline-flex items-center gap-x-1 rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-600 hover:bg-blue-100 hs-dropdown-open:bg-blue-100 dark:border-blue-900/60 dark:bg-blue-950/20 dark:text-blue-400 dark:hover:bg-blue-900/40 dark:hs-dropdown-open:bg-blue-900/40 focus:outline-none transition-colors">
+                class="proses-darah-trigger hs-dropdown-toggle inline-flex items-center gap-x-1 rounded-md border border-blue-200 px-2.5 py-1 text-sm font-semibold text-blue-600 dark:border-blue-900/60 dark:text-blue-400 focus:outline-none transition-colors">
             Proses Darah
             <svg class="hs-dropdown-open:rotate-180 size-4 text-blue-600 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </button>
@@ -38,8 +50,8 @@ if (!$isBerhasil) {
         </div>
 
     <?php else: ?>
-        <button type="button" disabled 
-                class="inline-flex items-center gap-x-1 text-sm font-semibold text-gray-400 dark:text-neutral-600 cursor-not-allowed select-none">
+        <button type="button" disabled
+                class="inline-flex items-center gap-x-1 rounded-md border border-gray-200 px-2.5 py-1 text-sm font-semibold text-gray-400 dark:border-neutral-700 dark:text-neutral-600 cursor-not-allowed select-none">
             Proses Darah
             <svg class="size-4 text-gray-400 dark:text-neutral-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </button>
