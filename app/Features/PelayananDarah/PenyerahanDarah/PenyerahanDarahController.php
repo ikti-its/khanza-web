@@ -60,17 +60,21 @@ final class PenyerahanDarahController extends ControllerTemplate
         $data_tabel = $this->model->get_data_tabel($perPage, $offset);
 
         $konfig = [
-            [1, 'No. Penyerahan',     'no_penyerahan',           'teks',        0],
-            [1, 'No. Permintaan',     'no_permintaan',           'teks',        0],
-            [1, 'Tanggal Penyerahan', 'tanggal_penyerahan',      'tanggal_jam', 0],
-            [1, 'Pengambil Darah',    'pengambil_darah',         'teks',        0],
-            [1, 'Status Pembayaran',  'nama_status_pembayaran',  'status',      0],
+            [1, 'No. Penyerahan',     'no_penyerahan',          'teks',        0],
+            [1, 'No. Permintaan',     'no_permintaan',          'teks',        0],
+            [1, 'Tanggal Penyerahan', 'tanggal_penyerahan',     'tanggal_jam', 0],
+            [1, 'Pengambil Darah',    'pengambil_darah',        'teks',        0],
+            [1, 'Status Pembayaran',  'nama_status_pembayaran', 'status',      0],
         ];
 
         return view('/layouts/data', [
             'judul'         => $this->title,
             'breadcrumbs'   => $this->breadcrumbs,
-            'meta_data'     => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'meta_data'     => [
+                'page'  => $currentPage,
+                'size'  => count($data_tabel),
+                'total' => ceil($totalRows / $perPage),
+            ],
             'modul_path'    => $this->get_uri_path(),
             'kolom_id'      => $this->primary_key,
             'konfig'        => $konfig,
@@ -404,17 +408,20 @@ final class PenyerahanDarahController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataPenyerahan = $this->model->find($id);
         if (!$dataPenyerahan) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Penyerahan Darah tidak ditemukan.');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound(
+                'Data Penyerahan Darah tidak ditemukan.',
+            );
         }
 
-        $baris = $dataPenyerahan;
-        $dataPermintaan = [];
+        $baris            = $dataPenyerahan;
+        $dataPermintaan   = [];
         $dataPetugasCross = [];
-        $dataPj = [];
+        $dataPj           = [];
 
         if (!empty($baris['id_permintaan'])) {
             $modelPermintaan = new \App\Features\PelayananDarah\PermintaanDarah\PermintaanDarahModel();
@@ -426,20 +433,20 @@ final class PenyerahanDarahController extends ControllerTemplate
 
         if (!empty($baris['id_petugas_cross'])) {
             $modelPetugasCross = new \App\Features\Role\Petugas\PetugasModel();
-            $rowCross = $modelPetugasCross->find($baris['id_petugas_cross']);
+            $rowCross          = $modelPetugasCross->find($baris['id_petugas_cross']);
             if ($rowCross && !empty($rowCross['id_orang'])) {
-                $modelOrangCross = new \App\Features\Person\Orang\OrangModel();
-                $orangCross = $modelOrangCross->find($rowCross['id_orang']);
+                $modelOrangCross                        = new \App\Features\Person\Orang\OrangModel();
+                $orangCross                             = $modelOrangCross->find($rowCross['id_orang']);
                 $dataPetugasCross['nama_petugas_cross'] = $orangCross['nama'] ?? '';
             }
         }
 
         if (!empty($baris['id_penanggung_jawab'])) {
             $modelPj = new \App\Features\Role\Petugas\PetugasModel();
-            $rowPj = $modelPj->find($baris['id_penanggung_jawab']);
+            $rowPj   = $modelPj->find($baris['id_penanggung_jawab']);
             if ($rowPj && !empty($rowPj['id_orang'])) {
-                $modelOrangPj = new \App\Features\Person\Orang\OrangModel();
-                $orangPj = $modelOrangPj->find($rowPj['id_orang']);
+                $modelOrangPj      = new \App\Features\Person\Orang\OrangModel();
+                $orangPj           = $modelOrangPj->find($rowPj['id_orang']);
                 $dataPj['nama_pj'] = $orangPj['nama'] ?? '';
             }
         }
@@ -454,7 +461,7 @@ final class PenyerahanDarahController extends ControllerTemplate
             if (!empty($options) && isset($baris[$colName])) {
                 $idMentah = $baris[$colName];
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $baris[$colName] = $opt[0];
                         break;
                     }
@@ -462,9 +469,12 @@ final class PenyerahanDarahController extends ControllerTemplate
             }
         }
 
-        $detailDarah = $this->model->db
+        $detailDarah = $this->model
+            ->db
             ->table('pelayanan_darah.penyerahan_darah_detail pdd')
-            ->select('sk.no_kantong, kd.nama_komponen, gd.nama_golongan_darah, r.kode_rhesus, pdd.jasa_sarana, pdd.paket_bhp, pdd.kso, pdd.manajemen')
+            ->select(
+                'sk.no_kantong, kd.nama_komponen, gd.nama_golongan_darah, r.kode_rhesus, pdd.jasa_sarana, pdd.paket_bhp, pdd.kso, pdd.manajemen',
+            )
             ->join('inventori_darah.stok_darah sk', 'sk.id_stok_darah = pdd.id_stok_darah', 'inner')
             ->join('inventori_darah.komponen_darah kd', 'kd.id_komponen = sk.id_komponen', 'inner')
             ->join('darah.golongan_darah gd', 'gd.id_golongan_darah = sk.id_golongan_darah', 'left')
@@ -483,17 +493,17 @@ final class PenyerahanDarahController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Detail', 'icon' => 'detail']
+            ['title' => 'Detail', 'icon' => 'detail'],
         ];
 
         return view('admin/pelayanandarah/detail_penyerahandarah', [
-            'judul'          => 'Detail ' . $this->title,
-            'breadcrumbs'    => array_merge($this->breadcrumbs, $breadcrumbs),
-            'modul_path'     => $this->get_uri_path(),
-            'baris'          => $baris,
-            'detail_darah'   => $detailDarah,
-            'bhp_medis'      => $bhpMedis,
-            'bhp_penunjang'  => $bhpPenunjang,
+            'judul'         => 'Detail ' . $this->title,
+            'breadcrumbs'   => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'    => $this->get_uri_path(),
+            'baris'         => $baris,
+            'detail_darah'  => $detailDarah,
+            'bhp_medis'     => $bhpMedis,
+            'bhp_penunjang' => $bhpPenunjang,
         ]);
     }
 

@@ -79,7 +79,9 @@ final class DataTriaseController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggal = $field[3] === 'tanggal' || str_contains($namaKolom, 'tanggal') || $field[3] === 'dtime';
+            $isTanggal             = $field[3] === 'tanggal'
+            || str_contains($namaKolom, 'tanggal')
+            || $field[3] === 'dtime';
             $mockBaris[$namaKolom] = $isTanggal ? date('Y-m-d\TH:i') : '';
 
             $konfigGabungan[] = $field;
@@ -92,8 +94,9 @@ final class DataTriaseController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggalPrimer =
-                $fPrimer[3] === 'tanggal' || str_contains($namaKolomPrimer, 'tanggal') || $fPrimer[3] === 'dtime';
+            $isTanggalPrimer             = $fPrimer[3] === 'tanggal'
+            || str_contains($namaKolomPrimer, 'tanggal')
+            || $fPrimer[3] === 'dtime';
             $mockBaris[$namaKolomPrimer] = $isTanggalPrimer ? date('Y-m-d\TH:i') : '';
 
             $konfigGabungan[] = $fPrimer;
@@ -110,8 +113,9 @@ final class DataTriaseController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggalSekunder =
-                $fSekunder[3] === 'tanggal' || str_contains($namaKolomSekunder, 'tanggal') || $fSekunder[3] === 'dtime';
+            $isTanggalSekunder             = $fSekunder[3] === 'tanggal'
+            || str_contains($namaKolomSekunder, 'tanggal')
+            || $fSekunder[3] === 'dtime';
             $mockBaris[$namaKolomSekunder] = $isTanggalSekunder ? date('Y-m-d\TH:i') : '';
 
             $konfigGabungan[] = $fSekunder;

@@ -52,18 +52,22 @@ final class PermintaanDarahController extends ControllerTemplate
         $data_tabel = $this->model->get_data_tabel($perPage, $offset);
 
         $konfig = [
-            [1, 'No. Permintaan',      'no_permintaan',          'teks',        0],
-            [1, 'No. Rawat',           'nomor_rawat',            'teks',        0],
-            [1, 'No. Rekam Medis',     'nomor_rm',               'teks',        0],
-            [1, 'Nama Pasien',         'nama',                   'nama',        0],
-            [1, 'Tanggal Permintaan',  'tanggal_permintaan',     'tanggal_jam', 0],
-            [1, 'Status',              'nama_status_permintaan', 'status',      0],
+            [1, 'No. Permintaan',     'no_permintaan',          'teks',        0],
+            [1, 'No. Rawat',          'nomor_rawat',            'teks',        0],
+            [1, 'No. Rekam Medis',    'nomor_rm',               'teks',        0],
+            [1, 'Nama Pasien',        'nama',                   'nama',        0],
+            [1, 'Tanggal Permintaan', 'tanggal_permintaan',     'tanggal_jam', 0],
+            [1, 'Status',             'nama_status_permintaan', 'status',      0],
         ];
 
         return view('/layouts/data', [
             'judul'         => $this->title,
             'breadcrumbs'   => $this->breadcrumbs,
-            'meta_data'     => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'meta_data'     => [
+                'page'  => $currentPage,
+                'size'  => count($data_tabel),
+                'total' => ceil($totalRows / $perPage),
+            ],
             'modul_path'    => $this->get_uri_path(),
             'kolom_id'      => $this->primary_key,
             'konfig'        => $konfig,
@@ -511,11 +515,14 @@ final class PermintaanDarahController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataPermintaan = $this->model->find($id);
         if (!$dataPermintaan) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Permintaan Darah tidak ditemukan.');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound(
+                'Data Permintaan Darah tidak ditemukan.',
+            );
         }
 
         $dataRawatInap  = [];
@@ -566,7 +573,7 @@ final class PermintaanDarahController extends ControllerTemplate
             if (!empty($options) && isset($baris[$colName])) {
                 $idMentah = $baris[$colName];
                 foreach ($options as $opt) {
-                    if ((string)$opt[1] === (string)$idMentah) {
+                    if ((string) $opt[1] === (string) $idMentah) {
                         $baris[$colName] = $opt[0];
                         break;
                     }
@@ -574,7 +581,8 @@ final class PermintaanDarahController extends ControllerTemplate
             }
         }
 
-        $detailPermintaanRaw = $this->model->db
+        $detailPermintaanRaw = $this->model
+            ->db
             ->table('pelayanan_darah.permintaan_darah_detail pdd')
             ->select('kd.nama_komponen, gd.nama_golongan_darah, r.kode_rhesus, pdd.jumlah')
             ->join('inventori_darah.komponen_darah kd', 'kd.id_komponen = pdd.id_komponen', 'inner')
@@ -591,7 +599,7 @@ final class PermintaanDarahController extends ControllerTemplate
         }
 
         $breadcrumbs = [
-            ['title' => 'Detail', 'icon' => 'detail']
+            ['title' => 'Detail', 'icon' => 'detail'],
         ];
 
         return view('admin/pelayanandarah/detail_permintaandarah', [

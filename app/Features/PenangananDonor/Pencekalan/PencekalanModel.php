@@ -21,8 +21,8 @@ final class PencekalanModel extends ModelTemplate
             [
                 'id_kunjungan'         => [
                     'nomor_kunjungan',
-                    'id_pendonor'   => [
-                        'id_orang'  => ['nama']
+                    'id_pendonor' => [
+                        'id_orang' => ['nama'],
                     ],
                 ],
                 'id_jenis_pencekalan'  => ['nama_jenis_pencekalan'],
@@ -63,17 +63,17 @@ final class PencekalanModel extends ModelTemplate
             ->join('role.pendonor p', 'p.id_pendonor = k.id_pendonor', 'inner')
             ->join('person.orang o', 'o.id_orang = p.id_orang', 'inner')
             ->join('penanganan_donor.jenis_pencekalan jp', 'jp.id_jenis_pencekalan = pc.id_jenis_pencekalan', 'left')
-            ->join('penanganan_donor.status_pencekalan sp', 'sp.id_status_pencekalan = pc.id_status_pencekalan', 'left');
+            ->join(
+                'penanganan_donor.status_pencekalan sp',
+                'sp.id_status_pencekalan = pc.id_status_pencekalan',
+                'left',
+            );
 
         foreach ($this->runtime_filters as $col => $val) {
             is_array($val) ? $builder->whereIn("pc.{$col}", $val) : $builder->where("pc.{$col}", $val);
         }
 
-        return $builder
-            ->orderBy('pc.id_pencekalan', 'DESC')
-            ->limit($limit, $offset)
-            ->get()
-            ->getResultArray();
+        return $builder->orderBy('pc.id_pencekalan', 'DESC')->limit($limit, $offset)->get()->getResultArray();
     }
 
     /**

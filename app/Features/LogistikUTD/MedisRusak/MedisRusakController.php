@@ -181,11 +181,14 @@ final class MedisRusakController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataRusak = $this->model->find($id);
         if (!$dataRusak) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Kerusakan BHP Medis tidak ditemukan.');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound(
+                'Data Kerusakan BHP Medis tidak ditemukan.',
+            );
         }
 
         $dataPetugas = [];
@@ -206,7 +209,8 @@ final class MedisRusakController extends ControllerTemplate
 
         $baris = array_merge($dataRusak, $dataPetugas);
 
-        $detailRusakRaw = $this->model->db
+        $detailRusakRaw = $this->model
+            ->db
             ->table('logistik_utd.medis_rusak_detail mrd')
             ->select('mrd.id_barang, mrd.jumlah, mrd.harga_beli')
             ->where('mrd.id_medis_rusak', $id)
@@ -215,9 +219,9 @@ final class MedisRusakController extends ControllerTemplate
 
         $modelMasterMedis = new \App\Features\InventoriMedis\DataBarang\DataBarangModel();
         foreach ($detailRusakRaw as $k => $v) {
-            $idBarang = $v['id_barang'] ?? 0;
+            $idBarang   = $v['id_barang'] ?? 0;
             $masterItem = $modelMasterMedis->find($idBarang);
-            
+
             $detailRusakRaw[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
             $detailRusakRaw[$k]['nama_barang'] = $masterItem['nama'] ?? '-';
         }

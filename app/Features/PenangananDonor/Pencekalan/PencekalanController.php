@@ -78,18 +78,22 @@ final class PencekalanController extends ControllerTemplate
         $data_tabel = $this->model->get_data_tabel($perPage, $offset);
 
         $konfig = [
-            [1, 'Nomor Kunjungan', 'nomor_kunjungan',        'teks',   0],
-            [1, 'Nama Pendonor',   'nama',                   'teks',   0],
-            [1, 'Jenis Pencekalan','nama_jenis_pencekalan',  'teks',   0],
-            [1, 'Tanggal Mulai',   'tanggal_mulai',          'tanggal',0],
-            [1, 'Tanggal Selesai', 'tanggal_selesai',        'tanggal',0],
-            [1, 'Status',          'nama_status_pencekalan', 'status', 0],
+            [1, 'Nomor Kunjungan',  'nomor_kunjungan',        'teks',    0],
+            [1, 'Nama Pendonor',    'nama',                   'teks',    0],
+            [1, 'Jenis Pencekalan', 'nama_jenis_pencekalan',  'teks',    0],
+            [1, 'Tanggal Mulai',    'tanggal_mulai',          'tanggal', 0],
+            [1, 'Tanggal Selesai',  'tanggal_selesai',        'tanggal', 0],
+            [1, 'Status',           'nama_status_pencekalan', 'status',  0],
         ];
 
         return view('/layouts/data', [
             'judul'         => $this->title,
             'breadcrumbs'   => $this->breadcrumbs,
-            'meta_data'     => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'meta_data'     => [
+                'page'  => $currentPage,
+                'size'  => count($data_tabel),
+                'total' => ceil($totalRows / $perPage),
+            ],
             'modul_path'    => $this->get_uri_path(),
             'kolom_id'      => $this->primary_key,
             'konfig'        => $konfig,

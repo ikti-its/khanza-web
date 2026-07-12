@@ -68,7 +68,11 @@ final class PengadaanBarangController extends ControllerTemplate
     protected function before_create(array &$postData): void
     {
         helper('autonomor');
-        $lastNo = $this->get_last('inventori_non_medis.pengadaan_barang', 'no_pengadaan', 'id_pengadaan');
+        $lastNo                                 = $this->get_last(
+            'inventori_non_medis.pengadaan_barang',
+            'no_pengadaan',
+            'id_pengadaan',
+        );
         $postData['no_pengadaan']               = generateNextNoPengadaanBarang($lastNo, $postData['tanggal'] ?? null);
         $postData['id_status_pengadaan_barang'] = 1;
         $this->new_no_pengadaan                 = $postData['no_pengadaan'];

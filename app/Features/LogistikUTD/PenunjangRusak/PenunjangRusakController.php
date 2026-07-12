@@ -182,11 +182,14 @@ final class PenunjangRusakController extends ControllerTemplate
      */
     public function detail(int|string $id): string
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $dataRusak = $this->model->find($id);
         if (!$dataRusak) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Kerusakan BHP Non Medis tidak ditemukan.');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound(
+                'Data Kerusakan BHP Non Medis tidak ditemukan.',
+            );
         }
 
         $dataPetugas = [];
@@ -207,7 +210,8 @@ final class PenunjangRusakController extends ControllerTemplate
 
         $baris = array_merge($dataRusak, $dataPetugas);
 
-        $detailRusakRaw = $this->model->db
+        $detailRusakRaw = $this->model
+            ->db
             ->table('logistik_utd.penunjang_rusak_detail prd')
             ->select('prd.id_barang, prd.jumlah, prd.harga_beli')
             ->where('prd.id_penunjang_rusak', $id)
@@ -218,7 +222,7 @@ final class PenunjangRusakController extends ControllerTemplate
         foreach ($detailRusakRaw as $k => $v) {
             $idBarang   = $v['id_barang'] ?? 0;
             $masterItem = $modelMasterPenunjang->find($idBarang);
-            
+
             $detailRusakRaw[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
             $detailRusakRaw[$k]['nama_barang'] = $masterItem['nama_barang'] ?? '-';
         }
