@@ -27,7 +27,7 @@ final class PengambilanPenunjangController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_pengambilan_penunjang', 'ID Pengambilan Penunjang'],
-                [SHOW, REQUIRED, I::INDEX,  'id_barang',                'ID Barang'],
+                [SHOW, REQUIRED, I::INDEX,  'id_barang',                'Kode Barang'],
                 [SHOW, REQUIRED, I::NUMBER, 'jumlah',                   'Jumlah'],
                 [SHOW, REQUIRED, I::MONEY,  'harga_beli',               'Harga Beli'],
                 [SHOW, REQUIRED, I::INDEX,  'id_petugas_gudang',        'Petugas Gudang'],

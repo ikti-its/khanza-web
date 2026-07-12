@@ -27,7 +27,7 @@ final class PengambilanMedisController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_pengambilan_medis', 'ID Pengambilan Medis'],
-                [SHOW, REQUIRED, I::INDEX,  'id_barang',            'ID Barang'],
+                [SHOW, REQUIRED, I::INDEX,  'id_barang',            'Kode Barang'],
                 [SHOW, REQUIRED, I::NUMBER, 'jumlah',               'Jumlah'],
                 [SHOW, REQUIRED, I::MONEY,  'harga_beli',           'Harga Beli'],
                 [SHOW, REQUIRED, I::TEXT,   'nama_bangsal',         'Nama Bangsal'],
