@@ -21,7 +21,7 @@ final class TriaseSkalaController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
             ],
@@ -33,5 +33,17 @@ final class TriaseSkalaController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,   'pengkajian',       'Pengkajian'],
             ],
         );
+    }
+
+    /**
+     * OVERRIDE: Mengurutkan data sebelum ditampilkan
+     */
+    #[\Override]
+    protected function before_read(): void
+    {
+        $this->model
+            ->set_order('id_tingkat_skala', 'ASC')
+            ->set_order('id_pemeriksaan', 'ASC')
+            ->set_order('kode_skala', 'ASC');
     }
 }
