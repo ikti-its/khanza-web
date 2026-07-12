@@ -22,13 +22,14 @@ final class PenunjangRusakController extends ControllerTemplate
             [
                 A::READ,
                 A::CREATE,
-                A::AUDIT,
+                // A::AUDIT,
                 // A::UPDATE,
                 A::DELETE,
+                A::DETAIL,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_penunjang_rusak', 'ID Penunjang Rusak'],
-                [SHOW, REQUIRED, I::INDEX, 'id_petugas',         'ID Petugas'],
+                [SHOW, REQUIRED, I::INDEX, 'id_petugas',         'Petugas'],
                 [SHOW, REQUIRED, I::DTIME, 'tanggal_rusak',      'Tanggal Rusak'],
                 [SHOW, REQUIRED, I::TEXT,  'keterangan',         'Keterangan'],
             ],
@@ -174,5 +175,70 @@ final class PenunjangRusakController extends ControllerTemplate
         }
 
         return $this->home();
+    }
+
+    /**
+     * Menampilkan Halaman Detail BHP Non Medis Rusak
+     */
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $dataRusak = $this->model->find($id);
+        if (!$dataRusak) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data Kerusakan BHP Non Medis tidak ditemukan.');
+        }
+
+        $dataPetugas = [];
+
+        if (!empty($dataRusak['id_petugas'])) {
+            $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
+            $petugasRow   = $modelPetugas->find($dataRusak['id_petugas']) ?? [];
+
+            if (!empty($petugasRow['id_orang'])) {
+                $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
+                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+
+                if (isset($orangPetugasRow['nama'])) {
+                    $dataPetugas['nama_petugas'] = $orangPetugasRow['nama'];
+                }
+            }
+        }
+
+        $baris = array_merge($dataRusak, $dataPetugas);
+
+        $detailRusakRaw = $this->model->db
+            ->table('logistik_utd.penunjang_rusak_detail prd')
+            ->select('prd.id_barang, prd.jumlah, prd.harga_beli')
+            ->where('prd.id_penunjang_rusak', $id)
+            ->get()
+            ->getResultArray();
+
+        $modelMasterPenunjang = new \App\Features\InventoriNonMedis\Barang\BarangModel();
+        foreach ($detailRusakRaw as $k => $v) {
+            $idBarang   = $v['id_barang'] ?? 0;
+            $masterItem = $modelMasterPenunjang->find($idBarang);
+            
+            $detailRusakRaw[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
+            $detailRusakRaw[$k]['nama_barang'] = $masterItem['nama_barang'] ?? '-';
+        }
+
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Detail', 'icon' => 'detail'],
+        ];
+
+        return view('admin/logistikutd/detail_penunjangrusak', [
+            'judul'        => 'Detail ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'   => $this->get_uri_path(),
+            'baris'        => $baris,
+            'detail_rusak' => $detailRusakRaw,
+        ]);
     }
 }
