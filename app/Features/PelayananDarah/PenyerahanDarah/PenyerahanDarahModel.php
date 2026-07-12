@@ -37,6 +37,33 @@ final class PenyerahanDarahModel extends ModelTemplate
     }
 
     /**
+     * Mengambil data penyerahan darah
+     * @param int $limit
+     * @param int $offset
+     * @return list<array<string, mixed>>
+     */
+    public function get_data_tabel(int $limit, int $offset): array
+    {
+        return $this->db
+            ->table('pelayanan_darah.penyerahan_darah pd')
+            ->select([
+                'pd.id_penyerahan',
+                'pd.no_penyerahan',
+                'pmt.no_permintaan',
+                'pd.tanggal_penyerahan',
+                'pd.pengambil_darah',
+                'pd.id_status_pembayaran',
+                'sp.nama_status_pembayaran',
+            ])
+            ->join('pelayanan_darah.permintaan_darah pmt', 'pmt.id_permintaan = pd.id_permintaan', 'left')
+            ->join('pelayanan_darah.status_pembayaran sp', 'sp.id_status_pembayaran = pd.id_status_pembayaran', 'left')
+            ->orderBy('pd.id_penyerahan', 'DESC')
+            ->limit($limit, $offset)
+            ->get()
+            ->getResultArray();
+    }
+
+    /**
      * Validasi akumulasi kuota kantong darah penyerahan vs permintaan
      * @param int $idPermintaan
      * @param array|null $stokDarahTerpilih

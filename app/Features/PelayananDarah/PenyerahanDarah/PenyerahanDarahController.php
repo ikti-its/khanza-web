@@ -47,6 +47,44 @@ final class PenyerahanDarahController extends ControllerTemplate
     }
 
     /**
+     * OVERRIDE: Menampilkan Halaman Utama Penyerahan Darah
+     */
+    #[\Override]
+    public function index(): string
+    {
+        $currentPage = max(1, (int) ($this->request->getGet('page') ?? 1));
+        $perPage     = 10;
+        $offset      = ($currentPage - 1) * $perPage;
+
+        $totalRows  = $this->model->count_filtered();
+        $data_tabel = $this->model->get_data_tabel($perPage, $offset);
+
+        $konfig = [
+            [1, 'No. Penyerahan',     'no_penyerahan',           'teks',        0],
+            [1, 'No. Permintaan',     'no_permintaan',           'teks',        0],
+            [1, 'Tanggal Penyerahan', 'tanggal_penyerahan',      'tanggal_jam', 0],
+            [1, 'Pengambil Darah',    'pengambil_darah',         'teks',        0],
+            [1, 'Status Pembayaran',  'nama_status_pembayaran',  'status',      0],
+        ];
+
+        return view('/layouts/data', [
+            'judul'         => $this->title,
+            'breadcrumbs'   => $this->breadcrumbs,
+            'meta_data'     => ['page' => $currentPage, 'size' => count($data_tabel), 'total' => ceil($totalRows / $perPage)],
+            'modul_path'    => $this->get_uri_path(),
+            'kolom_id'      => $this->primary_key,
+            'konfig'        => $konfig,
+            'aksi'          => $this->actions,
+            'tabel'         => $data_tabel,
+            'row_alert'     => [],
+            'child_link'    => null,
+            'query_string'  => '',
+            'filters'       => $this->filters,
+            'active_filter' => $this->active_filter,
+        ]);
+    }
+
+    /**
      * OVERRIDE: Menampilkan Form Penyerahan Darah
      */
     #[\Override]
