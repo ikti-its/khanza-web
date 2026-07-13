@@ -167,13 +167,15 @@ final class TagihanOperasiController extends ControllerTemplate
         )));
 
         $totalPaket = $idPaket
-            ? (float) ($this->model
-                ->db
-                ->table('operasi.paket_tindakan_operasi')
-                ->selectSum('tarif_kelas_3')
-                ->whereIn('id_paket', $idPaket)
-                ->get()
-                ->getRowArray()['tarif_kelas_3'] ?? 0)
+            ? (float) (
+                $this->model
+                    ->db
+                    ->table('operasi.paket_tindakan_operasi')
+                    ->selectSum('tarif_kelas_3')
+                    ->whereIn('id_paket', $idPaket)
+                    ->get()
+                    ->getRowArray()['tarif_kelas_3'] ?? 0
+            )
             : 0.0;
 
         $jumlahByBarang = [];

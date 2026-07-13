@@ -83,15 +83,8 @@ final class PermintaanBarangController extends ControllerTemplate
     protected function before_create(array &$postData): void
     {
         helper('autonomor');
-        $lastNo                                  = $this->get_last(
-            'inventori_non_medis.permintaan_barang',
-            'no_permintaan',
-            'id_permintaan',
-        );
-        $postData['no_permintaan']               = generateNextNoPermintaanBarang(
-            $lastNo,
-            $postData['tanggal'] ?? null,
-        );
+        $lastNo = $this->get_last('inventori_non_medis.permintaan_barang', 'no_permintaan', 'id_permintaan');
+        $postData['no_permintaan'] = generateNextNoPermintaanBarang($lastNo, $postData['tanggal'] ?? null);
         $postData['id_status_permintaan_barang'] = 1;
 
         // convert empty FK modal fields to null agar tidak kirim '' ke kolom integer
