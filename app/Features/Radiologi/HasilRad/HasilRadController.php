@@ -161,9 +161,15 @@ final class HasilRadController extends ControllerTemplate
     private function tindakanKosong(array $tindakan): bool
     {
         $fieldTeks = [
-            'proyeksi', 'inaktivasi', 'dosis_radiasi', 'hasil_ekspertise',
-            'kilovoltage_kv', 'milliampere_second_mas', 'focus_film_distance_ffd',
-            'back_scatter_factor_bsf', 'jumlah_penyinaran',
+            'proyeksi',
+            'inaktivasi',
+            'dosis_radiasi',
+            'hasil_ekspertise',
+            'kilovoltage_kv',
+            'milliampere_second_mas',
+            'focus_film_distance_ffd',
+            'back_scatter_factor_bsf',
+            'jumlah_penyinaran',
         ];
         foreach ($fieldTeks as $f) {
             if (trim((string) ($tindakan[$f] ?? '')) !== '') {
@@ -292,7 +298,7 @@ final class HasilRadController extends ControllerTemplate
 
         $submittedBarangIds = [];
         foreach ($bhpList as $idBarang => $bhp) {
-            $idBarang                     = (int) $idBarang;
+            $idBarang                      = (int) $idBarang;
             $submittedBarangIds[$idBarang] = true;
             $this->syncBhp($modelBhp, $existingBhpByBarang, $idBarang, $bhp, $idHasilRad);
         }

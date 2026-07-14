@@ -262,8 +262,21 @@ final class HasilLabPkController extends ControllerTemplate
             }
 
             $idHasilPk = $existingHasil !== null
-                ? $this->updateHasilPkHeader((int) $existingHasil['id_hasil_pk'], $idDokterPj, $idPetugasLab, $tglJamHasil, $idKategoriUsia)
-                : $this->insertHasilPkHeader($idPermintaanLab, $idItem, $idDokterPj, $idPetugasLab, $tglJamHasil, $idKategoriUsia);
+                ? $this->updateHasilPkHeader(
+                    (int) $existingHasil['id_hasil_pk'],
+                    $idDokterPj,
+                    $idPetugasLab,
+                    $tglJamHasil,
+                    $idKategoriUsia,
+                )
+                : $this->insertHasilPkHeader(
+                    $idPermintaanLab,
+                    $idItem,
+                    $idDokterPj,
+                    $idPetugasLab,
+                    $tglJamHasil,
+                    $idKategoriUsia,
+                );
             $existingByItem[$idItem] = ['id_hasil_pk' => $idHasilPk];
 
             $existingParamByParam = array_column(

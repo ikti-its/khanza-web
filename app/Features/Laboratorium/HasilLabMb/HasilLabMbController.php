@@ -293,7 +293,12 @@ final class HasilLabMbController extends ControllerTemplate
             }
 
             $idHasilMb = $existingHasil !== null
-                ? $this->updateHasilMbHeader((int) $existingHasil['id_hasil_mb'], $idDokterPj, $idPetugasLab, $tglJamHasil)
+                ? $this->updateHasilMbHeader(
+                    (int) $existingHasil['id_hasil_mb'],
+                    $idDokterPj,
+                    $idPetugasLab,
+                    $tglJamHasil,
+                )
                 : $this->insertHasilMbHeader($idPermintaanLab, $idItem, $idDokterPj, $idPetugasLab, $tglJamHasil);
             $existingByItem[$idItem] = ['id_hasil_mb' => $idHasilMb];
 
