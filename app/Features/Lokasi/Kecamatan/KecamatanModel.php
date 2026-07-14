@@ -23,4 +23,32 @@ final class KecamatanModel extends ModelTemplate
             ],
         );
     }
+
+    /**
+     * Mengambil data kecamatan
+     */
+    public function get_data_tabel(): array
+    {
+        $tabel = $this->table;
+
+        return $this->builder()
+            ->select("
+                {$tabel}.id_kecamatan,
+                {$tabel}.id_provinsi,
+                {$tabel}.id_kota_lokal,
+                {$tabel}.id_kec_lokal,
+                {$tabel}.nama_kecamatan AS nama_kecamatan,
+                kt.nama_kota AS nama_kota,
+                pr.nama_provinsi AS nama_provinsi
+            ")
+            ->join(
+                'lokasi.kota kt',
+                "kt.id_provinsi = {$tabel}.id_provinsi AND kt.id_kota_lokal = {$tabel}.id_kota_lokal",
+                'inner',
+            )
+            ->join('lokasi.provinsi pr', "pr.id_provinsi = {$tabel}.id_provinsi", 'inner')
+            ->where("{$tabel}.id_kecamatan >", 0)
+            ->get()
+            ->getResultArray();
+    }
 }

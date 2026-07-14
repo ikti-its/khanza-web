@@ -34,4 +34,14 @@ final class KecamatanController extends ControllerTemplate
             ],
         );
     }
+
+    /**
+     * Menampilkan data modal kecamatan
+     */
+    public function list()
+    {
+        return $this->response->setJSON([
+            'data' => $this->model->get_data_tabel(),
+        ]);
+    }
 }
