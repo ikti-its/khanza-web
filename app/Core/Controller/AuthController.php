@@ -56,9 +56,8 @@ final class AuthController extends Controller
         }
 
         session()->set('user', $user);
-        // session()->set('user_specific_data', 'Akun not found');
 
-        return redirect()->to('/dashboard')->with('title', 'Dashboard')->with('user_details', '');
+        return redirect()->to('/dashboard')->with('title', 'Dashboard');
     }
 
     public function logout(): RedirectResponse
