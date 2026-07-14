@@ -213,11 +213,11 @@ final class TagihanOperasiController extends ControllerTemplate
             'id_dokter_anak',
             'id_dokter_pj_anak',
             'id_dokter_umum',
+        ];
+        $petugasCols = [
             'id_ast_operator_1',
             'id_ast_operator_2',
             'id_ast_operator_3',
-        ];
-        $petugasCols = [
             'id_bidan_1',
             'id_bidan_2',
             'id_bidan_3',

@@ -100,18 +100,18 @@ final class TagihanOperasiDatabase extends DatabaseTemplate
                 ],
                 [
                     ['id_ast_operator_1'],
-                    \App\Features\Role\Dokter\DokterDatabase::class,
-                    ['id_dokter'],
+                    \App\Features\Role\Petugas\PetugasDatabase::class,
+                    ['id_petugas'],
                 ],
                 [
                     ['id_ast_operator_2'],
-                    \App\Features\Role\Dokter\DokterDatabase::class,
-                    ['id_dokter'],
+                    \App\Features\Role\Petugas\PetugasDatabase::class,
+                    ['id_petugas'],
                 ],
                 [
                     ['id_ast_operator_3'],
-                    \App\Features\Role\Dokter\DokterDatabase::class,
-                    ['id_dokter'],
+                    \App\Features\Role\Petugas\PetugasDatabase::class,
+                    ['id_petugas'],
                 ],
                 [
                     ['id_bidan_1'],

@@ -1,22 +1,22 @@
-id_peran,kode,nama_peran
-1,operator_2,Operator 2
-2,operator_3,Operator 3
-3,dokter_anak,Dokter Anak
-4,dokter_pj_anak,Dokter Pj. Anak
-5,dokter_umum,Dokter Umum
-6,ast_operator_1,Asisten Operator 1
-7,ast_operator_2,Asisten Operator 2
-8,ast_operator_3,Asisten Operator 3
-9,bidan_1,Bidan 1
-10,bidan_2,Bidan 2
-11,bidan_3,Bidan 3
-12,perawat_luar,Perawat Luar
-13,instrumen,Instrumen
-14,ast_anestesi_1,Asisten Anestesi 1
-15,ast_anestesi_2,Asisten Anestesi 2
-16,perawat_resus,Perawat Resusitasi
-17,onloop_1,Onloop 1
-18,onloop_2,Onloop 2
-19,onloop_3,Onloop 3
-20,onloop_4,Onloop 4
-21,onloop_5,Onloop 5
+id_peran,kode,nama_peran,jenis
+1,operator_2,Operator 2,dokter
+2,operator_3,Operator 3,dokter
+3,dokter_anak,Dokter Anak,dokter
+4,dokter_pj_anak,Dokter Pj. Anak,dokter
+5,dokter_umum,Dokter Umum,dokter
+6,ast_operator_1,Asisten Operator 1,petugas
+7,ast_operator_2,Asisten Operator 2,petugas
+8,ast_operator_3,Asisten Operator 3,petugas
+9,bidan_1,Bidan 1,petugas
+10,bidan_2,Bidan 2,petugas
+11,bidan_3,Bidan 3,petugas
+12,perawat_luar,Perawat Luar,petugas
+13,instrumen,Instrumen,petugas
+14,ast_anestesi_1,Asisten Anestesi 1,petugas
+15,ast_anestesi_2,Asisten Anestesi 2,petugas
+16,perawat_resus,Perawat Resusitasi,petugas
+17,onloop_1,Onloop 1,petugas
+18,onloop_2,Onloop 2,petugas
+19,onloop_3,Onloop 3,petugas
+20,onloop_4,Onloop 4,petugas
+21,onloop_5,Onloop 5,petugas

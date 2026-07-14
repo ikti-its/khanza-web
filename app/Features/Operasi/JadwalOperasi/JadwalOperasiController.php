@@ -253,6 +253,49 @@ final class JadwalOperasiController extends ControllerTemplate
         return $peran;
     }
 
+    private function fetchPeranJenis(): array
+    {
+        $rows = $this->model
+            ->db
+            ->table('operasi.ref_peran_tim_medis')
+            ->select(['id_peran', 'jenis'])
+            ->get()
+            ->getResultArray();
+
+        $jenis = [];
+        foreach ($rows as $row) {
+            $jenis[(int) $row['id_peran']] = $row['jenis'];
+        }
+        return $jenis;
+    }
+
+    /** Cegah petugas ditempatkan di peran khusus dokter (atau sebaliknya) sebelum data disimpan. */
+    private function validateTim(array $tim): null|string
+    {
+        $peranValid = $this->fetchPeranTim();
+        $peranJenis = $this->fetchPeranJenis();
+
+        foreach ($tim as $anggota) {
+            $idPeran = (int) ($anggota['id_peran'] ?? 0);
+            if (!isset($peranValid[$idPeran])) {
+                continue;
+            }
+
+            $idDokter  = (int) ($anggota['id_dokter'] ?? 0);
+            $idPetugas = (int) ($anggota['id_petugas'] ?? 0);
+            $jenis     = $peranJenis[$idPeran] ?? null;
+
+            if ($jenis === 'dokter' && $idPetugas > 0) {
+                return "Peran \"{$peranValid[$idPeran]}\" hanya boleh diisi dokter, bukan petugas.";
+            }
+            if ($jenis === 'petugas' && $idDokter > 0) {
+                return "Peran \"{$peranValid[$idPeran]}\" hanya boleh diisi petugas, bukan dokter.";
+            }
+        }
+
+        return null;
+    }
+
     private function saveTim(int $idJadwal, array $tim): void
     {
         $this->model->db->table('operasi.jadwal_operasi_tim')->where('id_jadwal', $idJadwal)->delete();
@@ -398,6 +441,12 @@ final class JadwalOperasiController extends ControllerTemplate
 
         if ($this->rentangSelesaiTidakValid($tanggal, $waktuMulai, $tanggalSelesai, $waktuSelesai)) {
             session()->setFlashdata('error', 'Tanggal/waktu selesai harus setelah tanggal/waktu mulai.');
+            return redirect()->back()->withInput();
+        }
+
+        $timError = $this->validateTim($tim);
+        if ($timError !== null) {
+            session()->setFlashdata('error', $timError);
             return redirect()->back()->withInput();
         }
 

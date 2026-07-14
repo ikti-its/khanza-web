@@ -31,11 +31,11 @@ $dokterFields = [
     ['id_dokter_anak',     'Dokter Anak'],
     ['id_dokter_pj_anak',  'Dokter Pj. Anak'],
     ['id_dokter_umum',     'Dokter Umum'],
-    ['id_ast_operator_1',  'Asisten Operator 1'],
-    ['id_ast_operator_2',  'Asisten Operator 2'],
-    ['id_ast_operator_3',  'Asisten Operator 3'],
 ];
 $petugasFields = [
+    ['id_ast_operator_1', 'Asisten Operator 1'],
+    ['id_ast_operator_2', 'Asisten Operator 2'],
+    ['id_ast_operator_3', 'Asisten Operator 3'],
     ['id_bidan_1',        'Bidan 1'],
     ['id_bidan_2',        'Bidan 2'],
     ['id_bidan_3',        'Bidan 3'],

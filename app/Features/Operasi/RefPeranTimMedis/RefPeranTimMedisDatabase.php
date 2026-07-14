@@ -12,6 +12,8 @@ use App\Core\Database\Template\SemanticType as T;
  * agar bisa dipetakan langsung saat membuat tagihan. Operator 1 dan
  * Dokter Anestesi tidak ada di sini karena sudah diwakili field
  * Dokter Bedah dan Dokter Anestesi di jadwal.
+ * Kolom `jenis` ('dokter'|'petugas') menandai anggota tim jenis apa yang
+ * boleh mengisi peran tsb, dipakai JadwalOperasiController untuk validasi.
  */
 final class RefPeranTimMedisDatabase extends DatabaseTemplate
 {
@@ -24,6 +26,7 @@ final class RefPeranTimMedisDatabase extends DatabaseTemplate
                 'id_peran'   => T::ID(100),
                 'kode'       => T::TEXT(),
                 'nama_peran' => T::TEXT(),
+                'jenis'      => T::TEXT(),
             ],
             'id_peran',
             ['kode'],
