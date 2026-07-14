@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Core\Controller;
 
+use App\Core\Auth\AccessMatrix;
 use App\Core\Model\ModelTemplate;
 use CodeIgniter\Controller;
 use CodeIgniter\Database\BaseConnection;
@@ -92,6 +94,26 @@ class ControllerTemplate extends Controller
             if (isset($fields[$i][5]))
                 $this->fields[$i][5] = $fields[$i][5];
         }
+    }
+
+    /** Tombol aksi tulis disembunyikan bagi role baca-saja; route tulisnya
+     * sendiri sudah dijaga filter checkpermission dengan matriks yang sama
+     * (lihat App\Core\Auth\AccessMatrix). */
+    private function writable_actions(): array
+    {
+        $group = $this->request->getUri()->getSegments()[0] ?? '';
+        if (AccessMatrix::can_write($group)) {
+            return $this->actions;
+        }
+        $aksi = $this->actions;
+        unset(
+            $aksi[ActionType::CREATE->value],
+            $aksi[ActionType::UPDATE->value],
+            $aksi[ActionType::DELETE->value],
+            $aksi[ActionType::SAMPEL->value],
+            $aksi[ActionType::PAY->value],
+        );
+        return $aksi;
     }
 
     protected function get_uri_path(): string

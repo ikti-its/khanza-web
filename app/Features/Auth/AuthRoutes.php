@@ -15,6 +15,8 @@ final class AuthRoutes extends RouteTemplate
             [
                 \App\Features\Auth\Akun\AkunController::class,
                 \App\Features\Auth\RefRole\RefRoleController::class => 'HIDE',
+                \App\Features\Auth\RefGrupFitur\RefGrupFiturController::class => 'HIDE',
+                \App\Features\Auth\AksesFitur\AksesFiturController::class,
             ],
             'auth.svg',
         );

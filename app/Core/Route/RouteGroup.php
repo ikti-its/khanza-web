@@ -39,12 +39,14 @@ class RouteGroup
 
     final public function create_routes(): array
     {
-        $filter = ['filter' => 'checkpermission:1337,1,2,3,4001,4002,4003,4004'];
-
         $groups = [];
 
         foreach ($this->get_controler_classes() as $group => $features) {
             $group_path = self::create_path_from_name($group);
+            // Role yang boleh baca/tulis grup ini adalah data (tabel
+            // auth.akses_fitur), bukan kode; lihat App\Core\Auth\AccessMatrix.
+            $filter_read = ['filter' => "checkpermission:{$group_path},read"];
+            $filter_write = ['filter' => "checkpermission:{$group_path},write"];
 
             foreach ($features as $f => $show) {
                 if ($show !== 'HIDE') {
@@ -60,31 +62,33 @@ class RouteGroup
                     'options' => ['filter' => 'auth'],
                     'routes'  => [],
                 ];
+                // Elemen ke-4: READ hanya melihat data, WRITE mengubah data;
+                // masing-masing dijaga filter checkpermission,<grup>,read|write.
                 $paths = [
-                    ['get',    'data',                  'index'],
-                    ['get',    'audit',                 'audit'],
-                    ['get',    'tambah',                'create_page'],
-                    ['post',   'submittambah',          'create'],
-                    ['get',    'edit/(:segment)',       'update_page/$1'],
-                    ['post',   'submitedit/(:segment)', 'update/$1'],
-                    ['delete', 'hapus/(:segment)',      'delete/$1'],
-                    ['get',    'cetak/(:segment)',      'print/$1'],
-                    ['get',    'modal/list',            'list'],
-                    ['post',   'sampel/(:segment)',     'sampel/$1'],
-                    ['post',   'bayar/(:segment)',      'bayar/$1'],
-                    ['post',   'upload/(:num)',         'upload/$1'],
-                    ['post',   'hapus-foto/(:num)',     'hapusFoto/$1'],
-                    ['get',    '(:segment)',            'detail/$1'],
+                    ['get',    'data',                  'index',          'READ'],
+                    ['get',    'audit',                 'audit',          'READ'],
+                    ['get',    'tambah',                'create_page',    'WRITE'],
+                    ['post',   'submittambah',          'create',         'WRITE'],
+                    ['get',    'edit/(:segment)',       'update_page/$1', 'WRITE'],
+                    ['post',   'submitedit/(:segment)', 'update/$1',      'WRITE'],
+                    ['delete', 'hapus/(:segment)',      'delete/$1',      'WRITE'],
+                    ['get',    'cetak/(:segment)',      'print/$1',       'READ'],
+                    ['get',    'modal/list',            'list',           'READ'],
+                    ['post',   'sampel/(:segment)',     'sampel/$1',      'WRITE'],
+                    ['post',   'bayar/(:segment)',      'bayar/$1',       'WRITE'],
+                    ['post',   'upload/(:num)',         'upload/$1',      'WRITE'],
+                    ['post',   'hapus-foto/(:num)',     'hapusFoto/$1',   'WRITE'],
+                    ['get',    '(:segment)',            'detail/$1',      'READ'],
                 ];
 
                 foreach ($paths as $p) {
-                    [$method, $uri, $action] = $p;
+                    [$method, $uri, $action, $access] = $p;
                     $route_group['routes'][] = [
-                        'method'  => $method,
-                        'uri'     => $uri,
-                        'action'  => $action,
-                        'class'   => $f,
-                        'options' => $filter,
+                        'method' => $method,
+                        'uri' => $uri,
+                        'action' => $action,
+                        'class' => $f,
+                        'options' => $access === 'WRITE' ? $filter_write : $filter_read,
                     ];
                 }
                 $groups[] = $route_group;
@@ -151,14 +155,6 @@ class RouteGroup
 
     final public function create_sidebar()
     {
-        $persetujuanrole   = [1337, 1, 2, 4001, 5001];
-        $petugasrole       = [1337, 1, 2, 4001, 5001];
-        $petugasdokterrole = [1337, 1, 2, 3, 4001, 5001];
-        $dokterrole        = [1337, 1, 3, 4001, 5001];
-        $loginadmin        = [1337, 1];
-        $loginpetugas      = 2;
-        $logindokter       = 3;
-
         $all_routes = $this->get_controler_classes();
         $all_icons  = $this->get_icons();
         $all_header = [];
@@ -175,11 +171,11 @@ class RouteGroup
                     '/' . $group_path . '/' . $feature_path . '/data',
                     $icon,
                     '',
-                    $petugasrole,
+                    $group_path,
                     [],
                 ];
             } else {
-                $header = [$group, '', $icon, '/' . $group_path, $petugasrole];
+                $header = [$group, '', $icon, '/' . $group_path, $group_path];
                 foreach ($features as $feature => $show) {
                     if ($show !== 'HIDE') {
                         $feature = $show;
@@ -216,18 +212,15 @@ class RouteGroup
             return [
             PHP;
         foreach ($sidebar as $s) {
-            [$title, $path, $icon, $prefix, $roles, $menus] = $s;
+            [$title, $path, $icon, $prefix, $group_path, $menus] = $s;
             $php .= sprintf(
-                '[%s, %s, %s, %s, [',
+                "[%s, %s, %s, %s, %s, [\n",
                 var_export($title, true),
                 var_export($path, true),
                 var_export($icon, true),
                 var_export($prefix, true),
+                var_export($group_path, true),
             );
-            foreach ($roles as $role) {
-                $php .= sprintf('%s,', var_export($role, true));
-            }
-            $php .= sprintf("], [\n");
             foreach ($menus as $menu) {
                 [$nama, $link, $icon] = $menu;
                 $php .= sprintf(

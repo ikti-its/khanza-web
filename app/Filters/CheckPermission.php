@@ -2,33 +2,34 @@
 
 namespace App\Filters;
 
+use App\Core\Auth\AccessMatrix;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class CheckPermission implements FilterInterface
 {
-    #[\Override()]
+    #[\Override]
     public function before(RequestInterface $request, $arguments = null)
     {
-        $session = session()->has('user');
-        if(!$session)
+        if (!session()->has('user'))
             return redirect()->to(base_url('/login'));
 
-        /** @var array{'role':string} */
-        $user = session()->get('user');
-        $role = $user['role'];
+        // $arguments = [group_path, 'read'|'write'], lihat RouteGroup::create_routes()
+        if (!is_array($arguments) || count($arguments) < 2)
+            return redirect()->to('/error/403');
 
-        if (!is_array($arguments))
-            $arguments = explode(',', '');
+        [$group, $mode] = $arguments;
 
-        if (!in_array((string) $role, array_map('strval', $arguments), true))
+        $allowed = $mode === 'write' ? AccessMatrix::can_write($group) : AccessMatrix::can_read($group);
+
+        if (!$allowed)
             return redirect()->to('/error/403');
 
         return null;
     }
 
-    #[\Override()]
+    #[\Override]
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
         return null;
