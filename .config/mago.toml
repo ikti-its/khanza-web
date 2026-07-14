@@ -81,3 +81,10 @@ must-be-final = true
 # must-be-readonly = true
 must-extend = "app\\Core\\Database\\Template\\DatabaseTemplate"
 reason = "Database must be final and extend DatabaseTemplate."
+
+[[guard.structural.rules]]
+on = "app\\Controllers\\**\\*"
+target = "class"
+must-be-final = true
+must-extend = "app\\Core\\Controller\\Legacy\\ControllerTemplateLegacy"
+reason = "Legacy controllers must be final and extend ControllerTemplateLegacy."
