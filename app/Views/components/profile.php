@@ -1,17 +1,19 @@
 <?php
-    $userDetails = session()->get('user_details');
+    $user = session()->get('user');
 
-    // dd($userDetails);
-    // Initialize defaults
     $role = null;
     $foto = '/img/akun-icon.png';
     $email = 'Guest';
 
-    if (is_array($userDetails)) {
-        $role  = $userDetails['role']  ?? null;
-        $foto  = $userDetails['foto']  ?? $foto;
-        $email = $userDetails['email'] ?? $email;
+    if (is_array($user)) {
+        $role  = $user['role']  ?? null;
+        $foto  = $user['foto']  ?? $foto;
+        $email = $user['email'] ?? $email;
     }
+
+    // Nama role ikut enum Role (sinkron dengan seed ref_role)
+    $nama_role = is_int($role) ? \App\Core\Auth\Role::tryFrom($role)?->name : null;
+    $nama_role = $nama_role !== null ? ucfirst(strtolower($nama_role)) : 'Guest';
 ?>
 
 <div class="hs-dropdown relative inline-flex [--placement:bottom-right]">
@@ -27,19 +29,11 @@
                 <?= esc($email) ?>
             </p>
             <p class="text-xs text-gray-500 dark:text-gray-400">
-                (<?= match ($role) {
-                    1337 => 'Super Admin',
-                    1    => 'Admin',
-                    2    => 'Petugas',
-                    3    => 'Dokter',
-                    4001 => 'Role 4001',
-                    5001 => 'Role 5001',
-                    default => 'Guest'
-                } ?>)
+                (<?= esc($nama_role) ?>)
             </p>
         </div>
         <div class="mt-2 py-2 first:pt-0 last:pb-0">
-            <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300" href="#">
+            <!-- <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300" href="#">
                 <img src="<?= base_url('/svg/profile/newsletter.svg') ?>">
                 Newsletter
             </a>
@@ -50,7 +44,7 @@
             <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300" href="/profile">
                 <img src="<?= base_url('svg/profile/profile.svg') ?>">
                 Lihat profil
-            </a>
+            </a> -->
             <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300" href="/logout">
                 <img src="<?= base_url('svg/profile/logout.svg') ?>">
                 Keluar akun
