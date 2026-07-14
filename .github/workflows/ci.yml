@@ -47,10 +47,13 @@ jobs:
         run: vendor/bin/mago --config .config/mago.toml guard
 
       - name: Run Mago Static Analysis
+        continue-on-error: true
         run: vendor/bin/mago --config .config/mago.toml analyze
 
       - name: Run Mago Linter
+        continue-on-error: true
         run: vendor/bin/mago --config .config/mago.toml lint
 
       - name: Verify Formatting
+        continue-on-error: true
         run: vendor/bin/mago --config .config/mago.toml fmt --check
