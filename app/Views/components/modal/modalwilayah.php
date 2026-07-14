@@ -16,6 +16,11 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const btnTambahWilayah = document.querySelector('#modalWilayah a[href="/lokasi/desa/tambah"]');
+        if (btnTambahWilayah) {
+            btnTambahWilayah.removeAttribute('target');
+            btnTambahWilayah.href = '/lokasi/desa/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
+        }
         initModalList({
             modalId:     'modalWilayah',
             tableId:     'wilayahTable',
