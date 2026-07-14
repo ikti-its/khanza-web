@@ -12,7 +12,6 @@ namespace App\Core\Auth;
  */
 enum Role: int
 {
-    case SUPERADMIN = 1337;
     case ADMIN = 1;
     case PETUGAS = 2;
     case DOKTER = 3;
