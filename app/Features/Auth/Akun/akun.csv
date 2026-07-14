@@ -1,6 +1,6 @@
 id,email,password,role
 1,admin123@fathoor.dev,$2a$10$LcvwwjdpGUz3LmKLOa9Yy.Oqs0DAsquurYYMAWA8n0eO3uPX0ibrW,1
 2,eric@fathoor.dev,$2a$12$GmKnyhdJVTC424cvJFgiC.fiQjFm18IN587OIq/puCLg5ab1abnEm,2	
-3,fathoor@fathoor.dev,$2a$10$Yg78XjsfHtvpiZHzxjhtBeauNRpK928c1zKSXjPdV.jOE0q21qXgq,1337
+3,fathoor@fathoor.dev,$2a$10$Yg78XjsfHtvpiZHzxjhtBeauNRpK928c1zKSXjPdV.jOE0q21qXgq,1
 4,aziz@fathoor.dev,$2a$12$GmKnyhdJVTC424cvJFgiC.fiQjFm18IN587OIq/puCLg5ab1abnEm,3
 5,admin@fathoor.dev,$2a$10$8jI.qKrVbXQjNzYX6KOIvukkYkNcmfYyPWiv9tuHE8vdg5EhjQBzy,1
