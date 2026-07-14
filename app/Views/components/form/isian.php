@@ -12,7 +12,7 @@
 
     $row = (isset($baris) && is_array($baris)) ? $baris : [];
 
-    $allowed_type = ['indeks', 'tanggal', 'jam', 'uang', 'status', 'nama', 'teks', 'jumlah', 'suhu', 'kosong', 'desimal', 'tanggal_jam', 'bool', 'readonly', 'modal'];
+    $allowed_type = ['indeks', 'tanggal', 'jam', 'uang', 'status', 'nama', 'teks', 'jumlah', 'suhu', 'kosong', 'desimal', 'tanggal_jam', 'bool', 'readonly', 'modal', 'password'];
     $len = sizeof($konfig);
     if ($len % 2 !== 0) {
         array_push($konfig, [0, '', '', 'kosong', 0, []]);

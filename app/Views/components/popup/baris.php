@@ -5,6 +5,9 @@ if ($nilai === 't')
     $nilai = 'Ya';
 if ($nilai === 'f')
     $nilai = 'Tidak';
+// Popup tidak menerima info jenis kolom, jadi masker berdasarkan nama
+if ($kolom === 'password' && $nilai !== '')
+    $nilai = '••••••••';
 ?>
 <div class="mb-5 sm:block">
     <label class="block mb-2 text-sm text-gray-900 dark:text-white">

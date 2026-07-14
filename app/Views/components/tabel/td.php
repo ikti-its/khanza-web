@@ -5,7 +5,7 @@
 /** @var int|string            $id         Nilai primary key baris ini */
 /** @var string                $modul_path Path URI modul saat ini (e.g. '/resepobat') */
 
-    $list_jenis = ['indeks', 'tanggal', 'jam', 'uang', 'status', 'nama', 'teks', 'jumlah', 'suhu', 'bool', 'desimal', 'tanggal_jam', 'kosong', 'readonly'];
+    $list_jenis = ['indeks', 'tanggal', 'jam', 'uang', 'status', 'nama', 'teks', 'jumlah', 'suhu', 'bool', 'desimal', 'tanggal_jam', 'kosong', 'readonly', 'password'];
     for($i = 0; $i < sizeof($kolom); $i++){
         if(!in_array($jenis[$i], $list_jenis)){
             echo 'Jenis tidak ditemukan pada daftar';
