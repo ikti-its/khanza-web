@@ -106,10 +106,12 @@ final class LembarOperasiController extends ControllerTemplate
 
         // Helper mapper untuk array
         $entry = static fn(string $label, string $slug, string $table): array => [
-            'label'     => $label,
-            'tambah'    => "/operasi/{$slug}/tambah",
-            'ubah'      => "/operasi/{$slug}/edit",
-            'record_id' => !empty($existingRecords[$table]) ? (int) $existingRecords[$table] : null,
+            'label'      => $label,
+            'tambah'     => "/operasi/{$slug}/tambah",
+            'ubah'       => "/operasi/{$slug}/edit",
+            'modul_path' => "/operasi/{$slug}",
+            'table'      => $table,
+            'record_id'  => !empty($existingRecords[$table]) ? (int) $existingRecords[$table] : null,
         ];
 
         return [
