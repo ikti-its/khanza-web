@@ -17,13 +17,19 @@ final class AkunDatabase extends DatabaseTemplate
                 'id'       => T::ID(1_000_000),
                 'email'    => T::TEXT(),
                 'password' => T::TEXT(),
-                'role'     => T::QTY(1, 6000),
+                'role'     => T::FK_AUTO(),
             ],
             'id',
             [
                 'email',
             ],
-            [],
+            [
+                [
+                    'role',
+                    \App\Features\Auth\RefRole\RefRoleDatabase::class,
+                    'id_role',
+                ],
+            ],
             true,
             'akun.csv',
         );

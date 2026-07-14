@@ -16,9 +16,10 @@ final class AkunModel extends ModelTemplate
                 'id'       => V::DEFAULT(),
                 'email'    => V::DEFAULT(),
                 'password' => V::DEFAULT(),
-                'role'     => V::DEFAULT(),
             ],
-            [],
+            [
+                'role' => ['nama_role'],
+            ],
         );
     }
 }
