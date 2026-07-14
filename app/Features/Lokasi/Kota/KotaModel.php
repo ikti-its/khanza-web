@@ -22,4 +22,25 @@ final class KotaModel extends ModelTemplate
             ],
         );
     }
+
+    /**
+     * Mengambil data kota
+     */
+    public function get_data_tabel(): array
+    {
+        $tabel = $this->table;
+
+        return $this->builder()
+            ->select("
+                {$tabel}.id_kota,
+                {$tabel}.id_provinsi,
+                {$tabel}.id_kota_lokal,
+                {$tabel}.nama_kota AS nama_kota,
+                pr.nama_provinsi AS nama_provinsi
+            ")
+            ->join('lokasi.provinsi pr', "pr.id_provinsi = {$tabel}.id_provinsi", 'inner')
+            ->where("{$tabel}.id_kota >", 0)
+            ->get()
+            ->getResultArray();
+    }
 }

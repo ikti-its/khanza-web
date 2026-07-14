@@ -26,7 +26,7 @@ final class KotaController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [SHOW, REQUIRED, I::INDEX, 'id_kota',       'ID'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_kota',       'ID'],
                 [SHOW, REQUIRED, I::TEXT,  'nama_provinsi', 'Provinsi'],
                 [SHOW, REQUIRED, I::TEXT,  'id_kota_lokal', 'Kode Lokal'],
                 [SHOW, REQUIRED, I::TEXT,  'nama_kota',     'Kota'],
@@ -39,20 +39,8 @@ final class KotaController extends ControllerTemplate
      */
     public function list()
     {
-        $tabel = $this->model->table;
-
-        $data = $this->model
-            ->builder()
-            ->select("
-                {$tabel}.id_kota,
-                {$tabel}.nama_kota
-            ")
-            ->where("{$tabel}.id_kota >", 0)
-            ->get()
-            ->getResultArray();
-
         return $this->response->setJSON([
-            'data' => $data,
+            'data' => $this->model->get_data_tabel(),
         ]);
     }
 }
