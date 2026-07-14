@@ -158,59 +158,152 @@ final class HasilRadController extends ControllerTemplate
         }
     }
 
-    private function insertTindakanAndBhp(int $idHasilRad, array $tindakanList, array $bhpList): void
+    private function tindakanKosong(array $tindakan): bool
     {
-        // 1. Insert Tindakan (Batch)
-        if (!empty($tindakanList)) {
-            $batchTindakan = array_map(static fn($tindakan) => [
-                'id_hasil_rad'            => $idHasilRad,
-                'id_permintaan_item'      => (int) ($tindakan['id_permintaan_item'] ?? 0),
-                'proyeksi'                => $tindakan['proyeksi'] ?? '' ?: null,
-                'kilovoltage_kv'          => ($tindakan['kilovoltage_kv'] ?? '') !== ''
-                    ? (float) $tindakan['kilovoltage_kv']
-                    : null,
-                'milliampere_second_mas'  => ($tindakan['milliampere_second_mas'] ?? '') !== ''
-                    ? (float) $tindakan['milliampere_second_mas']
-                    : null,
-                'focus_film_distance_ffd' => ($tindakan['focus_film_distance_ffd'] ?? '') !== ''
-                    ? (float) $tindakan['focus_film_distance_ffd']
-                    : null,
-                'back_scatter_factor_bsf' => ($tindakan['back_scatter_factor_bsf'] ?? '') !== ''
-                    ? (float) $tindakan['back_scatter_factor_bsf']
-                    : null,
-                'inaktivasi'              => $tindakan['inaktivasi'] ?? '' ?: null,
-                'jumlah_penyinaran'       => ($tindakan['jumlah_penyinaran'] ?? '') !== ''
-                    ? (int) $tindakan['jumlah_penyinaran']
-                    : null,
-                'dosis_radiasi'           => $tindakan['dosis_radiasi'] ?? '' ?: null,
-                'hasil_ekspertise'        => $tindakan['hasil_ekspertise'] ?? '' ?: null,
-                'id_template_rad'         => !empty($tindakan['id_template_rad'])
-                    ? (int) $tindakan['id_template_rad']
-                    : null,
-            ], $tindakanList);
+        $fieldTeks = [
+            'proyeksi', 'inaktivasi', 'dosis_radiasi', 'hasil_ekspertise',
+            'kilovoltage_kv', 'milliampere_second_mas', 'focus_film_distance_ffd',
+            'back_scatter_factor_bsf', 'jumlah_penyinaran',
+        ];
+        foreach ($fieldTeks as $f) {
+            if (trim((string) ($tindakan[$f] ?? '')) !== '') {
+                return false;
+            }
+        }
+        return empty($tindakan['id_template_rad']);
+    }
 
-            (new \App\Features\Radiologi\HasilRadTindakan\HasilRadTindakanModel())->insertBatch($batchTindakan);
+    /** Simpan hasil tindakan jika ada field terisi; hapus baris lama jika semua field dikosongkan kembali. */
+    private function syncTindakan(
+        \App\Features\Radiologi\HasilRadTindakan\HasilRadTindakanModel $modelTindakan,
+        array $existingByItem,
+        array $tindakan,
+        int $idHasilRad,
+    ): void {
+        $idItem = (int) ($tindakan['id_permintaan_item'] ?? 0);
+        if ($idItem <= 0) {
+            return;
         }
 
-        // 2. Insert BHP (Batch) & Update Stok
-        $batchBhp = [];
+        $existing = $existingByItem[$idItem] ?? null;
+
+        if ($this->tindakanKosong($tindakan)) {
+            if ($existing !== null) {
+                $modelTindakan->delete((int) $existing['id_hasil_tindakan']);
+            }
+            return;
+        }
+
+        $data = [
+            'id_permintaan_item'      => $idItem,
+            'proyeksi'                => $tindakan['proyeksi'] ?? '' ?: null,
+            'kilovoltage_kv'          => ($tindakan['kilovoltage_kv'] ?? '') !== ''
+                ? (float) $tindakan['kilovoltage_kv']
+                : null,
+            'milliampere_second_mas'  => ($tindakan['milliampere_second_mas'] ?? '') !== ''
+                ? (float) $tindakan['milliampere_second_mas']
+                : null,
+            'focus_film_distance_ffd' => ($tindakan['focus_film_distance_ffd'] ?? '') !== ''
+                ? (float) $tindakan['focus_film_distance_ffd']
+                : null,
+            'back_scatter_factor_bsf' => ($tindakan['back_scatter_factor_bsf'] ?? '') !== ''
+                ? (float) $tindakan['back_scatter_factor_bsf']
+                : null,
+            'inaktivasi'              => $tindakan['inaktivasi'] ?? '' ?: null,
+            'jumlah_penyinaran'       => ($tindakan['jumlah_penyinaran'] ?? '') !== ''
+                ? (int) $tindakan['jumlah_penyinaran']
+                : null,
+            'dosis_radiasi'           => $tindakan['dosis_radiasi'] ?? '' ?: null,
+            'hasil_ekspertise'        => $tindakan['hasil_ekspertise'] ?? '' ?: null,
+            'id_template_rad'         => !empty($tindakan['id_template_rad'])
+                ? (int) $tindakan['id_template_rad']
+                : null,
+        ];
+
+        if ($existing !== null) {
+            $modelTindakan->update((int) $existing['id_hasil_tindakan'], $data);
+        } else {
+            $modelTindakan->insert($data + ['id_hasil_rad' => $idHasilRad]);
+        }
+    }
+
+    /**
+     * Simpan/hapus satu baris BHP dan sesuaikan stok hanya sebesar selisihnya
+     * (bukan kembalikan-semua-lalu-kurangi-semua), termasuk saat baris dihapus
+     * user dari form (jumlah_pakai kosong) atau baris lama sudah tidak dikirim lagi.
+     */
+    private function syncBhp(
+        \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel $modelBhp,
+        array $existingByBarang,
+        int $idBarang,
+        array $bhp,
+        int $idHasilRad,
+    ): void {
+        if ($idBarang <= 0) {
+            return;
+        }
+
+        $jumlahBaru = (int) ($bhp['jumlah_pakai'] ?? 0);
+        $existing   = $existingByBarang[$idBarang] ?? null;
+
+        if ($jumlahBaru <= 0) {
+            if ($existing !== null) {
+                $this->adjustStok($idBarang, (int) $existing['jumlah_pakai'], '+');
+                $modelBhp->delete((int) $existing['id_rad_bhp']);
+            }
+            return;
+        }
+
+        if ($existing !== null) {
+            $selisih = $jumlahBaru - (int) $existing['jumlah_pakai'];
+            if ($selisih !== 0) {
+                $this->adjustStok($idBarang, abs($selisih), $selisih > 0 ? '-' : '+');
+            }
+            $modelBhp->update((int) $existing['id_rad_bhp'], ['jumlah_pakai' => $jumlahBaru]);
+        } else {
+            $modelBhp->insert([
+                'id_hasil_rad' => $idHasilRad,
+                'id_barang'    => $idBarang,
+                'jumlah_pakai' => $jumlahBaru,
+            ]);
+            $this->adjustStok($idBarang, $jumlahBaru, '-');
+        }
+    }
+
+    private function upsertTindakanAndBhp(int $idHasilRad, array $tindakanList, array $bhpList): void
+    {
+        $modelTindakan          = new \App\Features\Radiologi\HasilRadTindakan\HasilRadTindakanModel();
+        $existingTindakanByItem = array_column(
+            $modelTindakan->set_filter('id_hasil_rad', $idHasilRad)->findAll(),
+            null,
+            'id_permintaan_item',
+        );
+
+        foreach ($tindakanList as $tindakan) {
+            $this->syncTindakan($modelTindakan, $existingTindakanByItem, $tindakan, $idHasilRad);
+        }
+
+        $modelBhp            = new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel();
+        $existingBhpByBarang = array_column(
+            $modelBhp->set_filter('id_hasil_rad', $idHasilRad)->findAll(),
+            null,
+            'id_barang',
+        );
+
+        $submittedBarangIds = [];
         foreach ($bhpList as $idBarang => $bhp) {
-            $jumlahPakai = (int) ($bhp['jumlah_pakai'] ?? 0);
-            if ($jumlahPakai <= 0) {
+            $idBarang                     = (int) $idBarang;
+            $submittedBarangIds[$idBarang] = true;
+            $this->syncBhp($modelBhp, $existingBhpByBarang, $idBarang, $bhp, $idHasilRad);
+        }
+
+        // BHP yang dihapus user dari form (barisnya tidak dikirim lagi) tetap harus dikembalikan stoknya
+        foreach ($existingBhpByBarang as $idBarang => $lama) {
+            if (isset($submittedBarangIds[(int) $idBarang])) {
                 continue;
             }
-
-            $batchBhp[] = [
-                'id_hasil_rad' => $idHasilRad,
-                'id_barang'    => (int) $idBarang,
-                'jumlah_pakai' => $jumlahPakai,
-            ];
-
-            $this->adjustStok((int) $idBarang, $jumlahPakai, '-'); // Kurangi stok
-        }
-
-        if (!empty($batchBhp)) {
-            (new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel())->insertBatch($batchBhp);
+            $this->adjustStok((int) $lama['id_barang'], (int) $lama['jumlah_pakai'], '+');
+            $modelBhp->delete((int) $lama['id_rad_bhp']);
         }
     }
 
@@ -280,7 +373,7 @@ final class HasilRadController extends ControllerTemplate
             $idHasilRad = $this->model->getInsertID();
 
             // 2. Insert tindakan dan BHP
-            $this->insertTindakanAndBhp($idHasilRad, $tindakanList, $bhpList);
+            $this->upsertTindakanAndBhp($idHasilRad, $tindakanList, $bhpList);
 
             // 3. Update status permintaan sesuai kelengkapan ekspertise
             if (!empty($dataHeader['id_permintaan_rad'])) {
@@ -433,27 +526,12 @@ final class HasilRadController extends ControllerTemplate
         $tindakanList = $rawPost['tindakan'] ?? [];
         $bhpList      = $rawPost['bhp'] ?? [];
 
-        // Fetch BHP lama sebelum transaksi agar tidak terblokir oleh abort
-        $modelBhp = new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel();
-        $bhpLama  = $modelBhp->set_filter('id_hasil_rad', $id)->findAll();
-
         $this->model->db->transStart();
 
         try {
             $this->model->update($id, $dataHeader);
 
-            (new \App\Features\Radiologi\HasilRadTindakan\HasilRadTindakanModel())
-                ->where('id_hasil_rad', $id)
-                ->delete();
-
-            // Kembalikan stok BHP lama lalu hapus datanya
-            foreach ($bhpLama as $lama) {
-                $this->adjustStok((int) $lama['id_barang'], (int) $lama['jumlah_pakai'], '+');
-            }
-            $modelBhp->where('id_hasil_rad', $id)->delete();
-
-            // Insert data baru
-            $this->insertTindakanAndBhp((int) $id, $tindakanList, $bhpList);
+            $this->upsertTindakanAndBhp((int) $id, $tindakanList, $bhpList);
 
             if (!empty($dataHeader['id_permintaan_rad'])) {
                 $this->model

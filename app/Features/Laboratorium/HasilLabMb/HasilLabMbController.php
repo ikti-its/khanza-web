@@ -284,64 +284,93 @@ final class HasilLabMbController extends ControllerTemplate
                 continue;
             }
 
-            $filledParams = array_filter(
-                $item['parameter'] ?? [],
-                static fn($p) => trim($p['nilai_hasil'] ?? '') !== '',
-            );
-            if (empty($filledParams)) {
+            $params        = $item['parameter'] ?? [];
+            $existingHasil = $existingByItem[$idItem] ?? null;
+
+            $adaNilaiTerisi = array_any($params, static fn($p) => trim($p['nilai_hasil'] ?? '') !== '');
+            if (!$adaNilaiTerisi && $existingHasil === null) {
                 continue;
             }
 
-            $headerData = [
-                'id_dokter_pj'   => $idDokterPj,
-                'id_petugas_lab' => $idPetugasLab,
-                'tgl_jam_hasil'  => $tglJamHasil,
-            ];
-
-            if (isset($existingByItem[$idItem])) {
-                $idHasilMb = (int) $existingByItem[$idItem]['id_hasil_mb'];
-                $this->model->update($idHasilMb, $headerData);
-            } else {
-                $this->model->insert(
-                    $headerData
-                    + [
-                        'id_permintaan_lab'     => $idPermintaanLab,
-                        'id_permintaan_mb_item' => $idItem,
-                    ],
-                );
-                $idHasilMb               = (int) $this->model->getInsertID();
-                $existingByItem[$idItem] = ['id_hasil_mb' => $idHasilMb];
-            }
+            $idHasilMb = $existingHasil !== null
+                ? $this->updateHasilMbHeader((int) $existingHasil['id_hasil_mb'], $idDokterPj, $idPetugasLab, $tglJamHasil)
+                : $this->insertHasilMbHeader($idPermintaanLab, $idItem, $idDokterPj, $idPetugasLab, $tglJamHasil);
+            $existingByItem[$idItem] = ['id_hasil_mb' => $idHasilMb];
 
             $existingParamByParam = array_column(
-                $modelParam->where('id_hasil_mb', $idHasilMb)->findAll(),
+                $modelParam->set_filter('id_hasil_mb', $idHasilMb)->findAll(),
                 null,
                 'id_parameter',
             );
 
-            foreach ($filledParams as $param) {
-                $idParameter = (int) ($param['id_parameter'] ?? 0);
-                if ($idParameter <= 0) {
-                    continue;
-                }
-
-                $paramData = [
-                    'nilai_hasil'      => trim($param['nilai_hasil'] ?? ''),
-                    'keterangan_hasil' => trim($param['keterangan_hasil'] ?? '') ?: null,
-                ];
-
-                if (isset($existingParamByParam[$idParameter])) {
-                    $modelParam->update((int) $existingParamByParam[$idParameter]['id_hasil_mb_parameter'], $paramData);
-                } else {
-                    $modelParam->insert(
-                        $paramData
-                        + [
-                            'id_hasil_mb'  => $idHasilMb,
-                            'id_parameter' => $idParameter,
-                        ],
-                    );
-                }
+            foreach ($params as $param) {
+                $this->syncHasilMbParameter($modelParam, $existingParamByParam, $param, $idHasilMb);
             }
+        }
+    }
+
+    private function insertHasilMbHeader(
+        int $idPermintaanLab,
+        int $idItem,
+        null|int $idDokterPj,
+        null|int $idPetugasLab,
+        string $tglJamHasil,
+    ): int {
+        $this->model->insert([
+            'id_dokter_pj'          => $idDokterPj,
+            'id_petugas_lab'        => $idPetugasLab,
+            'tgl_jam_hasil'         => $tglJamHasil,
+            'id_permintaan_lab'     => $idPermintaanLab,
+            'id_permintaan_mb_item' => $idItem,
+        ]);
+        return (int) $this->model->getInsertID();
+    }
+
+    private function updateHasilMbHeader(
+        int $idHasilMb,
+        null|int $idDokterPj,
+        null|int $idPetugasLab,
+        string $tglJamHasil,
+    ): int {
+        $this->model->update($idHasilMb, [
+            'id_dokter_pj'   => $idDokterPj,
+            'id_petugas_lab' => $idPetugasLab,
+            'tgl_jam_hasil'  => $tglJamHasil,
+        ]);
+        return $idHasilMb;
+    }
+
+    /** Simpan nilai parameter jika terisi; hapus baris lama jika nilainya dikosongkan kembali. */
+    private function syncHasilMbParameter(
+        \App\Features\Laboratorium\HasilLabMbParameter\HasilLabMbParameterModel $modelParam,
+        array $existingParamByParam,
+        array $param,
+        int $idHasilMb,
+    ): void {
+        $idParameter = (int) ($param['id_parameter'] ?? 0);
+        if ($idParameter <= 0) {
+            return;
+        }
+
+        $existingParam = $existingParamByParam[$idParameter] ?? null;
+        $nilaiHasil    = trim($param['nilai_hasil'] ?? '');
+
+        if ($nilaiHasil === '') {
+            if ($existingParam !== null) {
+                $modelParam->delete((int) $existingParam['id_hasil_mb_parameter']);
+            }
+            return;
+        }
+
+        $paramData = [
+            'nilai_hasil'      => $nilaiHasil,
+            'keterangan_hasil' => trim($param['keterangan_hasil'] ?? '') ?: null,
+        ];
+
+        if ($existingParam !== null) {
+            $modelParam->update((int) $existingParam['id_hasil_mb_parameter'], $paramData);
+        } else {
+            $modelParam->insert($paramData + ['id_hasil_mb' => $idHasilMb, 'id_parameter' => $idParameter]);
         }
     }
 
@@ -419,57 +448,11 @@ final class HasilLabMbController extends ControllerTemplate
     #[\Override]
     public function create(): string|RedirectResponse
     {
-        $rawPost = $this->request->getPost();
-
-        $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
-        $idDokterPj      = (int) ($rawPost['id_dokter_pj'] ?? 0) ?: null;
-        $idPetugasLab    = (int) ($rawPost['id_petugas_lab'] ?? 0) ?: null;
-        $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
-        $hasilList       = $rawPost['hasil'] ?? [];
-
-        $err = $this->validateInput(
-            $idPermintaanLab,
-            $idDokterPj,
-            $idPetugasLab,
-            $hasilList,
+        return $this->submitHasil(
             'Tidak ada item hasil pemeriksaan. Pilih permintaan dan pastikan item MB sudah termuat.',
+            'Hasil Lab MB berhasil disimpan.',
+            'Gagal menyimpan hasil lab MB.',
         );
-        if ($err) {
-            session()->setFlashdata('error', $err);
-            return redirect()->back()->withInput();
-        }
-
-        $modelParam = new \App\Features\Laboratorium\HasilLabMbParameter\HasilLabMbParameterModel();
-
-        $this->model->db->transStart();
-
-        try {
-            $this->upsertHasilMbItems(
-                $hasilList,
-                $idPermintaanLab,
-                $idDokterPj,
-                $idPetugasLab,
-                $tglJamHasil,
-                $modelParam,
-            );
-            $this->recomputeStatusPermintaan($idPermintaanLab);
-
-            $this->model->db->transComplete();
-
-            if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException('Gagal menyimpan hasil lab MB.');
-            }
-
-            session()->setFlashdata('success', 'Hasil Lab MB berhasil disimpan.');
-            return redirect()->to($this->get_uri_path() . '/data');
-        } catch (\Exception $e) {
-            $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
-                ? $this->friendly_db_error($e)
-                : $e->getMessage();
-            session()->setFlashdata('error', $errorMsg);
-            return redirect()->back()->withInput();
-        }
     }
 
     // ──────────────────────────────────────────────────────────
@@ -520,6 +503,16 @@ final class HasilLabMbController extends ControllerTemplate
             return $this->home();
         }
 
+        return $this->submitHasil(
+            'Tidak ada item hasil pemeriksaan. Pastikan item MB masih termuat.',
+            'Hasil Lab MB berhasil diperbarui.',
+            'Gagal memperbarui hasil lab MB.',
+        );
+    }
+
+    /** Alur simpan yang sama persis dipakai create() dan update(); hanya pesan-pesannya yang beda. */
+    private function submitHasil(string $emptyListMsg, string $successMsg, string $failMsg): string|RedirectResponse
+    {
         $rawPost = $this->request->getPost();
 
         $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
@@ -528,13 +521,7 @@ final class HasilLabMbController extends ControllerTemplate
         $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
         $hasilList       = $rawPost['hasil'] ?? [];
 
-        $err = $this->validateInput(
-            $idPermintaanLab,
-            $idDokterPj,
-            $idPetugasLab,
-            $hasilList,
-            'Tidak ada item hasil pemeriksaan. Pastikan item MB masih termuat.',
-        );
+        $err = $this->validateInput($idPermintaanLab, $idDokterPj, $idPetugasLab, $hasilList, $emptyListMsg);
         if ($err) {
             session()->setFlashdata('error', $err);
             return redirect()->back()->withInput();
@@ -558,10 +545,10 @@ final class HasilLabMbController extends ControllerTemplate
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException('Gagal memperbarui hasil lab MB.');
+                throw new \RuntimeException($failMsg);
             }
 
-            session()->setFlashdata('success', 'Hasil Lab MB berhasil diperbarui.');
+            session()->setFlashdata('success', $successMsg);
             return redirect()->to($this->get_uri_path() . '/data');
         } catch (\Exception $e) {
             $this->model->db->transRollback();

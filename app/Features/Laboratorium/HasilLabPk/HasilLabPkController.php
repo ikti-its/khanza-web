@@ -253,65 +253,97 @@ final class HasilLabPkController extends ControllerTemplate
                 continue;
             }
 
-            $filledParams = array_filter(
-                $item['parameter'] ?? [],
-                static fn($p) => trim($p['nilai_hasil'] ?? '') !== '',
-            );
-            if (empty($filledParams)) {
+            $params        = $item['parameter'] ?? [];
+            $existingHasil = $existingByItem[$idItem] ?? null;
+
+            $adaNilaiTerisi = array_any($params, static fn($p) => trim($p['nilai_hasil'] ?? '') !== '');
+            if (!$adaNilaiTerisi && $existingHasil === null) {
                 continue;
             }
 
-            $headerData = [
-                'id_dokter_pj'     => $idDokterPj,
-                'id_petugas_lab'   => $idPetugasLab,
-                'tgl_jam_hasil'    => $tglJamHasil,
-                'id_kategori_usia' => $idKategoriUsia,
-            ];
-
-            if (isset($existingByItem[$idItem])) {
-                $idHasilPk = (int) $existingByItem[$idItem]['id_hasil_pk'];
-                $this->model->update($idHasilPk, $headerData);
-            } else {
-                $this->model->insert(
-                    $headerData
-                    + [
-                        'id_permintaan_lab'     => $idPermintaanLab,
-                        'id_permintaan_pk_item' => $idItem,
-                    ],
-                );
-                $idHasilPk               = (int) $this->model->getInsertID();
-                $existingByItem[$idItem] = ['id_hasil_pk' => $idHasilPk];
-            }
+            $idHasilPk = $existingHasil !== null
+                ? $this->updateHasilPkHeader((int) $existingHasil['id_hasil_pk'], $idDokterPj, $idPetugasLab, $tglJamHasil, $idKategoriUsia)
+                : $this->insertHasilPkHeader($idPermintaanLab, $idItem, $idDokterPj, $idPetugasLab, $tglJamHasil, $idKategoriUsia);
+            $existingByItem[$idItem] = ['id_hasil_pk' => $idHasilPk];
 
             $existingParamByParam = array_column(
-                $modelParam->where('id_hasil_pk', $idHasilPk)->findAll(),
+                $modelParam->set_filter('id_hasil_pk', $idHasilPk)->findAll(),
                 null,
                 'id_parameter',
             );
 
-            foreach ($filledParams as $param) {
-                $idParameter = (int) ($param['id_parameter'] ?? 0);
-                if ($idParameter <= 0) {
-                    continue;
-                }
-
-                $paramData = [
-                    'nilai_hasil'      => trim($param['nilai_hasil'] ?? ''),
-                    'keterangan_hasil' => trim($param['keterangan_hasil'] ?? '') ?: null,
-                ];
-
-                if (isset($existingParamByParam[$idParameter])) {
-                    $modelParam->update((int) $existingParamByParam[$idParameter]['id_hasil_pk_parameter'], $paramData);
-                } else {
-                    $modelParam->insert(
-                        $paramData
-                        + [
-                            'id_hasil_pk'  => $idHasilPk,
-                            'id_parameter' => $idParameter,
-                        ],
-                    );
-                }
+            foreach ($params as $param) {
+                $this->syncHasilPkParameter($modelParam, $existingParamByParam, $param, $idHasilPk);
             }
+        }
+    }
+
+    private function insertHasilPkHeader(
+        int $idPermintaanLab,
+        int $idItem,
+        null|int $idDokterPj,
+        null|int $idPetugasLab,
+        string $tglJamHasil,
+        null|int $idKategoriUsia,
+    ): int {
+        $this->model->insert([
+            'id_dokter_pj'          => $idDokterPj,
+            'id_petugas_lab'        => $idPetugasLab,
+            'tgl_jam_hasil'         => $tglJamHasil,
+            'id_kategori_usia'      => $idKategoriUsia,
+            'id_permintaan_lab'     => $idPermintaanLab,
+            'id_permintaan_pk_item' => $idItem,
+        ]);
+        return (int) $this->model->getInsertID();
+    }
+
+    private function updateHasilPkHeader(
+        int $idHasilPk,
+        null|int $idDokterPj,
+        null|int $idPetugasLab,
+        string $tglJamHasil,
+        null|int $idKategoriUsia,
+    ): int {
+        $this->model->update($idHasilPk, [
+            'id_dokter_pj'     => $idDokterPj,
+            'id_petugas_lab'   => $idPetugasLab,
+            'tgl_jam_hasil'    => $tglJamHasil,
+            'id_kategori_usia' => $idKategoriUsia,
+        ]);
+        return $idHasilPk;
+    }
+
+    /** Simpan nilai parameter jika terisi; hapus baris lama jika nilainya dikosongkan kembali. */
+    private function syncHasilPkParameter(
+        \App\Features\Laboratorium\HasilLabPkParameter\HasilLabPkParameterModel $modelParam,
+        array $existingParamByParam,
+        array $param,
+        int $idHasilPk,
+    ): void {
+        $idParameter = (int) ($param['id_parameter'] ?? 0);
+        if ($idParameter <= 0) {
+            return;
+        }
+
+        $existingParam = $existingParamByParam[$idParameter] ?? null;
+        $nilaiHasil    = trim($param['nilai_hasil'] ?? '');
+
+        if ($nilaiHasil === '') {
+            if ($existingParam !== null) {
+                $modelParam->delete((int) $existingParam['id_hasil_pk_parameter']);
+            }
+            return;
+        }
+
+        $paramData = [
+            'nilai_hasil'      => $nilaiHasil,
+            'keterangan_hasil' => trim($param['keterangan_hasil'] ?? '') ?: null,
+        ];
+
+        if ($existingParam !== null) {
+            $modelParam->update((int) $existingParam['id_hasil_pk_parameter'], $paramData);
+        } else {
+            $modelParam->insert($paramData + ['id_hasil_pk' => $idHasilPk, 'id_parameter' => $idParameter]);
         }
     }
 
@@ -401,58 +433,7 @@ final class HasilLabPkController extends ControllerTemplate
     #[\Override]
     public function create(): string|RedirectResponse
     {
-        $rawPost = $this->request->getPost();
-
-        $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
-        $idDokterPj      = (int) ($rawPost['id_dokter_pj'] ?? 0) ?: null;
-        $idPetugasLab    = (int) ($rawPost['id_petugas_lab'] ?? 0) ?: null;
-        $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
-        $idKategoriUsia  = (int) ($rawPost['id_kategori_usia'] ?? 0) ?: null;
-        $hasilList       = $rawPost['hasil'] ?? [];
-
-        if (!$idPermintaanLab) {
-            session()->setFlashdata('error', 'Permintaan laboratorium wajib dipilih.');
-            return redirect()->back()->withInput();
-        }
-
-        $err = $this->validateHasilList($hasilList);
-        if ($err) {
-            session()->setFlashdata('error', $err);
-            return redirect()->back()->withInput();
-        }
-
-        $modelParam = new \App\Features\Laboratorium\HasilLabPkParameter\HasilLabPkParameterModel();
-
-        $this->model->db->transStart();
-
-        try {
-            $this->upsertHasilPkItems(
-                $hasilList,
-                $idPermintaanLab,
-                $idDokterPj,
-                $idPetugasLab,
-                $tglJamHasil,
-                $idKategoriUsia,
-                $modelParam,
-            );
-            $this->recomputeStatusPermintaan($idPermintaanLab);
-
-            $this->model->db->transComplete();
-
-            if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException('Gagal menyimpan hasil lab PK.');
-            }
-
-            session()->setFlashdata('success', 'Hasil Lab PK berhasil disimpan.');
-            return redirect()->to($this->get_uri_path() . '/data');
-        } catch (\Exception $e) {
-            $this->model->db->transRollback();
-            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
-                ? $this->friendly_db_error($e)
-                : $e->getMessage();
-            session()->setFlashdata('error', $errorMsg);
-            return redirect()->back()->withInput();
-        }
+        return $this->submitHasil('Hasil Lab PK berhasil disimpan.', 'Gagal menyimpan hasil lab PK.');
     }
 
     // ──────────────────────────────────────────────────────────
@@ -503,6 +484,12 @@ final class HasilLabPkController extends ControllerTemplate
             return $this->home();
         }
 
+        return $this->submitHasil('Hasil Lab PK berhasil diperbarui.', 'Gagal memperbarui hasil lab PK.');
+    }
+
+    /** Alur simpan yang sama persis dipakai create() dan update(); hanya pesan sukses/gagal yang beda. */
+    private function submitHasil(string $successMsg, string $failMsg): string|RedirectResponse
+    {
         $rawPost = $this->request->getPost();
 
         $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
@@ -542,10 +529,10 @@ final class HasilLabPkController extends ControllerTemplate
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException('Gagal memperbarui hasil lab PK.');
+                throw new \RuntimeException($failMsg);
             }
 
-            session()->setFlashdata('success', 'Hasil Lab PK berhasil diperbarui.');
+            session()->setFlashdata('success', $successMsg);
             return redirect()->to($this->get_uri_path() . '/data');
         } catch (\Exception $e) {
             $this->model->db->transRollback();
