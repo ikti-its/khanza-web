@@ -46,11 +46,11 @@ jobs:
       - name: Run Mago Guard
         run: vendor/bin/mago --config .config/mago.toml guard
 
-      # - name: Run Mago Static Analysis
-      #   run: vendor/bin/mago --config .config/mago.toml analyze
+      - name: Run Mago Static Analysis
+        run: vendor/bin/mago --config .config/mago.toml analyze
 
-      # - name: Run Mago Linter
-      #   run: vendor/bin/mago --config .config/mago.toml lint
+      - name: Run Mago Linter
+        run: vendor/bin/mago --config .config/mago.toml lint
 
-      # - name: Verify Formatting
-      #   run: vendor/bin/mago --config .config/mago.toml fmt --check
+      - name: Verify Formatting
+        run: vendor/bin/mago --config .config/mago.toml fmt --check
