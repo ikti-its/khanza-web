@@ -24,7 +24,7 @@ final class OrangDatabase extends DatabaseTemplate
             [
                 'id_orang'          => T::ID(300_000_000),
                 'nik'               => T::CODE(16),
-                'nama'              => T::NAME(100),
+                'nama'              => T::NAME(60),
                 'id_jenis_kelamin'  => T::FK_AUTO(),
                 'id_agama'          => T::FK_AUTO(),
                 'id_pernikahan'     => T::FK_AUTO(),

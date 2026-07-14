@@ -40,7 +40,9 @@
                     Nama Lengkap<span class="text-red-600">*</span>
                 </label>
                 <div class="w-full lg:w-1/4">
-                    <input type="text" name="nama" value="<?= $baris['nama'] ?? '' ?>" required
+                    <input type="text" name="nama" id="nama" value="<?= $baris['nama'] ?? '' ?>" required
+                           maxlength="60" pattern="[A-Za-z .'\-]+"
+                           oninput="this.value = this.value.replace(/[^A-Za-z .'\-]/g, '');"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white h-[38px]">
                 </div>
 
