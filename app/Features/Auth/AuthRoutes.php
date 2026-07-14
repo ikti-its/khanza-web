@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Features\Auth;
@@ -13,6 +14,7 @@ final class AuthRoutes extends RouteTemplate
             'Auth',
             [
                 \App\Features\Auth\Akun\AkunController::class,
+                \App\Features\Auth\RefRole\RefRoleController::class => 'HIDE',
             ],
             'auth.svg',
         );
