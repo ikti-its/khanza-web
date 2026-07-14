@@ -1,11 +1,13 @@
 <div class="px-3 py-1.5">
     <?php
         echo view('components/aksi/hapus_tombol', [
-            'modul_path' => $modul_path 
+            'modul_path' => $modul_path,
+            'id'         => $id
         ]);
         echo view('components/aksi/hapus_form',[
             'modul_path' => $modul_path,
-            'id'         => $id
+            'id'         => $id,
+            'modal_id'   => $id
         ]);
     ?>
 </div>
