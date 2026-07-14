@@ -15,6 +15,11 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const btnTambahKecamatan = document.querySelector('#modalKecamatan a[href="/lokasi/kecamatan/tambah"]');
+        if (btnTambahKecamatan) {
+            btnTambahKecamatan.removeAttribute('target');
+            btnTambahKecamatan.href = '/lokasi/kecamatan/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
+        }
         initModalList({
             modalId:     'modalKecamatan',
             tableId:     'kecamatanTable',
