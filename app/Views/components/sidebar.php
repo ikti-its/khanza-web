@@ -22,6 +22,7 @@
                 <?= $this->include('components/search_feature') ?>
             </li>
             
+            <?php if (false) : ?>
             <li>
                 <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/dashboard">
                     <img src="<?= base_url('svg/old_icons/beranda.svg') ?>">
@@ -34,7 +35,9 @@
                     Akun
                 </a>
             </li>
+            <?php endif; ?>
 
+            <?php if (false) : ?>
             <li class="hs-accordion" id="account-accordion">
                 <button type="button" class="hs-accordion-toggle hs-accordion-active:bg-gray-100 w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     <img src="<?= base_url('svg/old_icons/kehadiran.svg') ?>">
@@ -164,11 +167,8 @@
                                     </svg>
                                     Ubah
 
-
                                     <?= $this->include('components/menu/dropdown_icon') ?>
-                                    </svg>
                                 </button>
-
 
                                 <div id="account-accordion" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
                                     <ul class="pt-2 ps-2">
@@ -179,7 +179,6 @@
                                         </li>
                                     </ul>
                                 </div>
-
                             </li>
                         <?php endif; ?>
                         <!-- <li>
@@ -207,42 +206,43 @@
                     </ul>
                 </div>
             </li>
+            <?php endif; ?>
 
-
-            <li>
-                <?php if (isset(session('user_details')['role']) && (session('user_details')['role'] === 2)) : ?>
-                    <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/detailberkaspegawai/<?php //echo session('user_specific_data')['pegawai']                                                                                                                                                                                                                                                                                  ?>">
-                    <img src="<?= base_url('svg/old_icons/pegawai.svg') ?>">
+            <?php if (false) : ?>
+            <?php if (isset(session('user_details')['role']) && (session('user_details')['role'] === 2)) : ?>
+                <li>
+                    <a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-teal-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/detailberkaspegawai/<?php //echo session('user_specific_data')['pegawai'] ?>">
+                        <img src="<?= base_url('svg/old_icons/pegawai.svg') ?>">
                         Pegawai
                     </a>
-                <?php else : ?>
+                </li>
+            <?php else : ?>
+                <li class="hs-accordion" id="account-accordion">
+                    <button type="button" class="hs-accordion-toggle hs-accordion-active:text-slate-700 hs-accordion-active:bg-gray-100 w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-gray-100 dark:text-neutral-400 dark:hover:text-neutral-300 dark:hs-accordion-active:text-white">
+                        <img src="<?= base_url('svg/old_icons/pegawai.svg') ?>">
+                        Pegawai
 
-            <li class="hs-accordion" id="account-accordion">
-                <button type="button" class="hs-accordion-toggle hs-accordion-active:text-slate-700 hs-accordion-active:bg-gray-100 w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-neutral-800 dark:hover:bg-gray-100 dark:text-neutral-400 dark:hover:text-neutral-300 dark:hs-accordion-active:text-white">
-                    <img src="<?= base_url('svg/old_icons/pegawai.svg') ?>">
-                    Pegawai
+                        <?= $this->include('components/menu/dropdown_icon') ?>
+                    </button>
 
-                    <?= $this->include('components/menu/dropdown_icon') ?>
-                </button>
+                    <div id="account-accordion-content" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
+                        <ul class="pt-2 ps-2">
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/detailberkaspegawai/<?php echo session('user_specific_data') //['pegawai'] ?>">
+                                    Data Pegawai
+                                </a>
+                            </li>
 
-                <div id="account-accordion-content" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden">
-                    <ul class="pt-2 ps-2">
-                        <li>
-                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/detailberkaspegawai/<?php echo session('user_specific_data') //['pegawai']                                                                                                                                                                                                   ?>">
-                                Data Pegawai
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/datauserpegawai"">
-                                Ketersediaan Pegawai
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-        <?php endif; ?>
+                            <li>
+                                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-teal-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300" href="/datauserpegawai">
+                                    Ketersediaan Pegawai
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            <?php endif; ?>
+            <?php endif; ?>
 
             <?php
             $menu_list = [
@@ -281,50 +281,50 @@
                     */
                 // ['Data Penggajian', '', 'data_penggajian', '/data-penggajian', $petugasrole, [
                 // ]],
-                ['Inventaris Medis', '', 'inventaris_medis.svg', '',  $petugasrole, [
-                    ['Data', '/datamedis', ''],
-                    ['Stok Opname', '/stokopnamemedis', ''],
-                    ['Mutasi Antar Gudang', '/mutasimedis', ''],
-                    ['Penerimaan Obat & BHP', '/penerimaanmedis', ''],
-                    ['Stok Keluar', '/stokkeluarmedis', ''],
-                    ['Sisa Stok',  '/sisastokmedis', ''],
-                    ['Data Batch', '/batchmedis', '']
-                ]],
-                ['Rujukan', '', 'rujukan.svg', '', $petugasdokterrole, [
-                    ['Rujukan Masuk', '/rujukanmasuk', ''],
-                    ['Rujukan Keluar', '/rujukankeluar', ''],
-                ]], #allrole
-                ['Persetujuan', '/persetujuanpengajuan', 'persetujuan.svg', '', $persetujuanrole, []],
-                ['Registrasi', '/registrasi', 'registrasi.svg', '', $petugasrole, []],
-                ['Data Pasien', '', 'olah_data_pasien.svg', '', $petugasrole, [
-                    ['Daftar Pasien', '/masterpasien', ''],
-                    ['Kelahiran Bayi', '/kelahiranbayi', ''],
-                    ['Pasien Meninggal', '/pasienmeninggal', ''],
-                    ['Asuransi Pasien', '/asuransi', ''],
-                    ['Instansi Pasien', '/instansi', ''],
-                ]],
-                ['Dokter', '', 'dokter_jaga.svg', '', $petugasrole, [
-                    ['Daftar Dokter', '/dokter', ''],
-                    ['Dokter Jaga', '/dokterjaga', ''],
-                ]],
-                ['Rawat Inap', '/rawatinap', 'rawat_inap.svg', '', $petugasdokterrole, []],
-                ['Ruangan', '/kamar', 'kamar.svg', '', $petugasrole, []],
-                // ['Unit Gawat Darurat', '/ugd', 'ugd.svg', '', $petugasdokterrole, []],
-                ['Ambulans', '/ambulans', 'ambulans.svg', '', $petugasrole, []],
-                ['Tindakan', '/tindakan', 'tindakan.svg', '', $petugasrole, []],
-                ['Pemeriksaan', '/pemeriksaanranap', 'pemeriksaan.svg', '', $petugasrole, []],
-                ['Resep Obat', '/resepobat', 'resep_obat.svg', '', $petugasdokterrole, []],
-                ['Pemberian Obat', '/pemberianobat', 'pemberian_obat.svg', '', $petugasrole, []],
-                ['Resep Pulang', '', 'resep_pulang.svg', '', $petugasrole, [
-                    ['Permintaan Resep Pulang', '/permintaanreseppulang', ''],
-                    ['Resep Pulang', '/reseppulang', ''],
-                ]],
-                ['Rekam Medis', '', 'rekam_medis.svg', '', $dokterrole, [
-                    ['Daftar Rekam Medis', '/rekam-medis', ''],
-                    ['Observasi Rawat Inap', '/catatanobservasiranap', ''],
-                    ['Observasi Rawat Inap Kebidanan', '/catatanobservasikebidanan', ''],
-                    ['Observasi Rawat Inap Post Partum', '/catatanobservasipostpartum', ''],
-                ]],
+                // ['Inventaris Medis', '', 'inventaris_medis.svg', '',  $petugasrole, [
+                //     ['Data', '/datamedis', ''],
+                //     ['Stok Opname', '/stokopnamemedis', ''],
+                //     ['Mutasi Antar Gudang', '/mutasimedis', ''],
+                //     ['Penerimaan Obat & BHP', '/penerimaanmedis', ''],
+                //     ['Stok Keluar', '/stokkeluarmedis', ''],
+                //     ['Sisa Stok',  '/sisastokmedis', ''],
+                //     ['Data Batch', '/batchmedis', '']
+                // ]],
+                // ['Rujukan', '', 'rujukan.svg', '', $petugasdokterrole, [
+                //     ['Rujukan Masuk', '/rujukanmasuk', ''],
+                //     ['Rujukan Keluar', '/rujukankeluar', ''],
+                // ]], #allrole
+                // ['Persetujuan', '/persetujuanpengajuan', 'persetujuan.svg', '', $persetujuanrole, []],
+                // ['Registrasi', '/registrasi', 'registrasi.svg', '', $petugasrole, []],
+                // ['Data Pasien', '', 'olah_data_pasien.svg', '', $petugasrole, [
+                //     ['Daftar Pasien', '/masterpasien', ''],
+                //     ['Kelahiran Bayi', '/kelahiranbayi', ''],
+                //     ['Pasien Meninggal', '/pasienmeninggal', ''],
+                //     ['Asuransi Pasien', '/asuransi', ''],
+                //     ['Instansi Pasien', '/instansi', ''],
+                // ]],
+                // ['Dokter', '', 'dokter_jaga.svg', '', $petugasrole, [
+                //     ['Daftar Dokter', '/dokter', ''],
+                //     ['Dokter Jaga', '/dokterjaga', ''],
+                // ]],
+                // ['Rawat Inap', '/rawatinap', 'rawat_inap.svg', '', $petugasdokterrole, []],
+                // ['Ruangan', '/kamar', 'kamar.svg', '', $petugasrole, []],
+                // // ['Unit Gawat Darurat', '/ugd', 'ugd.svg', '', $petugasdokterrole, []],
+                // ['Ambulans', '/ambulans', 'ambulans.svg', '', $petugasrole, []],
+                // ['Tindakan', '/tindakan', 'tindakan.svg', '', $petugasrole, []],
+                // ['Pemeriksaan', '/pemeriksaanranap', 'pemeriksaan.svg', '', $petugasrole, []],
+                // ['Resep Obat', '/resepobat', 'resep_obat.svg', '', $petugasdokterrole, []],
+                // ['Pemberian Obat', '/pemberianobat', 'pemberian_obat.svg', '', $petugasrole, []],
+                // ['Resep Pulang', '', 'resep_pulang.svg', '', $petugasrole, [
+                //     ['Permintaan Resep Pulang', '/permintaanreseppulang', ''],
+                //     ['Resep Pulang', '/reseppulang', ''],
+                // ]],
+                // ['Rekam Medis', '', 'rekam_medis.svg', '', $dokterrole, [
+                //     ['Daftar Rekam Medis', '/rekam-medis', ''],
+                //     ['Observasi Rawat Inap', '/catatanobservasiranap', ''],
+                //     ['Observasi Rawat Inap Kebidanan', '/catatanobservasikebidanan', ''],
+                //     ['Observasi Rawat Inap Post Partum', '/catatanobservasipostpartum', ''],
+                // ]],
             ];
             echo view('components/menu/menu', ['menu_list' => $menu_list]);
 
