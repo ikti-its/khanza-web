@@ -435,7 +435,7 @@ final class HasilRadController extends ControllerTemplate
 
         // Fetch BHP lama sebelum transaksi agar tidak terblokir oleh abort
         $modelBhp = new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel();
-        $bhpLama  = $modelBhp->where('id_hasil_rad', $id)->findAll();
+        $bhpLama  = $modelBhp->set_filter('id_hasil_rad', $id)->findAll();
 
         $this->model->db->transStart();
 
@@ -495,7 +495,7 @@ final class HasilRadController extends ControllerTemplate
 
         // Fetch BHP lama sebelum transaksi agar tidak terblokir oleh abort
         $modelBhp = new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel();
-        $bhpLama  = $modelBhp->where('id_hasil_rad', $id)->findAll();
+        $bhpLama  = $modelBhp->set_filter('id_hasil_rad', $id)->findAll();
 
         $this->model->db->transStart();
 

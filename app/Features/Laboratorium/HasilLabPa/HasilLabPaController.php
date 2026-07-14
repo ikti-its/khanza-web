@@ -213,7 +213,7 @@ final class HasilLabPaController extends ControllerTemplate
         string $tglJamHasil,
     ): void {
         $existingByItem = array_column(
-            $this->model->where('id_permintaan_lab', $idPermintaanLab)->findAll(),
+            $this->model->set_filter('id_permintaan_lab', $idPermintaanLab)->findAll(),
             null,
             'id_permintaan_pa_item',
         );

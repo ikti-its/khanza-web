@@ -273,7 +273,7 @@ final class HasilLabMbController extends ControllerTemplate
         \App\Features\Laboratorium\HasilLabMbParameter\HasilLabMbParameterModel $modelParam,
     ): void {
         $existingByItem = array_column(
-            $this->model->where('id_permintaan_lab', $idPermintaanLab)->findAll(),
+            $this->model->set_filter('id_permintaan_lab', $idPermintaanLab)->findAll(),
             null,
             'id_permintaan_mb_item',
         );
