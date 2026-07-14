@@ -7,6 +7,9 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body            { font-family: Arial, sans-serif; font-size: 13px; margin: 40px; color: #000; }
         .print-area     { border: 1px solid #000; padding: 30px; max-width: 800px; margin: auto; }
+        .kop            { text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 10px; }
+        .kop .rs-nama   { font-size: 16px; font-weight: bold; }
+        .kop .rs-sub    { font-size: 11px; color: #333; margin-top: 2px; }
         hr              { border: none; border-top: 2px solid #000; margin: 12px 0; }
         .judul          { text-align: center; font-weight: bold; font-size: 14px; margin: 16px 0 12px; text-decoration: underline; }
         .section-title  { font-weight: bold; font-size: 12px; margin: 12px 0 4px; text-decoration: underline; }
@@ -45,6 +48,12 @@ $adaRiwayat = !empty(trim($sp['riwayat_lokasi_lab'] ?? ''))
 ?>
 
 <div class="print-area">
+
+    <div class="kop">
+        <div class="rs-nama">RS Bhayangkara</div>
+        <div class="rs-sub">Jl. Arif Rahman Hakim No. 213, Keputih, Sukolilo, Surabaya, Jawa Timur</div>
+        <div class="rs-sub">Telp (031)123456789</div>
+    </div>
 
     <div class="judul">PERMINTAAN PEMERIKSAAN LABORATORIUM PA</div>
     <hr>

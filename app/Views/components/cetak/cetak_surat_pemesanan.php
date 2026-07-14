@@ -147,7 +147,7 @@
     <div class="kop-teks">
       <div class="rs-nama">RS Bhayangkara</div>
       <div class="rs-sub">Jl. Arif Rahman Hakim No. 213, Keputih, Sukolilo, Surabaya, Jawa Timur</div>
-      <div class="rs-sub">Telp (0821) 123456789</div>
+      <div class="rs-sub">Telp (031)123456789</div>
     </div>
   </div>
 
