@@ -26,14 +26,74 @@ final class DesaController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, REQUIRED, I::INDEX, 'id_desa',        'ID'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_provinsi',  'Provinsi'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_kota',      'Kota'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_kecamatan', 'Kecamatan'],
-                [SHOW, REQUIRED, I::TEXT,  'id_desa_lokal',  'Kode Lokal'],
-                [SHOW, REQUIRED, I::TEXT,  'nama_desa',      'Desa'],
+                [HIDE, REQUIRED, I::INDEX,   'id_desa',        'ID'],
+                [SHOW, REQUIRED, I::SELECT,  'id_provinsi',    'Provinsi'],
+                [SHOW, REQUIRED, I::SELECT,  'id_kota_lokal',  'Kota'],
+                [SHOW, REQUIRED, I::SELECT,  'id_kec_lokal',   'Kecamatan'],
+                [SHOW, REQUIRED, I::TEXT,    'id_desa_lokal',  'Kode Lokal'],
+                [SHOW, REQUIRED, I::TEXT,    'nama_desa',      'Desa'],
             ],
         );
+    }
+
+    /**
+     * OVERRIDE: Menampilkan Form Desa
+     */
+    #[\Override]
+    public function create_page(): string
+    {
+        $breadcrumbs = [
+            ['title' => 'Tambah', 'icon' => 'tambah'],
+        ];
+
+        $mockBaris = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if ($namaKolom === 'id_desa') {
+                continue;
+            }
+            $mockBaris[$namaKolom] = '';
+        }
+
+        $mockBaris['redirect_to'] = $this->request->getGet('redirect_to') ?? '';
+
+        return view('/admin/lokasi/tambah_desa', [
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'baris'       => $mockBaris,
+            'form_action' => '/submittambah',
+        ]);
+    }
+
+    /**
+     * OVERRIDE: Menampilkan Halaman Ubah Data Desa
+     */
+    #[\Override]
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0) {
+            return $this->index();
+        }
+
+        $baris = $this->model->find_one($id);
+        if (!$baris) {
+            $baris = [];
+        }
+
+        $breadcrumbs = [
+            ['title' => 'Ubah', 'icon' => 'Ubah'],
+        ];
+
+        return view('/admin/lokasi/tambah_desa', [
+            'judul'       => 'Ubah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'baris'       => $baris,
+            'form_action' => '/submitedit/' . $id,
+        ]);
     }
 
     /**
