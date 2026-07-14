@@ -380,7 +380,7 @@ final class PermintaanLabPkItemController extends ControllerTemplate
             $this->model->db->transComplete();
 
             if ($this->model->db->transStatus() === false) {
-                throw new \RuntimeException('Gagal menyimpan permintaan lab PK. ' . ($err['message'] ?? ''));
+                throw new \RuntimeException('Gagal menyimpan permintaan lab PK.');
             }
 
             session()->setFlashdata('success', 'Permintaan lab PK berhasil disimpan.');
