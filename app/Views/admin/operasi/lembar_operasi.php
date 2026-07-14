@@ -33,6 +33,7 @@ $gridData = [
 
 $iconCheck  = '<svg class="w-4 h-4 text-green-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
 $iconCircle = '<svg class="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>';
+$iconTrash  = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16"/></svg>';
 ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto space-y-4">
@@ -140,11 +141,12 @@ $iconCircle = '<svg class="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-
                     </h3>
                 </div>
                 <ul class="divide-y divide-gray-100 dark:divide-gray-800">
-                    <?php foreach ($items as $form): 
-                        $filled = $form['record_id'] !== null;
-                        $href   = $filled ? esc($form['ubah']) . '/' . $form['record_id'] : esc($form['tambah']) . '?id_jadwal=' . $id_jadwal;
-                        $colorT = $filled ? 'text-gray-500 dark:text-gray-400' : 'text-gray-800 dark:text-gray-200';
-                        $colorL = $filled ? 'text-gray-400 hover:text-blue-600 dark:text-gray-500' : 'text-blue-600 hover:underline dark:text-blue-400';
+                    <?php foreach ($items as $form):
+                        $filled  = $form['record_id'] !== null;
+                        $href    = $filled ? esc($form['ubah']) . '/' . $form['record_id'] : esc($form['tambah']) . '?id_jadwal=' . $id_jadwal;
+                        $colorT  = $filled ? 'text-gray-500 dark:text-gray-400' : 'text-gray-800 dark:text-gray-200';
+                        $colorL  = $filled ? 'text-gray-400 hover:text-blue-600 dark:text-gray-500' : 'text-blue-600 hover:underline dark:text-blue-400';
+                        $modalId = $filled ? 'lembar-' . $form['table'] . '-' . $form['record_id'] : null;
                     ?>
                         <li class="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
                             <div class="flex items-center gap-x-3">
@@ -153,9 +155,24 @@ $iconCircle = '<svg class="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-
                                     <?= esc($form['label']) ?>
                                 </span>
                             </div>
-                            <a href="<?= $href ?>" class="text-sm font-semibold <?= $colorL ?>">
-                                <?= $filled ? 'Ubah' : 'Isi' ?> &rarr;
-                            </a>
+                            <div class="flex items-center gap-x-1">
+                                <a href="<?= $href ?>" class="text-sm font-semibold <?= $colorL ?> px-2 py-1">
+                                    <?= $filled ? 'Ubah' : 'Isi' ?> &rarr;
+                                </a>
+                                <?php if ($filled): ?>
+                                    <button type="button" title="Hapus <?= esc($form['label']) ?>"
+                                            onclick="openModal('modelConfirm-<?= $modalId ?>')"
+                                            class="p-1.5 rounded-md text-gray-300 hover:text-red-600 hover:bg-red-50 dark:text-gray-600 dark:hover:text-red-400 dark:hover:bg-red-900/20 transition-colors">
+                                        <?= $iconTrash ?>
+                                    </button>
+                                    <?= view('components/aksi/hapus_form', [
+                                        'modul_path'   => $form['modul_path'],
+                                        'id'           => $form['record_id'],
+                                        'modal_id'     => $modalId,
+                                        'extra_fields' => ['id_jadwal' => $id_jadwal],
+                                    ]) ?>
+                                <?php endif; ?>
+                            </div>
                         </li>
                     <?php endforeach; ?>
                 </ul>
