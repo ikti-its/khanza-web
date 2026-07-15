@@ -25,10 +25,11 @@ final class DataTriaseController extends ControllerTemplate
                 // A::AUDIT,
                 A::UPDATE,
                 A::DELETE,
+                A::PRINT,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_triase',             'ID Triase'],
-                [SHOW, REQUIRED, I::INDEX,  'id_registrasi',         'ID Registrasi'],
+                [SHOW, REQUIRED, I::INDEX,  'id_registrasi',         'Nomor Rawat'],
                 [SHOW, REQUIRED, I::DTIME,  'tanggal_kunjungan',     'Tanggal Kunjungan'],
                 [SHOW, REQUIRED, I::SELECT, 'id_cara_masuk',         'Cara Masuk'],
                 [SHOW, REQUIRED, I::SELECT, 'id_alat_transportasi',  'Alat Transportasi'],
@@ -44,6 +45,150 @@ final class DataTriaseController extends ControllerTemplate
                 [HIDE, REQUIRED, I::NUMBER, 'nyeri',                 'Nyeri (0-10)'],
             ],
         );
+    }
+
+    /**
+     * OVERRIDE: Mencetak Lembar Hasil Pemeriksaan Triase Pasien Gawat Darurat
+     * @throws \CodeIgniter\Exceptions\PageNotFoundException
+     */
+    #[\Override]
+    public function print(int|string $id): string
+    {
+        $triaseInduk = $this->model->find($id);
+        if (!$triaseInduk) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound(
+                'Data Pemeriksaan Triase tidak ditemukan.',
+            );
+        }
+
+        $dataRegistrasi = [];
+        $dataPasien     = [];
+        $dataOrang      = [];
+        $dataKasus      = [];
+        $dataPetugas    = [];
+        $dataPrimer     = [];
+        $dataSekunder   = [];
+
+        $modelPrimer = new \App\Features\TriaseUGD\DataTriasePrimer\DataTriasePrimerModel();
+        $dataPrimer  = $modelPrimer->where('id_triase', $id)->first() ?? [];
+
+        $modelSekunder = new \App\Features\TriaseUGD\DataTriaseSekunder\DataTriaseSekunderModel();
+        $dataSekunder  = $modelSekunder->where('id_triase', $id)->first() ?? [];
+
+        $tabAktif = !empty($dataPrimer) ? 'primer' : 'sekunder';
+
+        if (!empty($triaseInduk['id_registrasi'])) {
+            $modelReg = new \App\Features\UGD\Registrasi\RegistrasiModel();
+            $regRow   = $modelReg->find($triaseInduk['id_registrasi']) ?? [];
+
+            if (!empty($regRow)) {
+                $dataRegistrasi['id_registrasi']     = $regRow['id_registrasi'] ?? '';
+                $dataRegistrasi['nomor_rawat']       = $regRow['nomor_rawat'] ?? '';
+                $dataRegistrasi['tanggal_kunjungan'] = $regRow['tanggal_kunjungan'] ?? '';
+
+                if (!empty($regRow['id_pasien'])) {
+                    $modelPasien = new \App\Features\Role\Pasien\PasienModel();
+                    $pasienRow   = $modelPasien->find($regRow['id_pasien']) ?? [];
+
+                    if (!empty($pasienRow)) {
+                        $dataPasien['nomor_rm'] = $pasienRow['nomor_rm'] ?? '';
+
+                        if (!empty($pasienRow['id_orang'])) {
+                            $modelOrang = new \App\Features\Person\Orang\OrangModel();
+                            $orangRow   = $modelOrang->find($pasienRow['id_orang']) ?? [];
+
+                            if (!empty($orangRow)) {
+                                $dataOrang['nama_pasien']      = $orangRow['nama'] ?? '';
+                                $dataOrang['tanggal_lahir']    = $orangRow['tanggal_lahir'] ?? '';
+                                $dataOrang['id_jenis_kelamin'] = $orangRow['id_jenis_kelamin'] ?? '';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!empty($triaseInduk['id_macam_kasus'])) {
+            $modelKasus = new \App\Features\TriaseUGD\TriaseMacamKasus\TriaseMacamKasusModel();
+            $kasusRow   = $modelKasus->find($triaseInduk['id_macam_kasus']) ?? [];
+            if (!empty($kasusRow)) {
+                $dataKasus['nama_macam_kasus'] = $kasusRow['nama_macam_kasus'] ?? '';
+            }
+        }
+
+        $idPetugasTerpilih = !empty($dataPrimer)
+            ? $dataPrimer['id_petugas'] ?? null
+            : $dataSekunder['id_petugas'] ?? null;
+        if (!empty($idPetugasTerpilih)) {
+            $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
+            $petugasRow   = $modelPetugas->find($idPetugasTerpilih) ?? [];
+
+            if (!empty($petugasRow['id_orang'])) {
+                $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
+                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+
+                if (!empty($orangPetugasRow['nama'])) {
+                    $dataPetugas['nama_petugas'] = $orangPetugasRow['nama'];
+                }
+            }
+        }
+
+        $baris = array_merge(
+            $dataOrang,
+            $dataPasien,
+            $dataRegistrasi,
+            $dataKasus,
+            $dataPetugas,
+            $dataPrimer,
+            $dataSekunder,
+            $triaseInduk,
+        );
+
+        $konfigTriase = $this->get_fields_with_options(false, true);
+
+        $controllerPrimer   = new \App\Features\TriaseUGD\DataTriasePrimer\DataTriasePrimerController();
+        $controllerSekunder = new \App\Features\TriaseUGD\DataTriaseSekunder\DataTriaseSekunderController();
+        $controllerOrang    = new \App\Features\Person\Orang\OrangController();
+
+        $konfigGabunganOptions = array_merge(
+            $controllerOrang->get_fields_with_options(false, true),
+            $konfigTriase,
+            $controllerPrimer->get_fields_with_options(false, true),
+            $controllerSekunder->get_fields_with_options(false, true),
+        );
+
+        foreach ($konfigGabunganOptions as $field) {
+            $namaKolom = $field[2];
+            $tipeField = $field[3];
+            $options   = $field[5] ?? [];
+
+            if (in_array($tipeField, ['select', 'status'], true) && !empty($options) && isset($baris[$namaKolom])) {
+                $idMentah = $baris[$namaKolom];
+                foreach ($options as $opt) {
+                    if ((string) $opt[1] === (string) $idMentah) {
+                        $baris[$namaKolom] = $opt[0];
+                        break;
+                    }
+                }
+            }
+            if (($baris[$namaKolom] ?? null) === null) {
+                $baris[$namaKolom] = '';
+            }
+        }
+
+        $modelDetail = new \App\Features\TriaseUGD\DataTriaseDetail\DataTriaseDetailModel();
+
+        $listKriteriaTersimpan = $modelDetail->getKriteriaOlehTriase($id);
+        $skalaTertinggi        = $modelDetail->hitungSkalaFinal($id);
+
+        return view('components/cetak/cetak_lembar_triase', [
+            'judul'         => 'Cetak Lembar Triase IGD',
+            'modul_path'    => $this->get_uri_path(),
+            'baris'         => $baris,
+            'tab_aktif'     => $tabAktif,
+            'list_kriteria' => $listKriteriaTersimpan,
+            'skala_final'   => $skalaTertinggi,
+        ]);
     }
 
     /**
@@ -79,9 +224,7 @@ final class DataTriaseController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggal             = $field[3] === 'tanggal'
-            || str_contains($namaKolom, 'tanggal')
-            || $field[3] === 'dtime';
+            $isTanggal = $field[3] === 'tanggal' || str_contains($namaKolom, 'tanggal') || $field[3] === 'dtime';
             $mockBaris[$namaKolom] = $isTanggal ? date('Y-m-d\TH:i') : '';
 
             $konfigGabungan[] = $field;
@@ -94,9 +237,8 @@ final class DataTriaseController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggalPrimer             = $fPrimer[3] === 'tanggal'
-            || str_contains($namaKolomPrimer, 'tanggal')
-            || $fPrimer[3] === 'dtime';
+            $isTanggalPrimer =
+                $fPrimer[3] === 'tanggal' || str_contains($namaKolomPrimer, 'tanggal') || $fPrimer[3] === 'dtime';
             $mockBaris[$namaKolomPrimer] = $isTanggalPrimer ? date('Y-m-d\TH:i') : '';
 
             $konfigGabungan[] = $fPrimer;
@@ -113,9 +255,8 @@ final class DataTriaseController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggalSekunder             = $fSekunder[3] === 'tanggal'
-            || str_contains($namaKolomSekunder, 'tanggal')
-            || $fSekunder[3] === 'dtime';
+            $isTanggalSekunder =
+                $fSekunder[3] === 'tanggal' || str_contains($namaKolomSekunder, 'tanggal') || $fSekunder[3] === 'dtime';
             $mockBaris[$namaKolomSekunder] = $isTanggalSekunder ? date('Y-m-d\TH:i') : '';
 
             $konfigGabungan[] = $fSekunder;
@@ -163,6 +304,12 @@ final class DataTriaseController extends ControllerTemplate
             if ($dataTriaseLama) {
                 throw new \RuntimeException(
                     'Gagal menyimpan! Nomor rawat ini sudah memiliki dokumen keputusan triase sebelumnya. Silakan gunakan tombol ubah pada kolom aksi jika terjadi perubahan kondisi klinis pada pasien.',
+                );
+            }
+
+            if (empty($listSkalaTerpilih) || !is_array($listSkalaTerpilih)) {
+                throw new \RuntimeException(
+                    'Gagal Menyimpan! Anda wajib mencentang minimal 1 indikator penilaian skor triase.',
                 );
             }
 
@@ -451,6 +598,12 @@ final class DataTriaseController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            if (empty($listSkalaTerpilih) || !is_array($listSkalaTerpilih)) {
+                throw new \RuntimeException(
+                    'Gagal Menyimpan! Anda wajib mencentang minimal 1 indikator penilaian skor triase.',
+                );
+            }
+
             $this->model->update($id, $dataTriase);
 
             $tabAktif = $rawPost['triase_tab_aktif'] ?? 'primer';
