@@ -113,6 +113,12 @@ $konfigTanpaRM = array_values(array_filter($konfig, fn($f) => !in_array($f[2], [
         const tglInput = document.querySelector('[name="tgl_skrining"]');
         if (tglInput) tglInput.max = new Date().toISOString().split('T')[0];
 
+        const jamInput = document.querySelector('[name="jam_skrining"]');
+        if (jamInput) {
+            jamInput.max = new Date().toTimeString().slice(0, 8);
+            if (jamInput.value > jamInput.max) jamInput.value = jamInput.max;
+        }
+
         const fieldDiamati = ['id_kesadaran', 'id_pernafasan', 'id_skala_nyeri', 'id_nyeri_dada', 'id_keputusan'];
         fieldDiamati.forEach(name => {
             document.querySelector(`[name="${name}"]`)?.addEventListener('change', cekIndikasiDarurat);
