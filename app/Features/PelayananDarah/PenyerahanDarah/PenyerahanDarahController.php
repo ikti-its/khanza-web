@@ -151,18 +151,25 @@ final class PenyerahanDarahController extends ControllerTemplate
         $tahunSekarang = date('Y');
         $bulanSekarang = date('m');
 
-        $jumlahPenyerahanBulanIni = $this->model
+        $prefiksPenyerahan = "{$tahunSekarang}-{$bulanSekarang}-PD";
+
+        $nomorTerakhir = $this->model
             ->db
             ->table('pelayanan_darah.penyerahan_darah')
-            ->where('EXTRACT(YEAR FROM tanggal_penyerahan)', $tahunSekarang)
-            ->where('EXTRACT(MONTH FROM tanggal_penyerahan)', $bulanSekarang)
-            ->countAllResults();
+            ->select('no_penyerahan')
+            ->like('no_penyerahan', $prefiksPenyerahan, 'after')
+            ->orderBy('no_penyerahan', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRowArray();
 
-        $nextUrutan = $jumlahPenyerahanBulanIni + 1;
+        $nextUrutan = $nomorTerakhir
+            ? ((int) substr($nomorTerakhir['no_penyerahan'], strlen($prefiksPenyerahan)) + 1)
+            : 1;
 
         $stringUrutan = str_pad((string) $nextUrutan, 5, '0', STR_PAD_LEFT);
 
-        $nomorPenyerahanOtomatis = "{$tahunSekarang}-{$bulanSekarang}-PD{$stringUrutan}";
+        $nomorPenyerahanOtomatis = "{$prefiksPenyerahan}{$stringUrutan}";
 
         foreach ($konfigPenyerahan as $fieldPenyerahan) {
             $columnPenyerahan = $fieldPenyerahan[2];
