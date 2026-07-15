@@ -14,8 +14,8 @@
         <option value="">Semua</option>
 
         <?php foreach ($filters as $key => $label): ?>
-            <option value="<?= $key ?>" 
-                <?= ($active_filter === $key) ? 'selected' : '' ?>>
+            <option value="<?= $key ?>"
+                <?= ((string) $active_filter === (string) $key) ? 'selected' : '' ?>>
                 <?= $label ?>
             </option>
         <?php endforeach; ?>
