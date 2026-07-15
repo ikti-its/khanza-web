@@ -76,6 +76,15 @@ $konfigTanpaRM = array_values(array_filter($konfig, fn($f) => !in_array($f[2], [
                 </div>
             </div>
 
+            <div id="peringatan-igd-tanpa-indikasi" class="hidden mb-5 p-4 rounded-lg border border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-700">
+                <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                    <p class="text-sm text-red-700 dark:text-red-400">Keputusan IGD dipilih, tetapi tidak ada indikasi kondisi darurat pada hasil skrining. Pastikan pilihan ini sudah sesuai kondisi pasien sebelum menyimpan.</p>
+                </div>
+            </div>
+
             <?= view('components/form/submit_button') ?>
         </form>
     </div>
@@ -97,8 +106,11 @@ $konfigTanpaRM = array_values(array_filter($konfig, fn($f) => !in_array($f[2], [
             document.querySelector(`[name="${field}"]`)?.value === nilai
         );
 
-        const peringatanEl = document.getElementById('peringatan-igd');
-        const daftarEl     = document.getElementById('peringatan-igd-daftar');
+        const peringatanEl     = document.getElementById('peringatan-igd');
+        const daftarEl         = document.getElementById('peringatan-igd-daftar');
+        const tanpaIndikasiEl  = document.getElementById('peringatan-igd-tanpa-indikasi');
+
+        tanpaIndikasiEl.classList.toggle('hidden', !(keputusan === '2' && terdeteksi.length === 0));
 
         if (terdeteksi.length === 0 || keputusan === '2') {
             peringatanEl.classList.add('hidden');
