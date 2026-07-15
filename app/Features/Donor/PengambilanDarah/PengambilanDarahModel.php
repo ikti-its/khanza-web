@@ -78,15 +78,6 @@ final class PengambilanDarahModel extends ModelTemplate
                 'Gagal Menyimpan! Tanggal pengambilan darah tidak boleh melebihi waktu saat ini.',
             );
         }
-
-        $selisih     = $tglDonasi->diff($tglSekarang);
-        $selisihHari = (int) $selisih->format('%r%a');
-
-        if ($selisihHari > 2) {
-            throw new \InvalidArgumentException(
-                'Gagal Menyimpan! Batas keterlambatan input data pengambilan darah untuk petugas maksimal adalah 2 hari ke belakang. Jika ingin menginput data Mobile Unit yang lebih lama, harap laporkan ke Supervisor / Kepala Ruangan.',
-            );
-        }
     }
 
     /**
