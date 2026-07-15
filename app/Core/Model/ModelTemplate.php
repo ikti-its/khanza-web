@@ -141,17 +141,27 @@ class ModelTemplate extends Model
         // $this->afterDelete  = [];
     }
 
-    /** @return array<string, array{0: class-string<DatabaseTemplate>, 1: string}> */
+    /** @return array<string, array{0: class-string<DatabaseTemplate>, 1: list<string>, 2: list<string>}> */
     private function build_fk_lookup(DatabaseTemplate $db): array
     {
         $lookup = [];
         foreach ($db->foreign_keys as $fk) {
             [$fields, $ref_class, $ref_fields] = $fk;
-            for ($i = 0; $i < count($fields); $i++) {
-                $lookup[$fields[$i]] = [$ref_class, $ref_fields[$i]];
-            }
+            $fields     = (array) $fields;
+            $ref_fields = (array) $ref_fields;
+            $lookup[end($fields)] = [$ref_class, $fields, $ref_fields];
         }
         return $lookup;
+    }
+
+    /** @param list<string> $fields @param list<string> $ref_fields */
+    private function composite_join_condition(string $parent_alias, array $fields, string $ref_alias, array $ref_fields): string
+    {
+        $conditions = [];
+        foreach ($fields as $i => $field) {
+            $conditions[] = "{$parent_alias}.{$field} = {$ref_alias}.{$ref_fields[$i]}";
+        }
+        return implode(' AND ', $conditions);
     }
 
     private function select_once(
@@ -187,14 +197,14 @@ class ModelTemplate extends Model
             $root_fk = $fk_col;
 
         /** @var class-string<DatabaseTemplate> $ref_class */
-        [$ref_class, $ref_on] = $fk_lookup[$fk_col];
+        [$ref_class, $fk_fields, $ref_fields] = $fk_lookup[$fk_col];
 
         $ref_db    = new $ref_class();
         $ref_table = $ref_db->schema . '.' . $ref_db->table;
         $ref_alias = "j{$idx}";
         $idx++;
 
-        $builder->join("{$ref_table} {$ref_alias}", "{$parent_alias}.{$fk_col} = {$ref_alias}.{$ref_on}", 'left');
+        $builder->join("{$ref_table} {$ref_alias}", $this->composite_join_condition($parent_alias, $fk_fields, $ref_alias, $ref_fields), 'left');
 
         foreach ($spec as $k => $v) {
             if (is_int($k)) {
@@ -266,14 +276,14 @@ class ModelTemplate extends Model
                 }
 
                 /** @var class-string<DatabaseTemplate> $ref_class */
-                [$ref_class, $ref_on] = $fk_lookup[$k];
+                [$ref_class, $fk_fields, $ref_fields] = $fk_lookup[$k];
 
                 $ref_db    = new $ref_class();
                 $ref_table = $ref_db->schema . '.' . $ref_db->table;
                 $ref_alias = "j{$idx}";
                 $idx++;
 
-                $builder->join("{$ref_table} {$ref_alias}", "{$parent_alias}.{$k} = {$ref_alias}.{$ref_on}", 'left');
+                $builder->join("{$ref_table} {$ref_alias}", $this->composite_join_condition($parent_alias, $fk_fields, $ref_alias, $ref_fields), 'left');
 
                 $next_spec = is_array($v) ? $v : [$v];
                 $resolved  = $this->resolve_option_source($builder, $next_spec, $ref_alias, $ref_db, $idx);
@@ -398,7 +408,8 @@ class ModelTemplate extends Model
                 continue;
 
             /** @var class-string<DatabaseTemplate> $ref_class */
-            [$ref_class, $ref_id_col] = $fk_lookup[$fk_col];
+            [$ref_class, , $ref_fields] = $fk_lookup[$fk_col];
+            $ref_id_col = end($ref_fields);
 
             $ref_db    = new $ref_class();
             $ref_table = $ref_db->schema . '.' . $ref_db->table;
