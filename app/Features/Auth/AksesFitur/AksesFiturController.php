@@ -34,4 +34,13 @@ final class AksesFiturController extends ControllerTemplate
             ],
         );
     }
+
+    /**
+     * OVERRIDE: Urutkan data per grup fitur, kemudian per role
+     */
+    #[\Override]
+    protected function before_read(): void
+    {
+        $this->model->set_order('m.feature_group')->set_order('m.id_role');
+    }
 }
