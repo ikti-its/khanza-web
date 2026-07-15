@@ -446,10 +446,15 @@
                             <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                                 Tanggal Triase<span class="text-red-600">*</span>
                             </label>
+                            <?php
+                                $minTanggalTriase = isset($baris['tanggal_triase'])
+                                    ? substr($baris['tanggal_triase'], 0, 10) . 'T00:00'
+                                    : date('Y-m-d\T00:00');
+                            ?>
                             <div class="w-full lg:w-1/4">
-                                <input type="datetime-local" name="tanggal_triase" id="tanggal_triase" 
+                                <input type="datetime-local" name="tanggal_triase" id="tanggal_triase"
                                        value="<?= $baris['tanggal_triase'] ?? date('Y-m-d\TH:i:s') ?>"
-                                       min="<?= date('Y-m-d\T00:00') ?>"
+                                       min="<?= $minTanggalTriase ?>"
                                        max="<?= date('Y-m-d\TH:i:s') ?>"
                                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:bg-slate-800 dark:text-white focus:outline-none focus:border-blue-500">
                             </div>
