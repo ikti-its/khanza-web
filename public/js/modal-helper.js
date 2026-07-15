@@ -9,11 +9,13 @@ function initModalList({
   fields,
   searchIds,
   rowsPerPage = 10,
-  onSelect
+  onSelect,
+  serverSearch = false
 }) {
   let data = [];
   let filtered = [];
   let currentPage = 1;
+  let debounceTimer = null;
 
   const modal = document.getElementById(modalId);
   const tbody = document.getElementById(tableId);
@@ -41,9 +43,20 @@ function initModalList({
     }
   };
 
+  function buildUrl() {
+    if (!serverSearch) return url;
+    const params = new URLSearchParams();
+    Object.entries(searchIds).forEach(([inputId, fieldKey]) => {
+      const val = document.getElementById(inputId)?.value?.trim();
+      if (val) params.set(fieldKey, val);
+    });
+    const qs = params.toString();
+    return qs ? `${url}?${qs}` : url;
+  }
+
   function fetchData() {
     tbody.innerHTML = `<tr><td colspan="${fields.length + 1}" class="text-center p-4 text-gray-500">Memuat data...</td></tr>`;
-    fetch(url)
+    fetch(buildUrl())
       .then(res => res.json())
       .then(result => {
         data = result.data || [];
@@ -116,7 +129,15 @@ function initModalList({
 
   Object.keys(searchIds).forEach(id => {
     const input = document.getElementById(id);
-    if (input) input.addEventListener("input", handleSearch);
+    if (!input) return;
+    if (serverSearch) {
+      input.addEventListener("input", () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(fetchData, 300);
+      });
+    } else {
+      input.addEventListener("input", handleSearch);
+    }
   });
 
   prevBtn.addEventListener("click", () => {

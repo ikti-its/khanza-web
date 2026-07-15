@@ -78,9 +78,9 @@
                 </button>
             </div>
         </div>
-        
+
     </div>
 </div>
 
 <!-- Load helper hanya sekali di layout utama, bukan di setiap modal -->
-<script src="<?= base_url('js/modal-helper.js') ?>"></script>
+<script src="<?= base_url('js/modal-helper.js') ?>?v=<?= filemtime(FCPATH . 'js/modal-helper.js') ?>"></script>
