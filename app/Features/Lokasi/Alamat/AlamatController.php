@@ -38,6 +38,63 @@ final class AlamatController extends ControllerTemplate
         );
     }
 
+    /**
+     * OVERRIDE: Menampilkan Form Alamat (pakai modal pencarian Wilayah)
+     */
+    #[\Override]
+    public function create_page(): string
+    {
+        $breadcrumbs = [
+            ['title' => 'Tambah', 'icon' => 'tambah'],
+        ];
+
+        $mockBaris = [];
+        foreach ($this->fields as $field) {
+            $namaKolom = $field[2];
+            if ($namaKolom === 'id_alamat') {
+                continue;
+            }
+            $mockBaris[$namaKolom] = '';
+        }
+
+        $mockBaris['redirect_to'] = $this->request->getGet('redirect_to') ?? '';
+
+        return view('/admin/lokasi/tambah_alamat', [
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'baris'       => $mockBaris,
+            'form_action' => '/submittambah',
+        ]);
+    }
+
+    /**
+     * OVERRIDE: Menampilkan Halaman Ubah Data Alamat
+     */
+    #[\Override]
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0) {
+            return $this->index();
+        }
+
+        $baris = $this->model->get_detail_wilayah($id) ?? [];
+
+        $breadcrumbs = [
+            ['title' => 'Ubah', 'icon' => 'Ubah'],
+        ];
+
+        return view('/admin/lokasi/tambah_alamat', [
+            'judul'       => 'Ubah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'baris'       => $baris,
+            'form_action' => '/submitedit/' . $id,
+        ]);
+    }
+
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
         $data = $this->model

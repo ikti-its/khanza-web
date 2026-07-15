@@ -15,6 +15,11 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const btnTambahAlamat = document.querySelector('#modalAlamat a[href="/lokasi/alamat/tambah"]');
+        if (btnTambahAlamat) {
+            btnTambahAlamat.removeAttribute('target');
+            btnTambahAlamat.href = '/lokasi/alamat/tambah?redirect_to=' + encodeURIComponent(window.location.pathname + window.location.search);
+        }
         initModalList({
             modalId:     'modalAlamat',
             tableId:     'alamatTable',
