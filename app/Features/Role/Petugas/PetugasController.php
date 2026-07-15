@@ -30,7 +30,7 @@ final class PetugasController extends ControllerTemplate
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_petugas', 'ID Petugas'],
-                [SHOW, REQUIRED, I::INDEX, 'id_orang',   'ID Orang'],
+                [SHOW, OPTIONAL, I::INDEX, 'id_orang',   'ID Orang'],
                 [SHOW, OPTIONAL, I::TEXT,  'deskripsi',  'Deskripsi'],
             ],
         );
@@ -38,29 +38,26 @@ final class PetugasController extends ControllerTemplate
 
     public function create_page(): string
     {
-        $orangModel = new OrangModel();
-        $allOptions = $orangModel->get_all_options();
+        $controllerOrang = new \App\Features\Person\Orang\OrangController();
+        $konfigOrang      = $controllerOrang->get_fields_with_options(false, true);
+        $konfigPetugas    = $this->get_fields_with_options(false, true);
 
-        $konfig = [
-            [SHOW, 'NIK', 'nik', 'teks', REQUIRED],
-            [SHOW, 'Nama', 'nama', 'nama', REQUIRED],
-            [SHOW, 'Jenis Kelamin', 'id_jenis_kelamin', 'status', REQUIRED, $allOptions['id_jenis_kelamin'] ?? []],
-            [SHOW, 'Agama', 'id_agama', 'status', REQUIRED, $allOptions['id_agama'] ?? []],
-            [SHOW, 'Status Pernikahan', 'id_pernikahan', 'status', REQUIRED, $allOptions['id_pernikahan'] ?? []],
-            [SHOW, 'Golongan Darah', 'id_golongan_darah', 'status', REQUIRED, $allOptions['id_golongan_darah'] ?? []],
-            [SHOW, 'Alamat', 'id_alamat', 'status', REQUIRED, $allOptions['id_alamat'] ?? []],
-            [SHOW, 'Tempat Lahir', 'tempat_lahir_kota', 'status', REQUIRED, $allOptions['tempat_lahir_kota'] ?? []],
-            [SHOW, 'Tanggal Lahir', 'tanggal_lahir', 'tanggal', REQUIRED],
-            [SHOW, 'Deskripsi / Jabatan', 'deskripsi', 'teks', OPTIONAL],
-        ];
+        $konfigGabungan = [];
+        foreach ($konfigPetugas as $field) {
+            if ($field[2] === 'id_orang') {
+                $konfigGabungan = array_merge($konfigGabungan, $konfigOrang);
+                continue;
+            }
+            $konfigGabungan[] = $field;
+        }
 
         $breadcrumbs = [['title' => 'Tambah', 'icon', 'tambah']];
-        return view('/layouts/tambah_ubah', [
+        return view('/admin/role/tambah_petugas', [
             'judul'       => 'Tambah Petugas',
-            'breadcrumbs' => [...$this->breadcrumbs, ...$breadcrumbs],
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->primary_key,
-            'konfig'      => $konfig,
+            'konfig'      => $konfigGabungan,
             'baris'       => [
                 'deskripsi'         => '',
                 'nik'               => '',
@@ -72,6 +69,7 @@ final class PetugasController extends ControllerTemplate
                 'id_alamat'         => '',
                 'tempat_lahir_kota' => '',
                 'tanggal_lahir'     => '',
+                'redirect_to'       => $this->request->getGet('redirect_to') ?? '',
             ],
             'form_action' => '/submittambah/',
         ]);
@@ -79,39 +77,41 @@ final class PetugasController extends ControllerTemplate
 
     public function create(): string|RedirectResponse
     {
-        $orangData = [
-            'nik'               => $this->request->getPost('nik'),
-            'nama'              => $this->request->getPost('nama'),
-            'id_jenis_kelamin'  => $this->request->getPost('id_jenis_kelamin') ?: null,
-            'id_agama'          => $this->request->getPost('id_agama') ?: null,
-            'id_pernikahan'     => $this->request->getPost('id_pernikahan') ?: null,
-            'id_golongan_darah' => $this->request->getPost('id_golongan_darah') ?: null,
-            'id_alamat'         => $this->request->getPost('id_alamat') ?: null,
-            'tempat_lahir_kota' => $this->request->getPost('tempat_lahir_kota') ?: null,
-            'tanggal_lahir'     => $this->request->getPost('tanggal_lahir') ?: null,
-        ];
-        $deskripsi = $this->request->getPost('deskripsi') ?: null;
+        $orangModel = new OrangModel();
+        $rawPost    = $this->request->getPost();
+        $deskripsi  = $rawPost['deskripsi'] ?: null;
+
+        $dataOrang = [];
+        foreach ($orangModel->allowedFields as $field) {
+            $value = $rawPost[$field] ?? '';
+            if ($value === '') {
+                $value = null;
+            } elseif (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
+                $value = (int) $value;
+            }
+            $dataOrang[$field] = $value;
+        }
 
         $db = $this->model->db;
-        $db->transBegin();
+        $db->transStart();
 
         try {
-            $cols   = implode(', ', array_keys($orangData));
-            $marks  = implode(', ', array_fill(0, count($orangData), '?'));
-            $result = $db->query(
-                "INSERT INTO person.orang ({$cols}) VALUES ({$marks}) RETURNING id_orang",
-                array_values($orangData),
-            );
-            if (!$result) {
-                throw new DatabaseException('Gagal menyimpan data Orang.');
+            if (!$orangModel->insert($dataOrang)) {
+                throw new \RuntimeException('Sistem gagal menyimpan identitas Orang.');
             }
-            $id_orang = (int) $result->getRow()->id_orang;
+            $id_orang = $orangModel->insertID();
 
-            $this->model->insert(['id_orang' => $id_orang, 'deskripsi' => $deskripsi]);
+            if (!$this->model->insert(['id_orang' => $id_orang, 'deskripsi' => $deskripsi])) {
+                throw new \RuntimeException('Sistem gagal menyimpan data Petugas.');
+            }
 
-            $db->transCommit();
+            $db->transComplete();
+            if ($db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menyimpan data Petugas.');
+            }
+
             session()->setFlashdata('success', 'Data Petugas berhasil disimpan.');
-        } catch (\ReflectionException|DatabaseException $e) {
+        } catch (\Exception $e) {
             $db->transRollback();
             $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $msg);
@@ -120,6 +120,160 @@ final class PetugasController extends ControllerTemplate
 
         $redirect_to = $this->request->getPost('redirect_to');
         return $redirect_to ? redirect()->to($redirect_to) : $this->home();
+    }
+
+    #[\Override]
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0)
+            return $this->index();
+
+        $dataPetugas = $this->model->find($id);
+        if (!$dataPetugas) {
+            return $this->index();
+        }
+
+        $dataOrang  = [];
+        $dataAlamat = [];
+
+        if (!empty($dataPetugas['id_orang'])) {
+            $orangModel = new OrangModel();
+            $dataOrang  = $orangModel->find($dataPetugas['id_orang']) ?? [];
+
+            if (!empty($dataOrang['id_alamat'])) {
+                $alamatModel = new \App\Features\Lokasi\Alamat\AlamatModel();
+                $alamat      = $alamatModel->find($dataOrang['id_alamat']) ?? [];
+                $dataAlamat  = ['alamat_lengkap' => $alamat['alamat_lengkap'] ?? ''];
+            }
+
+            if (!empty($dataOrang['tempat_lahir_kota'])) {
+                $kotaModel = new \App\Features\Lokasi\Kota\KotaModel();
+                $kotaLahir = $kotaModel->find($dataOrang['tempat_lahir_kota']);
+                if ($kotaLahir) {
+                    $dataAlamat['nama_kota'] = $kotaLahir['nama_kota'] ?? '';
+                }
+            }
+        }
+
+        $baris = array_merge($dataAlamat, $dataOrang, $dataPetugas);
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $controllerOrang = new \App\Features\Person\Orang\OrangController();
+        $konfigOrang      = $controllerOrang->get_fields_with_options(false, true);
+        $konfigPetugas    = $this->get_fields_with_options(false, true);
+
+        $konfigGabungan = [];
+        foreach ($konfigPetugas as $field) {
+            if ($field[2] === 'id_orang') {
+                $konfigGabungan = array_merge($konfigGabungan, $konfigOrang);
+                continue;
+            }
+            $konfigGabungan[] = $field;
+        }
+
+        $breadcrumbs = [['title' => 'Ubah', 'icon', 'Ubah']];
+        return view('/admin/role/tambah_petugas', [
+            'judul'       => 'Ubah Petugas',
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'konfig'      => $konfigGabungan,
+            'baris'       => $baris,
+            'form_action' => '/submitedit/' . $id,
+        ]);
+    }
+
+    #[\Override]
+    public function update(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0)
+            return $this->home();
+
+        $dataPetugasLama = $this->model->find($id);
+        if (!$dataPetugasLama) {
+            session()->setFlashdata('error', 'Data Petugas tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $idOrang    = $dataPetugasLama['id_orang'];
+        $orangModel = new OrangModel();
+        $rawPost    = $this->request->getPost();
+
+        $db = $this->model->db;
+        $db->transStart();
+
+        try {
+            $dataOrang = [];
+            foreach ($orangModel->allowedFields as $field) {
+                $value = $rawPost[$field] ?? '';
+                if ($value === '') {
+                    $value = null;
+                } elseif (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
+                    $value = (int) $value;
+                }
+                $dataOrang[$field] = $value;
+            }
+            $orangModel->update($idOrang, $dataOrang);
+
+            $this->model->update($id, ['deskripsi' => $rawPost['deskripsi'] ?: null]);
+
+            $db->transComplete();
+            if ($db->transStatus() === false) {
+                throw new \RuntimeException('Gagal memperbarui data Petugas.');
+            }
+
+            session()->setFlashdata('success', 'Data Petugas berhasil diperbarui.');
+        } catch (\Exception $e) {
+            $db->transRollback();
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $msg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
+    }
+
+    #[\Override]
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0)
+            return $this->home();
+
+        $petugas = $this->model->find($id);
+        if (!$petugas) {
+            session()->setFlashdata('error', 'Data Petugas tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $idOrang = $petugas['id_orang'] ?? null;
+
+        $db = $this->model->db;
+        $db->transStart();
+
+        try {
+            $this->model->delete($id);
+
+            // Alamat tidak dihapus: satu Alamat bisa dipakai bersama oleh banyak Orang.
+            if (!empty($idOrang)) {
+                (new OrangModel())->delete($idOrang);
+            }
+
+            $db->transComplete();
+            if ($db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus data Petugas.');
+            }
+
+            session()->setFlashdata('success', 'Data Petugas berhasil dihapus.');
+        } catch (\Exception $e) {
+            $db->transRollback();
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $msg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
     }
 
     public function list(): \CodeIgniter\HTTP\ResponseInterface
