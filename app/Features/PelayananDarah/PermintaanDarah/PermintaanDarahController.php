@@ -117,18 +117,25 @@ final class PermintaanDarahController extends ControllerTemplate
         $tahunSekarang = date('Y');
         $bulanSekarang = date('m');
 
-        $jumlahPermintaanBulanIni = $this->model
+        $prefiksPermintaan = "{$tahunSekarang}-{$bulanSekarang}-REQ";
+
+        $nomorTerakhir = $this->model
             ->db
             ->table('pelayanan_darah.permintaan_darah')
-            ->where('EXTRACT(YEAR FROM tanggal_permintaan)', $tahunSekarang)
-            ->where('EXTRACT(MONTH FROM tanggal_permintaan)', $bulanSekarang)
-            ->countAllResults();
+            ->select('no_permintaan')
+            ->like('no_permintaan', $prefiksPermintaan, 'after')
+            ->orderBy('no_permintaan', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRowArray();
 
-        $nextUrutan = $jumlahPermintaanBulanIni + 1;
+        $nextUrutan = $nomorTerakhir
+            ? ((int) substr($nomorTerakhir['no_permintaan'], strlen($prefiksPermintaan)) + 1)
+            : 1;
 
         $stringUrutan = str_pad((string) $nextUrutan, 5, '0', STR_PAD_LEFT);
 
-        $nomorPermintaanOtomatis = "{$tahunSekarang}/{$bulanSekarang}/REQ{$stringUrutan}";
+        $nomorPermintaanOtomatis = "{$prefiksPermintaan}{$stringUrutan}";
 
         foreach ($konfigPermintaan as $fieldPermintaan) {
             $columnPermintaan = $fieldPermintaan[2];
