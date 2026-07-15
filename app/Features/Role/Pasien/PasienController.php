@@ -38,8 +38,18 @@ final class PasienController extends ControllerTemplate
 
     public function create_page(): string
     {
-        $orangModel = new OrangModel();
-        $allOptions = $orangModel->get_all_options();
+        $controllerOrang = new \App\Features\Person\Orang\OrangController();
+        $konfigOrang      = $controllerOrang->get_fields_with_options(false, true);
+        $konfigPasien     = $this->get_fields_with_options(false, true);
+
+        $konfigGabungan = [];
+        foreach ($konfigPasien as $field) {
+            if ($field[2] === 'id_orang') {
+                $konfigGabungan = array_merge($konfigGabungan, $konfigOrang);
+                continue;
+            }
+            $konfigGabungan[] = $field;
+        }
 
         $last =
             $this->model
@@ -53,26 +63,13 @@ final class PasienController extends ControllerTemplate
 
         $nomor_rm = generateNextNoRM($last);
 
-        $konfig = [
-            [SHOW, 'No. Rekam Medis', 'nomor_rm', 'readonly', REQUIRED],
-            [SHOW, 'NIK', 'nik', 'teks', REQUIRED],
-            [SHOW, 'Nama', 'nama', 'nama', REQUIRED],
-            [SHOW, 'Jenis Kelamin', 'id_jenis_kelamin', 'status', REQUIRED, $allOptions['id_jenis_kelamin'] ?? []],
-            [SHOW, 'Agama', 'id_agama', 'status', REQUIRED, $allOptions['id_agama'] ?? []],
-            [SHOW, 'Status Pernikahan', 'id_pernikahan', 'status', REQUIRED, $allOptions['id_pernikahan'] ?? []],
-            [SHOW, 'Golongan Darah', 'id_golongan_darah', 'status', REQUIRED, $allOptions['id_golongan_darah'] ?? []],
-            [SHOW, 'Alamat', 'id_alamat', 'status', REQUIRED, $allOptions['id_alamat'] ?? []],
-            [SHOW, 'Tempat Lahir', 'tempat_lahir_kota', 'status', REQUIRED, $allOptions['tempat_lahir_kota'] ?? []],
-            [SHOW, 'Tanggal Lahir', 'tanggal_lahir', 'tanggal', REQUIRED],
-        ];
-
         $breadcrumbs = [['title' => 'Tambah', 'icon', 'tambah']];
-        return view('/layouts/tambah_ubah', [
+        return view('/admin/role/tambah_pasien', [
             'judul'       => 'Tambah Pasien',
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->primary_key,
-            'konfig'      => $konfig,
+            'konfig'      => $konfigGabungan,
             'baris'       => [
                 'nomor_rm'          => $nomor_rm,
                 'nik'               => '',
@@ -84,6 +81,7 @@ final class PasienController extends ControllerTemplate
                 'id_alamat'         => '',
                 'tempat_lahir_kota' => '',
                 'tanggal_lahir'     => '',
+                'redirect_to'       => $this->request->getGet('redirect_to') ?? '',
             ],
             'form_action' => '/submittambah/',
         ]);
@@ -91,39 +89,41 @@ final class PasienController extends ControllerTemplate
 
     public function create(): string|RedirectResponse
     {
-        $orangData = [
-            'nik'               => $this->request->getPost('nik'),
-            'nama'              => $this->request->getPost('nama'),
-            'id_jenis_kelamin'  => $this->request->getPost('id_jenis_kelamin') ?: null,
-            'id_agama'          => $this->request->getPost('id_agama') ?: null,
-            'id_pernikahan'     => $this->request->getPost('id_pernikahan') ?: null,
-            'id_golongan_darah' => $this->request->getPost('id_golongan_darah') ?: null,
-            'id_alamat'         => $this->request->getPost('id_alamat') ?: null,
-            'tempat_lahir_kota' => $this->request->getPost('tempat_lahir_kota') ?: null,
-            'tanggal_lahir'     => $this->request->getPost('tanggal_lahir') ?: null,
-        ];
-        $nomor_rm = $this->request->getPost('nomor_rm');
+        $orangModel = new OrangModel();
+        $rawPost    = $this->request->getPost();
+        $nomor_rm   = $rawPost['nomor_rm'] ?? null;
+
+        $dataOrang = [];
+        foreach ($orangModel->allowedFields as $field) {
+            $value = $rawPost[$field] ?? '';
+            if ($value === '') {
+                $value = null;
+            } elseif (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
+                $value = (int) $value;
+            }
+            $dataOrang[$field] = $value;
+        }
 
         $db = $this->model->db;
-        $db->transBegin();
+        $db->transStart();
 
         try {
-            $cols   = implode(', ', array_keys($orangData));
-            $marks  = implode(', ', array_fill(0, count($orangData), '?'));
-            $result = $db->query(
-                "INSERT INTO person.orang ({$cols}) VALUES ({$marks}) RETURNING id_orang",
-                array_values($orangData),
-            );
-            if (!$result) {
-                throw new DatabaseException('Gagal menyimpan data Orang.');
+            if (!$orangModel->insert($dataOrang)) {
+                throw new \RuntimeException('Sistem gagal menyimpan identitas Orang.');
             }
-            $id_orang = (int) $result->getRow()->id_orang;
+            $id_orang = $orangModel->insertID();
 
-            $this->model->insert(['id_orang' => $id_orang, 'nomor_rm' => $nomor_rm]);
+            if (!$this->model->insert(['id_orang' => $id_orang, 'nomor_rm' => $nomor_rm])) {
+                throw new \RuntimeException('Sistem gagal menyimpan data Pasien.');
+            }
 
-            $db->transCommit();
+            $db->transComplete();
+            if ($db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menyimpan data Pasien.');
+            }
+
             session()->setFlashdata('success', 'Data Pasien berhasil disimpan.');
-        } catch (\ReflectionException|DatabaseException $e) {
+        } catch (\Exception $e) {
             $db->transRollback();
             $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $msg);
@@ -134,17 +134,217 @@ final class PasienController extends ControllerTemplate
         return $redirect_to ? redirect()->to($redirect_to) : $this->home();
     }
 
+    #[\Override]
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0)
+            return $this->index();
+
+        $dataPasien = $this->model->find($id);
+        if (!$dataPasien) {
+            return $this->index();
+        }
+
+        $dataOrang  = [];
+        $dataAlamat = [];
+
+        if (!empty($dataPasien['id_orang'])) {
+            $orangModel = new OrangModel();
+            $dataOrang  = $orangModel->find($dataPasien['id_orang']) ?? [];
+
+            if (!empty($dataOrang['id_alamat'])) {
+                $alamatModel = new \App\Features\Lokasi\Alamat\AlamatModel();
+                $alamat      = $alamatModel->find($dataOrang['id_alamat']) ?? [];
+                $dataAlamat  = ['alamat_lengkap' => $alamat['alamat_lengkap'] ?? ''];
+            }
+
+            if (!empty($dataOrang['tempat_lahir_kota'])) {
+                $kotaModel = new \App\Features\Lokasi\Kota\KotaModel();
+                $kotaLahir = $kotaModel->find($dataOrang['tempat_lahir_kota']);
+                if ($kotaLahir) {
+                    $dataAlamat['nama_kota'] = $kotaLahir['nama_kota'] ?? '';
+                }
+            }
+        }
+
+        $baris = array_merge($dataAlamat, $dataOrang, $dataPasien);
+        foreach ($baris as $key => $value) {
+            if ($value === null) {
+                $baris[$key] = '';
+            }
+        }
+
+        $controllerOrang = new \App\Features\Person\Orang\OrangController();
+        $konfigOrang      = $controllerOrang->get_fields_with_options(false, true);
+        $konfigPasien     = $this->get_fields_with_options(false, true);
+
+        $konfigGabungan = [];
+        foreach ($konfigPasien as $field) {
+            if ($field[2] === 'id_orang') {
+                $konfigGabungan = array_merge($konfigGabungan, $konfigOrang);
+                continue;
+            }
+            $konfigGabungan[] = $field;
+        }
+
+        $breadcrumbs = [['title' => 'Ubah', 'icon', 'Ubah']];
+        return view('/admin/role/tambah_pasien', [
+            'judul'       => 'Ubah Pasien',
+            'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'konfig'      => $konfigGabungan,
+            'baris'       => $baris,
+            'form_action' => '/submitedit/' . $id,
+        ]);
+    }
+
+    #[\Override]
+    public function update(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0)
+            return $this->home();
+
+        $dataPasienLama = $this->model->find($id);
+        if (!$dataPasienLama) {
+            session()->setFlashdata('error', 'Data Pasien tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $idOrang    = $dataPasienLama['id_orang'];
+        $orangModel = new OrangModel();
+        $rawPost    = $this->request->getPost();
+
+        $db = $this->model->db;
+        $db->transStart();
+
+        try {
+            $dataOrang = [];
+            foreach ($orangModel->allowedFields as $field) {
+                $value = $rawPost[$field] ?? '';
+                if ($value === '') {
+                    $value = null;
+                } elseif (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
+                    $value = (int) $value;
+                }
+                $dataOrang[$field] = $value;
+            }
+            $orangModel->update($idOrang, $dataOrang);
+
+            $this->model->update($id, ['nomor_rm' => $rawPost['nomor_rm'] ?? null]);
+
+            $db->transComplete();
+            if ($db->transStatus() === false) {
+                throw new \RuntimeException('Gagal memperbarui data Pasien.');
+            }
+
+            session()->setFlashdata('success', 'Data Pasien berhasil diperbarui.');
+        } catch (\Exception $e) {
+            $db->transRollback();
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $msg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
+    }
+
+    #[\Override]
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0)
+            return $this->home();
+
+        $pasien = $this->model->find($id);
+        if (!$pasien) {
+            session()->setFlashdata('error', 'Data Pasien tidak ditemukan.');
+            return redirect()->to($this->get_uri_path() . '/data');
+        }
+
+        $idOrang = $pasien['id_orang'] ?? null;
+
+        $db = $this->model->db;
+        $db->transStart();
+
+        try {
+            $this->model->delete($id);
+
+            // Alamat tidak dihapus: satu Alamat bisa dipakai bersama oleh banyak Orang.
+            if (!empty($idOrang)) {
+                (new OrangModel())->delete($idOrang);
+            }
+
+            $db->transComplete();
+            if ($db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus data Pasien.');
+            }
+
+            session()->setFlashdata('success', 'Data Pasien berhasil dihapus.');
+        } catch (\Exception $e) {
+            $db->transRollback();
+            $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
+            session()->setFlashdata('error', $msg);
+        }
+
+        return redirect()->to($this->get_uri_path() . '/data');
+    }
+
     public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $builder = $this->model
-            ->db
-            ->table('role.pasien p')
-            ->select('p.id_pasien, p.nomor_rm, o.nama, o.nik, o.tanggal_lahir, jk.nama_jenis_kelamin as jenis_kelamin')
-            ->join('person.orang o', 'o.id_orang = p.id_orang')
-            ->join('person.jenis_kelamin jk', 'jk.id_jenis_kelamin = o.id_jenis_kelamin', 'left');
-
-        $data = $builder->get()->getResultArray();
+        $data = $this->pasien_query()->get()->getResultArray();
 
         return $this->response->setJSON(['data' => $data]);
+    }
+
+    /**
+     * OVERRIDE: generic index() melabeli kolom pertama hasil join (nik) dengan
+     * label field induknya ("ID Orang"); query eksplisit di sini menghindari itu.
+     */
+    #[\Override]
+    public function index(): string
+    {
+        $page = max(1, (int) ($this->request->getGet('page') ?? 1));
+        $size = max(1, (int) ($this->request->getGet('size') ?? $this->meta_data['size']));
+
+        $total_rows  = $this->model->count_filtered();
+        $total_pages = $total_rows > 0 ? (int) ceil($total_rows / $size) : 1;
+        $page        = min($page, $total_pages);
+
+        $data_tabel = $this->pasien_query()
+            ->orderBy('p.id_pasien')
+            ->limit($size, ($page - 1) * $size)
+            ->get()
+            ->getResultArray();
+
+        $konfig = [
+            [SHOW, 'No. Rekam Medis', 'nomor_rm',     'teks',    0],
+            [SHOW, 'NIK',             'nik',           'teks',    0],
+            [SHOW, 'Nama',            'nama',          'teks',    0],
+            [SHOW, 'Jenis Kelamin',   'jenis_kelamin', 'teks',    0],
+            [SHOW, 'Tanggal Lahir',   'tanggal_lahir', 'tanggal', 0],
+        ];
+
+        return view('/layouts/data', [
+            'judul'        => $this->title,
+            'breadcrumbs'  => $this->breadcrumbs,
+            'meta_data'    => ['page' => $page, 'size' => $size, 'total' => $total_pages],
+            'modul_path'   => $this->get_uri_path(),
+            'kolom_id'     => $this->primary_key,
+            'konfig'       => $konfig,
+            'aksi'         => $this->actions,
+            'tabel'        => $data_tabel,
+            'row_alert'    => $this->row_alert,
+            'child_link'   => null,
+            'query_string' => '',
+        ]);
+    }
+
+    private function pasien_query(): \CodeIgniter\Database\BaseBuilder
+    {
+        return $this->model
+            ->db
+            ->table('role.pasien p')
+            ->select('p.id_pasien, p.nomor_rm, o.nik, o.nama, o.tanggal_lahir, jk.nama_jenis_kelamin AS jenis_kelamin')
+            ->join('person.orang o', 'o.id_orang = p.id_orang')
+            ->join('person.jenis_kelamin jk', 'jk.id_jenis_kelamin = o.id_jenis_kelamin', 'left');
     }
 }
