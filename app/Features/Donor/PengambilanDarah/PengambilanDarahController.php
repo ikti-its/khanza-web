@@ -164,18 +164,24 @@ final class PengambilanDarahController extends ControllerTemplate
             }
         }
 
-        $tahunBulanIni = date('Y-m');
+        $prefiksNomorBulanIni = date('Y') . '-' . date('m') . '-UTD';
 
-        $jumlahTransaksiBulanIni = $this->model
+        $nomorTerakhir = $this->model
             ->db
             ->table('donor.pengambilan_darah')
-            ->where("TO_CHAR(tanggal_pengambilan, 'YYYY-MM')", $tahunBulanIni)
-            ->countAllResults();
+            ->select('nomor_pengambilan')
+            ->like('nomor_pengambilan', $prefiksNomorBulanIni, 'after')
+            ->orderBy('nomor_pengambilan', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRowArray();
 
-        $nextUrutanUTD = $jumlahTransaksiBulanIni + 1;
+        $nextUrutanUTD = $nomorTerakhir
+            ? ((int) substr($nomorTerakhir['nomor_pengambilan'], strlen($prefiksNomorBulanIni)) + 1)
+            : 1;
         $nomorUrutPad  = str_pad((string) $nextUrutanUTD, 4, '0', STR_PAD_LEFT);
 
-        $nomorPengambilanOtomatis = date('Y') . '-' . date('m') . '-UTD' . $nomorUrutPad;
+        $nomorPengambilanOtomatis = $prefiksNomorBulanIni . $nomorUrutPad;
 
         $mockBaris      = [];
         $konfigGabungan = [];
