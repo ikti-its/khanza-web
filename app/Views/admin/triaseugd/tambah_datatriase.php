@@ -447,15 +447,30 @@
                                 Tanggal Triase<span class="text-red-600">*</span>
                             </label>
                             <?php
-                                $minTanggalTriase = isset($baris['tanggal_triase'])
-                                    ? substr($baris['tanggal_triase'], 0, 10) . 'T00:00'
-                                    : date('Y-m-d\T00:00');
+                                $waktuSekarang = date('Y-m-d\TH:i');
+                                
+                                $batasNormal = date('Y-m-d\TH:i', strtotime('-2 days'));
+                                
+                                if (!empty($baris['id_triase'])) {
+                                    $tanggalLama = date(
+                                        'Y-m-d\TH:i',
+                                        strtotime($baris['tanggal_triase'])
+                                    );
+                                    
+                                    $minTanggalTriase = $tanggalLama;
+                                                                
+                                    $nilaiTanggalTriase = $tanggalLama;
+                                                                
+                                } else {
+                                    $minTanggalTriase = $batasNormal;
+                                    $nilaiTanggalTriase = $waktuSekarang;
+                                }
                             ?>
                             <div class="w-full lg:w-1/4">
                                 <input type="datetime-local" name="tanggal_triase" id="tanggal_triase"
-                                       value="<?= $baris['tanggal_triase'] ?? date('Y-m-d\TH:i:s') ?>"
+                                       value="<?= $nilaiTanggalTriase ?>"
                                        min="<?= $minTanggalTriase ?>"
-                                       max="<?= date('Y-m-d\TH:i:s') ?>"
+                                       max="<?= $waktuSekarang ?>"
                                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:bg-slate-800 dark:text-white focus:outline-none focus:border-blue-500">
                             </div>
 
