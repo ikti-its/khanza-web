@@ -37,8 +37,8 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',          'Tanggal Diproses'],
                 [SHOW, REQUIRED, I::MODAL,   'atasan_logistik',            'Pengelola', ['modal' => 'modalPemohon', 'display_column' => 'atasan_logistik_nama', 'placeholder' => 'Klik cari pengelola...']],
             ],
-            child_path: '/inventori-non-medis/ringkasan-pengajuan-barang-detail',
-            child_fk: 'id_pengajuan',
+            // child_path: '/inventori-non-medis/ringkasan-pengajuan-barang-detail',
+            // child_fk: 'id_pengajuan',
         );
     }
 
@@ -72,7 +72,64 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
             return;
     }
 
-    // validasi atasan & qty sebelum approve
+    // halaman detail (readonly)
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $baris = $this->model->find_one($id);
+
+        $detail_items = $this->get_db()
+            ->table('inventori_non_medis.pengajuan_barang_detail d')
+            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->select('d.id_barang, d.qty, d.qty_disetujui, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
+            ->where('d.id_pengajuan', (int) $id)
+            ->where('d.id_barang >', 0)
+            ->get()->getResultArray();
+
+        return view('admin/inventorinonmedis/detail_ringkasan_pengajuan_barang', [
+            'judul'        => 'Detail ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Detail', 'icon' => 'detail']]),
+            'modul_path'   => $this->get_uri_path(),
+            'baris'        => $baris,
+            'detail_items' => $detail_items,
+        ]);
+    }
+
+    // form ubah: 1-page — redirect jika sudah diproses
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $baris = $this->model->find_one($id);
+
+        // redirect ke detail jika sudah Disetujui atau Ditolak
+        $status = is_array($baris) ? (int) ($baris['id_status_pengajuan_barang'] ?? 0) : 0;
+        if (in_array($status, [2, 3], true)) {
+            return $this->detail($id);
+        }
+
+        $detail_items = $this->get_db()
+            ->table('inventori_non_medis.pengajuan_barang_detail d')
+            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->select('d.id_barang, d.qty, d.qty_disetujui, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
+            ->where('d.id_pengajuan', (int) $id)
+            ->where('d.id_barang >', 0)
+            ->get()->getResultArray();
+
+        return view('admin/inventorinonmedis/ubah_ringkasan_pengajuan_barang', [
+            'judul'        => 'Ubah ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
+            'modul_path'   => $this->get_uri_path(),
+            'form_action'  => '/submitedit/' . $id,
+            'baris'        => $baris,
+            'detail_items' => $detail_items,
+        ]);
+    }
+
+    // validasi atasan & qty sebelum approve, sync qty_disetujui
     public function update(int|string $id): string|RedirectResponse
     {
         $new_status     = (int) ($this->request->getPost('id_status_pengajuan_barang') ?? 0);
@@ -92,9 +149,26 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
                 session()->setFlashdata('error', 'Atasan logistik wajib diisi sebelum menyetujui pengajuan.');
                 return $this->home();
             }
+        }
 
-            $has_approved = $this
-                ->get_db()
+        // sync qty_disetujui from form
+        $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+        $detail_qty_disetujui = $this->request->getPost('detail_qty_disetujui') ?? [];
+
+        $db = $this->get_db();
+        for ($i = 0; $i < count($detail_ids); $i++) {
+            $id_barang = (int) ($detail_ids[$i] ?? 0);
+            $qty_d = (int) ($detail_qty_disetujui[$i] ?? 0);
+            if ($id_barang > 0) {
+                $db->table('inventori_non_medis.pengajuan_barang_detail')
+                    ->where('id_pengajuan', (int) $id)
+                    ->where('id_barang', $id_barang)
+                    ->update(['qty_disetujui' => $qty_d]);
+            }
+        }
+
+        if ($is_new_approval) {
+            $has_approved = $db
                 ->table('inventori_non_medis.pengajuan_barang_detail')
                 ->where('id_pengajuan', (int) $id)
                 ->where('qty_disetujui >', 0)

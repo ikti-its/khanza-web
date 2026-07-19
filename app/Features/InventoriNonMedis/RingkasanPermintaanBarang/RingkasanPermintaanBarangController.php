@@ -40,8 +40,8 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
                 [SHOW,       OPTIONAL, I::MODAL,   'petugas_gudang',              'Pengelola', ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pengelola...']],
                 [SHOW,       OPTIONAL, I::READONLY, 'no_keluar',                   'No. Keluar'],
             ],
-            child_path: '/inventori-non-medis/ringkasan-permintaan-barang-detail',
-            child_fk: 'id_permintaan',
+            // child_path: '/inventori-non-medis/ringkasan-permintaan-barang-detail',
+            // child_fk: 'id_permintaan',
         );
     }
 
@@ -81,7 +81,64 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         $this->pending_keluar  = true;
     }
 
-    // validasi petugas, qty & stok sebelum approve, buat transaksi keluar setelah
+    // halaman detail (readonly)
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $baris = $this->model->find_one($id);
+
+        $detail_items = $this->get_db()
+            ->table('inventori_non_medis.permintaan_barang_detail d')
+            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->select('d.id_barang, d.qty, d.qty_disetujui, b.kode_barang, b.nama_barang, s.nama_satuan')
+            ->where('d.id_permintaan', (int) $id)
+            ->where('d.id_barang >', 0)
+            ->get()->getResultArray();
+
+        return view('admin/inventorinonmedis/detail_ringkasan_permintaan_barang', [
+            'judul'        => 'Detail ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Detail', 'icon' => 'detail']]),
+            'modul_path'   => $this->get_uri_path(),
+            'baris'        => $baris,
+            'detail_items' => $detail_items,
+        ]);
+    }
+
+    // form ubah: 1-page — redirect jika sudah diproses
+    public function update_page(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $baris = $this->model->find_one($id);
+
+        // redirect ke detail jika sudah Disetujui atau Ditolak
+        $status = is_array($baris) ? (int) ($baris['id_status_permintaan_barang'] ?? 0) : 0;
+        if (in_array($status, [2, 3], true)) {
+            return $this->detail($id);
+        }
+
+        $detail_items = $this->get_db()
+            ->table('inventori_non_medis.permintaan_barang_detail d')
+            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->select('d.id_barang, d.qty, d.qty_disetujui, b.kode_barang, b.nama_barang, s.nama_satuan')
+            ->where('d.id_permintaan', (int) $id)
+            ->where('d.id_barang >', 0)
+            ->get()->getResultArray();
+
+        return view('admin/inventorinonmedis/ubah_ringkasan_permintaan_barang', [
+            'judul'        => 'Ubah ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
+            'modul_path'   => $this->get_uri_path(),
+            'form_action'  => '/submitedit/' . $id,
+            'baris'        => $baris,
+            'detail_items' => $detail_items,
+        ]);
+    }
+
+    // validasi petugas, qty & stok sebelum approve, sync qty_disetujui, buat transaksi keluar setelah
     public function update(int|string $id): string|RedirectResponse
     {
         $new_status     = (int) ($this->request->getPost('id_status_permintaan_barang') ?? 0);
@@ -99,11 +156,28 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         if ($is_new_approval) {
             if (empty($this->request->getPost('petugas_gudang'))) {
                 session()->setFlashdata('error', 'Petugas gudang wajib diisi sebelum menyetujui permintaan.');
-                return $this->home();
+                return redirect()->back();
             }
+        }
 
-            $has_approved_items = $this
-                ->get_db()
+        // sync qty_disetujui from form
+        $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+        $detail_qty_disetujui = $this->request->getPost('detail_qty_disetujui') ?? [];
+
+        $db = $this->get_db();
+        for ($i = 0; $i < count($detail_ids); $i++) {
+            $id_barang = (int) ($detail_ids[$i] ?? 0);
+            $qty_d = (int) ($detail_qty_disetujui[$i] ?? 0);
+            if ($id_barang > 0) {
+                $db->table('inventori_non_medis.permintaan_barang_detail')
+                    ->where('id_permintaan', (int) $id)
+                    ->where('id_barang', $id_barang)
+                    ->update(['qty_disetujui' => $qty_d]);
+            }
+        }
+
+        if ($is_new_approval) {
+            $has_approved_items = $db
                 ->table('inventori_non_medis.permintaan_barang_detail')
                 ->where('id_permintaan', (int) $id)
                 ->where('qty_disetujui >', 0)
@@ -113,18 +187,43 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
                     'error',
                     'Isi qty disetujui pada detail permintaan terlebih dahulu sebelum menyetujui.',
                 );
-                return $this->home();
+                return redirect()->back();
             }
 
             $error = $this->validate_stock((int) $id);
             if ($error !== null) {
                 session()->setFlashdata('error', $error);
-                return $this->home();
+                return redirect()->back();
             }
         }
 
-        $result = parent::update($id);
+        // update header — hanya field yang relevan
+        $postData = [
+            'id_status_permintaan_barang' => $new_status,
+            'petugas_gudang'              => $this->request->getPost('petugas_gudang') ?: null,
+        ];
 
+        // logic before_update: tanggal_diproses + no_keluar saat approve
+        if (in_array($new_status, [2, 3], true) && $current_status !== 2) {
+            $postData['tanggal_diproses'] = date('Y-m-d H:i:s');
+        }
+
+        if ($new_status === 2 && $current_status !== 2) {
+            helper('autonomor');
+            $lastNo                = $this->get_last('inventori_non_medis.permintaan_barang', 'no_keluar', 'id_permintaan');
+            $postData['no_keluar'] = generateNextNoKeluarBarang($lastNo);
+            $this->pending_keluar  = true;
+        }
+
+        try {
+            $this->model->update($id, $postData);
+            session()->setFlashdata('success', 'Data berhasil diperbarui.');
+        } catch (\Throwable $e) {
+            session()->setFlashdata('error', 'Gagal memperbarui: ' . $e->getMessage());
+            return redirect()->back();
+        }
+
+        // buat transaksi stok keluar jika disetujui
         if ($this->pending_keluar) {
             $this->pending_keluar = false;
             $saved                = $this->model->find((int) $id);
@@ -141,7 +240,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
             }
         }
 
-        return $result;
+        return $this->home();
     }
 
     // cek stok cukup untuk semua item yang disetujui

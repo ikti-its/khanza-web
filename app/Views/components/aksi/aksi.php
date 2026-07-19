@@ -84,7 +84,7 @@
             $is_draf = true;
             foreach ($status_cols as $col) {
                 $val = strtolower(trim((string) ($baris[$col] ?? '')));
-                if ($val !== '' && $val !== '-' && !in_array($val, ['draf', 'draft', 'diproses'])) {
+                if ($val !== '' && $val !== '-' && !in_array($val, ['draf', 'draft', 'diproses', 'proses permintaan', 'proses pengajuan', 'proses penerimaan'])) {
                     $is_draf = false;
                     break;
                 }
@@ -101,7 +101,7 @@
             $is_draf_h = true;
             foreach ($status_cols_h as $col) {
                 $val = strtolower(trim((string) ($baris[$col] ?? '')));
-                if ($val !== '' && $val !== '-' && !in_array($val, ['draf', 'draft', 'diproses'])) {
+                if ($val !== '' && $val !== '-' && !in_array($val, ['draf', 'draft', 'diproses', 'proses permintaan', 'proses pengajuan', 'proses penerimaan'])) {
                     $is_draf_h = false;
                     break;
                 }
