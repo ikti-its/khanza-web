@@ -90,15 +90,30 @@ final class PengadaanBarangController extends ControllerTemplate
         }
 
         if ($id_pengadaan > 0) {
-            // Return items dari pengadaan (untuk penerimaan)
-            $data = $this->get_db()
-                ->table('inventori_non_medis.pengadaan_barang_detail d')
-                ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
-                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-                ->select('d.id_barang, b.kode_barang, b.nama_barang, s.nama_satuan, d.qty, d.harga_satuan')
-                ->where('d.id_pengadaan', $id_pengadaan)
-                ->where('d.id_barang >', 0)
-                ->get()->getResultArray();
+            // Return items dari pengadaan (untuk penerimaan) dengan info sudah diterima
+            $data = $this->get_db()->query("
+                SELECT d.id_barang, b.kode_barang, b.nama_barang, s.nama_satuan,
+                       d.qty, d.harga_satuan,
+                       COALESCE((
+                           SELECT SUM(prbd.qty_diterima)
+                           FROM inventori_non_medis.penerimaan_barang_detail prbd
+                           JOIN inventori_non_medis.penerimaan_barang prb ON prbd.id_penerimaan = prb.id_penerimaan
+                           WHERE prb.id_pengadaan = d.id_pengadaan
+                             AND prbd.id_barang = d.id_barang
+                             AND prb.id_status_penerimaan_barang = 2
+                       ), 0) AS sudah_diterima
+                FROM inventori_non_medis.pengadaan_barang_detail d
+                LEFT JOIN inventori_non_medis.barang b ON d.id_barang = b.id_barang
+                LEFT JOIN inventori_non_medis.satuan s ON b.id_satuan = s.id_satuan
+                WHERE d.id_pengadaan = ?
+                  AND d.id_barang > 0
+                ORDER BY b.nama_barang ASC
+            ", [$id_pengadaan])->getResultArray();
+
+            // Hitung sisa per item
+            foreach ($data as &$row) {
+                $row['sisa'] = max(0, (int) $row['qty'] - (int) $row['sudah_diterima']);
+            }
 
             return $this->response->setJSON(['data' => $data]);
         }
@@ -107,7 +122,7 @@ final class PengadaanBarangController extends ControllerTemplate
         $mode = $this->request->getGet('mode') ?? '';
 
         if ($mode === 'available') {
-            // Hanya pengadaan yang masih punya sisa qty belum diterima
+            // Hanya pengadaan yang masih punya sisa qty belum diterima (status Proses/Selesai, bukan Dibatalkan)
             $data = $this->get_db()->query("
                 SELECT pb.id_pengadaan, pb.no_pengadaan,
                        TO_CHAR(pb.tanggal, 'YYYY-MM-DD HH24:MI') AS tanggal,
@@ -115,7 +130,7 @@ final class PengadaanBarangController extends ControllerTemplate
                        pb.total_harga
                 FROM inventori_non_medis.pengadaan_barang pb
                 LEFT JOIN inventori_non_medis.suplier s ON pb.id_suplier = s.id_suplier
-                WHERE pb.id_status_pengadaan_barang = 1
+                WHERE pb.id_status_pengadaan_barang IN (1, 2)
                   AND EXISTS (
                     SELECT 1 FROM inventori_non_medis.pengadaan_barang_detail pbd
                     WHERE pbd.id_pengadaan = pb.id_pengadaan
@@ -140,7 +155,7 @@ final class PengadaanBarangController extends ControllerTemplate
                        pb.total_harga
                 FROM inventori_non_medis.pengadaan_barang pb
                 LEFT JOIN inventori_non_medis.suplier s ON pb.id_suplier = s.id_suplier
-                WHERE pb.id_status_pengadaan_barang = 1
+                WHERE pb.id_status_pengadaan_barang IN (1, 2)
                 ORDER BY pb.id_pengadaan DESC
             ")->getResultArray();
         }
@@ -307,14 +322,17 @@ final class PengadaanBarangController extends ControllerTemplate
     {
         $current = $this->model->find((int) $id);
         if (is_array($current) && (int) ($current['id_status_pengadaan_barang'] ?? 0) !== 1) {
-            session()->setFlashdata('error', 'Pengadaan yang sudah diproses tidak dapat diubah.');
+            session()->setFlashdata('error', 'Pengadaan yang sudah selesai atau dibatalkan tidak dapat diubah.');
             return $this->home();
         }
 
+        $new_status = (int) ($this->request->getPost('id_status_pengadaan_barang') ?? 1);
+
         $postData = [
-            'tanggal'    => $this->request->getPost('tanggal'),
-            'id_suplier' => $this->request->getPost('id_suplier') ?: null,
-            'catatan'    => $this->request->getPost('catatan') ?: null,
+            'tanggal'                    => $this->request->getPost('tanggal'),
+            'id_suplier'                 => $this->request->getPost('id_suplier') ?: null,
+            'catatan'                    => $this->request->getPost('catatan') ?: null,
+            'id_status_pengadaan_barang' => $new_status,
         ];
 
         $db = $this->get_db();

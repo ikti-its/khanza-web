@@ -103,15 +103,29 @@ final class PenerimaanBarangController extends ControllerTemplate
             $baris['no_pengadaan'] = $pengadaan['no_pengadaan'] ?? '';
         }
 
-        $detail_items = $this->get_db()
-            ->table('inventori_non_medis.penerimaan_barang_detail d')
-            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-            ->join('inventori_non_medis.pengadaan_barang_detail pbd', "pbd.id_pengadaan = {$this->get_db()->escape((int)($baris['id_pengadaan'] ?? 0))} AND pbd.id_barang = d.id_barang", 'left')
-            ->select('d.id_barang, d.qty_diterima, b.kode_barang, b.nama_barang, s.nama_satuan, pbd.qty AS qty_dipesan')
-            ->where('d.id_penerimaan', (int) $id)
-            ->where('d.id_barang >', 0)
-            ->get()->getResultArray();
+        $id_pengadaan = (int) ($baris['id_pengadaan'] ?? 0);
+
+        $detail_items = $this->get_db()->query("
+            SELECT d.id_barang, d.qty_diterima, b.kode_barang, b.nama_barang, s.nama_satuan,
+                   pbd.qty AS qty_dipesan,
+                   COALESCE((
+                       SELECT SUM(prbd.qty_diterima)
+                       FROM inventori_non_medis.penerimaan_barang_detail prbd
+                       JOIN inventori_non_medis.penerimaan_barang prb ON prbd.id_penerimaan = prb.id_penerimaan
+                       WHERE prb.id_pengadaan = ?
+                         AND prbd.id_barang = d.id_barang
+                         AND prb.id_status_penerimaan_barang = 2
+                         AND prb.id_penerimaan != ?
+                   ), 0) AS sudah_diterima
+            FROM inventori_non_medis.penerimaan_barang_detail d
+            LEFT JOIN inventori_non_medis.barang b ON d.id_barang = b.id_barang
+            LEFT JOIN inventori_non_medis.satuan s ON b.id_satuan = s.id_satuan
+            LEFT JOIN inventori_non_medis.pengadaan_barang_detail pbd
+                ON pbd.id_pengadaan = ? AND pbd.id_barang = d.id_barang
+            WHERE d.id_penerimaan = ?
+              AND d.id_barang > 0
+            ORDER BY b.nama_barang ASC
+        ", [$id_pengadaan, (int) $id, $id_pengadaan, (int) $id])->getResultArray();
 
         return view('admin/inventorinonmedis/tambah_penerimaan_barang', [
             'judul'        => 'Ubah ' . $this->title,
@@ -150,6 +164,38 @@ final class PenerimaanBarangController extends ControllerTemplate
 
             $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
             $detail_qty = $this->request->getPost('detail_qty') ?? [];
+
+            // Validasi qty tidak melebihi sisa
+            $id_pengadaan_val = (int) ($postData['id_pengadaan'] ?? 0);
+            if ($id_pengadaan_val > 0) {
+                for ($i = 0; $i < count($detail_ids); $i++) {
+                    $id_barang = (int) ($detail_ids[$i] ?? 0);
+                    $qty_input = (int) ($detail_qty[$i] ?? 0);
+                    if ($id_barang > 0 && $qty_input > 0) {
+                        $qty_dipesan = (int) ($db->table('inventori_non_medis.pengadaan_barang_detail')
+                            ->select('qty')
+                            ->where('id_pengadaan', $id_pengadaan_val)
+                            ->where('id_barang', $id_barang)
+                            ->get()->getRowArray()['qty'] ?? 0);
+
+                        $sudah_terima = (int) ($db->query("
+                            SELECT COALESCE(SUM(prbd.qty_diterima), 0) AS total
+                            FROM inventori_non_medis.penerimaan_barang_detail prbd
+                            JOIN inventori_non_medis.penerimaan_barang prb ON prbd.id_penerimaan = prb.id_penerimaan
+                            WHERE prb.id_pengadaan = ?
+                              AND prbd.id_barang = ?
+                              AND prb.id_status_penerimaan_barang = 2
+                        ", [$id_pengadaan_val, $id_barang])->getRowArray()['total'] ?? 0);
+
+                        $sisa = $qty_dipesan - $sudah_terima;
+                        if ($qty_input > $sisa) {
+                            $db->transRollback();
+                            session()->setFlashdata('error', "Qty diterima melebihi sisa yang tersedia (maks: {$sisa}).");
+                            return $this->home();
+                        }
+                    }
+                }
+            }
 
             for ($i = 0; $i < count($detail_ids); $i++) {
                 $id_barang    = (int) ($detail_ids[$i] ?? 0);
@@ -213,6 +259,39 @@ final class PenerimaanBarangController extends ControllerTemplate
 
             $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
             $detail_qty = $this->request->getPost('detail_qty') ?? [];
+
+            // Validasi qty tidak melebihi sisa
+            $id_pengadaan_val = (int) ($current['id_pengadaan'] ?? 0);
+            if ($id_pengadaan_val > 0) {
+                for ($i = 0; $i < count($detail_ids); $i++) {
+                    $id_barang    = (int) ($detail_ids[$i] ?? 0);
+                    $qty_input    = (int) ($detail_qty[$i] ?? 0);
+                    if ($id_barang > 0 && $qty_input > 0) {
+                        $qty_dipesan = (int) ($db->table('inventori_non_medis.pengadaan_barang_detail')
+                            ->select('qty')
+                            ->where('id_pengadaan', $id_pengadaan_val)
+                            ->where('id_barang', $id_barang)
+                            ->get()->getRowArray()['qty'] ?? 0);
+
+                        $sudah_terima = (int) ($db->query("
+                            SELECT COALESCE(SUM(prbd.qty_diterima), 0) AS total
+                            FROM inventori_non_medis.penerimaan_barang_detail prbd
+                            JOIN inventori_non_medis.penerimaan_barang prb ON prbd.id_penerimaan = prb.id_penerimaan
+                            WHERE prb.id_pengadaan = ?
+                              AND prbd.id_barang = ?
+                              AND prb.id_status_penerimaan_barang = 2
+                              AND prb.id_penerimaan != ?
+                        ", [$id_pengadaan_val, $id_barang, (int) $id])->getRowArray()['total'] ?? 0);
+
+                        $sisa = $qty_dipesan - $sudah_terima;
+                        if ($qty_input > $sisa) {
+                            $db->transRollback();
+                            session()->setFlashdata('error', "Qty diterima melebihi sisa yang tersedia (maks: {$sisa}).");
+                            return $this->home();
+                        }
+                    }
+                }
+            }
 
             for ($i = 0; $i < count($detail_ids); $i++) {
                 $id_barang    = (int) ($detail_ids[$i] ?? 0);

@@ -79,15 +79,24 @@ $readonly = $readonly ?? false;
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Status
                 </label>
-                <input type="text" readonly value="<?= $baris['nama_status_pengadaan_barang'] ?? 'Proses Pengadaan' ?>"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
+                <?php if (!$isEdit): ?>
+                    <input type="text" readonly value="Proses Pengadaan"
+                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
+                <?php else: ?>
+                    <select name="id_status_pengadaan_barang"
+                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required <?= $readonly ? 'disabled' : '' ?>>
+                        <option value="1" <?= (($baris['id_status_pengadaan_barang'] ?? '') == 1) ? 'selected' : '' ?>>Proses Pengadaan</option>
+                        <option value="2" <?= (($baris['id_status_pengadaan_barang'] ?? '') == 2) ? 'selected' : '' ?>>Selesai</option>
+                        <option value="3" <?= (($baris['id_status_pengadaan_barang'] ?? '') == 3) ? 'selected' : '' ?>>Dibatalkan</option>
+                    </select>
+                <?php endif; ?>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Catatan
                 </label>
                 <input type="text" name="catatan" id="catatan" placeholder="Catatan (opsional)..." maxlength="500"
                        value="<?= $baris['catatan'] ?? '' ?>"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
+                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" <?= $readonly ? 'disabled' : '' ?>>
             </div>
 
             <!-- Detail Barang -->

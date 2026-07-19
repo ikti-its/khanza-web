@@ -112,27 +112,32 @@ $readonly = $readonly ?? false;
                                 <th class="p-3 border text-center font-semibold">Kode</th>
                                 <th class="p-3 border text-center font-semibold">Nama Barang</th>
                                 <th class="p-3 border text-center font-semibold">Satuan</th>
-                                <th class="p-3 border text-center font-semibold w-24">Qty Dipesan</th>
+                                <th class="p-3 border text-center font-semibold w-20">Qty Dipesan</th>
+                                <th class="p-3 border text-center font-semibold w-24">Sudah Diterima</th>
+                                <th class="p-3 border text-center font-semibold w-20">Sisa</th>
                                 <th class="p-3 border text-center font-semibold w-28">Qty Diterima</th>
                             </tr>
                         </thead>
                         <tbody id="detailTableBody">
                             <?php if ($isEdit && !empty($detail_items ?? [])): ?>
                                 <?php foreach ($detail_items as $item): ?>
+                                <?php $sisa = max(0, (int)($item['qty_dipesan'] ?? 0) - (int)($item['sudah_diterima'] ?? 0)); ?>
                                 <tr data-id="<?= $item['id_barang'] ?>">
                                     <td class="p-3 border text-center"><?= esc($item['kode_barang'] ?? '-') ?></td>
                                     <td class="p-3 border"><?= esc($item['nama_barang'] ?? '-') ?></td>
                                     <td class="p-3 border text-center"><?= esc($item['nama_satuan'] ?? '-') ?></td>
                                     <td class="p-3 border text-center text-gray-500"><?= $item['qty_dipesan'] ?? '-' ?></td>
+                                    <td class="p-3 border text-center text-gray-500"><?= $item['sudah_diterima'] ?? 0 ?></td>
+                                    <td class="p-3 border text-center font-semibold"><?= $sisa ?></td>
                                     <td class="p-3 border text-center">
-                                        <input type="number" name="detail_qty[]" value="<?= $item['qty_diterima'] ?? 0 ?>" min="0"
+                                        <input type="number" name="detail_qty[]" value="<?= $item['qty_diterima'] ?? 0 ?>" min="0" max="<?= $sisa + (int)($item['qty_diterima'] ?? 0) ?>"
                                                class="border border-gray-300 rounded-lg p-1 w-full text-center text-sm" <?= $readonly ? 'disabled' : '' ?>>
                                         <input type="hidden" name="detail_id_barang[]" value="<?= $item['id_barang'] ?>">
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <tr id="emptyRow"><td colspan="5" class="p-4 text-center text-gray-400 italic">Pilih pengadaan untuk menampilkan item</td></tr>
+                                <tr id="emptyRow"><td colspan="7" class="p-4 text-center text-gray-400 italic">Pilih pengadaan untuk menampilkan item</td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
@@ -155,27 +160,33 @@ $readonly = $readonly ?? false;
         document.getElementById('id_pengadaan').value = idPengadaan;
 
         var tbody = document.getElementById('detailTableBody');
-        tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-500">Memuat item...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-gray-500">Memuat item...</td></tr>';
 
         fetch('<?= site_url('inventori-non-medis/pengadaan-barang/modal/list') ?>?id_pengadaan=' + idPengadaan + '&mode=penerimaan')
             .then(r => r.json())
             .then(json => {
                 var data = json.data || [];
                 if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-400 italic">Tidak ada item pada pengadaan ini</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-gray-400 italic">Tidak ada item pada pengadaan ini</td></tr>';
                     return;
                 }
                 tbody.innerHTML = '';
                 data.forEach(item => {
+                    var qty = parseInt(item.qty) || 0;
+                    var sudah = parseInt(item.sudah_diterima) || 0;
+                    var sisa = parseInt(item.sisa) || 0;
+                    var defaultVal = sisa;
                     var tr = document.createElement('tr');
                     tr.dataset.id = item.id_barang;
                     tr.innerHTML = `
                         <td class="p-3 border text-center">${item.kode_barang ?? '-'}</td>
                         <td class="p-3 border">${item.nama_barang ?? '-'}</td>
                         <td class="p-3 border text-center">${item.nama_satuan ?? '-'}</td>
-                        <td class="p-3 border text-center text-gray-500">${item.qty ?? 0}</td>
+                        <td class="p-3 border text-center text-gray-500">${qty}</td>
+                        <td class="p-3 border text-center text-gray-500">${sudah}</td>
+                        <td class="p-3 border text-center font-semibold">${sisa}</td>
                         <td class="p-3 border text-center">
-                            <input type="number" name="detail_qty[]" value="${item.qty ?? 0}" min="0"
+                            <input type="number" name="detail_qty[]" value="${defaultVal}" min="0" max="${sisa}"
                                    class="border border-gray-300 rounded-lg p-1 w-full text-center text-sm">
                             <input type="hidden" name="detail_id_barang[]" value="${item.id_barang}">
                         </td>`;
@@ -183,7 +194,7 @@ $readonly = $readonly ?? false;
                 });
             })
             .catch(() => {
-                tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-red-500">Gagal memuat item</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-red-500">Gagal memuat item</td></tr>';
             });
     }
 
