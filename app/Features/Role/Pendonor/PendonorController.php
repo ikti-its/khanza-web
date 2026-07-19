@@ -284,6 +284,7 @@ final class PendonorController extends ControllerTemplate
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
+            return redirect()->back()->withInput();
         }
 
         $redirect_to = $this->request->getPost('redirect_to');
@@ -483,6 +484,7 @@ final class PendonorController extends ControllerTemplate
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
+            return redirect()->back()->withInput();
         }
 
         return redirect()->to($this->get_uri_path() . '/data');

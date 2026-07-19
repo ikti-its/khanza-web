@@ -21,15 +21,15 @@
                     Nomor Pendonor<span class="text-red-600">*</span>
                 </label>
                 <div class="w-full lg:w-1/4">
-                    <input type="text" name="nomor_pendonor" value="<?= $baris['nomor_pendonor'] ?? '' ?>" readonly required
-                           placeholder="Terisi otomatis..." 
+                    <input type="text" name="nomor_pendonor" value="<?= old('nomor_pendonor', $baris['nomor_pendonor'] ?? '') ?>" readonly required
+                           placeholder="Terisi otomatis..."
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed h-[38px]">
                 </div>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     NIK (No. KTP)<span class="text-red-600">*</span>
                 </label>
-                <input type="text" name="nik" id="nik" value="<?= $baris['nik'] ?? '' ?>" required
+                <input type="text" name="nik" id="nik" value="<?= old('nik', $baris['nik'] ?? '') ?>" required
                        minlength="16" maxlength="16" inputmode="numeric" pattern="[0-9]{16}"
                        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white h-[38px]">
@@ -40,7 +40,7 @@
                     Nama Lengkap<span class="text-red-600">*</span>
                 </label>
                 <div class="w-full lg:w-1/4">
-                    <input type="text" name="nama" id="nama" value="<?= $baris['nama'] ?? '' ?>" required
+                    <input type="text" name="nama" id="nama" value="<?= old('nama', $baris['nama'] ?? '') ?>" required
                            maxlength="60" pattern="[A-Za-z .'\-]+"
                            oninput="this.value = this.value.replace(/[^A-Za-z .'\-]/g, '');"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white h-[38px]">
@@ -54,7 +54,7 @@
                     <?php
                     $optionsJK = [];
                     foreach ($konfig as $field) { if ($field[2] === 'id_jenis_kelamin') { $optionsJK = $field[5] ?? []; break; } }
-                    foreach ($optionsJK as $opt) : $selected = ((string)($baris['id_jenis_kelamin'] ?? '') === (string)$opt[1]) ? 'selected' : '';
+                    foreach ($optionsJK as $opt) : $selected = ((string)old('id_jenis_kelamin', $baris['id_jenis_kelamin'] ?? '') === (string)$opt[1]) ? 'selected' : '';
                     ?>
                         <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
                     <?php endforeach; ?>
@@ -66,9 +66,9 @@
                     Tempat Lahir<span class="text-red-600">*</span>
                 </label>
                 <div class="w-full lg:w-1/4 flex gap-x-2">
-                    <input type="hidden" name="tempat_lahir_kota" id="tempat_lahir_kota" value="<?= $baris['tempat_lahir_kota'] ?? '' ?>" required>
+                    <input type="hidden" name="tempat_lahir_kota" id="tempat_lahir_kota" value="<?= old('tempat_lahir_kota', $baris['tempat_lahir_kota'] ?? '') ?>" required>
                     <input type="text" id="nama_kota" name="nama_kota" readonly required
-                           value="<?= $baris['nama_kota'] ?? '' ?>" placeholder="Klik cari..."
+                           value="<?= old('nama_kota', $baris['nama_kota'] ?? '') ?>" placeholder="Klik cari..."
                            onclick="open_modalKota()"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50 h-[38px]">
                     
@@ -83,8 +83,8 @@
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Tanggal Lahir<span class="text-red-600">*</span>
                 </label>
-                <input type="date" name="tanggal_lahir" id="tanggal_lahir" value="<?= $baris['tanggal_lahir'] ?? '' ?>" max="<?= date('Y-m-d') ?>"
-                       onchange="hitungUmurPendonor()"
+                <input type="date" name="tanggal_lahir" id="tanggal_lahir" value="<?= old('tanggal_lahir', $baris['tanggal_lahir'] ?? '') ?>" max="<?= date('Y-m-d') ?>"
+                       onchange="hitungUmurPendonor(true)"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-700 dark:text-white h-[38px]" required>
             </div>
 
@@ -110,7 +110,7 @@
                     <?php
                     $optionsGol = [];
                     foreach ($konfig as $field) { if ($field[2] === 'id_golongan_darah') { $optionsGol = $field[5] ?? []; break; } }
-                    foreach ($optionsGol as $opt) : $selected = ((string)($baris['id_golongan_darah'] ?? '') === (string)$opt[1]) ? 'selected' : '';
+                    foreach ($optionsGol as $opt) : $selected = ((string)old('id_golongan_darah', $baris['id_golongan_darah'] ?? '') === (string)$opt[1]) ? 'selected' : '';
                     ?>
                         <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
                     <?php endforeach; ?>
@@ -124,7 +124,7 @@
                     <?php
                     $optionsRhe = [];
                     foreach ($konfig as $field) { if ($field[2] === 'id_rhesus') { $optionsRhe = $field[5] ?? []; break; } }
-                    foreach ($optionsRhe as $opt) : $selected = ((string)($baris['id_rhesus'] ?? '') === (string)$opt[1]) ? 'selected' : '';
+                    foreach ($optionsRhe as $opt) : $selected = ((string)old('id_rhesus', $baris['id_rhesus'] ?? '') === (string)$opt[1]) ? 'selected' : '';
                     ?>
                         <option value="<?= $opt[1] ?>" <?= $selected ?>><?= $opt[0] ?></option>
                     <?php endforeach; ?>
@@ -137,7 +137,7 @@
                 </label>
                 <div class="w-full lg:w-1/4">
                     <textarea name="alamat_lengkap" rows="2" required
-                              class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:bg-slate-800 dark:text-white resize-y focus:outline-none focus:border-blue-500"><?= $baris['alamat_lengkap'] ?? '' ?></textarea>
+                              class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:bg-slate-800 dark:text-white resize-y focus:outline-none focus:border-blue-500"><?= old('alamat_lengkap', $baris['alamat_lengkap'] ?? '') ?></textarea>
                 </div>
             </div>
 
@@ -146,13 +146,13 @@
                     Kelurahan / Desa<span class="text-red-600">*</span>
                 </label>
                 <div class="w-full lg:w-1/4 flex gap-x-2">
-                    <input type="hidden" name="id_provinsi" id="id_provinsi" value="<?= $baris['id_provinsi'] ?? '' ?>" required>
-                    <input type="hidden" name="id_kota_lokal" id="id_kota_lokal" value="<?= $baris['id_kota_lokal'] ?? '' ?>" required>
-                    <input type="hidden" name="id_kec_lokal" id="id_kec_lokal" value="<?= $baris['id_kec_lokal'] ?? '' ?>" required>
-                    <input type="hidden" name="id_desa_lokal" id="id_desa_lokal" value="<?= $baris['id_desa_lokal'] ?? '' ?>" required>
+                    <input type="hidden" name="id_provinsi" id="id_provinsi" value="<?= old('id_provinsi', $baris['id_provinsi'] ?? '') ?>" required>
+                    <input type="hidden" name="id_kota_lokal" id="id_kota_lokal" value="<?= old('id_kota_lokal', $baris['id_kota_lokal'] ?? '') ?>" required>
+                    <input type="hidden" name="id_kec_lokal" id="id_kec_lokal" value="<?= old('id_kec_lokal', $baris['id_kec_lokal'] ?? '') ?>" required>
+                    <input type="hidden" name="id_desa_lokal" id="id_desa_lokal" value="<?= old('id_desa_lokal', $baris['id_desa_lokal'] ?? '') ?>" required>
 
                     <input type="text" id="nama_desa" name="nama_desa" readonly required
-                           value="<?= $baris['nama_desa'] ?? '' ?>"
+                           value="<?= old('nama_desa', $baris['nama_desa'] ?? '') ?>"
                            placeholder="Klik cari..."
                            onclick="open_modalWilayah()"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50 h-[38px]">
@@ -169,7 +169,7 @@
                     Kecamatan
                 </label>
                 <input type="text" id="nama_kecamatan" name="nama_kecamatan" readonly
-                       value="<?= $baris['nama_kecamatan'] ?? '' ?>" placeholder="Terisi otomatis..."
+                       value="<?= old('nama_kecamatan', $baris['nama_kecamatan'] ?? '') ?>" placeholder="Terisi otomatis..."
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed h-[38px]">
             </div>
 
@@ -179,7 +179,7 @@
                 </label>
                 <div class="w-full lg:w-1/4">
                     <input type="text" id="nama_kota_wilayah" name="nama_kota_wilayah" readonly
-                           value="<?= $baris['nama_kota_wilayah'] ?? '' ?>" placeholder="Terisi otomatis..."
+                           value="<?= old('nama_kota_wilayah', $baris['nama_kota_wilayah'] ?? '') ?>" placeholder="Terisi otomatis..."
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed h-[38px]">
                 </div>
 
@@ -187,7 +187,7 @@
                     Provinsi
                 </label>
                 <input type="text" id="nama_provinsi" name="nama_provinsi" readonly
-                       value="<?= $baris['nama_provinsi'] ?? '' ?>" placeholder="Terisi otomatis..."
+                       value="<?= old('nama_provinsi', $baris['nama_provinsi'] ?? '') ?>" placeholder="Terisi otomatis..."
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-700 dark:text-white bg-gray-100 cursor-not-allowed h-[38px]">
             </div>
 
@@ -206,8 +206,8 @@
                                 break; 
                             } 
                         }
-                        foreach ($optionsAgama as $opt) : 
-                            $selected = ((string)($baris['id_agama'] ?? '') === (string)$opt[1]) ? 'selected' : '';
+                        foreach ($optionsAgama as $opt) :
+                            $selected = ((string)old('id_agama', $baris['id_agama'] ?? '') === (string)$opt[1]) ? 'selected' : '';
                         ?>
                             <option value="<?= $opt[1] ?>" <?= $selected ?>><?= esc($opt[0]) ?></option>
                         <?php endforeach; ?>
@@ -227,8 +227,8 @@
                             break; 
                         } 
                     }
-                    foreach ($optionsStatus as $opt) : 
-                        $selected = ((string)($baris['id_pernikahan'] ?? '') === (string)$opt[1]) ? 'selected' : '';
+                    foreach ($optionsStatus as $opt) :
+                        $selected = ((string)old('id_pernikahan', $baris['id_pernikahan'] ?? '') === (string)$opt[1]) ? 'selected' : '';
                     ?>
                         <option value="<?= $opt[1] ?>" <?= $selected ?>><?= esc($opt[0]) ?></option>
                     <?php endforeach; ?>
@@ -240,7 +240,7 @@
                     Nomor Telepon<span class="text-red-600">*</span>
                 </label>
                 <div class="w-full lg:w-1/4">
-                    <input type="text" name="nomor_telepon" value="<?= $baris['nomor_telepon'] ?? '' ?>" required
+                    <input type="text" name="nomor_telepon" value="<?= old('nomor_telepon', $baris['nomor_telepon'] ?? '') ?>" required
                            maxlength="13" inputmode="numeric"
                            oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white h-[38px]">
@@ -249,11 +249,11 @@
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Tanggal Donor Terakhir
                 </label>
-                <input type="date" name="tanggal_donor_terakhir" value="<?= $baris['tanggal_donor_terakhir'] ?? '' ?>" max="<?= date('Y-m-d') ?>"
+                <input type="date" name="tanggal_donor_terakhir" value="<?= old('tanggal_donor_terakhir', $baris['tanggal_donor_terakhir'] ?? '') ?>" max="<?= date('Y-m-d') ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-700 dark:text-white h-[38px]">
             </div>
 
-            <?= view('components/form/submit_button') ?>
+            <?= view('components/form/submit_button', ['back_url' => $modul_path . '/data']) ?>
         </form>
     </div>
 </div>
@@ -262,7 +262,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         const tglLahirInput = document.getElementById('tanggal_lahir');
         if (tglLahirInput && tglLahirInput.value !== '') {
-            hitungUmurPendonor();
+            hitungUmurPendonor(false);
         }
     });
 
@@ -283,23 +283,35 @@
         document.getElementById('nama_provinsi').value   = item.nama_provinsi;
     }
 
-    function hitungUmurPendonor() {
+    const UMUR_MINIMAL_PENDONOR = 17;
+
+    function hitungSelisihUmur(tglLahirInput) {
+        const tglLahir = new Date(tglLahirInput);
+        const tglSekarang = new Date();
+
+        let tahunUmur = tglSekarang.getFullYear() - tglLahir.getFullYear();
+        let bulanUmur = tglSekarang.getMonth() - tglLahir.getMonth();
+
+        if (bulanUmur < 0 || (bulanUmur === 0 && tglSekarang.getDate() < tglLahir.getDate())) {
+            tahunUmur--;
+            bulanUmur = 12 + bulanUmur;
+        }
+
+        return { tahun: tahunUmur, bulan: bulanUmur };
+    }
+
+    function hitungUmurPendonor(tampilkanPeringatan = false) {
         const tglLahirInput = document.getElementById('tanggal_lahir').value;
         const inputUmur = document.getElementById('umur_pendonor');
 
         if (tglLahirInput) {
-            const tglLahir = new Date(tglLahirInput);
-            const tglSekarang = new Date();
-            
-            let tahunUmur = tglSekarang.getFullYear() - tglLahir.getFullYear();
-            let bulanUmur = tglSekarang.getMonth() - tglLahir.getMonth();
-            
-            if (bulanUmur < 0 || (bulanUmur === 0 && tglSekarang.getDate() < tglLahir.getDate())) {
-                tahunUmur--;
-                bulanUmur = 12 + bulanUmur;
+            const { tahun, bulan } = hitungSelisihUmur(tglLahirInput);
+            inputUmur.value = `${tahun} Tahun ${bulan} Bulan`;
+
+            if (tampilkanPeringatan && tahun < UMUR_MINIMAL_PENDONOR) {
+                alert(`Peringatan! Umur calon pendonor saat ini adalah ${tahun} Tahun ${bulan} Bulan.\nSyarat menjadi pendonor darah adalah minimal berusia ${UMUR_MINIMAL_PENDONOR} Tahun.`);
+                document.getElementById('tanggal_lahir').focus();
             }
-            
-            inputUmur.value = `${tahunUmur} Tahun ${bulanUmur} Bulan`;
         } else {
             inputUmur.value = "-";
         }
