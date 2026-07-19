@@ -12,9 +12,10 @@
 
         <form action="<?= $modul_path . $form_action ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
+            <?php $baris = $baris ?? []; ?>
 
-            <input type="hidden" name="id_satuan" id="id_satuan" value="">
-            <input type="hidden" name="id_jenis_barang" id="id_jenis_barang" value="">
+            <input type="hidden" name="id_satuan" id="id_satuan" value="<?= $baris['id_satuan'] ?? '' ?>">
+            <input type="hidden" name="id_jenis_barang" id="id_jenis_barang" value="<?= $baris['id_jenis_barang'] ?? '' ?>">
 
             <!-- Kode Barang + Nama Barang -->
             <div class="mb-5 sm:block md:flex items-center">
@@ -22,14 +23,14 @@
                     Kode Barang<span class="text-red-600">*</span>
                 </label>
                 <input type="text" name="kode_barang" id="kode_barang" placeholder="Masukkan kode barang..."
-                       maxlength="10"
+                       maxlength="10" value="<?= $baris['kode_barang'] ?? '' ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Nama Barang<span class="text-red-600">*</span>
                 </label>
                 <input type="text" name="nama_barang" id="nama_barang" placeholder="Masukkan nama barang..."
-                       maxlength="100"
+                       maxlength="100" value="<?= $baris['nama_barang'] ?? '' ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
             </div>
 
@@ -41,9 +42,10 @@
                 <div class="w-full lg:w-1/4 flex gap-x-2">
                     <input type="text" id="id_satuan_display"
                            placeholder="Klik cari satuan..."
+                           value="<?= $baris['nama_satuan'] ?? '' ?>"
                            onclick="open_modalSatuan()"
                            onkeydown="return false"
-                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50" required>
+                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-white" required>
                     <button type="button" onclick="open_modalSatuan()"
                             class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -58,9 +60,10 @@
                 <div class="w-full lg:w-1/4 flex gap-x-2">
                     <input type="text" id="id_jenis_barang_display"
                            placeholder="Klik cari jenis..."
+                           value="<?= $baris['nama_jenis_barang'] ?? '' ?>"
                            onclick="open_modalJenisBarang()"
                            onkeydown="return false"
-                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50" required>
+                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-white" required>
                     <button type="button" onclick="open_modalJenisBarang()"
                             class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -75,13 +78,14 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Stok
                 </label>
-                <input type="text" readonly value="0"
+                <input type="text" readonly value="<?= $baris['stok'] ?? '0' ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Stok Minimum
                 </label>
                 <input type="number" name="stok_minimum" id="stok_minimum" placeholder="0" min="0" max="1000000"
+                       value="<?= $baris['stok_minimum'] ?? '' ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
             </div>
 
@@ -91,6 +95,7 @@
                     Harga Satuan
                 </label>
                 <input type="number" name="harga_satuan" id="harga_satuan" placeholder="0" min="0" max="999999999999" step="any"
+                       value="<?= $baris['harga_satuan'] ?? '' ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
             </div>
 

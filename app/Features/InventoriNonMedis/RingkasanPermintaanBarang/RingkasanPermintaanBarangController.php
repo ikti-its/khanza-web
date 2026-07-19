@@ -37,7 +37,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'petugas_nama',                'Pemohon'],
                 [TABLE_ONLY, OPTIONAL, I::SELECT,   'master_ruangan',              'Ruangan'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_ruangan',                'Ruangan'],
-                [SHOW,       OPTIONAL, I::SELECT,   'petugas_gudang',              'Pengelola'],
+                [SHOW,       OPTIONAL, I::MODAL,   'petugas_gudang',              'Pengelola', ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pengelola...']],
                 [SHOW,       OPTIONAL, I::READONLY, 'no_keluar',                   'No. Keluar'],
             ],
             child_path: '/inventori-non-medis/ringkasan-permintaan-barang-detail',

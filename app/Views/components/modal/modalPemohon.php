@@ -26,7 +26,7 @@
             rowsPerPage: 10,
             onSelect: (item) => {
                 // Cari field petugas yang ada di halaman (petugas atau petugas_gudang atau id_petugas)
-                var targets = ['petugas', 'petugas_gudang', 'id_petugas'];
+                var targets = ['petugas', 'petugas_gudang', 'id_petugas', 'atasan_logistik'];
                 for (var i = 0; i < targets.length; i++) {
                     var el = document.getElementById(targets[i]);
                     if (el) {

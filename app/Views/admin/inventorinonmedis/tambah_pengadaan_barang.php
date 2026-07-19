@@ -12,23 +12,24 @@
 
         <form action="<?= $modul_path . $form_action ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
+            <?php $baris = $baris ?? []; ?>
 
-            <input type="hidden" name="id_suplier" id="id_suplier" value="">
-            <input type="hidden" name="id_pengajuan" id="id_pengajuan" value="">
+            <input type="hidden" name="id_suplier" id="id_suplier" value="<?= $baris['id_suplier'] ?? '' ?>">
+            <input type="hidden" name="id_pengajuan" id="id_pengajuan" value="<?= $baris['id_pengajuan'] ?? '' ?>">
 
             <!-- No. Pengadaan (auto) + Tanggal Pengadaan (input) -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     No. Pengadaan
                 </label>
-                <input type="text" readonly placeholder="Terisi otomatis..."
+                <input type="text" readonly placeholder="Terisi otomatis..." value="<?= $baris['no_pengadaan'] ?? '' ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Tanggal Pengadaan<span class="text-red-600">*</span>
                 </label>
                 <input type="datetime-local" name="tanggal" id="tanggal"
-                       value="<?= date('Y-m-d\TH:i') ?>"
+                       value="<?= $baris['tanggal'] ?? date('Y-m-d\TH:i') ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
             </div>
 
@@ -37,7 +38,7 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Status
                 </label>
-                <input type="text" readonly value="Diproses"
+                <input type="text" readonly value="<?= $baris['nama_status_pengadaan_barang'] ?? 'Diproses' ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
@@ -46,9 +47,10 @@
                 <div class="w-full lg:w-1/4 flex gap-x-2">
                     <input type="text" id="id_pengajuan_display"
                            placeholder="Klik cari pengajuan..."
+                           value="<?= $baris['no_pengajuan'] ?? '' ?>"
                            onclick="open_modalPengajuan()"
                            onkeydown="return false"
-                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50" required>
+                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-white" required>
                     <button type="button" onclick="open_modalPengajuan()"
                             class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -63,7 +65,7 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Total Harga
                 </label>
-                <input type="text" readonly placeholder="Terisi otomatis..."
+                <input type="text" readonly placeholder="Terisi otomatis..." value="<?= $baris['total_harga'] ?? '' ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
@@ -72,9 +74,10 @@
                 <div class="w-full lg:w-1/4 flex gap-x-2">
                     <input type="text" id="id_suplier_display"
                            placeholder="Klik cari suplier..."
+                           value="<?= $baris['nama_suplier'] ?? '' ?>"
                            onclick="open_modalSuplier()"
                            onkeydown="return false"
-                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-slate-50">
+                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-white">
                     <button type="button" onclick="open_modalSuplier()"
                             class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -90,6 +93,7 @@
                     Catatan
                 </label>
                 <input type="text" name="catatan" id="catatan" placeholder="Catatan (opsional)..." maxlength="500"
+                       value="<?= $baris['catatan'] ?? '' ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
             </div>
 

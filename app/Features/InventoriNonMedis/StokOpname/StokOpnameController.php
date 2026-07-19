@@ -55,6 +55,20 @@ final class StokOpnameController extends ControllerTemplate
         ]);
     }
 
+    // tampilkan form ubah custom (reuse view tambah)
+    public function update_page(int|string $id): string
+    {
+        $baris = $this->model->find_one($id);
+
+        return view('admin/inventorinonmedis/tambah_stok_opname', [
+            'judul'       => 'Ubah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
+            'modul_path'  => $this->get_uri_path(),
+            'form_action' => '/submitedit/' . $id,
+            'baris'       => $baris,
+        ]);
+    }
+
     // status awal = 1 (Proses)
     protected function before_create(array &$postData): void
     {

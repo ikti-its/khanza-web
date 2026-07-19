@@ -94,6 +94,20 @@ final class PengajuanBarangController extends ControllerTemplate
         ]);
     }
 
+    // tampilkan form ubah custom (reuse view tambah)
+    public function update_page(int|string $id): string
+    {
+        $baris = $this->model->find_one($id);
+
+        return view('admin/inventorinonmedis/tambah_pengajuan_barang', [
+            'judul'       => 'Ubah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
+            'modul_path'  => $this->get_uri_path(),
+            'form_action' => '/submitedit/' . $id,
+            'baris'       => $baris,
+        ]);
+    }
+
     // auto no_pengajuan + status awal Draf (1)
     protected function before_create(array &$postData): void
     {
