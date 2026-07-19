@@ -50,14 +50,11 @@ final class PenerimaanBarangController extends ControllerTemplate
     // form tambah: 1-page header + detail
     public function create_page(): string
     {
-        $options = $this->model->get_all_options();
-
         return view('admin/inventorinonmedis/tambah_penerimaan_barang', [
-            'judul'             => 'Tambah ' . $this->title,
-            'breadcrumbs'       => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
-            'modul_path'        => $this->get_uri_path(),
-            'form_action'       => '/submittambah/',
-            'options_pengadaan' => $options['id_pengadaan'] ?? [],
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
+            'modul_path'  => $this->get_uri_path(),
+            'form_action' => '/submittambah/',
         ]);
     }
 
@@ -89,14 +86,22 @@ final class PenerimaanBarangController extends ControllerTemplate
     // form ubah: 1-page header + detail existing
     public function update_page(int|string $id): string
     {
-        $baris   = $this->model->find_one($id);
+        $baris = $this->model->find_one($id);
 
         // redirect ke detail jika Dikonfirmasi (2) atau Dibatalkan (3)
         if (is_array($baris) && in_array((int) ($baris['id_status_penerimaan_barang'] ?? 0), [2, 3], true)) {
             return $this->detail($id);
         }
 
-        $options = $this->model->get_all_options();
+        // get no_pengadaan for display
+        if (is_array($baris) && !empty($baris['id_pengadaan'])) {
+            $pengadaan = $this->get_db()
+                ->table('inventori_non_medis.pengadaan_barang')
+                ->select('no_pengadaan')
+                ->where('id_pengadaan', (int) $baris['id_pengadaan'])
+                ->get()->getRowArray();
+            $baris['no_pengadaan'] = $pengadaan['no_pengadaan'] ?? '';
+        }
 
         $detail_items = $this->get_db()
             ->table('inventori_non_medis.penerimaan_barang_detail d')
@@ -109,14 +114,13 @@ final class PenerimaanBarangController extends ControllerTemplate
             ->get()->getResultArray();
 
         return view('admin/inventorinonmedis/tambah_penerimaan_barang', [
-            'judul'             => 'Ubah ' . $this->title,
-            'breadcrumbs'       => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
-            'modul_path'        => $this->get_uri_path(),
-            'form_action'       => '/submitedit/' . $id,
-            'baris'             => $baris,
-            'detail_items'      => $detail_items,
-            'options_pengadaan' => $options['id_pengadaan'] ?? [],
-            'readonly'          => false,
+            'judul'        => 'Ubah ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
+            'modul_path'   => $this->get_uri_path(),
+            'form_action'  => '/submitedit/' . $id,
+            'baris'        => $baris,
+            'detail_items' => $detail_items,
+            'readonly'     => false,
         ]);
     }
 

@@ -104,14 +104,51 @@ final class PengadaanBarangController extends ControllerTemplate
         }
 
         // Default: return list pengadaan (untuk modal penerimaan)
-        $data = $this->get_db()->query("
-            SELECT pb.id_pengadaan, pb.no_pengadaan, TO_CHAR(pb.tanggal, 'YYYY-MM-DD HH24:MI') AS tanggal,
-                   s.nama_suplier
-            FROM inventori_non_medis.pengadaan_barang pb
-            LEFT JOIN inventori_non_medis.suplier s ON pb.id_suplier = s.id_suplier
-            WHERE pb.id_status_pengadaan_barang = 1
-            ORDER BY pb.no_pengadaan DESC
-        ")->getResultArray();
+        $mode = $this->request->getGet('mode') ?? '';
+
+        if ($mode === 'available') {
+            // Hanya pengadaan yang masih punya sisa qty belum diterima
+            $data = $this->get_db()->query("
+                SELECT pb.id_pengadaan, pb.no_pengadaan,
+                       TO_CHAR(pb.tanggal, 'YYYY-MM-DD HH24:MI') AS tanggal,
+                       COALESCE(s.nama_suplier, '-') AS nama_suplier,
+                       pb.total_harga
+                FROM inventori_non_medis.pengadaan_barang pb
+                LEFT JOIN inventori_non_medis.suplier s ON pb.id_suplier = s.id_suplier
+                WHERE pb.id_status_pengadaan_barang = 1
+                  AND EXISTS (
+                    SELECT 1 FROM inventori_non_medis.pengadaan_barang_detail pbd
+                    WHERE pbd.id_pengadaan = pb.id_pengadaan
+                      AND pbd.id_barang > 0
+                      AND pbd.qty > 0
+                      AND (
+                        SELECT COALESCE(SUM(prbd.qty_diterima), 0)
+                        FROM inventori_non_medis.penerimaan_barang_detail prbd
+                        JOIN inventori_non_medis.penerimaan_barang prb ON prbd.id_penerimaan = prb.id_penerimaan
+                        WHERE prb.id_pengadaan = pbd.id_pengadaan
+                          AND prbd.id_barang = pbd.id_barang
+                          AND prb.id_status_penerimaan_barang = 2
+                      ) < pbd.qty
+                  )
+                ORDER BY pb.id_pengadaan DESC
+            ")->getResultArray();
+        } else {
+            $data = $this->get_db()->query("
+                SELECT pb.id_pengadaan, pb.no_pengadaan,
+                       TO_CHAR(pb.tanggal, 'YYYY-MM-DD HH24:MI') AS tanggal,
+                       COALESCE(s.nama_suplier, '-') AS nama_suplier,
+                       pb.total_harga
+                FROM inventori_non_medis.pengadaan_barang pb
+                LEFT JOIN inventori_non_medis.suplier s ON pb.id_suplier = s.id_suplier
+                WHERE pb.id_status_pengadaan_barang = 1
+                ORDER BY pb.id_pengadaan DESC
+            ")->getResultArray();
+        }
+
+        // Format total_harga for display
+        foreach ($data as &$row) {
+            $row['total_harga_fmt'] = 'Rp ' . number_format((float) ($row['total_harga'] ?? 0), 0, ',', '.');
+        }
 
         return $this->response->setJSON(['data' => $data]);
     }
