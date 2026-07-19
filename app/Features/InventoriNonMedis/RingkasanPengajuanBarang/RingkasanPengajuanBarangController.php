@@ -179,6 +179,24 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
             }
         }
 
-        return parent::update($id);
+        // update header — hanya field yang relevan
+        $postData = [
+            'id_status_pengajuan_barang' => $new_status,
+            'atasan_logistik'            => $this->request->getPost('atasan_logistik') ?: null,
+        ];
+
+        if (in_array($new_status, [2, 3], true) && $current_status !== 2) {
+            $postData['tanggal_diproses'] = date('Y-m-d H:i:s');
+        }
+
+        try {
+            $this->model->update($id, $postData);
+            session()->setFlashdata('success', 'Data berhasil diperbarui.');
+        } catch (\Throwable $e) {
+            session()->setFlashdata('error', 'Gagal memperbarui: ' . $e->getMessage());
+            return redirect()->back();
+        }
+
+        return $this->home();
     }
 }
