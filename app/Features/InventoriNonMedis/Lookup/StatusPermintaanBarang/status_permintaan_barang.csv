@@ -3,3 +3,5 @@ id_status_permintaan_barang,nama_status_permintaan_barang
 2,Disetujui
 3,Ditolak
 4,Proses Permintaan
+5,Menunggu Pengadaan
+6,Selesai

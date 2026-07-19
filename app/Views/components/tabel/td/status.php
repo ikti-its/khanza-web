@@ -24,6 +24,10 @@ if (in_array($status_lower, ['proses permintaan', 'proses pengajuan', 'diproses'
     $bg_color   = '#FEE2E2';
     $dot_color  = '#DC2626';
     $text_color = '#991B1B';
+} elseif ($status_lower === 'menunggu pengadaan') {
+    $bg_color   = '#DBEAFE';
+    $dot_color  = '#2563EB';
+    $text_color = '#1E40AF';
 } elseif ($status_lower === 'masuk') {
     $bg_color   = '#DBEAFE';
     $dot_color  = '#2563EB';

@@ -330,6 +330,8 @@ final class PenerimaanBarangController extends ControllerTemplate
                     try {
                         $this->create_transaksi_stok_masuk((int) $id, (string) $saved['no_masuk']);
                         $this->update_pengadaan_status((int) ($saved['id_pengadaan'] ?? 0));
+                        // Auto-fulfill pending permintaan barang baru
+                        $this->fulfill_pending_permintaan((int) $id);
                     } catch (\Throwable $e) {
                         log_message('error', '[Penerimaan] transaksi stok: ' . $e->getMessage());
                         session()->setFlashdata('error', 'Status berhasil diubah, namun gagal membuat transaksi stok: ' . $e->getMessage());
@@ -436,5 +438,131 @@ final class PenerimaanBarangController extends ControllerTemplate
             ->where('id_pengadaan', $id_pengadaan)
             ->set('id_status_pengadaan_barang', 2)
             ->update();
+    }
+
+    /**
+     * Auto-fulfill pending permintaan barang baru setelah penerimaan dikonfirmasi.
+     * Cari permintaan dengan status 5 (Menunggu Pengadaan) yang item-nya overlap
+     * dengan barang yang baru diterima, lalu buat transaksi stok keluar.
+     */
+    private function fulfill_pending_permintaan(int $id_penerimaan): void
+    {
+        $db = $this->get_db();
+
+        // Ambil id_pengadaan dari penerimaan ini
+        $penerimaan = $db->table('inventori_non_medis.penerimaan_barang')
+            ->select('id_pengadaan')
+            ->where('id_penerimaan', $id_penerimaan)
+            ->get()->getRowArray();
+        $id_pengadaan = (int) ($penerimaan['id_pengadaan'] ?? 0);
+        if ($id_pengadaan === 0) return;
+
+        // Cari pengajuan yang linked dari pengadaan ini
+        $pengadaan = $db->table('inventori_non_medis.pengadaan_barang')
+            ->select('id_pengajuan')
+            ->where('id_pengadaan', $id_pengadaan)
+            ->get()->getRowArray();
+        $id_pengajuan = (int) ($pengadaan['id_pengajuan'] ?? 0);
+        if ($id_pengajuan === 0) return;
+
+        // Cari pengajuan yang punya id_permintaan (auto-created from barang baru)
+        $pengajuan = $db->table('inventori_non_medis.pengajuan_barang')
+            ->select('id_permintaan')
+            ->where('id_pengajuan', $id_pengajuan)
+            ->get()->getRowArray();
+        $id_permintaan = (int) ($pengajuan['id_permintaan'] ?? 0);
+        if ($id_permintaan === 0) return;
+
+        // Cek apakah permintaan ini masih status Menunggu Pengadaan (5)
+        $permintaan = $db->table('inventori_non_medis.permintaan_barang')
+            ->select('id_permintaan, id_status_permintaan_barang, no_permintaan, master_ruangan, petugas, petugas_gudang')
+            ->where('id_permintaan', $id_permintaan)
+            ->where('id_status_permintaan_barang', 5)
+            ->get()->getRowArray();
+        if (empty($permintaan)) return;
+
+        // Ambil detail item yang perlu dikirim (barang baru yang stok-nya sekarang sudah ada)
+        $items_to_fulfill = $db->table('inventori_non_medis.permintaan_barang_detail d')
+            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+            ->select('d.id_barang, d.qty_disetujui, b.stok, b.harga_satuan, b.nama_barang')
+            ->where('d.id_permintaan', $id_permintaan)
+            ->where('d.id_barang >', 0)
+            ->where('d.qty_disetujui >', 0)
+            ->where('b.stok >', 0)
+            ->get()->getResultArray();
+
+        if (empty($items_to_fulfill)) return;
+
+        // Cek semua item punya stok cukup
+        foreach ($items_to_fulfill as $item) {
+            if ((int) $item['qty_disetujui'] > (int) $item['stok']) {
+                // Stok belum cukup — tunggu penerimaan berikutnya
+                return;
+            }
+        }
+
+        // Semua stok cukup → buat transaksi stok keluar
+        helper('autonomor');
+        $lastNo    = $db->table('inventori_non_medis.permintaan_barang')
+            ->select('no_keluar')
+            ->where('no_keluar IS NOT NULL')
+            ->orderBy('id_permintaan', 'DESC')
+            ->limit(1)
+            ->get()->getRowArray();
+        $no_keluar = generateNextNoKeluarBarang($lastNo['no_keluar'] ?? null);
+
+        // Get info untuk keterangan
+        $row = $db->table('inventori_non_medis.permintaan_barang pb')
+            ->join('ruangan.ruangan r', 'pb.master_ruangan = r.id_ruangan', 'left')
+            ->join('role.petugas pt', 'pb.petugas = pt.id_petugas', 'left')
+            ->join('person.orang o', 'pt.id_orang = o.id_orang', 'left')
+            ->select('pb.no_permintaan, r.nama_ruangan, o.nama AS nama_pemohon')
+            ->where('pb.id_permintaan', $id_permintaan)
+            ->get()->getRowArray();
+
+        $keterangan = trim(implode(', ', array_filter([
+            $row['no_permintaan'] ?? '',
+            ($row['nama_ruangan'] ?? '') !== '' ? 'Ruangan ' . $row['nama_ruangan'] : '',
+            ($row['nama_pemohon'] ?? '') !== '' ? 'Pemohon: ' . $row['nama_pemohon'] : '',
+            'Auto-fulfill barang baru',
+        ])));
+
+        $now = date('Y-m-d H:i:s');
+        $db->transBegin();
+
+        $db->table('inventori_non_medis.transaksi_stok')->insert([
+            'id_tipe_transaksi_stok' => 2, // keluar
+            'tanggal'                => $now,
+            'id_permintaan'          => $id_permintaan,
+            'keterangan'             => $keterangan,
+        ]);
+        $id_transaksi = (int) $db->insertID();
+
+        foreach ($items_to_fulfill as $d) {
+            $qty          = (int) $d['qty_disetujui'];
+            $stok_sebelum = (int) $d['stok'];
+            $db->table('inventori_non_medis.transaksi_stok_detail')->insert([
+                'id_transaksi' => $id_transaksi,
+                'id_barang'    => (int) $d['id_barang'],
+                'qty'          => $qty,
+                'harga_satuan' => isset($d['harga_satuan']) && (float) $d['harga_satuan'] > 0 ? $d['harga_satuan'] : null,
+                'stok_sebelum' => $stok_sebelum,
+                'stok_sesudah' => $stok_sebelum - $qty,
+            ]);
+            $db->table('inventori_non_medis.barang')
+                ->where('id_barang', (int) $d['id_barang'])
+                ->set('stok', 'stok - ' . $qty, false)
+                ->update();
+        }
+
+        // Update permintaan status → Selesai (6) + set no_keluar
+        $db->table('inventori_non_medis.permintaan_barang')
+            ->where('id_permintaan', $id_permintaan)
+            ->update([
+                'id_status_permintaan_barang' => 6,
+                'no_keluar'                   => $no_keluar,
+            ]);
+
+        $db->transCommit();
     }
 }

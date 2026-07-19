@@ -379,3 +379,19 @@ if (!function_exists('generateNextNoPermintaanMb')) {
         return $prefix . str_pad((string) $nomor, 4, '0', STR_PAD_LEFT);
     }
 }
+
+if (!function_exists('generateNextKodeBarang')) {
+    /** Generate kode barang otomatis: BRG-001, BRG-002, dst (sequential dari seluruh data) */
+    function generateNextKodeBarang(?string $lastKode): string
+    {
+        $prefix = 'BRG-';
+
+        if ($lastKode !== null && preg_match('/(\d+)$/', $lastKode, $m)) {
+            $nomor = (int) $m[1] + 1;
+        } else {
+            $nomor = 1;
+        }
+
+        return $prefix . str_pad((string) $nomor, 3, '0', STR_PAD_LEFT);
+    }
+}

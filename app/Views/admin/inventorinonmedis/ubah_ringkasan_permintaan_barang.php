@@ -96,15 +96,23 @@
                         <tbody id="detailTableBody">
                             <?php if (!empty($detail_items ?? [])): ?>
                                 <?php foreach ($detail_items as $item): ?>
+                                <?php $isBaru = empty($item['id_barang']) && !empty($item['nama_barang_baru']); ?>
                                 <tr>
-                                    <td class="p-3 border text-center"><?= esc($item['kode_barang'] ?? '-') ?></td>
-                                    <td class="p-3 border"><?= esc($item['nama_barang'] ?? '-') ?></td>
+                                    <td class="p-3 border text-center">
+                                        <?php if ($isBaru): ?>
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700">Baru</span>
+                                        <?php else: ?>
+                                            <?= esc($item['kode_barang'] ?? '-') ?>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="p-3 border"><?= esc($isBaru ? $item['nama_barang_baru'] : ($item['nama_barang'] ?? '-')) ?></td>
                                     <td class="p-3 border text-center"><?= esc($item['nama_satuan'] ?? '-') ?></td>
                                     <td class="p-3 border text-center"><?= $item['qty'] ?? 0 ?></td>
                                     <td class="p-3 border text-center">
                                         <input type="number" name="detail_qty_disetujui[]" value="<?= $item['qty_disetujui'] ?? 0 ?>" min="0"
                                                class="border border-gray-300 rounded-lg p-1 w-full text-center text-sm">
-                                        <input type="hidden" name="detail_id_barang[]" value="<?= $item['id_barang'] ?>">
+                                        <input type="hidden" name="detail_id_barang[]" value="<?= $item['id_barang'] ?? '' ?>">
+                                        <input type="hidden" name="detail_id_detail[]" value="<?= $item['id_detail'] ?? '' ?>">
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

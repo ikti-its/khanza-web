@@ -88,9 +88,16 @@
                 </thead>
                 <tbody class="text-slate-700 dark:text-slate-300">
                     <?php foreach ($detail_items as $item): ?>
+                    <?php $isBaru = empty($item['id_barang']) && !empty($item['nama_barang_baru']); ?>
                     <tr class="border-t border-slate-100 dark:border-slate-700/50">
-                        <td class="py-2 font-mono text-sm"><?= esc($item['kode_barang'] ?? '-') ?></td>
-                        <td class="py-2 font-semibold"><?= esc($item['nama_barang'] ?? '-') ?></td>
+                        <td class="py-2 font-mono text-sm">
+                            <?php if ($isBaru): ?>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700">Baru</span>
+                            <?php else: ?>
+                                <?= esc($item['kode_barang'] ?? '-') ?>
+                            <?php endif; ?>
+                        </td>
+                        <td class="py-2 font-semibold"><?= esc($isBaru ? $item['nama_barang_baru'] : ($item['nama_barang'] ?? '-')) ?></td>
                         <td class="py-2 text-center"><?= esc($item['nama_satuan'] ?? '-') ?></td>
                         <td class="py-2 text-center font-semibold"><?= $item['qty'] ?? 0 ?></td>
                         <td class="py-2 text-center font-semibold"><?= $item['qty_disetujui'] ?? 0 ?></td>
