@@ -48,22 +48,14 @@ $readonly = $readonly ?? false;
 
             <!-- Status + Catatan -->
             <div class="mb-5 sm:block md:flex items-center">
-                <?php if ($isEdit): ?>
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Status
                 </label>
                 <select name="id_status_stok_opname"
-                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
-                    <option value="1" <?= (($baris['id_status_stok_opname'] ?? '') == 1) ? 'selected' : '' ?>>Draft</option>
+                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" <?= $readonly ? 'disabled' : '' ?>>
+                    <option value="1" <?= (($baris['id_status_stok_opname'] ?? 1) == 1) ? 'selected' : '' ?>>Draft</option>
                     <option value="2" <?= (($baris['id_status_stok_opname'] ?? '') == 2) ? 'selected' : '' ?>>Selesai</option>
                 </select>
-                <?php else: ?>
-                <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
-                    Status
-                </label>
-                <input type="text" readonly value="Draft"
-                       class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
-                <?php endif; ?>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Catatan<span class="text-red-600">*</span>

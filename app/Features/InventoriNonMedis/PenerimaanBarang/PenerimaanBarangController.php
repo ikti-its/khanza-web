@@ -152,7 +152,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.penerimaan_barang', 'no_penerimaan', 'id_penerimaan');
         $postData['no_penerimaan']               = generateNextNoPenerimaanBarang($lastNo, $postData['tanggal'] ?? null);
-        $postData['id_status_penerimaan_barang'] = 1;
+        $postData['id_status_penerimaan_barang'] = (int) ($this->request->getPost('id_status_penerimaan_barang') ?? 1);
 
         $db = $this->get_db();
 

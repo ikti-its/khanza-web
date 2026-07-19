@@ -139,7 +139,7 @@ final class StokOpnameController extends ControllerTemplate
             'tanggal'              => $this->request->getPost('tanggal'),
             'id_petugas'           => $this->request->getPost('id_petugas') ?: null,
             'catatan'              => $this->request->getPost('catatan'),
-            'id_status_stok_opname' => 1,
+            'id_status_stok_opname' => (int) ($this->request->getPost('id_status_stok_opname') ?? 1),
         ];
 
         $db = $this->get_db();
