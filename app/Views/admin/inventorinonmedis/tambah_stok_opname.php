@@ -135,7 +135,7 @@ $readonly = $readonly ?? false;
         var namaBarang = map.id_barang_display ?? '';
         var namaSatuan = map.nama_satuan ?? '';
         var kodeBarang = map.kode_barang ?? '';
-        var stok       = map.stok ?? '0';
+        var stok       = map.stok_sistem ?? '0';
 
         if (!idBarang) return;
 
@@ -154,7 +154,7 @@ $readonly = $readonly ?? false;
             <td class="p-3 border text-center">${namaSatuan}</td>
             <td class="p-3 border text-center text-gray-500">${stok}</td>
             <td class="p-3 border text-center">
-                <input type="number" name="detail_stok_fisik[]" value="${stok}" min="0"
+                <input type="number" name="detail_stok_fisik[]" value="" min="0" placeholder="0"
                        class="border border-gray-300 rounded-lg p-1 w-full text-center text-sm" required>
                 <input type="hidden" name="detail_id_barang[]" value="${idBarang}">
             </td>
