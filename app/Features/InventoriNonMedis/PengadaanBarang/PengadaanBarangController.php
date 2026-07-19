@@ -189,12 +189,12 @@ final class PengadaanBarangController extends ControllerTemplate
         ]);
     }
 
-    // form ubah: 1-page header + detail existing (hanya saat Diproses)
+    // form ubah: 1-page header + detail existing (hanya saat Proses Pengadaan)
     public function update_page(int|string $id): string
     {
         $baris = $this->model->find_one($id);
 
-        // redirect ke detail jika bukan Diproses (1)
+        // redirect ke detail jika bukan Proses Pengadaan (1)
         if (is_array($baris) && (int) ($baris['id_status_pengadaan_barang'] ?? 0) !== 1) {
             return $this->detail($id);
         }

@@ -1,5 +1,5 @@
 id_status_pengadaan_barang,nama_status_pengadaan_barang
 0,-
-1,Diproses
-2,Diterima
+1,Proses Pengadaan
+2,Selesai
 3,Dibatalkan

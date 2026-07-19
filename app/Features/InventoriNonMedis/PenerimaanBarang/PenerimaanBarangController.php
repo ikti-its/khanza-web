@@ -88,7 +88,7 @@ final class PenerimaanBarangController extends ControllerTemplate
     {
         $baris = $this->model->find_one($id);
 
-        // redirect ke detail jika Dikonfirmasi (2) atau Dibatalkan (3)
+        // redirect ke detail jika Diterima (2) atau Ditolak (3)
         if (is_array($baris) && in_array((int) ($baris['id_status_penerimaan_barang'] ?? 0), [2, 3], true)) {
             return $this->detail($id);
         }
@@ -180,7 +180,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         $current_status = is_array($current) ? (int) ($current['id_status_penerimaan_barang'] ?? 0) : 0;
 
         if (in_array($current_status, [2, 3], true)) {
-            session()->setFlashdata('error', 'Penerimaan barang yang sudah dikonfirmasi atau dibatalkan tidak dapat diubah.');
+            session()->setFlashdata('error', 'Penerimaan barang yang sudah diterima atau ditolak tidak dapat diubah.');
             return $this->home();
         }
 
@@ -193,7 +193,7 @@ final class PenerimaanBarangController extends ControllerTemplate
             'id_status_penerimaan_barang' => $new_status,
         ];
 
-        // Generate no_masuk saat dikonfirmasi
+        // Generate no_masuk saat diterima
         if ($new_status === 2 && $current_status !== 2) {
             helper('autonomor');
             $lastNo             = $this->get_last('inventori_non_medis.penerimaan_barang', 'no_masuk', 'id_penerimaan');
@@ -226,7 +226,7 @@ final class PenerimaanBarangController extends ControllerTemplate
                 }
             }
 
-            // validasi sebelum dikonfirmasi
+            // validasi sebelum diterima
             if ($new_status === 2) {
                 $has_items = $db->table('inventori_non_medis.penerimaan_barang_detail')
                     ->where('id_penerimaan', (int) $id)
@@ -234,7 +234,7 @@ final class PenerimaanBarangController extends ControllerTemplate
                     ->countAllResults() > 0;
                 if (!$has_items) {
                     $db->transRollback();
-                    session()->setFlashdata('error', 'Isi qty diterima minimal untuk satu item sebelum mengkonfirmasi.');
+                    session()->setFlashdata('error', 'Isi qty diterima minimal untuk satu item sebelum menerima barang.');
                     return $this->home();
                 }
             }
@@ -327,7 +327,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         $db->transCommit();
     }
 
-    // kalau semua item sudah diterima penuh, set status pengadaan → Diterima (2)
+    // kalau semua item sudah diterima penuh, set status pengadaan → Selesai (2)
     private function update_pengadaan_status(int $id_pengadaan): void
     {
         if ($id_pengadaan === 0) return;

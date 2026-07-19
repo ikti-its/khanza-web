@@ -82,9 +82,10 @@
             // Cek apakah baris punya status dan bukan Draf — tampilkan "Detail" (readonly) bukan "Ubah"
             $status_cols = array_filter(array_keys($baris), fn($k) => str_contains($k, 'nama_status'));
             $is_draf = true;
+            $editable_statuses = ['draf', 'draft', 'diproses', 'proses pengadaan', 'proses penerimaan'];
             foreach ($status_cols as $col) {
                 $val = strtolower(trim((string) ($baris[$col] ?? '')));
-                if ($val !== '' && $val !== '-' && !in_array($val, ['draf', 'draft', 'diproses'])) {
+                if ($val !== '' && $val !== '-' && !in_array($val, $editable_statuses)) {
                     // Untuk halaman ringkasan, status "proses" masih editable
                     if (str_contains($modul_path, 'ringkasan') && in_array($val, ['proses permintaan', 'proses pengajuan', 'proses penerimaan'])) {
                         continue;
@@ -103,9 +104,10 @@
             // Sembunyikan hapus jika status bukan Draf
             $status_cols_h = array_filter(array_keys($baris), fn($k) => str_contains($k, 'nama_status'));
             $is_draf_h = true;
+            $editable_statuses_h = ['draf', 'draft', 'diproses', 'proses pengadaan', 'proses penerimaan'];
             foreach ($status_cols_h as $col) {
                 $val = strtolower(trim((string) ($baris[$col] ?? '')));
-                if ($val !== '' && $val !== '-' && !in_array($val, ['draf', 'draft', 'diproses'])) {
+                if ($val !== '' && $val !== '-' && !in_array($val, $editable_statuses_h)) {
                     $is_draf_h = false;
                     break;
                 }

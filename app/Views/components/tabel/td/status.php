@@ -12,7 +12,7 @@ $bg_color  = '#F1F1F1';
 $dot_color = '#535353';
 $text_color = '#374151';
 
-if (in_array($status_lower, ['proses permintaan', 'proses pengajuan', 'diproses', 'proses penerimaan'])) {
+if (in_array($status_lower, ['proses permintaan', 'proses pengajuan', 'diproses', 'proses penerimaan', 'proses pengadaan'])) {
     $bg_color   = '#FEF3C7';
     $dot_color  = '#D97706';
     $text_color = '#92400E';
