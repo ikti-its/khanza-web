@@ -153,13 +153,13 @@ final class PengadaanBarangController extends ControllerTemplate
     }
 
     // form ubah: 1-page header + detail existing (hanya saat Diproses)
-    public function update_page(int|string $id): string|RedirectResponse
+    public function update_page(int|string $id): string
     {
         $baris = $this->model->find_one($id);
 
         // redirect ke detail jika bukan Diproses (1)
         if (is_array($baris) && (int) ($baris['id_status_pengadaan_barang'] ?? 0) !== 1) {
-            return redirect()->to($this->get_uri_path() . '/' . $id);
+            return $this->detail($id);
         }
 
         $detail_items = $this->get_db()

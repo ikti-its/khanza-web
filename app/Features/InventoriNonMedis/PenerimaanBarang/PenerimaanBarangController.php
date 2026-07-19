@@ -87,13 +87,13 @@ final class PenerimaanBarangController extends ControllerTemplate
     }
 
     // form ubah: 1-page header + detail existing
-    public function update_page(int|string $id): string|RedirectResponse
+    public function update_page(int|string $id): string
     {
         $baris   = $this->model->find_one($id);
 
         // redirect ke detail jika Dikonfirmasi (2) atau Dibatalkan (3)
         if (is_array($baris) && in_array((int) ($baris['id_status_penerimaan_barang'] ?? 0), [2, 3], true)) {
-            return redirect()->to($this->get_uri_path() . '/' . $id);
+            return $this->detail($id);
         }
 
         $options = $this->model->get_all_options();
