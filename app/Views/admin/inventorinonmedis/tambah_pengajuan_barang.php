@@ -39,13 +39,13 @@ $readonly = $readonly ?? false;
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Status
                 </label>
-                <?php if (!$isEdit): ?>
-                    <input type="text" readonly value="Draf"
+                <?php if ($readonly ?? false): ?>
+                    <input type="text" readonly value="<?= $baris['nama_status_pengajuan_barang'] ?? 'Draf' ?>"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white bg-gray-100 cursor-not-allowed">
                 <?php else: ?>
                     <select name="id_status_pengajuan_barang"
                             class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
-                        <option value="1" <?= (($baris['id_status_pengajuan_barang'] ?? '') == 1) ? 'selected' : '' ?>>Draf</option>
+                        <option value="1" <?= (($baris['id_status_pengajuan_barang'] ?? 1) == 1) ? 'selected' : '' ?>>Draf</option>
                         <option value="4" <?= (($baris['id_status_pengajuan_barang'] ?? '') == 4) ? 'selected' : '' ?>>Proses Pengajuan</option>
                     </select>
                 <?php endif; ?>

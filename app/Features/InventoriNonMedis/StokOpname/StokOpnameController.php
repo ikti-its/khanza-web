@@ -108,6 +108,30 @@ final class StokOpnameController extends ControllerTemplate
         ]);
     }
 
+    // hapus header + detail sekaligus
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        $current = $this->model->find((int) $id);
+        if (is_array($current) && (int) ($current['id_status_stok_opname'] ?? 0) === 2) {
+            session()->setFlashdata('error', 'Stok Opname yang sudah Selesai tidak dapat dihapus.');
+            return $this->home();
+        }
+
+        $db = $this->get_db();
+        try {
+            $db->transBegin();
+            $db->table('inventori_non_medis.stok_opname_detail')->where('id_opname', (int) $id)->delete();
+            $this->model->delete($id);
+            $db->transCommit();
+            session()->setFlashdata('success', 'Data berhasil dihapus.');
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            session()->setFlashdata('error', 'Gagal menghapus: ' . $e->getMessage());
+        }
+
+        return $this->home();
+    }
+
     // simpan header + detail sekaligus
     public function create(): string|RedirectResponse
     {

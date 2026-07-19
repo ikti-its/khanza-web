@@ -171,6 +171,30 @@ final class PermintaanBarangController extends ControllerTemplate
         return $this->home();
     }
 
+    // hapus header + detail sekaligus
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        $current = $this->model->find((int) $id);
+        if (is_array($current) && (int) ($current['id_status_permintaan_barang'] ?? 0) !== 1) {
+            session()->setFlashdata('error', 'Permintaan yang sudah diproses tidak dapat dihapus.');
+            return $this->home();
+        }
+
+        $db = $this->get_db();
+        try {
+            $db->transBegin();
+            $db->table('inventori_non_medis.permintaan_barang_detail')->where('id_permintaan', (int) $id)->delete();
+            $this->model->delete($id);
+            $db->transCommit();
+            session()->setFlashdata('success', 'Data berhasil dihapus.');
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            session()->setFlashdata('error', 'Gagal menghapus: ' . $e->getMessage());
+        }
+
+        return $this->home();
+    }
+
     // update header + sync detail items
     public function update(int|string $id): string|RedirectResponse
     {

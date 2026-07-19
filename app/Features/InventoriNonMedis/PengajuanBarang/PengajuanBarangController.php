@@ -159,7 +159,7 @@ final class PengajuanBarangController extends ControllerTemplate
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.pengajuan_barang', 'no_pengajuan', 'id_pengajuan');
         $postData['no_pengajuan']               = generateNextNoPengajuanBarang($lastNo, $postData['tanggal'] ?? null);
-        $postData['id_status_pengajuan_barang'] = 1;
+        $postData['id_status_pengajuan_barang'] = (int) ($this->request->getPost('id_status_pengajuan_barang') ?? 1);
 
         $db = $this->get_db();
 
@@ -193,7 +193,9 @@ final class PengajuanBarangController extends ControllerTemplate
 
             // update total_harga di header
             if ($total_harga > 0) {
-                $this->model->update($id_pengajuan, ['total_harga' => $total_harga]);
+                $db->table('inventori_non_medis.pengajuan_barang')
+                    ->where('id_pengajuan', $id_pengajuan)
+                    ->update(['total_harga' => $total_harga]);
             }
 
             $db->transCommit();
@@ -201,6 +203,30 @@ final class PengajuanBarangController extends ControllerTemplate
         } catch (\Throwable $e) {
             $db->transRollback();
             session()->setFlashdata('error', 'Gagal menyimpan: ' . $e->getMessage());
+        }
+
+        return $this->home();
+    }
+
+    // hapus header + detail sekaligus
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        $current = $this->model->find((int) $id);
+        if (is_array($current) && (int) ($current['id_status_pengajuan_barang'] ?? 0) !== 1) {
+            session()->setFlashdata('error', 'Pengajuan yang sudah diajukan tidak dapat dihapus.');
+            return $this->home();
+        }
+
+        $db = $this->get_db();
+        try {
+            $db->transBegin();
+            $db->table('inventori_non_medis.pengajuan_barang_detail')->where('id_pengajuan', (int) $id)->delete();
+            $this->model->delete($id);
+            $db->transCommit();
+            session()->setFlashdata('success', 'Data berhasil dihapus.');
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            session()->setFlashdata('error', 'Gagal menghapus: ' . $e->getMessage());
         }
 
         return $this->home();
