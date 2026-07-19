@@ -32,19 +32,17 @@ final class StokOpnameController extends ControllerTemplate
                 [SHOW, REQUIRED, I::SELECT, 'id_petugas',            'Pelaksana'],
                 [SHOW, REQUIRED, I::TEXT,   'catatan',               'Catatan'],
             ],
-            child_path: '/inventori-non-medis/detail-stok-opname',
-            child_fk: 'id_opname',
+            // child_path: '/inventori-non-medis/detail-stok-opname',
+            // child_fk: 'id_opname',
         );
     }
 
-    // data terbaru di atas
     protected function before_read(): void
     {
         $this->model->set_order('id_opname', 'DESC');
     }
 
-    // form tambah custom dengan modal search pelaksana
-    #[\Override]
+    // form tambah: 1-page header + detail
     public function create_page(): string
     {
         return view('admin/inventorinonmedis/tambah_stok_opname', [
@@ -55,84 +53,196 @@ final class StokOpnameController extends ControllerTemplate
         ]);
     }
 
-    // tampilkan form ubah custom (reuse view tambah)
-    public function update_page(int|string $id): string
+    // halaman detail (readonly) — view terpisah tanpa form
+    public function detail(int|string $id): string
     {
+        if ($id == 0) return $this->index();
+
         $baris = $this->model->find_one($id);
 
-        return view('admin/inventorinonmedis/tambah_stok_opname', [
-            'judul'       => 'Ubah ' . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
-            'modul_path'  => $this->get_uri_path(),
-            'form_action' => '/submitedit/' . $id,
-            'baris'       => $baris,
+        $detail_items = $this->get_db()
+            ->table('inventori_non_medis.stok_opname_detail d')
+            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, s.nama_satuan')
+            ->where('d.id_opname', (int) $id)
+            ->where('d.id_barang >', 0)
+            ->get()->getResultArray();
+
+        return view('admin/inventorinonmedis/detail_stok_opname', [
+            'judul'        => 'Detail ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Detail', 'icon' => 'detail']]),
+            'modul_path'   => $this->get_uri_path(),
+            'baris'        => $baris,
+            'detail_items' => $detail_items,
         ]);
     }
 
-    // status awal = 1 (Proses)
-    protected function before_create(array &$postData): void
+    // form ubah: 1-page header + detail existing (hanya saat Proses)
+    public function update_page(int|string $id): string|RedirectResponse
     {
-        $postData['id_status_stok_opname'] = 1;
+        $baris = $this->model->find_one($id);
 
-        // convert empty FK modal fields to null
-        if (isset($postData['id_petugas']) && $postData['id_petugas'] === '') {
-            $postData['id_petugas'] = null;
+        // redirect ke detail jika status Selesai (2)
+        if (is_array($baris) && (int) ($baris['id_status_stok_opname'] ?? 0) === 2) {
+            return redirect()->to($this->get_uri_path() . '/' . $id);
         }
+
+        $detail_items = $this->get_db()
+            ->table('inventori_non_medis.stok_opname_detail d')
+            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, s.nama_satuan')
+            ->where('d.id_opname', (int) $id)
+            ->where('d.id_barang >', 0)
+            ->get()->getResultArray();
+
+        return view('admin/inventorinonmedis/tambah_stok_opname', [
+            'judul'        => 'Ubah ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
+            'modul_path'   => $this->get_uri_path(),
+            'form_action'  => '/submitedit/' . $id,
+            'baris'        => $baris,
+            'detail_items' => $detail_items,
+            'readonly'     => false,
+        ]);
     }
 
-    // blok kalau udah Selesai, validasi detail, buat transaksi kalau → Selesai
+    // simpan header + detail sekaligus
+    public function create(): string|RedirectResponse
+    {
+        $postData = [
+            'tanggal'              => $this->request->getPost('tanggal'),
+            'id_petugas'           => $this->request->getPost('id_petugas') ?: null,
+            'catatan'              => $this->request->getPost('catatan'),
+            'id_status_stok_opname' => 1,
+        ];
+
+        $db = $this->get_db();
+
+        try {
+            $db->transBegin();
+
+            $this->model->insert($postData);
+            $id_opname = (int) $db->insertID();
+
+            $detail_ids  = $this->request->getPost('detail_id_barang') ?? [];
+            $detail_stok = $this->request->getPost('detail_stok_fisik') ?? [];
+
+            for ($i = 0; $i < count($detail_ids); $i++) {
+                $id_barang  = (int) ($detail_ids[$i] ?? 0);
+                $stok_fisik = (int) ($detail_stok[$i] ?? 0);
+                if ($id_barang > 0) {
+                    // ambil stok sistem saat ini
+                    $row = $db->table('inventori_non_medis.barang')
+                        ->select('stok')
+                        ->where('id_barang', $id_barang)
+                        ->get()->getRowArray();
+                    $stok_sistem = (int) ($row['stok'] ?? 0);
+
+                    $db->table('inventori_non_medis.stok_opname_detail')->insert([
+                        'id_opname'  => $id_opname,
+                        'id_barang'  => $id_barang,
+                        'stok_sistem' => $stok_sistem,
+                        'stok_fisik'  => $stok_fisik,
+                        'selisih'     => $stok_fisik - $stok_sistem,
+                    ]);
+                }
+            }
+
+            $db->transCommit();
+            session()->setFlashdata('success', 'Data Stok Opname berhasil disimpan.');
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            session()->setFlashdata('error', 'Gagal menyimpan: ' . $e->getMessage());
+        }
+
+        return $this->home();
+    }
+
+    // update header + sync detail + handle status Selesai
     public function update(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);
-        if (!is_array($current))
-            return $this->home();
+        if (!is_array($current)) return $this->home();
 
         $current_status = (int) ($current['id_status_stok_opname'] ?? 0);
-
         if ($current_status === 2) {
             session()->setFlashdata('error', 'Stok Opname yang sudah Selesai tidak dapat diubah.');
             return $this->home();
         }
 
-        $new_status     = (int) ($this->request->getPost('id_status_stok_opname') ?? 0);
-        $is_new_selesai = $new_status === 2 && $current_status !== 2;
+        $new_status = (int) ($this->request->getPost('id_status_stok_opname') ?? 1);
 
-        if ($is_new_selesai) {
-            $error = $this->validate_before_selesai((int) $id);
-            if ($error !== null) {
-                session()->setFlashdata('error', $error);
-                return $this->home();
-            }
+        $postData = [
+            'tanggal'               => $this->request->getPost('tanggal'),
+            'id_petugas'            => $this->request->getPost('id_petugas') ?: null,
+            'catatan'               => $this->request->getPost('catatan'),
+            'id_status_stok_opname' => $new_status,
+        ];
+
+        $detail_ids  = $this->request->getPost('detail_id_barang') ?? [];
+        $detail_stok = $this->request->getPost('detail_stok_fisik') ?? [];
+
+        // validasi sebelum Selesai
+        if ($new_status === 2 && empty($detail_ids)) {
+            session()->setFlashdata('error', 'Isi detail stok opname terlebih dahulu sebelum mengubah status menjadi Selesai.');
+            return $this->home();
         }
 
-        $result = parent::update($id);
+        $db = $this->get_db();
 
-        if ($is_new_selesai && $result instanceof RedirectResponse) {
-            try {
-                $this->create_transaksi_stok_opname((int) $id);
-            } catch (\Throwable $e) {
-                log_message('error', '[StokOpname] create_transaksi_stok_opname: ' . $e->getMessage());
-                session()->setFlashdata(
-                    'error',
-                    'Status berhasil diubah, namun gagal membuat transaksi stok: ' . $e->getMessage(),
-                );
+        try {
+            $db->transBegin();
+
+            // sync detail
+            $db->table('inventori_non_medis.stok_opname_detail')
+                ->where('id_opname', (int) $id)
+                ->delete();
+
+            for ($i = 0; $i < count($detail_ids); $i++) {
+                $id_barang  = (int) ($detail_ids[$i] ?? 0);
+                $stok_fisik = (int) ($detail_stok[$i] ?? 0);
+                if ($id_barang > 0) {
+                    $row = $db->table('inventori_non_medis.barang')
+                        ->select('stok')
+                        ->where('id_barang', $id_barang)
+                        ->get()->getRowArray();
+                    $stok_sistem = (int) ($row['stok'] ?? 0);
+
+                    $db->table('inventori_non_medis.stok_opname_detail')->insert([
+                        'id_opname'   => (int) $id,
+                        'id_barang'   => $id_barang,
+                        'stok_sistem' => $stok_sistem,
+                        'stok_fisik'  => $stok_fisik,
+                        'selisih'     => $stok_fisik - $stok_sistem,
+                    ]);
+                }
             }
+
+            $this->model->update($id, $postData);
+
+            $db->transCommit();
+
+            // buat transaksi stok opname jika status → Selesai
+            $is_new_selesai = ($new_status === 2 && $current_status !== 2);
+            if ($is_new_selesai) {
+                try {
+                    $this->create_transaksi_stok_opname((int) $id);
+                } catch (\Throwable $e) {
+                    log_message('error', '[StokOpname] create_transaksi_stok_opname: ' . $e->getMessage());
+                    session()->setFlashdata('error', 'Status berhasil diubah, namun gagal membuat transaksi stok: ' . $e->getMessage());
+                    return $this->home();
+                }
+            }
+
+            session()->setFlashdata('success', 'Data Stok Opname berhasil diperbarui.');
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            session()->setFlashdata('error', 'Gagal memperbarui: ' . $e->getMessage());
         }
 
-        return $result;
-    }
-
-    // minimal 1 detail harus ada sebelum bisa Selesai
-    private function validate_before_selesai(int $id): null|string
-    {
-        $has_items = $this
-            ->get_db()
-            ->table('inventori_non_medis.stok_opname_detail')
-            ->where('id_opname', $id)
-            ->where('id_barang >', 0)
-            ->countAllResults() > 0;
-
-        return $has_items ? null : 'Isi detail stok opname terlebih dahulu sebelum mengubah status menjadi Selesai.';
+        return $this->home();
     }
 
     // catat penyesuaian stok, update stok barang ke nilai fisik (hanya yang ada selisih)
@@ -140,17 +250,14 @@ final class StokOpnameController extends ControllerTemplate
     {
         $db = $this->get_db();
 
-        $details = $db
-            ->table('inventori_non_medis.stok_opname_detail')
+        $details = $db->table('inventori_non_medis.stok_opname_detail')
             ->select('id_barang, stok_sistem, stok_fisik, selisih')
             ->where('id_opname', $id_opname)
             ->where('id_barang >', 0)
             ->where('selisih !=', 0)
-            ->get()
-            ->getResultArray();
+            ->get()->getResultArray();
 
-        if (empty($details))
-            return;
+        if (empty($details)) return;
 
         $now = date('Y-m-d H:i:s');
         $db->transBegin();
@@ -176,8 +283,7 @@ final class StokOpnameController extends ControllerTemplate
                 'stok_sesudah' => $stok_fisik,
             ]);
 
-            $db
-                ->table('inventori_non_medis.barang')
+            $db->table('inventori_non_medis.barang')
                 ->where('id_barang', (int) $d['id_barang'])
                 ->set('stok', $stok_fisik)
                 ->update();

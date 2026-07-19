@@ -30,26 +30,8 @@ final class PermintaanBarangController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX, 'id_permintaan', 'ID'],
                 [SHOW, OPTIONAL, I::READONLY, 'no_permintaan', 'No. Permintaan'],
                 [SHOW, REQUIRED, I::DTIME, 'tanggal', 'Tanggal Permintaan'],
-                [
-                    SHOW,
-                    REQUIRED,
-                    I::MODAL,
-                    'petugas',
-                    'Pemohon',
-                    ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pemohon...'],
-                ],
-                [
-                    SHOW,
-                    REQUIRED,
-                    I::MODAL,
-                    'master_ruangan',
-                    'Ruangan',
-                    [
-                        'modal'          => 'modalPilihRuangan',
-                        'display_column' => 'nama_ruangan',
-                        'placeholder'    => 'Klik cari ruangan...',
-                    ],
-                ],
+                [SHOW, REQUIRED, I::MODAL, 'petugas', 'Pemohon', ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pemohon...']],
+                [SHOW, REQUIRED, I::MODAL, 'master_ruangan', 'Ruangan', ['modal' => 'modalPilihRuangan', 'display_column' => 'nama_ruangan', 'placeholder' => 'Klik cari ruangan...']],
                 [SHOW, OPTIONAL, I::SELECT, 'id_status_permintaan_barang', 'Status'],
                 [TABLE_ONLY, OPTIONAL, I::DTIME, 'tanggal_diproses', 'Tanggal Diproses'],
                 [FORM_ONLY, OPTIONAL, I::READONLY, 'tanggal_diproses', 'Tanggal Diproses'],
@@ -57,8 +39,8 @@ final class PermintaanBarangController extends ControllerTemplate
                 [FORM_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang_nama', 'Pengelola'],
                 [SHOW, OPTIONAL, I::READONLY, 'no_keluar', 'No. Keluar'],
             ],
-            child_path: '/inventori-non-medis/detail-permintaan-barang',
-            child_fk: 'id_permintaan',
+            // child_path: '/inventori-non-medis/detail-permintaan-barang',
+            // child_fk: 'id_permintaan',
         );
     }
 
@@ -68,7 +50,7 @@ final class PermintaanBarangController extends ControllerTemplate
         $this->model->set_order('id_permintaan', 'DESC');
     }
 
-    // tampilkan form tambah custom (seperti pattern Triase)
+    // form tambah: 1-page header + detail
     public function create_page(): string
     {
         return view('admin/inventorinonmedis/tambah_permintaan_barang', [
@@ -79,48 +61,117 @@ final class PermintaanBarangController extends ControllerTemplate
         ]);
     }
 
-    // tampilkan form ubah custom (reuse view tambah)
+    // halaman detail (readonly) — view terpisah tanpa form
+    public function detail(int|string $id): string
+    {
+        if ($id == 0) return $this->index();
+
+        $baris = $this->model->find_one($id);
+
+        $detail_items = $this->get_db()
+            ->table('inventori_non_medis.permintaan_barang_detail d')
+            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->select('d.id_barang, d.qty, b.kode_barang, b.nama_barang, s.nama_satuan')
+            ->where('d.id_permintaan', (int) $id)
+            ->where('d.id_barang >', 0)
+            ->get()->getResultArray();
+
+        return view('admin/inventorinonmedis/detail_permintaan_barang', [
+            'judul'        => 'Detail ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Detail', 'icon' => 'detail']]),
+            'modul_path'   => $this->get_uri_path(),
+            'baris'        => $baris,
+            'detail_items' => $detail_items,
+        ]);
+    }
+
+    // form ubah: 1-page header + detail existing (hanya saat Draf)
     public function update_page(int|string $id): string
     {
         $baris = $this->model->find_one($id);
 
+        // redirect ke detail jika bukan Draf
+        if (is_array($baris) && (int) ($baris['id_status_permintaan_barang'] ?? 0) !== 1) {
+            return $this->detail($id);
+        }
+
+        $detail_items = $this->get_db()
+            ->table('inventori_non_medis.permintaan_barang_detail d')
+            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->select('d.id_detail, d.id_barang, d.qty, b.kode_barang, b.nama_barang, s.nama_satuan')
+            ->where('d.id_permintaan', (int) $id)
+            ->where('d.id_barang >', 0)
+            ->get()->getResultArray();
+
         return view('admin/inventorinonmedis/tambah_permintaan_barang', [
-            'judul'       => 'Ubah ' . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
-            'modul_path'  => $this->get_uri_path(),
-            'form_action' => '/submitedit/' . $id,
-            'baris'       => $baris,
+            'judul'        => 'Ubah ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
+            'modul_path'   => $this->get_uri_path(),
+            'form_action'  => '/submitedit/' . $id,
+            'baris'        => $baris,
+            'detail_items' => $detail_items,
+            'readonly'     => false,
         ]);
     }
 
-    // auto no_permintaan + status awal Draf (1)
-    protected function before_create(array &$postData): void
+    // simpan header + detail sekaligus
+    public function create(): string|RedirectResponse
     {
+        $postData = [
+            'tanggal'        => $this->request->getPost('tanggal'),
+            'petugas'        => $this->request->getPost('petugas') ?: null,
+            'master_ruangan' => $this->request->getPost('master_ruangan') ?: null,
+        ];
+
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.permintaan_barang', 'no_permintaan', 'id_permintaan');
-        $postData['no_permintaan'] = generateNextNoPermintaanBarang($lastNo, $postData['tanggal'] ?? null);
-        $postData['id_status_permintaan_barang'] = 1;
+        $postData['no_permintaan']               = generateNextNoPermintaanBarang($lastNo, $postData['tanggal'] ?? null);
+        $postData['id_status_permintaan_barang'] = (int) ($this->request->getPost('id_status_permintaan_barang') ?? 1);
 
-        // convert empty FK modal fields to null agar tidak kirim '' ke kolom integer
-        foreach (['petugas', 'master_ruangan'] as $fk) {
-            if (isset($postData[$fk]) && $postData[$fk] === '') {
-                $postData[$fk] = null;
+        // validasi: jika status Proses Permintaan (4), item wajib ada
+        $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+        if ($postData['id_status_permintaan_barang'] === 4 && empty($detail_ids)) {
+            session()->setFlashdata('error', 'Tambahkan detail barang terlebih dahulu sebelum mengajukan permintaan.');
+            return $this->home();
+        }
+
+        $db = $this->get_db();
+
+        try {
+            $db->transBegin();
+
+            $this->model->insert($postData);
+            $id_permintaan = (int) $db->insertID();
+
+            // simpan detail items
+            $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+            $detail_qty = $this->request->getPost('detail_qty') ?? [];
+
+            for ($i = 0; $i < count($detail_ids); $i++) {
+                $id_barang = (int) ($detail_ids[$i] ?? 0);
+                $qty       = (int) ($detail_qty[$i] ?? 0);
+                if ($id_barang > 0 && $qty > 0) {
+                    $db->table('inventori_non_medis.permintaan_barang_detail')->insert([
+                        'id_permintaan' => $id_permintaan,
+                        'id_barang'     => $id_barang,
+                        'qty'           => $qty,
+                    ]);
+                }
             }
+
+            $db->transCommit();
+            session()->setFlashdata('success', 'Data Permintaan Barang berhasil disimpan.');
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            session()->setFlashdata('error', 'Gagal menyimpan: ' . $e->getMessage());
         }
+
+        return $this->home();
     }
 
-    // hanya izinkan transisi ke Draf (1) atau Proses Permintaan (4)
-    protected function before_update(array &$postData, int|string $id): void
-    {
-        $new_status = (int) ($postData['id_status_permintaan_barang'] ?? 0);
-        if (!in_array($new_status, [1, 4], true)) {
-            $current                                 = $this->model->find($id);
-            $postData['id_status_permintaan_barang'] = (int) ($current['id_status_permintaan_barang'] ?? 1);
-        }
-    }
-
-    // blokir semua perubahan jika status bukan Draf (1),
-    // dan cegah pengajuan jika detail masih kosong
+    // update header + sync detail items
     public function update(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);
@@ -129,22 +180,58 @@ final class PermintaanBarangController extends ControllerTemplate
             return $this->home();
         }
 
-        $new_status = (int) ($this->request->getPost('id_status_permintaan_barang') ?? 0);
-        if ($new_status === 4) {
-            $has_detail = $this
-                ->get_db()
-                ->table('inventori_non_medis.permintaan_barang_detail')
-                ->where('id_permintaan', (int) $id)
-                ->countAllResults() > 0;
-            if (!$has_detail) {
-                session()->setFlashdata(
-                    'error',
-                    'Tambahkan detail barang terlebih dahulu sebelum mengajukan permintaan.',
-                );
-                return $this->home();
-            }
+        $postData = [
+            'tanggal'                       => $this->request->getPost('tanggal'),
+            'petugas'                       => $this->request->getPost('petugas') ?: null,
+            'master_ruangan'                => $this->request->getPost('master_ruangan') ?: null,
+            'id_status_permintaan_barang'   => $this->request->getPost('id_status_permintaan_barang') ?? 1,
+        ];
+
+        // validasi status
+        $new_status = (int) ($postData['id_status_permintaan_barang'] ?? 0);
+        if (!in_array($new_status, [1, 4], true)) {
+            $postData['id_status_permintaan_barang'] = (int) ($current['id_status_permintaan_barang'] ?? 1);
         }
 
-        return parent::update($id);
+        // cek detail sebelum proses permintaan
+        $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+        if ($new_status === 4 && empty($detail_ids)) {
+            session()->setFlashdata('error', 'Tambahkan detail barang terlebih dahulu sebelum mengajukan permintaan.');
+            return $this->home();
+        }
+
+        $db = $this->get_db();
+
+        try {
+            $db->transBegin();
+
+            $this->model->update($id, $postData);
+
+            // sync detail: hapus semua lalu insert ulang
+            $db->table('inventori_non_medis.permintaan_barang_detail')
+                ->where('id_permintaan', (int) $id)
+                ->delete();
+
+            $detail_qty = $this->request->getPost('detail_qty') ?? [];
+            for ($i = 0; $i < count($detail_ids); $i++) {
+                $id_barang = (int) ($detail_ids[$i] ?? 0);
+                $qty       = (int) ($detail_qty[$i] ?? 0);
+                if ($id_barang > 0 && $qty > 0) {
+                    $db->table('inventori_non_medis.permintaan_barang_detail')->insert([
+                        'id_permintaan' => (int) $id,
+                        'id_barang'     => $id_barang,
+                        'qty'           => $qty,
+                    ]);
+                }
+            }
+
+            $db->transCommit();
+            session()->setFlashdata('success', 'Data Permintaan Barang berhasil diperbarui.');
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            session()->setFlashdata('error', 'Gagal memperbarui: ' . $e->getMessage());
+        }
+
+        return $this->home();
     }
 }

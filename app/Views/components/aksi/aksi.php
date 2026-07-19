@@ -79,10 +79,36 @@
             echo view('components/aksi/pilih',  $data);
         }
         if (isset($aksi['ubah'])   && $aksi['ubah']   === true) {
-            echo view('components/aksi/ubah',   $data);
+            // Cek apakah baris punya status dan bukan Draf — tampilkan "Detail" (readonly) bukan "Ubah"
+            $status_cols = array_filter(array_keys($baris), fn($k) => str_contains($k, 'nama_status'));
+            $is_draf = true;
+            foreach ($status_cols as $col) {
+                $val = strtolower(trim((string) ($baris[$col] ?? '')));
+                if ($val !== '' && $val !== '-' && !in_array($val, ['draf', 'draft', 'diproses'])) {
+                    $is_draf = false;
+                    break;
+                }
+            }
+            if ($is_draf || empty($status_cols)) {
+                echo view('components/aksi/ubah', $data);
+            } else {
+                echo '<div class="px-3 py-1.5"><a href="' . $modul_path . '/' . $id . '" class="gap-x-1 text-sm text-green-600 decoration-2 hover:underline font-semibold">Lihat Detail</a></div>';
+            }
         }
         if (isset($aksi['hapus'])  && $aksi['hapus']  === true) {
-            echo view('components/aksi/hapus',  $data);
+            // Sembunyikan hapus jika status bukan Draf
+            $status_cols_h = array_filter(array_keys($baris), fn($k) => str_contains($k, 'nama_status'));
+            $is_draf_h = true;
+            foreach ($status_cols_h as $col) {
+                $val = strtolower(trim((string) ($baris[$col] ?? '')));
+                if ($val !== '' && $val !== '-' && !in_array($val, ['draf', 'draft', 'diproses'])) {
+                    $is_draf_h = false;
+                    break;
+                }
+            }
+            if ($is_draf_h || empty($status_cols_h)) {
+                echo view('components/aksi/hapus', $data);
+            }
         }
         if (isset($aksi['registrasi']) && $aksi['registrasi'] === true) {
             echo view('components/aksi/registrasi', $data);

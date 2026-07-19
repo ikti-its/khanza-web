@@ -40,12 +40,11 @@ final class PengajuanBarangController extends ControllerTemplate
                 [TABLE_ONLY, OPTIONAL, I::READONLY, 'atasan_logistik',            'Pengelola'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'atasan_logistik_nama',       'Pengelola'],
             ],
-            child_path: '/inventori-non-medis/detail-pengajuan-barang',
-            child_fk: 'id_pengajuan',
+            // child_path: '/inventori-non-medis/detail-pengajuan-barang',
+            // child_fk: 'id_pengajuan',
         );
     }
 
-    // data terbaru di atas
     protected function before_read(): void
     {
         $this->model->set_order('id_pengajuan', 'DESC');
@@ -83,7 +82,7 @@ final class PengajuanBarangController extends ControllerTemplate
         return $this->response->setJSON(['data' => $data]);
     }
 
-    // tampilkan form tambah custom dengan modal search
+    // form tambah: 1-page header + detail
     public function create_page(): string
     {
         return view('admin/inventorinonmedis/tambah_pengajuan_barang', [
@@ -94,45 +93,120 @@ final class PengajuanBarangController extends ControllerTemplate
         ]);
     }
 
-    // tampilkan form ubah custom (reuse view tambah)
-    public function update_page(int|string $id): string
+    // halaman detail (readonly) — view terpisah tanpa form
+    public function detail(int|string $id): string
     {
+        if ($id == 0) return $this->index();
+
         $baris = $this->model->find_one($id);
 
-        return view('admin/inventorinonmedis/tambah_pengajuan_barang', [
-            'judul'       => 'Ubah ' . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
-            'modul_path'  => $this->get_uri_path(),
-            'form_action' => '/submitedit/' . $id,
-            'baris'       => $baris,
+        $detail_items = $this->get_db()
+            ->table('inventori_non_medis.pengajuan_barang_detail d')
+            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->select('d.id_barang, d.qty, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
+            ->where('d.id_pengajuan', (int) $id)
+            ->where('d.id_barang >', 0)
+            ->get()->getResultArray();
+
+        return view('admin/inventorinonmedis/detail_pengajuan_barang', [
+            'judul'        => 'Detail ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Detail', 'icon' => 'detail']]),
+            'modul_path'   => $this->get_uri_path(),
+            'baris'        => $baris,
+            'detail_items' => $detail_items,
         ]);
     }
 
-    // auto no_pengajuan + status awal Draf (1)
-    protected function before_create(array &$postData): void
+    // form ubah: 1-page header + detail existing (hanya saat Draf)
+    public function update_page(int|string $id): string|RedirectResponse
     {
+        $baris = $this->model->find_one($id);
+
+        // redirect ke detail jika bukan Draf
+        if (is_array($baris) && (int) ($baris['id_status_pengajuan_barang'] ?? 0) !== 1) {
+            return redirect()->to($this->get_uri_path() . '/' . $id);
+        }
+
+        $detail_items = $this->get_db()
+            ->table('inventori_non_medis.pengajuan_barang_detail d')
+            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+            ->select('d.id_detail, d.id_barang, d.qty, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
+            ->where('d.id_pengajuan', (int) $id)
+            ->where('d.id_barang >', 0)
+            ->get()->getResultArray();
+
+        return view('admin/inventorinonmedis/tambah_pengajuan_barang', [
+            'judul'        => 'Ubah ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
+            'modul_path'   => $this->get_uri_path(),
+            'form_action'  => '/submitedit/' . $id,
+            'baris'        => $baris,
+            'detail_items' => $detail_items,
+            'readonly'     => false,
+        ]);
+    }
+
+    // simpan header + detail sekaligus
+    public function create(): string|RedirectResponse
+    {
+        $postData = [
+            'tanggal'        => $this->request->getPost('tanggal'),
+            'petugas_gudang' => $this->request->getPost('petugas_gudang') ?: null,
+        ];
+
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.pengajuan_barang', 'no_pengajuan', 'id_pengajuan');
         $postData['no_pengajuan']               = generateNextNoPengajuanBarang($lastNo, $postData['tanggal'] ?? null);
         $postData['id_status_pengajuan_barang'] = 1;
 
-        // convert empty FK modal fields to null
-        if (isset($postData['petugas_gudang']) && $postData['petugas_gudang'] === '') {
-            $postData['petugas_gudang'] = null;
+        $db = $this->get_db();
+
+        try {
+            $db->transBegin();
+
+            $this->model->insert($postData);
+            $id_pengajuan = (int) $db->insertID();
+
+            $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
+            $detail_qty   = $this->request->getPost('detail_qty') ?? [];
+            $detail_harga = $this->request->getPost('detail_harga') ?? [];
+            $total_harga  = 0;
+
+            for ($i = 0; $i < count($detail_ids); $i++) {
+                $id_barang = (int) ($detail_ids[$i] ?? 0);
+                $qty       = (int) ($detail_qty[$i] ?? 0);
+                $harga     = (float) ($detail_harga[$i] ?? 0);
+                if ($id_barang > 0 && $qty > 0) {
+                    $subtotal = $qty * $harga;
+                    $total_harga += $subtotal;
+                    $db->table('inventori_non_medis.pengajuan_barang_detail')->insert([
+                        'id_pengajuan' => $id_pengajuan,
+                        'id_barang'    => $id_barang,
+                        'qty'          => $qty,
+                        'harga'        => $harga > 0 ? $harga : null,
+                        'subtotal'     => $subtotal > 0 ? $subtotal : null,
+                    ]);
+                }
+            }
+
+            // update total_harga di header
+            if ($total_harga > 0) {
+                $this->model->update($id_pengajuan, ['total_harga' => $total_harga]);
+            }
+
+            $db->transCommit();
+            session()->setFlashdata('success', 'Data Pengajuan Barang berhasil disimpan.');
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            session()->setFlashdata('error', 'Gagal menyimpan: ' . $e->getMessage());
         }
+
+        return $this->home();
     }
 
-    // hanya izinkan transisi ke Draf (1) atau Proses Pengajuan (4)
-    protected function before_update(array &$postData, int|string $id): void
-    {
-        $new_status = (int) ($postData['id_status_pengajuan_barang'] ?? 0);
-        if (!in_array($new_status, [1, 4], true)) {
-            $current                                = $this->model->find($id);
-            $postData['id_status_pengajuan_barang'] = (int) ($current['id_status_pengajuan_barang'] ?? 1);
-        }
-    }
-
-    // blokir perubahan jika bukan Draf (1), cegah pengajuan jika detail kosong
+    // update header + sync detail
     public function update(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);
@@ -141,19 +215,64 @@ final class PengajuanBarangController extends ControllerTemplate
             return $this->home();
         }
 
-        $new_status = (int) ($this->request->getPost('id_status_pengajuan_barang') ?? 0);
-        if ($new_status === 4) {
-            $has_detail = $this
-                ->get_db()
-                ->table('inventori_non_medis.pengajuan_barang_detail')
-                ->where('id_pengajuan', (int) $id)
-                ->countAllResults() > 0;
-            if (!$has_detail) {
-                session()->setFlashdata('error', 'Tambahkan detail barang terlebih dahulu sebelum mengajukan.');
-                return $this->home();
-            }
+        $postData = [
+            'tanggal'                     => $this->request->getPost('tanggal'),
+            'petugas_gudang'              => $this->request->getPost('petugas_gudang') ?: null,
+            'id_status_pengajuan_barang'  => $this->request->getPost('id_status_pengajuan_barang') ?? 1,
+        ];
+
+        $new_status = (int) ($postData['id_status_pengajuan_barang'] ?? 0);
+        if (!in_array($new_status, [1, 4], true)) {
+            $postData['id_status_pengajuan_barang'] = (int) ($current['id_status_pengajuan_barang'] ?? 1);
         }
 
-        return parent::update($id);
+        $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+        if ($new_status === 4 && empty($detail_ids)) {
+            session()->setFlashdata('error', 'Tambahkan detail barang terlebih dahulu sebelum mengajukan.');
+            return $this->home();
+        }
+
+        $db = $this->get_db();
+
+        try {
+            $db->transBegin();
+
+            // sync detail: hapus semua lalu insert ulang
+            $db->table('inventori_non_medis.pengajuan_barang_detail')
+                ->where('id_pengajuan', (int) $id)
+                ->delete();
+
+            $detail_qty   = $this->request->getPost('detail_qty') ?? [];
+            $detail_harga = $this->request->getPost('detail_harga') ?? [];
+            $total_harga  = 0;
+
+            for ($i = 0; $i < count($detail_ids); $i++) {
+                $id_barang = (int) ($detail_ids[$i] ?? 0);
+                $qty       = (int) ($detail_qty[$i] ?? 0);
+                $harga     = (float) ($detail_harga[$i] ?? 0);
+                if ($id_barang > 0 && $qty > 0) {
+                    $subtotal = $qty * $harga;
+                    $total_harga += $subtotal;
+                    $db->table('inventori_non_medis.pengajuan_barang_detail')->insert([
+                        'id_pengajuan' => (int) $id,
+                        'id_barang'    => $id_barang,
+                        'qty'          => $qty,
+                        'harga'        => $harga > 0 ? $harga : null,
+                        'subtotal'     => $subtotal > 0 ? $subtotal : null,
+                    ]);
+                }
+            }
+
+            $postData['total_harga'] = $total_harga > 0 ? $total_harga : null;
+            $this->model->update($id, $postData);
+
+            $db->transCommit();
+            session()->setFlashdata('success', 'Data Pengajuan Barang berhasil diperbarui.');
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            session()->setFlashdata('error', 'Gagal memperbarui: ' . $e->getMessage());
+        }
+
+        return $this->home();
     }
 }
