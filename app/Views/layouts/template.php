@@ -74,6 +74,28 @@
             document.getElementById(modalId).style.display = 'none'
             document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
         }
+
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('button[type="submit"], input[type="submit"]');
+            if (!btn) return;
+            const form = btn.closest('form');
+            if (!form) return;
+
+            for (const field of form.querySelectorAll('[required]')) {
+                if (field.disabled || field.value) continue;
+                const wasReadonly = field.readOnly;
+                if (wasReadonly) field.readOnly = false;
+                const valid = field.reportValidity();
+                if (wasReadonly) {
+                    setTimeout(() => { field.readOnly = true; }, 900);
+                }
+                if (!valid) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return;
+                }
+            }
+        }, true);
     </script>
 
     <!-- SweetAlert Flash Message -->
