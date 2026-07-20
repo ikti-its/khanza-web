@@ -183,6 +183,8 @@ final class PengambilanDarahController extends ControllerTemplate
 
         $nomorPengambilanOtomatis = $prefiksNomorBulanIni . $nomorUrutPad;
 
+        $daftarNoBag = $this->model->getDaftarNoBagTerpakai();
+
         $mockBaris      = [];
         $konfigGabungan = [];
 
@@ -240,6 +242,7 @@ final class PengambilanDarahController extends ControllerTemplate
             'baris'             => $mockBaris,
             'bhp_medis_options' => $masterBhpMedis,
             'bhp_non_options'   => $masterBhpNonMedis,
+            'daftar_no_bag'     => $daftarNoBag,
             'form_action'       => '/submittambah',
         ]);
     }
@@ -483,6 +486,8 @@ final class PengambilanDarahController extends ControllerTemplate
             ['title' => 'Ubah', 'icon' => 'Ubah'],
         ];
 
+        $daftarNoBag = $this->model->getDaftarNoBagTerpakai($id);
+
         return view('/admin/donor/tambah_pengambilandarah', [
             'judul'             => 'Ubah ' . $this->title,
             'breadcrumbs'       => array_merge($this->breadcrumbs, $breadcrumbs),
@@ -494,6 +499,7 @@ final class PengambilanDarahController extends ControllerTemplate
             'bhp_non_options'   => $masterBhpNonMedis,
             'saved_medis'       => $savedBhpMedis,
             'saved_non_medis'   => $savedBhpNonMedis,
+            'daftar_no_bag'     => $daftarNoBag,
             'form_action'       => '/submitedit/' . $id,
         ]);
     }
