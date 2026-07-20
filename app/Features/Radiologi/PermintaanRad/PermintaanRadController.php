@@ -27,6 +27,7 @@ final class PermintaanRadController extends ControllerTemplate
                 A::DELETE,
                 A::SAMPEL,
                 A::PRINT,
+                A::FILTER,
             ],
             [
                 [HIDE,       OPTIONAL, I::INDEX,  'id_permintaan',        'ID Permintaan'],
@@ -157,6 +158,36 @@ final class PermintaanRadController extends ControllerTemplate
         ], $idItems);
 
         (new \App\Features\Radiologi\PermintaanRadItem\PermintaanRadItemModel())->insertBatch($data);
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // INDEX — filter status + jumlah data
+    // ──────────────────────────────────────────────────────────
+
+    #[\Override]
+    public function index(): string|RedirectResponse
+    {
+        $statuses = $this->model
+            ->db
+            ->table('radiologi.ref_status_permintaan_rad s')
+            ->select('s.id_status, s.nama_status, COUNT(pr.id_permintaan) AS jumlah')
+            ->join('radiologi.permintaan_rad pr', 'pr.id_status_permintaan = s.id_status', 'left')
+            ->groupBy('s.id_status, s.nama_status')
+            ->orderBy('s.id_status')
+            ->get()
+            ->getResultArray();
+
+        $this->filters = [];
+        foreach ($statuses as $row) {
+            $this->filters[(string) $row['id_status']] = $row['nama_status'] . ' (' . $row['jumlah'] . ')';
+        }
+
+        $this->active_filter = $this->request->getGet('filter') ?: null;
+        if ($this->active_filter !== null) {
+            $this->model->set_filter('id_status_permintaan', (int) $this->active_filter);
+        }
+
+        return parent::index();
     }
 
     // ──────────────────────────────────────────────────────────
