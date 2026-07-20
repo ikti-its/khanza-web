@@ -78,42 +78,58 @@
         if (isset($aksi['pilih'])  && $aksi['pilih']  === true) {
             echo view('components/aksi/pilih',  $data);
         }
+        $modul_draf_gate = ['pengadaanbarang', 'pengajuanbarang', 'permintaanbarang', 'penerimaanbarang', 'stokopname', 'ringkasanpengajuanbarang', 'ringkasanpermintaanbarang'];
+        $is_modul_draf = str_starts_with($modul_path, '/inventorinonmedis/')
+            && array_any($modul_draf_gate, fn($m) => str_contains($modul_path, $m));
+
         if (isset($aksi['ubah'])   && $aksi['ubah']   === true) {
-            // Cek apakah baris punya status dan bukan Draf — tampilkan "Detail" (readonly) bukan "Ubah"
-            $status_cols = array_filter(array_keys($baris), fn($k) => str_contains($k, 'nama_status'));
-            $is_draf = true;
-            $editable_statuses = ['draf', 'draft', 'diproses', 'proses pengadaan', 'proses penerimaan'];
-            foreach ($status_cols as $col) {
-                $val = strtolower(trim((string) ($baris[$col] ?? '')));
-                if ($val !== '' && $val !== '-' && !in_array($val, $editable_statuses)) {
-                    // Untuk halaman ringkasan, status "proses" masih editable
-                    if (str_contains($modul_path, 'ringkasan') && in_array($val, ['proses permintaan', 'proses pengajuan', 'proses penerimaan'])) {
-                        continue;
-                    }
-                    $is_draf = false;
-                    break;
-                }
-            }
-            if ($is_draf || empty($status_cols)) {
+            if (!$is_modul_draf) {
                 echo view('components/aksi/ubah', $data);
             } else {
-                echo '<div class="px-3 py-1.5"><a href="' . $modul_path . '/' . $id . '" class="gap-x-1 text-sm text-green-600 decoration-2 hover:underline font-semibold">Lihat Detail</a></div>';
+                // Cek apakah baris punya status dan bukan Draf — tampilkan "Lihat Detail" (readonly) bukan "Ubah"
+                $status_cols = array_filter(array_keys($baris), fn($k) => str_contains($k, 'nama_status'));
+                $is_draf = true;
+                $editable_statuses = ['draf', 'draft', 'diproses', 'proses pengadaan', 'proses penerimaan'];
+                foreach ($status_cols as $col) {
+                    $val = strtolower(trim((string) ($baris[$col] ?? '')));
+                    if ($val !== '' && $val !== '-' && !in_array($val, $editable_statuses)) {
+                        if (str_contains($modul_path, 'ringkasan') && in_array($val, ['proses permintaan', 'proses pengajuan', 'proses penerimaan'])) {
+                            continue;
+                        }
+                        $is_draf = false;
+                        break;
+                    }
+                }
+
+                $sudah_ada_detail = (isset($aksi['detail']) && $aksi['detail'] === true)
+                    || (isset($aksi['detail2']) && $aksi['detail2'] === true);
+
+                if ($is_draf || empty($status_cols)) {
+                    echo view('components/aksi/ubah', $data);
+                } elseif (!$sudah_ada_detail) {
+                    // Fallback "Lihat Detail" hanya kalau modul ini belum punya tombol detail/detail2 sendiri
+                    echo '<div class="px-3 py-1.5"><a href="' . $modul_path . '/' . $id . '" class="gap-x-1 text-sm text-green-600 decoration-2 hover:underline font-semibold">Lihat Detail</a></div>';
+                }
             }
         }
         if (isset($aksi['hapus'])  && $aksi['hapus']  === true) {
-            // Sembunyikan hapus jika status bukan Draf
-            $status_cols_h = array_filter(array_keys($baris), fn($k) => str_contains($k, 'nama_status'));
-            $is_draf_h = true;
-            $editable_statuses_h = ['draf', 'draft', 'diproses', 'proses pengadaan', 'proses penerimaan'];
-            foreach ($status_cols_h as $col) {
-                $val = strtolower(trim((string) ($baris[$col] ?? '')));
-                if ($val !== '' && $val !== '-' && !in_array($val, $editable_statuses_h)) {
-                    $is_draf_h = false;
-                    break;
-                }
-            }
-            if ($is_draf_h || empty($status_cols_h)) {
+            if (!$is_modul_draf) {
                 echo view('components/aksi/hapus', $data);
+            } else {
+                // Sembunyikan hapus jika status bukan Draf
+                $status_cols_h = array_filter(array_keys($baris), fn($k) => str_contains($k, 'nama_status'));
+                $is_draf_h = true;
+                $editable_statuses_h = ['draf', 'draft', 'diproses', 'proses pengadaan', 'proses penerimaan'];
+                foreach ($status_cols_h as $col) {
+                    $val = strtolower(trim((string) ($baris[$col] ?? '')));
+                    if ($val !== '' && $val !== '-' && !in_array($val, $editable_statuses_h)) {
+                        $is_draf_h = false;
+                        break;
+                    }
+                }
+                if ($is_draf_h || empty($status_cols_h)) {
+                    echo view('components/aksi/hapus', $data);
+                }
             }
         }
         if (isset($aksi['registrasi']) && $aksi['registrasi'] === true) {
