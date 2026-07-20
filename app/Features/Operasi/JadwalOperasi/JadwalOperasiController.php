@@ -421,6 +421,36 @@ final class JadwalOperasiController extends ControllerTemplate
     }
 
     #[\Override]
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) {
+            return $this->home();
+        }
+
+        $existing = $this->model->find($id);
+        if (!$existing) {
+            return $this->home();
+        }
+
+        /** Jadwal yang sudah diisi (Dijadwalkan/Proses/Selesai/Dibatalkan) tidak boleh dihapus—kalau ada
+         * kesalahan data, seharusnya diubah lewat menu edit, bukan dihapus lalu dibuat ulang, karena baris
+         * jadwal ini satu-satu dengan permintaan operasinya dan tidak ada alur untuk membuatnya kembali. */
+        if ((int) ($existing['id_status'] ?? 0) !== 1) {
+            session()->setFlashdata('error', 'Jadwal operasi yang sudah dijadwalkan tidak dapat dihapus. Jika ada kesalahan data, silakan ubah melalui menu edit.');
+            return $this->home();
+        }
+
+        try {
+            $this->model->delete($id);
+            session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil dihapus.');
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            session()->setFlashdata('error', $this->friendly_db_error($e));
+        }
+
+        return $this->home();
+    }
+
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         if ($id == 0) {
