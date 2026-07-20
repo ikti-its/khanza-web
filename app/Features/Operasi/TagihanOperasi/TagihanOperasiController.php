@@ -105,6 +105,17 @@ final class TagihanOperasiController extends ControllerTemplate
             ->getResultArray();
     }
 
+    private function fetchTemplateLaporan(): array
+    {
+        return $this->model
+            ->db
+            ->table('operasi.ref_template_laporan_operasi')
+            ->select(['id_template', 'nama_template', 'isi_template'])
+            ->orderBy('nama_template', 'ASC')
+            ->get()
+            ->getResultArray();
+    }
+
     private function fetchPaketTagihan(int $idTagihan): array
     {
         return $this->model
@@ -321,14 +332,15 @@ final class TagihanOperasiController extends ControllerTemplate
         }
 
         return view('admin/operasi/tagihan_operasi_form', [
-            'judul'          => 'Buat Tagihan Operasi',
-            'breadcrumbs'    => [...$this->breadcrumbs, ['title' => 'Buat', 'icon' => 'tambah']],
-            'modul_path'     => $this->get_uri_path(),
-            'form_action'    => '/submittambah',
-            'baris'          => $jadwal,
-            'paket_terpilih' => $paketTerpilih,
-            'obat'           => [],
-            'kategori'       => $this->fetchKategori(),
+            'judul'            => 'Buat Tagihan Operasi',
+            'breadcrumbs'      => [...$this->breadcrumbs, ['title' => 'Buat', 'icon' => 'tambah']],
+            'modul_path'       => $this->get_uri_path(),
+            'form_action'      => '/submittambah',
+            'baris'            => $jadwal,
+            'paket_terpilih'   => $paketTerpilih,
+            'obat'             => [],
+            'kategori'         => $this->fetchKategori(),
+            'template_laporan' => $this->fetchTemplateLaporan(),
         ]);
     }
 
@@ -344,15 +356,16 @@ final class TagihanOperasiController extends ControllerTemplate
         }
 
         return view('admin/operasi/tagihan_operasi_form', [
-            'judul'          => 'Ubah Tagihan Operasi',
-            'breadcrumbs'    => [...$this->breadcrumbs, ['title' => 'Ubah', 'icon' => 'ubah']],
-            'modul_path'     => $this->get_uri_path(),
-            'kolom_id'       => $this->model->primaryKey,
-            'form_action'    => "/submitedit/{$id}",
-            'baris'          => $baris,
-            'paket_terpilih' => $this->fetchPaketTagihan((int) $id),
-            'obat'           => $this->fetchObat((int) $id),
-            'kategori'       => $this->fetchKategori(),
+            'judul'            => 'Ubah Tagihan Operasi',
+            'breadcrumbs'      => [...$this->breadcrumbs, ['title' => 'Ubah', 'icon' => 'ubah']],
+            'modul_path'       => $this->get_uri_path(),
+            'kolom_id'         => $this->model->primaryKey,
+            'form_action'      => "/submitedit/{$id}",
+            'baris'            => $baris,
+            'paket_terpilih'   => $this->fetchPaketTagihan((int) $id),
+            'obat'             => $this->fetchObat((int) $id),
+            'kategori'         => $this->fetchKategori(),
+            'template_laporan' => $this->fetchTemplateLaporan(),
         ]);
     }
 
@@ -489,40 +502,41 @@ final class TagihanOperasiController extends ControllerTemplate
     private function buildData(array $post): array
     {
         return [
-            'id_jadwal'          => $post['id_jadwal'] ?? null,
-            'id_kategori'        => $post['id_kategori'] ?? null,
-            'jenis_anestesi'     => $post['jenis_anestesi'] ?? null,
-            'tanggal_mulai'      => $post['tanggal_mulai'] ?: null,
-            'tanggal_selesai'    => $post['tanggal_selesai'] ?: null,
-            'total_tagihan'      => $this->computeTotal($post['paket'] ?? [], $post['obat'] ?? []),
-            'diagnosis_pre'      => $post['diagnosis_pre'] ?? null,
-            'diagnosis_post'     => $post['diagnosis_post'] ?? null,
-            'jaringan'           => $post['jaringan'] ?? null,
-            'laporan'            => $post['laporan'] ?? null,
-            'is_pa'              => isset($post['is_pa']),
-            'id_operator_1'      => $post['id_operator_1'] ?: null,
-            'id_operator_2'      => $post['id_operator_2'] ?: null,
-            'id_operator_3'      => $post['id_operator_3'] ?: null,
-            'id_dokter_anestesi' => $post['id_dokter_anestesi'] ?: null,
-            'id_dokter_anak'     => $post['id_dokter_anak'] ?: null,
-            'id_dokter_pj_anak'  => $post['id_dokter_pj_anak'] ?: null,
-            'id_dokter_umum'     => $post['id_dokter_umum'] ?: null,
-            'id_ast_operator_1'  => $post['id_ast_operator_1'] ?: null,
-            'id_ast_operator_2'  => $post['id_ast_operator_2'] ?: null,
-            'id_ast_operator_3'  => $post['id_ast_operator_3'] ?: null,
-            'id_bidan_1'         => $post['id_bidan_1'] ?: null,
-            'id_bidan_2'         => $post['id_bidan_2'] ?: null,
-            'id_bidan_3'         => $post['id_bidan_3'] ?: null,
-            'id_perawat_luar'    => $post['id_perawat_luar'] ?: null,
-            'id_instrumen'       => $post['id_instrumen'] ?: null,
-            'id_ast_anestesi_1'  => $post['id_ast_anestesi_1'] ?: null,
-            'id_ast_anestesi_2'  => $post['id_ast_anestesi_2'] ?: null,
-            'id_perawat_resus'   => $post['id_perawat_resus'] ?: null,
-            'id_onloop_1'        => $post['id_onloop_1'] ?: null,
-            'id_onloop_2'        => $post['id_onloop_2'] ?: null,
-            'id_onloop_3'        => $post['id_onloop_3'] ?: null,
-            'id_onloop_4'        => $post['id_onloop_4'] ?: null,
-            'id_onloop_5'        => $post['id_onloop_5'] ?: null,
+            'id_jadwal'           => $post['id_jadwal'] ?? null,
+            'id_kategori'         => $post['id_kategori'] ?? null,
+            'jenis_anestesi'      => $post['jenis_anestesi'] ?? null,
+            'tanggal_mulai'       => $post['tanggal_mulai'] ?: null,
+            'tanggal_selesai'     => $post['tanggal_selesai'] ?: null,
+            'total_tagihan'       => $this->computeTotal($post['paket'] ?? [], $post['obat'] ?? []),
+            'diagnosis_pre'       => $post['diagnosis_pre'] ?? null,
+            'diagnosis_post'      => $post['diagnosis_post'] ?? null,
+            'jaringan'            => $post['jaringan'] ?? null,
+            'laporan'             => $post['laporan'] ?? null,
+            'id_template_laporan' => $post['id_template_laporan'] ?: null,
+            'is_pa'               => isset($post['is_pa']),
+            'id_operator_1'       => $post['id_operator_1'] ?: null,
+            'id_operator_2'       => $post['id_operator_2'] ?: null,
+            'id_operator_3'       => $post['id_operator_3'] ?: null,
+            'id_dokter_anestesi'  => $post['id_dokter_anestesi'] ?: null,
+            'id_dokter_anak'      => $post['id_dokter_anak'] ?: null,
+            'id_dokter_pj_anak'   => $post['id_dokter_pj_anak'] ?: null,
+            'id_dokter_umum'      => $post['id_dokter_umum'] ?: null,
+            'id_ast_operator_1'   => $post['id_ast_operator_1'] ?: null,
+            'id_ast_operator_2'   => $post['id_ast_operator_2'] ?: null,
+            'id_ast_operator_3'   => $post['id_ast_operator_3'] ?: null,
+            'id_bidan_1'          => $post['id_bidan_1'] ?: null,
+            'id_bidan_2'          => $post['id_bidan_2'] ?: null,
+            'id_bidan_3'          => $post['id_bidan_3'] ?: null,
+            'id_perawat_luar'     => $post['id_perawat_luar'] ?: null,
+            'id_instrumen'        => $post['id_instrumen'] ?: null,
+            'id_ast_anestesi_1'   => $post['id_ast_anestesi_1'] ?: null,
+            'id_ast_anestesi_2'   => $post['id_ast_anestesi_2'] ?: null,
+            'id_perawat_resus'    => $post['id_perawat_resus'] ?: null,
+            'id_onloop_1'         => $post['id_onloop_1'] ?: null,
+            'id_onloop_2'         => $post['id_onloop_2'] ?: null,
+            'id_onloop_3'         => $post['id_onloop_3'] ?: null,
+            'id_onloop_4'         => $post['id_onloop_4'] ?: null,
+            'id_onloop_5'         => $post['id_onloop_5'] ?: null,
         ];
     }
 

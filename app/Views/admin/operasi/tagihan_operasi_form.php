@@ -180,9 +180,24 @@ $infoGrid = [
         </div>
 
         <div class="mb-5">
-          <label class="block mb-2 text-sm text-gray-900 dark:text-white">
-            Laporan Operasi <span class="text-red-500">*</span>
-          </label>
+          <div class="flex items-center justify-between mb-2">
+            <label class="block text-sm text-gray-900 dark:text-white">
+              Laporan Operasi <span class="text-red-500">*</span>
+            </label>
+            <?php if (!empty($template_laporan)): ?>
+            <select onchange="applyTemplateLaporan(this.value); this.selectedIndex = 0;"
+                    class="text-sm py-2 px-3 min-w-[10rem] border border-gray-300 rounded-lg bg-white text-gray-700 cursor-pointer dark:bg-slate-800 dark:text-gray-300 dark:border-gray-600">
+              <option value="">Pilih Template</option>
+              <?php foreach ($template_laporan as $tpl): ?>
+              <option value="<?= esc((string) $tpl['id_template']) ?>">
+                <?= esc($tpl['nama_template']) ?>
+              </option>
+              <?php endforeach; ?>
+            </select>
+            <?php endif; ?>
+          </div>
+          <input type="hidden" name="id_template_laporan" id="id_template_laporan"
+                 value="<?= esc((string) ($baris['id_template_laporan'] ?? '')) ?>">
           <textarea name="laporan" rows="4" required
                     class="<?= $stdClass ?>"><?= esc($baris['laporan'] ?? '') ?></textarea>
         </div>
@@ -335,6 +350,16 @@ function autofillPetugas(item) {
     document.getElementById('id_'   + currentPetugasSlot).value = item.id_petugas ?? '';
     document.getElementById('nama_' + currentPetugasSlot).value = item.nama        ?? '';
     currentPetugasSlot = null;
+}
+
+// ── Template Laporan Operasi ─────────────────────────────────────────────
+const _templateLaporanMap = <?= json_encode(array_column($template_laporan ?? [], 'isi_template', 'id_template')) ?>;
+
+function applyTemplateLaporan(idTemplate) {
+    if (!idTemplate) return;
+    const textarea = document.querySelector('textarea[name="laporan"]');
+    if (textarea) textarea.value = (_templateLaporanMap[idTemplate] ?? '').replace(/\\n/g, '\n');
+    document.getElementById('id_template_laporan').value = idTemplate;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────

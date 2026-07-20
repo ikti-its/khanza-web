@@ -36,6 +36,7 @@ final class TagihanOperasiModel extends ModelTemplate
                         ],
                     ],
                 ],
+                'id_template'        => ['nama_template'],
                 'id_kategori'        => ['nama_kategori'],
                 'id_operator_1'      => ['id_orang' => ['nama']],
                 'id_operator_2'      => ['id_orang' => ['nama']],
