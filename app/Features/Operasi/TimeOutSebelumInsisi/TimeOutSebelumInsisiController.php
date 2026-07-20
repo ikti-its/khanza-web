@@ -165,7 +165,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
             'perkiraan_waktu_jam'     => $rawPost['perkiraan_waktu_jam'] ?? null,
             'is_antibiotik'           => $rawPost['is_antibiotik'] ?? null,
             'nama_antibiotik'         => $rawPost['nama_antibiotik'] ?? null,
-            'waktu_antibiotik'        => $rawPost['waktu_antibiotik'] ?? null,
+            'waktu_antibiotik'        => $rawPost['waktu_antibiotik'] ?: null,
             'antisipasi_hilang_darah' => $rawPost['antisipasi_hilang_darah'] ?? null,
             'id_hal_khusus'           => (int) ($rawPost['id_hal_khusus'] ?? 0) ?: null,
             'keterangan_hal_khusus'   => $rawPost['keterangan_hal_khusus'] ?? null,

@@ -187,15 +187,15 @@ foreach (['is_identitas_sesuai', 'is_tindakan_sesuai', 'is_area_insisi_sesuai', 
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="<?= $labelLeft ?>">Nama Antibiotik <span class="text-red-500">*</span></label>
+                <label class="<?= $labelLeft ?>">Nama Antibiotik</label>
                 <input type="text" name="nama_antibiotik"
                        value="<?= esc($baris['nama_antibiotik'] ?? '') ?>"
-                       required class="<?= $inputClass ?> lg:w-1/4">
+                       class="<?= $inputClass ?> lg:w-1/4">
 
-                <label class="<?= $labelRight ?>">Waktu Pemberian Antibiotik <span class="text-red-500">*</span></label>
+                <label class="<?= $labelRight ?>">Waktu Pemberian Antibiotik</label>
                 <input type="time" name="waktu_antibiotik"
                        value="<?= esc(substr(str_replace(' ', 'T', $baris['waktu_antibiotik'] ?? ''), 0, 16)) ?>"
-                       required class="<?= $inputClass ?> lg:w-1/4">
+                       class="<?= $inputClass ?> lg:w-1/4">
             </div>
 
             <div class="mb-5 sm:block md:flex items-center">
