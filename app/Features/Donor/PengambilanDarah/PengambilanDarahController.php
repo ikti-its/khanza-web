@@ -33,7 +33,7 @@ final class PengambilanDarahController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX,  'id_pengambilan_darah',  'ID Pengambilan Darah'],
                 [SHOW, REQUIRED, I::TEXT,   'nomor_pengambilan',     'Nomor Pengambilan'],
                 [SHOW, REQUIRED, I::INDEX,  'id_kunjungan',          'ID Kunjungan'],
-                [SHOW, REQUIRED, I::DATE,   'tanggal_pengambilan',   'Tanggal Pengambilan'],
+                [SHOW, REQUIRED, I::DTIME,  'tanggal_pengambilan',   'Tanggal Pengambilan'],
                 [SHOW, REQUIRED, I::SELECT, 'id_shift',              'Shift'],
                 [SHOW, REQUIRED, I::TEXT,   'no_bag',                'Nomor Bag'],
                 [SHOW, REQUIRED, I::SELECT, 'id_jenis_bag',          'Jenis Bag'],
@@ -193,8 +193,8 @@ final class PengambilanDarahController extends ControllerTemplate
                 continue;
             }
 
-            $isTanggal = $fieldPengambilan[3] === 'tanggal' || str_contains($columnPengambilan, 'tanggal');
-            $mockBaris[$columnPengambilan] = $isTanggal ? date('Y-m-d') : '';
+            $isTanggal = $fieldPengambilan[3] === 'tanggal_jam' || str_contains($columnPengambilan, 'tanggal');
+            $mockBaris[$columnPengambilan] = $isTanggal ? date('Y-m-d\TH:i') : '';
 
             if ($columnPengambilan === 'nomor_pengambilan') {
                 $mockBaris[$columnPengambilan] = $nomorPengambilanOtomatis;

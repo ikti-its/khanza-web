@@ -17,7 +17,7 @@ final class PengambilanDarahDatabase extends DatabaseTemplate
                 'id_pengambilan_darah'  => T::ID(100_000_000),
                 'nomor_pengambilan'     => T::RECORD(20),
                 'id_kunjungan'          => T::FK_AUTO(),
-                'tanggal_pengambilan'   => T::DATE(),
+                'tanggal_pengambilan'   => T::DTIME(),
                 'id_shift'              => T::FK_AUTO(),
                 'no_bag'                => T::CODE(14),
                 'id_jenis_bag'          => T::FK_AUTO(),

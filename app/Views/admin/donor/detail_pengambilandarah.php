@@ -42,7 +42,7 @@
                     <div>
                         <span class="block text-sm font-medium text-gray-500 dark:text-gray-400">Tanggal Pengambilan</span>
                         <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                            <?= !empty($baris['tanggal_pengambilan']) ? date('d F Y', strtotime($baris['tanggal_pengambilan'])) : '-' ?>
+                            <?= !empty($baris['tanggal_pengambilan']) ? date('d F Y H:i', strtotime($baris['tanggal_pengambilan'])) : '-' ?>
                         </span>
                     </div>
                     <div>

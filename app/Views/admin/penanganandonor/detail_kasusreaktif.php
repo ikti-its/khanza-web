@@ -3,9 +3,14 @@
 
 <?php
     $formatterTanggal = new IntlDateFormatter('id_ID', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
+    $formatterTanggalJam = new IntlDateFormatter('id_ID', IntlDateFormatter::LONG, IntlDateFormatter::SHORT);
 
     $formatTanggal = static function ($tanggal) use ($formatterTanggal): string {
         return !empty($tanggal) ? $formatterTanggal->format(strtotime((string) $tanggal)) : '-';
+    };
+
+    $formatTanggalJam = static function ($tanggal) use ($formatterTanggalJam): string {
+        return !empty($tanggal) ? $formatterTanggalJam->format(strtotime((string) $tanggal)) : '-';
     };
 
     $nilai = static function (array $baris, string $key): string {
@@ -96,7 +101,7 @@
                     <div>
                         <span class="block text-sm font-medium text-gray-500 dark:text-gray-400">Tanggal Pengambilan</span>
                         <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                            <?= esc($formatTanggal($baris['tanggal_pengambilan'] ?? null)) ?>
+                            <?= esc($formatTanggalJam($baris['tanggal_pengambilan'] ?? null)) ?>
                         </span>
                     </div>
 
