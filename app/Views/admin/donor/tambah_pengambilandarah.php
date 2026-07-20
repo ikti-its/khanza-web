@@ -96,7 +96,7 @@
                 <label class="block mb-2 md:mb-0 text-sm text-gray-900 dark:text-white md:w-1/4">
                     Nomor Bag<span class="text-red-600">*</span>
                 </label>
-                <input type="text" name="no_bag" value="<?= $baris['no_bag'] ?? '' ?>" placeholder="Masukkan nomor kantong..."
+                <input type="text" name="no_bag" id="no_bag" value="<?= $baris['no_bag'] ?? '' ?>" placeholder="Masukkan nomor kantong..."
                        maxlength="14" class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white" required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
@@ -265,6 +265,7 @@
 <script>
     const masterMedis    = <?= json_encode($bhp_medis_options ?? []) ?>;
     const masterNonMedis = <?= json_encode($bhp_non_options ?? []) ?>;
+    const daftarNoBagTerpakai = <?= json_encode($daftar_no_bag ?? []) ?>.map(v => String(v).trim().toUpperCase());
     let currentTab = 'medis';
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -497,6 +498,18 @@
         document.getElementById('nama_petugas').value = item.nama;
     }
 
+    function cekNomorBagDuplikat() {
+        const inputNoBag = document.getElementById('no_bag');
+        const noBag = inputNoBag.value.trim();
+
+        if (noBag !== '' && daftarNoBagTerpakai.includes(noBag.toUpperCase())) {
+            alert(`Nomor Bag "${noBag}" sudah pernah digunakan sebelumnya.\nSilakan masukkan nomor kantong darah yang berbeda.`);
+            inputNoBag.focus();
+            return false;
+        }
+        return true;
+    }
+
     function validateForm() {
         var requiredFields = document.querySelectorAll('select[required], input[required]');
         for (var i = 0; i < requiredFields.length; i++) {
@@ -511,7 +524,11 @@
             alert("Silakan tentukan data Kunjungan terlebih dahulu melalui modal pendaftaran.");
             return false;
         }
-        
+
+        if (!cekNomorBagDuplikat()) {
+            return false;
+        }
+
         var submitButton = document.getElementById('submitButton');
         if (submitButton) {
             submitButton.setAttribute('disabled', true);

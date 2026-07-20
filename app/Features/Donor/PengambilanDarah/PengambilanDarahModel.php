@@ -179,6 +179,24 @@ final class PengambilanDarahModel extends ModelTemplate
     }
 
     /**
+     * Mengambil daftar nomor bag yang sudah terpakai
+     * @param int|string|null $excludeId ID pengambilan darah yang dikecualikan (dipakai saat mode ubah)
+     * @return list<string>
+     */
+    public function getDaftarNoBagTerpakai(null|int|string $excludeId = null): array
+    {
+        $builder = $this->db
+            ->table('donor.pengambilan_darah')
+            ->select('no_bag');
+
+        if ($excludeId !== null) {
+            $builder->where('id_pengambilan_darah !=', $excludeId);
+        }
+
+        return array_column($builder->get()->getResultArray(), 'no_bag');
+    }
+
+    /**
      * Mengambil data penggunaan BHP medis donor
      */
     public function getBhpMedisDetail(int|string $idPengambilan): array
