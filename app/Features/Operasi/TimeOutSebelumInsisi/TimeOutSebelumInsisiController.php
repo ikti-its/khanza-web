@@ -335,4 +335,40 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
             return redirect()->back()->withInput();
         }
     }
+
+    #[\Override]
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) {
+            return $this->home();
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            (new \App\Features\Operasi\TimeOutSebelumInsisiPenunjang\TimeOutSebelumInsisiPenunjangModel())
+                ->where('id_timeout', $id)
+                ->delete();
+
+            $this->model->delete($id);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus time out sebelum insisi.');
+            }
+
+            session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil dihapus.');
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            session()->setFlashdata(
+                'error',
+                $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                    ? $this->friendly_db_error($e)
+                    : $e->getMessage(),
+            );
+        }
+
+        return $this->home();
+    }
 }
