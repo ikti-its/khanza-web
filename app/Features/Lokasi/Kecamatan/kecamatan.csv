@@ -1,12 +1,7287 @@
 ﻿id_kecamatan,id_provinsi,id_kota_lokal,id_kec_lokal,nama_kecamatan
 0,0,0,0,-
 1,1,1,1,Bakongan
-2,1,1,2,Kluet Utara
-3,1,1,3,Kluet Selatan
+2,1,1,2,"Kluet Utara"
+3,1,1,3,"Kluet Selatan"
 4,1,1,4,Labuhanhaji
 5,1,1,5,Meukek
 6,1,1,6,Samadua
 7,1,1,7,Sawang
 8,1,1,8,Tapaktuan
 9,1,1,9,Trumon
-10,15,78,8,Gubeng
+10,1,1,10,"Pasie Raja"
+11,1,1,11,"Labuhanhaji Timur"
+12,1,1,12,"Labuhanhaji Barat"
+13,1,1,13,"Kluet Tengah"
+14,1,1,14,"Kluet Timur"
+15,1,1,15,"Bakongan Timur"
+16,1,1,16,"Trumon Timur"
+17,1,1,17,"Kota Bahagia"
+18,1,1,18,"Trumon Tengah"
+19,1,2,1,"Lawe Alas"
+20,1,2,2,"Lawe Sigala-Gala"
+21,1,2,3,Bambel
+22,1,2,4,Babussalam
+23,1,2,5,Badar
+24,1,2,6,"Babul Makmur"
+25,1,2,7,"Darul Hasanah"
+26,1,2,8,"Lawe Bulan"
+27,1,2,9,"Bukit Tusam"
+28,1,2,10,Semadam
+29,1,2,11,"Babul Rahmah"
+30,1,2,12,Ketambe
+31,1,2,13,"Deleng Pokhkisen"
+32,1,2,14,"Lawe Sumur"
+33,1,2,15,"Tanoh Alas"
+34,1,2,16,Leuser
+35,1,3,1,"Darul Aman"
+36,1,3,2,Julok
+37,1,3,3,"Idi Rayeuk"
+38,1,3,4,"Birem Bayeun"
+39,1,3,5,Serbajadi
+40,1,3,6,Nurussalam
+41,1,3,7,Peureulak
+42,1,3,8,"Rantau Selamat"
+43,1,3,9,"Simpang Ulim"
+44,1,3,10,"Ranto Peureulak"
+45,1,3,11,"Pante Bidari"
+46,1,3,12,Madat
+47,1,3,13,"Indra Makmu"
+48,1,3,14,"Idi Tunong"
+49,1,3,15,"Banda Alam"
+50,1,3,16,Peudawa
+51,1,3,17,"Peureulak Timur"
+52,1,3,18,"Peureulak Barat"
+53,1,3,19,"Sungai Raya"
+54,1,3,20,"Simpang Jernih"
+55,1,3,21,"Darul Ihsan"
+56,1,3,22,"Darul Falah"
+57,1,3,23,"Idi Timur"
+58,1,3,24,Peunaron
+59,1,4,1,Linge
+60,1,4,2,"Silih Nara"
+61,1,4,3,Bebesen
+62,1,4,7,Pegasing
+63,1,4,8,Bintang
+64,1,4,10,Ketol
+65,1,4,11,Kebayakan
+66,1,4,12,"Kute Panang"
+67,1,4,13,Celala
+68,1,4,17,"Laut Tawar"
+69,1,4,18,"Atu Lintang"
+70,1,4,19,"Jagong Jeget"
+71,1,4,20,Bies
+72,1,4,21,"Rusip Antara"
+73,1,5,1,"Johan Pahlawan"
+74,1,5,2,"Kaway XVI"
+75,1,5,3,"Sungai Mas"
+76,1,5,4,Woyla
+77,1,5,5,Samatiga
+78,1,5,6,Bubon
+79,1,5,7,"Arongan Lambalek"
+80,1,5,8,"Pante Ceureumen"
+81,1,5,9,Meureubo
+82,1,5,10,"Woyla Barat"
+83,1,5,11,"Woyla Timur"
+84,1,5,12,"Panton Reu"
+85,1,6,1,Lhoong
+86,1,6,2,Lhoknga
+87,1,6,3,Indrapuri
+88,1,6,4,Seulimeum
+89,1,6,5,Montasik
+90,1,6,6,Sukamakmur
+91,1,6,7,"Darul Imarah"
+92,1,6,8,"Peukan Bada"
+93,1,6,9,"Mesjid Raya"
+94,1,6,10,"Ingin Jaya"
+95,1,6,11,"Kuta Baro"
+96,1,6,12,Darussalam
+97,1,6,13,"Pulo Aceh"
+98,1,6,14,"Lembah Seulawah"
+99,1,6,15,"Kota Jantho"
+100,1,6,16,"Kuta Cot Glie"
+101,1,6,17,"Kuta Malaka"
+102,1,6,18,"Simpang Tiga"
+103,1,6,19,"Darul Kamal"
+104,1,6,20,Baitussalam
+105,1,6,21,"Krueng Barona Jaya"
+106,1,6,22,Leupung
+107,1,6,23,"Blang Bintang"
+108,1,7,3,Batee
+109,1,7,4,Delima
+110,1,7,5,Geumpang
+111,1,7,6,"Glumpang Tiga"
+112,1,7,7,Indrajaya
+113,1,7,8,"Kembang Tanjong"
+114,1,7,9,"Kota Sigli"
+115,1,7,11,Mila
+116,1,7,12,"Muara Tiga"
+117,1,7,13,Mutiara
+118,1,7,14,"Padang Tiji"
+119,1,7,15,"Peukan Baro"
+120,1,7,16,Pidie
+121,1,7,17,Sakti
+122,1,7,18,"Simpang Tiga"
+123,1,7,19,Tangse
+124,1,7,21,Tiro/Truseb
+125,1,7,22,Keumala
+126,1,7,24,"Mutiara Timur"
+127,1,7,25,Grong-grong
+128,1,7,27,Mane
+129,1,7,29,"Glumpang Baro"
+130,1,7,31,Titeue
+131,1,8,1,Baktiya
+132,1,8,2,Dewantara
+133,1,8,3,"Kuta Makmur"
+134,1,8,4,Lhoksukon
+135,1,8,5,Matangkuli
+136,1,8,6,"Muara Batu"
+137,1,8,7,"Meurah Mulia"
+138,1,8,8,Samudera
+139,1,8,9,Seunuddon
+140,1,8,10,"Syamtalira Aron"
+141,1,8,11,"Syamtalira Bayu"
+142,1,8,12,"Tanah Luas"
+143,1,8,13,"Tanah Pasir"
+144,1,8,14,"Tanah Jambo Aye"
+145,1,8,15,Sawang
+146,1,8,16,Nisam
+147,1,8,17,"Cot Girek"
+148,1,8,18,Langkahan
+149,1,8,19,"Baktiya Barat"
+150,1,8,20,"Paya Bakong"
+151,1,8,21,Nibong
+152,1,8,22,"Simpang Keuramat"
+153,1,8,23,Lapang
+154,1,8,24,"Pirak Timu"
+155,1,8,25,"Geureudong Pase"
+156,1,8,26,"Banda Baro"
+157,1,8,27,"Nisam Antara"
+158,1,9,1,"Simeulue Tengah"
+159,1,9,2,Salang
+160,1,9,3,"Teupah Barat"
+161,1,9,4,"Simeulue Timur"
+162,1,9,5,"Teluk Dalam"
+163,1,9,6,"Simeulue Barat"
+164,1,9,7,"Teupah Selatan"
+165,1,9,8,Alafan
+166,1,9,9,"Teupah Tengah"
+167,1,9,10,"Simeulue Cut"
+168,1,10,1,"Pulau Banyak"
+169,1,10,2,"Simpang Kanan"
+170,1,10,4,Singkil
+171,1,10,6,"Gunung Meriah"
+172,1,10,9,"Kota Baharu"
+173,1,10,10,"Singkil Utara"
+174,1,10,11,"Danau Paris"
+175,1,10,12,"Suro Makmur"
+176,1,10,13,Singkohor
+177,1,10,14,"Kuala Baru"
+178,1,10,16,"Pulau Banyak Barat"
+179,1,11,1,Samalanga
+180,1,11,2,Jeunieb
+181,1,11,3,Peudada
+182,1,11,4,Jeumpa
+183,1,11,5,Peusangan
+184,1,11,6,Makmur
+185,1,11,7,Gandapura
+186,1,11,8,Pandrah
+187,1,11,9,Juli
+188,1,11,10,Jangka
+189,1,11,11,"Simpang Mamplam"
+190,1,11,12,Peulimbang
+191,1,11,13,"Kota Juang"
+192,1,11,14,Kuala
+193,1,11,15,"Peusangan Siblah Krueng"
+194,1,11,16,"Peusangan Selatan"
+195,1,11,17,"Kuta Blang"
+196,1,12,1,Blangpidie
+197,1,12,2,Tangan-Tangan
+198,1,12,3,Manggeng
+199,1,12,4,Susoh
+200,1,12,5,"Kuala Batee"
+201,1,12,6,"Babah Rot"
+202,1,12,7,Setia
+203,1,12,8,Jeumpa
+204,1,12,9,"Lembah Sabil"
+205,1,13,1,Blangkejeren
+206,1,13,2,Kutapanjang
+207,1,13,3,"Rikit Gaib"
+208,1,13,4,Terangun
+209,1,13,5,Pining
+210,1,13,6,Blangpegayon
+211,1,13,7,"Puteri Betung"
+212,1,13,8,"Dabun Gelang"
+213,1,13,9,Blangjerango
+214,1,13,10,"Teripe Jaya"
+215,1,13,11,"Pantan Cuaca"
+216,1,14,1,Teunom
+217,1,14,2,"Krueng Sabee"
+218,1,14,3,"Setia Bakti"
+219,1,14,4,"Sampoi Niet"
+220,1,14,5,Jaya
+221,1,14,6,Panga
+222,1,14,7,"Indra Jaya"
+223,1,14,8,"Darul Hikmah"
+224,1,14,9,"Pasie Raya"
+225,1,15,1,Kuala
+226,1,15,2,Seunagan
+227,1,15,3,"Seunagan Timur"
+228,1,15,4,Beutong
+229,1,15,5,"Darul Makmur"
+230,1,15,6,"Suka Makmue"
+231,1,15,7,"Kuala Pesisir"
+232,1,15,8,"Tadu Raya"
+233,1,15,9,"Tripa Makmur"
+234,1,15,10,"Beutong Ateuh Banggalang"
+235,1,16,1,"Manyak Payed"
+236,1,16,2,Bendahara
+237,1,16,3,"Karang Baru"
+238,1,16,4,Seruway
+239,1,16,5,"Kota Kualasinpang"
+240,1,16,6,"Kejuruan Muda"
+241,1,16,7,"Tamiang Hulu"
+242,1,16,8,Rantau
+243,1,16,9,"Banda Mulia"
+244,1,16,10,"Bandar Pusaka"
+245,1,16,11,Tenggulun
+246,1,16,12,Sekerak
+247,1,17,1,"Pintu Rime Gayo"
+248,1,17,2,Permata
+249,1,17,3,"Syiah Utama"
+250,1,17,4,Bandar
+251,1,17,5,Bukit
+252,1,17,6,"Wih Pesam"
+253,1,17,7,"Timang gajah"
+254,1,17,8,"Bener Kelipah"
+255,1,17,9,Mesidah
+256,1,17,10,"Gajah Putih"
+257,1,18,1,Meureudu
+258,1,18,2,Ulim
+259,1,18,3,"Jangka Buya"
+260,1,18,4,"Bandar Dua"
+261,1,18,5,"Meurah Dua"
+262,1,18,6,"Bandar Baru"
+263,1,18,7,Panteraja
+264,1,18,8,Trienggadeng
+265,1,71,1,Baiturrahman
+266,1,71,2,"Kuta Alam"
+267,1,71,3,Meuraxa
+268,1,71,4,"Syiah Kuala"
+269,1,71,5,"Lueng Bata"
+270,1,71,6,"Kuta Raja"
+271,1,71,7,"Banda Raya"
+272,1,71,8,"Jaya Baru"
+273,1,71,9,"Ulee Kareng"
+274,1,72,1,Sukakarya
+275,1,72,2,Sukajaya
+276,1,72,3,Sukamakmue
+277,1,73,1,"Muara Dua"
+278,1,73,2,"Banda Sakti"
+279,1,73,3,"Blang Mangat"
+280,1,73,4,"Muara Satu"
+281,1,74,1,"Langsa Timur"
+282,1,74,2,"Langsa Barat"
+283,1,74,3,"Langsa Kota"
+284,1,74,4,"Langsa Lama"
+285,1,74,5,"Langsa Baro"
+286,1,75,1,"Simpang Kiri"
+287,1,75,2,Penanggalan
+288,1,75,3,Rundeng
+289,1,75,4,"Sultan Daulat"
+290,1,75,5,Longkib
+291,2,1,1,Barus
+292,2,1,2,Sorkam
+293,2,1,3,Pandan
+294,2,1,4,Pinangsori
+295,2,1,5,Manduamas
+296,2,1,6,Kolang
+297,2,1,7,"Tapian Nauli"
+298,2,1,8,Sibabangun
+299,2,1,9,Sosorgadong
+300,2,1,10,"Sorkam Barat"
+301,2,1,11,Sirandorung
+302,2,1,12,"Andam Dewi"
+303,2,1,13,Sitahuis
+304,2,1,14,Tukka
+305,2,1,15,Badiri
+306,2,1,16,"Pasaribu Tobing"
+307,2,1,17,"Barus Utara"
+308,2,1,18,"Suka Bangun"
+309,2,1,19,Lumut
+310,2,1,20,Sarudik
+311,2,2,1,Tarutung
+312,2,2,2,"Siatas Barita"
+313,2,2,3,Adiankoting
+314,2,2,4,Sipoholon
+315,2,2,5,"Pahae Julu"
+316,2,2,6,"Pahae Jae"
+317,2,2,7,Simangumban
+318,2,2,8,Purbatua
+319,2,2,9,Siborongborong
+320,2,2,10,Pagaran
+321,2,2,11,Parmonangan
+322,2,2,12,Sipahutar
+323,2,2,13,Pangaribuan
+324,2,2,14,Garoga
+325,2,2,15,Muara
+326,2,3,1,"Angkola Barat"
+327,2,3,2,"Batang Toru"
+328,2,3,3,"Angkola Timur"
+329,2,3,4,Sipirok
+330,2,3,5,"Saipar Dolok Hole"
+331,2,3,6,"Angkola Selatan"
+332,2,3,7,"Batang Angkola"
+333,2,3,14,Arse
+334,2,3,20,Marancar
+335,2,3,21,"Sayur Matinggi"
+336,2,3,22,"Aek Bilah"
+337,2,3,29,"Muara Batang Toru"
+338,2,3,30,"Tano Tombangan Angkola"
+339,2,3,31,"Angkola Sangkunur"
+340,2,3,32,"Angkola Muara Tais"
+341,2,4,5,Hiliduho
+342,2,4,6,Gido
+343,2,4,10,Idanogawo
+344,2,4,11,Bawolato
+345,2,4,20,Hiliserangkai
+346,2,4,21,Botomuzoi
+347,2,4,27,Ulugawo
+348,2,4,28,Ma'u
+349,2,4,29,Somolo-molo
+350,2,4,35,Sogae'adu
+351,2,5,1,Bahorok
+352,2,5,2,Salapian
+353,2,5,3,Kuala
+354,2,5,4,"Sei Bingai"
+355,2,5,5,Binjai
+356,2,5,6,Selesai
+357,2,5,7,Stabat
+358,2,5,8,Wampu
+359,2,5,9,Secanggang
+360,2,5,10,Hinai
+361,2,5,11,"Tanjung Pura"
+362,2,5,12,"Padang Tualang"
+363,2,5,13,Gebang
+364,2,5,14,Babalan
+365,2,5,15,"Pangkalan Susu"
+366,2,5,16,Besitang
+367,2,5,17,"Sei Lepan"
+368,2,5,18,"Berandan Barat"
+369,2,5,19,"Batang Serangan"
+370,2,5,20,"Sawit Seberang"
+371,2,5,21,Sirapit
+372,2,5,22,Kutambaru
+373,2,5,23,"Pematang Jaya"
+374,2,6,1,Kabanjahe
+375,2,6,2,Berastagi
+376,2,6,3,Barusjahe
+377,2,6,4,Tigapanah
+378,2,6,5,Merek
+379,2,6,6,Munte
+380,2,6,7,Juhar
+381,2,6,8,Tigabinanga
+382,2,6,9,Laubaleng
+383,2,6,10,Mardingding
+384,2,6,11,Payung
+385,2,6,12,"Simpang Empat"
+386,2,6,13,Kutabuluh
+387,2,6,14,"Dolat Rayat"
+388,2,6,15,Merdeka
+389,2,6,16,"Naman Teran"
+390,2,6,17,Tiganderket
+391,2,7,1,"Gunung Meriah"
+392,2,7,2,"Tanjung Morawa"
+393,2,7,3,Sibolangit
+394,2,7,4,Kutalimbaru
+395,2,7,5,"Pancur Batu"
+396,2,7,6,"Namo Rambe"
+397,2,7,7,Biru-Biru
+398,2,7,8,"Sinembah Tanjung Muda Hilir"
+399,2,7,9,"Bangun Purba"
+400,2,7,19,Galang
+401,2,7,20,"Sinembah Tanjung Muda Hulu"
+402,2,7,21,Patumbak
+403,2,7,22,"Deli Tua"
+404,2,7,23,Sunggal
+405,2,7,24,"Hamparan Perak"
+406,2,7,25,"Labuhan Deli"
+407,2,7,26,"Percut Sei Tuan"
+408,2,7,27,"Batang Kuis"
+409,2,7,28,"Lubuk Pakam"
+410,2,7,31,"Pagar Merbau"
+411,2,7,32,"Pantai Labu"
+412,2,7,33,Beringin
+413,2,8,1,Siantar
+414,2,8,2,"Gunung Malela"
+415,2,8,3,"Gunung Maligas"
+416,2,8,4,Panei
+417,2,8,5,"Panombeian Panei"
+418,2,8,6,"Jorlang Hataran"
+419,2,8,7,"Raya Kahean"
+420,2,8,8,"Bosar Maligas"
+421,2,8,9,Sidamanik
+422,2,8,10,"Pamatang Sidamanik"
+423,2,8,11,"Tanah Jawa"
+424,2,8,12,Hatonduhan
+425,2,8,13,"Dolok Panribuan"
+426,2,8,14,Purba
+427,2,8,15,"Haranggaol Horisan"
+428,2,8,16,"Girsang Sipangan Bolon"
+429,2,8,17,"Dolok Batu Nanggar"
+430,2,8,18,"Hutabayu Raja"
+431,2,8,19,"Jawa Maraja Bah Jambi"
+432,2,8,20,"Dolok Pardamean"
+433,2,8,21,"Pematang Bandar"
+434,2,8,22,"Bandar Huluan"
+435,2,8,23,Bandar
+436,2,8,24,"Bandar Masilam"
+437,2,8,25,Silimakuta
+438,2,8,26,"Dolok Silao"
+439,2,8,27,"Silou Kahean"
+440,2,8,28,"Tapian Dolok"
+441,2,8,29,Raya
+442,2,8,30,"Ujung Padang"
+443,2,8,31,"Pamatang Silima Huta"
+444,2,8,32,"Dolog Masagal"
+445,2,9,8,Meranti
+446,2,9,9,"Air Joman"
+447,2,9,10,"Tanjung Balai"
+448,2,9,11,"Sei Kepayang"
+449,2,9,12,"Simpang Empat"
+450,2,9,13,"Air Batu"
+451,2,9,14,"Pulau Rakyat"
+452,2,9,15,"Bandar Pulau"
+453,2,9,16,"Buntu Pane"
+454,2,9,17,"Bandar Pasir Mandoge"
+455,2,9,18,"Aek Kuasan"
+456,2,9,19,"Kota Kisaran Barat"
+457,2,9,20,"Kota Kisaran Timur"
+458,2,9,21,"Aek Songsongan"
+459,2,9,22,Rahuning
+460,2,9,23,"Sei Dadap"
+461,2,9,24,"Sei Kepayang Barat"
+462,2,9,25,"Sei Kepayang Timur"
+463,2,9,26,"Tinggi Raja"
+464,2,9,27,"Setia Janji"
+465,2,9,28,"Silau Laut"
+466,2,9,29,"Rawang Panca Arga"
+467,2,9,30,"Pulo Bandring"
+468,2,9,31,"Teluk Dalam"
+469,2,9,32,"Aek Ledong"
+470,2,10,1,"Rantau Utara"
+471,2,10,2,"Rantau Selatan"
+472,2,10,7,"Bilah Barat"
+473,2,10,8,"Bilah Hilir"
+474,2,10,9,"Bilah Hulu"
+475,2,10,14,Pangkatan
+476,2,10,18,"Panai Tengah"
+477,2,10,19,"Panai Hilir"
+478,2,10,20,"Panai Hulu"
+479,2,11,1,Sidikalang
+480,2,11,2,Sumbul
+481,2,11,3,Tigalingga
+482,2,11,4,"Siempat Nempu"
+483,2,11,5,"Silima Pungga Pungga"
+484,2,11,6,"Tanah Pinem"
+485,2,11,7,"Siempat Nempu Hulu"
+486,2,11,8,"Siempat Nempu Hilir"
+487,2,11,9,"Pegagan Hilir"
+488,2,11,10,Parbuluan
+489,2,11,11,"Lae Parira"
+490,2,11,12,"Gunung Sitember"
+491,2,11,13,Berampu
+492,2,11,14,Silahisabungan
+493,2,11,15,Sitinjo
+494,2,12,1,Balige
+495,2,12,2,Laguboti
+496,2,12,3,Silaen
+497,2,12,4,Habinsaran
+498,2,12,5,"Pintu Pohan Meranti"
+499,2,12,6,Borbor
+500,2,12,7,Porsea
+501,2,12,8,Ajibata
+502,2,12,9,"Lumban Julu"
+503,2,12,10,Uluan
+504,2,12,19,Sigumpar
+505,2,12,20,"Siantar Narumonda"
+506,2,12,21,Nassau
+507,2,12,22,Tampahan
+508,2,12,23,"Bonatua Lunasi"
+509,2,12,24,Parmaksian
+510,2,13,1,Panyabungan
+511,2,13,2,"Panyabungan Utara"
+512,2,13,3,"Panyabungan Timur"
+513,2,13,4,"Panyabungan Selatan"
+514,2,13,5,"Panyabungan Barat"
+515,2,13,6,Siabu
+516,2,13,7,"Bukit Malintang"
+517,2,13,8,Kotanopan
+518,2,13,9,"Lembah Sorik Marapi"
+519,2,13,10,Tambangan
+520,2,13,11,"Ulu Pungkut"
+521,2,13,12,"Muara Sipongi"
+522,2,13,13,"Batang Natal"
+523,2,13,14,"Lingga Bayu"
+524,2,13,15,Batahan
+525,2,13,16,Natal
+526,2,13,17,"Muara Batang Gadis"
+527,2,13,18,"Ranto Baek"
+528,2,13,19,"Huta Bargot"
+529,2,13,20,"Puncak Sorik Marapi"
+530,2,13,21,Pakantan
+531,2,13,22,Sinunukan
+532,2,13,23,"Naga Juang"
+533,2,14,1,Lolomatua
+534,2,14,2,Gomo
+535,2,14,3,Lahusa
+536,2,14,4,Hibala
+537,2,14,5,"Pulau-Pulau Batu"
+538,2,14,6,"Teluk Dalam"
+539,2,14,7,Amandraya
+540,2,14,8,Lolowau
+541,2,14,9,Susua
+542,2,14,10,Maniamolo
+543,2,14,11,Hilimegai
+544,2,14,12,Toma
+545,2,14,13,Mazino
+546,2,14,14,Umbunasi
+547,2,14,15,Aramo
+548,2,14,16,"Pulau-Pulau Batu Timur"
+549,2,14,17,Mazo
+550,2,14,18,Fanayama
+551,2,14,19,Ulunoyo
+552,2,14,20,Huruna
+553,2,14,21,O'o'u
+554,2,14,22,Onohazumba
+555,2,14,23,Hilisalawa'ahe
+556,2,14,24,Ulususua
+557,2,14,25,Sidua'ori
+558,2,14,26,Somambawa
+559,2,14,27,Boronadu
+560,2,14,28,Simuk
+561,2,14,29,"Pulau-Pulau Batu Barat"
+562,2,14,30,"Pulau-Pulau Batu Utara"
+563,2,14,31,"Tanah Masa"
+564,2,14,32,"Luahagundre Maniamolo"
+565,2,14,33,Onolalu
+566,2,14,34,"Ulu Idanotae"
+567,2,14,35,Idanotae
+568,2,15,1,"Sitelu Tali Urang Jehe"
+569,2,15,2,Kerajaan
+570,2,15,3,Salak
+571,2,15,4,"Sitelu Tali Urang Julu"
+572,2,15,5,"Pergetteng Getteng Sengkut"
+573,2,15,6,Pagindar
+574,2,15,7,Tinada
+575,2,15,8,"Siempat Rube"
+576,2,16,1,Parlilitan
+577,2,16,2,Pollung
+578,2,16,3,Baktiraja
+579,2,16,4,Paranginan
+580,2,16,5,"Lintong Nihuta"
+581,2,16,6,"Dolok Sanggul"
+582,2,16,7,Sijamapolang
+583,2,16,8,"Onan Ganjang"
+584,2,16,9,Pakkat
+585,2,16,10,Tarabintang
+586,2,17,1,Simanindo
+587,2,17,2,"Onan Runggu"
+588,2,17,3,Nainggolan
+589,2,17,4,Palipi
+590,2,17,5,Harian
+591,2,17,6,"Sianjar Mula Mula"
+592,2,17,7,"Ronggur Nihuta"
+593,2,17,8,Pangururan
+594,2,17,9,Sitio-tio
+595,2,18,1,"Pantai Cermin"
+596,2,18,2,Perbaungan
+597,2,18,3,"Teluk Mengkudu"
+598,2,18,4,"Sei Rampah"
+599,2,18,5,"Tanjung Beringin"
+600,2,18,6,"Bandar Khalipah"
+601,2,18,7,"Dolok Merawan"
+602,2,18,8,Sipispis
+603,2,18,9,"Dolok Masihul"
+604,2,18,10,Kotarih
+605,2,18,11,Silinda
+606,2,18,12,"Serba Jadi"
+607,2,18,13,"Tebing Tinggi"
+608,2,18,14,Pegajahan
+609,2,18,15,"Sei Bamban"
+610,2,18,16,"Tebing Syahbandar"
+611,2,18,17,"Bintang Bayu"
+612,2,19,1,"Medang Deras"
+613,2,19,2,"Sei Suka"
+614,2,19,3,"Air Putih"
+615,2,19,4,"Lima Puluh"
+616,2,19,5,Talawi
+617,2,19,6,"Tanjung Tiram"
+618,2,19,7,"Sei Balai"
+619,2,19,8,"Laut Tador"
+620,2,19,9,"Lima Puluh Pesisir"
+621,2,19,10,"Datuk Lima Puluh"
+622,2,19,11,"Datuk Tanah Datar"
+623,2,19,12,"Nibung Hangus"
+624,2,20,1,"Dolok Sigompulon"
+625,2,20,2,Dolok
+626,2,20,3,Halongonan
+627,2,20,4,"Padang Bolak"
+628,2,20,5,"Padang Bolak Julu"
+629,2,20,6,Portibi
+630,2,20,7,"Batang Onang"
+631,2,20,8,Simangambat
+632,2,20,9,"Hulu Sihapas"
+633,2,20,10,"Padang Bolak Tenggara"
+634,2,20,11,"Halongonan Timur"
+635,2,20,12,"Ujung Batu"
+636,2,21,1,Sosopan
+637,2,21,2,"Barumun Tengah"
+638,2,21,3,Huristak
+639,2,21,4,"Lubuk Barumun"
+640,2,21,5,"Hutaraja Tinggi"
+641,2,21,6,"Ulu Barumun"
+642,2,21,7,Barumun
+643,2,21,8,Sosa
+644,2,21,9,"Batang Lubu Sutam"
+645,2,21,10,"Barumun Selatan"
+646,2,21,11,"Aek Nabara Barumun"
+647,2,21,12,"Sihapas Barumun"
+648,2,21,13,"Barumun Baru"
+649,2,21,14,"Ulu Sosa"
+650,2,21,15,"Sosa Julu"
+651,2,21,16,"Barumun Barat"
+652,2,21,17,"Sosa Timur"
+653,2,22,1,Kotapinang
+654,2,22,2,"Kampung Rakyat"
+655,2,22,3,Torgamba
+656,2,22,4,"Sungai Kanan"
+657,2,22,5,Silangkitang
+658,2,23,1,"Kualuh Hulu"
+659,2,23,2,"Kualuh Leidong"
+660,2,23,3,"Kualuh Hilir"
+661,2,23,4,"Aek Kuo"
+662,2,23,5,Marbau
+663,2,23,6,"Na IX-X"
+664,2,23,7,"Aek Natas"
+665,2,23,8,"Kualuh Selatan"
+666,2,24,1,Lotu
+667,2,24,2,Sawo
+668,2,24,3,Tuhemberua
+669,2,24,4,"Sitolu Ori"
+670,2,24,5,"Namohalu Esiwa"
+671,2,24,6,"Alasa Talumuzoi"
+672,2,24,7,Alasa
+673,2,24,8,"Tugala Oyo"
+674,2,24,9,Afulu
+675,2,24,10,Lahewa
+676,2,24,11,"Lahewa Timur"
+677,2,25,1,Lahomi
+678,2,25,2,Sirombu
+679,2,25,3,"Mandrehe Barat"
+680,2,25,4,Moro'o
+681,2,25,5,Mandrehe
+682,2,25,6,"Mandrehe Utara"
+683,2,25,7,"Lolofitu Moi"
+684,2,25,8,"Ulu Moro'o"
+685,2,71,1,"Medan Kota"
+686,2,71,2,"Medan Sunggal"
+687,2,71,3,"Medan Helvetia"
+688,2,71,4,"Medan Denai"
+689,2,71,5,"Medan Barat"
+690,2,71,6,"Medan Deli"
+691,2,71,7,"Medan Tuntungan"
+692,2,71,8,"Medan Belawan"
+693,2,71,9,"Medan Amplas"
+694,2,71,10,"Medan Area"
+695,2,71,11,"Medan Johor"
+696,2,71,12,"Medan Marelan"
+697,2,71,13,"Medan Labuhan"
+698,2,71,14,"Medan Tembung"
+699,2,71,15,"Medan Maimun"
+700,2,71,16,"Medan Polonia"
+701,2,71,17,"Medan Baru"
+702,2,71,18,"Medan Perjuangan"
+703,2,71,19,"Medan Petisah"
+704,2,71,20,"Medan Timur"
+705,2,71,21,"Medan Selayang"
+706,2,72,1,"Siantar Timur"
+707,2,72,2,"Siantar Barat"
+708,2,72,3,"Siantar Utara"
+709,2,72,4,"Siantar Selatan"
+710,2,72,5,"Siantar Marihat"
+711,2,72,6,"Siantar Martoba"
+712,2,72,7,"Siantar Sitalasari"
+713,2,72,8,"Siantar Marimbun"
+714,2,73,1,"Sibolga Utara"
+715,2,73,2,"Sibolga Kota"
+716,2,73,3,"Sibolga Selatan"
+717,2,73,4,"Sibolga Sambas"
+718,2,74,1,"Tanjungbalai Selatan"
+719,2,74,2,"Tanjungbalai Utara"
+720,2,74,3,"Sei Tualang Raso"
+721,2,74,4,"Teluk Nibung"
+722,2,74,5,"Datuk Bandar"
+723,2,74,6,"Datuk Bandar Timur"
+724,2,75,1,"Binjai Utara"
+725,2,75,2,"Binjai Kota"
+726,2,75,3,"Binjai Barat"
+727,2,75,4,"Binjai Timur"
+728,2,75,5,"Binjai Selatan"
+729,2,76,1,"Padang Hulu"
+730,2,76,2,Rambutan
+731,2,76,3,"Padang Hilir"
+732,2,76,4,Bajenis
+733,2,76,5,"Tebing Tinggi Kota"
+734,2,77,1,"Padangsidimpuan Utara"
+735,2,77,2,"Padangsidimpuan Selatan"
+736,2,77,3,"Padangsidimpuan Batunadua"
+737,2,77,4,"Padangsidimpuan Hutaimbaru"
+738,2,77,5,"Padangsidimpuan Tenggara"
+739,2,77,6,"Padangsidimpuan Angkola Julu"
+740,2,78,1,Gunungsitoli
+741,2,78,2,"Gunungsitoli Selatan"
+742,2,78,3,"Gunungsitoli Utara"
+743,2,78,4,"Gunungsitoli Idanoi"
+744,2,78,5,"Gunungsitoli Alo'oa"
+745,2,78,6,"Gunungsitoli Barat"
+746,3,1,1,"Pancung Soal"
+747,3,1,2,"Ranah Pesisir"
+748,3,1,3,Lengayang
+749,3,1,4,"Batang Kapas"
+750,3,1,5,"IV Jurai"
+751,3,1,6,Bayang
+752,3,1,7,"Koto XI Tarusan"
+753,3,1,8,Sutera
+754,3,1,9,"Linggo Sari Baganti"
+755,3,1,10,Lunang
+756,3,1,11,"Basa Ampek Balai Tapan"
+757,3,1,12,"IV Nagari Bayang Utara"
+758,3,1,13,Airpura
+759,3,1,14,"Ranah Ampek Hulu Tapan"
+760,3,1,15,Silaut
+761,3,2,3,"Pantai Cermin"
+762,3,2,4,"Lembah Gumanti"
+763,3,2,5,"Payung Sekaki"
+764,3,2,6,"Lembang Jaya"
+765,3,2,7,"Gunung Talang"
+766,3,2,8,"Bukit Sundi"
+767,3,2,9,"IX Koto Sungai Lasi"
+768,3,2,10,Kubung
+769,3,2,11,"X Koto Singkarak"
+770,3,2,12,"X Koto Diatas"
+771,3,2,13,"Junjung Sirih"
+772,3,2,17,"Hiliran Gumanti"
+773,3,2,18,"Tigo Lurah"
+774,3,2,19,"Danau Kembar"
+775,3,3,3,"Tanjung Gadang"
+776,3,3,4,Sijunjung
+777,3,3,5,"IV Nagari"
+778,3,3,6,"Kamang Baru"
+779,3,3,7,"Lubuk Tarok"
+780,3,3,8,"Koto VII"
+781,3,3,9,"Sumpur Kudus"
+782,3,3,10,Kupitan
+783,3,4,1,"X Koto"
+784,3,4,2,Batipuh
+785,3,4,3,Rambatan
+786,3,4,4,"Lima Kaum"
+787,3,4,5,"Tanjung Emas"
+788,3,4,6,"Lintau Buo"
+789,3,4,7,Sungayang
+790,3,4,8,"Sungai Tarab"
+791,3,4,9,Pariangan
+792,3,4,10,Salimpaung
+793,3,4,11,"Padang Ganting"
+794,3,4,12,"Tanjuang Baru"
+795,3,4,13,"Lintau Buo Utara"
+796,3,4,14,"Batipuah Selatan"
+797,3,5,1,"Lubuak Aluang"
+798,3,5,2,"Batang Anai"
+799,3,5,3,"Nan Sabaris"
+800,3,5,4,"2 x 11 Anam Lingkuang"
+801,3,5,5,"VII Koto"
+802,3,5,6,"V Koto"
+803,3,5,7,"Sungai Garinggiang"
+804,3,5,8,"Sungai Limau"
+805,3,5,9,"IV Koto Aua Malintang"
+806,3,5,10,"Ulakan Tapakih"
+807,3,5,11,"Sintuak Toboh Gadang"
+808,3,5,12,"VII Koto Padang Sago"
+809,3,5,13,"Batang Gasan"
+810,3,5,14,"V Koto Timur"
+811,3,5,15,"2 x 11 Kayu Tanam"
+812,3,5,16,"Koto Patamuan"
+813,3,5,17,"Anam Lingkuang"
+814,3,6,1,"Tanjung Mutiara"
+815,3,6,2,"Lubuk Basung"
+816,3,6,3,"Tanjung Raya"
+817,3,6,4,Matur
+818,3,6,5,"IV Koto"
+819,3,6,6,Banuhampu
+820,3,6,7,"Ampek Angkek"
+821,3,6,8,Baso
+822,3,6,9,"Tilatang Kamang"
+823,3,6,10,Palupuh
+824,3,6,11,Palembayan
+825,3,6,12,"Sungai Pua"
+826,3,6,13,"Ampek Nagari"
+827,3,6,14,Candung
+828,3,6,15,"Kamang Magek"
+829,3,6,16,Malalak
+830,3,7,1,Suliki
+831,3,7,2,Guguak
+832,3,7,3,Payakumbuh
+833,3,7,4,Luak
+834,3,7,5,Harau
+835,3,7,6,"Pangkalan Koto Baru"
+836,3,7,7,"Kapur IX"
+837,3,7,8,"Gunuang Omeh"
+838,3,7,9,"Lareh Sago Halaban"
+839,3,7,10,"Situjuah Limo Nagari"
+840,3,7,11,Mungka
+841,3,7,12,"Bukik Barisan"
+842,3,7,13,Akabiluru
+843,3,8,4,Bonjol
+844,3,8,5,"Lubuk Sikaping"
+845,3,8,7,Panti
+846,3,8,8,"Mapat Tunggul"
+847,3,8,12,"Duo Koto"
+848,3,8,13,"Tigo Nagari"
+849,3,8,14,Rao
+850,3,8,15,"Mapat Tunggul Selatan"
+851,3,8,16,"Simpang Alahan Mati"
+852,3,8,17,"Padang Gelugur"
+853,3,8,18,"Rao Utara"
+854,3,8,19,"Rao Selatan"
+855,3,9,1,"Pagai Utara"
+856,3,9,2,"Sipora Selatan"
+857,3,9,3,"Siberut Selatan"
+858,3,9,4,"Siberut Utara"
+859,3,9,5,"Siberut Barat"
+860,3,9,6,"Siberut Barat Daya"
+861,3,9,7,"Siberut Tengah"
+862,3,9,8,"Sipora Utara"
+863,3,9,9,Sikakap
+864,3,9,10,"Pagai Selatan"
+865,3,10,1,"Koto Baru"
+866,3,10,2,"Pulau Punjung"
+867,3,10,3,"Sungai Rumbai"
+868,3,10,4,Sitiung
+869,3,10,5,"Sembilan Koto"
+870,3,10,6,Timpeh
+871,3,10,7,"Koto Salak"
+872,3,10,8,Tiumang
+873,3,10,9,"Padang Laweh"
+874,3,10,10,"Asam Jujuhan"
+875,3,10,11,"Koto Besar"
+876,3,11,1,Sangir
+877,3,11,2,"Sungai Pagu"
+878,3,11,3,"Koto Parik Gadang Diateh"
+879,3,11,4,"Sangir Jujuan"
+880,3,11,5,"Sangir Batang Hari"
+881,3,11,6,"Pauh Duo"
+882,3,11,7,"Sangir Balai Janggo"
+883,3,12,1,"Sungai Beremas"
+884,3,12,2,"Lembah Melintang"
+885,3,12,3,Pasaman
+886,3,12,4,Talamau
+887,3,12,5,Kinali
+888,3,12,6,"Gunung Tuleh"
+889,3,12,7,"Ranah Batahan"
+890,3,12,8,"Koto Balingka"
+891,3,12,9,"Sungai Aur"
+892,3,12,10,"Luhak Nan Duo"
+893,3,12,11,"Sasak Ranah Pasisie"
+894,3,71,1,"Padang Selatan"
+895,3,71,2,"Padang Timur"
+896,3,71,3,"Padang Barat"
+897,3,71,4,"Padang Utara"
+898,3,71,5,"Bungus Teluk Kabung"
+899,3,71,6,"Lubuk Begalung"
+900,3,71,7,"Lubuk Kilangan"
+901,3,71,8,Pauh
+902,3,71,9,Kuranji
+903,3,71,10,Nanggalo
+904,3,71,11,"Koto Tangah"
+905,3,72,1,"Lubuk Sikarah"
+906,3,72,2,"Tanjung Harapan"
+907,3,73,1,"Lembah Segar"
+908,3,73,2,Barangin
+909,3,73,3,Silungkang
+910,3,73,4,Talawi
+911,3,74,1,"Padang Panjang Timur"
+912,3,74,2,"Padang Panjang Barat"
+913,3,75,1,"Guguak Panjang"
+914,3,75,2,"Mandiangin Koto Selayan"
+915,3,75,3,"Aur Birugo Tigo Baleh"
+916,3,76,1,"Payakumbuh Barat"
+917,3,76,2,"Payakumbuh Utara"
+918,3,76,3,"Payakumbuh Timur"
+919,3,76,4,"Lamposi Tigo Nagori"
+920,3,76,5,"Payakumbuh Selatan"
+921,3,77,1,"Pariaman Tengah"
+922,3,77,2,"Pariaman Utara"
+923,3,77,3,"Pariaman Selatan"
+924,3,77,4,"Pariaman Timur"
+925,4,1,1,"Bangkinang Kota"
+926,4,1,2,Kampar
+927,4,1,3,Tambang
+928,4,1,4,"XIII Koto Kampar"
+929,4,1,5,Kuok
+930,4,1,6,"Siak Hulu"
+931,4,1,7,"Kampar Kiri"
+932,4,1,8,"Kampar Kiri Hilir"
+933,4,1,9,"Kampar Kiri Hulu"
+934,4,1,10,Tapung
+935,4,1,11,"Tapung Hilir"
+936,4,1,12,"Tapung Hulu"
+937,4,1,13,Salo
+938,4,1,14,"Rumbio Jaya"
+939,4,1,15,Bangkinang
+940,4,1,16,"Perhentian Raja"
+941,4,1,17,Kampa
+942,4,1,18,"Kampar Utara"
+943,4,1,19,"Kampar Kiri Tengah"
+944,4,1,20,"Gunung Sahilan"
+945,4,1,21,"Koto Kampar Hulu"
+946,4,2,1,Rengat
+947,4,2,2,"Rengat Barat"
+948,4,2,3,Kelayang
+949,4,2,4,"Pasir Penyu"
+950,4,2,5,Peranap
+951,4,2,6,Seberida
+952,4,2,7,"Batang Cenaku"
+953,4,2,8,"Batang Gansal"
+954,4,2,9,Lirik
+955,4,2,10,"Kuala Cenaku"
+956,4,2,11,"Sungai Lala"
+957,4,2,12,"Lubuk Batu Jaya"
+958,4,2,13,"Rakit Kulim"
+959,4,2,14,"Batang Peranap"
+960,4,3,1,Bengkalis
+961,4,3,2,Bantan
+962,4,3,3,"Bukit Batu"
+963,4,3,9,Mandau
+964,4,3,10,Rupat
+965,4,3,11,"Rupat Utara"
+966,4,3,12,"Siak Kecil"
+967,4,3,13,Pinggir
+968,4,3,14,"Bandar Laksamana"
+969,4,3,15,"Talang Muandau"
+970,4,3,16,"Bathin Solapan"
+971,4,4,1,Reteh
+972,4,4,2,Enok
+973,4,4,3,"Kuala Indragiri"
+974,4,4,4,Tembilahan
+975,4,4,5,Tempuling
+976,4,4,6,"Gaung Anak Serka"
+977,4,4,7,Mandah
+978,4,4,8,Kateman
+979,4,4,9,Keritang
+980,4,4,10,"Tanah Merah"
+981,4,4,11,"Batang Tuaka"
+982,4,4,12,Gaung
+983,4,4,13,"Tembilahan Hulu"
+984,4,4,14,Kemuning
+985,4,4,15,Pelangiran
+986,4,4,16,"Teluk Belengkong"
+987,4,4,17,"Pulau Burung"
+988,4,4,18,Concong
+989,4,4,19,Kempas
+990,4,4,20,"Sungai Batang"
+991,4,5,1,Ukui
+992,4,5,2,"Pangkalan Kerinci"
+993,4,5,3,"Pangkalan Kuras"
+994,4,5,4,"Pangkalan Lesung"
+995,4,5,5,Langgam
+996,4,5,6,Pelalawan
+997,4,5,7,Kerumutan
+998,4,5,8,Bunut
+999,4,5,9,"Teluk Meranti"
+1000,4,5,10,"Kuala Kampar"
+1001,4,5,11,"Bandar Sei Kijang"
+1002,4,5,12,"Bandar Petalangan"
+1003,4,6,1,"Ujung Batu"
+1004,4,6,2,"Rokan IV Koto"
+1005,4,6,3,Rambah
+1006,4,6,4,Tambusai
+1007,4,6,5,Kepenuhan
+1008,4,6,6,"Kunto Darussalam"
+1009,4,6,7,"Rambah Samo"
+1010,4,6,8,"Rambah Hilir"
+1011,4,6,9,"Tambusai Utara"
+1012,4,6,10,"Bangun Purba"
+1013,4,6,11,Tandun
+1014,4,6,12,Kabun
+1015,4,6,13,"Bonai Darussalam"
+1016,4,6,14,"Pagaran Tapah Darussalam"
+1017,4,6,15,"Kepenuhan Hulu"
+1018,4,6,16,"Pendalian IV Koto"
+1019,4,7,1,Kubu
+1020,4,7,2,Bangko
+1021,4,7,3,"Tanah Putih"
+1022,4,7,4,"Rimba Melintang"
+1023,4,7,5,Bagansinembah
+1024,4,7,6,"Pasir Limau Kapas"
+1025,4,7,7,Sinaboi
+1026,4,7,8,Pujud
+1027,4,7,9,"Tanah Putih Tanjung Melawan"
+1028,4,7,10,"Bangko Pusako"
+1029,4,7,11,"Simpang Kanan"
+1030,4,7,12,"Batu Hampar"
+1031,4,7,13,"Rantau Kopar"
+1032,4,7,14,Pekaitan
+1033,4,7,15,"Kubu Babussalam"
+1034,4,7,16,"Tanjung Medan"
+1035,4,7,17,"Bagan Sinembah Raya"
+1036,4,7,18,"Balai Jaya"
+1037,4,8,1,Siak
+1038,4,8,2,"Sungai Apit"
+1039,4,8,3,Minas
+1040,4,8,4,Tualang
+1041,4,8,5,"Sungai Mandau"
+1042,4,8,6,Dayun
+1043,4,8,7,"Kerinci Kanan"
+1044,4,8,8,"Bunga Raya"
+1045,4,8,9,"Koto Gasib"
+1046,4,8,10,Kandis
+1047,4,8,11,"Lubuk Dalam"
+1048,4,8,12,"Sabak Auh"
+1049,4,8,13,Mempura
+1050,4,8,14,Pusako
+1051,4,9,1,"Kuantan Mudik"
+1052,4,9,2,"Kuantan Tengah"
+1053,4,9,3,Singingi
+1054,4,9,4,"Kuantan Hilir"
+1055,4,9,5,Cerenti
+1056,4,9,6,Benai
+1057,4,9,7,Gunungtoar
+1058,4,9,8,"Singingi Hilir"
+1059,4,9,9,Pangean
+1060,4,9,10,"Logas Tanah Darat"
+1061,4,9,11,Inuman
+1062,4,9,12,"Hulu Kuantan"
+1063,4,9,13,"Kuantan Hilir Seberang"
+1064,4,9,14,"Sentajo Raya"
+1065,4,9,15,"Pucuk Rantau"
+1066,4,10,1,"Tebing Tinggi"
+1067,4,10,2,"Rangsang Barat"
+1068,4,10,3,Rangsang
+1069,4,10,4,"Tebing Tinggi Barat"
+1070,4,10,5,Merbau
+1071,4,10,6,Pulaumerbau
+1072,4,10,7,"Tebing Tinggi Timur"
+1073,4,10,8,"Tasik Putri Puyu"
+1074,4,10,9,"Rangsang Pesisir"
+1075,4,71,1,Sukajadi
+1076,4,71,2,"Pekanbaru Kota"
+1077,4,71,3,Sail
+1078,4,71,4,Limapuluh
+1079,4,71,5,Senapelan
+1080,4,71,6,"Rumbai Barat"
+1081,4,71,7,"Bukit Raya"
+1082,4,71,8,Binawidya
+1083,4,71,9,"Marpoyan Damai"
+1084,4,71,10,"Tenayan Raya"
+1085,4,71,11,"Payung Sekaki"
+1086,4,71,12,Rumbai
+1087,4,71,13,Tuahmadani
+1088,4,71,14,Kulim
+1089,4,71,15,"Rumbai Timur"
+1090,4,72,1,"Dumai Barat"
+1091,4,72,2,"Dumai Timur"
+1092,4,72,3,"Bukit Kapur"
+1093,4,72,4,"Sungai Sembilan"
+1094,4,72,5,"Medang Kampai"
+1095,4,72,6,"Dumai Kota"
+1096,4,72,7,"Dumai Selatan"
+1097,5,1,1,"Gunung Raya"
+1098,5,1,2,"Danau Kerinci"
+1099,5,1,4,"Sitinjau Laut"
+1100,5,1,5,"Air Hangat"
+1101,5,1,6,"Gunung Kerinci"
+1102,5,1,7,"Batang Merangin"
+1103,5,1,8,"Keliling Danau"
+1104,5,1,9,"Kayu Aro"
+1105,5,1,11,"Air Hangat Timur"
+1106,5,1,15,"Gunung Tujuh"
+1107,5,1,16,Siulak
+1108,5,1,17,"Depati Tujuh"
+1109,5,1,18,"Siulak Mukai"
+1110,5,1,19,"Kayu Aro Barat"
+1111,5,1,20,"Bukit Kerman"
+1112,5,1,21,"Air Hangat Barat"
+1113,5,1,22,"Tanah Cogok"
+1114,5,1,23,"Danau Kerinci Barat"
+1115,5,2,1,Jangkat
+1116,5,2,2,Bangko
+1117,5,2,3,"Muara Siau"
+1118,5,2,4,"Sungai Manau"
+1119,5,2,5,Tabir
+1120,5,2,6,Pamenang
+1121,5,2,7,"Tabir Ulu"
+1122,5,2,8,"Tabir Selatan"
+1123,5,2,9,"Lembah Masurai"
+1124,5,2,10,"Bangko Barat"
+1125,5,2,11,"Nalo Tantan"
+1126,5,2,12,"Batang Masumai"
+1127,5,2,13,"Pamenang Barat"
+1128,5,2,14,"Tabir Ilir"
+1129,5,2,15,"Tabir Timur"
+1130,5,2,16,"Renah Pembarap"
+1131,5,2,17,"Pangkalan Jambu"
+1132,5,2,18,"Jangkat Timur"
+1133,5,2,19,"Renah Pamenang"
+1134,5,2,20,"Pamenang Selatan"
+1135,5,2,21,"Margo Tabir"
+1136,5,2,22,"Tabir Lintas"
+1137,5,2,23,"Tabir Barat"
+1138,5,2,24,"Tiang Pumpung"
+1139,5,3,1,"Batang Asai"
+1140,5,3,2,Limun
+1141,5,3,3,Sarolangun
+1142,5,3,4,Pauh
+1143,5,3,5,Pelawan
+1144,5,3,6,Mandiangin
+1145,5,3,7,"Air Hitam"
+1146,5,3,8,"Bathin VIII"
+1147,5,3,9,Singkut
+1148,5,3,10,"Cermin Nan Gedang"
+1149,5,3,11,"Mandiangin Timur"
+1150,5,4,1,Mersam
+1151,5,4,2,"Muara Tembesi"
+1152,5,4,3,"Muara Bulian"
+1153,5,4,4,"Batin XXIV"
+1154,5,4,5,Pemayung
+1155,5,4,6,"Maro Sebo Ulu"
+1156,5,4,7,Bajubang
+1157,5,4,8,"Maro Sebo Ilir"
+1158,5,5,1,"Jambi Luar Kota"
+1159,5,5,2,Sekernan
+1160,5,5,3,Kumpeh
+1161,5,5,4,"Maro Sebo"
+1162,5,5,5,Mestong
+1163,5,5,6,"Kumpeh Ulu"
+1164,5,5,7,"Sungai Bahar"
+1165,5,5,8,"Sungai Gelam"
+1166,5,5,9,"Bahar Utara"
+1167,5,5,10,"Bahar Selatan"
+1168,5,5,11,"Taman Rajo"
+1169,5,6,1,"Tungkal Ulu"
+1170,5,6,2,"Tungkal Ilir"
+1171,5,6,3,Pengabuan
+1172,5,6,4,Betara
+1173,5,6,5,Merlung
+1174,5,6,6,"Tebing Tinggi"
+1175,5,6,7,"Batang Asam"
+1176,5,6,8,"Renah Mendaluh"
+1177,5,6,9,"Muara Papalik"
+1178,5,6,10,"Seberang Kota"
+1179,5,6,11,"Bram Itam"
+1180,5,6,12,"Kuala Betara"
+1181,5,6,13,Senyerang
+1182,5,7,1,"Muara Sabak Timur"
+1183,5,7,2,"Nipah Panjang"
+1184,5,7,3,Mendahara
+1185,5,7,4,"Rantau Rasau"
+1186,5,7,5,Sadu
+1187,5,7,6,Dendang
+1188,5,7,7,"Muara Sabak Barat"
+1189,5,7,8,"Kuala Jambi"
+1190,5,7,9,"Mendahara Ulu"
+1191,5,7,10,Geragai
+1192,5,7,11,Berbak
+1193,5,8,1,"Tanah Tumbuh"
+1194,5,8,2,"Rantau Pandan"
+1195,5,8,3,"Pasar Muaro Bungo"
+1196,5,8,4,Jujuhan
+1197,5,8,5,"Tanah Sepenggal"
+1198,5,8,6,Pelepat
+1199,5,8,7,"Limbur Lubuk Mengkuang"
+1200,5,8,8,"Muko-muko Bathin VII"
+1201,5,8,9,"Pelepat Ilir"
+1202,5,8,10,"Batin II Babeko"
+1203,5,8,11,"Bathin III"
+1204,5,8,12,"Bungo Dani"
+1205,5,8,13,"Rimbo Tengah"
+1206,5,8,14,"Bathin III Ulu"
+1207,5,8,15,"Bathin II Pelayang"
+1208,5,8,16,"Jujuhan Ilir"
+1209,5,8,17,"Tanah Sepenggal Lintas"
+1210,5,9,1,"Tebo Tengah"
+1211,5,9,2,"Tebo Ilir"
+1212,5,9,3,"Tebo Ulu"
+1213,5,9,4,"Rimbo Bujang"
+1214,5,9,5,Sumay
+1215,5,9,6,"VII Koto"
+1216,5,9,7,"Rimbo Ulu"
+1217,5,9,8,"Rimbo Ilir"
+1218,5,9,9,"Tengah Ilir"
+1219,5,9,10,"Serai Serumpun"
+1220,5,9,11,"VII Koto Ilir"
+1221,5,9,12,"Muara Tabir"
+1222,5,71,1,Telanaipura
+1223,5,71,2,"Jambi Selatan"
+1224,5,71,3,"Jambi Timur"
+1225,5,71,4,"Pasar Jambi"
+1226,5,71,5,Pelayangan
+1227,5,71,6,"Danau Teluk"
+1228,5,71,7,"Kota Baru"
+1229,5,71,8,Jelutung
+1230,5,71,9,"Alam Barajo"
+1231,5,71,10,"Danau Sipin"
+1232,5,71,11,"Paal Merah"
+1233,5,72,1,"Sungai Penuh"
+1234,5,72,2,"Pesisir Bukit"
+1235,5,72,3,"Hamparan Rawang"
+1236,5,72,4,"Tanah Kampung"
+1237,5,72,5,"Kumun Debai"
+1238,5,72,6,"Pondok Tinggi"
+1239,5,72,7,"Koto Baru"
+1240,5,72,8,"Sungai Bungkal"
+1241,6,1,7,"Sosoh Buay Rayap"
+1242,6,1,8,Pengandonan
+1243,6,1,9,Peninjauan
+1244,6,1,13,"Baturaja Barat"
+1245,6,1,14,"Baturaja Timur"
+1246,6,1,20,"Ulu Ogan"
+1247,6,1,21,"Semidang Aji"
+1248,6,1,22,"Lubuk Batang"
+1249,6,1,28,Lengkiti
+1250,6,1,29,"Sinar Peninjauan"
+1251,6,1,30,"Lubuk Raja"
+1252,6,1,31,"Muara Jaya"
+1253,6,1,32,"Kedaton Peninjauan Raya"
+1254,6,2,2,"Tanjung Lubuk"
+1255,6,2,3,Pedamaran
+1256,6,2,4,Mesuji
+1257,6,2,5,"Kayu Agung"
+1258,6,2,8,"Sirah Pulau Padang"
+1259,6,2,11,"Tulung Selapan"
+1260,6,2,12,Pampangan
+1261,6,2,13,Lempuing
+1262,6,2,14,"Air Sugihan"
+1263,6,2,15,"Sungai Menang"
+1264,6,2,17,Jejawi
+1265,6,2,18,Cengal
+1266,6,2,19,"Pangkalan Lampam"
+1267,6,2,20,"Mesuji Makmur"
+1268,6,2,21,"Mesuji Raya"
+1269,6,2,22,"Lempuing Jaya"
+1270,6,2,23,"Teluk Gelam"
+1271,6,2,24,"Pedamaran Timur"
+1272,6,3,1,"Tanjung Agung"
+1273,6,3,2,"Muara Enim"
+1274,6,3,3,"Rambang Niru"
+1275,6,3,4,"Gunung Megang"
+1276,6,3,6,Gelumbang
+1277,6,3,7,"Lawang Kidul"
+1278,6,3,8,"Semende Darat Laut"
+1279,6,3,9,"Semende Darat Tengah"
+1280,6,3,10,"Semende Darat Ulu"
+1281,6,3,11,"Ujan Mas"
+1282,6,3,14,Lubai
+1283,6,3,15,Rambang
+1284,6,3,16,"Sungai Rotan"
+1285,6,3,17,Lembak
+1286,6,3,19,Benakat
+1287,6,3,21,Kelekar
+1288,6,3,22,"Muara Belida"
+1289,6,3,23,Belimbing
+1290,6,3,24,"Belida Darat"
+1291,6,3,25,"Lubai Ulu"
+1292,6,3,26,"Empat Petulai Dangku"
+1293,6,3,27,"Panang Enim"
+1294,6,4,1,"Tanjungsakti Pumu"
+1295,6,4,6,Jarai
+1296,6,4,7,"Kota Agung"
+1297,6,4,8,"Pulau Pinang"
+1298,6,4,9,"Merapi Barat"
+1299,6,4,10,Lahat
+1300,6,4,12,"Pajar Bulan"
+1301,6,4,15,"Mulak Ulu"
+1302,6,4,16,"Kikim Selatan"
+1303,6,4,17,"Kikim Timur"
+1304,6,4,18,"Kikim Tengah"
+1305,6,4,19,"Kikim Barat"
+1306,6,4,20,Pseksu
+1307,6,4,21,"Gumay Talang"
+1308,6,4,22,"Pagar Gunung"
+1309,6,4,23,"Merapi Timur"
+1310,6,4,24,"Tanjung Sakti Pumi"
+1311,6,4,25,"Gumay Ulu"
+1312,6,4,26,"Merapi Selatan"
+1313,6,4,27,Tanjungtebat
+1314,6,4,28,Muarapayang
+1315,6,4,29,Sukamerindu
+1316,6,4,30,"Mulak Sebingkai"
+1317,6,4,31,"Lahat Selatan"
+1318,6,5,1,Tugumulyo
+1319,6,5,2,"Muara Lakitan"
+1320,6,5,3,"Muara Kelingi"
+1321,6,5,8,Jayaloka
+1322,6,5,9,"Muara Beliti"
+1323,6,5,10,"STL Ulu Terawas"
+1324,6,5,11,Selangit
+1325,6,5,12,"Megang Sakti"
+1326,6,5,13,Purwodadi
+1327,6,5,14,"BTS. Ulu"
+1328,6,5,18,"Tiang Pumpung Kepungut"
+1329,6,5,19,"Sumber Harta"
+1330,6,5,20,"Tuah Negeri"
+1331,6,5,21,"Suka Karya"
+1332,6,6,1,Sekayu
+1333,6,6,2,Lais
+1334,6,6,3,"Sungai Keruh"
+1335,6,6,4,"Batang Hari Leko"
+1336,6,6,5,"Sanga Desa"
+1337,6,6,6,"Babat Toman"
+1338,6,6,7,"Sungai Lilin"
+1339,6,6,8,Keluang
+1340,6,6,9,"Bayung Lencir"
+1341,6,6,10,"Plakat Tinggi"
+1342,6,6,11,Lalan
+1343,6,6,12,"Tungkal Jaya"
+1344,6,6,13,"Lawan Wetan"
+1345,6,6,14,"Babat Supat"
+1346,6,6,15,"Jirak Jaya"
+1347,6,7,1,"Banyuasin I"
+1348,6,7,2,"Banyuasin II"
+1349,6,7,3,"Banyuasin III"
+1350,6,7,4,"Pulau Rimau"
+1351,6,7,5,Betung
+1352,6,7,6,Rambutan
+1353,6,7,7,"Muara Padang"
+1354,6,7,8,"Muara Telang"
+1355,6,7,9,"Makarti Jaya"
+1356,6,7,10,"Talang Kelapa"
+1357,6,7,11,"Rantau Bayur"
+1358,6,7,12,"Tanjung Lago"
+1359,6,7,13,"Muara Sugihan"
+1360,6,7,14,"Air Salek"
+1361,6,7,15,"Tungkal Ilir"
+1362,6,7,16,"Suak Tapeh"
+1363,6,7,17,Sembawa
+1364,6,7,18,"Sumber Marga Telang"
+1365,6,7,19,"Air Kumbang"
+1366,6,7,20,"Karang Agung Ilir"
+1367,6,7,21,"Selat Penuguan"
+1368,6,8,1,Martapura
+1369,6,8,2,"Buay Madang"
+1370,6,8,3,Belitang
+1371,6,8,4,Cempaka
+1372,6,8,5,"Buay Pemuka Peliung"
+1373,6,8,6,"Madang Suku II"
+1374,6,8,7,"Madang Suku I"
+1375,6,8,8,"Semendawai Suku III"
+1376,6,8,9,"Belitang II"
+1377,6,8,10,"Belitang III"
+1378,6,8,11,"Bunga Mayang"
+1379,6,8,12,"Buay Madang Timur"
+1380,6,8,13,"Madang Suku III"
+1381,6,8,14,"Semendawai Barat"
+1382,6,8,15,"Semendawai Timur"
+1383,6,8,16,Jayapura
+1384,6,8,17,"Belitang Jaya"
+1385,6,8,18,"Belitang Madang Raya"
+1386,6,8,19,"Belitang Mulya"
+1387,6,8,20,"Buay Pemuka Bangsa Raja"
+1388,6,9,1,"Muara Dua"
+1389,6,9,2,"Pulau Beringin"
+1390,6,9,3,"Banding Agung"
+1391,6,9,4,"Muara Dua Kisam"
+1392,6,9,5,Simpang
+1393,6,9,6,"Buay Sandang Aji"
+1394,6,9,7,"Buay Runjung"
+1395,6,9,8,"Mekakau Ilir"
+1396,6,9,9,"Buay Pemaca"
+1397,6,9,10,"Kisam Tinggi"
+1398,6,9,11,"Kisam Ilir"
+1399,6,9,12,"Buay Pematang Ribu Ranau Tengah"
+1400,6,9,13,"Warkuk Ranau Selatan"
+1401,6,9,14,"Runjung Agung"
+1402,6,9,15,"Sungai Are"
+1403,6,9,16,"Sindang Danau"
+1404,6,9,17,"Buana Pemaca"
+1405,6,9,18,"Tiga Dihaji"
+1406,6,9,19,"Buay Rawan"
+1407,6,10,1,"Muara Kuang"
+1408,6,10,2,"Tanjung Batu"
+1409,6,10,3,"Tanjung Raja"
+1410,6,10,4,Indralaya
+1411,6,10,5,Pemulutan
+1412,6,10,6,"Rantau Alai"
+1413,6,10,7,"Indralaya Utara"
+1414,6,10,8,"Indralaya Selatan"
+1415,6,10,9,"Pemulutan Selatan"
+1416,6,10,10,"Pemulutan Barat"
+1417,6,10,11,"Rantau Panjang"
+1418,6,10,12,"Sungai Pinang"
+1419,6,10,13,Kandis
+1420,6,10,14,"Rambang Kuang"
+1421,6,10,15,"Lubuk Keliat"
+1422,6,10,16,Payaraman
+1423,6,11,1,"Muara Pinang"
+1424,6,11,2,Pendopo
+1425,6,11,3,"Ulu Musi"
+1426,6,11,4,"Tebing Tinggi"
+1427,6,11,5,"Lintang Kanan"
+1428,6,11,6,"Talang Padang"
+1429,6,11,7,"Pasemah Air Keruh"
+1430,6,11,8,"Sikap Dalam"
+1431,6,11,9,Saling
+1432,6,11,10,"Pendopo Barat"
+1433,6,12,1,"Talang Ubi"
+1434,6,12,2,"Penukal Utara"
+1435,6,12,3,Penukal
+1436,6,12,4,Abab
+1437,6,12,5,"Tanah Abang"
+1438,6,13,1,Rupit
+1439,6,13,2,"Rawas Ulu"
+1440,6,13,3,Nibung
+1441,6,13,4,"Rawas Ilir"
+1442,6,13,5,"Karang Dapo"
+1443,6,13,6,"Karang Jaya"
+1444,6,13,7,"Ulu Rawas"
+1445,6,71,1,"Ilir Barat Dua"
+1446,6,71,2,"Seberang Ulu Satu"
+1447,6,71,3,"Seberang Ulu Dua"
+1448,6,71,4,"Ilir Barat Satu"
+1449,6,71,5,"Ilir Timur Satu"
+1450,6,71,6,"Ilir Timur Dua"
+1451,6,71,7,Sukarami
+1452,6,71,8,Sako
+1453,6,71,9,Kemuning
+1454,6,71,10,Kalidoni
+1455,6,71,11,Bukitkecil
+1456,6,71,12,Gandus
+1457,6,71,13,Kertapati
+1458,6,71,14,Plaju
+1459,6,71,15,"Alang-alang Lebar"
+1460,6,71,16,Sematangborang
+1461,6,71,17,Jakabaring
+1462,6,71,18,"Ilir Timur Tiga"
+1463,6,72,1,"Pagar Alam Utara"
+1464,6,72,2,"Pagar Alam Selatan"
+1465,6,72,3,"Dempo Utara"
+1466,6,72,4,"Dempo Selatan"
+1467,6,72,5,"Dempo Tengah"
+1468,6,73,1,"Lubuk Linggau Timur I"
+1469,6,73,2,"Lubuk Linggau Barat I"
+1470,6,73,3,"Lubuk Linggau Selatan I"
+1471,6,73,4,"Lubuk Linggau Utara I"
+1472,6,73,5,"Lubuk Linggau Timur II"
+1473,6,73,6,"Lubuk Linggau Barat II"
+1474,6,73,7,"Lubuk Linggau Selatan II"
+1475,6,73,8,"Lubuk Linggau Utara II"
+1476,6,74,1,"Prabumulih Barat"
+1477,6,74,2,"Prabumulih Timur"
+1478,6,74,3,Cambai
+1479,6,74,4,"Rambang Kapak Tengah"
+1480,6,74,5,"Prabumulih Utara"
+1481,6,74,6,"Prabumulih Selatan"
+1482,7,1,1,Kedurang
+1483,7,1,2,Seginim
+1484,7,1,3,Pino
+1485,7,1,4,Manna
+1486,7,1,5,"Kota Manna"
+1487,7,1,6,"Pino Raya"
+1488,7,1,7,"Kedurang Ilir"
+1489,7,1,8,"Air Nipis"
+1490,7,1,9,"Ulu Manna"
+1491,7,1,10,"Bunga Mas"
+1492,7,1,11,"Pasar Manna"
+1493,7,2,6,"Kota Padang"
+1494,7,2,7,"Padang Ulak Tanding"
+1495,7,2,8,"Sindang Kelingi"
+1496,7,2,9,Curup
+1497,7,2,10,"Bermani Ulu"
+1498,7,2,11,"Selupu Rejang"
+1499,7,2,16,"Curup Utara"
+1500,7,2,17,"Curup Timur"
+1501,7,2,18,"Curup Selatan"
+1502,7,2,19,"Curup Tengah"
+1503,7,2,20,Binduriang
+1504,7,2,21,"Sindang Beliti Ulu"
+1505,7,2,22,"Sindang Dataran"
+1506,7,2,23,"Sindang Beliti Ilir"
+1507,7,2,24,"Bermani Ulu Raya"
+1508,7,3,1,Enggano
+1509,7,3,6,Kerkap
+1510,7,3,7,"Kota Arga Makmur"
+1511,7,3,8,"Giri Mulya"
+1512,7,3,9,"Padang Jaya"
+1513,7,3,10,Lais
+1514,7,3,11,"Batik Nau"
+1515,7,3,12,Ketahun
+1516,7,3,13,"Napal Putih"
+1517,7,3,14,"Putri Hijau"
+1518,7,3,15,"Air Besi"
+1519,7,3,16,"Air Napal"
+1520,7,3,19,"Hulu Palik"
+1521,7,3,20,"Air Padang"
+1522,7,3,21,"Arma Jaya"
+1523,7,3,22,"Tanjung Agung Palik"
+1524,7,3,23,"Ulok Kupai"
+1525,7,3,24,"Pinang Raya"
+1526,7,3,25,"Marga Sakti Sebelat"
+1527,7,4,1,Kinal
+1528,7,4,2,"Tanjung Kemuning"
+1529,7,4,3,"Kaur Utara"
+1530,7,4,4,"Kaur Tengah"
+1531,7,4,5,"Kaur Selatan"
+1532,7,4,6,Maje
+1533,7,4,7,Nasal
+1534,7,4,8,"Semidang Gumay"
+1535,7,4,9,"Kelam Tengah"
+1536,7,4,10,Luas
+1537,7,4,11,"Muara Sahung"
+1538,7,4,12,Tetap
+1539,7,4,13,"Lungkang Kule"
+1540,7,4,14,"Padang Guci Hilir"
+1541,7,4,15,"Padang Guci Hulu"
+1542,7,5,1,Sukaraja
+1543,7,5,2,Seluma
+1544,7,5,3,Talo
+1545,7,5,4,"Semidang Alas"
+1546,7,5,5,"Semidang Alas Maras"
+1547,7,5,6,"Air Periukan"
+1548,7,5,7,"Lubuk Sandi"
+1549,7,5,8,"Seluma Barat"
+1550,7,5,9,"Seluma Timur"
+1551,7,5,10,"Seluma Utara"
+1552,7,5,11,"Seluma Selatan"
+1553,7,5,12,"Talo Kecil"
+1554,7,5,13,"Ulu Talo"
+1555,7,5,14,"Ilir Talo"
+1556,7,6,1,"Lubuk Pinang"
+1557,7,6,2,"Kota Mukomuko"
+1558,7,6,3,"Teras Terunjam"
+1559,7,6,4,"Pondok Suguh"
+1560,7,6,5,Ipuh
+1561,7,6,6,"Malin Deman"
+1562,7,6,7,"Air Rami"
+1563,7,6,8,"Teramang Jaya"
+1564,7,6,9,"Selagan Raya"
+1565,7,6,10,Penarik
+1566,7,6,11,"XIV Koto"
+1567,7,6,12,"V Koto"
+1568,7,6,13,"Air Manjunto"
+1569,7,6,14,"Air Dikit"
+1570,7,6,15,"Sungai Rumbai"
+1571,7,7,1,"Lebong Utara"
+1572,7,7,2,"Lebong Atas"
+1573,7,7,3,"Lebong Tengah"
+1574,7,7,4,"Lebong Selatan"
+1575,7,7,5,"Rimbo Pengadang"
+1576,7,7,6,Topos
+1577,7,7,7,"Bingin Kuning"
+1578,7,7,8,"Lebong Sakti"
+1579,7,7,9,Tubei
+1580,7,7,10,Amen
+1581,7,7,11,"Uram Jaya"
+1582,7,7,12,"Pinang Belapis"
+1583,7,8,1,"Bermani Ilir"
+1584,7,8,2,"Ujan Mas"
+1585,7,8,3,"Tebat Karai"
+1586,7,8,4,Kepahiang
+1587,7,8,5,Merigi
+1588,7,8,6,Kebawetan
+1589,7,8,7,"Seberang Musi"
+1590,7,8,8,"Muara Kemumu"
+1591,7,9,1,"Karang Tinggi"
+1592,7,9,2,"Talang Empat"
+1593,7,9,3,"Pondok Kelapa"
+1594,7,9,4,"Pematang Tiga"
+1595,7,9,5,"Pagar Jati"
+1596,7,9,6,"Taba Penanjung"
+1597,7,9,7,"Merigi Kelindang"
+1598,7,9,8,"Merigi Sakti"
+1599,7,9,9,"Pondok Kubang"
+1600,7,9,10,"Bang Haji"
+1601,7,9,11,"Semidang Lagan"
+1602,7,71,1,Selebar
+1603,7,71,2,"Gading Cempaka"
+1604,7,71,3,"Teluk Segara"
+1605,7,71,4,"Muara Bangka Hulu"
+1606,7,71,5,"Kampung Melayu"
+1607,7,71,6,"Ratu Agung"
+1608,7,71,7,"Ratu Samban"
+1609,7,71,8,"Sungai Serut"
+1610,7,71,9,"Singaran Pati"
+1611,8,1,4,Natar
+1612,8,1,5,"Tanjung Bintang"
+1613,8,1,6,Kalianda
+1614,8,1,7,Sidomulyo
+1615,8,1,8,Katibung
+1616,8,1,9,Penengahan
+1617,8,1,10,Palas
+1618,8,1,13,"Jati Agung"
+1619,8,1,14,Ketapang
+1620,8,1,15,Sragi
+1621,8,1,16,"Raja Basa"
+1622,8,1,17,Candipuro
+1623,8,1,18,"Merbau Mataram"
+1624,8,1,21,Bakauheni
+1625,8,1,22,"Tanjung Sari"
+1626,8,1,23,"Way Sulan"
+1627,8,1,24,"Way Panji"
+1628,8,2,1,Kalirejo
+1629,8,2,2,"Bangun Rejo"
+1630,8,2,3,"Padang Ratu"
+1631,8,2,4,"Gunung Sugih"
+1632,8,2,5,Trimurjo
+1633,8,2,6,Punggur
+1634,8,2,7,"Terbanggi Besar"
+1635,8,2,8,"Seputih Raman"
+1636,8,2,9,Rumbia
+1637,8,2,10,"Seputih Banyak"
+1638,8,2,11,"Seputih Mataram"
+1639,8,2,12,"Seputih Surabaya"
+1640,8,2,13,"Terusan Nunyai"
+1641,8,2,14,"Bumi Ratu Nuban"
+1642,8,2,15,Bekri
+1643,8,2,16,"Seputih Agung"
+1644,8,2,17,"Way Pengubuan"
+1645,8,2,18,"Bandar Mataram"
+1646,8,2,19,Pubian
+1647,8,2,20,"Selagai Lingga"
+1648,8,2,21,"Anak Tuha"
+1649,8,2,22,"Sendang Agung"
+1650,8,2,23,"Kota Gajah"
+1651,8,2,24,"Bumi Nabung"
+1652,8,2,25,"Way Seputih"
+1653,8,2,26,"Bandar Surabaya"
+1654,8,2,27,"Anak Ratu Aji"
+1655,8,2,28,"Putra Rumbia"
+1656,8,3,1,"Bukit Kemuning"
+1657,8,3,2,Kotabumi
+1658,8,3,3,"Sungkai Selatan"
+1659,8,3,4,"Tanjung Raja"
+1660,8,3,5,"Abung Timur"
+1661,8,3,6,"Abung Barat"
+1662,8,3,7,"Abung Selatan"
+1663,8,3,8,"Sungkai Utara"
+1664,8,3,9,"Kotabumi Utara"
+1665,8,3,10,"Kotabumi Selatan"
+1666,8,3,11,"Abung Tengah"
+1667,8,3,12,"Abung Tinggi"
+1668,8,3,13,"Abung Semuli"
+1669,8,3,14,"Abung Surakarta"
+1670,8,3,15,"Muara Sungkai"
+1671,8,3,16,"Bunga Mayang"
+1672,8,3,17,"Hulu Sungkai"
+1673,8,3,18,"Sungkai Tengah"
+1674,8,3,19,"Abung Pekurun"
+1675,8,3,20,"Sungkai Jaya"
+1676,8,3,21,"Sungkai Barat"
+1677,8,3,22,"Abung Kunang"
+1678,8,3,23,"Blambangan Pagar"
+1679,8,4,4,"Balik Bukit"
+1680,8,4,5,"Sumber Jaya"
+1681,8,4,6,Belalau
+1682,8,4,7,"Way Tenong"
+1683,8,4,8,Sekincau
+1684,8,4,9,Suoh
+1685,8,4,10,"Batu Brak"
+1686,8,4,11,Sukau
+1687,8,4,15,"Gedung Surian"
+1688,8,4,18,"Kebun Tebu"
+1689,8,4,19,"Air Hitam"
+1690,8,4,20,"Pagar Dewa"
+1691,8,4,21,"Batu Ketulis"
+1692,8,4,22,"Lumbok Seminung"
+1693,8,4,23,"Bandar Negeri Suoh"
+1694,8,5,2,Menggala
+1695,8,5,6,"Gedung Aji"
+1696,8,5,8,"Banjar Agung"
+1697,8,5,11,"Gedung Meneng"
+1698,8,5,12,"Rawa Jitu Selatan"
+1699,8,5,13,"Penawar Tama"
+1700,8,5,18,"Rawa Jitu Timur"
+1701,8,5,20,"Banjar Margo"
+1702,8,5,22,"Rawa Pitu"
+1703,8,5,23,"Penawar Aji"
+1704,8,5,25,"Dente Teladas"
+1705,8,5,26,"Meraksa Aji"
+1706,8,5,27,"Gedung Aji Baru"
+1707,8,5,29,"Banjar Baru"
+1708,8,5,30,"Menggala Timur"
+1709,8,6,1,"Kota Agung"
+1710,8,6,2,"Talang Padang"
+1711,8,6,3,Wonosobo
+1712,8,6,4,"Pulau Panggung"
+1713,8,6,9,"Cukuh Balak"
+1714,8,6,11,Pugung
+1715,8,6,12,Semaka
+1716,8,6,13,Sumberejo
+1717,8,6,15,"Ulu Belu"
+1718,8,6,16,"Pematang Sawa"
+1719,8,6,17,Kelumbayan
+1720,8,6,18,"Kota Agung Barat"
+1721,8,6,19,"Kota Agung Timur"
+1722,8,6,20,Gisting
+1723,8,6,21,"Gunung Alip"
+1724,8,6,24,Limau
+1725,8,6,25,"Bandar Negeri Semuong"
+1726,8,6,26,"Air Naningan"
+1727,8,6,27,Bulok
+1728,8,6,28,"Kelumbayan Barat"
+1729,8,7,1,Sukadana
+1730,8,7,2,"Labuhan Maringgai"
+1731,8,7,3,Jabung
+1732,8,7,4,Pekalongan
+1733,8,7,5,Sekampung
+1734,8,7,6,Batanghari
+1735,8,7,7,"Way Jepara"
+1736,8,7,8,Purbolinggo
+1737,8,7,9,"Raman Utara"
+1738,8,7,10,"Metro Kibang"
+1739,8,7,11,"Marga Tiga"
+1740,8,7,12,"Sekampung Udik"
+1741,8,7,13,"Batanghari Nuban"
+1742,8,7,14,"Bumi Agung"
+1743,8,7,15,"Bandar Sribhawono"
+1744,8,7,16,"Mataram Baru"
+1745,8,7,17,Melinting
+1746,8,7,18,"Gunung Pelindung"
+1747,8,7,19,"Pasir Sakti"
+1748,8,7,20,"Waway Karya"
+1749,8,7,21,"Labuhan Ratu"
+1750,8,7,22,"Braja Selebah"
+1751,8,7,23,"Way Bungur"
+1752,8,7,24,"Marga Sekampung"
+1753,8,8,1,"Blambangan Umpu"
+1754,8,8,2,Kasui
+1755,8,8,3,Banjit
+1756,8,8,4,Baradatu
+1757,8,8,5,Bahuga
+1758,8,8,6,"Pakuan Ratu"
+1759,8,8,7,"Negeri Agung"
+1760,8,8,8,"Way Tuba"
+1761,8,8,9,"Rebang Tangkas"
+1762,8,8,10,"Gunung Labuhan"
+1763,8,8,11,"Negara Batin"
+1764,8,8,12,"Negeri Besar"
+1765,8,8,13,"Buay Bahuga"
+1766,8,8,14,"Bumi Agung"
+1767,8,8,15,"Umpu Semenguk"
+1768,8,9,1,"Gedong Tataan"
+1769,8,9,2,"Negeri Katon"
+1770,8,9,3,Tegineneng
+1771,8,9,4,"Way Lima"
+1772,8,9,5,"Padang Cermin"
+1773,8,9,6,"Punduh Pidada"
+1774,8,9,7,Kedondong
+1775,8,9,8,"Marga Punduh"
+1776,8,9,9,"Way Khilau"
+1777,8,9,10,"Teluk Pandan"
+1778,8,9,11,"Way Ratai"
+1779,8,10,1,Pringsewu
+1780,8,10,2,"Gading Rejo"
+1781,8,10,3,Ambarawa
+1782,8,10,4,Pardasuka
+1783,8,10,5,Pagelaran
+1784,8,10,6,Banyumas
+1785,8,10,7,Adiluwih
+1786,8,10,8,Sukoharjo
+1787,8,10,9,"Pagelaran Utara"
+1788,8,11,1,Mesuji
+1789,8,11,2,"Mesuji Timur"
+1790,8,11,3,"Rawa Jitu Utara"
+1791,8,11,4,"Way Serdang"
+1792,8,11,5,"Simpang Pematang"
+1793,8,11,6,"Panca Jaya"
+1794,8,11,7,"Tanjung Raya"
+1795,8,12,1,"Tulang Bawang Tengah"
+1796,8,12,2,Tumijajar
+1797,8,12,3,"Tulang Bawang Udik"
+1798,8,12,4,"Gunung Terang"
+1799,8,12,5,"Gunung Agung"
+1800,8,12,6,"Way Kenanga"
+1801,8,12,7,"Lambu Kibang"
+1802,8,12,8,"Pagar Dewa"
+1803,8,12,9,"Batu Putih"
+1804,8,13,1,"Pesisir Tengah"
+1805,8,13,2,"Pesisir Selatan"
+1806,8,13,3,Lemong
+1807,8,13,4,"Pesisir Utara"
+1808,8,13,5,"Karya Penggawa"
+1809,8,13,6,"Pulau Pisang"
+1810,8,13,7,"Way Krui"
+1811,8,13,8,"Krui Selatan"
+1812,8,13,9,Ngambur
+1813,8,13,10,Ngaras
+1814,8,13,11,Bangkunat
+1815,8,71,1,Kedaton
+1816,8,71,2,Sukarame
+1817,8,71,3,"Tanjungkarang Barat"
+1818,8,71,4,Panjang
+1819,8,71,5,"Tanjungkarang Timur"
+1820,8,71,6,"Tanjungkarang Pusat"
+1821,8,71,7,"Telukbetung Selatan"
+1822,8,71,8,"Telukbetung Barat"
+1823,8,71,9,"Telukbetung Utara"
+1824,8,71,10,Rajabasa
+1825,8,71,11,"Tanjung Senang"
+1826,8,71,12,Sukabumi
+1827,8,71,13,Kemiling
+1828,8,71,14,"Labuhan Ratu"
+1829,8,71,15,"Way Halim"
+1830,8,71,16,Langkapura
+1831,8,71,17,Enggal
+1832,8,71,18,Kedamaian
+1833,8,71,19,"Telukbetung Timur"
+1834,8,71,20,"Bumi Waras"
+1835,8,72,1,"Metro Pusat"
+1836,8,72,2,"Metro Utara"
+1837,8,72,3,"Metro Barat"
+1838,8,72,4,"Metro Timur"
+1839,8,72,5,"Metro Selatan"
+1840,9,1,1,Sungailiat
+1841,9,1,2,Belinyu
+1842,9,1,3,Merawang
+1843,9,1,4,"Mendo Barat"
+1844,9,1,5,Pemali
+1845,9,1,6,Bakam
+1846,9,1,7,"Riau Silip"
+1847,9,1,8,"Puding Besar"
+1848,9,2,1,Tanjungpandan
+1849,9,2,2,Membalong
+1850,9,2,3,"Selat Nasik"
+1851,9,2,4,Sijuk
+1852,9,2,5,Badau
+1853,9,3,1,Toboali
+1854,9,3,2,Lepar
+1855,9,3,3,Airgegas
+1856,9,3,4,"Simpang Rimba"
+1857,9,3,5,Payung
+1858,9,3,6,"Tukak Sadai"
+1859,9,3,7,"Pulau Besar"
+1860,9,3,8,"Kepulauan Pongok"
+1861,9,4,1,Koba
+1862,9,4,2,"Pangkalan Baru"
+1863,9,4,3,"Sungai Selan"
+1864,9,4,4,"Simpang Katis"
+1865,9,4,5,Namang
+1866,9,4,6,"Lubuk Besar"
+1867,9,5,1,Mentok
+1868,9,5,2,"Simpang Teritip"
+1869,9,5,3,Jebus
+1870,9,5,4,Kelapa
+1871,9,5,5,Tempilang
+1872,9,5,6,Parittiga
+1873,9,6,1,Manggar
+1874,9,6,2,Gantung
+1875,9,6,3,Dendang
+1876,9,6,4,"Kelapa Kampit"
+1877,9,6,5,Damar
+1878,9,6,6,"Simpang Renggiang"
+1879,9,6,7,"Simpang Pesak"
+1880,9,71,1,"Bukit Intan"
+1881,9,71,2,"Taman Sari"
+1882,9,71,3,"Pangkal Balam"
+1883,9,71,4,Rangkui
+1884,9,71,5,Gerunggang
+1885,9,71,6,Gabek
+1886,9,71,7,Girimaya
+1887,10,1,4,"Gunung Kijang"
+1888,10,1,6,"Bintan Timur"
+1889,10,1,7,"Bintan Utara"
+1890,10,1,8,"Teluk Bintan"
+1891,10,1,9,Tambelan
+1892,10,1,10,"Teluk Sebong"
+1893,10,1,12,Toapaya
+1894,10,1,13,Mantang
+1895,10,1,14,"Bintan Pesisir"
+1896,10,1,15,"Seri Kuala Lobam"
+1897,10,2,1,Moro
+1898,10,2,2,Kundur
+1899,10,2,3,Karimun
+1900,10,2,4,Meral
+1901,10,2,5,Tebing
+1902,10,2,6,Buru
+1903,10,2,7,"Kundur Utara"
+1904,10,2,8,"Kundur Barat"
+1905,10,2,9,Durai
+1906,10,2,10,"Meral Barat"
+1907,10,2,11,Ungar
+1908,10,2,12,Belat
+1909,10,2,13,"Selat Gelam"
+1910,10,2,14,"Sugie Besar"
+1911,10,3,4,Midai
+1912,10,3,5,"Bunguran Barat"
+1913,10,3,6,Serasan
+1914,10,3,7,"Bunguran Timur"
+1915,10,3,8,"Bunguran Utara"
+1916,10,3,9,Subi
+1917,10,3,10,"Pulau Laut"
+1918,10,3,11,"Pulau Tiga"
+1919,10,3,15,"Bunguran Timur Laut"
+1920,10,3,16,"Bunguran Tengah"
+1921,10,3,18,"Bunguran Selatan"
+1922,10,3,19,"Serasan Timur"
+1923,10,3,20,"Bunguran Batubi"
+1924,10,3,21,"Pulau Tiga Barat"
+1925,10,3,22,"Suak Midai"
+1926,10,3,23,"Pulau Panjang"
+1927,10,3,24,"Pulau Seluan"
+1928,10,4,1,Singkep
+1929,10,4,2,Lingga
+1930,10,4,3,Senayang
+1931,10,4,4,"Singkep Barat"
+1932,10,4,5,"Lingga Utara"
+1933,10,4,6,"Singkep Pesisir"
+1934,10,4,7,"Lingga Timur"
+1935,10,4,8,Selayar
+1936,10,4,9,"Singkep Selatan"
+1937,10,4,10,"Kepulauan Posek"
+1938,10,4,11,"Katang Bidare"
+1939,10,4,12,"Temiang Pesisir"
+1940,10,4,13,"Bakung Serumpun"
+1941,10,5,1,Siantan
+1942,10,5,2,Palmatak
+1943,10,5,3,"Siantan Timur"
+1944,10,5,4,"Siantan Selatan"
+1945,10,5,5,"Jemaja Timur"
+1946,10,5,6,Jemaja
+1947,10,5,7,"Siantan Tengah"
+1948,10,5,8,"Siantan Utara"
+1949,10,5,9,"Jemaja Barat"
+1950,10,5,10,"Kute Siantan"
+1951,10,71,1,"Belakang Padang"
+1952,10,71,2,"Batu Ampar"
+1953,10,71,3,Sekupang
+1954,10,71,4,Nongsa
+1955,10,71,5,Bulang
+1956,10,71,6,"Lubuk Baja"
+1957,10,71,7,"Sei Beduk"
+1958,10,71,8,Galang
+1959,10,71,9,Bengkong
+1960,10,71,10,"Batam Kota"
+1961,10,71,11,Sagulung
+1962,10,71,12,"Batu Aji"
+1963,10,72,1,"Tanjung Pinang Barat"
+1964,10,72,2,"Tanjung Pinang Timur"
+1965,10,72,3,"Tanjung Pinang Kota"
+1966,10,72,4,"Bukit Bestari"
+1967,11,1,1,"Kepulauan Seribu Utara"
+1968,11,1,2,"Kepulauan Seribu Selatan"
+1969,11,71,1,Gambir
+1970,11,71,2,"Sawah Besar"
+1971,11,71,3,Kemayoran
+1972,11,71,4,Senen
+1973,11,71,5,"Cempaka Putih"
+1974,11,71,6,Menteng
+1975,11,71,7,"Tanah Abang"
+1976,11,71,8,"Johar Baru"
+1977,11,72,1,Penjaringan
+1978,11,72,2,"Tanjung Priok"
+1979,11,72,3,Koja
+1980,11,72,4,Cilincing
+1981,11,72,5,Pademangan
+1982,11,72,6,"Kelapa Gading"
+1983,11,73,1,Cengkareng
+1984,11,73,2,"Grogol Petamburan"
+1985,11,73,3,"Taman Sari"
+1986,11,73,4,Tambora
+1987,11,73,5,"Kebon Jeruk"
+1988,11,73,6,Kalideres
+1989,11,73,7,"Pal Merah"
+1990,11,73,8,Kembangan
+1991,11,74,1,Tebet
+1992,11,74,2,Setiabudi
+1993,11,74,3,"Mampang Prapatan"
+1994,11,74,4,"Pasar Minggu"
+1995,11,74,5,"Kebayoran Lama"
+1996,11,74,6,Cilandak
+1997,11,74,7,"Kebayoran Baru"
+1998,11,74,8,Pancoran
+1999,11,74,9,Jagakarsa
+2000,11,74,10,Pesanggrahan
+2001,11,75,1,Matraman
+2002,11,75,2,Pulogadung
+2003,11,75,3,Jatinegara
+2004,11,75,4,Kramatjati
+2005,11,75,5,"Pasar Rebo"
+2006,11,75,6,Cakung
+2007,11,75,7,"Duren Sawit"
+2008,11,75,8,Makasar
+2009,11,75,9,Ciracas
+2010,11,75,10,Cipayung
+2011,12,1,1,Cibinong
+2012,12,1,2,Gunungputri
+2013,12,1,3,Citeureup
+2014,12,1,4,Sukaraja
+2015,12,1,5,"Babakan Madang"
+2016,12,1,6,Jonggol
+2017,12,1,7,Cileungsi
+2018,12,1,8,Cariu
+2019,12,1,9,Sukamakmur
+2020,12,1,10,Parung
+2021,12,1,11,Gunungsindur
+2022,12,1,12,Kemang
+2023,12,1,13,Bojonggede
+2024,12,1,14,Leuwiliang
+2025,12,1,15,Ciampea
+2026,12,1,16,Cibungbulang
+2027,12,1,17,Pamijahan
+2028,12,1,18,Rumpin
+2029,12,1,19,Jasinga
+2030,12,1,20,Parungpanjang
+2031,12,1,21,Nanggung
+2032,12,1,22,Cigudeg
+2033,12,1,23,Tenjo
+2034,12,1,24,Ciawi
+2035,12,1,25,Cisarua
+2036,12,1,26,Megamendung
+2037,12,1,27,Caringin
+2038,12,1,28,Cijeruk
+2039,12,1,29,Ciomas
+2040,12,1,30,Dramaga
+2041,12,1,31,Tamansari
+2042,12,1,32,Klapanunggal
+2043,12,1,33,Ciseeng
+2044,12,1,34,Rancabungur
+2045,12,1,35,Sukajaya
+2046,12,1,36,Tanjungsari
+2047,12,1,37,Tajurhalang
+2048,12,1,38,Cigombong
+2049,12,1,39,Leuwisadeng
+2050,12,1,40,Tenjolaya
+2051,12,2,1,Palabuhanratu
+2052,12,2,2,Simpenan
+2053,12,2,3,Cikakak
+2054,12,2,4,Bantargadung
+2055,12,2,5,Cisolok
+2056,12,2,6,Cikidang
+2057,12,2,7,Lengkong
+2058,12,2,8,Jampangtengah
+2059,12,2,9,Warungkiara
+2060,12,2,10,Cikembar
+2061,12,2,11,Cibadak
+2062,12,2,12,Nagrak
+2063,12,2,13,Parungkuda
+2064,12,2,14,Bojonggenteng
+2065,12,2,15,Parakansalak
+2066,12,2,16,Cicurug
+2067,12,2,17,Cidahu
+2068,12,2,18,Kalapanunggal
+2069,12,2,19,Kabandungan
+2070,12,2,20,Waluran
+2071,12,2,21,Jampangkulon
+2072,12,2,22,Ciemas
+2073,12,2,23,Kalibunder
+2074,12,2,24,Surade
+2075,12,2,25,Cibitung
+2076,12,2,26,Ciracap
+2077,12,2,27,Gunungguruh
+2078,12,2,28,Cicantayan
+2079,12,2,29,Cisaat
+2080,12,2,30,Kadudampit
+2081,12,2,31,Caringin
+2082,12,2,32,Sukabumi
+2083,12,2,33,Sukaraja
+2084,12,2,34,Kebonpedes
+2085,12,2,35,Cireunghas
+2086,12,2,36,Sukalarang
+2087,12,2,37,Pabuaran
+2088,12,2,38,Purabaya
+2089,12,2,39,Nyalindung
+2090,12,2,40,Gegerbitung
+2091,12,2,41,Sagaranten
+2092,12,2,42,Curugkembar
+2093,12,2,43,Cidolog
+2094,12,2,44,Cidadap
+2095,12,2,45,Tegalbuleud
+2096,12,2,46,Cimanggu
+2097,12,2,47,Ciambar
+2098,12,3,1,Cianjur
+2099,12,3,2,Warungkondang
+2100,12,3,3,Cibeber
+2101,12,3,4,Cilaku
+2102,12,3,5,Ciranjang
+2103,12,3,6,Bonjogpicung
+2104,12,3,7,Karangtengah
+2105,12,3,8,Mande
+2106,12,3,9,Sukaluyu
+2107,12,3,10,Pacet
+2108,12,3,11,Cugenang
+2109,12,3,12,Cikalongkulon
+2110,12,3,13,Sukaresmi
+2111,12,3,14,Sukanagara
+2112,12,3,15,Campaka
+2113,12,3,16,Takokak
+2114,12,3,17,Kadupandak
+2115,12,3,18,Pagelarang
+2116,12,3,19,Tanggeung
+2117,12,3,20,Cubinong
+2118,12,3,21,Sindangbarang
+2119,12,3,22,Agrabinta
+2120,12,3,23,Cidaun
+2121,12,3,24,Naringgul
+2122,12,3,25,Campakamulya
+2123,12,3,26,Cikadu
+2124,12,3,27,Gekbrong
+2125,12,3,28,Cipanas
+2126,12,3,29,Cijati
+2127,12,3,30,Leles
+2128,12,3,31,Haurwangi
+2129,12,3,32,Pasirkuda
+2130,12,4,5,Cileunyi
+2131,12,4,6,Cimenyan
+2132,12,4,7,Cilengkrang
+2133,12,4,8,Bojongsoang
+2134,12,4,9,Margahayu
+2135,12,4,10,Margaasih
+2136,12,4,11,Katapang
+2137,12,4,12,Dayeuhkolot
+2138,12,4,13,Banjaran
+2139,12,4,14,Pameungpeuk
+2140,12,4,15,Pangalengan
+2141,12,4,16,Arjasari
+2142,12,4,17,Cimaung
+2143,12,4,25,Cicalengka
+2144,12,4,26,Nagreg
+2145,12,4,27,Cikancung
+2146,12,4,28,Rancaekek
+2147,12,4,29,Ciparay
+2148,12,4,30,Pacet
+2149,12,4,31,Kertasari
+2150,12,4,32,Baleendah
+2151,12,4,33,Majalaya
+2152,12,4,34,Solokanjeruk
+2153,12,4,35,Paseh
+2154,12,4,36,Ibun
+2155,12,4,37,Soreang
+2156,12,4,38,Pasirjambu
+2157,12,4,39,Ciwidey
+2158,12,4,40,Rancabali
+2159,12,4,44,Cangkuang
+2160,12,4,46,Kutawaringin
+2161,12,5,1,"Garut Kota"
+2162,12,5,2,Karangpawitan
+2163,12,5,3,Wanaraja
+2164,12,5,4,"Tarogong Kaler"
+2165,12,5,5,"Tarogong Kidul"
+2166,12,5,6,Banyuresmi
+2167,12,5,7,Samarang
+2168,12,5,8,Pasirwangi
+2169,12,5,9,Leles
+2170,12,5,10,Kadungora
+2171,12,5,11,Leuwigoong
+2172,12,5,12,Cibatu
+2173,12,5,13,Kersamanah
+2174,12,5,14,Malangbong
+2175,12,5,15,Sukawening
+2176,12,5,16,Karangtengah
+2177,12,5,17,Bayongbong
+2178,12,5,18,Cigedug
+2179,12,5,19,Cilawu
+2180,12,5,20,Cisurupan
+2181,12,5,21,Sukaresmi
+2182,12,5,22,Cikajang
+2183,12,5,23,Banjarwangi
+2184,12,5,24,Singajaya
+2185,12,5,25,Cihurip
+2186,12,5,26,Peundeuy
+2187,12,5,27,Pameungpeuk
+2188,12,5,28,Cisompet
+2189,12,5,29,Cibalong
+2190,12,5,30,Cikelet
+2191,12,5,31,Bungbulang
+2192,12,5,32,Mekarmukti
+2193,12,5,33,Pakenjeng
+2194,12,5,34,Pamulihan
+2195,12,5,35,Cisewu
+2196,12,5,36,Caringin
+2197,12,5,37,Talegong
+2198,12,5,38,Limbangan
+2199,12,5,39,Selaawi
+2200,12,5,40,Cibiuk
+2201,12,5,41,Pangatikan
+2202,12,5,42,Sucinaraja
+2203,12,6,1,Cipatujah
+2204,12,6,2,Karangnunggal
+2205,12,6,3,Cikalong
+2206,12,6,4,Pancatengah
+2207,12,6,5,Cikatomas
+2208,12,6,6,Cibalong
+2209,12,6,7,Parungponteng
+2210,12,6,8,Bantarkalong
+2211,12,6,9,Bojongasih
+2212,12,6,10,Culamega
+2213,12,6,11,Bojonggambir
+2214,12,6,12,Sodonghilir
+2215,12,6,13,Taraju
+2216,12,6,14,Salawu
+2217,12,6,15,Puspahiang
+2218,12,6,16,Tanjungjaya
+2219,12,6,17,Sukaraja
+2220,12,6,18,Salopa
+2221,12,6,19,Jatiwaras
+2222,12,6,20,Cineam
+2223,12,6,21,"Karang Jaya"
+2224,12,6,22,Manonjaya
+2225,12,6,23,"Gunung Tanjung"
+2226,12,6,24,Singaparna
+2227,12,6,25,Mangunreja
+2228,12,6,26,Sukarame
+2229,12,6,27,Cigalontang
+2230,12,6,28,Leuwisari
+2231,12,6,29,Padakembang
+2232,12,6,30,Sariwangi
+2233,12,6,31,Sukaratu
+2234,12,6,32,Cisayong
+2235,12,6,33,Sukahening
+2236,12,6,34,Rajapolah
+2237,12,6,35,Jamanis
+2238,12,6,36,Ciawi
+2239,12,6,37,Kadipaten
+2240,12,6,38,Pagerageung
+2241,12,6,39,Sukaresik
+2242,12,7,1,Ciamis
+2243,12,7,2,Cikoneng
+2244,12,7,3,Cijeungjing
+2245,12,7,4,Sadananya
+2246,12,7,5,Cidolog
+2247,12,7,6,Cihaurbeuti
+2248,12,7,7,Panumbangan
+2249,12,7,8,Panjalu
+2250,12,7,9,Kawali
+2251,12,7,10,Panawangan
+2252,12,7,11,Cipaku
+2253,12,7,12,Jatinagara
+2254,12,7,13,Rajadesa
+2255,12,7,14,Sukadana
+2256,12,7,15,Rancah
+2257,12,7,16,Tambaksari
+2258,12,7,17,Lakbok
+2259,12,7,18,Banjarsari
+2260,12,7,19,Pamarican
+2261,12,7,29,Cimaragas
+2262,12,7,30,Cisaga
+2263,12,7,31,Sindangkasih
+2264,12,7,32,Baregbeg
+2265,12,7,33,Sukamantri
+2266,12,7,34,Lumbung
+2267,12,7,35,Purwadadi
+2268,12,7,37,Banjaranyar
+2269,12,8,1,Kadugede
+2270,12,8,2,Ciniru
+2271,12,8,3,Subang
+2272,12,8,4,Ciwaru
+2273,12,8,5,Cibingbin
+2274,12,8,6,Luragung
+2275,12,8,7,Lebakwangi
+2276,12,8,8,Garawangi
+2277,12,8,9,Kuningan
+2278,12,8,10,Ciawigebang
+2279,12,8,11,Cidahu
+2280,12,8,12,Jalaksana
+2281,12,8,13,Cilimus
+2282,12,8,14,Mandirancan
+2283,12,8,15,Selajambe
+2284,12,8,16,Kramatmulya
+2285,12,8,17,Darma
+2286,12,8,18,Cigugur
+2287,12,8,19,Pasawahan
+2288,12,8,20,Nusaherang
+2289,12,8,21,Cipicung
+2290,12,8,22,Pancalang
+2291,12,8,23,Japara
+2292,12,8,24,Cimahi
+2293,12,8,25,Cilebak
+2294,12,8,26,Hantara
+2295,12,8,27,Kalimanggis
+2296,12,8,28,Cibeureum
+2297,12,8,29,Karangkancana
+2298,12,8,30,Maleber
+2299,12,8,31,Sindangagung
+2300,12,8,32,Cigandamekar
+2301,12,9,1,Waled
+2302,12,9,2,Ciledug
+2303,12,9,3,Losari
+2304,12,9,4,Pabedilan
+2305,12,9,5,Babakan
+2306,12,9,6,Karangsembung
+2307,12,9,7,Lemahabang
+2308,12,9,8,"Susukan Lebak"
+2309,12,9,9,Sedong
+2310,12,9,10,Astanajapura
+2311,12,9,11,Pangenan
+2312,12,9,12,Mundu
+2313,12,9,13,Beber
+2314,12,9,14,Talun
+2315,12,9,15,Sumber
+2316,12,9,16,Dukupuntang
+2317,12,9,17,Palimanan
+2318,12,9,18,Plumbon
+2319,12,9,19,Weru
+2320,12,9,20,Kedawung
+2321,12,9,21,"Gunung Jati"
+2322,12,9,22,Kepetakan
+2323,12,9,23,Klangenan
+2324,12,9,24,Arjawinangun
+2325,12,9,25,Panguragan
+2326,12,9,26,Ciwaringin
+2327,12,9,27,Susukan
+2328,12,9,28,Gegesik
+2329,12,9,29,Kaliwedi
+2330,12,9,30,Gebang
+2331,12,9,31,Depok
+2332,12,9,32,Pasaleman
+2333,12,9,33,Pabuaran
+2334,12,9,34,Karangwareng
+2335,12,9,35,"Tengah Tani"
+2336,12,9,36,Plered
+2337,12,9,37,Gempol
+2338,12,9,38,Greged
+2339,12,9,39,Suranenggala
+2340,12,9,40,Jamblang
+2341,12,10,1,Lemahsugih
+2342,12,10,2,Bantarujeg
+2343,12,10,3,Cikijing
+2344,12,10,4,Talaga
+2345,12,10,5,Argapura
+2346,12,10,6,Maja
+2347,12,10,7,Majalengka
+2348,12,10,8,Sukahaji
+2349,12,10,9,Rajagaluh
+2350,12,10,10,Leuwimunding
+2351,12,10,11,Jatiwangi
+2352,12,10,12,Dawuan
+2353,12,10,13,Kadipaten
+2354,12,10,14,Kertajati
+2355,12,10,15,Jatitujuh
+2356,12,10,16,Ligung
+2357,12,10,17,Sumberjaya
+2358,12,10,18,Panyingkiran
+2359,12,10,19,Palasah
+2360,12,10,20,Cigasong
+2361,12,10,21,Sindangwangi
+2362,12,10,22,Banjaran
+2363,12,10,23,Cingambul
+2364,12,10,24,Kasokandel
+2365,12,10,25,Sindang
+2366,12,10,26,Malausma
+2367,12,11,1,Wado
+2368,12,11,2,Jatinunggal
+2369,12,11,3,Darmaraja
+2370,12,11,4,Cibugel
+2371,12,11,5,Cisitu
+2372,12,11,6,Situraja
+2373,12,11,7,Conggeang
+2374,12,11,8,Paseh
+2375,12,11,9,Surian
+2376,12,11,10,Buahdua
+2377,12,11,11,Tanjungsari
+2378,12,11,12,Sukasari
+2379,12,11,13,Pamulihan
+2380,12,11,14,Cimanggung
+2381,12,11,15,Jatinangor
+2382,12,11,16,Rancakalong
+2383,12,11,17,"Sumedang Selatan"
+2384,12,11,18,"Sumedang Utara"
+2385,12,11,19,Ganeas
+2386,12,11,20,Tanjungkerta
+2387,12,11,21,Tanjungmedar
+2388,12,11,22,Cimalaka
+2389,12,11,23,Cisarua
+2390,12,11,24,Tomo
+2391,12,11,25,Ujungjaya
+2392,12,11,26,Jatigede
+2393,12,12,1,Haurgeulis
+2394,12,12,2,Kroya
+2395,12,12,3,Gabuswetan
+2396,12,12,4,Cikedung
+2397,12,12,5,Lelea
+2398,12,12,6,Bangodua
+2399,12,12,7,Widasari
+2400,12,12,8,Kertasemaya
+2401,12,12,9,Krangkeng
+2402,12,12,10,Karangampel
+2403,12,12,11,Juntinyuat
+2404,12,12,12,Sliyeg
+2405,12,12,13,Jatibarang
+2406,12,12,14,Balongan
+2407,12,12,15,Indramayu
+2408,12,12,16,Sindang
+2409,12,12,17,Cantigi
+2410,12,12,18,Lohbener
+2411,12,12,19,Arahan
+2412,12,12,20,Losarang
+2413,12,12,21,Kandanghaur
+2414,12,12,22,Bongas
+2415,12,12,23,Anjatan
+2416,12,12,24,Sukra
+2417,12,12,25,Gantar
+2418,12,12,26,Terisi
+2419,12,12,27,Sukagumiwang
+2420,12,12,28,"Kedokan Bunder"
+2421,12,12,29,Pasekan
+2422,12,12,30,Tukdana
+2423,12,12,31,Patrol
+2424,12,13,1,Sagalaherang
+2425,12,13,2,Cisalak
+2426,12,13,3,Subang
+2427,12,13,4,Kalijati
+2428,12,13,5,Pabuaran
+2429,12,13,6,Purwadadi
+2430,12,13,7,Pagaden
+2431,12,13,8,Binong
+2432,12,13,9,Ciasem
+2433,12,13,10,Pusakanagara
+2434,12,13,11,Pamanukan
+2435,12,13,12,Jalancagak
+2436,12,13,13,Blanakan
+2437,12,13,14,Tanjungsiang
+2438,12,13,15,Compreng
+2439,12,13,16,Patokbeusi
+2440,12,13,17,Cibogo
+2441,12,13,18,Cipunagara
+2442,12,13,19,Cijambe
+2443,12,13,20,Cipeundeuy
+2444,12,13,21,Legonkulon
+2445,12,13,22,Cikaum
+2446,12,13,23,Serangpanjang
+2447,12,13,24,Sukasari
+2448,12,13,25,Tambakdahan
+2449,12,13,26,Kasomalang
+2450,12,13,27,Dawuan
+2451,12,13,28,"Pagaden Barat"
+2452,12,13,29,Ciater
+2453,12,13,30,Pusakajaya
+2454,12,14,1,Purwakarta
+2455,12,14,2,Campaka
+2456,12,14,3,Jatiluhur
+2457,12,14,4,Plered
+2458,12,14,5,Sukatani
+2459,12,14,6,Darangdan
+2460,12,14,7,Maniis
+2461,12,14,8,Tegalwaru
+2462,12,14,9,Wanayasa
+2463,12,14,10,Pasawahan
+2464,12,14,11,Bojong
+2465,12,14,12,Babakancikao
+2466,12,14,13,Bungursari
+2467,12,14,14,Cibatu
+2468,12,14,15,Sukasari
+2469,12,14,16,Pondoksalam
+2470,12,14,17,Kiarapedes
+2471,12,15,1,"Karawang Barat"
+2472,12,15,2,Pangkalan
+2473,12,15,3,"Telukjambe Timur"
+2474,12,15,4,Ciampel
+2475,12,15,5,Klari
+2476,12,15,6,Rengasdengklok
+2477,12,15,7,Kutawaluya
+2478,12,15,8,Batujaya
+2479,12,15,9,Tirtajaya
+2480,12,15,10,Pedes
+2481,12,15,11,Cibuaya
+2482,12,15,12,Pakisjaya
+2483,12,15,13,Cikampek
+2484,12,15,14,Jatisari
+2485,12,15,15,"Cilamaya Wetan"
+2486,12,15,16,Tirtamulya
+2487,12,15,17,Telagasari
+2488,12,15,18,Rawamerta
+2489,12,15,19,Lemahabang
+2490,12,15,20,Tempuran
+2491,12,15,21,Majalaya
+2492,12,15,22,Jayakerta
+2493,12,15,23,"Cilamaya Kulon"
+2494,12,15,24,Banyusari
+2495,12,15,25,"Kota Baru"
+2496,12,15,26,"Karawang Timur"
+2497,12,15,27,"Telukjambe Barat"
+2498,12,15,28,Tegalwaru
+2499,12,15,29,Purwasari
+2500,12,15,30,Cilebar
+2501,12,16,1,Tarumajaya
+2502,12,16,2,Babelan
+2503,12,16,3,Sukawangi
+2504,12,16,4,Tambelang
+2505,12,16,5,"Tambun Utara"
+2506,12,16,6,"Tambun Selatan"
+2507,12,16,7,Cibitung
+2508,12,16,8,"Cikarang Barat"
+2509,12,16,9,"Cikarang Utara"
+2510,12,16,10,"Karang Bahagia"
+2511,12,16,11,"Cikarang Timur"
+2512,12,16,12,"Kedung Waringin"
+2513,12,16,13,Pebayuran
+2514,12,16,14,Sukakarya
+2515,12,16,15,Sukatani
+2516,12,16,16,Cabangbungin
+2517,12,16,17,Muaragembong
+2518,12,16,18,Setu
+2519,12,16,19,"Cikarang Selatan"
+2520,12,16,20,"Cikarang Pusat"
+2521,12,16,21,"Serang Baru"
+2522,12,16,22,Cibarusah
+2523,12,16,23,Bojongmangu
+2524,12,17,1,Lembang
+2525,12,17,2,Parongpong
+2526,12,17,3,Cisarua
+2527,12,17,4,Cikalongwetan
+2528,12,17,5,Cipeundeuy
+2529,12,17,6,Ngamprah
+2530,12,17,7,Cipatat
+2531,12,17,8,Padalarang
+2532,12,17,9,Batujajar
+2533,12,17,10,Cihampelas
+2534,12,17,11,Cililin
+2535,12,17,12,Cipongkor
+2536,12,17,13,Rongga
+2537,12,17,14,Sindangkerta
+2538,12,17,15,Gununghalu
+2539,12,17,16,Saguling
+2540,12,18,1,Parigi
+2541,12,18,2,Cijulang
+2542,12,18,3,Cimerak
+2543,12,18,4,Cigugur
+2544,12,18,5,Langkaplancar
+2545,12,18,6,Mangunjaya
+2546,12,18,7,Padaherang
+2547,12,18,8,Kalipucang
+2548,12,18,9,Pangandaran
+2549,12,18,10,Sidamulih
+2550,12,71,1,"Bogor Selatan"
+2551,12,71,2,"Bogor Timur"
+2552,12,71,3,"Bogor Tengah"
+2553,12,71,4,"Bogor Barat"
+2554,12,71,5,"Bogor Utara"
+2555,12,71,6,"Tanah Sareal"
+2556,12,72,1,"Gunung Puyuh"
+2557,12,72,2,Cikole
+2558,12,72,3,Citamiang
+2559,12,72,4,Warudoyong
+2560,12,72,5,Baros
+2561,12,72,6,Lembursitu
+2562,12,72,7,Cibeureum
+2563,12,73,1,Sukasari
+2564,12,73,2,Coblong
+2565,12,73,3,"Babakan Ciparay"
+2566,12,73,4,"Bojongloa Kaler"
+2567,12,73,5,Andir
+2568,12,73,6,Cicendo
+2569,12,73,7,Sukajadi
+2570,12,73,8,Cidadap
+2571,12,73,9,"Bandung Wetan"
+2572,12,73,10,Astanaanyar
+2573,12,73,11,Regol
+2574,12,73,12,Batununggal
+2575,12,73,13,Lengkong
+2576,12,73,14,"Cibeunying Kidul"
+2577,12,73,15,"Bandung Kulon"
+2578,12,73,16,Kiaracondong
+2579,12,73,17,"Bojongloa Kidul"
+2580,12,73,18,"Cibeunying Kaler"
+2581,12,73,19,"Sumur Bandung"
+2582,12,73,20,Antapani
+2583,12,73,21,"Bandung Kidul"
+2584,12,73,22,Buahbatu
+2585,12,73,23,Rancasari
+2586,12,73,24,Arcamanik
+2587,12,73,25,Cibiru
+2588,12,73,26,Ujungberung
+2589,12,73,27,Gedebage
+2590,12,73,28,Panyileukan
+2591,12,73,29,Cinambo
+2592,12,73,30,Mandalajati
+2593,12,74,1,Kejaksan
+2594,12,74,2,Lemahwungkuk
+2595,12,74,3,Harjamukti
+2596,12,74,4,Pekalipan
+2597,12,74,5,Kesambi
+2598,12,75,1,"Bekasi Timur"
+2599,12,75,2,"Bekasi Barat"
+2600,12,75,3,"Bekasi Utara"
+2601,12,75,4,"Bekasi Selatan"
+2602,12,75,5,Rawalumbu
+2603,12,75,6,Medansatria
+2604,12,75,7,Bantargebang
+2605,12,75,8,Pondokgede
+2606,12,75,9,Jatiasih
+2607,12,75,10,Jatisampurna
+2608,12,75,11,Mustikajaya
+2609,12,75,12,Pondokmelati
+2610,12,76,1,"Pancoran Mas"
+2611,12,76,2,Cimanggis
+2612,12,76,3,Sawangan
+2613,12,76,4,Limo
+2614,12,76,5,Sukmajaya
+2615,12,76,6,Beji
+2616,12,76,7,Cipayung
+2617,12,76,8,Cilodong
+2618,12,76,9,Cinere
+2619,12,76,10,Tapos
+2620,12,76,11,Bojongsari
+2621,12,77,1,"Cimahi Selatan"
+2622,12,77,2,"Cimahi Tengah"
+2623,12,77,3,"Cimahi Utara"
+2624,12,78,1,Cihideung
+2625,12,78,2,Cipedes
+2626,12,78,3,Tawang
+2627,12,78,4,Indihiang
+2628,12,78,5,Kawalu
+2629,12,78,6,Cibeureum
+2630,12,78,7,Tamansari
+2631,12,78,8,Mangkubumi
+2632,12,78,9,Bungursari
+2633,12,78,10,Purbaratu
+2634,12,79,1,Banjar
+2635,12,79,2,Pataruman
+2636,12,79,3,Purwaharja
+2637,12,79,4,Langensari
+2638,13,1,1,Kedungreja
+2639,13,1,2,Kesugihan
+2640,13,1,3,Adipala
+2641,13,1,4,Binangun
+2642,13,1,5,Nusawungu
+2643,13,1,6,Kroya
+2644,13,1,7,Maos
+2645,13,1,8,Jeruklegi
+2646,13,1,9,Kawunganten
+2647,13,1,10,Gandrungmangu
+2648,13,1,11,Sidareja
+2649,13,1,12,Karangpucung
+2650,13,1,13,Cimanggu
+2651,13,1,14,Majenang
+2652,13,1,15,Wanareja
+2653,13,1,16,Dayeuhluhur
+2654,13,1,17,Sampang
+2655,13,1,18,Cipari
+2656,13,1,19,Patimuan
+2657,13,1,20,Bantarsari
+2658,13,1,21,"Cilacap Selatan"
+2659,13,1,22,"Cilacap Tengah"
+2660,13,1,23,"Cilacap Utara"
+2661,13,1,24,"Kampung Laut"
+2662,13,2,1,Lumbir
+2663,13,2,2,Wangon
+2664,13,2,3,Jatilawang
+2665,13,2,4,Rawalo
+2666,13,2,5,Kebasen
+2667,13,2,6,Kemranjen
+2668,13,2,7,Sumpiuh
+2669,13,2,8,Tambak
+2670,13,2,9,Somagede
+2671,13,2,10,Kalibagor
+2672,13,2,11,Banyumas
+2673,13,2,12,Patikraja
+2674,13,2,13,Purwojati
+2675,13,2,14,Ajibarang
+2676,13,2,15,Gumelar
+2677,13,2,16,Pekuncen
+2678,13,2,17,Cilongok
+2679,13,2,18,Karanglewas
+2680,13,2,19,Sokaraja
+2681,13,2,20,Kembaran
+2682,13,2,21,Sumbang
+2683,13,2,22,Baturraden
+2684,13,2,23,Kedungbanteng
+2685,13,2,24,"Purwokerto Selatan"
+2686,13,2,25,"Purwokerto Barat"
+2687,13,2,26,"Purwokerto Timur"
+2688,13,2,27,"Purwokerto Utara"
+2689,13,3,1,Kemangkon
+2690,13,3,2,Bukateja
+2691,13,3,3,Kejobong
+2692,13,3,4,Kaligondang
+2693,13,3,5,Purbalingga
+2694,13,3,6,Kalimanah
+2695,13,3,7,Kutasari
+2696,13,3,8,Mrebet
+2697,13,3,9,Bobotsari
+2698,13,3,10,Karangreja
+2699,13,3,11,Karanganyar
+2700,13,3,12,Karangmoncol
+2701,13,3,13,Rembang
+2702,13,3,14,Bojongsari
+2703,13,3,15,Padamara
+2704,13,3,16,Pengadegan
+2705,13,3,17,Karangjambu
+2706,13,3,18,Kertanegara
+2707,13,4,1,Susukan
+2708,13,4,2,"Purworeja Klampok"
+2709,13,4,3,Mandiraja
+2710,13,4,4,Purwanegara
+2711,13,4,5,Bawang
+2712,13,4,6,Banjarnegara
+2713,13,4,7,Sigaluh
+2714,13,4,8,Madukara
+2715,13,4,9,Banjarmangu
+2716,13,4,10,Wanadadi
+2717,13,4,11,Rakit
+2718,13,4,12,Punggelan
+2719,13,4,13,Karangkobar
+2720,13,4,14,Pagentan
+2721,13,4,15,Pejawaran
+2722,13,4,16,Batur
+2723,13,4,17,Wanayasa
+2724,13,4,18,Kalibening
+2725,13,4,19,Pandanarum
+2726,13,4,20,Pagedongan
+2727,13,5,1,Ayah
+2728,13,5,2,Buayan
+2729,13,5,3,Puring
+2730,13,5,4,Petanahan
+2731,13,5,5,Klirong
+2732,13,5,6,Buluspesantren
+2733,13,5,7,Ambal
+2734,13,5,8,Mirit
+2735,13,5,9,Prembun
+2736,13,5,10,Kutowinangun
+2737,13,5,11,Alian
+2738,13,5,12,Kebumen
+2739,13,5,13,Pejagoan
+2740,13,5,14,Sruweng
+2741,13,5,15,Adimulyo
+2742,13,5,16,Kuwarasan
+2743,13,5,17,Rowokele
+2744,13,5,18,Sempor
+2745,13,5,19,Gombong
+2746,13,5,20,Karanganyar
+2747,13,5,21,Karanggayam
+2748,13,5,22,Sadang
+2749,13,5,23,Bonorowo
+2750,13,5,24,Padureso
+2751,13,5,25,Poncowarno
+2752,13,5,26,Karangsambung
+2753,13,6,1,Grabag
+2754,13,6,2,Ngombol
+2755,13,6,3,Purwodadi
+2756,13,6,4,Bagelen
+2757,13,6,5,Kaligesing
+2758,13,6,6,Purworejo
+2759,13,6,7,Banyuurip
+2760,13,6,8,Bayan
+2761,13,6,9,Kutoarjo
+2762,13,6,10,Butuh
+2763,13,6,11,Pituruh
+2764,13,6,12,Kemiri
+2765,13,6,13,Bruno
+2766,13,6,14,Gebang
+2767,13,6,15,Loano
+2768,13,6,16,Bener
+2769,13,7,1,Wadaslintang
+2770,13,7,2,Kepil
+2771,13,7,3,Sapuran
+2772,13,7,4,Kaliwiro
+2773,13,7,5,Leksono
+2774,13,7,6,Selomerto
+2775,13,7,7,Kalikajar
+2776,13,7,8,Kertek
+2777,13,7,9,Wonosobo
+2778,13,7,10,Watumalang
+2779,13,7,11,Mojotengah
+2780,13,7,12,Garung
+2781,13,7,13,Kejajar
+2782,13,7,14,Sukoharjo
+2783,13,7,15,Kalibawang
+2784,13,8,1,Salaman
+2785,13,8,2,Borobudur
+2786,13,8,3,Ngluwar
+2787,13,8,4,Salam
+2788,13,8,5,Srumbung
+2789,13,8,6,Dukun
+2790,13,8,7,Sawangan
+2791,13,8,8,Muntilan
+2792,13,8,9,Mungkid
+2793,13,8,10,Mertoyudan
+2794,13,8,11,Tempuran
+2795,13,8,12,Kajoran
+2796,13,8,13,Kaliangkrik
+2797,13,8,14,Bandongan
+2798,13,8,15,Candimulyo
+2799,13,8,16,Pakis
+2800,13,8,17,Ngablak
+2801,13,8,18,Grabag
+2802,13,8,19,Tegalrejo
+2803,13,8,20,Secang
+2804,13,8,21,Windusari
+2805,13,9,1,Selo
+2806,13,9,2,Ampel
+2807,13,9,3,Cepogo
+2808,13,9,4,Musuk
+2809,13,9,5,Boyolali
+2810,13,9,6,Mojosongo
+2811,13,9,7,Teras
+2812,13,9,8,Sawit
+2813,13,9,9,Banyudono
+2814,13,9,10,Sambi
+2815,13,9,11,Ngemplak
+2816,13,9,12,Nogosari
+2817,13,9,13,Simo
+2818,13,9,14,Karanggede
+2819,13,9,15,Klego
+2820,13,9,16,Andong
+2821,13,9,17,Kemusu
+2822,13,9,18,Wonosegoro
+2823,13,9,19,Juwangi
+2824,13,9,20,Gladagsari
+2825,13,9,21,Tamansari
+2826,13,9,22,Wonosamodro
+2827,13,10,1,Prambanan
+2828,13,10,2,Gantiwarno
+2829,13,10,3,Wedi
+2830,13,10,4,Bayat
+2831,13,10,5,Cawas
+2832,13,10,6,Trucuk
+2833,13,10,7,Kebonarum
+2834,13,10,8,Jogonalan
+2835,13,10,9,Manisrenggo
+2836,13,10,10,Karangnongko
+2837,13,10,11,Ceper
+2838,13,10,12,Pedan
+2839,13,10,13,Karangdowo
+2840,13,10,14,Juwiring
+2841,13,10,15,Wonosari
+2842,13,10,16,Delanggu
+2843,13,10,17,Polanharjo
+2844,13,10,18,Karanganom
+2845,13,10,19,Tulung
+2846,13,10,20,Jatinom
+2847,13,10,21,Kemalang
+2848,13,10,22,Ngawen
+2849,13,10,23,Kalikotes
+2850,13,10,24,"Klaten Utara"
+2851,13,10,25,"Klaten Tengah"
+2852,13,10,26,"Klaten Selatan"
+2853,13,11,1,Weru
+2854,13,11,2,Bulu
+2855,13,11,3,Tawangsari
+2856,13,11,4,Sukoharjo
+2857,13,11,5,Nguter
+2858,13,11,6,Bendosari
+2859,13,11,7,Polokarto
+2860,13,11,8,Mojolaban
+2861,13,11,9,Grogol
+2862,13,11,10,Baki
+2863,13,11,11,Gatak
+2864,13,11,12,Kartasura
+2865,13,12,1,Pracimantoro
+2866,13,12,2,Giritontro
+2867,13,12,3,Giriwoyo
+2868,13,12,4,Batuwarno
+2869,13,12,5,Tirtomoyo
+2870,13,12,6,Nguntoronadi
+2871,13,12,7,Baturetno
+2872,13,12,8,Eromoko
+2873,13,12,9,Wuryantoro
+2874,13,12,10,Manyaran
+2875,13,12,11,Selogiri
+2876,13,12,12,Wonogiri
+2877,13,12,13,Ngadirojo
+2878,13,12,14,Sidoharjo
+2879,13,12,15,Jatiroto
+2880,13,12,16,Kismantoro
+2881,13,12,17,Purwantoro
+2882,13,12,18,Bulukerto
+2883,13,12,19,Slogohimo
+2884,13,12,20,Jatisrono
+2885,13,12,21,Jatipurno
+2886,13,12,22,Girimarto
+2887,13,12,23,Karangtengah
+2888,13,12,24,Paranggupito
+2889,13,12,25,Puhpelem
+2890,13,13,1,Jatipuro
+2891,13,13,2,Jatiyoso
+2892,13,13,3,Jumapolo
+2893,13,13,4,Jumantono
+2894,13,13,5,Matesih
+2895,13,13,6,Tawangmangu
+2896,13,13,7,Ngargoyoso
+2897,13,13,8,Karangpandan
+2898,13,13,9,Karanganyar
+2899,13,13,10,Tasikmadu
+2900,13,13,11,Jaten
+2901,13,13,12,Colomadu
+2902,13,13,13,Gondangrejo
+2903,13,13,14,Kebakkramat
+2904,13,13,15,Mojogedang
+2905,13,13,16,Kerjo
+2906,13,13,17,Jenawi
+2907,13,14,1,Kalijambe
+2908,13,14,2,Plupuh
+2909,13,14,3,Masaran
+2910,13,14,4,Kedawung
+2911,13,14,5,Sambirejo
+2912,13,14,6,Gondang
+2913,13,14,7,Sambungmacan
+2914,13,14,8,Ngrampal
+2915,13,14,9,Karangmalang
+2916,13,14,10,Sragen
+2917,13,14,11,Sidoharjo
+2918,13,14,12,Tanon
+2919,13,14,13,Gemolong
+2920,13,14,14,Miri
+2921,13,14,15,Sumberlawang
+2922,13,14,16,Mondokan
+2923,13,14,17,Sukodono
+2924,13,14,18,Gesi
+2925,13,14,19,Tangen
+2926,13,14,20,Jenar
+2927,13,15,1,Kedungjati
+2928,13,15,2,Karangrayung
+2929,13,15,3,Penawangan
+2930,13,15,4,Toroh
+2931,13,15,5,Geyer
+2932,13,15,6,Pulokulon
+2933,13,15,7,Kradenan
+2934,13,15,8,Gabus
+2935,13,15,9,Ngaringan
+2936,13,15,10,Wirosari
+2937,13,15,11,Tawangharjo
+2938,13,15,12,Grobogan
+2939,13,15,13,Purwodadi
+2940,13,15,14,Brati
+2941,13,15,15,Klambu
+2942,13,15,16,Godong
+2943,13,15,17,Gubug
+2944,13,15,18,Tegowanu
+2945,13,15,19,Tanggungharjo
+2946,13,16,1,Jati
+2947,13,16,2,Randublatung
+2948,13,16,3,Kradenan
+2949,13,16,4,Kedungtuban
+2950,13,16,5,Cepu
+2951,13,16,6,Sambong
+2952,13,16,7,Jiken
+2953,13,16,8,Jepon
+2954,13,16,9,Blora
+2955,13,16,10,Tunjungan
+2956,13,16,11,Banjarejo
+2957,13,16,12,Ngawen
+2958,13,16,13,Kunduran
+2959,13,16,14,Todanan
+2960,13,16,15,Bogorejo
+2961,13,16,16,Japah
+2962,13,17,1,Sumber
+2963,13,17,2,Bulu
+2964,13,17,3,Gunem
+2965,13,17,4,Sale
+2966,13,17,5,Sarang
+2967,13,17,6,Sedan
+2968,13,17,7,Pamotan
+2969,13,17,8,Sulang
+2970,13,17,9,Kaliori
+2971,13,17,10,Rembang
+2972,13,17,11,Pancur
+2973,13,17,12,Kragan
+2974,13,17,13,Sluke
+2975,13,17,14,Lasem
+2976,13,18,1,Sukolilo
+2977,13,18,2,Kayen
+2978,13,18,3,Tambakromo
+2979,13,18,4,Winong
+2980,13,18,5,Pucakwangi
+2981,13,18,6,Jaken
+2982,13,18,7,Batangan
+2983,13,18,8,Juwana
+2984,13,18,9,Jakenan
+2985,13,18,10,Pati
+2986,13,18,11,Gabus
+2987,13,18,12,Margorejo
+2988,13,18,13,Gembong
+2989,13,18,14,Tlogowungu
+2990,13,18,15,Wedarijaksa
+2991,13,18,16,Margoyoso
+2992,13,18,17,Gunungwungkal
+2993,13,18,18,Cluwak
+2994,13,18,19,Tayu
+2995,13,18,20,Dukuhseti
+2996,13,18,21,Trangkil
+2997,13,19,1,Kaliwungu
+2998,13,19,2,"Kota Kudus"
+2999,13,19,3,Jati
+3000,13,19,4,Undaan
+3001,13,19,5,Mejobo
+3002,13,19,6,Jekulo
+3003,13,19,7,Bae
+3004,13,19,8,Gebog
+3005,13,19,9,Dawe
+3006,13,20,1,Kedung
+3007,13,20,2,Pecangaan
+3008,13,20,3,Welahan
+3009,13,20,4,Mayong
+3010,13,20,5,Batealit
+3011,13,20,6,Jepara
+3012,13,20,7,Mlonggo
+3013,13,20,8,Bangsri
+3014,13,20,9,Keling
+3015,13,20,10,Karimunjawa
+3016,13,20,11,Tahunan
+3017,13,20,12,Nalumsari
+3018,13,20,13,Kalinyamatan
+3019,13,20,14,Kembang
+3020,13,20,15,"Pakis Aji"
+3021,13,20,16,Donorojo
+3022,13,21,1,Mranggen
+3023,13,21,2,Karangawen
+3024,13,21,3,Guntur
+3025,13,21,4,Sayung
+3026,13,21,5,Karangtengah
+3027,13,21,6,Wonosalam
+3028,13,21,7,Dempet
+3029,13,21,8,Gajah
+3030,13,21,9,Karanganyar
+3031,13,21,10,Mijen
+3032,13,21,11,Demak
+3033,13,21,12,Bonang
+3034,13,21,13,Wedung
+3035,13,21,14,Kebonagung
+3036,13,22,1,Getasan
+3037,13,22,2,Tengaran
+3038,13,22,3,Susukan
+3039,13,22,4,Suruh
+3040,13,22,5,Pabelan
+3041,13,22,6,Tuntang
+3042,13,22,7,Banyubiru
+3043,13,22,8,Jambu
+3044,13,22,9,Sumowono
+3045,13,22,10,Ambarawa
+3046,13,22,11,Bawen
+3047,13,22,12,Bringin
+3048,13,22,13,Bergas
+3049,13,22,15,Pringapus
+3050,13,22,16,Bancak
+3051,13,22,17,Kaliwungu
+3052,13,22,18,"Ungaran Barat"
+3053,13,22,19,"Ungaran Timur"
+3054,13,22,20,Bandungan
+3055,13,23,1,Bulu
+3056,13,23,2,Tembarak
+3057,13,23,3,Temanggung
+3058,13,23,4,Pringsurat
+3059,13,23,5,Kaloran
+3060,13,23,6,Kandangan
+3061,13,23,7,Kedu
+3062,13,23,8,Parakan
+3063,13,23,9,Ngadirejo
+3064,13,23,10,Jumo
+3065,13,23,11,Tretep
+3066,13,23,12,Candiroto
+3067,13,23,13,Kranggan
+3068,13,23,14,Tlogomulyo
+3069,13,23,15,Selopampang
+3070,13,23,16,Bansari
+3071,13,23,17,Kledung
+3072,13,23,18,Bejen
+3073,13,23,19,Wonoboyo
+3074,13,23,20,Gemawang
+3075,13,24,1,Plantungan
+3076,13,24,2,Pageruyung
+3077,13,24,3,Sukorejo
+3078,13,24,4,Patean
+3079,13,24,5,Singorojo
+3080,13,24,6,Limbangan
+3081,13,24,7,Boja
+3082,13,24,8,Kaliwungu
+3083,13,24,9,Brangsong
+3084,13,24,10,Pegandon
+3085,13,24,11,Gemuh
+3086,13,24,12,Weleri
+3087,13,24,13,Cepiring
+3088,13,24,14,Patebon
+3089,13,24,15,Kendal
+3090,13,24,16,Rowosari
+3091,13,24,17,Kangkung
+3092,13,24,18,Ringinarum
+3093,13,24,19,Ngampel
+3094,13,24,20,"Kaliwungu Selatan"
+3095,13,25,1,Wonotunggal
+3096,13,25,2,Bandar
+3097,13,25,3,Blado
+3098,13,25,4,Reban
+3099,13,25,5,Bawang
+3100,13,25,6,Tersono
+3101,13,25,7,Gringsing
+3102,13,25,8,Limpung
+3103,13,25,9,Subah
+3104,13,25,10,Tulis
+3105,13,25,11,Batang
+3106,13,25,12,Warungasem
+3107,13,25,13,Kandeman
+3108,13,25,14,Pecalungan
+3109,13,25,15,Banyuputih
+3110,13,26,1,Kandangserang
+3111,13,26,2,Paninggaran
+3112,13,26,3,Lebakbarang
+3113,13,26,4,Petungkriyono
+3114,13,26,5,Talun
+3115,13,26,6,Doro
+3116,13,26,7,Karanganyar
+3117,13,26,8,Kajen
+3118,13,26,9,Kesesi
+3119,13,26,10,Sragi
+3120,13,26,11,Bojong
+3121,13,26,12,Wonopringgo
+3122,13,26,13,Kedungwuni
+3123,13,26,14,Buaran
+3124,13,26,15,Tirto
+3125,13,26,16,Wiradesa
+3126,13,26,17,Siwalan
+3127,13,26,18,Karangdadap
+3128,13,26,19,Wonokerto
+3129,13,27,1,Moga
+3130,13,27,2,Pulosari
+3131,13,27,3,Belik
+3132,13,27,4,Watukumpul
+3133,13,27,5,Bodeh
+3134,13,27,6,Bantarbolang
+3135,13,27,7,Randudongkal
+3136,13,27,8,Pemalang
+3137,13,27,9,Taman
+3138,13,27,10,Petarukan
+3139,13,27,11,Ampelgading
+3140,13,27,12,Comal
+3141,13,27,13,Ulujami
+3142,13,27,14,Warungpring
+3143,13,28,1,Margasari
+3144,13,28,2,Bumijawa
+3145,13,28,3,Bojong
+3146,13,28,4,Balapulang
+3147,13,28,5,Pagerbarang
+3148,13,28,6,Lebaksiu
+3149,13,28,7,Jatinegara
+3150,13,28,8,Kedungbanteng
+3151,13,28,9,Pangkah
+3152,13,28,10,Slawi
+3153,13,28,11,Adiwerna
+3154,13,28,12,Talang
+3155,13,28,13,Dukuhturi
+3156,13,28,14,Tarub
+3157,13,28,15,Kramat
+3158,13,28,16,Suradadi
+3159,13,28,17,Warureja
+3160,13,28,18,Dukuhwaru
+3161,13,29,1,Salem
+3162,13,29,2,Bantarkawung
+3163,13,29,3,Bumiayu
+3164,13,29,4,Paguyangan
+3165,13,29,5,Sirampog
+3166,13,29,6,Tonjong
+3167,13,29,7,Jatibarang
+3168,13,29,8,Wanasari
+3169,13,29,9,Brebes
+3170,13,29,10,Songgom
+3171,13,29,11,Kersana
+3172,13,29,12,Losari
+3173,13,29,13,Tanjung
+3174,13,29,14,Bulakamba
+3175,13,29,15,Larangan
+3176,13,29,16,Ketanggungan
+3177,13,29,17,Banjarharjo
+3178,13,71,1,"Magelang Selatan"
+3179,13,71,2,"Magelang Utara"
+3180,13,71,3,"Magelang Tengah"
+3181,13,72,1,Laweyan
+3182,13,72,2,Serengan
+3183,13,72,3,"Pasar Kliwon"
+3184,13,72,4,Jebres
+3185,13,72,5,Banjarsari
+3186,13,73,1,Sidorejo
+3187,13,73,2,Tingkir
+3188,13,73,3,Argomulyo
+3189,13,73,4,Sidomukti
+3190,13,74,1,"Semarang Tengah"
+3191,13,74,2,"Semarang Utara"
+3192,13,74,3,"Semarang Timur"
+3193,13,74,4,Gayamsari
+3194,13,74,5,Genuk
+3195,13,74,6,Pedurungan
+3196,13,74,7,"Semarang Selatan"
+3197,13,74,8,Candisari
+3198,13,74,9,Gajahmungkur
+3199,13,74,10,Tembalang
+3200,13,74,11,Banyumanik
+3201,13,74,12,Gunungpati
+3202,13,74,13,"Semarang Barat"
+3203,13,74,14,Mijen
+3204,13,74,15,Ngaliyan
+3205,13,74,16,Tugu
+3206,13,75,1,"Pekalongan Barat"
+3207,13,75,2,"Pekalongan Timur"
+3208,13,75,3,"Pekalongan Utara"
+3209,13,75,4,"Pekalongan Selatan"
+3210,13,76,1,"Tegal Barat"
+3211,13,76,2,"Tegal Timur"
+3212,13,76,3,"Tegal Selatan"
+3213,13,76,4,Margadana
+3214,14,1,1,Temon
+3215,14,1,2,Wates
+3216,14,1,3,Panjatan
+3217,14,1,4,Galur
+3218,14,1,5,Lendah
+3219,14,1,6,Sentolo
+3220,14,1,7,Pengasih
+3221,14,1,8,Kokap
+3222,14,1,9,Girimulyo
+3223,14,1,10,Nanggulan
+3224,14,1,11,Samigaluh
+3225,14,1,12,Kalibawang
+3226,14,2,1,Srandakan
+3227,14,2,2,Sanden
+3228,14,2,3,Kretek
+3229,14,2,4,Pundong
+3230,14,2,5,Bambanglipuro
+3231,14,2,6,Pandak
+3232,14,2,7,Pajangan
+3233,14,2,8,Bantul
+3234,14,2,9,Jetis
+3235,14,2,10,Imogiri
+3236,14,2,11,Dlingo
+3237,14,2,12,Banguntapan
+3238,14,2,13,Pleret
+3239,14,2,14,Piyungan
+3240,14,2,15,Sewon
+3241,14,2,16,Kasihan
+3242,14,2,17,Sedayu
+3243,14,3,1,Wonosari
+3244,14,3,2,Nglipar
+3245,14,3,3,Playen
+3246,14,3,4,Patuk
+3247,14,3,5,Paliyan
+3248,14,3,6,Panggang
+3249,14,3,7,Tepus
+3250,14,3,8,Semanu
+3251,14,3,9,Karangmojo
+3252,14,3,10,Ponjong
+3253,14,3,11,Rongkop
+3254,14,3,12,Semin
+3255,14,3,13,Ngawen
+3256,14,3,14,Gedangsari
+3257,14,3,15,Saptosari
+3258,14,3,16,Girisubo
+3259,14,3,17,Tanjungsari
+3260,14,3,18,Purwosari
+3261,14,4,1,Gamping
+3262,14,4,2,Godean
+3263,14,4,3,Moyudan
+3264,14,4,4,Minggir
+3265,14,4,5,Seyegan
+3266,14,4,6,Mlati
+3267,14,4,7,Depok
+3268,14,4,8,Berbah
+3269,14,4,9,Prambanan
+3270,14,4,10,Kalasan
+3271,14,4,11,Ngemplak
+3272,14,4,12,Ngaglik
+3273,14,4,13,Sleman
+3274,14,4,14,Tempel
+3275,14,4,15,Turi
+3276,14,4,16,Pakem
+3277,14,4,17,Cangkringan
+3278,14,71,1,Tegalrejo
+3279,14,71,2,Jetis
+3280,14,71,3,Gondokusuman
+3281,14,71,4,Danurejan
+3282,14,71,5,Gedongtengen
+3283,14,71,6,Ngampilan
+3284,14,71,7,Wirobrajan
+3285,14,71,8,Mantrijeron
+3286,14,71,9,Kraton
+3287,14,71,10,Gondomanan
+3288,14,71,11,Pakualaman
+3289,14,71,12,Mergangsan
+3290,14,71,13,Umbulharjo
+3291,14,71,14,Kotagede
+3292,15,1,1,Donorojo
+3293,15,1,2,Pringkuku
+3294,15,1,3,Punung
+3295,15,1,4,Pacitan
+3296,15,1,5,Kebonagung
+3297,15,1,6,Arjosari
+3298,15,1,7,Nawangan
+3299,15,1,8,Bandar
+3300,15,1,9,Tegalombo
+3301,15,1,10,Tulakan
+3302,15,1,11,Ngadirojo
+3303,15,1,12,Sudimoro
+3304,15,2,1,Slahung
+3305,15,2,2,Ngrayun
+3306,15,2,3,Bungkal
+3307,15,2,4,Sambit
+3308,15,2,5,Sawoo
+3309,15,2,6,Sooko
+3310,15,2,7,Pulung
+3311,15,2,8,Mlarak
+3312,15,2,9,Jetis
+3313,15,2,10,Siman
+3314,15,2,11,Balong
+3315,15,2,12,Kauman
+3316,15,2,13,Badegan
+3317,15,2,14,Sampung
+3318,15,2,15,Sukorejo
+3319,15,2,16,Babadan
+3320,15,2,17,Ponorogo
+3321,15,2,18,Jenangan
+3322,15,2,19,Ngebel
+3323,15,2,20,Jambon
+3324,15,2,21,Pudak
+3325,15,3,1,Panggul
+3326,15,3,2,Munjungan
+3327,15,3,3,Pule
+3328,15,3,4,Dongko
+3329,15,3,5,Tugu
+3330,15,3,6,Karangan
+3331,15,3,7,Kampak
+3332,15,3,8,Watulimo
+3333,15,3,9,Bendungan
+3334,15,3,10,Gandusari
+3335,15,3,11,Trenggalek
+3336,15,3,12,Pogalan
+3337,15,3,13,Durenan
+3338,15,3,14,Suruh
+3339,15,4,1,Tulungagung
+3340,15,4,2,Boyolangu
+3341,15,4,3,Kedungwaru
+3342,15,4,4,Ngantru
+3343,15,4,5,Kauman
+3344,15,4,6,Pagerwojo
+3345,15,4,7,Sendang
+3346,15,4,8,Karangrejo
+3347,15,4,9,Gondang
+3348,15,4,10,Sumbergempol
+3349,15,4,11,Ngunut
+3350,15,4,12,Pucanglaban
+3351,15,4,13,Rejotangan
+3352,15,4,14,Kalidawir
+3353,15,4,15,Besuki
+3354,15,4,16,Campurdarat
+3355,15,4,17,Bandung
+3356,15,4,18,Pakel
+3357,15,4,19,Tanggunggunung
+3358,15,5,1,Wonodadi
+3359,15,5,2,Udanawu
+3360,15,5,3,Srengat
+3361,15,5,4,Kademangan
+3362,15,5,5,Bakung
+3363,15,5,6,Ponggok
+3364,15,5,7,Sanankulon
+3365,15,5,8,Wonotirto
+3366,15,5,9,Nglegok
+3367,15,5,10,Kanigoro
+3368,15,5,11,Garum
+3369,15,5,12,Sutojayan
+3370,15,5,13,Panggungrejo
+3371,15,5,14,Talun
+3372,15,5,15,Gandusari
+3373,15,5,16,Binangun
+3374,15,5,17,Wlingi
+3375,15,5,18,Doko
+3376,15,5,19,Kesamben
+3377,15,5,20,Wates
+3378,15,5,21,Selorejo
+3379,15,5,22,Selopuro
+3380,15,6,1,Semen
+3381,15,6,2,Mojo
+3382,15,6,3,Kras
+3383,15,6,4,Ngadiluwih
+3384,15,6,5,Kandat
+3385,15,6,6,Wates
+3386,15,6,7,Ngancar
+3387,15,6,8,Puncu
+3388,15,6,9,Plosoklaten
+3389,15,6,10,Gurah
+3390,15,6,11,Pagu
+3391,15,6,12,Gampengrejo
+3392,15,6,13,Grogol
+3393,15,6,14,Papar
+3394,15,6,15,Purwoasri
+3395,15,6,16,Plemahan
+3396,15,6,17,Pare
+3397,15,6,18,Kepung
+3398,15,6,19,Kandangan
+3399,15,6,20,Tarokan
+3400,15,6,21,Kunjang
+3401,15,6,22,Banyakan
+3402,15,6,23,Ringinrejo
+3403,15,6,24,"Kayen Kidul"
+3404,15,6,25,Ngasem
+3405,15,6,26,Badas
+3406,15,7,1,Donomulyo
+3407,15,7,2,Pagak
+3408,15,7,3,Bantur
+3409,15,7,4,"Sumbermanjing Wetan"
+3410,15,7,5,Dampit
+3411,15,7,6,Ampelgading
+3412,15,7,7,Poncokusumo
+3413,15,7,8,Wajak
+3414,15,7,9,Turen
+3415,15,7,10,Gondanglegi
+3416,15,7,11,Kalipare
+3417,15,7,12,Sumberpucung
+3418,15,7,13,Kepanjen
+3419,15,7,14,Bululawang
+3420,15,7,15,Tajinan
+3421,15,7,16,Tumpang
+3422,15,7,17,Jabung
+3423,15,7,18,Pakis
+3424,15,7,19,Pakisaji
+3425,15,7,20,Ngajum
+3426,15,7,21,Wagir
+3427,15,7,22,Dau
+3428,15,7,23,Karangploso
+3429,15,7,24,Singosari
+3430,15,7,25,Lawang
+3431,15,7,26,Pujon
+3432,15,7,27,Ngantang
+3433,15,7,28,Kasembon
+3434,15,7,29,Gedangan
+3435,15,7,30,Tirtoyudo
+3436,15,7,31,Kromengan
+3437,15,7,32,Wonosari
+3438,15,7,33,Pagelaran
+3439,15,8,1,Tempursari
+3440,15,8,2,Pronojiwo
+3441,15,8,3,Candipuro
+3442,15,8,4,Pasirian
+3443,15,8,5,Tempeh
+3444,15,8,6,Kunir
+3445,15,8,7,Yosowilangun
+3446,15,8,8,Rowokangkung
+3447,15,8,9,Tekung
+3448,15,8,10,Lumajang
+3449,15,8,11,Pasrujambe
+3450,15,8,12,Senduro
+3451,15,8,13,Gucialit
+3452,15,8,14,Padang
+3453,15,8,15,Sukodono
+3454,15,8,16,Kedungjajang
+3455,15,8,17,Jatiroto
+3456,15,8,18,Randuagung
+3457,15,8,19,Klakah
+3458,15,8,20,Ranuyoso
+3459,15,8,21,Sumbersuko
+3460,15,9,1,Jombang
+3461,15,9,2,Kencong
+3462,15,9,3,Sumberbaru
+3463,15,9,4,Gumukmas
+3464,15,9,5,Umbulsari
+3465,15,9,6,Tanggul
+3466,15,9,7,Semboro
+3467,15,9,8,Puger
+3468,15,9,9,Bangsalsari
+3469,15,9,10,Balung
+3470,15,9,11,Wuluhan
+3471,15,9,12,Ambulu
+3472,15,9,13,Rambipuji
+3473,15,9,14,Panti
+3474,15,9,15,Sukorambi
+3475,15,9,16,Jenggawah
+3476,15,9,17,Ajung
+3477,15,9,18,Tempurejo
+3478,15,9,19,Kaliwates
+3479,15,9,20,Patrang
+3480,15,9,21,Sumbersari
+3481,15,9,22,Arjasa
+3482,15,9,23,Mumbulsari
+3483,15,9,24,Pakusari
+3484,15,9,25,Jelbuk
+3485,15,9,26,Mayang
+3486,15,9,27,Kalisat
+3487,15,9,28,Ledokombo
+3488,15,9,29,Sukowono
+3489,15,9,30,Silo
+3490,15,9,31,Sumberjambe
+3491,15,10,1,Pesanggaran
+3492,15,10,2,Bangorejo
+3493,15,10,3,Purwoharjo
+3494,15,10,4,Tegaldlimo
+3495,15,10,5,Muncar
+3496,15,10,6,Cluring
+3497,15,10,7,Gambiran
+3498,15,10,8,Srono
+3499,15,10,9,Genteng
+3500,15,10,10,Glenmore
+3501,15,10,11,Kalibaru
+3502,15,10,12,Singojuruh
+3503,15,10,13,Rogojampi
+3504,15,10,14,Kabat
+3505,15,10,15,Glagah
+3506,15,10,16,Banyuwangi
+3507,15,10,17,Giri
+3508,15,10,18,Wongsorejo
+3509,15,10,19,Songgon
+3510,15,10,20,Sempu
+3511,15,10,21,Kalipuro
+3512,15,10,22,Siliragung
+3513,15,10,23,Tegalsari
+3514,15,10,24,Licin
+3515,15,10,25,Blimbingsari
+3516,15,11,1,Maesan
+3517,15,11,2,Tamanan
+3518,15,11,3,Tlogosari
+3519,15,11,4,Sukosari
+3520,15,11,5,Pujer
+3521,15,11,6,Grujugan
+3522,15,11,7,Curahdami
+3523,15,11,8,Tenggarang
+3524,15,11,9,Wonosari
+3525,15,11,10,Tapen
+3526,15,11,11,Bondowoso
+3527,15,11,12,Wringin
+3528,15,11,13,Tegalampel
+3529,15,11,14,Klabang
+3530,15,11,15,Cermee
+3531,15,11,16,Prajekan
+3532,15,11,17,Pakem
+3533,15,11,18,Sumberwringin
+3534,15,11,19,Sempol
+3535,15,11,20,Binakal
+3536,15,11,21,"Taman Krocok"
+3537,15,11,22,Botolinggo
+3538,15,11,23,"Jambesari Darus Sholah"
+3539,15,12,1,Jatibanteng
+3540,15,12,2,Besuki
+3541,15,12,3,Suboh
+3542,15,12,4,Mlandingan
+3543,15,12,5,Kendit
+3544,15,12,6,Panarukan
+3545,15,12,7,Situbondo
+3546,15,12,8,Panji
+3547,15,12,9,Mangaran
+3548,15,12,10,Kapongan
+3549,15,12,11,Arjasa
+3550,15,12,12,Jangkar
+3551,15,12,13,Asembagus
+3552,15,12,14,Banyuputih
+3553,15,12,15,Sumbermalang
+3554,15,12,16,Banyuglugur
+3555,15,12,17,Bungatan
+3556,15,13,1,Sukapura
+3557,15,13,2,Sumber
+3558,15,13,3,Kuripan
+3559,15,13,4,Bantaran
+3560,15,13,5,Leces
+3561,15,13,6,Banyuanyar
+3562,15,13,7,Tiris
+3563,15,13,8,Krucil
+3564,15,13,9,Gading
+3565,15,13,10,Pakuniran
+3566,15,13,11,Kotaanyar
+3567,15,13,12,Paiton
+3568,15,13,13,Besuk
+3569,15,13,14,Kraksaan
+3570,15,13,15,Krejengan
+3571,15,13,16,Pajarakan
+3572,15,13,17,Maron
+3573,15,13,18,Gending
+3574,15,13,19,Dringu
+3575,15,13,20,Tegalsiwalan
+3576,15,13,21,Sumberasih
+3577,15,13,22,Wonomerto
+3578,15,13,23,Tongas
+3579,15,13,24,Lumbang
+3580,15,14,1,Purwodadi
+3581,15,14,2,Tutur
+3582,15,14,3,Puspo
+3583,15,14,4,Lumbang
+3584,15,14,5,Pasrepan
+3585,15,14,6,Kejayan
+3586,15,14,7,Wonorejo
+3587,15,14,8,Purwosari
+3588,15,14,9,Sukorejo
+3589,15,14,10,Prigen
+3590,15,14,11,Pandaan
+3591,15,14,12,Gempol
+3592,15,14,13,Beji
+3593,15,14,14,Bangil
+3594,15,14,15,Rembang
+3595,15,14,16,Kraton
+3596,15,14,17,Pohjentrek
+3597,15,14,18,Gondangwetan
+3598,15,14,19,Winongan
+3599,15,14,20,Grati
+3600,15,14,21,Nguling
+3601,15,14,22,Lekok
+3602,15,14,23,Rejoso
+3603,15,14,24,Tosari
+3604,15,15,1,Tarik
+3605,15,15,2,Prambon
+3606,15,15,3,Krembung
+3607,15,15,4,Porong
+3608,15,15,5,Jabon
+3609,15,15,6,Tanggulangin
+3610,15,15,7,Candi
+3611,15,15,8,Sidoarjo
+3612,15,15,9,Tulangan
+3613,15,15,10,Wonoayu
+3614,15,15,11,Krian
+3615,15,15,12,Balongbendo
+3616,15,15,13,Taman
+3617,15,15,14,Sukodono
+3618,15,15,15,Buduran
+3619,15,15,16,Gedangan
+3620,15,15,17,Sedati
+3621,15,15,18,Waru
+3622,15,16,1,Jatirejo
+3623,15,16,2,Gondang
+3624,15,16,3,Pacet
+3625,15,16,4,Trawas
+3626,15,16,5,Ngoro
+3627,15,16,6,Pungging
+3628,15,16,7,Kutorejo
+3629,15,16,8,Mojosari
+3630,15,16,9,Dlanggu
+3631,15,16,10,Bangsal
+3632,15,16,11,Puri
+3633,15,16,12,Trowulan
+3634,15,16,13,Sooko
+3635,15,16,14,Gedeg
+3636,15,16,15,Kemlagi
+3637,15,16,16,Jetis
+3638,15,16,17,Dawarblandong
+3639,15,16,18,Mojoanyar
+3640,15,17,1,Perak
+3641,15,17,2,Gudo
+3642,15,17,3,Ngoro
+3643,15,17,4,Bareng
+3644,15,17,5,Wonosalam
+3645,15,17,6,Mojoagung
+3646,15,17,7,Mojowarno
+3647,15,17,8,Diwek
+3648,15,17,9,Jombang
+3649,15,17,10,Peterongan
+3650,15,17,11,Sumobito
+3651,15,17,12,Kesamben
+3652,15,17,13,Tembelang
+3653,15,17,14,Ploso
+3654,15,17,15,Plandaan
+3655,15,17,16,Kabuh
+3656,15,17,17,Kudu
+3657,15,17,18,Bandarkedungmulyo
+3658,15,17,19,Jogoroto
+3659,15,17,20,Megaluh
+3660,15,17,21,Ngusikan
+3661,15,18,1,Sawahan
+3662,15,18,2,Ngetos
+3663,15,18,3,Berbek
+3664,15,18,4,Loceret
+3665,15,18,5,Pace
+3666,15,18,6,Prambon
+3667,15,18,7,Ngronggot
+3668,15,18,8,Kertosono
+3669,15,18,9,Patianrowo
+3670,15,18,10,Baron
+3671,15,18,11,Tanjunganom
+3672,15,18,12,Sukomoro
+3673,15,18,13,Nganjuk
+3674,15,18,14,Bagor
+3675,15,18,15,Wilangan
+3676,15,18,16,Rejoso
+3677,15,18,17,Gondang
+3678,15,18,18,Ngluyu
+3679,15,18,19,Lengkong
+3680,15,18,20,Jatikalen
+3681,15,19,1,Kebonsari
+3682,15,19,2,Dolopo
+3683,15,19,3,Geger
+3684,15,19,4,Dagangan
+3685,15,19,5,Kare
+3686,15,19,6,Gemarang
+3687,15,19,7,Wungu
+3688,15,19,8,Madiun
+3689,15,19,9,Jiwan
+3690,15,19,10,Balerejo
+3691,15,19,11,Mejayan
+3692,15,19,12,Saradan
+3693,15,19,13,Pilangkenceng
+3694,15,19,14,Sawahan
+3695,15,19,15,Wonoasri
+3696,15,20,1,Poncol
+3697,15,20,2,Parang
+3698,15,20,3,Lembeyan
+3699,15,20,4,Takeran
+3700,15,20,5,Kawedanan
+3701,15,20,6,Magetan
+3702,15,20,7,Plaosan
+3703,15,20,8,Panekan
+3704,15,20,9,Sukomoro
+3705,15,20,10,Bendo
+3706,15,20,11,Maospati
+3707,15,20,12,Barat
+3708,15,20,13,Karangrejo
+3709,15,20,14,Karas
+3710,15,20,15,Kartoharjo
+3711,15,20,16,Ngariboyo
+3712,15,20,17,Nguntoronadi
+3713,15,20,18,Sidorejo
+3714,15,21,1,Sine
+3715,15,21,2,Ngrambe
+3716,15,21,3,Jogorogo
+3717,15,21,4,Kendal
+3718,15,21,5,Geneng
+3719,15,21,6,Kwadungan
+3720,15,21,7,Karangjati
+3721,15,21,8,Padas
+3722,15,21,9,Ngawi
+3723,15,21,10,Paron
+3724,15,21,11,Kedunggalar
+3725,15,21,12,Widodaren
+3726,15,21,13,Mantingan
+3727,15,21,14,Pangkur
+3728,15,21,15,Bringin
+3729,15,21,16,Pitu
+3730,15,21,17,Karanganyar
+3731,15,21,18,Gerih
+3732,15,21,19,Kasreman
+3733,15,22,1,Ngraho
+3734,15,22,2,Tambakrejo
+3735,15,22,3,Ngambon
+3736,15,22,4,Ngasem
+3737,15,22,5,Bubulan
+3738,15,22,6,Dander
+3739,15,22,7,Sugihwaras
+3740,15,22,8,Kedungadem
+3741,15,22,9,Kepohbaru
+3742,15,22,10,Baureno
+3743,15,22,11,Kanor
+3744,15,22,12,Sumberrejo
+3745,15,22,13,Balen
+3746,15,22,14,Kapas
+3747,15,22,15,Bojonegoro
+3748,15,22,16,Kalitidu
+3749,15,22,17,Malo
+3750,15,22,18,Purwosari
+3751,15,22,19,Padangan
+3752,15,22,20,Kasiman
+3753,15,22,21,Temayang
+3754,15,22,22,Margomulyo
+3755,15,22,23,Trucuk
+3756,15,22,24,Sukosewu
+3757,15,22,25,Kedewan
+3758,15,22,26,Gondang
+3759,15,22,27,Sekar
+3760,15,22,28,Gayam
+3761,15,23,1,Kenduruan
+3762,15,23,2,Jatirogo
+3763,15,23,3,Bangilan
+3764,15,23,4,Bancar
+3765,15,23,5,Senori
+3766,15,23,6,Tambakboyo
+3767,15,23,7,Singgahan
+3768,15,23,8,Kerek
+3769,15,23,9,Parengan
+3770,15,23,10,Montong
+3771,15,23,11,Soko
+3772,15,23,12,Jenu
+3773,15,23,13,Merakurak
+3774,15,23,14,Rengel
+3775,15,23,15,Semanding
+3776,15,23,16,Tuban
+3777,15,23,17,Plumpang
+3778,15,23,18,Palang
+3779,15,23,19,Widang
+3780,15,23,20,Grabagan
+3781,15,24,1,Sukorame
+3782,15,24,2,Bluluk
+3783,15,24,3,Modo
+3784,15,24,4,Ngimbang
+3785,15,24,5,Babat
+3786,15,24,6,Kedungpring
+3787,15,24,7,Brondong
+3788,15,24,8,Laren
+3789,15,24,9,Sekaran
+3790,15,24,10,Maduran
+3791,15,24,11,Sambeng
+3792,15,24,12,Sugio
+3793,15,24,13,Pucuk
+3794,15,24,14,Paciran
+3795,15,24,15,Solokuro
+3796,15,24,16,Mantup
+3797,15,24,17,Sukodadi
+3798,15,24,18,Karanggeneng
+3799,15,24,19,Kembangbahu
+3800,15,24,20,Kalitengah
+3801,15,24,21,Turi
+3802,15,24,22,Lamongan
+3803,15,24,23,Tikung
+3804,15,24,24,Karangbinangun
+3805,15,24,25,Deket
+3806,15,24,26,Glagah
+3807,15,24,27,Sarirejo
+3808,15,25,1,Dukun
+3809,15,25,2,Balongpanggang
+3810,15,25,3,Panceng
+3811,15,25,4,Benjeng
+3812,15,25,5,Duduksampeyan
+3813,15,25,6,Wringinanom
+3814,15,25,7,Ujungpangkah
+3815,15,25,8,Kedamean
+3816,15,25,9,Sidayu
+3817,15,25,10,Manyar
+3818,15,25,11,Cerme
+3819,15,25,12,Bungah
+3820,15,25,13,Menganti
+3821,15,25,14,Kebomas
+3822,15,25,15,Driyorejo
+3823,15,25,16,Gresik
+3824,15,25,17,Sangkapura
+3825,15,25,18,Tambak
+3826,15,26,1,Bangkalan
+3827,15,26,2,Socah
+3828,15,26,3,Burneh
+3829,15,26,4,Kamal
+3830,15,26,5,Arosbaya
+3831,15,26,6,Geger
+3832,15,26,7,Klampis
+3833,15,26,8,Sepulu
+3834,15,26,9,"Tanjung Bumi"
+3835,15,26,10,Kokop
+3836,15,26,11,Kwanyar
+3837,15,26,12,Labang
+3838,15,26,13,"Tanah Merah"
+3839,15,26,14,Tragah
+3840,15,26,15,Blega
+3841,15,26,16,Modung
+3842,15,26,17,Konang
+3843,15,26,18,Galis
+3844,15,27,1,Sreseh
+3845,15,27,2,Torjun
+3846,15,27,3,Sampang
+3847,15,27,4,Camplong
+3848,15,27,5,Omben
+3849,15,27,6,Kedungdung
+3850,15,27,7,Jrengik
+3851,15,27,8,Tambelangan
+3852,15,27,9,Banyuates
+3853,15,27,10,Robatal
+3854,15,27,11,Sokobanah
+3855,15,27,12,Ketapang
+3856,15,27,13,Pangarengan
+3857,15,27,14,Karangpenang
+3858,15,28,1,Tlanakan
+3859,15,28,2,Pademawu
+3860,15,28,3,Galis
+3861,15,28,4,Pamekasan
+3862,15,28,5,Proppo
+3863,15,28,6,Palengaan
+3864,15,28,7,Pegantenan
+3865,15,28,8,Larangan
+3866,15,28,9,Pakong
+3867,15,28,10,Waru
+3868,15,28,11,Batumarmar
+3869,15,28,12,Kadur
+3870,15,28,13,Pasean
+3871,15,29,1,"Kota Sumenep"
+3872,15,29,2,Kalianget
+3873,15,29,3,Manding
+3874,15,29,4,Talango
+3875,15,29,5,Bluto
+3876,15,29,6,Saronggi
+3877,15,29,7,Lenteng
+3878,15,29,8,Giliginting
+3879,15,29,9,Guluk-Guluk
+3880,15,29,10,Ganding
+3881,15,29,11,Pragaan
+3882,15,29,12,Ambunten
+3883,15,29,13,Pasongsongan
+3884,15,29,14,Dasuk
+3885,15,29,15,Rubaru
+3886,15,29,16,"Batang Batang"
+3887,15,29,17,Batuputih
+3888,15,29,18,Dungkek
+3889,15,29,19,Gapura
+3890,15,29,20,Gayam
+3891,15,29,21,Nonggunong
+3892,15,29,22,Ra'as
+3893,15,29,23,Masalembu
+3894,15,29,24,Arjasa
+3895,15,29,25,Sapeken
+3896,15,29,26,Batuan
+3897,15,29,27,Kangayan
+3898,15,71,1,Mojoroto
+3899,15,71,2,Kota
+3900,15,71,3,Pesantren
+3901,15,72,1,Kepanjenkidul
+3902,15,72,2,Sukorejo
+3903,15,72,3,Sananwetan
+3904,15,73,1,Blimbing
+3905,15,73,2,Klojen
+3906,15,73,3,Kedungkandang
+3907,15,73,4,Sukun
+3908,15,73,5,Lowokwaru
+3909,15,74,1,Kademangan
+3910,15,74,2,Wonoasih
+3911,15,74,3,Mayangan
+3912,15,74,4,Kanigaran
+3913,15,74,5,Kedopok
+3914,15,75,1,Gadingrejo
+3915,15,75,2,Purworejo
+3916,15,75,3,"Bugul Kidul"
+3917,15,75,4,Panggungrejo
+3918,15,76,1,Prajuritkulon
+3919,15,76,2,Magersari
+3920,15,76,3,Kranggan
+3921,15,77,1,Kartoharjo
+3922,15,77,2,Manguharjo
+3923,15,77,3,Taman
+3924,15,78,1,"Karang Pilang"
+3925,15,78,2,Wonocolo
+3926,15,78,3,Rungkut
+3927,15,78,4,Wonokromo
+3928,15,78,5,Tegalsari
+3929,15,78,6,Sawahan
+3930,15,78,7,Genteng
+3931,15,78,8,Gubeng
+3932,15,78,9,Sukolilo
+3933,15,78,10,Tambaksari
+3934,15,78,11,Simokerto
+3935,15,78,12,"Pabean Cantian"
+3936,15,78,13,Bubutan
+3937,15,78,14,Tandes
+3938,15,78,15,Krembangan
+3939,15,78,16,Semampir
+3940,15,78,17,Kenjeran
+3941,15,78,18,Lakarsantri
+3942,15,78,19,Benowo
+3943,15,78,20,Wiyung
+3944,15,78,21,"Dukuh Pakis"
+3945,15,78,22,Gayungan
+3946,15,78,23,Jambangan
+3947,15,78,24,"Tenggilis Mejoyo"
+3948,15,78,25,"Gunung Anyar"
+3949,15,78,26,Mulyorejo
+3950,15,78,27,Sukomanunggal
+3951,15,78,28,"Asem Rowo"
+3952,15,78,29,Bulak
+3953,15,78,30,Pakal
+3954,15,78,31,Sambikerep
+3955,15,79,1,Batu
+3956,15,79,2,Bumiaji
+3957,15,79,3,Junrejo
+3958,16,1,1,Sumur
+3959,16,1,2,Cimanggu
+3960,16,1,3,Cibaliung
+3961,16,1,4,Cikeusik
+3962,16,1,5,Cigeulis
+3963,16,1,6,Panimbang
+3964,16,1,7,Angsana
+3965,16,1,8,Munjul
+3966,16,1,9,Pagelaran
+3967,16,1,10,Bojong
+3968,16,1,11,Picung
+3969,16,1,12,Labuan
+3970,16,1,13,Menes
+3971,16,1,14,Saketi
+3972,16,1,15,Cipeucang
+3973,16,1,16,Jiput
+3974,16,1,17,Mandalawangi
+3975,16,1,18,Cimanuk
+3976,16,1,19,Kaduhejo
+3977,16,1,20,Banjar
+3978,16,1,21,Pandeglang
+3979,16,1,22,Cadasari
+3980,16,1,23,Cisata
+3981,16,1,24,Patia
+3982,16,1,25,"Karang Tanjung"
+3983,16,1,26,Cikedal
+3984,16,1,27,Cibitung
+3985,16,1,28,Carita
+3986,16,1,29,Sukaresmi
+3987,16,1,30,Mekarjaya
+3988,16,1,31,Sindangresmi
+3989,16,1,32,Pulosari
+3990,16,1,33,Koroncong
+3991,16,1,34,Majasari
+3992,16,1,35,Sobang
+3993,16,2,1,Malingping
+3994,16,2,2,Panggarangan
+3995,16,2,3,Bayah
+3996,16,2,4,Cipanas
+3997,16,2,5,Muncang
+3998,16,2,6,Leuwidamar
+3999,16,2,7,Bojongmanik
+4000,16,2,8,Gunungkencana
+4001,16,2,9,Banjarsari
+4002,16,2,10,Cileles
+4003,16,2,11,Cimarga
+4004,16,2,12,Sajira
+4005,16,2,13,Maja
+4006,16,2,14,Rangkasbitung
+4007,16,2,15,Warunggunung
+4008,16,2,16,Cijaku
+4009,16,2,17,Cikulur
+4010,16,2,18,Cibadak
+4011,16,2,19,Cibeber
+4012,16,2,20,Cilograng
+4013,16,2,21,Wanasalam
+4014,16,2,22,Sobang
+4015,16,2,23,Curugbitung
+4016,16,2,24,Kalanganyar
+4017,16,2,25,Lebakgedong
+4018,16,2,26,Cihara
+4019,16,2,27,Cirinten
+4020,16,2,28,Cigemblong
+4021,16,3,1,Balaraja
+4022,16,3,2,Jayanti
+4023,16,3,3,Tigaraksa
+4024,16,3,4,Jambe
+4025,16,3,5,Cisoka
+4026,16,3,6,Kresek
+4027,16,3,7,Kronjo
+4028,16,3,8,Mauk
+4029,16,3,9,Kemiri
+4030,16,3,10,Sukadiri
+4031,16,3,11,Rajeg
+4032,16,3,12,"Pasar Kemis"
+4033,16,3,13,Teluknaga
+4034,16,3,14,Kosambi
+4035,16,3,15,Pakuhaji
+4036,16,3,16,Sepatan
+4037,16,3,17,Curug
+4038,16,3,18,Cikupa
+4039,16,3,19,Panongan
+4040,16,3,20,Legok
+4041,16,3,22,Pagedangan
+4042,16,3,23,Cisauk
+4043,16,3,27,Sukamulya
+4044,16,3,28,"Kelapa Dua"
+4045,16,3,29,"Sindang Jaya"
+4046,16,3,30,"Sepatan Timur"
+4047,16,3,31,Solear
+4048,16,3,32,"Gunung Kaler"
+4049,16,3,33,"Mekar Baru"
+4050,16,4,5,Kramatwatu
+4051,16,4,6,Waringinkurung
+4052,16,4,7,Bojonegara
+4053,16,4,8,"Pulo Ampel"
+4054,16,4,9,Ciruas
+4055,16,4,11,Kragilan
+4056,16,4,12,Pontang
+4057,16,4,13,Tirtayasa
+4058,16,4,14,Tanara
+4059,16,4,15,Cikande
+4060,16,4,16,Kibin
+4061,16,4,17,Carenang
+4062,16,4,18,Binuang
+4063,16,4,19,Petir
+4064,16,4,20,"Tunjung Teja"
+4065,16,4,22,Baros
+4066,16,4,23,Cikeusal
+4067,16,4,24,Pamarayan
+4068,16,4,25,Kopo
+4069,16,4,26,Jawilan
+4070,16,4,27,Ciomas
+4071,16,4,28,Pabuaran
+4072,16,4,29,Padarincang
+4073,16,4,30,Anyar
+4074,16,4,31,Cinangka
+4075,16,4,32,Mancak
+4076,16,4,33,Gunungsari
+4077,16,4,34,Bandung
+4078,16,4,35,"Lebak Wangi"
+4079,16,71,1,Tangerang
+4080,16,71,2,Jatiuwung
+4081,16,71,3,Batuceper
+4082,16,71,4,Benda
+4083,16,71,5,Cipondoh
+4084,16,71,6,Ciledug
+4085,16,71,7,Karawaci
+4086,16,71,8,Periuk
+4087,16,71,9,Cibodas
+4088,16,71,10,Neglasari
+4089,16,71,11,Pinang
+4090,16,71,12,"Karang Tengah"
+4091,16,71,13,Larangan
+4092,16,72,1,Cibeber
+4093,16,72,2,Cilegon
+4094,16,72,3,Pulomerak
+4095,16,72,4,Ciwandan
+4096,16,72,5,Jombang
+4097,16,72,6,Gerogol
+4098,16,72,7,Purwakarta
+4099,16,72,8,Citangkil
+4100,16,73,1,Serang
+4101,16,73,2,Kasemen
+4102,16,73,3,Walantaka
+4103,16,73,4,Curug
+4104,16,73,5,"Cipocok Jaya"
+4105,16,73,6,Taktakan
+4106,16,74,1,Serpong
+4107,16,74,2,"Serpong Utara"
+4108,16,74,3,"Pondok Aren"
+4109,16,74,4,Ciputat
+4110,16,74,5,"Ciputat Timur"
+4111,16,74,6,Pamulang
+4112,16,74,7,Setu
+4113,17,1,1,Negara
+4114,17,1,2,Mendoyo
+4115,17,1,3,Pekutatan
+4116,17,1,4,Melaya
+4117,17,1,5,Jembrana
+4118,17,2,1,Selemadeg
+4119,17,2,2,"Selemadeg Timur"
+4120,17,2,3,"Selemadeg Barat"
+4121,17,2,4,Kerambitan
+4122,17,2,5,Tabanan
+4123,17,2,6,Kediri
+4124,17,2,7,Marga
+4125,17,2,8,Penebel
+4126,17,2,9,Baturiti
+4127,17,2,10,Pupuan
+4128,17,3,1,Kuta
+4129,17,3,2,Mengwi
+4130,17,3,3,Abiansemal
+4131,17,3,4,Petang
+4132,17,3,5,"Kuta Selatan"
+4133,17,3,6,"Kuta Utara"
+4134,17,4,1,Sukawati
+4135,17,4,2,Blahbatuh
+4136,17,4,3,Gianyar
+4137,17,4,4,Tampaksiring
+4138,17,4,5,Ubud
+4139,17,4,6,Tegallalang
+4140,17,4,7,Payangan
+4141,17,5,1,"Nusa Penida"
+4142,17,5,2,Banjarangkan
+4143,17,5,3,Klungkung
+4144,17,5,4,Dawan
+4145,17,6,1,Susut
+4146,17,6,2,Bangli
+4147,17,6,3,Tembuku
+4148,17,6,4,Kintamani
+4149,17,7,1,Rendang
+4150,17,7,2,Sidemen
+4151,17,7,3,Manggis
+4152,17,7,4,Karangasem
+4153,17,7,5,Abang
+4154,17,7,6,Bebandem
+4155,17,7,7,Selat
+4156,17,7,8,Kubu
+4157,17,8,1,Gerokgak
+4158,17,8,2,Seririt
+4159,17,8,3,Busungbiu
+4160,17,8,4,Banjar
+4161,17,8,5,Sukasada
+4162,17,8,6,Buleleng
+4163,17,8,7,Sawan
+4164,17,8,8,Kubutambahan
+4165,17,8,9,Tejakula
+4166,17,71,1,"Denpasar Selatan"
+4167,17,71,2,"Denpasar Timur"
+4168,17,71,3,"Denpasar Barat"
+4169,17,71,4,"Denpasar Utara"
+4170,18,1,1,Gerung
+4171,18,1,2,Kediri
+4172,18,1,3,Narmada
+4173,18,1,7,Sekotong
+4174,18,1,8,Labuapi
+4175,18,1,9,Gunungsari
+4176,18,1,12,Lingsar
+4177,18,1,13,Lembar
+4178,18,1,14,"Batu Layar"
+4179,18,1,15,Kuripan
+4180,18,2,1,Praya
+4181,18,2,2,Jonggat
+4182,18,2,3,Batukliang
+4183,18,2,4,Pujut
+4184,18,2,5,"Praya Barat"
+4185,18,2,6,"Praya Timur"
+4186,18,2,7,Janapria
+4187,18,2,8,Pringgarata
+4188,18,2,9,Kopang
+4189,18,2,10,"Praya Tengah"
+4190,18,2,11,"Praya Barat Daya"
+4191,18,2,12,"Batukliang Utara"
+4192,18,3,1,Keruak
+4193,18,3,2,Sakra
+4194,18,3,3,Terara
+4195,18,3,4,Sikur
+4196,18,3,5,Masbagik
+4197,18,3,6,Sukamulia
+4198,18,3,7,Selong
+4199,18,3,8,Pringgabaya
+4200,18,3,9,Aikmel
+4201,18,3,10,Sambelia
+4202,18,3,11,"Montong Gading"
+4203,18,3,12,Pringgasela
+4204,18,3,13,Suralaga
+4205,18,3,14,Wanasaba
+4206,18,3,15,Sembalun
+4207,18,3,16,Suwela
+4208,18,3,17,"Labuhan Haji"
+4209,18,3,18,"Sakra Timur"
+4210,18,3,19,"Sakra Barat"
+4211,18,3,20,Jerowaru
+4212,18,3,21,Lenek
+4213,18,4,2,Lunyuk
+4214,18,4,5,Alas
+4215,18,4,6,Utan
+4216,18,4,7,"Batu Lanteh"
+4217,18,4,8,Sumbawa
+4218,18,4,9,"Moyo Hilir"
+4219,18,4,10,"Moyo Hulu"
+4220,18,4,11,Ropang
+4221,18,4,12,Lape
+4222,18,4,13,Plampang
+4223,18,4,14,Empang
+4224,18,4,17,"Alas Barat"
+4225,18,4,18,"Labuhan Badas"
+4226,18,4,19,Labangka
+4227,18,4,20,Buer
+4228,18,4,21,Rhee
+4229,18,4,22,"Unter Iwes"
+4230,18,4,23,"Moyo Utara"
+4231,18,4,24,Maronge
+4232,18,4,25,Tarano
+4233,18,4,26,Lopok
+4234,18,4,27,Lenangguar
+4235,18,4,28,"Orong Telu"
+4236,18,4,29,Lantung
+4237,18,5,1,Dompu
+4238,18,5,2,Kempo
+4239,18,5,3,Hu'u
+4240,18,5,4,Kilo
+4241,18,5,5,Woja
+4242,18,5,6,Pekat
+4243,18,5,7,Manggalewa
+4244,18,5,8,Pajo
+4245,18,6,1,Monta
+4246,18,6,2,Bolo
+4247,18,6,3,Woha
+4248,18,6,4,Belo
+4249,18,6,5,Wawo
+4250,18,6,6,Sape
+4251,18,6,7,Wera
+4252,18,6,8,Donggo
+4253,18,6,9,Sanggar
+4254,18,6,10,Ambalawi
+4255,18,6,11,Langgudu
+4256,18,6,12,Lambu
+4257,18,6,13,Madapangga
+4258,18,6,14,Tambora
+4259,18,6,15,Soromandi
+4260,18,6,16,Parado
+4261,18,6,17,Lambitu
+4262,18,6,18,Palibelo
+4263,18,7,1,Jereweh
+4264,18,7,2,Taliwang
+4265,18,7,3,Seteluk
+4266,18,7,4,Sekongkang
+4267,18,7,5,"Brang Rea"
+4268,18,7,6,"Poto Tano"
+4269,18,7,7,"Brang Ene"
+4270,18,7,8,Maluk
+4271,18,8,1,Tanjung
+4272,18,8,2,Gangga
+4273,18,8,3,Kayangan
+4274,18,8,4,Bayan
+4275,18,8,5,Pemenang
+4276,18,71,1,Ampenan
+4277,18,71,2,Mataram
+4278,18,71,3,Cakranegara
+4279,18,71,4,Sekarbela
+4280,18,71,5,Selaparang
+4281,18,71,6,Sandubaya
+4282,18,72,1,"Rasanae Barat"
+4283,18,72,2,"Rasanae Timur"
+4284,18,72,3,Asakota
+4285,18,72,4,Raba
+4286,18,72,5,Mpunda
+4287,19,1,4,Semau
+4288,19,1,5,"Kupang Barat"
+4289,19,1,6,"Kupang Timur"
+4290,19,1,7,Sulamu
+4291,19,1,8,"Kupang Tengah"
+4292,19,1,9,Amarasi
+4293,19,1,10,Fatuleu
+4294,19,1,11,Takari
+4295,19,1,12,"Amfoang Selatan"
+4296,19,1,13,"Amfoang Utara"
+4297,19,1,16,Nekamese
+4298,19,1,17,"Amarasi Barat"
+4299,19,1,18,"Amarasi Selatan"
+4300,19,1,19,"Amarasi Timur"
+4301,19,1,20,"Amabi Oefeto Timur"
+4302,19,1,21,"Amfoang Barat Daya"
+4303,19,1,22,"Amfoang Barat Laut"
+4304,19,1,23,"Semau Selatan"
+4305,19,1,24,Taebenu
+4306,19,1,25,"Amabi Oefeto"
+4307,19,1,26,"Amfoang Timur"
+4308,19,1,27,"Fatuleu Barat"
+4309,19,1,28,"Fatuleu Tengah"
+4310,19,1,30,"Amfoang Tengah"
+4311,19,2,1,"Kota Soe"
+4312,19,2,2,"Mollo Selatan"
+4313,19,2,3,"Mollo Utara"
+4314,19,2,4,"Amanuban Timur"
+4315,19,2,5,"Amanuban Tengah"
+4316,19,2,6,"Amanuban Selatan"
+4317,19,2,7,"Amanuban Barat"
+4318,19,2,8,"Amanatun Selatan"
+4319,19,2,9,"Amanatun Utara"
+4320,19,2,10,KI'E
+4321,19,2,11,Kuanfatu
+4322,19,2,12,Fatumnasi
+4323,19,2,13,Polen
+4324,19,2,14,"Batu Putih"
+4325,19,2,15,Boking
+4326,19,2,16,Toianas
+4327,19,2,17,Nunkolo
+4328,19,2,18,Oenino
+4329,19,2,19,Kolbano
+4330,19,2,20,"Kot olin"
+4331,19,2,21,Kualin
+4332,19,2,22,"Mollo Barat"
+4333,19,2,23,"Kok Baun"
+4334,19,2,24,Noebana
+4335,19,2,25,Santian
+4336,19,2,26,Noebeba
+4337,19,2,27,Kuatnana
+4338,19,2,28,Fautmolo
+4339,19,2,29,Fatukopa
+4340,19,2,30,"Mollo Tengah"
+4341,19,2,31,Tobu
+4342,19,2,32,Nunbena
+4343,19,3,1,"Miomaffo Timur"
+4344,19,3,2,"Miomaffo Barat"
+4345,19,3,3,"Biboki Selatan"
+4346,19,3,4,Noemuti
+4347,19,3,5,"Kota Kefamenanu"
+4348,19,3,6,"Biboki Utara"
+4349,19,3,7,"Biboki Anleu"
+4350,19,3,8,Insana
+4351,19,3,9,"Insana Utara"
+4352,19,3,10,"Noemuti Timur"
+4353,19,3,11,"Miomaffo Tengah"
+4354,19,3,12,Musi
+4355,19,3,13,Mutis
+4356,19,3,14,"Bikomi Selatan"
+4357,19,3,15,"Bikomi Tengah"
+4358,19,3,16,"Bikomi Nilulat"
+4359,19,3,17,"Bikomi Utara"
+4360,19,3,18,Naibenu
+4361,19,3,19,"Insana Fafinesu"
+4362,19,3,20,"Insana Barat"
+4363,19,3,21,"Insana Tengah"
+4364,19,3,22,"Biboki Tan Pah"
+4365,19,3,23,"Biboki Moenleu"
+4366,19,3,24,"Biboki Feotleu"
+4367,19,4,1,Lamaknen
+4368,19,4,2,"Tasifeto Timur"
+4369,19,4,3,Raihat
+4370,19,4,4,"Tasifeto Barat"
+4371,19,4,5,"Kakuluk Mesak"
+4372,19,4,12,"Kota Atambua"
+4373,19,4,13,Raimanuk
+4374,19,4,17,Lasiolat
+4375,19,4,18,"Lamaknen Selatan"
+4376,19,4,21,"Atambua Barat"
+4377,19,4,22,"Atambua Selatan"
+4378,19,4,23,"Nanaet Duabesi"
+4379,19,5,1,"Teluk Mutiara"
+4380,19,5,2,"Alor Barat Laut"
+4381,19,5,3,"Alor Barat Daya"
+4382,19,5,4,"Alor Selatan"
+4383,19,5,5,"Alor Timur"
+4384,19,5,6,Pantar
+4385,19,5,7,"Alor Tengah Utara"
+4386,19,5,8,"Alor Timur Laut"
+4387,19,5,9,"Pantar Barat"
+4388,19,5,10,Kabola
+4389,19,5,11,"Pulau Pura"
+4390,19,5,12,Mataru
+4391,19,5,13,Pureman
+4392,19,5,14,"Pantar Timur"
+4393,19,5,15,Lembur
+4394,19,5,16,"Pantar Tengah"
+4395,19,5,17,"Pantar Barat Laut"
+4396,19,5,18,"Abad Selatan"
+4397,19,6,1,Wulanggitang
+4398,19,6,2,Titehena
+4399,19,6,3,Larantuka
+4400,19,6,4,"Ile Mandiri"
+4401,19,6,5,"Tanjung Bunga"
+4402,19,6,6,"Solor Barat"
+4403,19,6,7,"Solor Timur"
+4404,19,6,8,"Adonara Barat"
+4405,19,6,9,"Wotan Ulumando"
+4406,19,6,10,"Adonara Timur"
+4407,19,6,11,Kelubagolit
+4408,19,6,12,Witihama
+4409,19,6,13,"Ile Boleng"
+4410,19,6,14,"Demon Pagong"
+4411,19,6,15,Lewolema
+4412,19,6,16,"Ile Bura"
+4413,19,6,17,Adonara
+4414,19,6,18,"Adonara Tengah"
+4415,19,6,19,"Solor Selatan"
+4416,19,7,1,Paga
+4417,19,7,2,Mego
+4418,19,7,3,Lela
+4419,19,7,4,Nita
+4420,19,7,5,Alok
+4421,19,7,6,Palue
+4422,19,7,7,Nelle
+4423,19,7,8,Talibura
+4424,19,7,9,Waigete
+4425,19,7,10,Kewapante
+4426,19,7,11,Bola
+4427,19,7,12,Magepanda
+4428,19,7,13,Waiblama
+4429,19,7,14,"Alok Barat"
+4430,19,7,15,"Alok Timur"
+4431,19,7,16,Koting
+4432,19,7,17,"Tana Wawo"
+4433,19,7,18,Hewokloang
+4434,19,7,19,Kangae
+4435,19,7,20,Doreng
+4436,19,7,21,Mapitara
+4437,19,8,1,Nangapanda
+4438,19,8,2,"Pulau Ende"
+4439,19,8,3,Ende
+4440,19,8,4,"Ende Selatan"
+4441,19,8,5,Ndona
+4442,19,8,6,Detusoko
+4443,19,8,7,Wewaria
+4444,19,8,8,Wolowaru
+4445,19,8,9,Wolojita
+4446,19,8,10,Maurole
+4447,19,8,11,Maukaro
+4448,19,8,12,"Lio Timur"
+4449,19,8,13,"Kota Baru"
+4450,19,8,14,Kelimutu
+4451,19,8,15,Detukeli
+4452,19,8,16,"Ndona Timur"
+4453,19,8,17,Ndori
+4454,19,8,18,"Ende Utara"
+4455,19,8,19,"Ende Tengah"
+4456,19,8,20,"Ende Timur"
+4457,19,8,21,"Lepembusu Kelisoke"
+4458,19,9,1,Aimere
+4459,19,9,2,Golewa
+4460,19,9,6,Bajawa
+4461,19,9,7,Soa
+4462,19,9,9,Riung
+4463,19,9,12,Jerebuu
+4464,19,9,14,"Riung Barat"
+4465,19,9,15,"Bajawa Utara"
+4466,19,9,16,Wolomeze
+4467,19,9,18,"Golewa Selatan"
+4468,19,9,19,"Golewa Barat"
+4469,19,9,20,Inerie
+4470,19,10,1,"Wae Rii"
+4471,19,10,3,Ruteng
+4472,19,10,5,"Satar Mese"
+4473,19,10,6,Cibal
+4474,19,10,11,Reok
+4475,19,10,12,"Langke Rembong"
+4476,19,10,13,"Satar Mese Barat"
+4477,19,10,14,"Rahong Utara"
+4478,19,10,15,Lelak
+4479,19,10,16,"Reok Barat"
+4480,19,10,17,"Cibal barat"
+4481,19,10,18,"Satar Mese Utara"
+4482,19,11,1,"Kota Waingapu"
+4483,19,11,2,Haharu
+4484,19,11,3,Lewa
+4485,19,11,4,"Nggaha Ori Angu"
+4486,19,11,5,Tabundung
+4487,19,11,6,"Pinu Pahar"
+4488,19,11,7,Pandawai
+4489,19,11,8,Umalulu
+4490,19,11,9,Rindi
+4491,19,11,10,"Pahunga Lodu"
+4492,19,11,11,"Wulla Waijelu"
+4493,19,11,12,Paberiwai
+4494,19,11,13,Karera
+4495,19,11,14,"Kahaungu Eti"
+4496,19,11,15,"Matawai La Pawu"
+4497,19,11,16,Kambera
+4498,19,11,17,"Kambata Mapambuhang"
+4499,19,11,18,"Lewa Tidahu"
+4500,19,11,19,"Katala Hamu Lingu"
+4501,19,11,20,Kanatang
+4502,19,11,21,"Ngadu Ngala"
+4503,19,11,22,Mahu
+4504,19,12,4,"Tana Righu"
+4505,19,12,10,Loli
+4506,19,12,11,Wanokaka
+4507,19,12,12,Lamboya
+4508,19,12,15,"Kota Waikabubak"
+4509,19,12,18,"Laboya Barat"
+4510,19,13,1,"Naga Wutung"
+4511,19,13,2,Atadei
+4512,19,13,3,"Ile Ape"
+4513,19,13,4,Lebatukan
+4514,19,13,5,Nubatukan
+4515,19,13,6,Omesuri
+4516,19,13,7,Buyasuri
+4517,19,13,8,Wulandoni
+4518,19,13,9,"Ile Ape Timur"
+4519,19,14,1,"Rote Barat Daya"
+4520,19,14,2,"Rote Barat Laut"
+4521,19,14,3,Lobalain
+4522,19,14,4,"Rote Tengah"
+4523,19,14,5,"Pantai Baru"
+4524,19,14,6,"Rote Timur"
+4525,19,14,7,"Rote Barat"
+4526,19,14,8,"Rote Selatan"
+4527,19,14,9,"Ndao Nuse"
+4528,19,14,10,"Landu Leko"
+4529,19,14,11,Loaholu
+4530,19,15,1,"Macang Pacar"
+4531,19,15,2,Kuwus
+4532,19,15,3,Lembor
+4533,19,15,4,"Sano Nggoang"
+4534,19,15,5,Komodo
+4535,19,15,6,Boleng
+4536,19,15,7,Welak
+4537,19,15,8,Ndoso
+4538,19,15,9,"Lembor Selatan"
+4539,19,15,10,Mbeliling
+4540,19,15,11,Pacar
+4541,19,15,12,"Kuwus Barat"
+4542,19,16,1,Aesesa
+4543,19,16,2,Nangaroro
+4544,19,16,3,Boawae
+4545,19,16,4,Mauponggo
+4546,19,16,5,Wolowae
+4547,19,16,6,"Keo Tengah"
+4548,19,16,7,"Aesesa Selatan"
+4549,19,17,1,"Katiku Tana"
+4550,19,17,2,"Umbu Ratu Nggay Barat"
+4551,19,17,3,Mamboro
+4552,19,17,4,"Umbu Ratu Nggay"
+4553,19,17,5,"Katiku Tana Selatan"
+4554,19,17,6,"Umbu Ratu Nggay Tengah"
+4555,19,18,1,Loura
+4556,19,18,2,"Wewewa Utara"
+4557,19,18,3,"Wewewa Timur"
+4558,19,18,4,"Wewewa Barat"
+4559,19,18,5,"Wewewa Selatan"
+4560,19,18,6,"Kodi Bangedo"
+4561,19,18,7,Kodi
+4562,19,18,8,"Kodi Utara"
+4563,19,18,9,"Kota Tambolaka"
+4564,19,18,10,"Wewewa Tengah"
+4565,19,18,11,"Kodi Balaghar"
+4566,19,19,1,Borong
+4567,19,19,2,"Lamba Leda Selatan"
+4568,19,19,3,"Lamba Leda"
+4569,19,19,4,"Sambi Rampas"
+4570,19,19,5,Elar
+4571,19,19,6,"Kota Komba"
+4572,19,19,7,"Rana Mese"
+4573,19,19,8,"Lamba Leda Timur"
+4574,19,19,9,"Elar Selatan"
+4575,19,19,10,"Kota Komba Utara"
+4576,19,19,11,"Lamba Leda Utara"
+4577,19,19,12,Congkar
+4578,19,20,1,"Sabu Barat"
+4579,19,20,2,"Sabu Tengah"
+4580,19,20,3,"Sabu Timur"
+4581,19,20,4,"Sabu Liae"
+4582,19,20,5,"Hawu Mehara"
+4583,19,20,6,Raijua
+4584,19,21,1,"Malaka Tengah"
+4585,19,21,2,"Malaka Barat"
+4586,19,21,3,Wewiku
+4587,19,21,4,Weliman
+4588,19,21,5,Rinhat
+4589,19,21,6,"Io Kufeu"
+4590,19,21,7,Sasitamean
+4591,19,21,8,Laenmanen
+4592,19,21,9,"Malaka Timur"
+4593,19,21,10,"Kobalima Timur"
+4594,19,21,11,Kobalima
+4595,19,21,12,"Botin Leobele"
+4596,19,71,1,Alak
+4597,19,71,2,Maulafa
+4598,19,71,3,"Kelapa Lima"
+4599,19,71,4,Oebobo
+4600,19,71,5,"Kota Raja"
+4601,19,71,6,"Kota Lama"
+4602,20,1,1,Sambas
+4603,20,1,2,"Teluk Keramat"
+4604,20,1,3,Jawai
+4605,20,1,4,Tebas
+4606,20,1,5,Pemangkat
+4607,20,1,6,Sejangkung
+4608,20,1,7,Selakau
+4609,20,1,8,Paloh
+4610,20,1,9,"Sajingan Besar"
+4611,20,1,10,Subah
+4612,20,1,11,Galing
+4613,20,1,12,Tekarang
+4614,20,1,13,Semparuk
+4615,20,1,14,Sajad
+4616,20,1,15,Sebawi
+4617,20,1,16,"Jawai Selatan"
+4618,20,1,17,Tangaran
+4619,20,1,18,Salatiga
+4620,20,1,19,"Selakau Timur"
+4621,20,2,1,"Mempawah Hilir"
+4622,20,2,6,Toho
+4623,20,2,7,"Sungai Pinyuh"
+4624,20,2,8,Jongkat
+4625,20,2,12,"Sungai Kunyit"
+4626,20,2,15,Segedong
+4627,20,2,16,Anjongan
+4628,20,2,17,Sadaniang
+4629,20,2,18,"Mempawah Timur"
+4630,20,3,1,Kapuas
+4631,20,3,2,Mukok
+4632,20,3,3,Noyan
+4633,20,3,4,Jangkang
+4634,20,3,5,Bonti
+4635,20,3,6,Beduai
+4636,20,3,7,Sekayam
+4637,20,3,8,Kembayan
+4638,20,3,9,Parindu
+4639,20,3,10,"Tayan Hulu"
+4640,20,3,11,"Tayan Hilir"
+4641,20,3,12,Balai
+4642,20,3,13,Toba
+4643,20,3,20,Meliau
+4644,20,3,21,Entikong
+4645,20,4,1,"Matan Hilir Utara"
+4646,20,4,2,Marau
+4647,20,4,3,"Manis Mata"
+4648,20,4,4,Kendawangan
+4649,20,4,5,Sandai
+4650,20,4,7,"Sungai Laur"
+4651,20,4,8,"Simpang Hulu"
+4652,20,4,11,"Nanga Tayap"
+4653,20,4,12,"Matan Hilir Selatan"
+4654,20,4,13,"Tumbang Titi"
+4655,20,4,14,"Jelai Hulu"
+4656,20,4,16,"Delta Pawan"
+4657,20,4,17,"Muara Pawan"
+4658,20,4,18,"Benua Kayong"
+4659,20,4,19,"Hulu Sungai"
+4660,20,4,20,"Simpang Dua"
+4661,20,4,21,"Air Upas"
+4662,20,4,22,Singkup
+4663,20,4,24,Pemahan
+4664,20,4,25,"Sungai Melayu Rayak"
+4665,20,5,1,Sintang
+4666,20,5,2,Tempunak
+4667,20,5,3,Sepauk
+4668,20,5,4,"Ketungau Hilir"
+4669,20,5,5,"Ketungau Tengah"
+4670,20,5,6,"Ketungau Hulu"
+4671,20,5,7,Dedai
+4672,20,5,8,"Kayan Hilir"
+4673,20,5,9,"Kayan Hulu"
+4674,20,5,14,Serawai
+4675,20,5,15,Ambalau
+4676,20,5,19,"Kelam Permai"
+4677,20,5,20,"Sungai Tebelian"
+4678,20,5,21,"Binjai Hulu"
+4679,20,6,1,"Putussibau Utara"
+4680,20,6,2,Bika
+4681,20,6,3,"Embaloh Hilir"
+4682,20,6,4,"Embaloh Hulu"
+4683,20,6,5,"Bunut Hilir"
+4684,20,6,6,"Bunut Hulu"
+4685,20,6,7,Jongkong
+4686,20,6,8,"Hulu Gurung"
+4687,20,6,9,Selimbau
+4688,20,6,10,Semitau
+4689,20,6,11,Seberuang
+4690,20,6,12,"Batang Lupar"
+4691,20,6,13,Empanang
+4692,20,6,14,Badau
+4693,20,6,15,"Silat Hilir"
+4694,20,6,16,"Silat Hulu"
+4695,20,6,17,"Putussibau Selatan"
+4696,20,6,18,Kalis
+4697,20,6,19,"Boyan Tanjung"
+4698,20,6,20,Mentebah
+4699,20,6,21,Pengkadan
+4700,20,6,22,Suhaid
+4701,20,6,23,"Puring Kencana"
+4702,20,7,1,"Sungai Raya"
+4703,20,7,2,Samalantan
+4704,20,7,3,Ledo
+4705,20,7,4,Bengkayang
+4706,20,7,5,Seluas
+4707,20,7,6,"Sanggau Ledo"
+4708,20,7,7,"Jagoi Babang"
+4709,20,7,8,Monterado
+4710,20,7,9,Teriak
+4711,20,7,10,"Suti Semarang"
+4712,20,7,11,Capkala
+4713,20,7,12,Siding
+4714,20,7,13,Lumar
+4715,20,7,14,"Sungai Betung"
+4716,20,7,15,"Sungai Raya Kepulauan"
+4717,20,7,16,"Lembah Bawang"
+4718,20,7,17,"Tujuh Belas"
+4719,20,8,1,Ngabang
+4720,20,8,2,"Mempawah Hulu"
+4721,20,8,3,Menjalin
+4722,20,8,4,Mandor
+4723,20,8,5,"Air Besar"
+4724,20,8,6,Menyuke
+4725,20,8,7,"Sengah Temila"
+4726,20,8,8,Meranti
+4727,20,8,9,"Kuala Behe"
+4728,20,8,10,Sebangki
+4729,20,8,11,Jelimpo
+4730,20,8,12,"Banyuke Hulu"
+4731,20,8,13,Sompak
+4732,20,9,1,"Sekadau Hilir"
+4733,20,9,2,"Sekadau Hulu"
+4734,20,9,3,"Nanga Taman"
+4735,20,9,4,"Nanga Mahap"
+4736,20,9,5,"Belitang Hilir"
+4737,20,9,6,"Belitang Hulu"
+4738,20,9,7,Belitang
+4739,20,10,1,Belimbing
+4740,20,10,2,"Nanga Pinoh"
+4741,20,10,3,"Ella Hilir"
+4742,20,10,4,Menukung
+4743,20,10,5,Sayan
+4744,20,10,6,"Tanah Pinoh"
+4745,20,10,7,Sokan
+4746,20,10,8,"Pinoh Utara"
+4747,20,10,9,"Pinoh Selatan"
+4748,20,10,10,"Belimbing Hulu"
+4749,20,10,11,"Tanah Pinoh Barat"
+4750,20,11,1,Sukadana
+4751,20,11,2,"Simpang Hilir"
+4752,20,11,3,"Teluk Batang"
+4753,20,11,4,"Pulau Maya"
+4754,20,11,5,Seponti
+4755,20,11,6,"Kepulauan Karimata"
+4756,20,12,1,"Sungai Raya"
+4757,20,12,2,"Kuala Mandor B"
+4758,20,12,3,"Sungai Ambawang"
+4759,20,12,4,Terentang
+4760,20,12,5,"Batu Ampar"
+4761,20,12,6,Kubu
+4762,20,12,7,"Rasau Jaya"
+4763,20,12,8,"Teluk Pakedai"
+4764,20,12,9,"Sungai Kakap"
+4765,20,71,1,"Pontianak Selatan"
+4766,20,71,2,"Pontianak Timur"
+4767,20,71,3,"Pontianak Barat"
+4768,20,71,4,"Pontianak Utara"
+4769,20,71,5,"Pontianak Kota"
+4770,20,71,6,"Pontianak Tenggara"
+4771,20,72,1,"Singkawang Tengah"
+4772,20,72,2,"Singkawang Barat"
+4773,20,72,3,"Singkawang Timur"
+4774,20,72,4,"Singkawang Utara"
+4775,20,72,5,"Singkawang Selatan"
+4776,21,1,1,Kumai
+4777,21,1,2,"Arut Selatan"
+4778,21,1,3,"Kotawaringin Lama"
+4779,21,1,4,"Arut Utara"
+4780,21,1,5,"Pangkalan Lada"
+4781,21,1,6,"Pangkalan Banteng"
+4782,21,2,1,"Kota Besi"
+4783,21,2,2,Cempaga
+4784,21,2,3,"Mentaya Hulu"
+4785,21,2,4,Parenggean
+4786,21,2,5,Baamang
+4787,21,2,6,"Mentawa Baru Ketapang"
+4788,21,2,7,"Mentaya Hilir Utara"
+4789,21,2,8,"Mentaya Hilir Selatan"
+4790,21,2,9,"Pulau Hanaut"
+4791,21,2,10,"Antang Kalang"
+4792,21,2,11,"Teluk Sampit"
+4793,21,2,12,Seranau
+4794,21,2,13,"Cempaga Hulu"
+4795,21,2,14,Telawang
+4796,21,2,15,"Bukit Santuai"
+4797,21,2,16,"Tualan Hulu"
+4798,21,2,17,"Telaga Antang"
+4799,21,3,1,Selat
+4800,21,3,2,"Kapuas Hilir"
+4801,21,3,3,"Kapuas Timur"
+4802,21,3,4,"Kapuas Kuala"
+4803,21,3,5,"Kapuas Barat"
+4804,21,3,6,"Pulau Petak"
+4805,21,3,7,"Kapuas Murung"
+4806,21,3,8,Basarang
+4807,21,3,9,Mantangai
+4808,21,3,10,Timpah
+4809,21,3,11,"Kapuas Tengah"
+4810,21,3,12,"Kapuas Hulu"
+4811,21,3,13,"Tamban Catur"
+4812,21,3,14,"Pasak Talawang"
+4813,21,3,15,"Mandau Talawang"
+4814,21,3,16,Dadahup
+4815,21,3,17,Bataguh
+4816,21,4,1,Jenamas
+4817,21,4,2,"Dusun Hilir"
+4818,21,4,3,"Karau Kuala"
+4819,21,4,4,"Dusun Utara"
+4820,21,4,5,"Gn. Bintang Awai"
+4821,21,4,6,"Dusun Selatan"
+4822,21,5,1,Montallat
+4823,21,5,2,"Gunung Timang"
+4824,21,5,3,"Gunung Purei"
+4825,21,5,4,"Teweh Timur"
+4826,21,5,5,"Teweh Tengah"
+4827,21,5,6,Lahei
+4828,21,5,7,"Teweh Baru"
+4829,21,5,8,"Teweh Selatan"
+4830,21,5,9,"Lahei Barat"
+4831,21,6,1,Kamipang
+4832,21,6,2,"Katingan Hilir"
+4833,21,6,3,"Tewang Sangalang Garing"
+4834,21,6,4,"Pulau Malan"
+4835,21,6,5,"Katingan Tengah"
+4836,21,6,6,"Sanaman Mantikei"
+4837,21,6,7,Marikit
+4838,21,6,8,"Katingan Hulu"
+4839,21,6,9,Mendawai
+4840,21,6,10,"Katingan Kuala"
+4841,21,6,11,"Tasik Payawan"
+4842,21,6,12,"Petak Malai"
+4843,21,6,13,"Bukit Raya"
+4844,21,7,1,"Seruyan Hilir"
+4845,21,7,2,"Seruyan Tengah"
+4846,21,7,3,"Danau Sembuluh"
+4847,21,7,4,Hanau
+4848,21,7,5,"Seruyan Hulu"
+4849,21,7,6,"Seruyan Hilir Timur"
+4850,21,7,7,"Seruyan Raya"
+4851,21,7,8,"Danau Seluluk"
+4852,21,7,9,"Batu Ampar"
+4853,21,7,10,"Suling Tambun"
+4854,21,8,1,Sukamara
+4855,21,8,2,Jelai
+4856,21,8,3,"Balai Riam"
+4857,21,8,4,"Pantai Lunci"
+4858,21,8,5,"Permata Kecubung"
+4859,21,9,1,Lamandau
+4860,21,9,2,Delang
+4861,21,9,3,Bulik
+4862,21,9,4,"Bulik Timur"
+4863,21,9,5,"Menthobi Raya"
+4864,21,9,6,"Sematu Jaya"
+4865,21,9,7,"Belantikan Raya"
+4866,21,9,8,"Batang Kawa"
+4867,21,10,1,Sepang
+4868,21,10,2,Kurun
+4869,21,10,3,Tewah
+4870,21,10,4,"Kahayan Hulu Utara"
+4871,21,10,5,Rungan
+4872,21,10,6,Manuhing
+4873,21,10,7,"Mihing Raya"
+4874,21,10,8,"Damang Batu"
+4875,21,10,9,"Miri Manasa"
+4876,21,10,10,"Rungan Hulu"
+4877,21,10,11,"Manuhing Raya"
+4878,21,10,12,"Rungan Barat"
+4879,21,11,1,"Pandih Batu"
+4880,21,11,2,"Kahayan Kuala"
+4881,21,11,3,"Kahayan Tengah"
+4882,21,11,4,"Banama Tingang"
+4883,21,11,5,"Kahayan Hilir"
+4884,21,11,6,Maliku
+4885,21,11,7,"Jabiren Raya"
+4886,21,11,8,"Sebangau Kuala"
+4887,21,12,1,Murung
+4888,21,12,2,"Tanah Siang"
+4889,21,12,3,"Laung Tuhup"
+4890,21,12,4,"Permata Intan"
+4891,21,12,5,"Sumber Barito"
+4892,21,12,6,"Barito Tuhup Raya"
+4893,21,12,7,"Tanah Siang Selatan"
+4894,21,12,8,"Sungai Babuat"
+4895,21,12,9,"Seribu Riam"
+4896,21,12,10,"Uut Murung"
+4897,21,13,1,"Dusun Timur"
+4898,21,13,2,"Banua Lima"
+4899,21,13,3,"Patangkep Tutui"
+4900,21,13,4,Awang
+4901,21,13,5,"Dusun Tengah"
+4902,21,13,6,"Pematang Karau"
+4903,21,13,7,"Paju Epat"
+4904,21,13,8,"Raren Batuah"
+4905,21,13,9,Paku
+4906,21,13,10,"Karusen Janang"
+4907,21,71,1,Pahandut
+4908,21,71,2,"Bukit Batu"
+4909,21,71,3,"Jekan Raya"
+4910,21,71,4,Sabangau
+4911,21,71,5,Rakumpit
+4912,22,1,1,Takisung
+4913,22,1,2,Jorong
+4914,22,1,3,Pelaihari
+4915,22,1,4,Kurau
+4916,22,1,5,"Bati Bati"
+4917,22,1,6,Panyipatan
+4918,22,1,7,Kintap
+4919,22,1,8,"Tambang Ulang"
+4920,22,1,9,"Batu Ampar"
+4921,22,1,10,Bajuin
+4922,22,1,11,"Bumi Makmur"
+4923,22,2,1,"Pulau Sembilan"
+4924,22,2,2,"Pulau Laut Barat"
+4925,22,2,3,"Pulau Laut Selatan"
+4926,22,2,4,"Pulau Laut Timur"
+4927,22,2,5,"Pulau Sebuku"
+4928,22,2,6,"Pulaulaut Utara"
+4929,22,2,7,"Kelumpang Selatan"
+4930,22,2,8,"Kelumpang Hulu"
+4931,22,2,9,"Kelumpang Tengah"
+4932,22,2,10,"Kelumpang Utara"
+4933,22,2,11,"Pamukan Selatan"
+4934,22,2,12,Sampanahan
+4935,22,2,13,"Pamukan Utara"
+4936,22,2,14,Hampang
+4937,22,2,15,"Sungai Durian"
+4938,22,2,16,"Pulau Laut Tengah"
+4939,22,2,17,"Kelumpang Hilir"
+4940,22,2,18,"Kelumpang Barat"
+4941,22,2,19,"Pamukan Barat"
+4942,22,2,20,"Pulau Laut Kepulauan"
+4943,22,2,21,"Pulau Laut Tanjung Selayar"
+4944,22,2,22,"Pulaulaut Sigam"
+4945,22,3,1,"Aluh Aluh"
+4946,22,3,2,"Kertak Hanyar"
+4947,22,3,3,Gambut
+4948,22,3,4,"Sungai Tabuk"
+4949,22,3,5,Martapura
+4950,22,3,6,"Karang Intan"
+4951,22,3,7,Astambul
+4952,22,3,8,"Simpang Empat"
+4953,22,3,9,Pengaron
+4954,22,3,10,"Sungai Pinang"
+4955,22,3,11,Aranio
+4956,22,3,12,Mataraman
+4957,22,3,13,"Beruntung Baru"
+4958,22,3,14,"Martapura Barat"
+4959,22,3,15,"Martapura Timur"
+4960,22,3,16,"Sambung Makmur"
+4961,22,3,17,Paramasan
+4962,22,3,18,"Telaga Bauntung"
+4963,22,3,19,"Tatah Makmur"
+4964,22,3,20,"Cintapuri Darussalam"
+4965,22,4,1,Tabunganen
+4966,22,4,2,Tamban
+4967,22,4,3,"Anjir Pasar"
+4968,22,4,4,"Anjir Muara"
+4969,22,4,5,Alalak
+4970,22,4,6,Mandastana
+4971,22,4,7,"Rantau Badauh"
+4972,22,4,8,Belawang
+4973,22,4,9,Cerbon
+4974,22,4,10,Bakumpai
+4975,22,4,11,Kuripan
+4976,22,4,12,Tabukan
+4977,22,4,13,Mekarsari
+4978,22,4,14,Barambai
+4979,22,4,15,Marabahan
+4980,22,4,16,Wanaraya
+4981,22,4,17,Jejangkit
+4982,22,5,1,Binuang
+4983,22,5,2,"Tapin Selatan"
+4984,22,5,3,"Tapin Tengah"
+4985,22,5,4,"Tapin Utara"
+4986,22,5,5,"Candi Laras Selatan"
+4987,22,5,6,"Candi Laras Utara"
+4988,22,5,7,Bakarangan
+4989,22,5,8,Piani
+4990,22,5,9,Bungur
+4991,22,5,10,Lokpaikat
+4992,22,5,11,"Salam Babaris"
+4993,22,5,12,Hatungun
+4994,22,6,1,"Sungai Raya"
+4995,22,6,2,"Padang Batung"
+4996,22,6,3,"Telaga Langsat"
+4997,22,6,4,Angkinang
+4998,22,6,5,Kandangan
+4999,22,6,6,Simpur
+5000,22,6,7,"Daha Selatan"
+5001,22,6,8,"Daha Utara"
+5002,22,6,9,Kalumpang
+5003,22,6,10,Loksado
+5004,22,6,11,"Daha Barat"
+5005,22,7,1,Haruyan
+5006,22,7,2,"Batu Benawa"
+5007,22,7,3,"Labuan Amas Selatan"
+5008,22,7,4,"Labuan Amas Utara"
+5009,22,7,5,Pandawan
+5010,22,7,6,Barabai
+5011,22,7,7,"Batang Alai Selatan"
+5012,22,7,8,"Batang Alai Utara"
+5013,22,7,9,Hantakan
+5014,22,7,10,"Batang Alai Timur"
+5015,22,7,11,Limpasu
+5016,22,8,1,"Danau Panggang"
+5017,22,8,2,Babirik
+5018,22,8,3,"Sungai Pandan"
+5019,22,8,4,"Amuntai Selatan"
+5020,22,8,5,"Amuntai Tengah"
+5021,22,8,6,"Amuntai Utara"
+5022,22,8,7,Banjang
+5023,22,8,8,"Haur Gading"
+5024,22,8,9,Paminggir
+5025,22,8,10,"Sungai Tabukan"
+5026,22,9,1,"Banua Lawas"
+5027,22,9,2,Kelua
+5028,22,9,3,Tanta
+5029,22,9,4,Tanjung
+5030,22,9,5,Haruai
+5031,22,9,6,"Murung Pudak"
+5032,22,9,7,"Muara Uya"
+5033,22,9,8,"Muara Harus"
+5034,22,9,9,Pugaan
+5035,22,9,10,Upau
+5036,22,9,11,Jaro
+5037,22,9,12,"Bintang Ara"
+5038,22,10,1,"Batu Licin"
+5039,22,10,2,"Kusan Hilir"
+5040,22,10,3,"Sungai Loban"
+5041,22,10,4,Satui
+5042,22,10,5,"Kusan Hulu"
+5043,22,10,6,"Simpang Empat"
+5044,22,10,7,"Karang Bintang"
+5045,22,10,8,Mantewe
+5046,22,10,9,Angsana
+5047,22,10,10,Kuranji
+5048,22,10,11,"Kusan Tengah"
+5049,22,10,12,"Teluk Kepayang"
+5050,22,11,1,Juai
+5051,22,11,2,Halong
+5052,22,11,3,Awayan
+5053,22,11,4,"Batu Mandi"
+5054,22,11,5,Lampihong
+5055,22,11,6,Paringin
+5056,22,11,7,"Paringin Selatan"
+5057,22,11,8,"Tebing Tinggi"
+5058,22,71,1,"Banjarmasin Selatan"
+5059,22,71,2,"Banjarmasin Timur"
+5060,22,71,3,"Banjarmasin Barat"
+5061,22,71,4,"Banjarmasin Utara"
+5062,22,71,5,"Banjarmasin Tengah"
+5063,22,72,2,"Landasan Ulin"
+5064,22,72,3,Cempaka
+5065,22,72,4,"Banjarbaru Utara"
+5066,22,72,5,"Banjarbaru Selatan"
+5067,22,72,6,"Liang Anggang"
+5068,23,1,1,"Batu Sopang"
+5069,23,1,2,"Tanjung Harapan"
+5070,23,1,3,"Paser Belengkong"
+5071,23,1,4,"Tanah Grogot"
+5072,23,1,5,Kuaro
+5073,23,1,6,"Long Ikis"
+5074,23,1,7,"Muara Komam"
+5075,23,1,8,"Long Kali"
+5076,23,1,9,"Batu Engau"
+5077,23,1,10,"Muara Samu"
+5078,23,2,1,"Muara Muntai"
+5079,23,2,2,"Loa Kulu"
+5080,23,2,3,"Loa Janan"
+5081,23,2,4,Anggana
+5082,23,2,5,"Muara Badak"
+5083,23,2,6,Tenggarong
+5084,23,2,7,Sebulu
+5085,23,2,8,"Kota Bangun"
+5086,23,2,9,Kenohan
+5087,23,2,10,"Kembang Janggut"
+5088,23,2,11,"Muara Kaman"
+5089,23,2,12,Tabang
+5090,23,2,13,Samboja
+5091,23,2,14,"Muara Jawa"
+5092,23,2,15,"Sanga Sanga"
+5093,23,2,16,"Tenggarong Seberang"
+5094,23,2,17,"Marang Kayu"
+5095,23,2,18,"Muara Wis"
+5096,23,2,19,"Kota Bangun Darat"
+5097,23,2,20,"Samboja Barat"
+5098,23,3,1,Kelay
+5099,23,3,2,Talisayan
+5100,23,3,3,Sambaliung
+5101,23,3,4,Segah
+5102,23,3,5,"Tanjung Redeb"
+5103,23,3,6,"Gunung Tabur"
+5104,23,3,7,"Pulau Derawan"
+5105,23,3,8,Biduk-Biduk
+5106,23,3,9,"Teluk Bayur"
+5107,23,3,10,Tabalar
+5108,23,3,11,Maratua
+5109,23,3,12,"Batu Putih"
+5110,23,3,13,Biatan
+5111,23,7,5,"Long Iram"
+5112,23,7,6,Melak
+5113,23,7,7,"Barong Tongkok"
+5114,23,7,8,Damai
+5115,23,7,9,"Muara Lawa"
+5116,23,7,10,"Muara Pahu"
+5117,23,7,11,Jempang
+5118,23,7,12,Bongan
+5119,23,7,13,Penyinggahan
+5120,23,7,14,"Bentian Besar"
+5121,23,7,15,"Linggang Bigung"
+5122,23,7,16,Nyuatan
+5123,23,7,17,"Siluq Ngurai"
+5124,23,7,18,"Mook Manaar Bulatn"
+5125,23,7,19,Tering
+5126,23,7,20,"Sekolaq Darat"
+5127,23,8,1,"Muara Ancalong"
+5128,23,8,2,"Muara Wahau"
+5129,23,8,3,"Muara Bengkal"
+5130,23,8,4,"Sangatta Utara"
+5131,23,8,5,Sangkulirang
+5132,23,8,6,Busang
+5133,23,8,7,Telen
+5134,23,8,8,Kombeng
+5135,23,8,9,Bengalon
+5136,23,8,10,Kaliorang
+5137,23,8,11,Sandaran
+5138,23,8,12,"Sangatta Selatan"
+5139,23,8,13,"Teluk Pandan"
+5140,23,8,14,"Rantau Pulung"
+5141,23,8,15,Kaubun
+5142,23,8,16,Karangan
+5143,23,8,17,"Batu Ampar"
+5144,23,8,18,"Long Mesangat"
+5145,23,9,1,Penajam
+5146,23,9,2,Waru
+5147,23,9,3,Babulu
+5148,23,9,4,Sepaku
+5149,23,11,1,"Long Bagun"
+5150,23,11,2,"Long Hubung"
+5151,23,11,3,Laham
+5152,23,11,4,"Long Apari"
+5153,23,11,5,"Long Pahangai"
+5154,23,71,1,"Balikpapan Timur"
+5155,23,71,2,"Balikpapan Barat"
+5156,23,71,3,"Balikpapan Utara"
+5157,23,71,4,"Balikpapan Tengah"
+5158,23,71,5,"Balikpapan Selatan"
+5159,23,71,6,"Balikpapan Kota"
+5160,23,72,1,Palaran
+5161,23,72,2,"Samarinda Seberang"
+5162,23,72,3,"Samarinda Ulu"
+5163,23,72,4,"Samarinda Ilir"
+5164,23,72,5,"Samarinda Utara"
+5165,23,72,6,"Sungai Kunjang"
+5166,23,72,7,Sambutan
+5167,23,72,8,"Sungai Pinang"
+5168,23,72,9,"Samarinda Kota"
+5169,23,72,10,"Loa Janan Ilir"
+5170,23,74,1,"Bontang Utara"
+5171,23,74,2,"Bontang Selatan"
+5172,23,74,3,"Bontang Barat"
+5173,24,1,1,"Tanjung Palas"
+5174,24,1,2,"Tanjung Palas Barat"
+5175,24,1,3,"Tanjung Palas Utara"
+5176,24,1,4,"Tanjung Palas Timur"
+5177,24,1,5,"Tanjung Selor"
+5178,24,1,6,"Tanjung Palas Tengah"
+5179,24,1,7,Peso
+5180,24,1,8,"Peso Hilir"
+5181,24,1,9,Sekatak
+5182,24,1,10,Bunyu
+5183,24,2,1,Mentarang
+5184,24,2,2,"Malinau Kota"
+5185,24,2,3,Pujungan
+5186,24,2,4,"Kayan Hilir"
+5187,24,2,5,"Kayan Hulu"
+5188,24,2,6,"Malinau Selatan"
+5189,24,2,7,"Malinau Utara"
+5190,24,2,8,"Malinau Barat"
+5191,24,2,9,"Sungai Boh"
+5192,24,2,10,"Kayan Selatan"
+5193,24,2,11,"Bahau Hulu"
+5194,24,2,12,"Mentarang Hulu"
+5195,24,2,13,"Malinau Selatan Hilir"
+5196,24,2,14,"Malinau Selatan Hulu"
+5197,24,2,15,"Sungai Tubu"
+5198,24,3,1,Sebatik
+5199,24,3,2,Nunukan
+5200,24,3,3,Sembakung
+5201,24,3,4,Lumbis
+5202,24,3,5,Krayan
+5203,24,3,6,Sebuku
+5204,24,3,7,"Krayan Selatan"
+5205,24,3,8,"Sebatik Barat"
+5206,24,3,9,"Nunukan Selatan"
+5207,24,3,10,"Sebatik Timur"
+5208,24,3,11,"Sebatik Utara"
+5209,24,3,12,"Sebatik Tengah"
+5210,24,3,13,"Sei Menggaris"
+5211,24,3,14,"Tulin Onsoi"
+5212,24,3,15,"Lumbis Ogong"
+5213,24,3,16,"Sembakung Atulai"
+5214,24,3,17,"Krayan Tengah"
+5215,24,3,18,"Krayan Timur"
+5216,24,3,19,"Krayan Barat"
+5217,24,3,20,"Lumbis Pansiangan"
+5218,24,3,21,"Lumbis Hulu"
+5219,24,4,1,Sesayap
+5220,24,4,2,"Sesayap Hilir"
+5221,24,4,3,"Tana Lia"
+5222,24,4,4,Betayau
+5223,24,4,5,"Muruk Rian"
+5224,24,71,1,"Tarakan Barat"
+5225,24,71,2,"Tarakan Tengah"
+5226,24,71,3,"Tarakan Timur"
+5227,24,71,4,"Tarakan Utara"
+5228,25,1,5,"Sang Tombolang"
+5229,25,1,9,"Dumoga Barat"
+5230,25,1,10,"Dumoga Timur"
+5231,25,1,11,"Dumoga Utara"
+5232,25,1,12,Lolak
+5233,25,1,13,Bolaang
+5234,25,1,14,Lolayan
+5235,25,1,19,"Passi Barat"
+5236,25,1,20,Poigar
+5237,25,1,22,"Passi Timur"
+5238,25,1,31,"Bolaang Timur"
+5239,25,1,32,Bilalang
+5240,25,1,33,Dumoga
+5241,25,1,34,"Dumoga Tenggara"
+5242,25,1,35,"Dumoga Tengah"
+5243,25,2,1,"Tondano Barat"
+5244,25,2,2,"Tondano Timur"
+5245,25,2,3,Eris
+5246,25,2,4,Kombi
+5247,25,2,5,"Lembean Timur"
+5248,25,2,6,Kakas
+5249,25,2,7,Tompaso
+5250,25,2,8,Remboken
+5251,25,2,9,"Langowan Timur"
+5252,25,2,10,"Langowan Barat"
+5253,25,2,11,Sonder
+5254,25,2,12,Kawangkoan
+5255,25,2,13,Pineleng
+5256,25,2,14,Tombulu
+5257,25,2,15,Tombariri
+5258,25,2,16,"Tondano Utara"
+5259,25,2,17,"Langowan Selatan"
+5260,25,2,18,"Tondano Selatan"
+5261,25,2,19,"Langowan Utara"
+5262,25,2,20,"Kakas Barat"
+5263,25,2,21,"Kawangkoan Utara"
+5264,25,2,22,"Kawangkoan Barat"
+5265,25,2,23,Mandolang
+5266,25,2,24,"Tombariri Timur"
+5267,25,2,25,"Tompaso Barat"
+5268,25,3,8,"Tabukan Utara"
+5269,25,3,9,"Nusa Tabukan"
+5270,25,3,10,"Manganitu Selatan"
+5271,25,3,11,Tatoareng
+5272,25,3,12,Tamako
+5273,25,3,13,Manganitu
+5274,25,3,14,"Tabukan Tengah"
+5275,25,3,15,"Tabukan Selatan"
+5276,25,3,16,Kendahe
+5277,25,3,17,Tahuna
+5278,25,3,19,"Tabukan Selatan Tengah"
+5279,25,3,20,"Tabukan Selatan Tenggara"
+5280,25,3,23,"Tahuna Barat"
+5281,25,3,24,"Tahuna Timur"
+5282,25,3,25,"Kepulauan Marore"
+5283,25,4,1,Lirung
+5284,25,4,2,Beo
+5285,25,4,3,Rainis
+5286,25,4,4,Essang
+5287,25,4,5,Nanusa
+5288,25,4,6,Kabaruan
+5289,25,4,7,Melonguane
+5290,25,4,8,Gemeh
+5291,25,4,9,Damau
+5292,25,4,10,"Tampan' Amma"
+5293,25,4,11,Salibabu
+5294,25,4,12,Kalongan
+5295,25,4,13,Miangas
+5296,25,4,14,"Beo Utara"
+5297,25,4,15,Pulutan
+5298,25,4,16,"Melonguane Timur"
+5299,25,4,17,Moronge
+5300,25,4,18,"Beo Selatan"
+5301,25,4,19,"Essang Selatan"
+5302,25,5,1,Modoinding
+5303,25,5,2,"Tompaso Baru"
+5304,25,5,3,Ranoyapo
+5305,25,5,7,Motoling
+5306,25,5,8,Sinonsayang
+5307,25,5,9,Tenga
+5308,25,5,10,Amurang
+5309,25,5,12,Tumpaan
+5310,25,5,13,Tareran
+5311,25,5,15,Kumelembuai
+5312,25,5,16,Maesaan
+5313,25,5,17,"Amurang Barat"
+5314,25,5,18,"Amurang Timur"
+5315,25,5,19,Tatapaan
+5316,25,5,21,"Motoling Barat"
+5317,25,5,22,"Motoling Timur"
+5318,25,5,23,"Suluun Tareran"
+5319,25,6,1,Kema
+5320,25,6,2,Kauditan
+5321,25,6,3,Airmadidi
+5322,25,6,4,Wori
+5323,25,6,5,Dimembe
+5324,25,6,6,"Likupang Barat"
+5325,25,6,7,"Likupang Timur"
+5326,25,6,8,Kalawat
+5327,25,6,9,Talawaan
+5328,25,6,10,"Likupang Selatan"
+5329,25,7,1,Ratahan
+5330,25,7,2,Pusomaen
+5331,25,7,3,Belang
+5332,25,7,4,Ratatotok
+5333,25,7,5,Tombatu
+5334,25,7,6,Touluaan
+5335,25,7,7,"Touluaan Selatan"
+5336,25,7,8,"Silian Raya"
+5337,25,7,9,"Tombatu Timur"
+5338,25,7,10,"Tombatu Utara"
+5339,25,7,11,Pasan
+5340,25,7,12,"Ratahan Timur"
+5341,25,8,1,Sangkub
+5342,25,8,2,Bintauna
+5343,25,8,3,"Bolangitang Timur"
+5344,25,8,4,"Bolangitang Barat"
+5345,25,8,5,Kaidipang
+5346,25,8,6,Pinogaluman
+5347,25,9,1,"Siau Timur"
+5348,25,9,2,"Siau Barat"
+5349,25,9,3,Tagulandang
+5350,25,9,4,"Siau Timur Selatan"
+5351,25,9,5,"Siau Barat Selatan"
+5352,25,9,6,"Tagulandang Utara"
+5353,25,9,7,Biaro
+5354,25,9,8,"Siau Barat Utara"
+5355,25,9,9,"Siau Tengah"
+5356,25,9,10,"Tagulandang Selatan"
+5357,25,10,1,Tutuyan
+5358,25,10,2,Kotabunan
+5359,25,10,3,Nuangan
+5360,25,10,4,Modayag
+5361,25,10,5,"Modayag Barat"
+5362,25,10,6,Motongkad
+5363,25,10,7,Mooat
+5364,25,11,1,"Bolaang Uki"
+5365,25,11,2,Posigadan
+5366,25,11,3,Pinolosian
+5367,25,11,4,"Pinolosian Tengah"
+5368,25,11,5,"Pinolosian Timur"
+5369,25,11,6,Helumo
+5370,25,11,7,Tomini
+5371,25,71,1,Bunaken
+5372,25,71,2,Tuminting
+5373,25,71,3,Singkil
+5374,25,71,4,Wenang
+5375,25,71,5,Tikala
+5376,25,71,6,Sario
+5377,25,71,7,Wanea
+5378,25,71,8,Mapanget
+5379,25,71,9,Malalayang
+5380,25,71,10,"Bunaken Kepulauan"
+5381,25,71,11,"Paal Dua"
+5382,25,72,1,"Lembeh Selatan"
+5383,25,72,2,Madidir
+5384,25,72,3,Ranowulu
+5385,25,72,4,Aertembaga
+5386,25,72,5,Matuari
+5387,25,72,6,Girian
+5388,25,72,7,Maesa
+5389,25,72,8,"Lembeh Utara"
+5390,25,73,1,"Tomohon Selatan"
+5391,25,73,2,"Tomohon Tengah"
+5392,25,73,3,"Tomohon Utara"
+5393,25,73,4,"Tomohon Barat"
+5394,25,73,5,"Tomohon Timur"
+5395,25,74,1,"Kotamobagu Utara"
+5396,25,74,2,"Kotamobagu Timur"
+5397,25,74,3,"Kotamobagu Selatan"
+5398,25,74,4,"Kotamobagu Barat"
+5399,26,1,1,Batui
+5400,26,1,2,Bunta
+5401,26,1,3,Kintom
+5402,26,1,4,Luwuk
+5403,26,1,5,Lamala
+5404,26,1,6,Balantak
+5405,26,1,7,Pagimana
+5406,26,1,8,Bualemo
+5407,26,1,9,Toili
+5408,26,1,10,Masama
+5409,26,1,11,"Luwuk Timur"
+5410,26,1,12,"Toili Barat"
+5411,26,1,13,Nuhon
+5412,26,1,14,Moilong
+5413,26,1,15,"Batui Selatan"
+5414,26,1,16,Lobu
+5415,26,1,17,"Simpang Raya"
+5416,26,1,18,"Balantak Selatan"
+5417,26,1,19,"Balantak Utara"
+5418,26,1,20,"Luwuk Selatan"
+5419,26,1,21,"Luwuk Utara"
+5420,26,1,22,Mantoh
+5421,26,1,23,Nambo
+5422,26,1,24,"Toili Jaya"
+5423,26,2,1,"Poso Kota"
+5424,26,2,2,"Poso Pesisir"
+5425,26,2,3,Lage
+5426,26,2,4,"Pamona Puselemba"
+5427,26,2,5,"Pamona Timur"
+5428,26,2,6,"Pamona Selatan"
+5429,26,2,7,"Lore Utara"
+5430,26,2,8,"Lore Tengah"
+5431,26,2,9,"Lore Selatan"
+5432,26,2,18,"Poso Pesisir Utara"
+5433,26,2,19,"Poso Pesisir Selatan"
+5434,26,2,20,"Pamona Barat"
+5435,26,2,21,"Poso Kota Selatan"
+5436,26,2,22,"Poso Kota Utara"
+5437,26,2,23,"Lore Barat"
+5438,26,2,24,"Lore Timur"
+5439,26,2,25,"Lore Peore"
+5440,26,2,26,"Pamona Tenggara"
+5441,26,2,27,"Pamona Utara"
+5442,26,3,4,"Rio Pakava"
+5443,26,3,6,Dampelas
+5444,26,3,8,Banawa
+5445,26,3,9,Labuan
+5446,26,3,10,Sindue
+5447,26,3,11,Sirenja
+5448,26,3,12,Balaesang
+5449,26,3,14,Sojol
+5450,26,3,18,"Banawa Selatan"
+5451,26,3,19,Tanantovea
+5452,26,3,21,Pinembani
+5453,26,3,24,"Sindue Tombusabora"
+5454,26,3,25,"Sindue Tobata"
+5455,26,3,27,"Banawa Tengah"
+5456,26,3,30,"Sojol Utara"
+5457,26,3,31,"Balaesang Tanjung"
+5458,26,4,1,"Dampal Selatan"
+5459,26,4,2,"Dampal Utara"
+5460,26,4,3,Dondo
+5461,26,4,4,Basidondo
+5462,26,4,5,Ogodeide
+5463,26,4,6,Lampasio
+5464,26,4,7,Baolan
+5465,26,4,8,Galang
+5466,26,4,9,"Tolitoli Utara"
+5467,26,4,10,"Dako Pemean"
+5468,26,5,1,Momunu
+5469,26,5,2,Lakea
+5470,26,5,3,Bokat
+5471,26,5,4,Bunobogu
+5472,26,5,5,Paleleh
+5473,26,5,6,Biau
+5474,26,5,7,Tiloan
+5475,26,5,8,Bukal
+5476,26,5,9,Gadung
+5477,26,5,10,Karamat
+5478,26,5,11,"Paleleh Barat"
+5479,26,6,5,"Bungku Tengah"
+5480,26,6,6,"Bungku Selatan"
+5481,26,6,7,"Menui Kepulauan"
+5482,26,6,8,"Bungku Barat"
+5483,26,6,9,"Bumi Raya"
+5484,26,6,10,Bahodopi
+5485,26,6,12,"Wita Ponda"
+5486,26,6,15,"Bungku Pesisir"
+5487,26,6,18,"Bungku Timur"
+5488,26,6,20,"Sombori Kepulauan"
+5489,26,7,3,Totikum
+5490,26,7,4,Tinangkung
+5491,26,7,5,Liang
+5492,26,7,6,Bulagi
+5493,26,7,7,Buko
+5494,26,7,9,"Bulagi Selatan"
+5495,26,7,11,"Tinangkung Selatan"
+5496,26,7,15,"Totikum Selatan"
+5497,26,7,16,"Peling Tengah"
+5498,26,7,17,"Bulagi Utara"
+5499,26,7,18,"Buko Selatan"
+5500,26,7,19,"Tinangkung Utara"
+5501,26,8,1,Parigi
+5502,26,8,2,Ampibabo
+5503,26,8,3,Tinombo
+5504,26,8,4,Moutong
+5505,26,8,5,Tomini
+5506,26,8,6,Sausu
+5507,26,8,7,"Bolano Lambunu"
+5508,26,8,8,Kasimbar
+5509,26,8,9,Torue
+5510,26,8,10,"Tinombo Selatan"
+5511,26,8,11,"Parigi Selatan"
+5512,26,8,12,Mepanga
+5513,26,8,13,Toribulu
+5514,26,8,14,Taopa
+5515,26,8,15,Balinggi
+5516,26,8,16,"Parigi Barat"
+5517,26,8,17,Siniu
+5518,26,8,18,Palasa
+5519,26,8,19,"Parigi Utara"
+5520,26,8,20,"Parigi Tengah"
+5521,26,8,21,Bolano
+5522,26,8,22,"Ongka Malino"
+5523,26,8,23,Sidoan
+5524,26,9,1,"Una Una"
+5525,26,9,2,Togean
+5526,26,9,3,"Walea Kepulauan"
+5527,26,9,4,"Ampana Tete"
+5528,26,9,5,"Ampana Kota"
+5529,26,9,6,Ulubongka
+5530,26,9,7,"Tojo Barat"
+5531,26,9,8,Tojo
+5532,26,9,9,"Walea Besar"
+5533,26,9,10,Ratolindo
+5534,26,9,11,Batudaka
+5535,26,9,12,Talatako
+5536,26,10,1,"Sigi Biromaru"
+5537,26,10,2,Palolo
+5538,26,10,3,Nokilalaki
+5539,26,10,4,Lindu
+5540,26,10,5,Kulawi
+5541,26,10,6,"Kulawi Selatan"
+5542,26,10,7,Pipikoro
+5543,26,10,8,Gumbasa
+5544,26,10,9,"Dolo Selatan"
+5545,26,10,10,Tanambulava
+5546,26,10,11,"Dolo Barat"
+5547,26,10,12,Dolo
+5548,26,10,13,Kinovaro
+5549,26,10,14,Marawola
+5550,26,10,15,"Marawola Barat"
+5551,26,11,1,Banggai
+5552,26,11,2,"Banggai Utara"
+5553,26,11,3,"Bokan Kepulauan"
+5554,26,11,4,Bangkurung
+5555,26,11,5,Labobo
+5556,26,11,6,"Banggai Selatan"
+5557,26,11,7,"Banggai Tengah"
+5558,26,12,1,Petasia
+5559,26,12,2,"Petasia Timur"
+5560,26,12,3,"Lembo Raya"
+5561,26,12,4,Lembo
+5562,26,12,5,"Mori Atas"
+5563,26,12,6,"Mori Utara"
+5564,26,12,7,"Soyo Jaya"
+5565,26,12,8,"Bungku Utara"
+5566,26,12,9,Mamosalato
+5567,26,12,10,"Petasia Barat"
+5568,26,71,1,"Palu Timur"
+5569,26,71,2,"Palu Barat"
+5570,26,71,3,"Palu Selatan"
+5571,26,71,4,"Palu Utara"
+5572,26,71,5,Ulujadi
+5573,26,71,6,Tatanga
+5574,26,71,7,Tawaeli
+5575,26,71,8,Mantikulore
+5576,27,1,1,Benteng
+5577,27,1,2,Bontoharu
+5578,27,1,3,Bontomatene
+5579,27,1,4,Bontomanai
+5580,27,1,5,Bontosikuyu
+5581,27,1,6,Pasimasunggu
+5582,27,1,7,Pasimarannu
+5583,27,1,8,"Taka Bonerate"
+5584,27,1,9,Pasilambena
+5585,27,1,10,"Pasimasunggu Timur"
+5586,27,1,11,Buki
+5587,27,2,1,Gantarang
+5588,27,2,2,"Ujung Bulu"
+5589,27,2,3,"Bonto Bahari"
+5590,27,2,4,"Bonto Tiro"
+5591,27,2,5,Herlang
+5592,27,2,6,Kajang
+5593,27,2,7,Bulukumpa
+5594,27,2,8,Kindang
+5595,27,2,9,Ujungloe
+5596,27,2,10,Rilauale
+5597,27,3,1,Bissappu
+5598,27,3,2,Bantaeng
+5599,27,3,3,Eremerasa
+5600,27,3,4,"Tompo Bulu"
+5601,27,3,5,Pajukukang
+5602,27,3,6,Uluere
+5603,27,3,7,"Gantarang Keke"
+5604,27,3,8,Sinoa
+5605,27,4,1,Bangkala
+5606,27,4,2,Tamalatea
+5607,27,4,3,Binamu
+5608,27,4,4,Batang
+5609,27,4,5,Kelara
+5610,27,4,6,"Bangkala Barat"
+5611,27,4,7,Bontoramba
+5612,27,4,8,Turatea
+5613,27,4,9,Arungkeke
+5614,27,4,10,Rumbia
+5615,27,4,11,Tarowang
+5616,27,5,1,Mappakasunggu
+5617,27,5,2,Mangarabombang
+5618,27,5,3,"Polongbangkeng Selatan"
+5619,27,5,4,"Polongbangkeng Utara"
+5620,27,5,5,"Galesong Selatan"
+5621,27,5,6,"Galesong Utara"
+5622,27,5,7,Pattallassang
+5623,27,5,8,Sanrobone
+5624,27,5,9,Galesong
+5625,27,5,10,"Kepulauan Tanakeke"
+5626,27,5,11,"Polongbangkeng Timur"
+5627,27,5,12,Laikang
+5628,27,6,1,Bontonompo
+5629,27,6,2,Bajeng
+5630,27,6,3,Tompobulu
+5631,27,6,4,Tinggimoncong
+5632,27,6,5,Parangloe
+5633,27,6,6,Bontomarannu
+5634,27,6,7,Pallangga
+5635,27,6,8,"Somba Opu"
+5636,27,6,9,Bungaya
+5637,27,6,10,Tombolopao
+5638,27,6,11,Biringbulu
+5639,27,6,12,Barombong
+5640,27,6,13,Pattallasang
+5641,27,6,14,Manuju
+5642,27,6,15,Bontolempangang
+5643,27,6,16,"Bontonompo Selatan"
+5644,27,6,17,Parigi
+5645,27,6,18,"Bajeng Barat"
+5646,27,7,1,"Sinjai Barat"
+5647,27,7,2,"Sinjai Selatan"
+5648,27,7,3,"Sinjai Timur"
+5649,27,7,4,"Sinjai Tengah"
+5650,27,7,5,"Sinjai Utara"
+5651,27,7,6,Bulupoddo
+5652,27,7,7,"Sinjai Borong"
+5653,27,7,8,"Tellu Limpoe"
+5654,27,7,9,"Pulau Sembilan"
+5655,27,8,1,Bontocani
+5656,27,8,2,Kahu
+5657,27,8,3,Kajuara
+5658,27,8,4,Salomekko
+5659,27,8,5,Tonra
+5660,27,8,6,Libureng
+5661,27,8,7,Mare
+5662,27,8,8,Sibulue
+5663,27,8,9,Barebbo
+5664,27,8,10,Cina
+5665,27,8,11,Ponre
+5666,27,8,12,Lappariaja
+5667,27,8,13,Lamuru
+5668,27,8,14,Ulaweng
+5669,27,8,15,Palakka
+5670,27,8,16,Awangpone
+5671,27,8,17,"Tellu Siattinge"
+5672,27,8,18,Ajangale
+5673,27,8,19,"Dua Boccoe"
+5674,27,8,20,Cenrana
+5675,27,8,21,"Tanete Riattang"
+5676,27,8,22,"Tanete Riattang Barat"
+5677,27,8,23,"Tanete Riattang Timur"
+5678,27,8,24,Amali
+5679,27,8,25,Tellulimpoe
+5680,27,8,26,Bengo
+5681,27,8,27,Patimpeng
+5682,27,9,1,Mandai
+5683,27,9,2,Camba
+5684,27,9,3,Bantimurung
+5685,27,9,4,"Maros Baru"
+5686,27,9,5,Bontoa
+5687,27,9,6,Malllawa
+5688,27,9,7,Tanralili
+5689,27,9,8,Marusu
+5690,27,9,9,Simbang
+5691,27,9,10,Cenrana
+5692,27,9,11,Tompobulu
+5693,27,9,12,Lau
+5694,27,9,13,Moncongloe
+5695,27,9,14,Turikale
+5696,27,10,1,"Liukang Tangaya"
+5697,27,10,2,"Liukang Kalmas"
+5698,27,10,3,"Liukang Tupabbiring"
+5699,27,10,4,Pangkajene
+5700,27,10,5,Balocci
+5701,27,10,6,Bungoro
+5702,27,10,7,Labakkang
+5703,27,10,8,Marang
+5704,27,10,9,Segeri
+5705,27,10,10,Minasate'ne
+5706,27,10,11,Mandalle
+5707,27,10,12,"Tondong Tallasa"
+5708,27,10,13,"Liukang Tupabbiring Utara"
+5709,27,11,1,"Tanete Riaja"
+5710,27,11,2,"Tanete Rilau"
+5711,27,11,3,Barru
+5712,27,11,4,"Soppeng Riaja"
+5713,27,11,5,Mallusetasi
+5714,27,11,6,Pujananting
+5715,27,11,7,Balusu
+5716,27,12,1,Marioriwawo
+5717,27,12,2,Liliriaja
+5718,27,12,3,Lilirilau
+5719,27,12,4,Lalabata
+5720,27,12,5,Marioriawa
+5721,27,12,6,Donri-Donri
+5722,27,12,7,Ganra
+5723,27,12,8,Citta
+5724,27,13,1,Sabangparu
+5725,27,13,2,Pammana
+5726,27,13,3,Takkalalla
+5727,27,13,4,Sajoanging
+5728,27,13,5,Majauleng
+5729,27,13,6,Tempe
+5730,27,13,7,Belawa
+5731,27,13,8,Tanasitolo
+5732,27,13,9,Maniangpajo
+5733,27,13,10,Pitumpanua
+5734,27,13,11,Bola
+5735,27,13,12,Penrang
+5736,27,13,13,Gilireng
+5737,27,13,14,Keera
+5738,27,14,1,"Panca Lautang"
+5739,27,14,2,"Tellu Limpoe"
+5740,27,14,3,"Watang Pulu"
+5741,27,14,4,Baranti
+5742,27,14,5,"Panca Rijang"
+5743,27,14,6,Kulo
+5744,27,14,7,Maritengngae
+5745,27,14,8,"Watang Sidenreng"
+5746,27,14,9,"Dua Pitue"
+5747,27,14,10,"Pitu Riawa"
+5748,27,14,11,"Pitu Riase"
+5749,27,15,1,"Mattiro Sompe"
+5750,27,15,2,Suppa
+5751,27,15,3,"Mattiro Bulu"
+5752,27,15,4,"Watang Sawitto"
+5753,27,15,5,Patampanua
+5754,27,15,6,Duampanua
+5755,27,15,7,Lembang
+5756,27,15,8,Cempa
+5757,27,15,9,Tiroang
+5758,27,15,10,Lanrisang
+5759,27,15,11,Paleteang
+5760,27,15,12,Batulappa
+5761,27,16,1,Maiwa
+5762,27,16,2,Enrekang
+5763,27,16,3,Baraka
+5764,27,16,4,Anggeraja
+5765,27,16,5,Alla
+5766,27,16,6,Bungin
+5767,27,16,7,Cendana
+5768,27,16,8,Curio
+5769,27,16,9,Malua
+5770,27,16,10,"Buntu Batu"
+5771,27,16,11,Masalle
+5772,27,16,12,Baroko
+5773,27,17,1,"Basse Sangtempe"
+5774,27,17,2,Larompong
+5775,27,17,3,Suli
+5776,27,17,4,Bajo
+5777,27,17,5,"Bua Ponrang"
+5778,27,17,6,Walenrang
+5779,27,17,7,Belopa
+5780,27,17,8,Bua
+5781,27,17,9,Lamasi
+5782,27,17,10,"Larompong Selatan"
+5783,27,17,11,Ponrang
+5784,27,17,12,Latimojong
+5785,27,17,13,Kamanre
+5786,27,17,14,"Belopa Utara"
+5787,27,17,15,"Walenrang Barat"
+5788,27,17,16,"Walenrang Utara"
+5789,27,17,17,"Walenrang Timur"
+5790,27,17,18,"Lamasi Timur"
+5791,27,17,19,"Suli Barat"
+5792,27,17,20,"Bajo Barat"
+5793,27,17,21,"Ponrang Selatan"
+5794,27,17,22,"Basse Sangtempe Utara"
+5795,27,18,1,Salupputti
+5796,27,18,2,Bittuang
+5797,27,18,3,Bonggakaradeng
+5798,27,18,5,Makale
+5799,27,18,9,Simbuang
+5800,27,18,11,Rantetayo
+5801,27,18,12,Mengkendek
+5802,27,18,13,Sangalla'
+5803,27,18,19,"Gandangbatu Sillanan"
+5804,27,18,20,Rembon
+5805,27,18,27,"Makale Utara"
+5806,27,18,28,Mappak
+5807,27,18,29,"Makale Selatan"
+5808,27,18,31,Masanda
+5809,27,18,33,"Sangalla' Selatan"
+5810,27,18,34,"Sangalla' Utara"
+5811,27,18,35,"Malimbong Balepe'"
+5812,27,18,37,Rano
+5813,27,18,38,Kurra
+5814,27,22,1,Malangke
+5815,27,22,2,"Bone Bone"
+5816,27,22,3,Masamba
+5817,27,22,4,Sabbang
+5818,27,22,5,Rongkong
+5819,27,22,6,Sukamaju
+5820,27,22,7,Seko
+5821,27,22,8,"Malangke Barat"
+5822,27,22,9,Rampi
+5823,27,22,10,Mappedeceng
+5824,27,22,11,Baebunta
+5825,27,22,12,"Tana Lili"
+5826,27,22,13,"Sukamaju Selatan"
+5827,27,22,14,"Baebunta Selatan"
+5828,27,22,15,"Sabbang Selatan"
+5829,27,24,1,Mangkutana
+5830,27,24,2,Nuha
+5831,27,24,3,Towuti
+5832,27,24,4,Malili
+5833,27,24,5,Angkona
+5834,27,24,6,Wotu
+5835,27,24,7,Burau
+5836,27,24,8,Tomoni
+5837,27,24,9,"Tomoni Timur"
+5838,27,24,10,Kalaena
+5839,27,24,11,Wasuponda
+5840,27,26,1,Rantepao
+5841,27,26,2,Sesean
+5842,27,26,3,Nanggala
+5843,27,26,4,Rindingallo
+5844,27,26,5,Buntao
+5845,27,26,6,Sa'dan
+5846,27,26,7,Sanggalangi
+5847,27,26,8,Sopai
+5848,27,26,9,Tikala
+5849,27,26,10,Balusu
+5850,27,26,11,Tallunglipu
+5851,27,26,12,"Dende' Piongan Napo"
+5852,27,26,13,"Buntu Pepasan"
+5853,27,26,14,Baruppu
+5854,27,26,15,Kesu
+5855,27,26,16,Tondon
+5856,27,26,17,Bangkelekila
+5857,27,26,18,Rantebua
+5858,27,26,19,"Sesean Suloara"
+5859,27,26,20,"Kapala Pitu"
+5860,27,26,21,"Awan Rante Karua"
+5861,27,71,1,Mariso
+5862,27,71,2,Mamajang
+5863,27,71,3,Makassar
+5864,27,71,4,"Ujung Pandang"
+5865,27,71,5,Wajo
+5866,27,71,6,Bontoala
+5867,27,71,7,Tallo
+5868,27,71,8,"Ujung Tanah"
+5869,27,71,9,Panakkukang
+5870,27,71,10,Tamalate
+5871,27,71,11,Biringkanaya
+5872,27,71,12,Manggala
+5873,27,71,13,Rappocini
+5874,27,71,14,Tamalanrea
+5875,27,71,15,"Kepulauan Sangkarrang"
+5876,27,72,1,Bacukiki
+5877,27,72,2,Ujung
+5878,27,72,3,Soreang
+5879,27,72,4,"Bacukiki Barat"
+5880,27,73,1,Wara
+5881,27,73,2,"Wara Utara"
+5882,27,73,3,"Wara Selatan"
+5883,27,73,4,Telluwanua
+5884,27,73,5,"Wara Timur"
+5885,27,73,6,"Wara Barat"
+5886,27,73,7,Sendana
+5887,27,73,8,Mungkajang
+5888,27,73,9,Bara
+5889,28,1,1,Wundulako
+5890,28,1,4,Kolaka
+5891,28,1,7,Pomalaa
+5892,28,1,8,Watubangga
+5893,28,1,10,Wolo
+5894,28,1,12,Baula
+5895,28,1,14,Latambaga
+5896,28,1,18,Tanggetada
+5897,28,1,20,Samaturu
+5898,28,1,24,Toari
+5899,28,1,25,Polinggona
+5900,28,1,27,Iwoimendaa
+5901,28,2,1,Lambuya
+5902,28,2,2,Unaaha
+5903,28,2,3,Wawotobi
+5904,28,2,4,Pondidaha
+5905,28,2,5,Sampara
+5906,28,2,10,Abuki
+5907,28,2,11,Soropia
+5908,28,2,15,Tongauna
+5909,28,2,16,Latoma
+5910,28,2,17,Puriala
+5911,28,2,18,Uepai
+5912,28,2,19,Wonggeduku
+5913,28,2,20,Besulutu
+5914,28,2,21,Bondoala
+5915,28,2,23,Routa
+5916,28,2,24,Anggaberi
+5917,28,2,25,Meluhu
+5918,28,2,28,Amonggedo
+5919,28,2,31,Asinua
+5920,28,2,32,Konawe
+5921,28,2,33,Kapoiala
+5922,28,2,36,Lalonggasumeeto
+5923,28,2,37,Onembute
+5924,28,2,38,Padangguni
+5925,28,2,39,Morosi
+5926,28,2,40,Anggalomoare
+5927,28,2,41,"Wonggeduku Barat"
+5928,28,2,42,"Tongauna Utara"
+5929,28,3,6,Napabalano
+5930,28,3,7,Maligano
+5931,28,3,13,"Wakorumba Selatan"
+5932,28,3,14,Lasalepa
+5933,28,3,15,Batalaiworu
+5934,28,3,16,Katobu
+5935,28,3,17,Duruka
+5936,28,3,18,Lohia
+5937,28,3,19,Watopute
+5938,28,3,20,Kontunaga
+5939,28,3,23,Kabangka
+5940,28,3,24,Kabawo
+5941,28,3,25,Parigi
+5942,28,3,26,Bone
+5943,28,3,27,Tongkuno
+5944,28,3,28,"Pasir Putih"
+5945,28,3,30,"Kontu Kowuna"
+5946,28,3,31,Marobo
+5947,28,3,32,"Tongkuno Selatan"
+5948,28,3,33,"Pasi Kolaga"
+5949,28,3,34,Batukara
+5950,28,3,37,Towea
+5951,28,4,11,Pasarwajo
+5952,28,4,22,Kapontori
+5953,28,4,23,Lasalimu
+5954,28,4,24,"Lasalimu Selatan"
+5955,28,4,27,Siotapina
+5956,28,4,28,Wolowa
+5957,28,4,29,Wabula
+5958,28,5,1,Tinanggea
+5959,28,5,2,Angata
+5960,28,5,3,Andoolo
+5961,28,5,4,Palangga
+5962,28,5,5,Landono
+5963,28,5,6,Lainea
+5964,28,5,7,Konda
+5965,28,5,8,Ranomeeto
+5966,28,5,9,Kolono
+5967,28,5,10,Moramo
+5968,28,5,11,Laonti
+5969,28,5,12,Lalembuu
+5970,28,5,13,Benua
+5971,28,5,14,"Palangga Selatan"
+5972,28,5,15,Mowila
+5973,28,5,16,"Moramo Utara"
+5974,28,5,17,Buke
+5975,28,5,18,Wolasi
+5976,28,5,19,Laeya
+5977,28,5,20,Baito
+5978,28,5,21,Basala
+5979,28,5,22,"Ranomeeto Barat"
+5980,28,5,23,"Kolono Timur"
+5981,28,5,24,Sabulakoa
+5982,28,5,25,"Andoolo Barat"
+5983,28,6,1,Poleang
+5984,28,6,2,"Poleang Timur"
+5985,28,6,3,Rarowatu
+5986,28,6,4,Rumbia
+5987,28,6,5,Kabaena
+5988,28,6,6,"Kabaena Timur"
+5989,28,6,7,"Poleang Barat"
+5990,28,6,8,"Mata Oleo"
+5991,28,6,9,"Rarowatu Utara"
+5992,28,6,10,"Poleang Utara"
+5993,28,6,11,"Poleang Selatan"
+5994,28,6,12,"Poleang Tenggara"
+5995,28,6,13,"Kabaena Selatan"
+5996,28,6,14,"Kabaena Barat"
+5997,28,6,15,"Kabaena Utara"
+5998,28,6,16,"Kabaena Tengah"
+5999,28,6,17,"Kep. Masaloka Raya"
+6000,28,6,18,"Rumbia Tengah"
+6001,28,6,19,"Poleang Tengah"
+6002,28,6,20,Tontonunu
+6003,28,6,21,"Lantari Jaya"
+6004,28,6,22,"Mata Usu"
+6005,28,7,1,Wangi-Wangi
+6006,28,7,2,Kaledupa
+6007,28,7,3,Tomia
+6008,28,7,4,Binongko
+6009,28,7,5,"Wangi Wangi Selatan"
+6010,28,7,6,"Kaledupa Selatan"
+6011,28,7,7,"Tomia Timur"
+6012,28,7,8,"Togo Binongko"
+6013,28,8,1,Lasusua
+6014,28,8,2,Pakue
+6015,28,8,3,"Batu Putih"
+6016,28,8,4,"Rante Angin"
+6017,28,8,5,Kodeoha
+6018,28,8,6,Ngapa
+6019,28,8,7,Wawo
+6020,28,8,8,Lambai
+6021,28,8,9,Watunohu
+6022,28,8,10,"Pakue Tengah"
+6023,28,8,11,"Pakue Utara"
+6024,28,8,12,Porehu
+6025,28,8,13,Katoi
+6026,28,8,14,Tiwu
+6027,28,8,15,Tolala
+6028,28,9,1,Asera
+6029,28,9,2,Wiwirano
+6030,28,9,3,Langgikima
+6031,28,9,4,Molawe
+6032,28,9,5,Lasolo
+6033,28,9,6,Lembo
+6034,28,9,7,Sawa
+6035,28,9,8,Oheo
+6036,28,9,9,Andowia
+6037,28,9,10,Motui
+6038,28,9,11,Wawolesea
+6039,28,9,12,"Lasolo Kepulauan"
+6040,28,9,13,Landawe
+6041,28,10,1,Kulisusu
+6042,28,10,2,Kambowa
+6043,28,10,3,Bonegunu
+6044,28,10,4,"Kulisusu Barat"
+6045,28,10,5,"Kulisusu Utara"
+6046,28,10,6,"Wakorumba Utara"
+6047,28,11,1,Tirawuta
+6048,28,11,2,Loea
+6049,28,11,3,Ladongi
+6050,28,11,4,"Poli Polia"
+6051,28,11,5,Lambandia
+6052,28,11,6,Lalolae
+6053,28,11,7,Mowewe
+6054,28,11,8,Uluiwoi
+6055,28,11,9,Tinondo
+6056,28,11,10,Aere
+6057,28,11,11,Ueesi
+6058,28,11,12,Dangia
+6059,28,12,1,"Wawonii Barat"
+6060,28,12,2,"Wawonii Utara"
+6061,28,12,3,"Wawonii Timur Laut"
+6062,28,12,4,"Wawonii Timur"
+6063,28,12,5,"Wawonii Tenggara"
+6064,28,12,6,"Wawonii Selatan"
+6065,28,12,7,"Wawonii Tengah"
+6066,28,13,1,Sawerigadi
+6067,28,13,2,Barangka
+6068,28,13,3,Lawa
+6069,28,13,4,Wadaga
+6070,28,13,5,"Tiworo Selatan"
+6071,28,13,6,Maginti
+6072,28,13,7,"Tiworo Tengah"
+6073,28,13,8,"Tiworo Utara"
+6074,28,13,9,"Tiworo Kepulauan"
+6075,28,13,10,Kusambi
+6076,28,13,11,"Napano Kusambi"
+6077,28,14,1,Lakudo
+6078,28,14,2,"Mawasangka Timur"
+6079,28,14,3,"Mawasangka Tengah"
+6080,28,14,4,Mawasangka
+6081,28,14,5,"Talaga Raya"
+6082,28,14,6,Gu
+6083,28,14,7,"Sangia Wambulu"
+6084,28,15,1,Batauga
+6085,28,15,2,Sampolawa
+6086,28,15,3,Lapandewa
+6087,28,15,4,"Batu Atas"
+6088,28,15,5,"Siompu Barat"
+6089,28,15,6,Siompu
+6090,28,15,7,Kadatua
+6091,28,71,1,Mandonga
+6092,28,71,2,Kendari
+6093,28,71,3,Baruga
+6094,28,71,4,Poasia
+6095,28,71,5,"Kendari Barat"
+6096,28,71,6,Abeli
+6097,28,71,7,Wua-Wua
+6098,28,71,8,Kadia
+6099,28,71,9,Puuwatu
+6100,28,71,10,Kambu
+6101,28,71,11,Nambo
+6102,28,72,1,Betoambari
+6103,28,72,2,Wolio
+6104,28,72,3,Sorawolio
+6105,28,72,4,Bungi
+6106,28,72,5,Kokalukuna
+6107,28,72,6,Murhum
+6108,28,72,7,Lea-Lea
+6109,28,72,8,Batupoaro
+6110,29,1,1,Limboto
+6111,29,1,2,Telaga
+6112,29,1,3,Batudaa
+6113,29,1,4,Tibawa
+6114,29,1,5,"Batudaa Pantai"
+6115,29,1,9,Boliyohuto
+6116,29,1,10,"Telaga Biru"
+6117,29,1,11,Bongomeme
+6118,29,1,13,Tolangohula
+6119,29,1,14,Mootilango
+6120,29,1,16,Pulubala
+6121,29,1,17,"Limboto Barat"
+6122,29,1,18,Tilango
+6123,29,1,19,Tabongo
+6124,29,1,20,Biluhu
+6125,29,1,21,Asparaga
+6126,29,1,22,"Talaga Jaya"
+6127,29,1,23,Bilato
+6128,29,1,24,Dungaliyo
+6129,29,2,1,Paguyaman
+6130,29,2,2,Wonosari
+6131,29,2,3,Dulupi
+6132,29,2,4,Tilamuta
+6133,29,2,5,Mananggu
+6134,29,2,6,Botumoito
+6135,29,2,7,"Paguyaman Pantai"
+6136,29,3,1,Tapa
+6137,29,3,2,Kabila
+6138,29,3,3,Suwawa
+6139,29,3,4,Bonepantai
+6140,29,3,5,"Bulango Utara"
+6141,29,3,6,Tilongkabila
+6142,29,3,7,Botupingge
+6143,29,3,8,"Kabila Bone"
+6144,29,3,9,Bone
+6145,29,3,10,"Bone Raya"
+6146,29,3,11,"Suwawa Timur"
+6147,29,3,12,"Suwawa Selatan"
+6148,29,3,13,"Suwawa Tengah"
+6149,29,3,14,"Bulango Ulu"
+6150,29,3,15,"Bulango Selatan"
+6151,29,3,16,"Bulango Timur"
+6152,29,3,17,Bulawa
+6153,29,3,18,Pinogu
+6154,29,4,1,Popayato
+6155,29,4,2,Lemito
+6156,29,4,3,Randangan
+6157,29,4,4,Marisa
+6158,29,4,5,Paguat
+6159,29,4,6,Patilanggio
+6160,29,4,7,Taluditi
+6161,29,4,8,Dengilo
+6162,29,4,9,Buntulia
+6163,29,4,10,Duhiadaa
+6164,29,4,11,Wanggarasi
+6165,29,4,12,"Popayato Timur"
+6166,29,4,13,"Popayato Barat"
+6167,29,5,1,Atinggola
+6168,29,5,2,Kwandang
+6169,29,5,3,Anggrek
+6170,29,5,4,Sumalata
+6171,29,5,5,Tolinggula
+6172,29,5,6,"Gentuma Raya"
+6173,29,5,7,Tomilito
+6174,29,5,8,"Ponelo Kepulauan"
+6175,29,5,9,Monano
+6176,29,5,10,Biau
+6177,29,5,11,"Sumalata Timur"
+6178,29,71,1,"Kota Barat"
+6179,29,71,2,"Kota Selatan"
+6180,29,71,3,"Kota Utara"
+6181,29,71,4,Dungingi
+6182,29,71,5,"Kota Timur"
+6183,29,71,6,"Kota Tengah"
+6184,29,71,7,Sipatana
+6185,29,71,8,"Dumbo Raya"
+6186,29,71,9,Hulonthalangi
+6187,30,1,1,Bambalamotu
+6188,30,1,2,Pasangkayu
+6189,30,1,3,Baras
+6190,30,1,4,Sarudu
+6191,30,1,5,Dapurang
+6192,30,1,6,Duripoku
+6193,30,1,7,"Bulu Taba"
+6194,30,1,8,"Tikke Raya"
+6195,30,1,9,Pedongga
+6196,30,1,10,Bambaira
+6197,30,1,11,Sarjo
+6198,30,1,12,Lariang
+6199,30,2,1,Mamuju
+6200,30,2,2,Tapalang
+6201,30,2,3,Kalukku
+6202,30,2,4,Kalumpang
+6203,30,2,7,Papalang
+6204,30,2,8,Sampaga
+6205,30,2,11,Tommo
+6206,30,2,12,Simboro
+6207,30,2,13,"Tapalang Barat"
+6208,30,2,15,Bonehau
+6209,30,2,16,"Kepulauan Bala Balakang"
+6210,30,3,1,Mambi
+6211,30,3,2,Aralle
+6212,30,3,3,Mamasa
+6213,30,3,4,Pana
+6214,30,3,5,Tabulahan
+6215,30,3,6,Sumarorong
+6216,30,3,7,Messawa
+6217,30,3,8,Sesenapadang
+6218,30,3,9,"Tanduk Kalua"
+6219,30,3,10,Tabang
+6220,30,3,11,Bambang
+6221,30,3,12,Balla
+6222,30,3,13,Nosu
+6223,30,3,14,Tawalian
+6224,30,3,15,"Rantebulahan Timur"
+6225,30,3,16,Buntumalangka
+6226,30,3,17,Mehalaan
+6227,30,4,1,Tinambung
+6228,30,4,2,Campalagian
+6229,30,4,3,Wonomulyo
+6230,30,4,4,Polewali
+6231,30,4,5,Tutar
+6232,30,4,6,Binuang
+6233,30,4,7,Tapango
+6234,30,4,8,Mapilli
+6235,30,4,9,Matangnga
+6236,30,4,10,Luyo
+6237,30,4,11,Limboro
+6238,30,4,12,Balanipa
+6239,30,4,13,Anreapi
+6240,30,4,14,Matakali
+6241,30,4,15,Allu
+6242,30,4,16,Bulo
+6243,30,5,1,Banggae
+6244,30,5,2,Pamboang
+6245,30,5,3,Sendana
+6246,30,5,4,Malunda
+6247,30,5,5,Ulumanda
+6248,30,5,6,"Tammerodo Sendana"
+6249,30,5,7,"Tubo Sendana"
+6250,30,5,8,"Banggae Timur"
+6251,30,6,1,Tobadak
+6252,30,6,2,Pangale
+6253,30,6,3,Budong-Budong
+6254,30,6,4,Topoyo
+6255,30,6,5,Karossa
+6256,31,1,1,Amahai
+6257,31,1,2,"Teon Nila Serua"
+6258,31,1,6,"Seram Utara"
+6259,31,1,9,Banda
+6260,31,1,11,Tehoru
+6261,31,1,12,Saparua
+6262,31,1,13,"Pulau Haruku"
+6263,31,1,14,Salahutu
+6264,31,1,15,Leihitu
+6265,31,1,16,"Nusa Laut"
+6266,31,1,17,"Kota Masohi"
+6267,31,1,20,"Seram Utara Barat"
+6268,31,1,21,"Teluk Elpaputih"
+6269,31,1,22,"Leihitu Barat"
+6270,31,1,23,Telutih
+6271,31,1,24,"Seram Utara Timur Seti"
+6272,31,1,25,"Seram Utara Timur Kobi"
+6273,31,1,26,"Saparua Timur"
+6274,31,2,1,"Kei Kecil"
+6275,31,2,3,"Kei Besar"
+6276,31,2,4,"Kei Besar Selatan"
+6277,31,2,5,"Kei Besar Utara Timur"
+6278,31,2,13,"Kei Kecil Timur"
+6279,31,2,14,"Kei Kecil Barat"
+6280,31,2,15,Manyeuw
+6281,31,2,16,"Hoat Sorbay"
+6282,31,2,17,"Kei Besar Utara Barat"
+6283,31,2,18,"Kei Besar Selatan Barat"
+6284,31,2,19,"Kei Kecil Timur Selatan"
+6285,31,3,1,"Tanimbar Selatan"
+6286,31,3,2,Selaru
+6287,31,3,3,Wertamrian
+6288,31,3,4,Wermaktian
+6289,31,3,5,"Tanimbar Utara"
+6290,31,3,6,Fordata
+6291,31,3,7,"Wuar Labobar"
+6292,31,3,8,Kormomolin
+6293,31,3,9,Nirunmas
+6294,31,3,18,"Molu Maru"
+6295,31,4,1,Namlea
+6296,31,4,2,"Air Buaya"
+6297,31,4,3,Waeapo
+6298,31,4,6,Waplau
+6299,31,4,10,Batabual
+6300,31,4,11,"Lolong Guba"
+6301,31,4,12,Waelata
+6302,31,4,13,"Fena Leisela"
+6303,31,4,14,"Teluk Kaiely"
+6304,31,4,15,Lilialy
+6305,31,5,1,Bula
+6306,31,5,2,"Seram Timur"
+6307,31,5,3,Werinama
+6308,31,5,4,"Pulau Gorom"
+6309,31,5,5,Wakate
+6310,31,5,6,"Tutuk Tolu"
+6311,31,5,7,Siwalalat
+6312,31,5,8,Kilmury
+6313,31,5,9,"Pulau Panjang"
+6314,31,5,10,Teor
+6315,31,5,11,"Gorom Timur"
+6316,31,5,12,"Bula Barat"
+6317,31,5,13,"Kian Darat"
+6318,31,5,14,"Siritaun Wida Timur"
+6319,31,5,15,"Teluk Waru"
+6320,31,5,16,"Ukar Sengan"
+6321,31,6,1,Kairatu
+6322,31,6,2,"Seram Barat"
+6323,31,6,3,Taniwel
+6324,31,6,4,"Huamual Belakang"
+6325,31,6,5,Amalatu
+6326,31,6,6,Inamosol
+6327,31,6,7,"Kairatu Barat"
+6328,31,6,8,Huamual
+6329,31,6,9,"Kepulauan Manipa"
+6330,31,6,10,"Taniwel Timur"
+6331,31,6,11,Elpaputih
+6332,31,7,1,"Pulau-Pulau Aru"
+6333,31,7,2,"Aru Selatan"
+6334,31,7,3,"Aru Tengah"
+6335,31,7,4,"Aru Utara"
+6336,31,7,5,"Aru Utara Timur Batuley"
+6337,31,7,6,Sir-Sir
+6338,31,7,7,"Aru Tengah Timur"
+6339,31,7,8,"Aru Tengah Selatan"
+6340,31,7,9,"Aru Selatan Timur"
+6341,31,7,10,"Aru Selatan Utara"
+6342,31,8,1,Moa
+6343,31,8,2,Damer
+6344,31,8,3,"Kepulauan Luang Sermata"
+6345,31,8,4,"Babar Barat"
+6346,31,8,5,"Pulau-pulau Babar Timur"
+6347,31,8,6,"Wetar Selatan"
+6348,31,8,7,"Kisar Selatan"
+6349,31,8,8,"Pulau Leti"
+6350,31,8,9,"Pulau Masela"
+6351,31,8,10,"Dawelor Dawera"
+6352,31,8,11,"Pulau Wetang"
+6353,31,8,12,"Pulau Lakor"
+6354,31,8,13,"Wetar Utara"
+6355,31,8,14,"Wetar Barat"
+6356,31,8,15,"Wetar Timur"
+6357,31,8,16,"Kepulauan Roma"
+6358,31,8,17,"Kisar Utara"
+6359,31,9,1,Namrole
+6360,31,9,2,Waesama
+6361,31,9,3,Ambalau
+6362,31,9,4,"Kepala Madan"
+6363,31,9,5,Leksula
+6364,31,9,6,"Fena Fafan"
+6365,31,71,1,Nusaniwe
+6366,31,71,2,Sirimau
+6367,31,71,3,Baguala
+6368,31,71,4,"Teluk Ambon"
+6369,31,71,5,"Leitimur Selatan"
+6370,31,72,1,"Pulau Dullah Utara"
+6371,31,72,2,"Pulau Dullah Selatan"
+6372,31,72,3,"Tayando Tam"
+6373,31,72,4,"Pulau-Pulau Kur"
+6374,31,72,5,"Kur Selatan"
+6375,32,1,1,Jailolo
+6376,32,1,2,Loloda
+6377,32,1,3,Ibu
+6378,32,1,4,Sahu
+6379,32,1,5,"Jailolo Selatan"
+6380,32,1,7,"Ibu Utara"
+6381,32,1,8,"Ibu Selatan"
+6382,32,1,9,"Sahu Timur"
+6383,32,1,10,"Loloda Tengah"
+6384,32,2,1,Weda
+6385,32,2,2,Patani
+6386,32,2,3,"Pulau Gebe"
+6387,32,2,4,"Weda Utara"
+6388,32,2,5,"Weda Selatan"
+6389,32,2,6,"Patani Utara"
+6390,32,2,7,"Weda Tengah"
+6391,32,2,8,"Patani Barat"
+6392,32,2,9,"Weda Timur"
+6393,32,2,10,"Patani Timur"
+6394,32,3,4,Galela
+6395,32,3,5,Tobelo
+6396,32,3,6,"Tobelo Selatan"
+6397,32,3,7,Kao
+6398,32,3,8,Malifut
+6399,32,3,9,"Loloda Utara"
+6400,32,3,10,"Tobelo Utara"
+6401,32,3,11,"Tobelo Tengah"
+6402,32,3,12,"Tobelo Timur"
+6403,32,3,13,"Tobelo Barat"
+6404,32,3,14,"Galela Barat"
+6405,32,3,15,"Galela Utara"
+6406,32,3,16,"Galela Selatan"
+6407,32,3,19,"Loloda Kepulauan"
+6408,32,3,20,"Kao Utara"
+6409,32,3,21,"Kao Barat"
+6410,32,3,22,"Kao Teluk"
+6411,32,4,1,"Pulau Makian"
+6412,32,4,2,Kayoa
+6413,32,4,3,"Gane Timur"
+6414,32,4,4,"Gane Barat"
+6415,32,4,5,"Obi Selatan"
+6416,32,4,6,Obi
+6417,32,4,7,"Bacan Timur"
+6418,32,4,8,Bacan
+6419,32,4,9,"Bacan Barat"
+6420,32,4,10,"Makian Barat"
+6421,32,4,11,"Kayoa Barat"
+6422,32,4,12,"Kayoa Selatan"
+6423,32,4,13,"Kayoa Utara"
+6424,32,4,14,"Bacan Barat Utara"
+6425,32,4,15,"Kasiruta Barat"
+6426,32,4,16,"Kasiruta Timur"
+6427,32,4,17,"Bacan Selatan"
+6428,32,4,18,"Kepulauan Botanglomang"
+6429,32,4,19,"Mandioli Selatan"
+6430,32,4,20,"Mandioli Utara"
+6431,32,4,21,"Bacan Timur Selatan"
+6432,32,4,22,"Bacan Timur Tengah"
+6433,32,4,23,"Gane Barat Selatan"
+6434,32,4,24,"Gane Barat Utara"
+6435,32,4,25,"Kepulauan Joronga"
+6436,32,4,26,"Gane Timur Selatan"
+6437,32,4,27,"Gane Timur Tengah"
+6438,32,4,28,"Obi Barat"
+6439,32,4,29,"Obi Timur"
+6440,32,4,30,"Obi Utara"
+6441,32,5,1,"Mangoli Timur"
+6442,32,5,2,Sanana
+6443,32,5,3,"Sulabesi Barat"
+6444,32,5,6,"Mangoli Barat"
+6445,32,5,7,"Sulabesi Tengah"
+6446,32,5,8,"Sulabesi Timur"
+6447,32,5,9,"Sulabesi Selatan"
+6448,32,5,10,"Mangoli Utara Timur"
+6449,32,5,11,"Mangoli Tengah"
+6450,32,5,12,"Mangoli Selatan"
+6451,32,5,13,"Mangoli Utara"
+6452,32,5,18,"Sanana Utara"
+6453,32,6,1,Wasile
+6454,32,6,2,Maba
+6455,32,6,3,"Maba Selatan"
+6456,32,6,4,"Wasile Selatan"
+6457,32,6,5,"Wasile Tengah"
+6458,32,6,6,"Wasile Utara"
+6459,32,6,7,"Wasile Timur"
+6460,32,6,8,"Maba Tengah"
+6461,32,6,9,"Maba Utara"
+6462,32,6,10,"Kota Maba"
+6463,32,7,1,"Morotai Selatan"
+6464,32,7,2,"Morotai Selatan Barat"
+6465,32,7,3,"Morotai Jaya"
+6466,32,7,4,"Morotai Utara"
+6467,32,7,5,"Morotai Timur"
+6468,32,7,6,"Pulau Rao"
+6469,32,8,1,"Taliabu Barat"
+6470,32,8,2,"Taliabu Barat Laut"
+6471,32,8,3,Lede
+6472,32,8,4,"Taliabu Utara"
+6473,32,8,5,"Taliabu Timur"
+6474,32,8,6,"Taliabu Timur Selatan"
+6475,32,8,7,"Taliabu Selatan"
+6476,32,8,8,Tabona
+6477,32,71,1,"Pulau Ternate"
+6478,32,71,2,"Kota Ternate Selatan"
+6479,32,71,3,"Kota Ternate Utara"
+6480,32,71,4,Moti
+6481,32,71,5,"Pulau Batang Dua"
+6482,32,71,6,"Kota Ternate Tengah"
+6483,32,71,7,"Pulau Hiri"
+6484,32,71,8,"Ternate Barat"
+6485,32,72,1,Tidore
+6486,32,72,2,"Oba Utara"
+6487,32,72,3,Oba
+6488,32,72,4,"Tidore Selatan"
+6489,32,72,5,"Tidore Utara"
+6490,32,72,6,"Oba Tengah"
+6491,32,72,7,"Oba Selatan"
+6492,32,72,8,"Tidore Timur"
+6493,33,3,1,Sentani
+6494,33,3,2,"Sentani Timur"
+6495,33,3,3,Depapre
+6496,33,3,4,"Sentani Barat"
+6497,33,3,5,Kemtuk
+6498,33,3,6,"Kemtuk Gresi"
+6499,33,3,7,Nimboran
+6500,33,3,8,Nimbokrang
+6501,33,3,9,"Unurum Guay"
+6502,33,3,10,Demta
+6503,33,3,11,Kaureh
+6504,33,3,12,Ebungfao
+6505,33,3,13,Waibu
+6506,33,3,14,Nambluong
+6507,33,3,15,Yapsi
+6508,33,3,16,Airu
+6509,33,3,17,"Raveni Rara"
+6510,33,3,18,"Gresi Selatan"
+6511,33,3,19,Yokari
+6512,33,5,1,"Yapen Selatan"
+6513,33,5,2,"Yapen Barat"
+6514,33,5,3,"Yapen Timur"
+6515,33,5,4,Angkaisera
+6516,33,5,5,Poom
+6517,33,5,6,Kosiwo
+6518,33,5,7,"Yapen Utara"
+6519,33,5,8,Raimbawi
+6520,33,5,9,"Teluk Ampimoi"
+6521,33,5,10,"Kepulauan Ambai"
+6522,33,5,11,Wonawa
+6523,33,5,12,Windesi
+6524,33,5,13,"Pulau Kurudu"
+6525,33,5,14,"Pulau Yerui"
+6526,33,5,15,Anotaurei
+6527,33,5,16,Yawakukat
+6528,33,5,17,Nusawani
+6529,33,6,1,"Biak Kota"
+6530,33,6,2,"Biak Utara"
+6531,33,6,3,"Biak Timur"
+6532,33,6,4,"Numfor Barat"
+6533,33,6,5,"Numfor Timur"
+6534,33,6,8,"Biak Barat"
+6535,33,6,9,Warsa
+6536,33,6,10,Padaido
+6537,33,6,11,Yendidori
+6538,33,6,12,Samofa
+6539,33,6,13,Yawosi
+6540,33,6,14,Andey
+6541,33,6,15,Swandiwe
+6542,33,6,16,Bruyadori
+6543,33,6,17,Orkeri
+6544,33,6,18,Poiru
+6545,33,6,19,"Aimando Padaido"
+6546,33,6,20,Oridek
+6547,33,6,21,Bondifuar
+6548,33,10,1,Sarmi
+6549,33,10,2,"Tor Atas"
+6550,33,10,3,"Pantai Barat"
+6551,33,10,4,"Pantai Timur"
+6552,33,10,5,Bonggo
+6553,33,10,9,"Apawer Hulu"
+6554,33,10,12,"Sarmi Selatan"
+6555,33,10,13,"Sarmi Timur"
+6556,33,10,14,"Pantai Timur Bagian Barat"
+6557,33,10,15,"Bonggo Timur"
+6558,33,11,1,Waris
+6559,33,11,2,Arso
+6560,33,11,3,Senggi
+6561,33,11,4,Web
+6562,33,11,5,Skanto
+6563,33,11,6,"Arso Timur"
+6564,33,11,7,Towe
+6565,33,11,8,"Arso Barat"
+6566,33,11,9,Mannem
+6567,33,11,10,Yaffi
+6568,33,11,11,Kaisenar
+6569,33,15,1,"Waropen Bawah"
+6570,33,15,3,Masirei
+6571,33,15,7,"Risei Sayati"
+6572,33,15,8,"Urei Faisei"
+6573,33,15,9,Inggerus
+6574,33,15,10,Kirihi
+6575,33,15,11,Oudate
+6576,33,15,12,Wapoga
+6577,33,15,13,Demba
+6578,33,15,14,Wonti
+6579,33,15,15,"Soyoi Mambai"
+6580,33,19,1,"Supiori Selatan"
+6581,33,19,2,"Supiori Utara"
+6582,33,19,3,"Supiori Timur"
+6583,33,19,4,"Kepulauan Aruri"
+6584,33,19,5,"Supiori Barat"
+6585,33,20,1,"Mamberamo Tengah"
+6586,33,20,2,"Mamberamo Hulu"
+6587,33,20,3,Rufaer
+6588,33,20,4,"Mamberamo Tengah Timur"
+6589,33,20,5,"Mamberamo Hilir"
+6590,33,20,6,"Waropen Atas"
+6591,33,20,7,Benuki
+6592,33,20,8,Sawai
+6593,33,71,1,"Jayapura Utara"
+6594,33,71,2,"Jayapura Selatan"
+6595,33,71,3,Abepura
+6596,33,71,4,"Muara Tami"
+6597,33,71,5,Heram
+6598,34,2,3,Warmare
+6599,34,2,4,Prafi
+6600,34,2,5,Masni
+6601,34,2,12,"Manokwari Barat"
+6602,34,2,13,"Manokwari Timur"
+6603,34,2,14,"Manokwari Utara"
+6604,34,2,15,"Manokwari Selatan"
+6605,34,2,17,"Tanah Rubuh"
+6606,34,2,21,Sidey
+6607,34,2,31,Aimasi
+6608,34,2,32,Mokwam
+6609,34,2,33,"Masni Utara"
+6610,34,2,34,Wasirawi
+6611,34,2,35,"Moruj Mega"
+6612,34,3,1,Fak-Fak
+6613,34,3,2,"Fak-Fak Barat"
+6614,34,3,3,"Fak-Fak Timur"
+6615,34,3,4,Kokas
+6616,34,3,5,"Fak-Fak Tengah"
+6617,34,3,6,Karas
+6618,34,3,7,Bomberay
+6619,34,3,8,Kramongmongga
+6620,34,3,9,"Teluk Patipi"
+6621,34,3,10,Pariwari
+6622,34,3,11,Wartutin
+6623,34,3,12,"Fakfak Timur Tengah"
+6624,34,3,13,Arguni
+6625,34,3,14,Mbahamdandara
+6626,34,3,15,Kayauni
+6627,34,3,16,Furwagi
+6628,34,3,17,Tomage
+6629,34,6,1,Bintuni
+6630,34,6,2,Merdey
+6631,34,6,3,Babo
+6632,34,6,4,Aranday
+6633,34,6,5,"Moskona Selatan"
+6634,34,6,6,"Moskona Utara"
+6635,34,6,7,Wamesa
+6636,34,6,8,Fafurwar
+6637,34,6,9,Tembuni
+6638,34,6,10,Kuri
+6639,34,6,11,Manimeri
+6640,34,6,12,Tuhiba
+6641,34,6,13,"Dataran Beimes"
+6642,34,6,14,Sumuri
+6643,34,6,15,Kaitaro
+6644,34,6,16,Aroba
+6645,34,6,17,Masyeta
+6646,34,6,18,Biscoop
+6647,34,6,19,Tomu
+6648,34,6,20,Kamundan
+6649,34,6,21,Weriagar
+6650,34,6,22,"Moskona Barat"
+6651,34,6,23,Meyado
+6652,34,6,24,"Moskona Timur"
+6653,34,7,1,Wasior
+6654,34,7,2,Windesi
+6655,34,7,3,"Teluk Duairi"
+6656,34,7,4,Wondiboy
+6657,34,7,5,Wamesa
+6658,34,7,6,Rumberpon
+6659,34,7,7,Naikere
+6660,34,7,8,Rasiei
+6661,34,7,9,"Kuri Wamesa"
+6662,34,7,10,Roon
+6663,34,7,11,Roswar
+6664,34,7,12,Nikiwar
+6665,34,7,13,"Soug Jaya"
+6666,34,8,1,Kaimana
+6667,34,8,2,Buruway
+6668,34,8,3,"Teluk Arguni Atas"
+6669,34,8,4,"Teluk Etna"
+6670,34,8,5,Kambrau
+6671,34,8,6,"Teluk Arguni Bawah"
+6672,34,8,7,Yamor
+6673,34,11,1,Ransiki
+6674,34,11,2,Oransbari
+6675,34,11,3,Neney
+6676,34,11,4,"Dataran Isim"
+6677,34,11,5,"Momi Waren"
+6678,34,11,6,Tahota
+6679,34,12,1,Anggi
+6680,34,12,2,"Anggi Gida"
+6681,34,12,3,Membey
+6682,34,12,4,Sururey
+6683,34,12,5,Didohu
+6684,34,12,6,Taige
+6685,34,12,7,Catubouw
+6686,34,12,8,Testega
+6687,34,12,9,Minyambaouw
+6688,34,12,10,Hingk
+6689,35,1,1,Merauke
+6690,35,1,2,Muting
+6691,35,1,3,Okaba
+6692,35,1,4,Kimaam
+6693,35,1,5,Semangga
+6694,35,1,6,"Tanah Miring"
+6695,35,1,7,Jagebob
+6696,35,1,8,Sota
+6697,35,1,9,Ulilin
+6698,35,1,10,Elikobal
+6699,35,1,11,Kurik
+6700,35,1,12,Naukenjerai
+6701,35,1,13,Animha
+6702,35,1,14,Malind
+6703,35,1,15,Tubang
+6704,35,1,16,Ngguti
+6705,35,1,17,Kaptel
+6706,35,1,18,Tabonji
+6707,35,1,19,Waan
+6708,35,1,20,Ilwayab
+6709,35,1,21,Padua
+6710,35,1,22,Kontuar
+6711,35,2,1,Mandobo
+6712,35,2,2,Mindiptana
+6713,35,2,3,Waropko
+6714,35,2,4,Kouh
+6715,35,2,5,Jair
+6716,35,2,6,Bomakia
+6717,35,2,7,Kombut
+6718,35,2,8,Iniyandit
+6719,35,2,9,Arimop
+6720,35,2,10,Fofi
+6721,35,2,11,Ambatkwi
+6722,35,2,12,Manggelum
+6723,35,2,13,Firiwage
+6724,35,2,14,Yaniruma
+6725,35,2,15,Subur
+6726,35,2,16,Kombay
+6727,35,2,17,Ninati
+6728,35,2,18,Sesnuk
+6729,35,2,19,Ki
+6730,35,2,20,Kawagit
+6731,35,3,1,Obaa
+6732,35,3,2,"Mambioman Bapai"
+6733,35,3,3,Citak-Mitak
+6734,35,3,4,Edera
+6735,35,3,5,Haju
+6736,35,3,6,Assue
+6737,35,3,7,Kaibar
+6738,35,3,8,Passue
+6739,35,3,9,Minyamur
+6740,35,3,10,Venaha
+6741,35,3,11,Syahcame
+6742,35,3,12,Yakomi
+6743,35,3,13,Bamgi
+6744,35,3,14,"Passue Bawah"
+6745,35,3,15,"Ti Zain"
+6746,35,4,1,Agats
+6747,35,4,2,Atsj
+6748,35,4,3,"Sawa Erma"
+6749,35,4,4,Akat
+6750,35,4,5,Fayit
+6751,35,4,6,"Pantai Kasuari"
+6752,35,4,7,Suator
+6753,35,4,8,Suru-suru
+6754,35,4,9,"Kolf Braza"
+6755,35,4,10,"Unir Sirau"
+6756,35,4,11,Joerat
+6757,35,4,12,"Pulau Tiga"
+6758,35,4,13,Jetsy
+6759,35,4,14,"Der Koumur"
+6760,35,4,15,Kopay
+6761,35,4,16,Safan
+6762,35,4,17,Sirets
+6763,35,4,18,Ayib
+6764,35,4,19,Betcbamu
+6765,35,4,20,Joutu
+6766,35,4,21,Aswi
+6767,35,4,22,Awyu
+6768,35,4,23,"Koroway Buluanop"
+6769,35,4,24,"Tomor Birip"
+6770,35,4,25,"Sor Ep"
+6771,36,1,1,Nabire
+6772,36,1,2,Napan
+6773,36,1,3,Yaur
+6774,36,1,4,Uwapa
+6775,36,1,5,Wanggar
+6776,36,1,6,Siriwo
+6777,36,1,7,Makimi
+6778,36,1,8,"Teluk Umar"
+6779,36,1,9,"Teluk Kimi"
+6780,36,1,10,Yaro
+6781,36,1,11,Wapoga
+6782,36,1,12,"Nabire Barat"
+6783,36,1,13,Moora
+6784,36,1,14,Dipa
+6785,36,1,15,Menou
+6786,36,2,1,Mulia
+6787,36,2,2,Ilu
+6788,36,2,3,Fawi
+6789,36,2,4,Mewoluk
+6790,36,2,5,Yamo
+6791,36,2,6,Nume
+6792,36,2,7,Torere
+6793,36,2,8,Tingginambut
+6794,36,2,9,Pagaleme
+6795,36,2,10,Gurage
+6796,36,2,11,Irimuli
+6797,36,2,12,Muara
+6798,36,2,13,Ilamburawi
+6799,36,2,14,Yambi
+6800,36,2,15,Lumo
+6801,36,2,16,Molanikime
+6802,36,2,17,Dokome
+6803,36,2,18,Kalome
+6804,36,2,19,Wanwi
+6805,36,2,20,Yamoneri
+6806,36,2,21,Waegi
+6807,36,2,22,Nioga
+6808,36,2,23,Gubume
+6809,36,2,24,Taganombak
+6810,36,2,25,Dagai
+6811,36,2,26,Kiyage
+6812,36,3,1,"Paniai Timur"
+6813,36,3,2,"Paniai Barat"
+6814,36,3,3,Aradide
+6815,36,3,4,Bogabaida
+6816,36,3,5,Bibida
+6817,36,3,6,Dumadama
+6818,36,3,7,Siriwo
+6819,36,3,8,Kebo
+6820,36,3,9,Yatamo
+6821,36,3,10,Ekadide
+6822,36,3,11,"Wegee Muka"
+6823,36,3,12,"Wegee Bino"
+6824,36,3,13,"Pugo Dagi"
+6825,36,3,14,Muye
+6826,36,3,15,Nakama
+6827,36,3,16,"Teluk Deya"
+6828,36,3,17,Yagai
+6829,36,3,18,Youtadi
+6830,36,3,19,"Baya Biru"
+6831,36,3,20,"Deiyai Miyo"
+6832,36,3,21,Dogomo
+6833,36,3,22,Aweida
+6834,36,3,23,Topiyai
+6835,36,3,24,"Fajar Timur"
+6836,36,4,1,"Mimika Baru"
+6837,36,4,2,Agimuga
+6838,36,4,3,"Mimika Timur"
+6839,36,4,4,"Mimika Barat"
+6840,36,4,5,Jita
+6841,36,4,6,Jila
+6842,36,4,7,"Mimika Timur Jauh"
+6843,36,4,8,"Mimika Tengah"
+6844,36,4,9,"Kuala Kencana"
+6845,36,4,10,Tembagapura
+6846,36,4,11,"Mimika Barat Jauh"
+6847,36,4,12,"Mimika Barat Tengah"
+6848,36,4,13,"Kwamki Narama"
+6849,36,4,14,Hoya
+6850,36,4,15,Iwaka
+6851,36,4,16,Wania
+6852,36,4,17,Amar
+6853,36,4,18,Alama
+6854,36,5,1,Ilaga
+6855,36,5,2,Wangbe
+6856,36,5,3,Beoga
+6857,36,5,4,Doufo
+6858,36,5,5,Pogoma
+6859,36,5,6,Sinak
+6860,36,5,7,Agandugume
+6861,36,5,8,Gome
+6862,36,5,9,Dervos
+6863,36,5,10,"Beoga Barat"
+6864,36,5,11,"Beoga Timur"
+6865,36,5,12,Ogamanim
+6866,36,5,13,Kembru
+6867,36,5,14,Bina
+6868,36,5,15,"Sinak Barat"
+6869,36,5,16,Mage'abume
+6870,36,5,17,Yugumuak
+6871,36,5,18,"Ilaga Utara"
+6872,36,5,19,Mabugi
+6873,36,5,20,Omukia
+6874,36,5,21,Lambewi
+6875,36,5,22,Oneri
+6876,36,5,23,Amungkalpia
+6877,36,5,24,"Gome Utara"
+6878,36,5,25,Erelmakawia
+6879,36,6,1,Kamu
+6880,36,6,2,Mapia
+6881,36,6,3,Piyaiye
+6882,36,6,4,"Kamu Utara"
+6883,36,6,5,"Sukikai Selatan"
+6884,36,6,6,"Mapia Barat"
+6885,36,6,7,"Kamu Selatan"
+6886,36,6,8,"Kamu Timur"
+6887,36,6,9,"Mapia Tengah"
+6888,36,6,10,Dogiyai
+6889,36,7,1,Sugapa
+6890,36,7,2,Homeyo
+6891,36,7,3,Wandai
+6892,36,7,4,Biandoga
+6893,36,7,5,Agisiga
+6894,36,7,6,Hitadipa
+6895,36,7,7,Ugimba
+6896,36,7,8,Tomosiga
+6897,36,8,1,Tigi
+6898,36,8,2,"Tigi Timur"
+6899,36,8,3,Bowobado
+6900,36,8,4,"Tigi Barat"
+6901,36,8,5,Kapiraya
+6902,37,1,1,Wamena
+6903,37,1,2,Kurulu
+6904,37,1,3,Asologaima
+6905,37,1,4,Hubikosi
+6906,37,1,5,Bolakme
+6907,37,1,6,Walelagama
+6908,37,1,7,Musatfak
+6909,37,1,8,Wolo
+6910,37,1,9,Asolokobal
+6911,37,1,10,Pelebaga
+6912,37,1,11,Yalengga
+6913,37,1,12,Trikora
+6914,37,1,13,Napua
+6915,37,1,14,Walaik
+6916,37,1,15,Wouma
+6917,37,1,16,Hubikiak
+6918,37,1,17,Ibele
+6919,37,1,18,Taelarek
+6920,37,1,19,"Itlay Hisage"
+6921,37,1,20,Siepkosi
+6922,37,1,21,Usilimo
+6923,37,1,22,"Wita Waya"
+6924,37,1,23,Libarek
+6925,37,1,24,Wadangku
+6926,37,1,25,Pisugi
+6927,37,1,26,Koragi
+6928,37,1,27,Tagime
+6929,37,1,28,Molagalome
+6930,37,1,29,Tagineri
+6931,37,1,30,"Silo Karno Doga"
+6932,37,1,31,Piramid
+6933,37,1,32,Muliama
+6934,37,1,33,Bugi
+6935,37,1,34,Bpiri
+6936,37,1,35,Welesi
+6937,37,1,36,Asotipo
+6938,37,1,37,Maima
+6939,37,1,38,Popugoba
+6940,37,1,39,Wame
+6941,37,1,40,Wesaput
+6942,37,2,1,Oksibil
+6943,37,2,2,Kiwirok
+6944,37,2,3,Okbibab
+6945,37,2,4,Iwur
+6946,37,2,5,Batom
+6947,37,2,6,Borme
+6948,37,2,7,"Kiwirok Timur"
+6949,37,2,8,Aboy
+6950,37,2,9,Pepera
+6951,37,2,10,Bime
+6952,37,2,11,Alemsom
+6953,37,2,12,Okbape
+6954,37,2,13,Kalomdol
+6955,37,2,14,Oksop
+6956,37,2,15,Serambakon
+6957,37,2,16,"Ok Aom"
+6958,37,2,17,Kawor
+6959,37,2,18,Awinbon
+6960,37,2,19,Tarup
+6961,37,2,20,Okhika
+6962,37,2,21,Oksamol
+6963,37,2,22,Oklip
+6964,37,2,23,Okbemtau
+6965,37,2,24,Oksebang
+6966,37,2,25,Okbab
+6967,37,2,26,Batani
+6968,37,2,27,Weime
+6969,37,2,28,Murkim
+6970,37,2,29,Mofinop
+6971,37,2,30,Jetfa
+6972,37,2,31,Teiraplu
+6973,37,2,32,Eipumek
+6974,37,2,33,Pamek
+6975,37,2,34,Nongme
+6976,37,3,1,Kurima
+6977,37,3,2,Anggruk
+6978,37,3,3,Ninia
+6979,37,3,4,Silimo
+6980,37,3,5,Samenage
+6981,37,3,6,Nalca
+6982,37,3,7,Dekai
+6983,37,3,8,Obio
+6984,37,3,9,"Suru Suru"
+6985,37,3,10,Wusama
+6986,37,3,11,Amuma
+6987,37,3,12,Musaik
+6988,37,3,13,Pasema
+6989,37,3,14,Hogio
+6990,37,3,15,Mugi
+6991,37,3,16,Soba
+6992,37,3,17,Werima
+6993,37,3,18,Tangma
+6994,37,3,19,Ukha
+6995,37,3,20,Panggema
+6996,37,3,21,Kosarek
+6997,37,3,22,Nipsan
+6998,37,3,23,Ubahak
+6999,37,3,24,Pronggoli
+7000,37,3,25,Walma
+7001,37,3,26,Yahuliambut
+7002,37,3,27,Hereapini
+7003,37,3,28,Ubalihi
+7004,37,3,29,Talambo
+7005,37,3,30,Puldama
+7006,37,3,31,Endomen
+7007,37,3,32,Kona
+7008,37,3,33,Dirwemna
+7009,37,3,34,Holuwon
+7010,37,3,35,Lolat
+7011,37,3,36,Soloikma
+7012,37,3,37,Sela
+7013,37,3,38,Korupun
+7014,37,3,39,Langda
+7015,37,3,40,Bomela
+7016,37,3,41,Suntamon
+7017,37,3,42,Seradala
+7018,37,3,43,Sobaham
+7019,37,3,44,Kabianggama
+7020,37,3,45,Kwelamdua
+7021,37,3,46,Kwikma
+7022,37,3,47,Hilipuk
+7023,37,3,48,Duram
+7024,37,3,49,Yogosem
+7025,37,3,50,Kayo
+7026,37,3,51,Sumo
+7027,37,4,1,Karubaga
+7028,37,4,2,Bokondini
+7029,37,4,3,Kanggime
+7030,37,4,4,Kembu
+7031,37,4,5,Goyage
+7032,37,4,6,Wunim
+7033,37,4,7,Wina
+7034,37,4,8,Umagi
+7035,37,4,9,Panaga
+7036,37,4,10,Woniki
+7037,37,4,11,Kubu
+7038,37,4,12,Konda/Kondaga
+7039,37,4,13,Nelawi
+7040,37,4,14,Kuari
+7041,37,4,15,Bokoneri
+7042,37,4,16,Bewani
+7043,37,4,17,Nabunage
+7044,37,4,18,Gilubandu
+7045,37,4,19,Nunggawi
+7046,37,4,20,Gundagi
+7047,37,4,21,Numba
+7048,37,4,22,Timori
+7049,37,4,23,Dundu
+7050,37,4,24,Geya
+7051,37,4,25,Egiam
+7052,37,4,26,Poganeri
+7053,37,4,27,Kamboneri
+7054,37,4,28,Airgaram
+7055,37,4,29,"Wari/Taiyeve II"
+7056,37,4,30,Dow
+7057,37,4,31,Tagineri
+7058,37,4,32,Yuneri
+7059,37,4,33,Wakuwo
+7060,37,4,34,Gika
+7061,37,4,35,Telenggeme
+7062,37,4,36,Anawi
+7063,37,4,37,Wenam
+7064,37,4,38,Wugi
+7065,37,4,39,Danime
+7066,37,4,40,Tagime
+7067,37,4,41,Kai
+7068,37,4,42,Aweku
+7069,37,4,43,Bogonuk
+7070,37,4,44,"Li Anogomma"
+7071,37,4,45,Biuk
+7072,37,4,46,Yuko
+7073,37,5,1,Kobakma
+7074,37,5,2,Kelila
+7075,37,5,3,Eragayam
+7076,37,5,4,Megambilis
+7077,37,5,5,Ilugwa
+7078,37,6,1,Elelim
+7079,37,6,2,Apalapsili
+7080,37,6,3,Abenaho
+7081,37,6,4,Benawa
+7082,37,6,5,Welarek
+7083,37,7,1,Tiom
+7084,37,7,2,Pirime
+7085,37,7,3,Makki
+7086,37,7,4,Gamelia
+7087,37,7,5,Dimba
+7088,37,7,6,Melagineri
+7089,37,7,7,Balingga
+7090,37,7,8,Tiomneri
+7091,37,7,9,Kuyawage
+7092,37,7,10,Poga
+7093,37,7,11,Niname
+7094,37,7,12,Nogi
+7095,37,7,13,Yiginua
+7096,37,7,14,"Tiom Ollo"
+7097,37,7,15,Yugungwi
+7098,37,7,16,Mokoni
+7099,37,7,17,Wereka
+7100,37,7,18,Milimbo
+7101,37,7,19,Wiringgambut
+7102,37,7,20,Gollo
+7103,37,7,21,Awina
+7104,37,7,22,Ayumnati
+7105,37,7,23,"Wano Barat"
+7106,37,7,24,"Goa Balim"
+7107,37,7,25,Bruwa
+7108,37,7,26,"Balingga Barat"
+7109,37,7,27,Gupura
+7110,37,7,28,Kolawa
+7111,37,7,29,"Gelok Beam"
+7112,37,7,30,"Kuly Lanny"
+7113,37,7,31,Lannyna
+7114,37,7,32,Karu
+7115,37,7,33,Yiluk
+7116,37,7,34,Guna
+7117,37,7,35,Kelulome
+7118,37,7,36,Nikogwe
+7119,37,7,37,Muara
+7120,37,7,38,"Buguk Gona"
+7121,37,7,39,Melagi
+7122,37,8,1,Kenyam
+7123,37,8,2,Mapenduma
+7124,37,8,3,Yigi
+7125,37,8,4,Wosak
+7126,37,8,5,Geselma
+7127,37,8,6,Mugi
+7128,37,8,7,Mbuwa
+7129,37,8,8,Gearek
+7130,37,8,9,Koroptak
+7131,37,8,10,Kegayem
+7132,37,8,11,Paro
+7133,37,8,12,Mebarok
+7134,37,8,13,Yenggelo
+7135,37,8,14,Kilmid
+7136,37,8,15,Alama
+7137,37,8,16,Yal
+7138,37,8,17,Mam
+7139,37,8,18,Dal
+7140,37,8,19,Nirkuri
+7141,37,8,20,Inikgal
+7142,37,8,21,Iniye
+7143,37,8,22,"Mbulmu Yalma"
+7144,37,8,23,"Mbua Tengah"
+7145,37,8,24,Embetpen
+7146,37,8,25,Kora
+7147,37,8,26,Wusi
+7148,37,8,27,Pija
+7149,37,8,28,Moba
+7150,37,8,29,Wutpaga
+7151,37,8,30,Nenggeagin
+7152,37,8,31,Krepkuri
+7153,37,8,32,"Pasir Putih"
+7154,38,1,1,Makbon
+7155,38,1,2,Beraur
+7156,38,1,3,Salawati
+7157,38,1,4,Seget
+7158,38,1,5,Aimas
+7159,38,1,6,Klamono
+7160,38,1,7,Sayosa
+7161,38,1,8,Segun
+7162,38,1,9,Mayamuk
+7163,38,1,10,"Salawati Selatan"
+7164,38,1,11,Klabot
+7165,38,1,12,Klawak
+7166,38,1,13,Maudus
+7167,38,1,14,Mariat
+7168,38,1,15,Klayili
+7169,38,1,16,Klaso
+7170,38,1,17,Moisegen
+7171,38,1,18,Sorong
+7172,38,1,19,Bagun
+7173,38,1,20,Wemak
+7174,38,1,21,Sunook
+7175,38,1,22,Buk
+7176,38,1,23,Saengkeduk
+7177,38,1,24,Malabotom
+7178,38,1,25,Konhir
+7179,38,1,26,Klasafet
+7180,38,1,27,Hobard
+7181,38,1,28,"Salawati Tengah"
+7182,38,1,29,Botain
+7183,38,1,30,"Sayosa Timur"
+7184,38,2,1,Teminabuan
+7185,38,2,2,Inanwatan
+7186,38,2,3,Sawiat
+7187,38,2,4,Kokoda
+7188,38,2,5,Moswaren
+7189,38,2,6,Seremuk
+7190,38,2,7,Wayer
+7191,38,2,8,Kais
+7192,38,2,9,Konda
+7193,38,2,10,Matemani
+7194,38,2,11,"Kokoda Utara"
+7195,38,2,12,Saifi
+7196,38,2,13,Fokour
+7197,38,2,14,Salkma
+7198,38,2,15,"Kais Darat"
+7199,38,3,1,"Misool (Misool Utara)"
+7200,38,3,2,"Waigeo Utara"
+7201,38,3,3,"Waigeo Selatan"
+7202,38,3,4,"Salawati Utara"
+7203,38,3,5,Ayau
+7204,38,3,6,"Misool Timur"
+7205,38,3,7,"Waigeo Barat"
+7206,38,3,8,"Waigeo Timur"
+7207,38,3,9,"Teluk Mayalibit"
+7208,38,3,10,Kofiau
+7209,38,3,11,"Meos Mansar"
+7210,38,3,12,"Misool Selatan"
+7211,38,3,13,Warwarbomi
+7212,38,3,14,"Waigeo Barat Kepulauan"
+7213,38,3,15,"Misool Barat"
+7214,38,3,16,"Kepulauan Sembilan"
+7215,38,3,17,"Kota Waisai"
+7216,38,3,18,"Tiplol Mayalibit"
+7217,38,3,19,"Batanta Utara"
+7218,38,3,20,"Salawati Barat"
+7219,38,3,21,"Salawati Tengah"
+7220,38,3,22,Supnin
+7221,38,3,23,"Kepulauan Ayau"
+7222,38,3,24,"Batanta Selatan"
+7223,38,4,1,Fef
+7224,38,4,2,Miyah
+7225,38,4,3,Yembun
+7226,38,4,4,Kwoor
+7227,38,4,5,Sausapor
+7228,38,4,6,Abun
+7229,38,4,7,Syujak
+7230,38,4,8,Moraid
+7231,38,4,9,Kebar
+7232,38,4,10,Amberbaken
+7233,38,4,11,Senopi
+7234,38,4,12,Mubrani
+7235,38,4,13,Bikar
+7236,38,4,14,Bamusbama
+7237,38,4,15,Ases
+7238,38,4,16,"Miyah Selatan"
+7239,38,4,17,Ireres
+7240,38,4,18,Tobouw
+7241,38,4,19,"Wilhem Roumbouts"
+7242,38,4,20,Tinggouw
+7243,38,4,21,Kwesefo
+7244,38,4,22,Mawabuan
+7245,38,4,23,"Kebar Timur"
+7246,38,4,24,"Kebar Selatan"
+7247,38,4,25,Manekar
+7248,38,4,26,Mpur
+7249,38,4,27,"Amberbaken Barat"
+7250,38,4,28,Kasi
+7251,38,4,29,Selemkai
+7252,38,5,1,Aifat
+7253,38,5,2,"Aifat Utara"
+7254,38,5,3,"Aifat Timur"
+7255,38,5,4,"Aifat Selatan"
+7256,38,5,5,"Aitinyo Barat"
+7257,38,5,6,Aitinyo
+7258,38,5,7,"Aitinyo Utara"
+7259,38,5,8,Ayamaru
+7260,38,5,9,"Ayamaru Utara"
+7261,38,5,10,"Ayamaru Timur"
+7262,38,5,11,Mare
+7263,38,5,12,"Aifat Timur Tengah"
+7264,38,5,13,"Aifat Timur Jauh"
+7265,38,5,14,"Aifat Timur Selatan"
+7266,38,5,15,"Ayamaru Selatan"
+7267,38,5,16,"Ayamaru Jaya"
+7268,38,5,17,"Ayamaru Selatan Jaya"
+7269,38,5,18,"Ayamaru Timur Selatan"
+7270,38,5,19,"Ayamaru Utara Timur"
+7271,38,5,20,"Ayamaru Tengah"
+7272,38,5,21,"Ayamaru Barat"
+7273,38,5,22,"Aitinyo Tengah"
+7274,38,5,23,"Aitinyo Raya"
+7275,38,5,24,"Mare Selatan"
+7276,38,71,1,Sorong
+7277,38,71,2,"Sorong Timur"
+7278,38,71,3,"Sorong Barat"
+7279,38,71,4,"Sorong Kepulauan"
+7280,38,71,5,"Sorong Utara"
+7281,38,71,6,"Sorong Manoi"
+7282,38,71,7,"Sorong Kota"
+7283,38,71,8,Klaurung
+7284,38,71,9,Malaimsimsa
+7285,38,71,10,"Maladum Mes"

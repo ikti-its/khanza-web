@@ -26,11 +26,11 @@ final class KecamatanController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,   'id_kecamatan',   'ID Kecamatan'],
-                [SHOW, REQUIRED, I::SELECT,  'id_provinsi',    'Provinsi'],
-                [SHOW, REQUIRED, I::SELECT,  'id_kota_lokal',  'Kota'],
-                [SHOW, REQUIRED, I::SELECT,  'id_kec_lokal',   'Kode Lokal'],
-                [SHOW, REQUIRED, I::TEXT,    'nama_kecamatan', 'Kecamatan'],
+                [HIDE, OPTIONAL, I::INDEX,  'id_kecamatan',   'ID Kecamatan'],
+                [SHOW, REQUIRED, I::SELECT, 'id_provinsi',    'Provinsi'],
+                [SHOW, REQUIRED, I::SELECT, 'id_kota_lokal',  'Kota'],
+                [SHOW, REQUIRED, I::SELECT, 'id_kec_lokal',   'Kode Lokal'],
+                [SHOW, REQUIRED, I::TEXT,   'nama_kecamatan', 'Kecamatan'],
             ],
         );
     }
@@ -45,15 +45,15 @@ final class KecamatanController extends ControllerTemplate
         $size = max(1, (int) ($this->request->getGet('size') ?? 10));
 
         $total_rows  = $this->model->exclude_zero_pk()->count_filtered();
-        $total_pages = ($total_rows > 0) ? (int) ceil($total_rows / $size) : 1;
+        $total_pages = $total_rows > 0 ? (int) ceil($total_rows / $size) : 1;
         $page        = min($page, $total_pages);
         $offset      = ($page - 1) * $size;
 
         $konfig = [
-            [1, 'Provinsi',     'nama_provinsi',  'teks', 0],
-            [1, 'Kota',         'nama_kota',      'teks', 0],
-            [1, 'Kode Lokal',   'id_kec_lokal',   'teks', 0],
-            [1, 'Kecamatan',    'nama_kecamatan', 'teks', 0],
+            [1, 'Provinsi',   'nama_provinsi',  'teks', 0],
+            [1, 'Kota',       'nama_kota',      'teks', 0],
+            [1, 'Kode Lokal', 'id_kec_lokal',   'teks', 0],
+            [1, 'Kecamatan',  'nama_kecamatan', 'teks', 0],
         ];
 
         return view('/layouts/data', [

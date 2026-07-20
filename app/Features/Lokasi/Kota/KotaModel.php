@@ -30,7 +30,8 @@ final class KotaModel extends ModelTemplate
     {
         $tabel = $this->table;
 
-        return $this->builder()
+        return $this
+            ->builder()
             ->select("
                 {$tabel}.id_kota,
                 {$tabel}.id_provinsi,

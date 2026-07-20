@@ -26,12 +26,12 @@ final class DesaController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, REQUIRED, I::INDEX,   'id_desa',        'ID'],
-                [SHOW, REQUIRED, I::SELECT,  'id_provinsi',    'Provinsi'],
-                [SHOW, REQUIRED, I::SELECT,  'id_kota_lokal',  'Kota'],
-                [SHOW, REQUIRED, I::SELECT,  'id_kec_lokal',   'Kecamatan'],
-                [SHOW, REQUIRED, I::TEXT,    'id_desa_lokal',  'Kode Lokal'],
-                [SHOW, REQUIRED, I::TEXT,    'nama_desa',      'Desa'],
+                [HIDE, REQUIRED, I::INDEX,  'id_desa',       'ID'],
+                [SHOW, REQUIRED, I::SELECT, 'id_provinsi',   'Provinsi'],
+                [SHOW, REQUIRED, I::SELECT, 'id_kota_lokal', 'Kota'],
+                [SHOW, REQUIRED, I::SELECT, 'id_kec_lokal',  'Kecamatan'],
+                [SHOW, REQUIRED, I::TEXT,   'id_desa_lokal', 'Kode Lokal'],
+                [SHOW, REQUIRED, I::TEXT,   'nama_desa',     'Desa'],
             ],
         );
     }
@@ -103,7 +103,11 @@ final class DesaController extends ControllerTemplate
     {
         $tabel = $this->model->table;
 
-        $data = $this->model
+        $namaDesa      = trim((string) ($this->request->getGet('nama_desa') ?? ''));
+        $namaKecamatan = trim((string) ($this->request->getGet('nama_kecamatan') ?? ''));
+        $namaKota      = trim((string) ($this->request->getGet('nama_kota') ?? ''));
+
+        $builder = $this->model
             ->builder()
             ->select("
                 {$tabel}.id_provinsi,
@@ -126,9 +130,19 @@ final class DesaController extends ControllerTemplate
                 'inner',
             )
             ->join('lokasi.provinsi pr', "pr.id_provinsi = {$tabel}.id_provinsi", 'inner')
-            ->where("{$tabel}.id_desa >", 0)
-            ->get()
-            ->getResultArray();
+            ->where("{$tabel}.id_desa >", 0);
+
+        if ($namaDesa !== '') {
+            $builder->like("{$tabel}.nama_desa", $namaDesa, 'both', null, true);
+        }
+        if ($namaKecamatan !== '') {
+            $builder->like('kc.nama_kecamatan', $namaKecamatan, 'both', null, true);
+        }
+        if ($namaKota !== '') {
+            $builder->like('kt.nama_kota', $namaKota, 'both', null, true);
+        }
+
+        $data = $builder->orderBy("{$tabel}.nama_desa")->limit(100)->get()->getResultArray();
 
         return $this->response->setJSON([
             'data' => $data,

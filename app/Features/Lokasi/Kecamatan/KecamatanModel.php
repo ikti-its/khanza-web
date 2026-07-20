@@ -27,11 +27,12 @@ final class KecamatanModel extends ModelTemplate
     /**
      * Mengambil data kecamatan
      */
-    public function get_data_tabel(?int $limit = null, int $offset = 0): array
+    public function get_data_tabel(null|int $limit = null, int $offset = 0): array
     {
         $tabel = $this->table;
 
-        $builder = $this->builder()
+        $builder = $this
+            ->builder()
             ->select("
                 {$tabel}.id_kecamatan,
                 {$tabel}.id_provinsi,
@@ -63,7 +64,8 @@ final class KecamatanModel extends ModelTemplate
     {
         $tabel = $this->table;
 
-        $row = $this->builder()
+        $row = $this
+            ->builder()
             ->select("
                 {$tabel}.id_kecamatan,
                 {$tabel}.id_provinsi,
