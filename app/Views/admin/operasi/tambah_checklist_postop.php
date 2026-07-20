@@ -187,8 +187,8 @@ $penunjangMap = array_column($penunjang, null, 'id_jenis_penunjang');
 
             <?php $drainRow = $drain[0] ?? []; ?>
             <div class="mb-3 sm:block md:flex items-center">
-                <label class="<?= $labelLeft ?>">Drain</label>
-                <select name="drain[0][id_ketersediaan]" class="<?= $stdClass ?> lg:w-1/4">
+                <label class="<?= $labelLeft ?>">Drain <span class="text-red-500">*</span></label>
+                <select name="drain[0][id_ketersediaan]" required class="<?= $stdClass ?> lg:w-1/4">
                     <option value="">— Pilih —</option>
                     <?php foreach ($options['ketersediaan'] as $o): ?>
                         <option value="<?= esc($o['id_ketersediaan_status']) ?>"
@@ -197,20 +197,20 @@ $penunjangMap = array_column($penunjang, null, 'id_jenis_penunjang');
                         </option>
                     <?php endforeach; ?>
                 </select>
-                
-                <label class="<?= $labelRight ?>">Jumlah</label>
+
+                <label class="<?= $labelRight ?>">Jumlah <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
-                    <input type="number" name="drain[0][jumlah]" min="0" max="10000"
+                    <input type="number" name="drain[0][jumlah]" min="0" max="10000" required
                            value="<?= esc($drainRow['jumlah'] ?? '') ?>" class="<?= $inputClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">buah</span>
                 </div>
             </div>
             <div class="mb-5 sm:block md:flex items-center">
-                <label class="<?= $labelLeft ?>">Letak</label>
-                <input type="text" name="drain[0][letak]"
+                <label class="<?= $labelLeft ?>">Letak <span class="text-red-500">*</span></label>
+                <input type="text" name="drain[0][letak]" required
                        value="<?= esc($drainRow['letak'] ?? '') ?>" class="<?= $inputClass ?> lg:w-1/4">
-                <label class="<?= $labelRight ?>">Warna</label>
-                <input type="text" name="drain[0][warna]"
+                <label class="<?= $labelRight ?>">Warna <span class="text-red-500">*</span></label>
+                <input type="text" name="drain[0][warna]" required
                        value="<?= esc($drainRow['warna'] ?? '') ?>" class="<?= $inputClass ?> lg:w-1/4">
             </div>
 

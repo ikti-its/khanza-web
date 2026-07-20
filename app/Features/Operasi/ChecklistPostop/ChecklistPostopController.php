@@ -203,7 +203,7 @@ final class ChecklistPostopController extends ControllerTemplate
             $batchDrain[] = [
                 'id_checklist_post' => $idChecklistPost,
                 'id_ketersediaan'   => $idKetersediaan,
-                'jumlah'            => $row['jumlah'] ?? null,
+                'jumlah'            => (int) ($row['jumlah'] ?? 0),
                 'letak'             => $row['letak'] ?? '',
                 'warna'             => $row['warna'] ?? '',
             ];
