@@ -347,6 +347,15 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
         container.innerHTML = html;
     }
 
+    function sanitizeQtyInput(el) {
+        el.value = el.value.replace(/[^0-9]/g, '');
+        const max = parseInt(el.dataset.max, 10);
+        if (el.value !== '' && !isNaN(max) && parseInt(el.value, 10) > max) {
+            el.value = String(max);
+        }
+        el.setCustomValidity(el.value === '' ? 'Jumlah pakai wajib diisi.' : '');
+    }
+
     function validateRange(el) {
         if (el.value === '' || el.validity.valid) { el.setCustomValidity(''); return; }
         let msg = '';
@@ -425,8 +434,9 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
             <td class="p-2 border dark:border-gray-700">${item.nama_barang}</td>
             <td class="p-2 border text-center dark:border-gray-700">${item.nama_satuan ?? '-'}</td>
             <td class="p-2 border text-center dark:border-gray-700">
-                <input type="number" name="bhp[${item.id_barang}][jumlah_pakai]"
-                       data-id="${item.id_barang}" value="${item.jumlah_pakai ?? 1}" min="1"
+                <input type="text" inputmode="numeric" pattern="[0-9]*" name="bhp[${item.id_barang}][jumlah_pakai]"
+                       data-id="${item.id_barang}" data-max="${item.stok}" value="${item.jumlah_pakai ?? 1}"
+                       oninput="sanitizeQtyInput(this)"
                        class="w-16 text-center border border-gray-300 rounded p-1 dark:bg-slate-900 dark:text-white dark:border-gray-700">
             </td>
             <td class="p-2 border text-center dark:border-gray-700">

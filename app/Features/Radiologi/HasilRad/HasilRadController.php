@@ -135,6 +135,17 @@ final class HasilRadController extends ControllerTemplate
             ->update();
     }
 
+    private function fetchStokBarang(int $idBarang): array
+    {
+        return $this->model
+            ->db
+            ->table('inventori_non_medis.barang')
+            ->select(['nama_barang', 'stok'])
+            ->where('id_barang', $idBarang)
+            ->get()
+            ->getRowArray() ?? [];
+    }
+
     private function processFotoUpload(int $idHasilRad): void
     {
         $uploadDir = ROOTPATH . 'public/uploads/radiologi/';
@@ -249,15 +260,35 @@ final class HasilRadController extends ControllerTemplate
             return;
         }
 
-        $jumlahBaru = (int) ($bhp['jumlah_pakai'] ?? 0);
-        $existing   = $existingByBarang[$idBarang] ?? null;
+        $rawJumlah = $bhp['jumlah_pakai'] ?? 0;
+        if (!is_numeric($rawJumlah)) {
+            throw new \RuntimeException('Jumlah pakai BHP harus berupa angka.');
+        }
 
-        if ($jumlahBaru <= 0) {
+        $jumlahBaru = (int) $rawJumlah;
+        if ($jumlahBaru < 0) {
+            throw new \RuntimeException('Jumlah pakai BHP tidak boleh negatif.');
+        }
+
+        $existing = $existingByBarang[$idBarang] ?? null;
+
+        if ($jumlahBaru === 0) {
             if ($existing !== null) {
                 $this->adjustStok($idBarang, (int) $existing['jumlah_pakai'], '+');
                 $modelBhp->delete((int) $existing['id_rad_bhp']);
             }
             return;
+        }
+
+        $barang       = $this->fetchStokBarang($idBarang);
+        $stokTersedia = (int) ($barang['stok'] ?? 0) + ($existing !== null ? (int) $existing['jumlah_pakai'] : 0);
+        if ($jumlahBaru > $stokTersedia) {
+            throw new \RuntimeException(sprintf(
+                'Jumlah pakai BHP "%s" (%d) melebihi stok tersedia (%d).',
+                $barang['nama_barang'] ?? $idBarang,
+                $jumlahBaru,
+                $stokTersedia,
+            ));
         }
 
         if ($existing !== null) {
