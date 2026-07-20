@@ -377,9 +377,11 @@ final class TagihanOperasiController extends ControllerTemplate
     public function create(): string|RedirectResponse
     {
         $rawPost = $this->request->getPost();
-        $data    = $this->buildData($rawPost);
 
         try {
+            $this->validateObatList($rawPost['obat'] ?? []);
+            $data = $this->buildData($rawPost);
+
             $this->model->db->transStart();
 
             $idTagihan = $this->model->insert($data);
@@ -421,9 +423,11 @@ final class TagihanOperasiController extends ControllerTemplate
         }
 
         $rawPost = $this->request->getPost();
-        $data    = $this->buildData($rawPost);
 
         try {
+            $this->validateObatList($rawPost['obat'] ?? []);
+            $data = $this->buildData($rawPost);
+
             $this->model->db->transStart();
 
             $this->model->update($id, $data);
@@ -555,6 +559,22 @@ final class TagihanOperasiController extends ControllerTemplate
                 ]);
             if ($this->model->db->transStatus() === false) {
                 return;
+            }
+        }
+    }
+
+    private function validateObatList(array $obatList): void
+    {
+        foreach ($obatList as $obat) {
+            if (empty($obat['id_barang'])) {
+                continue;
+            }
+            $jumlah = $obat['jumlah'] ?? null;
+            if ($jumlah === null || $jumlah === '') {
+                continue;
+            }
+            if (!is_numeric($jumlah) || (int) $jumlah <= 0) {
+                throw new \RuntimeException('Jumlah obat/BHP harus berupa angka positif.');
             }
         }
     }

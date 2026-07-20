@@ -406,9 +406,9 @@ function addObatToTable(item, jumlah) {
         <td class="p-2 border text-center dark:border-gray-700">${item.kode_barang ?? '-'}</td>
         <td class="p-2 border dark:border-gray-700">${item.nama_barang ?? ''}</td>
         <td class="p-2 border text-center dark:border-gray-700">
-            <input type="number" name="obat[${item.id_barang}][jumlah]"
-                   value="${jumlah}" min="1" max="10000" required
-                   oninput="updateObatSubtotal(${item.id_barang}, this.value)"
+            <input type="text" inputmode="numeric" pattern="[0-9]*" name="obat[${item.id_barang}][jumlah]"
+                   value="${jumlah}" data-max="10000" required
+                   oninput="sanitizeObatQty(this, ${item.id_barang})"
                    class="w-16 text-center border border-gray-300 rounded p-1 dark:bg-slate-900 dark:text-white dark:border-gray-700">
         </td>
         <td id="subtotal-obat-${item.id_barang}" class="p-2 border text-right pr-4 dark:border-gray-700"
@@ -429,6 +429,16 @@ function addObatToTable(item, jumlah) {
     document.getElementById('hiddenObatInputs').appendChild(inp);
 
     updateTotal();
+}
+
+function sanitizeObatQty(el, idBarang) {
+    el.value = el.value.replace(/[^0-9]/g, '');
+    const max = parseInt(el.dataset.max, 10);
+    if (el.value !== '' && !isNaN(max) && parseInt(el.value, 10) > max) {
+        el.value = String(max);
+    }
+    el.setCustomValidity(el.value === '' ? 'Jumlah wajib diisi.' : '');
+    updateObatSubtotal(idBarang, el.value);
 }
 
 function updateObatSubtotal(idBarang, qty) {
