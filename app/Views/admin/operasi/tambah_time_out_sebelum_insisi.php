@@ -16,6 +16,20 @@ $labelRight    = 'block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:te
 $btnClass      = 'inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0';
 $searchIcon    = '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>';
 $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-4 mt-6';
+
+// Kolom BOOLEAN Postgres dibaca kembali sebagai 't'/'f', bukan '1'/'0' seperti saat disimpan dari form.
+$boolToStr = static function (mixed $v): string {
+    return match (true) {
+        $v === true, $v === 1, $v === '1', $v === 't'  => '1',
+        $v === false, $v === 0, $v === '0', $v === 'f' => '0',
+        default                                        => '',
+    };
+};
+foreach (['is_identitas_sesuai', 'is_tindakan_sesuai', 'is_area_insisi_sesuai', 'is_antibiotik', 'is_steril_dikonfirmasi', 'is_verifikasi_preop'] as $boolField) {
+    if (array_key_exists($boolField, $baris)) {
+        $baris[$boolField] = $boolToStr($baris[$boolField]);
+    }
+}
 ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
