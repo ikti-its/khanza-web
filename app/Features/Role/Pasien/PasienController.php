@@ -39,8 +39,8 @@ final class PasienController extends ControllerTemplate
     public function create_page(): string
     {
         $controllerOrang = new \App\Features\Person\Orang\OrangController();
-        $konfigOrang      = $controllerOrang->get_fields_with_options(false, true);
-        $konfigPasien     = $this->get_fields_with_options(false, true);
+        $konfigOrang     = $controllerOrang->get_fields_with_options(false, true);
+        $konfigPasien    = $this->get_fields_with_options(false, true);
 
         $konfigGabungan = [];
         foreach ($konfigPasien as $field) {
@@ -89,25 +89,42 @@ final class PasienController extends ControllerTemplate
 
     public function create(): string|RedirectResponse
     {
-        $orangModel = new OrangModel();
-        $rawPost    = $this->request->getPost();
-        $nomor_rm   = $rawPost['nomor_rm'] ?? null;
-
-        $dataOrang = [];
-        foreach ($orangModel->allowedFields as $field) {
-            $value = $rawPost[$field] ?? '';
-            if ($value === '') {
-                $value = null;
-            } elseif (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
-                $value = (int) $value;
-            }
-            $dataOrang[$field] = $value;
-        }
+        $alamatModel = new \App\Features\Lokasi\Alamat\AlamatModel();
+        $orangModel  = new OrangModel();
+        $rawPost     = $this->request->getPost();
+        $nomor_rm    = $rawPost['nomor_rm'] ?? null;
 
         $db = $this->model->db;
         $db->transStart();
 
         try {
+            $dataAlamat = [
+                'alamat_lengkap' => $rawPost['alamat_lengkap'] ?? null,
+                'id_provinsi'    => isset($rawPost['id_provinsi']) ? (int) $rawPost['id_provinsi'] : null,
+                'id_kota_lokal'  => isset($rawPost['id_kota_lokal']) ? (int) $rawPost['id_kota_lokal'] : null,
+                'id_kec_lokal'   => isset($rawPost['id_kec_lokal']) ? (int) $rawPost['id_kec_lokal'] : null,
+                'id_desa_lokal'  => isset($rawPost['id_desa_lokal']) ? (int) $rawPost['id_desa_lokal'] : null,
+            ];
+            if (!$alamatModel->insert($dataAlamat)) {
+                throw new \RuntimeException('Sistem gagal menyimpan data Alamat.');
+            }
+            $id_alamat = $alamatModel->insertID();
+
+            $dataOrang = [];
+            foreach ($orangModel->allowedFields as $field) {
+                if ($field === 'id_alamat') {
+                    continue;
+                }
+                $value = $rawPost[$field] ?? '';
+                if ($value === '') {
+                    $value = null;
+                } elseif (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
+                    $value = (int) $value;
+                }
+                $dataOrang[$field] = $value;
+            }
+            $dataOrang['id_alamat'] = $id_alamat;
+
             if (!$orangModel->insert($dataOrang)) {
                 throw new \RuntimeException('Sistem gagal menyimpan identitas Orang.');
             }
@@ -175,8 +192,8 @@ final class PasienController extends ControllerTemplate
         }
 
         $controllerOrang = new \App\Features\Person\Orang\OrangController();
-        $konfigOrang      = $controllerOrang->get_fields_with_options(false, true);
-        $konfigPasien     = $this->get_fields_with_options(false, true);
+        $konfigOrang     = $controllerOrang->get_fields_with_options(false, true);
+        $konfigPasien    = $this->get_fields_with_options(false, true);
 
         $konfigGabungan = [];
         foreach ($konfigPasien as $field) {
@@ -309,14 +326,15 @@ final class PasienController extends ControllerTemplate
         $total_pages = $total_rows > 0 ? (int) ceil($total_rows / $size) : 1;
         $page        = min($page, $total_pages);
 
-        $data_tabel = $this->pasien_query()
+        $data_tabel = $this
+            ->pasien_query()
             ->orderBy('p.id_pasien')
             ->limit($size, ($page - 1) * $size)
             ->get()
             ->getResultArray();
 
         $konfig = [
-            [SHOW, 'No. Rekam Medis', 'nomor_rm',     'teks',    0],
+            [SHOW, 'No. Rekam Medis', 'nomor_rm',      'teks',    0],
             [SHOW, 'NIK',             'nik',           'teks',    0],
             [SHOW, 'Nama',            'nama',          'teks',    0],
             [SHOW, 'Jenis Kelamin',   'jenis_kelamin', 'teks',    0],

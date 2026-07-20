@@ -31,7 +31,7 @@ $renderSelect = function (string $name, array $opts, string $selected) {
 <?= $this->section('content'); ?>
 
 <?= $this->include('components/modal/modalkota') ?>
-<?= $this->include('components/modal/modalalamat') ?>
+<?= $this->include('components/modal/modalwilayah') ?>
 
 <div class="max-w-[85rem] py-6 lg:py-3 px-8 mx-auto">
     <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
@@ -99,21 +99,49 @@ $renderSelect = function (string $name, array $opts, string $selected) {
                 </select>
             </div>
 
-            <!-- Golongan Darah + Alamat -->
+            <!-- Golongan Darah -->
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="<?= $labelLeft ?>">Golongan Darah <span class="text-red-600">*</span></label>
                 <select name="id_golongan_darah" required class="<?= $selectClass ?> lg:w-1/4">
                     <?= $renderSelect('id_golongan_darah', $options('id_golongan_darah'), $val('id_golongan_darah')) ?>
                 </select>
+            </div>
 
-                <label class="<?= $labelRight ?>">Alamat <span class="text-red-600">*</span></label>
-                <input type="hidden" name="id_alamat" id="id_alamat" value="<?= $val('id_alamat') ?>" required>
+            <!-- Alamat Lengkap -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="<?= $labelLeft ?>">Alamat Lengkap <span class="text-red-600">*</span></label>
+                <textarea name="alamat_lengkap" rows="2" required
+                          class="<?= $editClass ?> lg:w-1/4 resize-y"><?= $val('alamat_lengkap') ?></textarea>
+            </div>
+
+            <!-- Kelurahan/Desa + Kecamatan -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="<?= $labelLeft ?>">Kelurahan / Desa <span class="text-red-600">*</span></label>
+                <input type="hidden" name="id_provinsi" id="id_provinsi" value="<?= $val('id_provinsi') ?>" required>
+                <input type="hidden" name="id_kota_lokal" id="id_kota_lokal" value="<?= $val('id_kota_lokal') ?>" required>
+                <input type="hidden" name="id_kec_lokal" id="id_kec_lokal" value="<?= $val('id_kec_lokal') ?>" required>
+                <input type="hidden" name="id_desa_lokal" id="id_desa_lokal" value="<?= $val('id_desa_lokal') ?>" required>
                 <div class="flex gap-x-2 lg:w-1/4">
-                    <input type="text" id="alamat_lengkap_display" readonly required
-                           value="<?= $val('alamat_lengkap') ?>" placeholder="Klik cari alamat..."
-                           onclick="open_modalAlamat()" class="<?= $inputClass ?>">
-                    <button type="button" onclick="open_modalAlamat()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
+                    <input type="text" id="nama_desa" readonly
+                           value="<?= $val('nama_desa') ?>" placeholder="Klik cari..."
+                           onclick="open_modalWilayah()" class="<?= $inputClass ?>">
+                    <button type="button" onclick="open_modalWilayah()" class="<?= $btnClass ?>"><?= $searchIcon ?></button>
                 </div>
+
+                <label class="<?= $labelRight ?>">Kecamatan</label>
+                <input type="text" id="nama_kecamatan" readonly placeholder="Terisi otomatis..."
+                       value="<?= $val('nama_kecamatan') ?>" class="<?= $readonlyClass ?> lg:w-1/4">
+            </div>
+
+            <!-- Kota + Provinsi -->
+            <div class="mb-5 sm:block md:flex items-center">
+                <label class="<?= $labelLeft ?>">Kota / Kabupaten</label>
+                <input type="text" id="nama_kota_wilayah" readonly placeholder="Terisi otomatis..."
+                       value="<?= $val('nama_kota_wilayah') ?>" class="<?= $readonlyClass ?> lg:w-1/4">
+
+                <label class="<?= $labelRight ?>">Provinsi</label>
+                <input type="text" id="nama_provinsi" readonly placeholder="Terisi otomatis..."
+                       value="<?= $val('nama_provinsi') ?>" class="<?= $readonlyClass ?> lg:w-1/4">
             </div>
 
             <?= view('components/form/submit_button') ?>
@@ -127,9 +155,16 @@ $renderSelect = function (string $name, array $opts, string $selected) {
         document.getElementById('nama_kota').value = item.nama_kota;
     }
 
-    function autofillAlamatFields(item) {
-        document.getElementById('id_alamat').value = item.id_alamat;
-        document.getElementById('alamat_lengkap_display').value = item.alamat_lengkap;
+    function autofillWilayah(item) {
+        document.getElementById('id_provinsi').value   = item.id_provinsi;
+        document.getElementById('id_kota_lokal').value = item.id_kota_lokal;
+        document.getElementById('id_kec_lokal').value  = item.id_kec_lokal;
+        document.getElementById('id_desa_lokal').value = item.id_desa_lokal;
+
+        document.getElementById('nama_desa').value        = item.nama_desa;
+        document.getElementById('nama_kecamatan').value    = item.nama_kecamatan;
+        document.getElementById('nama_kota_wilayah').value = item.nama_kota;
+        document.getElementById('nama_provinsi').value     = item.nama_provinsi;
     }
 
     function validateForm() {
