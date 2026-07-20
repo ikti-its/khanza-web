@@ -27,6 +27,7 @@ final class PermintaanLabPaController extends ControllerTemplate
                 A::DELETE,
                 A::SAMPEL,
                 A::PRINT,
+                A::FILTER,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_permintaan_pa',            'ID Permintaan PA'],
@@ -201,9 +202,9 @@ final class PermintaanLabPaController extends ControllerTemplate
     }
 
     // // Centralize query for index() and list()
-    private function fetchPermintaanLabHeaders(): array
+    private function fetchPermintaanLabHeaders(null|int $idStatus = null): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_header h')
             ->select([
@@ -225,10 +226,44 @@ final class PermintaanLabPaController extends ControllerTemplate
             ->join('role.dokter d', 'd.id_dokter  = h.id_dokter_perujuk', 'left')
             ->join('person.orang od', 'od.id_orang  = d.id_orang', 'left')
             ->join('laboratorium.ref_status_permintaan s', 's.id_status  = h.id_status_permintaan', 'left')
-            ->where('h.id_kategori_lab', ID_KATEGORI_PA)
-            ->orderBy('h.tgl_permintaan', 'DESC')
+            ->where('h.id_kategori_lab', ID_KATEGORI_PA);
+
+        if ($idStatus !== null) {
+            $builder->where('h.id_status_permintaan', $idStatus);
+        }
+
+        return $builder->orderBy('h.tgl_permintaan', 'DESC')->get()->getResultArray();
+    }
+
+    // Jumlah data per status (untuk filter)
+    private function fetchStatusFilters(): array
+    {
+        $countMap = array_column(
+            $this->model
+                ->db
+                ->table('laboratorium.permintaan_lab_header')
+                ->select('id_status_permintaan, COUNT(*) AS jumlah')
+                ->where('id_kategori_lab', ID_KATEGORI_PA)
+                ->groupBy('id_status_permintaan')
+                ->get()
+                ->getResultArray(),
+            'jumlah',
+            'id_status_permintaan',
+        );
+
+        $filters = [];
+        foreach ($this->model
+            ->db
+            ->table('laboratorium.ref_status_permintaan')
+            ->select('id_status, nama_status')
+            ->orderBy('id_status')
             ->get()
-            ->getResultArray();
+            ->getResultArray() as $row) {
+            $filters[(string) $row['id_status']] =
+                $row['nama_status'] . ' (' . ($countMap[$row['id_status']] ?? 0) . ')';
+        }
+
+        return $filters;
     }
 
     // -------------------------------------------------------------------------
@@ -498,7 +533,8 @@ final class PermintaanLabPaController extends ControllerTemplate
     #[\Override]
     public function index(): string
     {
-        $rows = $this->fetchPermintaanLabHeaders();
+        $activeFilter = $this->request->getGet('filter') ?: null;
+        $rows         = $this->fetchPermintaanLabHeaders($activeFilter !== null ? (int) $activeFilter : null);
 
         $konfig = [
             [1, 'No. Permintaan', 'no_permintaan',  'teks',    0],
@@ -511,17 +547,19 @@ final class PermintaanLabPaController extends ControllerTemplate
         ];
 
         return view('/layouts/data', [
-            'judul'        => $this->title,
-            'breadcrumbs'  => $this->breadcrumbs,
-            'meta_data'    => ['page' => 1, 'size' => count($rows), 'total' => 1],
-            'modul_path'   => $this->get_uri_path(),
-            'kolom_id'     => 'id_permintaan',
-            'konfig'       => $konfig,
-            'aksi'         => $this->actions,
-            'tabel'        => $rows,
-            'row_alert'    => [],
-            'child_link'   => null,
-            'query_string' => '',
+            'judul'         => $this->title,
+            'breadcrumbs'   => $this->breadcrumbs,
+            'meta_data'     => ['page' => 1, 'size' => count($rows), 'total' => 1],
+            'modul_path'    => $this->get_uri_path(),
+            'kolom_id'      => 'id_permintaan',
+            'konfig'        => $konfig,
+            'aksi'          => $this->actions,
+            'tabel'         => $rows,
+            'row_alert'     => [],
+            'child_link'    => null,
+            'query_string'  => '',
+            'filters'       => $this->fetchStatusFilters(),
+            'active_filter' => $activeFilter,
         ]);
     }
 
