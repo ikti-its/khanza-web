@@ -30,10 +30,14 @@
                 <!-- Tgl Pengambilan | Metode Diperoleh -->
                 <div class="mb-5 sm:block md:flex items-center">
                     <label class="<?= $labelLeft ?>">Tanggal Pengambilan Bahan <span class="text-red-500">*</span></label>
-                    <input type="datetime-local" name="tgl_pengambilan_bahan"
-                           value="<?= esc($baris['tgl_pengambilan_bahan'] ?? '') ?>"
-                           required
-                           class="<?= $inputClass ?> lg:w-1/4">
+                    <div class="lg:w-1/4">
+                        <input type="datetime-local" name="tgl_pengambilan_bahan" id="tgl_pengambilan_bahan"
+                               value="<?= esc($baris['tgl_pengambilan_bahan'] ?? '') ?>"
+                               max="<?= date('Y-m-d\TH:i') ?>"
+                               required
+                               class="<?= $inputClass ?> w-full">
+                        <p id="err_tgl_pengambilan_bahan" class="hidden text-red-500 text-xs mt-1"></p>
+                    </div>
 
                     <label class="<?= $labelRight ?>">Metode Diperoleh <span class="text-red-500">*</span></label>
                     <input type="text" name="metode_diperoleh"
@@ -77,8 +81,9 @@
                            class="<?= $inputClass ?> lg:w-1/4">
 
                     <label class="<?= $labelRight ?>">Tanggal Pemeriksaan Sebelumnya <span class="text-red-500">*</span></label>
-                    <input type="date" name="riwayat_tgl_sebelumnya"
+                    <input type="date" name="riwayat_tgl_sebelumnya" id="riwayat_tgl_sebelumnya"
                            value="<?= esc($baris['riwayat_tgl_sebelumnya'] ?? '') ?>"
+                           max="<?= date('Y-m-d') ?>"
                            required
                            class="<?= $inputClass ?> lg:w-1/4">
                 </div>
@@ -226,11 +231,14 @@
         }
     }
 
+    let _firstErrorEl = null;
+
     function showError(fieldId, msg) {
         const errEl = document.getElementById('err_' + fieldId);
         if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
         const inputEl = document.getElementById(fieldId);
         if (inputEl) inputEl.classList.add('!border-red-500');
+        if (!_firstErrorEl) _firstErrorEl = errEl || inputEl;
     }
 
     function clearError(fieldId) {
@@ -261,10 +269,25 @@
 
     function validateForm() {
         let valid = true;
+        _firstErrorEl = null;
 
         clearError('nomor_reg_display');
         clearError('kode_dokter');
         clearError('items');
+        clearError('tgl_pengambilan_bahan');
+        clearError('riwayat_tgl_sebelumnya');
+
+        const tglPengambilan = document.getElementById('tgl_pengambilan_bahan');
+        if (tglPengambilan.value && new Date(tglPengambilan.value) > new Date()) {
+            showError('tgl_pengambilan_bahan', 'Tanggal pengambilan bahan tidak boleh lebih dari hari ini.');
+            valid = false;
+        }
+
+        const tglSebelumnya = document.getElementById('riwayat_tgl_sebelumnya');
+        if (tglSebelumnya.value && tglSebelumnya.value > new Date().toISOString().slice(0, 10)) {
+            showError('riwayat_tgl_sebelumnya', 'Tanggal pemeriksaan sebelumnya tidak boleh lebih dari hari ini.');
+            valid = false;
+        }
 
         if (!document.getElementById('nomor_reg').value) {
             showError('nomor_reg_display', 'Registrasi pasien wajib dipilih.');
@@ -280,7 +303,12 @@
             valid = false;
         }
 
-        if (!valid) return false;
+        if (!valid) {
+            if (_firstErrorEl) {
+                _firstErrorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return false;
+        }
 
         if (!document.getElementById('myForm').checkValidity()) {
             document.getElementById('myForm').reportValidity();
