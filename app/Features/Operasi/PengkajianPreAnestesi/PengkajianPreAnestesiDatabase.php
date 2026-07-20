@@ -53,7 +53,7 @@ final class PengkajianPreAnestesiDatabase extends DatabaseTemplate
                 'rw_lainnya'           => T::NOTE(),
                 'id_rencana_anestesi'  => T::FK_AUTO(),
                 'id_asa'               => T::FK_AUTO(),
-                'waktu_puasa'          => T::TIME(),
+                'waktu_puasa'          => T::DTIME(),
                 'rencana_perawatan'    => T::NOTE(),
                 'catatan_khusus'       => T::NOTE(),
             ],

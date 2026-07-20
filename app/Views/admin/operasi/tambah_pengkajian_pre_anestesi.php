@@ -321,7 +321,7 @@ $sectionClass  = 'text-xs font-semibold uppercase tracking-wider text-gray-500 d
 
             <div class="mb-5 sm:block md:flex items-center">
                 <label class="<?= $labelLeft ?>">Waktu Puasa <span class="text-red-500">*</span></label>
-                <input type="time" name="waktu_puasa" value="<?= esc(substr(str_replace(' ', 'T', $baris['waktu_puasa'] ?? ''), 0, 16)) ?>"
+                <input type="datetime-local" name="waktu_puasa" value="<?= esc(substr(str_replace(' ', 'T', $baris['waktu_puasa'] ?? ''), 0, 16)) ?>"
                        required class="<?= $inputClass ?> lg:w-1/4">
             </div>
 
