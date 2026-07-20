@@ -359,4 +359,38 @@ final class ChecklistPreOperasiController extends ControllerTemplate
             return redirect()->back()->withInput();
         }
     }
+
+    #[\Override]
+    public function delete(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0) {
+            return $this->home();
+        }
+
+        $this->model->db->transStart();
+
+        try {
+            (new \App\Features\Operasi\ChecklistPreOperasiPenunjang\ChecklistPreOperasiPenunjangModel())
+                ->where('id_checklist', $id)
+                ->delete();
+
+            $this->model->delete($id);
+
+            $this->model->db->transComplete();
+
+            if ($this->model->db->transStatus() === false) {
+                throw new \RuntimeException('Gagal menghapus checklist pre operasi.');
+            }
+
+            session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil dihapus.');
+        } catch (\Exception $e) {
+            $this->model->db->transRollback();
+            $errorMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+                ? $this->friendly_db_error($e)
+                : $e->getMessage();
+            session()->setFlashdata('error', $errorMsg);
+        }
+
+        return $this->home();
+    }
 }
