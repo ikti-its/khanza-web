@@ -31,6 +31,7 @@
                 searchNamaKecamatan: 'nama_kecamatan',
                 searchKota: 'nama_kota'
             },
+            serverSearch: true,
             rowsPerPage: 10,
             onSelect: (item) => {
                 autofillWilayah(item);
