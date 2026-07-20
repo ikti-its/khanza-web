@@ -34,8 +34,33 @@ final class HasilRadController extends ControllerTemplate
                 [SHOW, REQUIRED, I::TEXT,  'id_petugas_rad',    'Petugas Rad'],
                 [HIDE, REQUIRED, I::TEXT,  'id_dokter_perujuk', 'Dokter Perujuk'],
                 [SHOW, REQUIRED, I::DTIME, 'tgl_jam_hasil',     'Tanggal dan Jam Hasil'],
+                [TABLE_ONLY, OPTIONAL, I::SELECT, 'nama_status', 'Status'],
             ],
         );
+    }
+
+    #[\Override]
+    protected function after_read(array &$data_tabel): void
+    {
+        if (empty($data_tabel)) {
+            return;
+        }
+
+        $ids     = array_column($data_tabel, 'id_permintaan_rad');
+        $statuses = $this->model
+            ->db
+            ->table('radiologi.permintaan_rad pr')
+            ->select(['pr.id_permintaan', 's.nama_status'])
+            ->join('radiologi.ref_status_permintaan_rad s', 's.id_status = pr.id_status_permintaan', 'left')
+            ->whereIn('pr.id_permintaan', $ids)
+            ->get()
+            ->getResultArray();
+
+        $map = array_column($statuses, 'nama_status', 'id_permintaan');
+
+        foreach ($data_tabel as &$row) {
+            $row['nama_status'] = $map[$row['id_permintaan_rad']] ?? null;
+        }
     }
 
     // ──────────────────────────────────────────────────────────
