@@ -487,6 +487,21 @@ foreach (['is_disetujui'] as $boolField) {
         }
     }
 
+    // Cegah user mengetik "-", "+", atau "e" di semua input tanda vital (type=number),
+    // karena atribut min/max HTML saja bisa dilewati (devtools, paste, dsb).
+    document.querySelectorAll('input[type="number"]').forEach(function (input) {
+        input.addEventListener('keydown', function (e) {
+            if (e.key === '-' || e.key === '+' || e.key === 'e') {
+                e.preventDefault();
+            }
+        });
+        input.addEventListener('input', function () {
+            if (input.value !== '' && parseFloat(input.value) < 0) {
+                input.value = '';
+            }
+        });
+    });
+
     // ── Validate ───────────────────────────────────────────────────────────────
     function validateForm() {
         const anyChecked = document.querySelectorAll('input[name*="[selected]"]:checked').length > 0;

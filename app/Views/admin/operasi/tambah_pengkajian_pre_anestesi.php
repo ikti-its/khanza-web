@@ -118,7 +118,7 @@ foreach (['is_merokok', 'is_alkohol'] as $boolField) {
                 </label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="berat_badan" value="<?= esc($baris['berat_badan'] ?? '') ?>"
-                           required min="0" max="700"class="<?= $stdClass ?>">
+                           required min="0" max="700" class="<?= $stdClass ?>">
                     <span class="text-sm text-gray-400 whitespace-nowrap">kg</span>
                 </div>
             </div>
@@ -366,11 +366,38 @@ foreach (['is_merokok', 'is_alkohol'] as $boolField) {
         document.getElementById('nama_dokter_anestesi').value  = item.nama_dokter ?? '';
     }
 
+    // Cegah user mengetik "-", "+", atau "e" di semua input tanda vital (type=number),
+    // karena atribut min/max HTML saja bisa dilewati (devtools, paste, dsb).
+    document.querySelectorAll('input[type="number"]').forEach(function (input) {
+        input.addEventListener('keydown', function (e) {
+            if (e.key === '-' || e.key === '+' || e.key === 'e') {
+                e.preventDefault();
+            }
+        });
+        input.addEventListener('input', function () {
+            if (input.value !== '' && parseFloat(input.value) < 0) {
+                input.value = '';
+            }
+        });
+    });
+
     function validateForm() {
         if (!document.getElementById('id_dokter_anestesi').value) {
             alert('Silakan pilih dokter anestesi terlebih dahulu.');
             return false;
         }
+
+        for (const input of document.querySelectorAll('input[type="number"]')) {
+            if (input.value === '') continue;
+            const value = parseFloat(input.value);
+            const min   = input.min !== '' ? parseFloat(input.min) : null;
+            const max   = input.max !== '' ? parseFloat(input.max) : null;
+            if ((min !== null && value < min) || (max !== null && value > max)) {
+                alert('Nilai pada field "' + (input.name || input.id) + '" harus di antara ' + input.min + ' dan ' + input.max + '.');
+                return false;
+            }
+        }
+
         const btn = document.getElementById('submitButton');
         if (btn) { btn.disabled = true; btn.innerHTML = 'Menyimpan...'; }
         return true;

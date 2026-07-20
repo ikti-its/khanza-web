@@ -90,17 +90,17 @@ foreach ([
                 <label class="<?= $labelLeft ?>">Tekanan Darah <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="sistolik" value="<?= esc($baris['sistolik'] ?? '') ?>"
-                           placeholder="Sistolik" required min="0" max="300" class="<?= $stdClass ?>">
+                           placeholder="Sistolik" required min="0" max="300" class="<?= $stdClass ?>" <?= $noMinus ?>>
                     <span class="text-gray-500 font-semibold flex-shrink-0">/</span>
                     <input type="number" name="diastolik" value="<?= esc($baris['diastolik'] ?? '') ?>"
-                           placeholder="Diastolik" required min="0" max="200" class="<?= $stdClass ?>">
+                           placeholder="Diastolik" required min="0" max="200" class="<?= $stdClass ?>" <?= $noMinus ?>>
                     <span class="text-sm text-gray-400 whitespace-nowrap">mmHg</span>
                 </div>
 
                 <label class="<?= $labelRight ?>">Nadi <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="nadi" value="<?= esc($baris['nadi'] ?? '') ?>"
-                           required min="0" max="300" class="<?= $stdClass ?>">
+                           required min="0" max="300" class="<?= $stdClass ?>" <?= $noMinus ?>>
                     <span class="text-sm text-gray-400 whitespace-nowrap">x/mnt</span>
                 </div>
             </div>
@@ -109,14 +109,14 @@ foreach ([
                 <label class="<?= $labelLeft ?>">Respiratory Rate <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="respiratory_rate" value="<?= esc($baris['respiratory_rate'] ?? '') ?>"
-                           required min="0" max="100" class="<?= $stdClass ?>">
+                           required min="0" max="100" class="<?= $stdClass ?>" <?= $noMinus ?>>
                     <span class="text-sm text-gray-400 whitespace-nowrap">x/mnt</span>
                 </div>
 
                 <label class="<?= $labelRight ?>">Suhu <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="suhu" value="<?= esc($baris['suhu'] ?? '') ?>"
-                           required step="0.1" min="30" max="45" class="<?= $stdClass ?>">
+                           required step="0.1" min="30" max="45" class="<?= $stdClass ?>" <?= $noMinus ?>>
                     <span class="text-sm text-gray-400 whitespace-nowrap">°C</span>
                 </div>
             </div>
@@ -272,7 +272,7 @@ foreach ([
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="airway[<?= $ett['idx'] ?? 2 ?>][fiksasi_cm]"
                            value="<?= esc($ett['ex']['fiksasi_cm'] ?? '') ?>"
-                           min="0" max="100" class="<?= $stdClass ?>">
+                           min="0" max="100" class="<?= $stdClass ?>" <?= $noMinus ?>>
                     <span class="text-sm text-gray-400 whitespace-nowrap">cm</span>
                 </div>
             </div>
@@ -389,7 +389,7 @@ foreach ([
                 <label class="<?= $labelRight ?>">Fiksasi <span class="text-red-500">*</span></label>
                 <div class="flex items-center gap-x-2 lg:w-1/4">
                     <input type="number" name="kateter_fiksasi_cm" value="<?= esc($baris['kateter_fiksasi_cm'] ?? '') ?>"
-                           required min="0" max="100" class="<?= $stdClass ?>">
+                           required min="0" max="100" class="<?= $stdClass ?>" <?= $noMinus ?>>
                     <span class="text-sm text-gray-400 whitespace-nowrap">cm</span>
                 </div>
             </div>
