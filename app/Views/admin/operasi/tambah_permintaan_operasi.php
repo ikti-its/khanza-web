@@ -97,13 +97,11 @@ $isCito = in_array($baris['is_cito'] ?? false, [true, 1, '1', 't'], true);
                     </button>
                 </div>
 
-                <label class="<?= $labelRight ?>">
-                    Tanggal Minta <span class="text-red-500">*</span>
-                </label>
-                <input type="datetime-local" name="tanggal_minta" id="tanggal_minta"
-                       value="<?= esc(substr(str_replace(' ', 'T', $baris['tanggal_minta'] ?? date('Y-m-d\TH:i')), 0, 16)) ?>"
-                       required
-                       class="<?= $inputClass ?> lg:w-1/4">
+                <label class="<?= $labelRight ?>">Tanggal Minta</label>
+                <input type="text" id="tanggal_minta"
+                       value="<?= esc($baris['tanggal_minta'] ?? date('Y-m-d H:i:s')) ?>"
+                       readonly disabled
+                       class="<?= $readonlyClass ?> lg:w-1/4">
             </div>
 
             <!-- Baris 4: CITO -->

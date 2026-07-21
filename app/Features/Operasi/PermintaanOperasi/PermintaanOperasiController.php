@@ -107,13 +107,20 @@ final class PermintaanOperasiController extends ControllerTemplate
 
     private function buildHeaderData(array $rawPost, bool $isCreate = false): array
     {
-        return [
-            'nomor_reg'     => $rawPost['nomor_reg'] ?? '',
-            'id_dokter'     => $rawPost['id_dokter'] ?? '',
-            'id_tindakan'   => $rawPost['id_tindakan'] ?? '',
-            'tanggal_minta' => $rawPost['tanggal_minta'] ?? ($isCreate ? date('Y-m-d H:i:s') : ''),
-            'is_cito'       => $rawPost['is_cito'] ?? 0,
+        $data = [
+            'nomor_reg'   => $rawPost['nomor_reg'] ?? '',
+            'id_dokter'   => $rawPost['id_dokter'] ?? '',
+            'id_tindakan' => $rawPost['id_tindakan'] ?? '',
+            'is_cito'     => $rawPost['is_cito'] ?? 0,
         ];
+
+        // tanggal_minta mencatat kapan permintaan dibuat, jadi diisi server
+        // saat create dan tidak pernah diubah lagi lewat update.
+        if ($isCreate) {
+            $data['tanggal_minta'] = date('Y-m-d H:i:s');
+        }
+
+        return $data;
     }
 
     // -------------------------------------------------------------------------
