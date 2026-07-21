@@ -101,6 +101,11 @@ final readonly class PostgresType
         return new ForgeType('TEXT');
     }
 
+    public static function BYTEA(): ForgeType
+    {
+        return new ForgeType('BYTEA');
+    }
+
     public static function BOOL(): ForgeType
     {
         return new ForgeType('BOOLEAN');

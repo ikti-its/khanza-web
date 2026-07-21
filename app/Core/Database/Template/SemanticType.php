@@ -155,4 +155,9 @@ final readonly class SemanticType
     {
         return PT::VARCHAR($len);
     }
+
+    public static function FILE(): FT
+    {
+        return PT::BYTEA();
+    }
 }
