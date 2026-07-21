@@ -131,20 +131,6 @@ class ControllerTemplate extends Controller
         return redirect()->to($this->get_uri_path() . '/data' . $qs);
     }
 
-    /** Folder penyimpanan file upload milik grup fitur ini. Sengaja di
-     * writable/ (di luar public/) supaya file tidak pernah bisa diakses
-     * sebagai file statis tanpa melewati filter auth; penyajiannya hanya
-     * lewat tampil(). */
-    protected function upload_dir(): string
-    {
-        $group = $this->request->getUri()->getSegments()[0] ?? '';
-        $dir   = WRITEPATH . 'uploads/' . $group . '/';
-        if (!is_dir($dir)) {
-            mkdir($dir, 0o755, true);
-        }
-        return $dir;
-    }
-
     /** Whitelist ekstensi dinilai dari mime hasil deteksi isi file di server,
      * bukan dari nama file kiriman client, plus batas ukuran. */
     protected function upload_valid(
@@ -158,28 +144,43 @@ class ControllerTemplate extends Controller
             && in_array(strtolower($file->guessExtension()), $allowed_ext, true);
     }
 
-    /** Menyajikan isi file upload lewat aplikasi (route tampil/(:num), dijaga
-     * auth + checkpermission read) sebagai pengganti URL statis publik.
-     * Berlaku untuk fitur manapun yang menyimpan nama file di kolom
-     * nama_file lewat upload_dir(). */
+    /** Kolom bytea tempat isi file, dideteksi otomatis dari kolom pertama
+     * bertipe T::FILE() pada definisi schema fitur ini. */
+    private function file_column(): null|string
+    {
+        foreach ($this->model->database->fields as $col => $def) {
+            if (($def['type'] ?? '') === 'BYTEA') {
+                return $col;
+            }
+        }
+        return null;
+    }
+
+    /** Menyajikan isi file upload dari database lewat aplikasi (route
+     * tampil/(:num), dijaga auth + checkpermission read) sebagai pengganti
+     * URL statis publik. Fitur pemakai cukup mendeklarasikan satu kolom
+     * T::FILE() di Database class-nya; Content-Type diambil dari ekstensi
+     * pada kolom nama_file bila ada. */
     public function tampil(int|string $id): \CodeIgniter\HTTP\ResponseInterface
     {
-        $row  = $this->model->find($id);
-        $path = is_array($row) && isset($row['nama_file'])
-            ? $this->upload_dir() . basename($row['nama_file'])
-            : '';
-
-        if ($path === '' || !is_file($path)) {
+        $kolom  = $this->file_column();
+        $row    = $kolom !== null ? $this->model->find($id) : null;
+        $konten = is_array($row) ? ($row[$kolom] ?? null) : null;
+        if (!is_string($konten) || $konten === '') {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        // Utamakan deteksi dari isi file (butuh ekstensi fileinfo); kalau tidak
-        // tersedia, jatuhkan ke peta ekstensi bawaan CI. Ekstensinya sendiri
-        // sudah dibatasi whitelist upload_valid() saat file masuk.
-        $mime = function_exists('mime_content_type') ? mime_content_type($path) : false;
-        if ($mime === false) {
-            $mime = \Config\Mimes::guessTypeFromExtension(pathinfo($path, PATHINFO_EXTENSION));
+        // Driver pgsql mengembalikan bytea sebagai string hex "\x...".
+        $bytes = str_starts_with($konten, '\x')
+            ? hex2bin(substr($konten, 2))
+            : $konten;
+        if ($bytes === false || $bytes === '') {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
+
+        $mime = empty($row['nama_file'])
+            ? null
+            : \Config\Mimes::guessTypeFromExtension(pathinfo($row['nama_file'], PATHINFO_EXTENSION));
 
         return $this->response
             ->setContentType($mime ?? 'application/octet-stream')
@@ -187,7 +188,7 @@ class ControllerTemplate extends Controller
             // yang menyamar sebagai gambar tidak bisa dirender sebagai HTML/JS.
             ->setHeader('X-Content-Type-Options', 'nosniff')
             ->setHeader('Cache-Control', 'private, max-age=0')
-            ->setBody(file_get_contents($path));
+            ->setBody($bytes);
     }
 
     private function fk_from_get(): void
