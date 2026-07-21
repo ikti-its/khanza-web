@@ -17,6 +17,7 @@ final class HasilRadFotoDatabase extends DatabaseTemplate
                 'id_rad_foto'  => T::ID(100_000_000),
                 'id_hasil_rad' => T::FK_AUTO(),
                 'nama_file'    => T::NAME(500),
+                'konten_file'  => T::FILE()->nullable(),
                 'tgl_upload'   => T::DTIME(),
             ],
             'id_rad_foto',

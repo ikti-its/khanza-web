@@ -15,6 +15,7 @@ final class HasilRadFotoModel extends ModelTemplate
             [
                 'id_rad_foto' => V::DEFAULT(),
                 'nama_file'   => V::DEFAULT(),
+                'konten_file' => V::DEFAULT(),
                 'tgl_upload'  => V::DEFAULT(),
             ],
             [
