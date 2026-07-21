@@ -131,6 +131,65 @@ class ControllerTemplate extends Controller
         return redirect()->to($this->get_uri_path() . '/data' . $qs);
     }
 
+    /** Folder penyimpanan file upload milik grup fitur ini. Sengaja di
+     * writable/ (di luar public/) supaya file tidak pernah bisa diakses
+     * sebagai file statis tanpa melewati filter auth; penyajiannya hanya
+     * lewat tampil(). */
+    protected function upload_dir(): string
+    {
+        $group = $this->request->getUri()->getSegments()[0] ?? '';
+        $dir   = WRITEPATH . 'uploads/' . $group . '/';
+        if (!is_dir($dir)) {
+            mkdir($dir, 0o755, true);
+        }
+        return $dir;
+    }
+
+    /** Whitelist ekstensi dinilai dari mime hasil deteksi isi file di server,
+     * bukan dari nama file kiriman client, plus batas ukuran. */
+    protected function upload_valid(
+        \CodeIgniter\HTTP\Files\UploadedFile $file,
+        array $allowed_ext,
+        int $max_bytes,
+    ): bool {
+        return $file->isValid()
+            && !$file->hasMoved()
+            && $file->getSize() <= $max_bytes
+            && in_array(strtolower($file->guessExtension()), $allowed_ext, true);
+    }
+
+    /** Menyajikan isi file upload lewat aplikasi (route tampil/(:num), dijaga
+     * auth + checkpermission read) sebagai pengganti URL statis publik.
+     * Berlaku untuk fitur manapun yang menyimpan nama file di kolom
+     * nama_file lewat upload_dir(). */
+    public function tampil(int|string $id): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $row  = $this->model->find($id);
+        $path = is_array($row) && isset($row['nama_file'])
+            ? $this->upload_dir() . basename($row['nama_file'])
+            : '';
+
+        if ($path === '' || !is_file($path)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        // Utamakan deteksi dari isi file (butuh ekstensi fileinfo); kalau tidak
+        // tersedia, jatuhkan ke peta ekstensi bawaan CI. Ekstensinya sendiri
+        // sudah dibatasi whitelist upload_valid() saat file masuk.
+        $mime = function_exists('mime_content_type') ? mime_content_type($path) : false;
+        if ($mime === false) {
+            $mime = \Config\Mimes::guessTypeFromExtension(pathinfo($path, PATHINFO_EXTENSION));
+        }
+
+        return $this->response
+            ->setContentType($mime ?? 'application/octet-stream')
+            // nosniff mencegah browser menebak-nebak tipe file, sehingga file
+            // yang menyamar sebagai gambar tidak bisa dirender sebagai HTML/JS.
+            ->setHeader('X-Content-Type-Options', 'nosniff')
+            ->setHeader('Cache-Control', 'private, max-age=0')
+            ->setBody(file_get_contents($path));
+    }
+
     private function fk_from_get(): void
     {
         if ($this->parent_fk === null)

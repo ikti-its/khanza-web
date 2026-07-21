@@ -35,27 +35,19 @@ final class HasilRadFotoController extends ControllerTemplate
         );
     }
 
-    private function uploadDir(): string
-    {
-        $dir = ROOTPATH . 'public/uploads/radiologi/';
-        if (!is_dir($dir)) {
-            mkdir($dir, 0o755, true);
-        }
-        return $dir;
-    }
-
-    // Simpan satu atau lebih file gambar ke disk dan catat ke DB
+    // Simpan satu atau lebih file gambar ke disk (writable/, di luar public/)
+    // dan catat ke DB; penyajiannya lewat route tampil/(:num) yang dijaga auth
     public function upload(int $idHasilRad): ResponseInterface
     {
         $uploaded = [];
 
         foreach ($this->request->getFiles()['foto'] ?? [] as $file) {
-            if (!$file->isValid() || $file->hasMoved() || !str_starts_with($file->getMimeType(), 'image/')) {
+            if (!$this->upload_valid($file, ['jpg', 'jpeg', 'png', 'webp'], 5 * 1024 * 1024)) {
                 continue;
             }
 
             $newName = $file->getRandomName();
-            $file->move($this->uploadDir(), $newName);
+            $file->move($this->upload_dir(), $newName);
 
             $this->model->insert([
                 'id_hasil_rad' => $idHasilRad,
@@ -63,10 +55,12 @@ final class HasilRadFotoController extends ControllerTemplate
                 'tgl_upload'   => date('Y-m-d H:i:s'),
             ]);
 
+            $idFoto = (int) $this->model->getInsertID();
+
             $uploaded[] = [
-                'id_rad_foto' => (int) $this->model->getInsertID(),
+                'id_rad_foto' => $idFoto,
                 'nama_file'   => $newName,
-                'url'         => base_url("uploads/radiologi/{$newName}"),
+                'url'         => site_url("radiologi/foto-hasil-radiologi/tampil/{$idFoto}"),
             ];
         }
 
@@ -79,7 +73,7 @@ final class HasilRadFotoController extends ControllerTemplate
         $foto = $this->model->find($id);
 
         if ($foto) {
-            $path = $this->uploadDir() . $foto['nama_file'];
+            $path = $this->upload_dir() . $foto['nama_file'];
             if (file_exists($path)) {
                 unlink($path);
             }

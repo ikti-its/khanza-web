@@ -173,19 +173,14 @@ final class HasilRadController extends ControllerTemplate
 
     private function processFotoUpload(int $idHasilRad): void
     {
-        $uploadDir = ROOTPATH . 'public/uploads/radiologi/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0o755, true);
-        }
-
         $fotoModel = new \App\Features\Radiologi\HasilRadFoto\HasilRadFotoModel();
         foreach ($this->request->getFiles()['foto'] ?? [] as $file) {
-            if (!$file->isValid() || $file->hasMoved() || !str_starts_with($file->getMimeType(), 'image/')) {
+            if (!$this->upload_valid($file, ['jpg', 'jpeg', 'png', 'webp'], 5 * 1024 * 1024)) {
                 continue;
             }
 
             $newName = $file->getRandomName();
-            $file->move($uploadDir, $newName);
+            $file->move($this->upload_dir(), $newName);
             $fotoModel->insert([
                 'id_hasil_rad' => $idHasilRad,
                 'nama_file'    => $newName,

@@ -78,6 +78,7 @@ class RouteGroup
                     ['post',   'bayar/(:segment)',      'bayar/$1',       'WRITE'],
                     ['post',   'upload/(:num)',         'upload/$1',      'WRITE'],
                     ['post',   'hapus-foto/(:num)',     'hapusFoto/$1',   'WRITE'],
+                    ['get',    'tampil/(:num)',         'tampil/$1',      'READ'],
                     ['get',    '(:segment)',            'detail/$1',      'READ'],
                 ];
 

@@ -149,7 +149,7 @@ $sectionHead   = fn($t) => "<h4 class=\"text-sm font-semibold text-gray-600 dark
             <div id="fotoGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-4">
                 <?php foreach ($foto_terpilih ?? [] as $foto) : ?>
                 <div class="relative" style="position:relative;" id="foto-<?= $foto['id_rad_foto'] ?>">
-                    <img src="<?= base_url('uploads/radiologi/' . esc($foto['nama_file'])) ?>" alt="Foto"
+                    <img src="<?= site_url('radiologi/foto-hasil-radiologi/tampil/' . $foto['id_rad_foto']) ?>" alt="Foto"
                          class="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-gray-700">
                     <button type="button" onclick="hapusFoto(<?= $foto['id_rad_foto'] ?>)"
                             style="position:absolute; top:4px; right:4px; z-index:10; width:20px; height:20px; font-size:16px; line-height:1;"
