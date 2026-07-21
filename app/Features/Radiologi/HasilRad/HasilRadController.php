@@ -180,10 +180,10 @@ final class HasilRadController extends ControllerTemplate
             }
 
             $newName = $file->getRandomName();
-            $file->move($this->upload_dir(), $newName);
             $fotoModel->insert([
                 'id_hasil_rad' => $idHasilRad,
                 'nama_file'    => $newName,
+                'konten_file'  => '\x' . bin2hex(file_get_contents($file->getTempName())),
                 'tgl_upload'   => date('Y-m-d H:i:s'),
             ]);
         }

@@ -35,8 +35,8 @@ final class HasilRadFotoController extends ControllerTemplate
         );
     }
 
-    // Simpan satu atau lebih file gambar ke disk (writable/, di luar public/)
-    // dan catat ke DB; penyajiannya lewat route tampil/(:num) yang dijaga auth
+    // Simpan satu atau lebih file gambar sebagai bytea di database;
+    // penyajiannya lewat route tampil/(:num) yang dijaga auth
     public function upload(int $idHasilRad): ResponseInterface
     {
         $uploaded = [];
@@ -47,11 +47,11 @@ final class HasilRadFotoController extends ControllerTemplate
             }
 
             $newName = $file->getRandomName();
-            $file->move($this->upload_dir(), $newName);
 
             $this->model->insert([
                 'id_hasil_rad' => $idHasilRad,
                 'nama_file'    => $newName,
+                'konten_file'  => '\x' . bin2hex(file_get_contents($file->getTempName())),
                 'tgl_upload'   => date('Y-m-d H:i:s'),
             ]);
 
@@ -67,16 +67,10 @@ final class HasilRadFotoController extends ControllerTemplate
         return $this->response->setJSON(['success' => true, 'data' => $uploaded]);
     }
 
-    // Hapus file dari disk lalu hapus record dari DB
+    // Hapus record foto; isi filenya ikut terhapus karena tersimpan di DB
     public function hapusFoto(int $id): ResponseInterface
     {
-        $foto = $this->model->find($id);
-
-        if ($foto) {
-            $path = $this->upload_dir() . $foto['nama_file'];
-            if (file_exists($path)) {
-                unlink($path);
-            }
+        if ($this->model->find($id)) {
             $this->model->delete($id);
         }
 
