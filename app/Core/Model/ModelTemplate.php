@@ -4,12 +4,18 @@ declare(strict_types=1);
 namespace App\Core\Model;
 
 use App\Core\Database\Template\DatabaseTemplate;
+use CodeIgniter\Database\BaseConnection;
 use CodeIgniter\Database\BaseResult;
 use CodeIgniter\Model;
 
 /** @mago-expect lint:excessive-parameter-list */
 class ModelTemplate extends Model
 {
+    // Widened to public; parent keeps these protected and only exposes them via __get().
+    public BaseConnection $db;
+    public string $primaryKey;
+    public string $table;
+
     public private(set) DatabaseTemplate $database;
     /** @var 'BASE'| 'JOIN'| 'REFS' */
     public private(set) string $type;
@@ -147,16 +153,20 @@ class ModelTemplate extends Model
         $lookup = [];
         foreach ($db->foreign_keys as $fk) {
             [$fields, $ref_class, $ref_fields] = $fk;
-            $fields     = (array) $fields;
-            $ref_fields = (array) $ref_fields;
+            $fields               = (array) $fields;
+            $ref_fields           = (array) $ref_fields;
             $lookup[end($fields)] = [$ref_class, $fields, $ref_fields];
         }
         return $lookup;
     }
 
     /** @param list<string> $fields @param list<string> $ref_fields */
-    private function composite_join_condition(string $parent_alias, array $fields, string $ref_alias, array $ref_fields): string
-    {
+    private function composite_join_condition(
+        string $parent_alias,
+        array $fields,
+        string $ref_alias,
+        array $ref_fields,
+    ): string {
         $conditions = [];
         foreach ($fields as $i => $field) {
             $conditions[] = "{$parent_alias}.{$field} = {$ref_alias}.{$ref_fields[$i]}";
@@ -204,7 +214,11 @@ class ModelTemplate extends Model
         $ref_alias = "j{$idx}";
         $idx++;
 
-        $builder->join("{$ref_table} {$ref_alias}", $this->composite_join_condition($parent_alias, $fk_fields, $ref_alias, $ref_fields), 'left');
+        $builder->join(
+            "{$ref_table} {$ref_alias}",
+            $this->composite_join_condition($parent_alias, $fk_fields, $ref_alias, $ref_fields),
+            'left',
+        );
 
         foreach ($spec as $k => $v) {
             if (is_int($k)) {
@@ -283,7 +297,11 @@ class ModelTemplate extends Model
                 $ref_alias = "j{$idx}";
                 $idx++;
 
-                $builder->join("{$ref_table} {$ref_alias}", $this->composite_join_condition($parent_alias, $fk_fields, $ref_alias, $ref_fields), 'left');
+                $builder->join(
+                    "{$ref_table} {$ref_alias}",
+                    $this->composite_join_condition($parent_alias, $fk_fields, $ref_alias, $ref_fields),
+                    'left',
+                );
 
                 $next_spec = is_array($v) ? $v : [$v];
                 $resolved  = $this->resolve_option_source($builder, $next_spec, $ref_alias, $ref_db, $idx);
