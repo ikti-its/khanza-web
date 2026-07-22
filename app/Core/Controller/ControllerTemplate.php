@@ -139,9 +139,9 @@ class ControllerTemplate extends Controller
         int $max_bytes,
     ): bool {
         return $file->isValid()
-            && !$file->hasMoved()
-            && $file->getSize() <= $max_bytes
-            && in_array(strtolower($file->guessExtension()), $allowed_ext, true);
+        && !$file->hasMoved()
+        && $file->getSize() <= $max_bytes
+        && in_array(strtolower($file->guessExtension()), $allowed_ext, true);
     }
 
     /** Kolom bytea tempat isi file, dideteksi otomatis dari kolom pertama
@@ -165,15 +165,13 @@ class ControllerTemplate extends Controller
     {
         $kolom  = $this->file_column();
         $row    = $kolom !== null ? $this->model->find($id) : null;
-        $konten = is_array($row) ? ($row[$kolom] ?? null) : null;
+        $konten = is_array($row) ? $row[$kolom] ?? null : null;
         if (!is_string($konten) || $konten === '') {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
         // Driver pgsql mengembalikan bytea sebagai string hex "\x...".
-        $bytes = str_starts_with($konten, '\x')
-            ? hex2bin(substr($konten, 2))
-            : $konten;
+        $bytes = str_starts_with($konten, '\x') ? hex2bin(substr($konten, 2)) : $konten;
         if ($bytes === false || $bytes === '') {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }

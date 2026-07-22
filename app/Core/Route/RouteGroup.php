@@ -45,7 +45,7 @@ class RouteGroup
             $group_path = self::create_path_from_name($group);
             // Role yang boleh baca/tulis grup ini adalah data (tabel
             // auth.akses_fitur), bukan kode; lihat App\Core\Auth\AccessMatrix.
-            $filter_read = ['filter' => "checkpermission:{$group_path},read"];
+            $filter_read  = ['filter' => "checkpermission:{$group_path},read"];
             $filter_write = ['filter' => "checkpermission:{$group_path},write"];
 
             foreach ($features as $f => $show) {
@@ -85,10 +85,10 @@ class RouteGroup
                 foreach ($paths as $p) {
                     [$method, $uri, $action, $access] = $p;
                     $route_group['routes'][] = [
-                        'method' => $method,
-                        'uri' => $uri,
-                        'action' => $action,
-                        'class' => $f,
+                        'method'  => $method,
+                        'uri'     => $uri,
+                        'action'  => $action,
+                        'class'   => $f,
                         'options' => $access === 'WRITE' ? $filter_write : $filter_read,
                     ];
                 }
