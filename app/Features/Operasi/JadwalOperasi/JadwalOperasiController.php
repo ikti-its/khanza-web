@@ -436,7 +436,10 @@ final class JadwalOperasiController extends ControllerTemplate
          * kesalahan data, seharusnya diubah lewat menu edit, bukan dihapus lalu dibuat ulang, karena baris
          * jadwal ini satu-satu dengan permintaan operasinya dan tidak ada alur untuk membuatnya kembali. */
         if ((int) ($existing['id_status'] ?? 0) !== 1) {
-            session()->setFlashdata('error', 'Jadwal operasi yang sudah dijadwalkan tidak dapat dihapus. Jika ada kesalahan data, silakan ubah melalui menu edit.');
+            session()->setFlashdata(
+                'error',
+                'Jadwal operasi yang sudah dijadwalkan tidak dapat dihapus. Jika ada kesalahan data, silakan ubah melalui menu edit.',
+            );
             return $this->home();
         }
 

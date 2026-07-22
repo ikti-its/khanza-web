@@ -28,13 +28,13 @@ final class HasilRadController extends ControllerTemplate
                 A::PRINT,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX, 'id_hasil_rad',      'ID Hasil Radiologi'],
-                [SHOW, REQUIRED, I::INDEX, 'id_permintaan_rad', 'No. Permintaan'],
-                [SHOW, REQUIRED, I::TEXT,  'id_dokter_pj',      'Dokter PJ'],
-                [SHOW, REQUIRED, I::TEXT,  'id_petugas_rad',    'Petugas Rad'],
-                [HIDE, REQUIRED, I::TEXT,  'id_dokter_perujuk', 'Dokter Perujuk'],
-                [SHOW, REQUIRED, I::DTIME, 'tgl_jam_hasil',     'Tanggal dan Jam Hasil'],
-                [TABLE_ONLY, OPTIONAL, I::SELECT, 'nama_status', 'Status'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_hasil_rad',      'ID Hasil Radiologi'],
+                [SHOW,       REQUIRED, I::INDEX,  'id_permintaan_rad', 'No. Permintaan'],
+                [SHOW,       REQUIRED, I::TEXT,   'id_dokter_pj',      'Dokter PJ'],
+                [SHOW,       REQUIRED, I::TEXT,   'id_petugas_rad',    'Petugas Rad'],
+                [HIDE,       REQUIRED, I::TEXT,   'id_dokter_perujuk', 'Dokter Perujuk'],
+                [SHOW,       REQUIRED, I::DTIME,  'tgl_jam_hasil',     'Tanggal dan Jam Hasil'],
+                [TABLE_ONLY, OPTIONAL, I::SELECT, 'nama_status',       'Status'],
             ],
         );
     }
@@ -46,7 +46,7 @@ final class HasilRadController extends ControllerTemplate
             return;
         }
 
-        $ids     = array_column($data_tabel, 'id_permintaan_rad');
+        $ids      = array_column($data_tabel, 'id_permintaan_rad');
         $statuses = $this->model
             ->db
             ->table('radiologi.permintaan_rad pr')
