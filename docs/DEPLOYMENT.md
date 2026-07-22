@@ -158,6 +158,8 @@ Dari root repo:
 
    Aplikasi berjalan di `http://localhost:8080`.
 
+   > Jika ingin menggunakan port lain, ubah `app.baseURL` di `.env` (nilai `.env` selalu meng-override default di `app/Config/App.php`) supaya portnya sama dengan yang digunakan `php spark serve --port <port>`. Kalau portnya berbeda, tampilan/asset/login bisa error.
+
 7. Login dengan akun default:
 
    - Username: `admin@fathoor.dev`
