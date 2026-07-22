@@ -224,6 +224,8 @@ final class HasilLabPaController extends ControllerTemplate
                 continue;
             }
 
+            $kesan = trim($item['kesan'] ?? '');
+
             $data = [
                 'id_dokter_pj'    => $idDokterPj,
                 'id_petugas_lab'  => $idPetugasLab,
@@ -232,20 +234,20 @@ final class HasilLabPaController extends ControllerTemplate
                 'makroskopik'     => trim($item['makroskopik']),
                 'mikroskopik'     => trim($item['mikroskopik']),
                 'kesimpulan'      => trim($item['kesimpulan']),
-                'kesan'           => trim($item['kesan'] ?? '') ?: null,
+                'kesan'           => $kesan ? $kesan : null,
             ];
 
-            if (isset($existingByItem[$idItem])) {
+            if (array_key_exists($idItem, $existingByItem)) {
                 $this->model->update((int) $existingByItem[$idItem]['id_hasil_pa'], $data);
-            } else {
-                $this->model->insert(
-                    $data
-                    + [
-                        'id_permintaan_lab'     => $idPermintaanLab,
-                        'id_permintaan_pa_item' => $idItem,
-                    ],
-                );
+                continue;
             }
+            $this->model->insert(
+                $data
+                + [
+                    'id_permintaan_lab'     => $idPermintaanLab,
+                    'id_permintaan_pa_item' => $idItem,
+                ],
+            );
         }
     }
 
@@ -310,11 +312,13 @@ final class HasilLabPaController extends ControllerTemplate
     {
         $rawPost = $this->request->getPost();
 
-        $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
-        $idDokterPj      = (int) ($rawPost['id_dokter_pj'] ?? 0) ?: null;
-        $idPetugasLab    = (int) ($rawPost['id_petugas_lab'] ?? 0) ?: null;
-        $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
-        $hasilList       = $rawPost['hasil'] ?? [];
+        $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0)
+            ? (int) ($rawPost['id_permintaan_lab'] ?? 0)
+            : null;
+        $idDokterPj   = (int) ($rawPost['id_dokter_pj'] ?? 0) ? (int) ($rawPost['id_dokter_pj'] ?? 0) : null;
+        $idPetugasLab = (int) ($rawPost['id_petugas_lab'] ?? 0) ? (int) ($rawPost['id_petugas_lab'] ?? 0) : null;
+        $tglJamHasil  = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
+        $hasilList    = $rawPost['hasil'] ?? [];
 
         if (!$idPermintaanLab) {
             session()->setFlashdata('error', 'Permintaan laboratorium wajib dipilih.');
@@ -395,17 +399,19 @@ final class HasilLabPaController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
         $rawPost = $this->request->getPost();
 
-        $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
-        $idDokterPj      = (int) ($rawPost['id_dokter_pj'] ?? 0) ?: null;
-        $idPetugasLab    = (int) ($rawPost['id_petugas_lab'] ?? 0) ?: null;
-        $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
-        $hasilList       = $rawPost['hasil'] ?? [];
+        $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0)
+            ? (int) ($rawPost['id_permintaan_lab'] ?? 0)
+            : null;
+        $idDokterPj   = (int) ($rawPost['id_dokter_pj'] ?? 0) ? (int) ($rawPost['id_dokter_pj'] ?? 0) : null;
+        $idPetugasLab = (int) ($rawPost['id_petugas_lab'] ?? 0) ? (int) ($rawPost['id_petugas_lab'] ?? 0) : null;
+        $tglJamHasil  = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
+        $hasilList    = $rawPost['hasil'] ?? [];
 
         if (!$idPermintaanLab) {
             session()->setFlashdata('error', 'Permintaan laboratorium wajib dipilih.');
@@ -463,7 +469,7 @@ final class HasilLabPaController extends ControllerTemplate
     public function delete(int|string $id): string|RedirectResponse
     {
         $idPermintaanLab = (int) $id;
-        if ($idPermintaanLab == 0) {
+        if ($idPermintaanLab === 0) {
             return $this->home();
         }
 

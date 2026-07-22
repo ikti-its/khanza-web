@@ -401,7 +401,7 @@ final class PermintaanLabPaController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -460,7 +460,7 @@ final class PermintaanLabPaController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -504,7 +504,7 @@ final class PermintaanLabPaController extends ControllerTemplate
 
     public function sampel(int|string $id): RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -515,7 +515,9 @@ final class PermintaanLabPaController extends ControllerTemplate
 
         try {
             (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel())->update($idPermintaanLab, [
-                'tgl_jam_sampel'       => $this->request->getPost('tgl_jam_sampel') ?: date('Y-m-d H:i:s'),
+                'tgl_jam_sampel'       => $this->request->getPost('tgl_jam_sampel')
+                    ? $this->request->getPost('tgl_jam_sampel')
+                    : date('Y-m-d H:i:s'),
                 'id_status_permintaan' => 2,
             ]);
             session()->setFlashdata('success', 'Waktu pengambilan sampel berhasil dicatat.');
@@ -533,7 +535,7 @@ final class PermintaanLabPaController extends ControllerTemplate
     #[\Override]
     public function index(): string
     {
-        $activeFilter = $this->request->getGet('filter') ?: null;
+        $activeFilter = $this->request->getGet('filter') ? $this->request->getGet('filter') : null;
         $rows         = $this->fetchPermintaanLabHeaders($activeFilter !== null ? (int) $activeFilter : null);
 
         $konfig = [

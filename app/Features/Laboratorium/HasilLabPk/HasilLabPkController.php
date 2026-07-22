@@ -208,9 +208,9 @@ final class HasilLabPkController extends ControllerTemplate
 
         $items = [];
         foreach ($rows as $row) {
-            $idItem = $row['id_permintaan_pk_item'];
+            $idItem = (int) $row['id_permintaan_pk_item'];
 
-            if (!isset($items[$idItem])) {
+            if (!array_key_exists($idItem, $items)) {
                 $items[$idItem] = [
                     'id_permintaan_pk_item' => $idItem,
                     'kode_periksa'          => $row['kode_periksa'],
@@ -348,16 +348,18 @@ final class HasilLabPkController extends ControllerTemplate
             return;
         }
 
+        $keteranganHasil = trim($param['keterangan_hasil'] ?? '');
+
         $paramData = [
             'nilai_hasil'      => $nilaiHasil,
-            'keterangan_hasil' => trim($param['keterangan_hasil'] ?? '') ?: null,
+            'keterangan_hasil' => $keteranganHasil ? $keteranganHasil : null,
         ];
 
         if ($existingParam !== null) {
             $modelParam->update((int) $existingParam['id_hasil_pk_parameter'], $paramData);
-        } else {
-            $modelParam->insert($paramData + ['id_hasil_pk' => $idHasilPk, 'id_parameter' => $idParameter]);
+            return;
         }
+        $modelParam->insert($paramData + ['id_hasil_pk' => $idHasilPk, 'id_parameter' => $idParameter]);
     }
 
     private function recomputeStatusPermintaan(int $idPermintaanLab): void
@@ -493,7 +495,7 @@ final class HasilLabPkController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -505,12 +507,14 @@ final class HasilLabPkController extends ControllerTemplate
     {
         $rawPost = $this->request->getPost();
 
-        $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0) ?: null;
-        $idDokterPj      = (int) ($rawPost['id_dokter_pj'] ?? 0) ?: null;
-        $idPetugasLab    = (int) ($rawPost['id_petugas_lab'] ?? 0) ?: null;
-        $tglJamHasil     = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
-        $idKategoriUsia  = (int) ($rawPost['id_kategori_usia'] ?? 0) ?: null;
-        $hasilList       = $rawPost['hasil'] ?? [];
+        $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0)
+            ? (int) ($rawPost['id_permintaan_lab'] ?? 0)
+            : null;
+        $idDokterPj     = (int) ($rawPost['id_dokter_pj'] ?? 0) ? (int) ($rawPost['id_dokter_pj'] ?? 0) : null;
+        $idPetugasLab   = (int) ($rawPost['id_petugas_lab'] ?? 0) ? (int) ($rawPost['id_petugas_lab'] ?? 0) : null;
+        $tglJamHasil    = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
+        $idKategoriUsia = (int) ($rawPost['id_kategori_usia'] ?? 0) ? (int) ($rawPost['id_kategori_usia'] ?? 0) : null;
+        $hasilList      = $rawPost['hasil'] ?? [];
 
         if (!$idPermintaanLab) {
             session()->setFlashdata('error', 'Permintaan laboratorium wajib dipilih.');
@@ -578,7 +582,7 @@ final class HasilLabPkController extends ControllerTemplate
     public function delete(int|string $id): string|RedirectResponse
     {
         $idPermintaanLab = (int) $id;
-        if ($idPermintaanLab == 0) {
+        if ($idPermintaanLab === 0) {
             return $this->home();
         }
 

@@ -228,7 +228,7 @@ final class PenyerahanPasienController extends ControllerTemplate
             $record['nama_perawat_menerima'] = $this->fetchNamaRole('petugas', 'id_petugas', $idPr);
         }
 
-        if (isset($record['is_disetujui'])) {
+        if (array_key_exists('is_disetujui', $record)) {
             $isTrue                 = in_array($record['is_disetujui'], [true, 1, 't'], true);
             $record['is_disetujui'] = $isTrue ? '1' : '0';
         }
@@ -249,14 +249,24 @@ final class PenyerahanPasienController extends ControllerTemplate
     private function buildDataHeader(array $rawPost): array
     {
         return [
-            'id_jadwal'                => (int) ($rawPost['id_jadwal'] ?? 0) ?: null,
+            'id_jadwal'                => (int) ($rawPost['id_jadwal'] ?? 0)
+                ? (int) ($rawPost['id_jadwal'] ?? 0)
+                : null,
             'waktu_masuk_asal'         => $rawPost['waktu_masuk_asal'] ?? null,
             'waktu_pindah'             => $rawPost['waktu_pindah'] ?? null,
-            'id_indikasi'              => (int) ($rawPost['id_indikasi'] ?? 0) ?: null,
+            'id_indikasi'              => (int) ($rawPost['id_indikasi'] ?? 0)
+                ? (int) ($rawPost['id_indikasi'] ?? 0)
+                : null,
             'ket_indikasi'             => $rawPost['ket_indikasi'] ?? null,
-            'id_ruang_asal'            => (int) ($rawPost['id_ruang_asal'] ?? 0) ?: null,
-            'id_ruang_selanjutnya'     => (int) ($rawPost['id_ruang_selanjutnya'] ?? 0) ?: null,
-            'id_metode'                => (int) ($rawPost['id_metode'] ?? 0) ?: null,
+            'id_ruang_asal'            => (int) ($rawPost['id_ruang_asal'] ?? 0)
+                ? (int) ($rawPost['id_ruang_asal'] ?? 0)
+                : null,
+            'id_ruang_selanjutnya'     => (int) ($rawPost['id_ruang_selanjutnya'] ?? 0)
+                ? (int) ($rawPost['id_ruang_selanjutnya'] ?? 0)
+                : null,
+            'id_metode'                => (int) ($rawPost['id_metode'] ?? 0)
+                ? (int) ($rawPost['id_metode'] ?? 0)
+                : null,
             'diagnosa_utama'           => $rawPost['diagnosa_utama'] ?? null,
             'diagnosa_sekunder'        => $rawPost['diagnosa_sekunder'] ?? null,
             'prosedur_dilakukan'       => $rawPost['prosedur_dilakukan'] ?? null,
@@ -264,23 +274,33 @@ final class PenyerahanPasienController extends ControllerTemplate
             'pemeriksaan_penunjang'    => $rawPost['pemeriksaan_penunjang'] ?? null,
             'is_disetujui'             => $rawPost['is_disetujui'] ?? '0',
             'nama_pemberi_persetujuan' => $rawPost['nama_pemberi_persetujuan'] ?? null,
-            'id_hubungan'              => (int) ($rawPost['id_hubungan'] ?? 0) ?: null,
-            'asal_id_keadaan'          => (int) ($rawPost['asal_id_keadaan'] ?? 0) ?: null,
+            'id_hubungan'              => (int) ($rawPost['id_hubungan'] ?? 0)
+                ? (int) ($rawPost['id_hubungan'] ?? 0)
+                : null,
+            'asal_id_keadaan'          => (int) ($rawPost['asal_id_keadaan'] ?? 0)
+                ? (int) ($rawPost['asal_id_keadaan'] ?? 0)
+                : null,
             'asal_sistolik'            => $rawPost['asal_sistolik'] ?? null,
             'asal_diastolik'           => $rawPost['asal_diastolik'] ?? null,
             'asal_nadi'                => $rawPost['asal_nadi'] ?? null,
             'asal_respiratory_rate'    => $rawPost['asal_respiratory_rate'] ?? null,
             'asal_suhu'                => $rawPost['asal_suhu'] ?? null,
             'asal_keluhan'             => $rawPost['asal_keluhan'] ?? null,
-            'tiba_id_keadaan'          => (int) ($rawPost['tiba_id_keadaan'] ?? 0) ?: null,
+            'tiba_id_keadaan'          => (int) ($rawPost['tiba_id_keadaan'] ?? 0)
+                ? (int) ($rawPost['tiba_id_keadaan'] ?? 0)
+                : null,
             'tiba_sistolik'            => $rawPost['tiba_sistolik'] ?? null,
             'tiba_diastolik'           => $rawPost['tiba_diastolik'] ?? null,
             'tiba_nadi'                => $rawPost['tiba_nadi'] ?? null,
             'tiba_respiratory_rate'    => $rawPost['tiba_respiratory_rate'] ?? null,
             'tiba_suhu'                => $rawPost['tiba_suhu'] ?? null,
             'tiba_keluhan'             => $rawPost['tiba_keluhan'] ?? null,
-            'id_perawat_menyerahkan'   => (int) ($rawPost['id_perawat_menyerahkan'] ?? 0) ?: null,
-            'id_perawat_menerima'      => (int) ($rawPost['id_perawat_menerima'] ?? 0) ?: null,
+            'id_perawat_menyerahkan'   => (int) ($rawPost['id_perawat_menyerahkan'] ?? 0)
+                ? (int) ($rawPost['id_perawat_menyerahkan'] ?? 0)
+                : null,
+            'id_perawat_menerima'      => (int) ($rawPost['id_perawat_menerima'] ?? 0)
+                ? (int) ($rawPost['id_perawat_menerima'] ?? 0)
+                : null,
         ];
     }
 
@@ -347,7 +367,7 @@ final class PenyerahanPasienController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -384,7 +404,7 @@ final class PenyerahanPasienController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 

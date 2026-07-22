@@ -113,12 +113,12 @@ final class PermintaanRadController extends ControllerTemplate
 
     private function buildHeaderData(array $rawPost, bool $isCreate = false): array
     {
+        $noPermintaan = '';
         if (!empty($rawPost['no_permintaan'])) {
             $noPermintaan = $rawPost['no_permintaan'];
-        } elseif ($isCreate) {
+        }
+        if (empty($rawPost['no_permintaan']) && $isCreate) {
             $noPermintaan = $this->generateNomorPermintaan();
-        } else {
-            $noPermintaan = '';
         }
         $tglPermintaan = !empty($rawPost['tgl_jam_permintaan']) ? $rawPost['tgl_jam_permintaan'] : date('Y-m-d H:i:s');
 
@@ -182,7 +182,7 @@ final class PermintaanRadController extends ControllerTemplate
             $this->filters[(string) $row['id_status']] = $row['nama_status'] . ' (' . $row['jumlah'] . ')';
         }
 
-        $this->active_filter = $this->request->getGet('filter') ?: null;
+        $this->active_filter = $this->request->getGet('filter') ? $this->request->getGet('filter') : null;
         if ($this->active_filter !== null) {
             $this->model->set_filter('id_status_permintaan', (int) $this->active_filter);
         }
@@ -287,7 +287,7 @@ final class PermintaanRadController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -339,7 +339,7 @@ final class PermintaanRadController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -380,13 +380,15 @@ final class PermintaanRadController extends ControllerTemplate
 
     public function sampel(int|string $id): RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
         try {
             $this->model->update($id, [
-                'tgl_jam_sampel'       => $this->request->getPost('tgl_jam_sampel') ?: date('Y-m-d H:i:s'),
+                'tgl_jam_sampel'       => $this->request->getPost('tgl_jam_sampel')
+                    ? $this->request->getPost('tgl_jam_sampel')
+                    : date('Y-m-d H:i:s'),
                 'id_status_permintaan' => 2,
             ]);
 

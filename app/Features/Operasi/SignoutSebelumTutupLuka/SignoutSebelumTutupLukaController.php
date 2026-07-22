@@ -175,7 +175,7 @@ final class SignoutSebelumTutupLukaController extends ControllerTemplate
     #[\Override]
     public function update_page(int|string $id): string
     {
-        $record   = $this->model->find_one($id);
+        $record   = $this->model->find_one($id) ?? [];
         $idJadwal = (int) ($record['id_jadwal'] ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
@@ -204,7 +204,7 @@ final class SignoutSebelumTutupLukaController extends ControllerTemplate
             'is_konfirmasi_anestesi',
             'is_konfirmasi_perawat',
         ] as $field) {
-            if (!isset($record[$field])) {
+            if (!array_key_exists($field, $record)) {
                 continue;
             }
 

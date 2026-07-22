@@ -304,7 +304,9 @@ final class TagihanOperasiController extends ControllerTemplate
             $jadwal['tanggal_mulai'] = $jadwal['tanggal'] . ' ' . $jadwal['waktu_mulai'];
         }
         if (!empty($jadwal['tanggal']) && !empty($jadwal['waktu_selesai'])) {
-            $tanggalSelesai            = $jadwal['jadwal_tanggal_selesai'] ?: $jadwal['tanggal'];
+            $tanggalSelesai = $jadwal['jadwal_tanggal_selesai']
+                ? $jadwal['jadwal_tanggal_selesai']
+                : $jadwal['tanggal'];
             $jadwal['tanggal_selesai'] = $tanggalSelesai . ' ' . $jadwal['waktu_selesai'];
         }
 
@@ -326,7 +328,8 @@ final class TagihanOperasiController extends ControllerTemplate
                 if ($peran === '' || $peran === null) {
                     continue;
                 }
-                $jadwal['id_' . $peran]   = $anggota['id_dokter'] ?: $anggota['id_petugas'];
+                $idDokterAnggota          = $anggota['id_dokter'] ?? null;
+                $jadwal['id_' . $peran]   = $idDokterAnggota ? $idDokterAnggota : $anggota['id_petugas'];
                 $jadwal['nama_' . $peran] = $anggota['nama'] ?? '';
             }
         }
@@ -394,9 +397,13 @@ final class TagihanOperasiController extends ControllerTemplate
             }
 
             // Ambil pesan error DB sebelum transComplete()/ROLLBACK menghapus jejaknya.
-            $dbErrorMsg = $this->model->db->transStatus() === false
-                ? ($this->model->db->error()['message'] ?: 'Gagal menyimpan tagihan operasi.')
-                : null;
+            $dbErrorMsg = null;
+            if ($this->model->db->transStatus() === false) {
+                $dbErrorMsg = $this->model->db->error()['message'];
+                if (!$dbErrorMsg) {
+                    $dbErrorMsg = 'Gagal menyimpan tagihan operasi.';
+                }
+            }
 
             $this->model->db->transComplete();
 
@@ -418,7 +425,7 @@ final class TagihanOperasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -446,9 +453,13 @@ final class TagihanOperasiController extends ControllerTemplate
             }
 
             // Ambil pesan error DB sebelum transComplete()/ROLLBACK menghapus jejaknya.
-            $dbErrorMsg = $this->model->db->transStatus() === false
-                ? ($this->model->db->error()['message'] ?: 'Gagal memperbarui tagihan operasi.')
-                : null;
+            $dbErrorMsg = null;
+            if ($this->model->db->transStatus() === false) {
+                $dbErrorMsg = $this->model->db->error()['message'];
+                if (!$dbErrorMsg) {
+                    $dbErrorMsg = 'Gagal memperbarui tagihan operasi.';
+                }
+            }
 
             $this->model->db->transComplete();
 
@@ -470,7 +481,7 @@ final class TagihanOperasiController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -509,38 +520,38 @@ final class TagihanOperasiController extends ControllerTemplate
             'id_jadwal'           => $post['id_jadwal'] ?? null,
             'id_kategori'         => $post['id_kategori'] ?? null,
             'jenis_anestesi'      => $post['jenis_anestesi'] ?? null,
-            'tanggal_mulai'       => $post['tanggal_mulai'] ?: null,
-            'tanggal_selesai'     => $post['tanggal_selesai'] ?: null,
+            'tanggal_mulai'       => $post['tanggal_mulai'] ? $post['tanggal_mulai'] : null,
+            'tanggal_selesai'     => $post['tanggal_selesai'] ? $post['tanggal_selesai'] : null,
             'total_tagihan'       => $this->computeTotal($post['paket'] ?? [], $post['obat'] ?? []),
             'diagnosis_pre'       => $post['diagnosis_pre'] ?? null,
             'diagnosis_post'      => $post['diagnosis_post'] ?? null,
             'jaringan'            => $post['jaringan'] ?? null,
             'laporan'             => $post['laporan'] ?? null,
-            'id_template_laporan' => $post['id_template_laporan'] ?: null,
-            'is_pa'               => isset($post['is_pa']),
-            'id_operator_1'       => $post['id_operator_1'] ?: null,
-            'id_operator_2'       => $post['id_operator_2'] ?: null,
-            'id_operator_3'       => $post['id_operator_3'] ?: null,
-            'id_dokter_anestesi'  => $post['id_dokter_anestesi'] ?: null,
-            'id_dokter_anak'      => $post['id_dokter_anak'] ?: null,
-            'id_dokter_pj_anak'   => $post['id_dokter_pj_anak'] ?: null,
-            'id_dokter_umum'      => $post['id_dokter_umum'] ?: null,
-            'id_ast_operator_1'   => $post['id_ast_operator_1'] ?: null,
-            'id_ast_operator_2'   => $post['id_ast_operator_2'] ?: null,
-            'id_ast_operator_3'   => $post['id_ast_operator_3'] ?: null,
-            'id_bidan_1'          => $post['id_bidan_1'] ?: null,
-            'id_bidan_2'          => $post['id_bidan_2'] ?: null,
-            'id_bidan_3'          => $post['id_bidan_3'] ?: null,
-            'id_perawat_luar'     => $post['id_perawat_luar'] ?: null,
-            'id_instrumen'        => $post['id_instrumen'] ?: null,
-            'id_ast_anestesi_1'   => $post['id_ast_anestesi_1'] ?: null,
-            'id_ast_anestesi_2'   => $post['id_ast_anestesi_2'] ?: null,
-            'id_perawat_resus'    => $post['id_perawat_resus'] ?: null,
-            'id_onloop_1'         => $post['id_onloop_1'] ?: null,
-            'id_onloop_2'         => $post['id_onloop_2'] ?: null,
-            'id_onloop_3'         => $post['id_onloop_3'] ?: null,
-            'id_onloop_4'         => $post['id_onloop_4'] ?: null,
-            'id_onloop_5'         => $post['id_onloop_5'] ?: null,
+            'id_template_laporan' => $post['id_template_laporan'] ? $post['id_template_laporan'] : null,
+            'is_pa'               => array_key_exists('is_pa', $post),
+            'id_operator_1'       => $post['id_operator_1'] ? $post['id_operator_1'] : null,
+            'id_operator_2'       => $post['id_operator_2'] ? $post['id_operator_2'] : null,
+            'id_operator_3'       => $post['id_operator_3'] ? $post['id_operator_3'] : null,
+            'id_dokter_anestesi'  => $post['id_dokter_anestesi'] ? $post['id_dokter_anestesi'] : null,
+            'id_dokter_anak'      => $post['id_dokter_anak'] ? $post['id_dokter_anak'] : null,
+            'id_dokter_pj_anak'   => $post['id_dokter_pj_anak'] ? $post['id_dokter_pj_anak'] : null,
+            'id_dokter_umum'      => $post['id_dokter_umum'] ? $post['id_dokter_umum'] : null,
+            'id_ast_operator_1'   => $post['id_ast_operator_1'] ? $post['id_ast_operator_1'] : null,
+            'id_ast_operator_2'   => $post['id_ast_operator_2'] ? $post['id_ast_operator_2'] : null,
+            'id_ast_operator_3'   => $post['id_ast_operator_3'] ? $post['id_ast_operator_3'] : null,
+            'id_bidan_1'          => $post['id_bidan_1'] ? $post['id_bidan_1'] : null,
+            'id_bidan_2'          => $post['id_bidan_2'] ? $post['id_bidan_2'] : null,
+            'id_bidan_3'          => $post['id_bidan_3'] ? $post['id_bidan_3'] : null,
+            'id_perawat_luar'     => $post['id_perawat_luar'] ? $post['id_perawat_luar'] : null,
+            'id_instrumen'        => $post['id_instrumen'] ? $post['id_instrumen'] : null,
+            'id_ast_anestesi_1'   => $post['id_ast_anestesi_1'] ? $post['id_ast_anestesi_1'] : null,
+            'id_ast_anestesi_2'   => $post['id_ast_anestesi_2'] ? $post['id_ast_anestesi_2'] : null,
+            'id_perawat_resus'    => $post['id_perawat_resus'] ? $post['id_perawat_resus'] : null,
+            'id_onloop_1'         => $post['id_onloop_1'] ? $post['id_onloop_1'] : null,
+            'id_onloop_2'         => $post['id_onloop_2'] ? $post['id_onloop_2'] : null,
+            'id_onloop_3'         => $post['id_onloop_3'] ? $post['id_onloop_3'] : null,
+            'id_onloop_4'         => $post['id_onloop_4'] ? $post['id_onloop_4'] : null,
+            'id_onloop_5'         => $post['id_onloop_5'] ? $post['id_onloop_5'] : null,
         ];
     }
 

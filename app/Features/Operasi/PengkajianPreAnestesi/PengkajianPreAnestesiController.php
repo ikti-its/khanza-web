@@ -139,8 +139,10 @@ final class PengkajianPreAnestesiController extends ControllerTemplate
     private function buildHeaderData(array $rawPost): array
     {
         return [
-            'id_jadwal'            => (int) ($rawPost['id_jadwal'] ?? 0) ?: null,
-            'id_dokter_anestesi'   => (int) ($rawPost['id_dokter_anestesi'] ?? 0) ?: null,
+            'id_jadwal'            => (int) ($rawPost['id_jadwal'] ?? 0) ? (int) ($rawPost['id_jadwal'] ?? 0) : null,
+            'id_dokter_anestesi'   => (int) ($rawPost['id_dokter_anestesi'] ?? 0)
+                ? (int) ($rawPost['id_dokter_anestesi'] ?? 0)
+                : null,
             'waktu_pengkajian'     => $rawPost['waktu_pengkajian'] ?? null,
             'diagnosa'             => $rawPost['diagnosa'] ?? null,
             'rencana_tindakan'     => $rawPost['rencana_tindakan'] ?? null,
@@ -169,14 +171,18 @@ final class PengkajianPreAnestesiController extends ControllerTemplate
             'jumlah_rokok'         => $rawPost['jumlah_rokok'] ?? null,
             'is_alkohol'           => $rawPost['is_alkohol'] ?? null,
             'jumlah_alkohol'       => $rawPost['jumlah_alkohol'] ?? null,
-            'id_obat_bebas'        => (int) ($rawPost['id_obat_bebas'] ?? 0) ?: null,
+            'id_obat_bebas'        => (int) ($rawPost['id_obat_bebas'] ?? 0)
+                ? (int) ($rawPost['id_obat_bebas'] ?? 0)
+                : null,
             'ket_obat'             => $rawPost['ket_obat'] ?? null,
             'rw_cardiovascular'    => $rawPost['rw_cardiovascular'] ?? null,
             'rw_respiratory'       => $rawPost['rw_respiratory'] ?? null,
             'rw_endocrine'         => $rawPost['rw_endocrine'] ?? null,
             'rw_lainnya'           => $rawPost['rw_lainnya'] ?? null,
-            'id_rencana_anestesi'  => (int) ($rawPost['id_rencana_anestesi'] ?? 0) ?: null,
-            'id_asa'               => (int) ($rawPost['id_asa'] ?? 0) ?: null,
+            'id_rencana_anestesi'  => (int) ($rawPost['id_rencana_anestesi'] ?? 0)
+                ? (int) ($rawPost['id_rencana_anestesi'] ?? 0)
+                : null,
+            'id_asa'               => (int) ($rawPost['id_asa'] ?? 0) ? (int) ($rawPost['id_asa'] ?? 0) : null,
             'waktu_puasa'          => $rawPost['waktu_puasa'] ?? null,
             'rencana_perawatan'    => $rawPost['rencana_perawatan'] ?? null,
             'catatan_khusus'       => $rawPost['catatan_khusus'] ?? null,

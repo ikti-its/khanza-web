@@ -171,22 +171,40 @@ final class ChecklistPostopController extends ControllerTemplate
     private function buildHeaderData(array $rawPost): array
     {
         return [
-            'id_jadwal'            => (int) ($rawPost['id_jadwal'] ?? 0) ?: null,
-            'id_tindakan'          => (int) ($rawPost['id_tindakan'] ?? 0) ?: null,
-            'id_sn_cn'             => (int) ($rawPost['id_sn_cn'] ?? 0) ?: null,
-            'id_dokter_bedah'      => (int) ($rawPost['id_dokter_bedah'] ?? 0) ?: null,
-            'id_dokter_anestesi'   => (int) ($rawPost['id_dokter_anestesi'] ?? 0) ?: null,
+            'id_jadwal'            => (int) ($rawPost['id_jadwal'] ?? 0) ? (int) ($rawPost['id_jadwal'] ?? 0) : null,
+            'id_tindakan'          => (int) ($rawPost['id_tindakan'] ?? 0)
+                ? (int) ($rawPost['id_tindakan'] ?? 0)
+                : null,
+            'id_sn_cn'             => (int) ($rawPost['id_sn_cn'] ?? 0) ? (int) ($rawPost['id_sn_cn'] ?? 0) : null,
+            'id_dokter_bedah'      => (int) ($rawPost['id_dokter_bedah'] ?? 0)
+                ? (int) ($rawPost['id_dokter_bedah'] ?? 0)
+                : null,
+            'id_dokter_anestesi'   => (int) ($rawPost['id_dokter_anestesi'] ?? 0)
+                ? (int) ($rawPost['id_dokter_anestesi'] ?? 0)
+                : null,
             'waktu_checklist'      => $rawPost['waktu_checklist'] ?? null,
-            'id_kesadaran_pascaop' => (int) ($rawPost['id_kesadaran_pascaop'] ?? 0) ?: null,
+            'id_kesadaran_pascaop' => (int) ($rawPost['id_kesadaran_pascaop'] ?? 0)
+                ? (int) ($rawPost['id_kesadaran_pascaop'] ?? 0)
+                : null,
             'jenis_cairan_infus'   => $rawPost['jenis_cairan_infus'] ?? null,
-            'id_jaringan_pa_vc'    => (int) ($rawPost['id_jaringan_pa_vc'] ?? 0) ?: null,
-            'id_kateter_urine'     => (int) ($rawPost['id_kateter_urine'] ?? 0) ?: null,
+            'id_jaringan_pa_vc'    => (int) ($rawPost['id_jaringan_pa_vc'] ?? 0)
+                ? (int) ($rawPost['id_jaringan_pa_vc'] ?? 0)
+                : null,
+            'id_kateter_urine'     => (int) ($rawPost['id_kateter_urine'] ?? 0)
+                ? (int) ($rawPost['id_kateter_urine'] ?? 0)
+                : null,
             'waktu_pasang_kateter' => $rawPost['waktu_pasang_kateter'] ?? null,
-            'id_warna_urine'       => (int) ($rawPost['id_warna_urine'] ?? 0) ?: null,
+            'id_warna_urine'       => (int) ($rawPost['id_warna_urine'] ?? 0)
+                ? (int) ($rawPost['id_warna_urine'] ?? 0)
+                : null,
             'jumlah_urine_cc'      => $rawPost['jumlah_urine_cc'] ?? null,
             'catatan_luka_operasi' => $rawPost['catatan_luka_operasi'] ?? null,
-            'id_petugas_anestesi'  => (int) ($rawPost['id_petugas_anestesi'] ?? 0) ?: null,
-            'id_petugas_ok'        => (int) ($rawPost['id_petugas_ok'] ?? 0) ?: null,
+            'id_petugas_anestesi'  => (int) ($rawPost['id_petugas_anestesi'] ?? 0)
+                ? (int) ($rawPost['id_petugas_anestesi'] ?? 0)
+                : null,
+            'id_petugas_ok'        => (int) ($rawPost['id_petugas_ok'] ?? 0)
+                ? (int) ($rawPost['id_petugas_ok'] ?? 0)
+                : null,
         ];
     }
 
@@ -222,7 +240,9 @@ final class ChecklistPostopController extends ControllerTemplate
             $batchPenunjang[] = [
                 'id_checklist_post'  => $idChecklistPost,
                 'id_jenis_penunjang' => $idJenis,
-                'id_ketersediaan'    => (int) ($row['id_ketersediaan'] ?? 0) ?: null,
+                'id_ketersediaan'    => (int) ($row['id_ketersediaan'] ?? 0)
+                    ? (int) ($row['id_ketersediaan'] ?? 0)
+                    : null,
                 'keterangan'         => $row['keterangan'] ?? '',
             ];
         }
@@ -358,7 +378,7 @@ final class ChecklistPostopController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -401,7 +421,7 @@ final class ChecklistPostopController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 

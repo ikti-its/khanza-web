@@ -233,7 +233,7 @@ final class HasilRadController extends ControllerTemplate
 
         $data = [
             'id_permintaan_item'      => $idItem,
-            'proyeksi'                => $tindakan['proyeksi'] ?? '' ?: null,
+            'proyeksi'                => $tindakan['proyeksi'] ?? '' ? $tindakan['proyeksi'] ?? '' : null,
             'kilovoltage_kv'          => ($tindakan['kilovoltage_kv'] ?? '') !== ''
                 ? (float) $tindakan['kilovoltage_kv']
                 : null,
@@ -246,12 +246,14 @@ final class HasilRadController extends ControllerTemplate
             'back_scatter_factor_bsf' => ($tindakan['back_scatter_factor_bsf'] ?? '') !== ''
                 ? (float) $tindakan['back_scatter_factor_bsf']
                 : null,
-            'inaktivasi'              => $tindakan['inaktivasi'] ?? '' ?: null,
+            'inaktivasi'              => $tindakan['inaktivasi'] ?? '' ? $tindakan['inaktivasi'] ?? '' : null,
             'jumlah_penyinaran'       => ($tindakan['jumlah_penyinaran'] ?? '') !== ''
                 ? (int) $tindakan['jumlah_penyinaran']
                 : null,
-            'dosis_radiasi'           => $tindakan['dosis_radiasi'] ?? '' ?: null,
-            'hasil_ekspertise'        => $tindakan['hasil_ekspertise'] ?? '' ?: null,
+            'dosis_radiasi'           => $tindakan['dosis_radiasi'] ?? '' ? $tindakan['dosis_radiasi'] ?? '' : null,
+            'hasil_ekspertise'        => $tindakan['hasil_ekspertise'] ?? ''
+                ? $tindakan['hasil_ekspertise'] ?? ''
+                : null,
             'id_template_rad'         => !empty($tindakan['id_template_rad'])
                 ? (int) $tindakan['id_template_rad']
                 : null,
@@ -259,9 +261,9 @@ final class HasilRadController extends ControllerTemplate
 
         if ($existing !== null) {
             $modelTindakan->update((int) $existing['id_hasil_tindakan'], $data);
-        } else {
-            $modelTindakan->insert($data + ['id_hasil_rad' => $idHasilRad]);
+            return;
         }
+        $modelTindakan->insert($data + ['id_hasil_rad' => $idHasilRad]);
     }
 
     /**
@@ -317,14 +319,14 @@ final class HasilRadController extends ControllerTemplate
                 $this->adjustStok($idBarang, abs($selisih), $selisih > 0 ? '-' : '+');
             }
             $modelBhp->update((int) $existing['id_rad_bhp'], ['jumlah_pakai' => $jumlahBaru]);
-        } else {
-            $modelBhp->insert([
-                'id_hasil_rad' => $idHasilRad,
-                'id_barang'    => $idBarang,
-                'jumlah_pakai' => $jumlahBaru,
-            ]);
-            $this->adjustStok($idBarang, $jumlahBaru, '-');
+            return;
         }
+        $modelBhp->insert([
+            'id_hasil_rad' => $idHasilRad,
+            'id_barang'    => $idBarang,
+            'jumlah_pakai' => $jumlahBaru,
+        ]);
+        $this->adjustStok($idBarang, $jumlahBaru, '-');
     }
 
     private function upsertTindakanAndBhp(int $idHasilRad, array $tindakanList, array $bhpList): void
@@ -356,7 +358,7 @@ final class HasilRadController extends ControllerTemplate
 
         // BHP yang dihapus user dari form (barisnya tidak dikirim lagi) tetap harus dikembalikan stoknya
         foreach ($existingBhpByBarang as $idBarang => $lama) {
-            if (isset($submittedBarangIds[(int) $idBarang])) {
+            if (array_key_exists((int) $idBarang, $submittedBarangIds)) {
                 continue;
             }
             $this->adjustStok((int) $lama['id_barang'], (int) $lama['jumlah_pakai'], '+');
@@ -412,9 +414,13 @@ final class HasilRadController extends ControllerTemplate
         $rawPost = $this->request->getPost();
 
         $dataHeader = [
-            'id_permintaan_rad' => (int) ($rawPost['id_permintaan_rad'] ?? 0) ?: null,
-            'id_dokter_pj'      => (int) ($rawPost['id_dokter_pj'] ?? 0) ?: null,
-            'id_petugas_rad'    => (int) ($rawPost['id_petugas_rad'] ?? 0) ?: null,
+            'id_permintaan_rad' => (int) ($rawPost['id_permintaan_rad'] ?? 0)
+                ? (int) ($rawPost['id_permintaan_rad'] ?? 0)
+                : null,
+            'id_dokter_pj'      => (int) ($rawPost['id_dokter_pj'] ?? 0) ? (int) ($rawPost['id_dokter_pj'] ?? 0) : null,
+            'id_petugas_rad'    => (int) ($rawPost['id_petugas_rad'] ?? 0)
+                ? (int) ($rawPost['id_petugas_rad'] ?? 0)
+                : null,
             'tgl_jam_hasil'     => $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s'),
             'catatan'           => $rawPost['catatan'] ?? '',
         ];
@@ -566,16 +572,20 @@ final class HasilRadController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
         $rawPost = $this->request->getPost();
 
         $dataHeader = [
-            'id_permintaan_rad' => (int) ($rawPost['id_permintaan_rad'] ?? 0) ?: null,
-            'id_dokter_pj'      => (int) ($rawPost['id_dokter_pj'] ?? 0) ?: null,
-            'id_petugas_rad'    => (int) ($rawPost['id_petugas_rad'] ?? 0) ?: null,
+            'id_permintaan_rad' => (int) ($rawPost['id_permintaan_rad'] ?? 0)
+                ? (int) ($rawPost['id_permintaan_rad'] ?? 0)
+                : null,
+            'id_dokter_pj'      => (int) ($rawPost['id_dokter_pj'] ?? 0) ? (int) ($rawPost['id_dokter_pj'] ?? 0) : null,
+            'id_petugas_rad'    => (int) ($rawPost['id_petugas_rad'] ?? 0)
+                ? (int) ($rawPost['id_petugas_rad'] ?? 0)
+                : null,
             'tgl_jam_hasil'     => $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s'),
             'catatan'           => $rawPost['catatan'] ?? '',
         ];
@@ -624,7 +634,7 @@ final class HasilRadController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 

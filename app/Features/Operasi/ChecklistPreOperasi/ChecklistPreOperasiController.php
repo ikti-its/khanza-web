@@ -159,23 +159,43 @@ final class ChecklistPreOperasiController extends ControllerTemplate
     private function buildHeaderData(array $rawPost): array
     {
         return [
-            'id_jadwal'              => (int) ($rawPost['id_jadwal'] ?? 0) ?: null,
-            'id_tindakan'            => (int) ($rawPost['id_tindakan'] ?? 0) ?: null,
-            'id_sn_cn'               => (int) ($rawPost['id_sn_cn'] ?? 0) ?: null,
-            'id_dokter_bedah'        => (int) ($rawPost['id_dokter_bedah'] ?? 0) ?: null,
-            'id_dokter_anestesi'     => (int) ($rawPost['id_dokter_anestesi'] ?? 0) ?: null,
-            'id_petugas_ruangan'     => (int) ($rawPost['id_petugas_ruangan'] ?? 0) ?: null,
-            'id_petugas_ok'          => (int) ($rawPost['id_petugas_ok'] ?? 0) ?: null,
+            'id_jadwal'              => (int) ($rawPost['id_jadwal'] ?? 0) ? (int) ($rawPost['id_jadwal'] ?? 0) : null,
+            'id_tindakan'            => (int) ($rawPost['id_tindakan'] ?? 0)
+                ? (int) ($rawPost['id_tindakan'] ?? 0)
+                : null,
+            'id_sn_cn'               => (int) ($rawPost['id_sn_cn'] ?? 0) ? (int) ($rawPost['id_sn_cn'] ?? 0) : null,
+            'id_dokter_bedah'        => (int) ($rawPost['id_dokter_bedah'] ?? 0)
+                ? (int) ($rawPost['id_dokter_bedah'] ?? 0)
+                : null,
+            'id_dokter_anestesi'     => (int) ($rawPost['id_dokter_anestesi'] ?? 0)
+                ? (int) ($rawPost['id_dokter_anestesi'] ?? 0)
+                : null,
+            'id_petugas_ruangan'     => (int) ($rawPost['id_petugas_ruangan'] ?? 0)
+                ? (int) ($rawPost['id_petugas_ruangan'] ?? 0)
+                : null,
+            'id_petugas_ok'          => (int) ($rawPost['id_petugas_ok'] ?? 0)
+                ? (int) ($rawPost['id_petugas_ok'] ?? 0)
+                : null,
             'waktu_checklist'        => $rawPost['waktu_checklist'] ?? null,
             'is_identitas_sesuai'    => $rawPost['is_identitas_sesuai'] ?? null,
-            'id_keadaan_umum'        => (int) ($rawPost['id_keadaan_umum'] ?? 0) ?: null,
-            'id_penandaan_area'      => (int) ($rawPost['id_penandaan_area'] ?? 0) ?: null,
+            'id_keadaan_umum'        => (int) ($rawPost['id_keadaan_umum'] ?? 0)
+                ? (int) ($rawPost['id_keadaan_umum'] ?? 0)
+                : null,
+            'id_penandaan_area'      => (int) ($rawPost['id_penandaan_area'] ?? 0)
+                ? (int) ($rawPost['id_penandaan_area'] ?? 0)
+                : null,
             'is_ijin_bedah'          => $rawPost['is_ijin_bedah'] ?? null,
             'is_ijin_anestesi'       => $rawPost['is_ijin_anestesi'] ?? null,
-            'id_ijin_transfusi'      => (int) ($rawPost['id_ijin_transfusi'] ?? 0) ?: null,
-            'id_persiapan_darah'     => (int) ($rawPost['id_persiapan_darah'] ?? 0) ?: null,
+            'id_ijin_transfusi'      => (int) ($rawPost['id_ijin_transfusi'] ?? 0)
+                ? (int) ($rawPost['id_ijin_transfusi'] ?? 0)
+                : null,
+            'id_persiapan_darah'     => (int) ($rawPost['id_persiapan_darah'] ?? 0)
+                ? (int) ($rawPost['id_persiapan_darah'] ?? 0)
+                : null,
             'ket_persiapan_darah'    => $rawPost['ket_persiapan_darah'] ?? null,
-            'id_perlengkapan_khusus' => (int) ($rawPost['id_perlengkapan_khusus'] ?? 0) ?: null,
+            'id_perlengkapan_khusus' => (int) ($rawPost['id_perlengkapan_khusus'] ?? 0)
+                ? (int) ($rawPost['id_perlengkapan_khusus'] ?? 0)
+                : null,
         ];
     }
 
@@ -192,7 +212,9 @@ final class ChecklistPreOperasiController extends ControllerTemplate
             $batchPenunjang[] = [
                 'id_checklist'       => $idChecklist,
                 'id_jenis_penunjang' => $idJenis,
-                'id_ketersediaan'    => (int) ($row['id_ketersediaan'] ?? 0) ?: null,
+                'id_ketersediaan'    => (int) ($row['id_ketersediaan'] ?? 0)
+                    ? (int) ($row['id_ketersediaan'] ?? 0)
+                    : null,
                 'keterangan'         => $row['keterangan'] ?? null,
             ];
         }
@@ -324,7 +346,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -363,7 +385,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 

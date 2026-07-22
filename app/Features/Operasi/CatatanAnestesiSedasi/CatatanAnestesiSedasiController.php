@@ -222,17 +222,29 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
     private function buildHeaderData(array $rawPost): array
     {
         return [
-            'id_jadwal'            => (int) ($rawPost['id_jadwal'] ?? 0) ?: null,
-            'id_tindakan'          => (int) ($rawPost['id_tindakan'] ?? 0) ?: null,
-            'id_dokter_anestesi'   => (int) ($rawPost['id_dokter_anestesi'] ?? 0) ?: null,
-            'id_dokter_bedah'      => (int) ($rawPost['id_dokter_bedah'] ?? 0) ?: null,
-            'id_perawat_anestesi'  => (int) ($rawPost['id_perawat_anestesi'] ?? 0) ?: null,
-            'id_perawat_bedah'     => (int) ($rawPost['id_perawat_bedah'] ?? 0) ?: null,
+            'id_jadwal'            => (int) ($rawPost['id_jadwal'] ?? 0) ? (int) ($rawPost['id_jadwal'] ?? 0) : null,
+            'id_tindakan'          => (int) ($rawPost['id_tindakan'] ?? 0)
+                ? (int) ($rawPost['id_tindakan'] ?? 0)
+                : null,
+            'id_dokter_anestesi'   => (int) ($rawPost['id_dokter_anestesi'] ?? 0)
+                ? (int) ($rawPost['id_dokter_anestesi'] ?? 0)
+                : null,
+            'id_dokter_bedah'      => (int) ($rawPost['id_dokter_bedah'] ?? 0)
+                ? (int) ($rawPost['id_dokter_bedah'] ?? 0)
+                : null,
+            'id_perawat_anestesi'  => (int) ($rawPost['id_perawat_anestesi'] ?? 0)
+                ? (int) ($rawPost['id_perawat_anestesi'] ?? 0)
+                : null,
+            'id_perawat_bedah'     => (int) ($rawPost['id_perawat_bedah'] ?? 0)
+                ? (int) ($rawPost['id_perawat_bedah'] ?? 0)
+                : null,
             'waktu_catatan'        => $rawPost['waktu_catatan'] ?? null,
             'diagnosa_pra_bedah'   => $rawPost['diagnosa_pra_bedah'] ?? null,
             'diagnosa_paska_bedah' => $rawPost['diagnosa_paska_bedah'] ?? null,
             'jam_pengkajian'       => $rawPost['jam_pengkajian'] ?? null,
-            'id_kesadaran'         => (int) ($rawPost['id_kesadaran'] ?? 0) ?: null,
+            'id_kesadaran'         => (int) ($rawPost['id_kesadaran'] ?? 0)
+                ? (int) ($rawPost['id_kesadaran'] ?? 0)
+                : null,
             'sistolik'             => $rawPost['sistolik'] ?? null,
             'diastolik'            => $rawPost['diastolik'] ?? null,
             'nadi'                 => $rawPost['nadi'] ?? null,
@@ -241,8 +253,10 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
             'saturasi_o2'          => $rawPost['saturasi_o2'] ?? null,
             'tinggi_badan_cm'      => $rawPost['tinggi_badan_cm'] ?? null,
             'berat_badan_kg'       => $rawPost['berat_badan_kg'] ?? null,
-            'id_golongan_darah'    => (int) ($rawPost['id_golongan_darah'] ?? 0) ?: null,
-            'id_rhesus'            => (int) ($rawPost['id_rhesus'] ?? 0) ?: null,
+            'id_golongan_darah'    => (int) ($rawPost['id_golongan_darah'] ?? 0)
+                ? (int) ($rawPost['id_golongan_darah'] ?? 0)
+                : null,
+            'id_rhesus'            => (int) ($rawPost['id_rhesus'] ?? 0) ? (int) ($rawPost['id_rhesus'] ?? 0) : null,
             'hemoglobin'           => $rawPost['hemoglobin'] ?? null,
             'hematokrit'           => $rawPost['hematokrit'] ?? null,
             'leukosit'             => $rawPost['leukosit'] ?? null,
@@ -251,12 +265,14 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
             'clotting_time_ct'     => $rawPost['clotting_time_ct'] ?? null,
             'gula_darah_sewaktu'   => $rawPost['gula_darah_sewaktu'] ?? null,
             'klinis_lain_lain'     => $rawPost['klinis_lain_lain'] ?? null,
-            'id_asa'               => (int) ($rawPost['id_asa'] ?? 0) ?: null,
+            'id_asa'               => (int) ($rawPost['id_asa'] ?? 0) ? (int) ($rawPost['id_asa'] ?? 0) : null,
             'is_alergi'            => $rawPost['is_alergi'] ?? null,
             'ket_alergi'           => ($rawPost['ket_alergi'] ?? '') !== '' ? $rawPost['ket_alergi'] : null,
             'penyulit_pra'         => ($rawPost['penyulit_pra'] ?? '') !== '' ? $rawPost['penyulit_pra'] : null,
             'is_lanjut_tindakan'   => $rawPost['is_lanjut_tindakan'] ?? null,
-            'id_jenis_sedasi'      => (int) ($rawPost['id_jenis_sedasi'] ?? 0) ?: null,
+            'id_jenis_sedasi'      => (int) ($rawPost['id_jenis_sedasi'] ?? 0)
+                ? (int) ($rawPost['id_jenis_sedasi'] ?? 0)
+                : null,
             'ket_sedasi'           => ($rawPost['ket_sedasi'] ?? '') !== '' ? $rawPost['ket_sedasi'] : null,
             'is_epidural'          => $rawPost['is_epidural'] ?? null,
             'is_spinal'            => $rawPost['is_spinal'] ?? null,
@@ -367,7 +383,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
     #[\Override]
     public function update_page(int|string $id): string
     {
-        $record   = $this->model->find_one($id);
+        $record   = $this->model->find_one($id) ?? [];
         $idJadwal = (int) ($record['id_jadwal'] ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
@@ -396,7 +412,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
             'is_blok_perifer',
             'is_batal_tindakan',
         ] as $field) {
-            if (!isset($record[$field])) {
+            if (!array_key_exists($field, $record)) {
                 continue;
             }
 
@@ -451,7 +467,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -494,7 +510,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 

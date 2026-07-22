@@ -59,7 +59,7 @@ final class JadwalOperasiController extends ControllerTemplate
             'dibatalkan'  => 'Dibatalkan',
         ];
 
-        $this->active_filter = $this->request->getGet('filter') ?: null;
+        $this->active_filter = $this->request->getGet('filter') ? $this->request->getGet('filter') : null;
 
         match ($this->active_filter) {
             'menunggu'    => $this->model->set_filter('id_status', 1),
@@ -277,7 +277,7 @@ final class JadwalOperasiController extends ControllerTemplate
 
         foreach ($tim as $anggota) {
             $idPeran = (int) ($anggota['id_peran'] ?? 0);
-            if (!isset($peranValid[$idPeran])) {
+            if (!array_key_exists($idPeran, $peranValid)) {
                 continue;
             }
 
@@ -312,7 +312,7 @@ final class JadwalOperasiController extends ControllerTemplate
             }
 
             $idPeran = (int) ($anggota['id_peran'] ?? 0);
-            if (!isset($peranValid[$idPeran]) || isset($peranTerpakai[$idPeran])) {
+            if (!array_key_exists($idPeran, $peranValid) || array_key_exists($idPeran, $peranTerpakai)) {
                 $idPeran = 0;
             } else {
                 $peranTerpakai[$idPeran] = true;
@@ -320,9 +320,9 @@ final class JadwalOperasiController extends ControllerTemplate
 
             $rows[] = [
                 'id_jadwal'  => $idJadwal,
-                'id_dokter'  => $idDokter ?: null,
-                'id_petugas' => $idPetugas ?: null,
-                'id_peran'   => $idPeran ?: null,
+                'id_dokter'  => $idDokter ? $idDokter : null,
+                'id_petugas' => $idPetugas ? $idPetugas : null,
+                'id_peran'   => $idPeran ? $idPeran : null,
             ];
         }
 
@@ -423,7 +423,7 @@ final class JadwalOperasiController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -456,19 +456,21 @@ final class JadwalOperasiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
-        $rawPost        = $this->request->getPost();
-        $tanggal        = $rawPost['tanggal'] ?? null;
-        $waktuMulai     = $rawPost['waktu_mulai'] ?? null;
-        $waktuSelesai   = $rawPost['waktu_selesai'] ?: null;
-        $tanggalSelesai = $this->resolveTanggalSelesai(
+        $rawPost             = $this->request->getPost();
+        $tanggal             = $rawPost['tanggal'] ?? null;
+        $waktuMulai          = $rawPost['waktu_mulai'] ?? null;
+        $waktuSelesaiInput   = $rawPost['waktu_selesai'] ?? null;
+        $waktuSelesai        = $waktuSelesaiInput ? $waktuSelesaiInput : null;
+        $tanggalSelesaiInput = $rawPost['tanggal_selesai'] ?? null;
+        $tanggalSelesai      = $this->resolveTanggalSelesai(
             $tanggal,
             $waktuMulai,
             $waktuSelesai,
-            $rawPost['tanggal_selesai'] ?: null,
+            $tanggalSelesaiInput ? $tanggalSelesaiInput : null,
         );
         $tim = $this->request->getPost('tim') ?? [];
 

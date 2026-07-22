@@ -151,23 +151,35 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
     private function buildHeaderData(array $rawPost): array
     {
         return [
-            'id_jadwal'               => (int) ($rawPost['id_jadwal'] ?? 0) ?: null,
-            'id_tindakan'             => (int) ($rawPost['id_tindakan'] ?? 0) ?: null,
-            'id_sn_cn'                => (int) ($rawPost['id_sn_cn'] ?? 0) ?: null,
-            'id_dokter_bedah'         => (int) ($rawPost['id_dokter_bedah'] ?? 0) ?: null,
-            'id_dokter_anestesi'      => (int) ($rawPost['id_dokter_anestesi'] ?? 0) ?: null,
-            'id_perawat_ok'           => (int) ($rawPost['id_perawat_ok'] ?? 0) ?: null,
+            'id_jadwal'               => (int) ($rawPost['id_jadwal'] ?? 0) ? (int) ($rawPost['id_jadwal'] ?? 0) : null,
+            'id_tindakan'             => (int) ($rawPost['id_tindakan'] ?? 0)
+                ? (int) ($rawPost['id_tindakan'] ?? 0)
+                : null,
+            'id_sn_cn'                => (int) ($rawPost['id_sn_cn'] ?? 0) ? (int) ($rawPost['id_sn_cn'] ?? 0) : null,
+            'id_dokter_bedah'         => (int) ($rawPost['id_dokter_bedah'] ?? 0)
+                ? (int) ($rawPost['id_dokter_bedah'] ?? 0)
+                : null,
+            'id_dokter_anestesi'      => (int) ($rawPost['id_dokter_anestesi'] ?? 0)
+                ? (int) ($rawPost['id_dokter_anestesi'] ?? 0)
+                : null,
+            'id_perawat_ok'           => (int) ($rawPost['id_perawat_ok'] ?? 0)
+                ? (int) ($rawPost['id_perawat_ok'] ?? 0)
+                : null,
             'waktu_timeout'           => $rawPost['waktu_timeout'] ?? null,
             'is_identitas_sesuai'     => $rawPost['is_identitas_sesuai'] ?? null,
             'is_tindakan_sesuai'      => $rawPost['is_tindakan_sesuai'] ?? null,
             'is_area_insisi_sesuai'   => $rawPost['is_area_insisi_sesuai'] ?? null,
-            'id_penandaan_area'       => (int) ($rawPost['id_penandaan_area'] ?? 0) ?: null,
+            'id_penandaan_area'       => (int) ($rawPost['id_penandaan_area'] ?? 0)
+                ? (int) ($rawPost['id_penandaan_area'] ?? 0)
+                : null,
             'perkiraan_waktu_jam'     => $rawPost['perkiraan_waktu_jam'] ?? null,
             'is_antibiotik'           => $rawPost['is_antibiotik'] ?? null,
             'nama_antibiotik'         => $rawPost['nama_antibiotik'] ?? null,
-            'waktu_antibiotik'        => $rawPost['waktu_antibiotik'] ?: null,
+            'waktu_antibiotik'        => $rawPost['waktu_antibiotik'] ? $rawPost['waktu_antibiotik'] : null,
             'antisipasi_hilang_darah' => $rawPost['antisipasi_hilang_darah'] ?? null,
-            'id_hal_khusus'           => (int) ($rawPost['id_hal_khusus'] ?? 0) ?: null,
+            'id_hal_khusus'           => (int) ($rawPost['id_hal_khusus'] ?? 0)
+                ? (int) ($rawPost['id_hal_khusus'] ?? 0)
+                : null,
             'keterangan_hal_khusus'   => $rawPost['keterangan_hal_khusus'] ?? null,
             'tanggal_steril'          => $rawPost['tanggal_steril'] ?? null,
             'is_steril_dikonfirmasi'  => $rawPost['is_steril_dikonfirmasi'] ?? null,
@@ -186,7 +198,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
             $batch[] = [
                 'id_timeout'         => $idTimeout,
                 'id_jenis_penunjang' => $idJenis,
-                'id_status'          => (int) ($row['id_status'] ?? 0) ?: null,
+                'id_status'          => (int) ($row['id_status'] ?? 0) ? (int) ($row['id_status'] ?? 0) : null,
             ];
         }
         if (!empty($batch)) {
@@ -302,7 +314,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 
@@ -339,7 +351,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) {
+        if ((int) $id === 0) {
             return $this->home();
         }
 

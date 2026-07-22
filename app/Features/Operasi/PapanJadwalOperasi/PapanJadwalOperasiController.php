@@ -26,7 +26,7 @@ final class PapanJadwalOperasiController extends ControllerTemplate
     #[\Override]
     public function index(): string|RedirectResponse
     {
-        $tanggal  = $this->request->getGet('tanggal') ?: date('Y-m-d');
+        $tanggal  = $this->request->getGet('tanggal') ? $this->request->getGet('tanggal') : date('Y-m-d');
         $slots    = $this->fetchSlots();
         $ruangans = $this->fetchRuangans();
         $jadwals  = $this->fetchJadwals($tanggal);
@@ -158,11 +158,11 @@ final class PapanJadwalOperasiController extends ControllerTemplate
                 if ($idJadwal !== null && $idJadwal === $prevJadwal) {
                     $spans[$firstSlot][$idRuangan]++;
                     $spans[$idSlot][$idRuangan] = 0;
-                } else {
-                    $spans[$idSlot][$idRuangan] = 1;
-                    $firstSlot                  = $idSlot;
-                    $prevJadwal                 = $idJadwal;
+                    continue;
                 }
+                $spans[$idSlot][$idRuangan] = 1;
+                $firstSlot                  = $idSlot;
+                $prevJadwal                 = $idJadwal;
             }
         }
         return $spans;
