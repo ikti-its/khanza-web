@@ -12,9 +12,12 @@ use CodeIgniter\Model;
 class ModelTemplate extends Model
 {
     // Widened to public; parent keeps these protected and only exposes them via __get().
-    public BaseConnection $db;
-    public string $primaryKey;
-    public string $table;
+    /** @var BaseConnection */
+    public $db;
+    /** @var string */
+    public $primaryKey;
+    /** @var string */
+    public $table;
 
     public private(set) DatabaseTemplate $database;
     /** @var 'BASE'| 'JOIN'| 'REFS' */
