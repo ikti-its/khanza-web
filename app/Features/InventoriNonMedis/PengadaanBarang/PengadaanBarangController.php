@@ -261,6 +261,8 @@ final class PengadaanBarangController extends ControllerTemplate
     // simpan header + detail sekaligus
     public function create(): string|RedirectResponse
     {
+        $new_status = (int) ($this->request->getPost('id_status_pengadaan_barang') ?? 1);
+
         $postData = [
             'tanggal'      => $this->request->getPost('tanggal'),
             'id_pengajuan' => $this->request->getPost('id_pengajuan') ?: null,
@@ -271,40 +273,50 @@ final class PengadaanBarangController extends ControllerTemplate
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.pengadaan_barang', 'no_pengadaan', 'id_pengadaan');
         $postData['no_pengadaan']               = generateNextNoPengadaanBarang($lastNo, $postData['tanggal'] ?? null);
-        $postData['id_status_pengadaan_barang'] = (int) ($this->request->getPost('id_status_pengadaan_barang') ?? 1);
+        $postData['id_status_pengadaan_barang'] = $new_status;
 
         $db = $this->get_db();
 
         try {
             $db->transBegin();
 
-            $this->model->insert($postData);
+            $inserted = $this->model->insert($postData);
+            if ($inserted === false) {
+                $db->transRollback();
+                session()->setFlashdata('error', implode(' ', $this->model->errors()));
+                return $this->home();
+            }
             $id_pengadaan = (int) $db->insertID();
 
-            $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
-            $detail_qty   = $this->request->getPost('detail_qty') ?? [];
-            $detail_harga = $this->request->getPost('detail_harga') ?? [];
-            $total_harga  = 0;
+            // Jika Dibatalkan (3), skip insert detail — tidak perlu item
+            if ($new_status !== 3) {
+                $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
+                $detail_qty   = $this->request->getPost('detail_qty') ?? [];
+                $detail_harga = $this->request->getPost('detail_harga') ?? [];
+                $total_harga  = 0;
 
-            for ($i = 0; $i < count($detail_ids); $i++) {
-                $id_barang    = (int) ($detail_ids[$i] ?? 0);
-                $qty          = (int) ($detail_qty[$i] ?? 0);
-                $harga_satuan = (float) ($detail_harga[$i] ?? 0);
-                if ($id_barang > 0 && $qty > 0) {
-                    $subtotal = $qty * $harga_satuan;
-                    $total_harga += $subtotal;
-                    $db->table('inventori_non_medis.pengadaan_barang_detail')->insert([
-                        'id_pengadaan' => $id_pengadaan,
-                        'id_barang'    => $id_barang,
-                        'qty'          => $qty,
-                        'harga_satuan' => $harga_satuan > 0 ? $harga_satuan : null,
-                        'subtotal'     => $subtotal > 0 ? $subtotal : null,
-                    ]);
+                for ($i = 0; $i < count($detail_ids); $i++) {
+                    $id_barang    = (int) ($detail_ids[$i] ?? 0);
+                    $qty          = (int) ($detail_qty[$i] ?? 0);
+                    $harga_satuan = (float) ($detail_harga[$i] ?? 0);
+                    if ($id_barang > 0 && $qty > 0) {
+                        $subtotal = $qty * $harga_satuan;
+                        $total_harga += $subtotal;
+                        $db->table('inventori_non_medis.pengadaan_barang_detail')->insert([
+                            'id_pengadaan' => $id_pengadaan,
+                            'id_barang'    => $id_barang,
+                            'qty'          => $qty,
+                            'harga_satuan' => $harga_satuan > 0 ? $harga_satuan : null,
+                            'subtotal'     => $subtotal > 0 ? $subtotal : null,
+                        ]);
+                    }
                 }
-            }
 
-            if ($total_harga > 0) {
-                $this->model->update($id_pengadaan, ['total_harga' => $total_harga]);
+                if ($total_harga > 0) {
+                    $db->table('inventori_non_medis.pengadaan_barang')
+                        ->where('id_pengadaan', $id_pengadaan)
+                        ->update(['total_harga' => $total_harga]);
+                }
             }
 
             $db->transCommit();
@@ -321,7 +333,7 @@ final class PengadaanBarangController extends ControllerTemplate
     public function update(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);
-        if (is_array($current) && (int) ($current['id_status_pengadaan_barang'] ?? 0) !== 1) {
+        if (is_array($current) && !in_array((int) ($current['id_status_pengadaan_barang'] ?? 0), [1], true)) {
             session()->setFlashdata('error', 'Pengadaan yang sudah selesai atau dibatalkan tidak dapat diubah.');
             return $this->home();
         }
@@ -340,34 +352,43 @@ final class PengadaanBarangController extends ControllerTemplate
         try {
             $db->transBegin();
 
-            // sync detail
-            $db->table('inventori_non_medis.pengadaan_barang_detail')
-                ->where('id_pengadaan', (int) $id)
-                ->delete();
+            // Jika Dibatalkan (3), hapus detail dan skip insert ulang
+            if ($new_status === 3) {
+                $db->table('inventori_non_medis.pengadaan_barang_detail')
+                    ->where('id_pengadaan', (int) $id)
+                    ->delete();
+                $postData['total_harga'] = null;
+            } else {
+                // sync detail
+                $db->table('inventori_non_medis.pengadaan_barang_detail')
+                    ->where('id_pengadaan', (int) $id)
+                    ->delete();
 
-            $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
-            $detail_qty   = $this->request->getPost('detail_qty') ?? [];
-            $detail_harga = $this->request->getPost('detail_harga') ?? [];
-            $total_harga  = 0;
+                $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
+                $detail_qty   = $this->request->getPost('detail_qty') ?? [];
+                $detail_harga = $this->request->getPost('detail_harga') ?? [];
+                $total_harga  = 0;
 
-            for ($i = 0; $i < count($detail_ids); $i++) {
-                $id_barang    = (int) ($detail_ids[$i] ?? 0);
-                $qty          = (int) ($detail_qty[$i] ?? 0);
-                $harga_satuan = (float) ($detail_harga[$i] ?? 0);
-                if ($id_barang > 0 && $qty > 0) {
-                    $subtotal = $qty * $harga_satuan;
-                    $total_harga += $subtotal;
-                    $db->table('inventori_non_medis.pengadaan_barang_detail')->insert([
-                        'id_pengadaan' => (int) $id,
-                        'id_barang'    => $id_barang,
-                        'qty'          => $qty,
-                        'harga_satuan' => $harga_satuan > 0 ? $harga_satuan : null,
-                        'subtotal'     => $subtotal > 0 ? $subtotal : null,
-                    ]);
+                for ($i = 0; $i < count($detail_ids); $i++) {
+                    $id_barang    = (int) ($detail_ids[$i] ?? 0);
+                    $qty          = (int) ($detail_qty[$i] ?? 0);
+                    $harga_satuan = (float) ($detail_harga[$i] ?? 0);
+                    if ($id_barang > 0 && $qty > 0) {
+                        $subtotal = $qty * $harga_satuan;
+                        $total_harga += $subtotal;
+                        $db->table('inventori_non_medis.pengadaan_barang_detail')->insert([
+                            'id_pengadaan' => (int) $id,
+                            'id_barang'    => $id_barang,
+                            'qty'          => $qty,
+                            'harga_satuan' => $harga_satuan > 0 ? $harga_satuan : null,
+                            'subtotal'     => $subtotal > 0 ? $subtotal : null,
+                        ]);
+                    }
                 }
+
+                $postData['total_harga'] = $total_harga > 0 ? $total_harga : null;
             }
 
-            $postData['total_harga'] = $total_harga > 0 ? $total_harga : null;
             $this->model->update($id, $postData);
 
             $db->transCommit();

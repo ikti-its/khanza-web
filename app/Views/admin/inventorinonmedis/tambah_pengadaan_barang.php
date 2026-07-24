@@ -226,13 +226,19 @@ $readonly = $readonly ?? false;
             return false;
         }
 
-        // Pastikan minimal 1 item punya qty > 0
-        var qtyInputs = document.querySelectorAll('input[name="detail_qty[]"]');
-        var hasItem = false;
-        qtyInputs.forEach(function(input) { if (parseInt(input.value) > 0) hasItem = true; });
-        if (!hasItem) {
-            Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'Isi qty pesan minimal untuk satu item.', confirmButtonText: 'Tutup', customClass: { confirmButton: 'bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] font-medium rounded-lg px-4 py-2' }, buttonsStyling: false });
-            return false;
+        // Jika status Dibatalkan (3), tidak perlu validasi item
+        var statusSelect = document.querySelector('select[name="id_status_pengadaan_barang"]');
+        var isCancelled = statusSelect && statusSelect.value === '3';
+
+        if (!isCancelled) {
+            // Pastikan minimal 1 item punya qty > 0
+            var qtyInputs = document.querySelectorAll('input[name="detail_qty[]"]');
+            var hasItem = false;
+            qtyInputs.forEach(function(input) { if (parseInt(input.value) > 0) hasItem = true; });
+            if (!hasItem) {
+                Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'Isi qty pesan minimal untuk satu item.', confirmButtonText: 'Tutup', customClass: { confirmButton: 'bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] font-medium rounded-lg px-4 py-2' }, buttonsStyling: false });
+                return false;
+            }
         }
 
         var btn = document.getElementById('submitButton');

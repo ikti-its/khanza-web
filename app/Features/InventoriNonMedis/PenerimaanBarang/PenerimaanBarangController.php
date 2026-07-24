@@ -141,6 +141,8 @@ final class PenerimaanBarangController extends ControllerTemplate
     // simpan header + detail sekaligus
     public function create(): string|RedirectResponse
     {
+        $new_status = (int) ($this->request->getPost('id_status_penerimaan_barang') ?? 1);
+
         $postData = [
             'tanggal'      => $this->request->getPost('tanggal'),
             'id_pengadaan' => $this->request->getPost('id_pengadaan') ?: null,
@@ -152,14 +154,25 @@ final class PenerimaanBarangController extends ControllerTemplate
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.penerimaan_barang', 'no_penerimaan', 'id_penerimaan');
         $postData['no_penerimaan']               = generateNextNoPenerimaanBarang($lastNo, $postData['tanggal'] ?? null);
-        $postData['id_status_penerimaan_barang'] = (int) ($this->request->getPost('id_status_penerimaan_barang') ?? 1);
+        $postData['id_status_penerimaan_barang'] = $new_status;
+
+        // Generate no_masuk saat langsung Diterima
+        if ($new_status === 2) {
+            $lastNoMasuk         = $this->get_last('inventori_non_medis.penerimaan_barang', 'no_masuk', 'id_penerimaan');
+            $postData['no_masuk'] = generateNextNoMasukBarang($lastNoMasuk);
+        }
 
         $db = $this->get_db();
 
         try {
             $db->transBegin();
 
-            $this->model->insert($postData);
+            $inserted = $this->model->insert($postData);
+            if ($inserted === false) {
+                $db->transRollback();
+                session()->setFlashdata('error', implode(' ', $this->model->errors()));
+                return $this->home();
+            }
             $id_penerimaan = (int) $db->insertID();
 
             $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
@@ -197,6 +210,22 @@ final class PenerimaanBarangController extends ControllerTemplate
                 }
             }
 
+            // Validasi: harus ada item dengan qty > 0 saat Diterima
+            if ($new_status === 2) {
+                $has_items = false;
+                for ($i = 0; $i < count($detail_ids); $i++) {
+                    if ((int) ($detail_ids[$i] ?? 0) > 0 && (int) ($detail_qty[$i] ?? 0) > 0) {
+                        $has_items = true;
+                        break;
+                    }
+                }
+                if (!$has_items) {
+                    $db->transRollback();
+                    session()->setFlashdata('error', 'Isi qty diterima minimal untuk satu item sebelum menerima barang.');
+                    return $this->home();
+                }
+            }
+
             for ($i = 0; $i < count($detail_ids); $i++) {
                 $id_barang    = (int) ($detail_ids[$i] ?? 0);
                 $qty_diterima = (int) ($detail_qty[$i] ?? 0);
@@ -210,6 +239,20 @@ final class PenerimaanBarangController extends ControllerTemplate
             }
 
             $db->transCommit();
+
+            // Jika langsung Diterima: buat transaksi stok masuk + update pengadaan + fulfill pending
+            if ($new_status === 2) {
+                try {
+                    $this->create_transaksi_stok_masuk($id_penerimaan, (string) $postData['no_masuk']);
+                    $this->update_pengadaan_status((int) ($postData['id_pengadaan'] ?? 0));
+                    $this->fulfill_pending_permintaan($id_penerimaan);
+                } catch (\Throwable $e) {
+                    log_message('error', '[Penerimaan::create] transaksi stok: ' . $e->getMessage());
+                    session()->setFlashdata('error', 'Data tersimpan, namun gagal membuat transaksi stok: ' . $e->getMessage());
+                    return $this->home();
+                }
+            }
+
             session()->setFlashdata('success', 'Data Penerimaan Barang berhasil disimpan.');
         } catch (\Throwable $e) {
             $db->transRollback();
@@ -442,66 +485,106 @@ final class PenerimaanBarangController extends ControllerTemplate
 
     /**
      * Auto-fulfill pending permintaan barang baru setelah penerimaan dikonfirmasi.
-     * Cari permintaan dengan status 5 (Menunggu Pengadaan) yang item-nya overlap
-     * dengan barang yang baru diterima, lalu buat transaksi stok keluar.
+     *
+     * Trace: penerimaan → pengadaan → pengajuan (yang punya id_permintaan) → permintaan status 5.
+     * Hanya item yang BELUM pernah stok keluar untuk permintaan ini yang di-fulfill.
+     * Jika semua item pending terpenuhi → status permintaan → Selesai (6).
      */
     private function fulfill_pending_permintaan(int $id_penerimaan): void
     {
         $db = $this->get_db();
 
-        // Ambil id_pengadaan dari penerimaan ini
+        // Trace: penerimaan → pengadaan
         $penerimaan = $db->table('inventori_non_medis.penerimaan_barang')
             ->select('id_pengadaan')
             ->where('id_penerimaan', $id_penerimaan)
             ->get()->getRowArray();
         $id_pengadaan = (int) ($penerimaan['id_pengadaan'] ?? 0);
-        if ($id_pengadaan === 0) return;
+        if ($id_pengadaan === 0) {
+            log_message('debug', "[fulfill] Penerimaan {$id_penerimaan} tidak punya id_pengadaan");
+            return;
+        }
 
-        // Cari pengajuan yang linked dari pengadaan ini
+        // Trace: pengadaan → pengajuan
         $pengadaan = $db->table('inventori_non_medis.pengadaan_barang')
             ->select('id_pengajuan')
             ->where('id_pengadaan', $id_pengadaan)
             ->get()->getRowArray();
         $id_pengajuan = (int) ($pengadaan['id_pengajuan'] ?? 0);
-        if ($id_pengajuan === 0) return;
+        if ($id_pengajuan === 0) {
+            log_message('debug', "[fulfill] Pengadaan {$id_pengadaan} tidak punya id_pengajuan");
+            return;
+        }
 
-        // Cari pengajuan yang punya id_permintaan (auto-created from barang baru)
+        // Trace: pengajuan → permintaan (hanya pengajuan auto-created yang punya id_permintaan)
         $pengajuan = $db->table('inventori_non_medis.pengajuan_barang')
             ->select('id_permintaan')
             ->where('id_pengajuan', $id_pengajuan)
             ->get()->getRowArray();
         $id_permintaan = (int) ($pengajuan['id_permintaan'] ?? 0);
-        if ($id_permintaan === 0) return;
+        if ($id_permintaan === 0) {
+            log_message('debug', "[fulfill] Pengajuan {$id_pengajuan} tidak punya id_permintaan (bukan auto-created)");
+            return;
+        }
 
         // Cek apakah permintaan ini masih status Menunggu Pengadaan (5)
         $permintaan = $db->table('inventori_non_medis.permintaan_barang')
-            ->select('id_permintaan, id_status_permintaan_barang, no_permintaan, master_ruangan, petugas, petugas_gudang')
+            ->select('id_permintaan, id_status_permintaan_barang, no_permintaan, no_keluar, master_ruangan, petugas, petugas_gudang')
             ->where('id_permintaan', $id_permintaan)
             ->where('id_status_permintaan_barang', 5)
             ->get()->getRowArray();
-        if (empty($permintaan)) return;
+        if (empty($permintaan)) {
+            log_message('debug', "[fulfill] Permintaan {$id_permintaan} bukan status 5 (Menunggu Pengadaan)");
+            return;
+        }
 
-        // Ambil detail item yang perlu dikirim (barang baru yang stok-nya sekarang sudah ada)
-        $items_to_fulfill = $db->table('inventori_non_medis.permintaan_barang_detail d')
+        // Ambil id_barang yang sudah pernah stok keluar untuk permintaan ini
+        // (item existing yang sudah di-fulfill saat approval di Ringkasan)
+        $already_fulfilled = $db->query("
+            SELECT DISTINCT tsd.id_barang
+            FROM inventori_non_medis.transaksi_stok_detail tsd
+            JOIN inventori_non_medis.transaksi_stok ts ON tsd.id_transaksi = ts.id_transaksi
+            WHERE ts.id_permintaan = ?
+              AND ts.id_tipe_transaksi_stok = 2
+        ", [$id_permintaan])->getResultArray();
+        $fulfilled_ids = array_map(fn($r) => (int) $r['id_barang'], $already_fulfilled);
+
+        // Ambil detail item yang BELUM pernah stok keluar dan stok sekarang sudah ada
+        $builder = $db->table('inventori_non_medis.permintaan_barang_detail d')
             ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
             ->select('d.id_barang, d.qty_disetujui, b.stok, b.harga_satuan, b.nama_barang')
             ->where('d.id_permintaan', $id_permintaan)
             ->where('d.id_barang >', 0)
-            ->where('d.qty_disetujui >', 0)
-            ->where('b.stok >', 0)
-            ->get()->getResultArray();
+            ->where('d.qty_disetujui >', 0);
 
-        if (empty($items_to_fulfill)) return;
+        if (!empty($fulfilled_ids)) {
+            $builder->whereNotIn('d.id_barang', $fulfilled_ids);
+        }
 
-        // Cek semua item punya stok cukup
-        foreach ($items_to_fulfill as $item) {
-            if ((int) $item['qty_disetujui'] > (int) $item['stok']) {
-                // Stok belum cukup — tunggu penerimaan berikutnya
-                return;
+        $pending_items = $builder->get()->getResultArray();
+
+        if (empty($pending_items)) {
+            log_message('debug', "[fulfill] Permintaan {$id_permintaan} tidak ada item pending yang perlu di-fulfill");
+            return;
+        }
+
+        // Filter hanya item yang stok-nya sudah cukup
+        $items_to_fulfill = [];
+        $items_not_ready  = [];
+        foreach ($pending_items as $item) {
+            if ((int) $item['stok'] >= (int) $item['qty_disetujui']) {
+                $items_to_fulfill[] = $item;
+            } else {
+                $items_not_ready[] = $item;
             }
         }
 
-        // Semua stok cukup → buat transaksi stok keluar
+        if (empty($items_to_fulfill)) {
+            log_message('debug', "[fulfill] Permintaan {$id_permintaan} stok belum cukup untuk item pending");
+            return;
+        }
+
+        // Buat transaksi stok keluar untuk item yang siap
         helper('autonomor');
         $lastNo    = $db->table('inventori_non_medis.permintaan_barang')
             ->select('no_keluar')
@@ -511,7 +594,7 @@ final class PenerimaanBarangController extends ControllerTemplate
             ->get()->getRowArray();
         $no_keluar = generateNextNoKeluarBarang($lastNo['no_keluar'] ?? null);
 
-        // Get info untuk keterangan
+        // Info untuk keterangan
         $row = $db->table('inventori_non_medis.permintaan_barang pb')
             ->join('ruangan.ruangan r', 'pb.master_ruangan = r.id_ruangan', 'left')
             ->join('role.petugas pt', 'pb.petugas = pt.id_petugas', 'left')
@@ -555,13 +638,21 @@ final class PenerimaanBarangController extends ControllerTemplate
                 ->update();
         }
 
-        // Update permintaan status → Selesai (6) + set no_keluar
-        $db->table('inventori_non_medis.permintaan_barang')
-            ->where('id_permintaan', $id_permintaan)
-            ->update([
-                'id_status_permintaan_barang' => 6,
-                'no_keluar'                   => $no_keluar,
-            ]);
+        // Tentukan status akhir permintaan
+        if (empty($items_not_ready)) {
+            // Semua item pending terpenuhi → Selesai (6)
+            $db->table('inventori_non_medis.permintaan_barang')
+                ->where('id_permintaan', $id_permintaan)
+                ->update([
+                    'id_status_permintaan_barang' => 6,
+                    'no_keluar'                   => $no_keluar,
+                ]);
+            log_message('info', "[fulfill] Permintaan {$id_permintaan} → Selesai (6)");
+        } else {
+            // Masih ada item yang belum terpenuhi — tetap status 5, tapi simpan no_keluar parsial
+            // no_keluar belum di-set karena belum selesai sepenuhnya
+            log_message('info', "[fulfill] Permintaan {$id_permintaan} partial fulfill, masih ada " . count($items_not_ready) . " item pending");
+        }
 
         $db->transCommit();
     }

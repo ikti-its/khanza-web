@@ -63,8 +63,28 @@
         if ((isset($aksi['pisah']) && $aksi['pisah'] === true) || (isset($aksi['uji']) && $aksi['uji'] === true)) {
             echo view('components/aksi/proses_darah', array_merge($data, ['aksi' => $aksi]));
         }
+        $modul_draf_gate = ['pengadaan-barang', 'pengajuan-barang', 'permintaan-barang', 'penerimaan-barang', 'stok-opname', 'ringkasan-pengajuan-barang', 'ringkasan-permintaan-barang'];
+        $is_modul_draf = str_starts_with($modul_path, '/inventori-non-medis/')
+            && array_any($modul_draf_gate, fn($m) => str_contains($modul_path, $m));
+
         if (isset($aksi['cetak'])  && $aksi['cetak']  === true) {
-            echo view('components/aksi/cetak',  $data);
+            // Pengadaan: cetak hanya saat Selesai (bukan Draft/Dibatalkan)
+            if ($is_modul_draf && str_contains($modul_path, 'pengadaan-barang')) {
+                $status_cols_c = array_filter(array_keys($baris), fn($k) => str_contains($k, 'nama_status'));
+                $show_cetak = false;
+                foreach ($status_cols_c as $col) {
+                    $val = strtolower(trim((string) ($baris[$col] ?? '')));
+                    if ($val === 'selesai') {
+                        $show_cetak = true;
+                        break;
+                    }
+                }
+                if ($show_cetak) {
+                    echo view('components/aksi/cetak', $data);
+                }
+            } else {
+                echo view('components/aksi/cetak',  $data);
+            }
         }
         if (isset($aksi['bayar']) && $aksi['bayar'] === true) {
             echo view('components/aksi/bayar', $data);
@@ -78,9 +98,6 @@
         if (isset($aksi['pilih'])  && $aksi['pilih']  === true) {
             echo view('components/aksi/pilih',  $data);
         }
-        $modul_draf_gate = ['pengadaanbarang', 'pengajuanbarang', 'permintaanbarang', 'penerimaanbarang', 'stokopname', 'ringkasanpengajuanbarang', 'ringkasanpermintaanbarang'];
-        $is_modul_draf = str_starts_with($modul_path, '/inventorinonmedis/')
-            && array_any($modul_draf_gate, fn($m) => str_contains($modul_path, $m));
 
         if (isset($aksi['ubah'])   && $aksi['ubah']   === true) {
             if (!$is_modul_draf) {

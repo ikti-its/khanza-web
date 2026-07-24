@@ -168,11 +168,22 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
         }
 
         if ($is_new_approval) {
-            $has_approved = $db
-                ->table('inventori_non_medis.pengajuan_barang_detail')
+            // Validasi: qty_disetujui tidak boleh melebihi qty yang diajukan
+            $detail_items_check = $db->table('inventori_non_medis.pengajuan_barang_detail')
+                ->select('id_barang, qty, qty_disetujui')
                 ->where('id_pengajuan', (int) $id)
+                ->where('id_barang >', 0)
                 ->where('qty_disetujui >', 0)
-                ->countAllResults() > 0;
+                ->get()->getResultArray();
+
+            foreach ($detail_items_check as $item) {
+                if ((int) $item['qty_disetujui'] > (int) $item['qty']) {
+                    session()->setFlashdata('error', "Qty disetujui tidak boleh melebihi qty yang diajukan (maks: {$item['qty']}).");
+                    return redirect()->back();
+                }
+            }
+
+            $has_approved = !empty($detail_items_check);
             if (!$has_approved) {
                 session()->setFlashdata('error', 'Isi qty disetujui pada detail pengajuan sebelum menyetujui.');
                 return $this->home();
