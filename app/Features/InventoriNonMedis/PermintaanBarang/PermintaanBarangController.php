@@ -33,6 +33,7 @@ final class PermintaanBarangController extends ControllerTemplate
                 [SHOW, REQUIRED, I::MODAL, 'petugas', 'Pemohon', ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pemohon...']],
                 [SHOW, REQUIRED, I::MODAL, 'master_ruangan', 'Ruangan', ['modal' => 'modalPilihRuangan', 'display_column' => 'nama_ruangan', 'placeholder' => 'Klik cari ruangan...']],
                 [SHOW, OPTIONAL, I::SELECT, 'id_status_permintaan_barang', 'Status'],
+                [TABLE_ONLY, OPTIONAL, I::SELECT, 'progress', 'Progress'],
                 [TABLE_ONLY, OPTIONAL, I::DTIME, 'tanggal_diproses', 'Tanggal Diproses'],
                 [FORM_ONLY, OPTIONAL, I::READONLY, 'tanggal_diproses', 'Tanggal Diproses'],
                 [TABLE_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang', 'Pengelola'],
@@ -48,6 +49,24 @@ final class PermintaanBarangController extends ControllerTemplate
     protected function before_read(): void
     {
         $this->model->set_order('id_permintaan', 'DESC');
+    }
+
+    // Tambahkan kolom progress badge ke setiap baris di list
+    protected function after_read(array &$data_tabel): void
+    {
+        if (empty($data_tabel)) return;
+
+        helper('tracking');
+        foreach ($data_tabel as &$row) {
+            $id = (int) ($row['id_permintaan'] ?? 0);
+            if ($id === 0) {
+                $row['progress'] = '-';
+                continue;
+            }
+
+            $tracking = get_permintaan_tracking($id);
+            $row['progress'] = $tracking['progress_label'];
+        }
     }
 
     // form tambah: 1-page header + detail

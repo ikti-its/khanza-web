@@ -56,6 +56,24 @@
 
         </div>
 
+        <!-- Progress Tracking -->
+        <?php
+        helper('tracking');
+        // Trace: penerimaan → pengadaan → pengajuan
+        $id_pengajuan_track = 0;
+        if (!empty($baris['id_pengadaan'])) {
+            $config_track = (new \Config\Database())->default;
+            $config_track['database'] = env('database.default.khanza_db');
+            $db_track = \Config\Database::connect($config_track);
+            $pd_row = $db_track->table('inventori_non_medis.pengadaan_barang')->select('id_pengajuan')->where('id_pengadaan', (int) $baris['id_pengadaan'])->get()->getRowArray();
+            $id_pengajuan_track = (int) ($pd_row['id_pengajuan'] ?? 0);
+        }
+        $tracking = $id_pengajuan_track > 0 ? get_pengajuan_tracking($id_pengajuan_track) : get_penerimaan_tracking((int) ($baris['id_penerimaan'] ?? 0));
+        if (!empty($tracking['steps'])):
+        ?>
+            <?= view('components/tracking/timeline', ['tracking' => $tracking]) ?>
+        <?php endif; ?>
+
         <!-- Detail Barang -->
         <div class="mt-6 bg-slate-50 border border-slate-200 rounded-xl p-5 dark:bg-slate-800 dark:border-slate-700 shadow-sm">
             <div class="flex items-center gap-x-2 mb-3 border-b border-slate-200 pb-2 dark:border-slate-700">

@@ -28,6 +28,26 @@ if (in_array($status_lower, ['proses permintaan', 'proses pengajuan', 'diproses'
     $bg_color   = '#DBEAFE';
     $dot_color  = '#2563EB';
     $text_color = '#1E40AF';
+} elseif (in_array($status_lower, ['pembelian diproses', 'pengajuan diproses', 'menunggu kiriman', 'barang sedang diperiksa'])) {
+    $bg_color   = '#DBEAFE';
+    $dot_color  = '#2563EB';
+    $text_color = '#1E40AF';
+} elseif (str_starts_with($status_lower, 'diterima ') && str_contains($status_lower, '%')) {
+    $bg_color   = '#DBEAFE';
+    $dot_color  = '#2563EB';
+    $text_color = '#1E40AF';
+} elseif (in_array($status_lower, ['menunggu persetujuan', 'menunggu pengajuan'])) {
+    $bg_color   = '#FEF3C7';
+    $dot_color  = '#D97706';
+    $text_color = '#92400E';
+} elseif (in_array($status_lower, ['pengadaan dibatalkan', 'pengajuan ditolak'])) {
+    $bg_color   = '#FEE2E2';
+    $dot_color  = '#DC2626';
+    $text_color = '#991B1B';
+} elseif ($status_lower === 'draft') {
+    $bg_color   = '#F1F1F1';
+    $dot_color  = '#535353';
+    $text_color = '#374151';
 } elseif ($status_lower === 'masuk') {
     $bg_color   = '#DBEAFE';
     $dot_color  = '#2563EB';

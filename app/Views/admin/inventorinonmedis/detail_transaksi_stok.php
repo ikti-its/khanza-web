@@ -8,44 +8,47 @@
 
         <div class="space-y-1">
 
-            <!-- No. Pengajuan + Tanggal -->
+            <!-- Tipe Transaksi + Tanggal -->
             <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">No. Pengajuan</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Tipe Transaksi</span>
                 <div class="w-full lg:w-1/4">
-                    <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['no_pengajuan'] ?? '-') ?></span>
+                    <?php
+                    $tipe = strtolower(trim($baris['nama_tipe_transaksi_stok'] ?? '-'));
+                    $tipe_bg = '#F3F4F6'; $tipe_color = '#374151';
+                    if ($tipe === 'masuk') { $tipe_bg = '#DBEAFE'; $tipe_color = '#1E40AF'; }
+                    elseif ($tipe === 'keluar') { $tipe_bg = '#FED7AA'; $tipe_color = '#9A3412'; }
+                    elseif ($tipe === 'opname') { $tipe_bg = '#E9D5FF'; $tipe_color = '#5B21B6'; }
+                    ?>
+                    <span class="inline-flex items-center py-1 px-2.5 rounded-full text-xs font-semibold" style="background-color: <?= $tipe_bg ?>; color: <?= $tipe_color ?>;">
+                        <?= esc($baris['nama_tipe_transaksi_stok'] ?? '-') ?>
+                    </span>
                 </div>
-                <span class="block mt-4 md:my-0 md:ml-10 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Tanggal Pengajuan</span>
+                <span class="block mt-4 md:my-0 md:ml-10 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Tanggal</span>
                 <div class="w-full lg:w-1/4">
                     <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= !empty($baris['tanggal']) ? date('d/m/Y, H:i', strtotime($baris['tanggal'])) : '-' ?></span>
                 </div>
             </div>
 
-            <!-- Pemohon + Status -->
+            <!-- No. Masuk / No. Keluar -->
             <div class="sm:block md:flex items-center py-3">
-                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Pemohon</span>
+                <span class="block mb-1 md:mb-0 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">No. Referensi</span>
                 <div class="w-full lg:w-1/4">
-                    <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['nama'] ?? '-') ?></span>
-                </div>
-                <span class="block mt-4 md:my-0 md:ml-10 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Status</span>
-                <div class="w-full lg:w-1/4">
-                    <span class="inline-flex items-center py-1 px-2.5 rounded-full text-xs font-semibold" style="background-color: #FEF3C7; color: #92400E;">
-                        <?= esc($baris['nama_status_pengajuan_barang'] ?? '-') ?>
+                    <span class="text-sm font-semibold text-gray-900 dark:text-white">
+                        <?php
+                        $no_ref = $baris['no_masuk'] ?? $baris['no_keluar'] ?? '-';
+                        echo esc($no_ref);
+                        ?>
                     </span>
+                </div>
+                <span class="block mt-4 md:my-0 md:ml-10 mb-1 text-sm font-medium text-gray-500 dark:text-gray-500 md:w-1/4">Keterangan</span>
+                <div class="w-full lg:w-1/4">
+                    <span class="text-sm font-semibold text-gray-900 dark:text-white"><?= esc($baris['keterangan'] ?? '-') ?></span>
                 </div>
             </div>
 
         </div>
 
-        <!-- Progress Tracking -->
-        <?php
-        helper('tracking');
-        $tracking = get_pengajuan_tracking((int) ($baris['id_pengajuan'] ?? 0));
-        if (!empty($tracking['steps'])):
-        ?>
-            <?= view('components/tracking/timeline', ['tracking' => $tracking]) ?>
-        <?php endif; ?>
-
-        <!-- Detail Barang -->
+        <!-- Detail Items -->
         <div class="mt-6 bg-slate-50 border border-slate-200 rounded-xl p-5 dark:bg-slate-800 dark:border-slate-700 shadow-sm">
             <div class="flex items-center gap-x-2 mb-3 border-b border-slate-200 pb-2 dark:border-slate-700">
                 <svg class="w-4 h-4 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -62,7 +65,9 @@
                         <th class="text-left py-2 font-medium">Nama Barang</th>
                         <th class="text-center py-2 font-medium">Satuan</th>
                         <th class="text-center py-2 font-medium">Qty</th>
-                        <th class="text-right py-2 font-medium">Harga</th>
+                        <th class="text-right py-2 font-medium">Harga Satuan</th>
+                        <th class="text-center py-2 font-medium">Stok Sebelum</th>
+                        <th class="text-center py-2 font-medium">Stok Sesudah</th>
                     </tr>
                 </thead>
                 <tbody class="text-slate-700 dark:text-slate-300">
@@ -72,7 +77,9 @@
                         <td class="py-2 font-semibold"><?= esc($item['nama_barang'] ?? '-') ?></td>
                         <td class="py-2 text-center"><?= esc($item['nama_satuan'] ?? '-') ?></td>
                         <td class="py-2 text-center font-semibold"><?= $item['qty'] ?? 0 ?></td>
-                        <td class="py-2 text-right font-semibold"><?= number_format((float)($item['harga'] ?? 0), 0, ',', '.') ?></td>
+                        <td class="py-2 text-right"><?= number_format((float)($item['harga_satuan'] ?? 0), 0, ',', '.') ?></td>
+                        <td class="py-2 text-center"><?= $item['stok_sebelum'] ?? 0 ?></td>
+                        <td class="py-2 text-center font-semibold"><?= $item['stok_sesudah'] ?? 0 ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
