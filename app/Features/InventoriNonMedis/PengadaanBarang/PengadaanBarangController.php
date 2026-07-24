@@ -266,7 +266,7 @@ final class PengadaanBarangController extends ControllerTemplate
         $postData = [
             'tanggal'      => $this->request->getPost('tanggal'),
             'id_pengajuan' => $this->request->getPost('id_pengajuan') ?: null,
-            'id_suplier'   => $this->request->getPost('id_suplier') ?: null,
+            'id_suplier'   => ((int) ($this->request->getPost('id_suplier') ?? 0)) > 0 ? (int) $this->request->getPost('id_suplier') : 0,
             'catatan'      => $this->request->getPost('catatan') ?: null,
         ];
 
@@ -342,7 +342,7 @@ final class PengadaanBarangController extends ControllerTemplate
 
         $postData = [
             'tanggal'                    => $this->request->getPost('tanggal'),
-            'id_suplier'                 => $this->request->getPost('id_suplier') ?: null,
+            'id_suplier'                 => ((int) ($this->request->getPost('id_suplier') ?? 0)) > 0 ? (int) $this->request->getPost('id_suplier') : 0,
             'catatan'                    => $this->request->getPost('catatan') ?: null,
             'id_status_pengadaan_barang' => $new_status,
         ];
