@@ -288,35 +288,33 @@ final class PengadaanBarangController extends ControllerTemplate
             }
             $id_pengadaan = (int) $db->insertID();
 
-            // Jika Dibatalkan (3), skip insert detail — tidak perlu item
-            if ($new_status !== 3) {
-                $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
-                $detail_qty   = $this->request->getPost('detail_qty') ?? [];
-                $detail_harga = $this->request->getPost('detail_harga') ?? [];
-                $total_harga  = 0;
+            // Simpan detail item (termasuk saat Dibatalkan — item tetap dipertahankan)
+            $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
+            $detail_qty   = $this->request->getPost('detail_qty') ?? [];
+            $detail_harga = $this->request->getPost('detail_harga') ?? [];
+            $total_harga  = 0;
 
-                for ($i = 0; $i < count($detail_ids); $i++) {
-                    $id_barang    = (int) ($detail_ids[$i] ?? 0);
-                    $qty          = (int) ($detail_qty[$i] ?? 0);
-                    $harga_satuan = (float) ($detail_harga[$i] ?? 0);
-                    if ($id_barang > 0 && $qty > 0) {
-                        $subtotal = $qty * $harga_satuan;
-                        $total_harga += $subtotal;
-                        $db->table('inventori_non_medis.pengadaan_barang_detail')->insert([
-                            'id_pengadaan' => $id_pengadaan,
-                            'id_barang'    => $id_barang,
-                            'qty'          => $qty,
-                            'harga_satuan' => $harga_satuan > 0 ? $harga_satuan : null,
-                            'subtotal'     => $subtotal > 0 ? $subtotal : null,
-                        ]);
-                    }
+            for ($i = 0; $i < count($detail_ids); $i++) {
+                $id_barang    = (int) ($detail_ids[$i] ?? 0);
+                $qty          = (int) ($detail_qty[$i] ?? 0);
+                $harga_satuan = (float) ($detail_harga[$i] ?? 0);
+                if ($id_barang > 0 && $qty > 0) {
+                    $subtotal = $qty * $harga_satuan;
+                    $total_harga += $subtotal;
+                    $db->table('inventori_non_medis.pengadaan_barang_detail')->insert([
+                        'id_pengadaan' => $id_pengadaan,
+                        'id_barang'    => $id_barang,
+                        'qty'          => $qty,
+                        'harga_satuan' => $harga_satuan > 0 ? $harga_satuan : null,
+                        'subtotal'     => $subtotal > 0 ? $subtotal : null,
+                    ]);
                 }
+            }
 
-                if ($total_harga > 0) {
-                    $db->table('inventori_non_medis.pengadaan_barang')
-                        ->where('id_pengadaan', $id_pengadaan)
-                        ->update(['total_harga' => $total_harga]);
-                }
+            if ($total_harga > 0) {
+                $db->table('inventori_non_medis.pengadaan_barang')
+                    ->where('id_pengadaan', $id_pengadaan)
+                    ->update(['total_harga' => $total_harga]);
             }
 
             $db->transCommit();
@@ -352,12 +350,9 @@ final class PengadaanBarangController extends ControllerTemplate
         try {
             $db->transBegin();
 
-            // Jika Dibatalkan (3), hapus detail dan skip insert ulang
+            // Jika Dibatalkan (3), hanya update header — pertahankan detail item
             if ($new_status === 3) {
-                $db->table('inventori_non_medis.pengadaan_barang_detail')
-                    ->where('id_pengadaan', (int) $id)
-                    ->delete();
-                $postData['total_harga'] = null;
+                // detail tetap ada, tidak dihapus
             } else {
                 // sync detail
                 $db->table('inventori_non_medis.pengadaan_barang_detail')

@@ -109,7 +109,7 @@
                                     <td class="p-3 border text-center"><?= esc($item['nama_satuan'] ?? '-') ?></td>
                                     <td class="p-3 border text-center"><?= $item['qty'] ?? 0 ?></td>
                                     <td class="p-3 border text-center">
-                                        <input type="number" name="detail_qty_disetujui[]" value="<?= $item['qty_disetujui'] ?? 0 ?>" min="0" max="<?= $item['qty'] ?? 0 ?>"
+                                        <input type="number" name="detail_qty_disetujui[]" value="<?= $item['qty_disetujui'] ?? $item['qty'] ?? 0 ?>" min="0" max="<?= $item['qty'] ?? 0 ?>"
                                                class="border border-gray-300 rounded-lg p-1 w-full text-center text-sm">
                                         <input type="hidden" name="detail_id_barang[]" value="<?= $item['id_barang'] ?? '' ?>">
                                         <input type="hidden" name="detail_id_detail[]" value="<?= $item['id_detail'] ?? '' ?>">
