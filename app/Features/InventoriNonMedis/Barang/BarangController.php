@@ -104,4 +104,47 @@ final class BarangController extends ControllerTemplate
             }
         }
     }
+
+    /** @param array<string, scalar|null> $postData */
+    // 'stok' bukan bagian dari form ubah (tampil readonly, tanpa name di form),
+    // jadi get_post_data() akan mengirim null untuknya kalau tidak dibuang di sini —
+    // dan itu melanggar constraint NOT NULL pada kolom stok.
+    protected function before_update(array &$postData, int|string $id): void
+    {
+        unset($postData['stok']);
+
+        foreach (['id_satuan', 'id_jenis_barang'] as $fk) {
+            if (isset($postData[$fk]) && $postData[$fk] === '') {
+                $postData[$fk] = null;
+            }
+        }
+    }
+
+    // form tambah gagal validasi: render ulang view custom yang sama, bukan layout generik
+    protected function create_view(array $baris = []): string
+    {
+        return view('admin/inventorinonmedis/tambah_barang', [
+            'judul'       => 'Tambah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
+            'modul_path'  => $this->get_uri_path(),
+            'form_action' => '/submittambah/',
+            'baris'       => $baris,
+        ]);
+    }
+
+    // form ubah gagal validasi: render ulang view custom yang sama dengan input yang baru disubmit
+    protected function update_error_view(int|string $id, string $msg, array $postData = []): string
+    {
+        session()->setFlashdata('error', $msg);
+        $data  = $this->model->find_one($id);
+        $baris = array_merge($data ?? [], $postData);
+
+        return view('admin/inventorinonmedis/tambah_barang', [
+            'judul'       => 'Ubah ' . $this->title,
+            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
+            'modul_path'  => $this->get_uri_path(),
+            'form_action' => '/submitedit/' . $id,
+            'baris'       => $baris,
+        ]);
+    }
 }

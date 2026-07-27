@@ -544,34 +544,39 @@ class ControllerTemplate extends Controller
         try {
             $updated = $this->model->update($id, $postData);
             if ($updated === false) {
-                return $this->update_error_view($id, $this->format_validation_errors());
+                return $this->update_error_view($id, $this->format_validation_errors(), $postData);
             }
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil diperbarui.');
         } catch (\ReflectionException $e) {
             session()->setFlashdata('error', $e->getMessage());
             return $this->home();
         } catch (DatabaseException $e) {
-            return $this->update_error_view($id, $this->friendly_db_error($e));
+            return $this->update_error_view($id, $this->friendly_db_error($e), $postData);
         }
 
         return $this->home();
     }
 
-    /** Menampilkan kembali form ubah beserta pesan error setelah update gagal */
-    private function update_error_view(int|string $id, string $msg): string
+    /**
+     * Menampilkan kembali form ubah beserta pesan error setelah update gagal.
+     * $postData (input yang baru disubmit user) ditumpuk di atas data lama dari DB,
+     * supaya input yang sudah diketik user tidak hilang saat form ditampilkan ulang.
+     */
+    protected function update_error_view(int|string $id, string $msg, array $postData = []): string
     {
         session()->setFlashdata('error', $msg);
         $breadcrumbs = [
             ['title' => 'Ubah', 'icon', 'Ubah'],
         ];
-        $data = $this->model->find_one($id);
+        $data  = $this->model->find_one($id);
+        $baris = array_merge($data ?? [], $postData);
         return view('/layouts/tambah_ubah', [
             'judul'       => 'Ubah ' . $this->title,
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->primary_key,
             'konfig'      => $this->get_fields_with_options(true, true),
-            'baris'       => $data,
+            'baris'       => $baris,
             'form_action' => '/submitedit/' . $id,
         ]);
     }
