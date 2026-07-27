@@ -29,7 +29,7 @@ final class PengadaanBarangController extends ControllerTemplate
             ],
             [
                 [HIDE,       OPTIONAL, I::INDEX,    'id_pengadaan',                 'ID'],
-                [TABLE_ONLY, OPTIONAL, I::READONLY, 'no_pengajuan',                 'No. Pengajuan'],
+                [HIDE,       OPTIONAL, I::READONLY, 'no_pengajuan',                 'No. Pengajuan'],
                 [FORM_ONLY,  REQUIRED, I::SELECT,   'id_pengajuan',                 'Pengajuan'],
                 [SHOW,       OPTIONAL, I::READONLY, 'no_pengadaan',                 'No. Pengadaan'],
                 [TABLE_ONLY, OPTIONAL, I::MONEY,    'total_harga',                  'Total Harga'],
@@ -38,7 +38,7 @@ final class PengadaanBarangController extends ControllerTemplate
                 [SHOW,       REQUIRED, I::DTIME,    'tanggal',                      'Tanggal Pengadaan'],
                 [TABLE_ONLY, OPTIONAL, I::SELECT,   'id_status_pengadaan_barang',   'Status'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_status_pengadaan_barang', 'Status'],
-                [SHOW,       OPTIONAL, I::TEXT,     'catatan',                      'Catatan'],
+                [FORM_ONLY,  OPTIONAL, I::TEXT,     'catatan',                      'Catatan'],
             ],
             // child_path: '/inventori-non-medis/detail-pengadaan-barang',
             // child_fk: 'id_pengadaan',

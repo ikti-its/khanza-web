@@ -74,7 +74,7 @@
                 $show_cetak = false;
                 foreach ($status_cols_c as $col) {
                     $val = strtolower(trim((string) ($baris[$col] ?? '')));
-                    if ($val === 'selesai') {
+                    if (str_contains($val, 'selesai')) {
                         $show_cetak = true;
                         break;
                     }
