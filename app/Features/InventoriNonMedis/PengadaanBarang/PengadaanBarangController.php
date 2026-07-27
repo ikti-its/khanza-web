@@ -258,14 +258,67 @@ final class PengadaanBarangController extends ControllerTemplate
         return $this->home();
     }
 
+    // Qty pengadaan tidak boleh melebihi sisa qty_disetujui di Pengajuan terkait
+    // (dikurangi yang sudah dipesan di pengadaan lain untuk pengajuan yang sama).
+    // Pengadaan murni tahap eksekusi — kenaikan qty hanya sah lewat approval Pengajuan.
+    private function validate_qty_terhadap_pengajuan(int $id_pengajuan, array $detail_ids, array $detail_qty, int $exclude_id_pengadaan = 0): ?string
+    {
+        if ($id_pengajuan <= 0) return null;
+
+        $db = $this->get_db();
+        for ($i = 0; $i < count($detail_ids); $i++) {
+            $id_barang = (int) ($detail_ids[$i] ?? 0);
+            $qty       = (int) ($detail_qty[$i] ?? 0);
+            if ($id_barang <= 0 || $qty <= 0) continue;
+
+            $pjd = $db->table('inventori_non_medis.pengajuan_barang_detail pjd')
+                ->join('inventori_non_medis.barang b', 'pjd.id_barang = b.id_barang', 'left')
+                ->select('pjd.qty_disetujui, b.nama_barang')
+                ->where('pjd.id_pengajuan', $id_pengajuan)
+                ->where('pjd.id_barang', $id_barang)
+                ->get()->getRowArray();
+
+            $qty_disetujui = (int) ($pjd['qty_disetujui'] ?? 0);
+
+            $sudah_dipesan = (int) ($db->table('inventori_non_medis.pengadaan_barang_detail pbd')
+                ->join('inventori_non_medis.pengadaan_barang pb', 'pbd.id_pengadaan = pb.id_pengadaan')
+                ->selectSum('pbd.qty', 'total')
+                ->where('pb.id_pengajuan', $id_pengajuan)
+                ->where('pbd.id_barang', $id_barang)
+                ->where('pb.id_pengadaan !=', $exclude_id_pengadaan)
+                ->get()->getRowArray()['total'] ?? 0);
+
+            $sisa = max(0, $qty_disetujui - $sudah_dipesan);
+
+            if ($qty > $sisa) {
+                $nama = $pjd['nama_barang'] ?? "Barang #{$id_barang}";
+                return "Qty pengadaan untuk {$nama} ({$qty}) melebihi sisa yang disetujui di pengajuan (sisa: {$sisa}). Jika butuh lebih, naikkan qty disetujui di Pengajuan terlebih dahulu.";
+            }
+        }
+
+        return null;
+    }
+
     // simpan header + detail sekaligus
     public function create(): string|RedirectResponse
     {
         $new_status = (int) ($this->request->getPost('id_status_pengadaan_barang') ?? 1);
 
+        $id_pengajuan_raw = $this->request->getPost('id_pengajuan');
+        $id_pengajuan     = (int) ($id_pengajuan_raw ?: 0);
+        $detail_ids       = $this->request->getPost('detail_id_barang') ?? [];
+        $detail_qty       = $this->request->getPost('detail_qty') ?? [];
+        $detail_harga     = $this->request->getPost('detail_harga') ?? [];
+
+        $qty_error = $this->validate_qty_terhadap_pengajuan($id_pengajuan, $detail_ids, $detail_qty);
+        if ($qty_error !== null) {
+            session()->setFlashdata('error', $qty_error);
+            return redirect()->back();
+        }
+
         $postData = [
             'tanggal'      => $this->request->getPost('tanggal'),
-            'id_pengajuan' => $this->request->getPost('id_pengajuan') ?: null,
+            'id_pengajuan' => $id_pengajuan_raw ?: null,
             'id_suplier'   => ((int) ($this->request->getPost('id_suplier') ?? 0)) > 0 ? (int) $this->request->getPost('id_suplier') : 0,
             'catatan'      => $this->request->getPost('catatan') ?: null,
         ];
@@ -289,9 +342,6 @@ final class PengadaanBarangController extends ControllerTemplate
             $id_pengadaan = (int) $db->insertID();
 
             // Simpan detail item (termasuk saat Dibatalkan — item tetap dipertahankan)
-            $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
-            $detail_qty   = $this->request->getPost('detail_qty') ?? [];
-            $detail_harga = $this->request->getPost('detail_harga') ?? [];
             $total_harga  = 0;
 
             for ($i = 0; $i < count($detail_ids); $i++) {
@@ -338,6 +388,19 @@ final class PengadaanBarangController extends ControllerTemplate
 
         $new_status = (int) ($this->request->getPost('id_status_pengadaan_barang') ?? 1);
 
+        $id_pengajuan = (int) ($current['id_pengajuan'] ?? 0);
+        $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
+        $detail_qty   = $this->request->getPost('detail_qty') ?? [];
+        $detail_harga = $this->request->getPost('detail_harga') ?? [];
+
+        if ($new_status !== 3) {
+            $qty_error = $this->validate_qty_terhadap_pengajuan($id_pengajuan, $detail_ids, $detail_qty, (int) $id);
+            if ($qty_error !== null) {
+                session()->setFlashdata('error', $qty_error);
+                return redirect()->back();
+            }
+        }
+
         $postData = [
             'tanggal'                    => $this->request->getPost('tanggal'),
             'id_suplier'                 => ((int) ($this->request->getPost('id_suplier') ?? 0)) > 0 ? (int) $this->request->getPost('id_suplier') : 0,
@@ -359,9 +422,6 @@ final class PengadaanBarangController extends ControllerTemplate
                     ->where('id_pengadaan', (int) $id)
                     ->delete();
 
-                $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
-                $detail_qty   = $this->request->getPost('detail_qty') ?? [];
-                $detail_harga = $this->request->getPost('detail_harga') ?? [];
                 $total_harga  = 0;
 
                 for ($i = 0; $i < count($detail_ids); $i++) {

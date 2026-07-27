@@ -80,7 +80,11 @@ $total_steps = count($steps);
                 </div>
 
                 <!-- Label -->
+                <?php if (!empty($step['link'])): ?>
+                <a href="<?= base_url($step['link']) ?>" style="margin-top:8px; font-size:12px; font-weight:700; color:<?= $label_color ?>; line-height:1.2; text-decoration:underline; text-underline-offset:2px;"><?= esc($step['label']) ?></a>
+                <?php else: ?>
                 <p style="margin-top:8px; font-size:12px; font-weight:700; color:<?= $label_color ?>; line-height:1.2;"><?= esc($step['label']) ?></p>
+                <?php endif; ?>
 
                 <!-- Status -->
                 <p style="margin-top:2px; font-size:11px; font-weight:500; color:<?= $status_color ?>;"><?= esc($step['status_label']) ?></p>

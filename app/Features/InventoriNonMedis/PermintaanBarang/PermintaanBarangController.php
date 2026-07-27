@@ -32,7 +32,7 @@ final class PermintaanBarangController extends ControllerTemplate
                 [SHOW, REQUIRED, I::DTIME, 'tanggal', 'Tanggal Permintaan'],
                 [SHOW, REQUIRED, I::MODAL, 'petugas', 'Pemohon', ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pemohon...']],
                 [SHOW, REQUIRED, I::MODAL, 'master_ruangan', 'Ruangan', ['modal' => 'modalPilihRuangan', 'display_column' => 'nama_ruangan', 'placeholder' => 'Klik cari ruangan...']],
-                [SHOW, OPTIONAL, I::SELECT, 'id_status_permintaan_barang', 'Status'],
+                [FORM_ONLY, OPTIONAL, I::SELECT, 'id_status_permintaan_barang', 'Status'],
                 [TABLE_ONLY, OPTIONAL, I::SELECT, 'progress', 'Progress'],
                 [TABLE_ONLY, OPTIONAL, I::DTIME, 'tanggal_diproses', 'Tanggal Diproses'],
                 [FORM_ONLY, OPTIONAL, I::READONLY, 'tanggal_diproses', 'Tanggal Diproses'],

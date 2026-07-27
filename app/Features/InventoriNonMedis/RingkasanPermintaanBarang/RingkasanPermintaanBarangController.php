@@ -246,8 +246,8 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
                 // Status tetap "Disetujui" untuk existing, tapi juga trigger pengajuan
                 $postData['id_status_permintaan_barang'] = 5; // pending sampai semua terpenuhi
             } else {
-                // All existing → normal Disetujui
-                $postData['id_status_permintaan_barang'] = 2;
+                // All existing, tidak perlu pengadaan → langsung Selesai (6)
+                $postData['id_status_permintaan_barang'] = 6;
             }
 
             // Generate no_keluar hanya jika ada existing items yang dikirim
@@ -290,7 +290,8 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         // Auto-create Pengajuan untuk barang baru
         if ($is_new_approval && $has_baru) {
             try {
-                $this->auto_create_pengajuan((int) $id, $baru_items);
+                $no_pengajuan = $this->auto_create_pengajuan((int) $id, $baru_items);
+                session()->setFlashdata('success', "Permintaan disetujui. Pengajuan {$no_pengajuan} otomatis dibuat untuk barang baru, menunggu persetujuan atasan logistik.");
             } catch (\Throwable $e) {
                 log_message('error', '[AutoPengajuan] ' . $e->getMessage());
                 session()->setFlashdata('error', 'Disetujui, namun gagal membuat pengajuan otomatis: ' . $e->getMessage());
@@ -439,9 +440,9 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
     /**
      * Auto-create Pengajuan Barang dari item barang baru yang disetujui.
      */
-    private function auto_create_pengajuan(int $id_permintaan, array $baru_items): void
+    private function auto_create_pengajuan(int $id_permintaan, array $baru_items): string
     {
-        if (empty($baru_items)) return;
+        if (empty($baru_items)) return '';
 
         $db = $this->get_db();
         helper('autonomor');
@@ -484,6 +485,8 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         }
 
         $db->transCommit();
+
+        return $no_pengajuan;
     }
 
 }

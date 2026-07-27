@@ -128,14 +128,9 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
             return $this->home();
         }
 
-        if (is_array($row)) {
-            $qty_disetujui = (float) ($this->request->getPost('qty_disetujui') ?? 0);
-            $qty_max       = (float) ($row['qty'] ?? 0);
-            if ($qty_disetujui > $qty_max) {
-                session()->setFlashdata('error', "Qty disetujui tidak boleh melebihi qty pengajuan ({$qty_max}).");
-                return $this->home();
-            }
-        }
+        // Catatan: qty_disetujui boleh melebihi qty pengajuan (mis. konsolidasi
+        // pembelian untuk stok) — validasi alasan dilakukan di aksi approve
+        // pada RingkasanPengajuanBarangController, bukan di editor per-baris ini.
 
         $result = parent::update($id);
         if ($result instanceof RedirectResponse && $id_pengajuan > 0) {

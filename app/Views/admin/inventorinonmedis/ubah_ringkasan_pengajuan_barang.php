@@ -104,10 +104,9 @@
                                     <td class="p-3 border text-center"><?= $item['qty'] ?? 0 ?></td>
                                     <td class="p-3 border text-right"><?= number_format((float)($item['harga'] ?? 0), 0, ',', '.') ?></td>
                                     <td class="p-3 border text-center">
-                                        <input type="number" name="detail_qty_disetujui[]" value="<?= $item['qty_disetujui'] ?? $item['qty'] ?? 0 ?>" min="0" max="<?= $item['qty'] ?? 0 ?>"
+                                        <input type="number" name="detail_qty_disetujui[]" value="<?= $item['qty_disetujui'] ?? $item['qty'] ?? 0 ?>" min="0"
                                                class="border border-gray-300 rounded-lg p-1 w-full text-center text-sm">
                                         <input type="hidden" name="detail_id_barang[]" value="<?= $item['id_barang'] ?>">
-                                        <input type="hidden" name="detail_qty_asal[]" value="<?= $item['qty'] ?? 0 ?>">
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -141,16 +140,8 @@
 
             var hasQty = false;
             var qtyInputs = document.querySelectorAll('input[name="detail_qty_disetujui[]"]');
-            var qtyAsalInputs = document.querySelectorAll('input[name="detail_qty_asal[]"]');
             for (var i = 0; i < qtyInputs.length; i++) {
-                var qtyDisetujui = parseInt(qtyInputs[i].value) || 0;
-                var qtyAsal = parseInt(qtyAsalInputs[i].value) || 0;
-                if (qtyDisetujui > 0) hasQty = true;
-                if (qtyDisetujui > qtyAsal) {
-                    Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'Qty disetujui tidak boleh melebihi qty yang diajukan (' + qtyAsal + ').', confirmButtonText: 'Tutup', customClass: { confirmButton: 'bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] font-medium rounded-lg px-4 py-2' }, buttonsStyling: false });
-                    qtyInputs[i].focus();
-                    return false;
-                }
+                if ((parseInt(qtyInputs[i].value) || 0) > 0) hasQty = true;
             }
             if (!hasQty) {
                 Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'Isi minimal satu qty disetujui sebelum menyetujui pengajuan.', confirmButtonText: 'Tutup', customClass: { confirmButton: 'bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] font-medium rounded-lg px-4 py-2' }, buttonsStyling: false });

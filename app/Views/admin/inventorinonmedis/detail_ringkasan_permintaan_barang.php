@@ -38,7 +38,7 @@
                 <div class="w-full lg:w-1/4">
                     <?php
                         $status_id = (int) ($baris['id_status_permintaan_barang'] ?? 0);
-                        if ($status_id === 2) {
+                        if (in_array($status_id, [2, 6], true)) {
                             $bg = '#D1FAE5'; $color = '#065F46';
                         } elseif ($status_id === 3) {
                             $bg = '#FEE2E2'; $color = '#991B1B';

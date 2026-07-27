@@ -44,7 +44,7 @@ final class RingkasanPermintaanBarangDetailController extends ControllerTemplate
         );
     }
 
-    // true jika permintaan sudah Disetujui (2) atau Ditolak (3) — qty tidak bisa diubah lagi
+    // true jika permintaan sudah final: Disetujui (2, legacy)/Ditolak (3)/Menunggu Pengadaan (5)/Selesai (6) — qty tidak bisa diubah lagi
     private function is_locked(int $id_permintaan): bool
     {
         if ($id_permintaan <= 0)
@@ -56,7 +56,7 @@ final class RingkasanPermintaanBarangDetailController extends ControllerTemplate
             ->where('id_permintaan', $id_permintaan)
             ->get()
             ->getRowArray();
-        return is_array($row) && in_array((int) ($row['id_status_permintaan_barang'] ?? 0), [2, 3], true);
+        return is_array($row) && in_array((int) ($row['id_status_permintaan_barang'] ?? 0), [2, 3, 5, 6], true);
     }
 
     // qty_disetujui tidak bisa diubah jika sudah diproses, dan tidak boleh melebihi qty diminta
