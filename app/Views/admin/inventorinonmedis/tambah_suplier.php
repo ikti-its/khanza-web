@@ -1,3 +1,7 @@
+<?php
+$isEdit = !empty($baris ?? []);
+$baris  = $baris ?? [];
+?>
 <?= $this->extend('layouts/template'); ?>
 <?= $this->section('content'); ?>
 
@@ -13,8 +17,8 @@
         <form action="<?= $modul_path . $form_action ?>" id="myForm" onsubmit="return validateForm()" method="post">
             <?= csrf_field() ?>
 
-            <input type="hidden" name="id_kota" id="id_kota" value="">
-            <input type="hidden" name="id_bank" id="id_bank" value="">
+            <input type="hidden" name="id_kota" id="id_kota" value="<?= $baris['id_kota'] ?? '' ?>">
+            <input type="hidden" name="id_bank" id="id_bank" value="<?= $baris['id_bank'] ?? '' ?>">
 
             <!-- Kode Suplier + Nama Suplier -->
             <div class="mb-5 sm:block md:flex items-center">
@@ -22,13 +26,14 @@
                     Kode Suplier<span class="text-red-600">*</span>
                 </label>
                 <input type="text" name="kode_suplier" id="kode_suplier"
-                       value="<?= esc($kode_suplier ?? '') ?>" maxlength="10"
+                       value="<?= esc($isEdit ? ($baris['kode_suplier'] ?? '') : ($kode_suplier ?? '')) ?>" maxlength="10"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
                     Nama Suplier<span class="text-red-600">*</span>
                 </label>
                 <input type="text" name="nama_suplier" id="nama_suplier" placeholder="Masukkan nama suplier..." maxlength="100"
+                       value="<?= esc($baris['nama_suplier'] ?? '') ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800" required>
             </div>
 
@@ -40,6 +45,7 @@
                 <div class="w-full lg:w-1/4 flex gap-x-2">
                     <input type="text" id="id_kota_display"
                            placeholder="Klik cari kota..."
+                           value="<?= esc($baris['nama_kota'] ?? '') ?>"
                            onclick="open_modalKota()"
                            onkeydown="return false"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-white">
@@ -55,6 +61,7 @@
                     Alamat
                 </label>
                 <input type="text" name="alamat" id="alamat" placeholder="Alamat suplier..." maxlength="255"
+                       value="<?= esc($baris['alamat'] ?? '') ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
             </div>
 
@@ -64,6 +71,7 @@
                     No. Telepon
                 </label>
                 <input type="tel" name="no_telp" id="no_telp" placeholder="No. telepon..." maxlength="20"
+                       value="<?= esc($baris['no_telp'] ?? '') ?>"
                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
 
@@ -73,6 +81,7 @@
                 <div class="w-full lg:w-1/4 flex gap-x-2">
                     <input type="text" id="id_bank_display"
                            placeholder="Klik cari bank..."
+                           value="<?= esc($baris['nama_bank'] ?? '') ?>"
                            onclick="open_modalBank()"
                            onkeydown="return false"
                            class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-white">
@@ -91,6 +100,7 @@
                     No. Rekening
                 </label>
                 <input type="text" name="nomor_rekening" id="nomor_rekening" placeholder="Nomor rekening..." maxlength="30"
+                       value="<?= esc($baris['nomor_rekening'] ?? '') ?>"
                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
 
@@ -98,6 +108,7 @@
                     Nama Akun
                 </label>
                 <input type="text" name="nama_akun" id="nama_akun" placeholder="Nama pemilik rekening..." maxlength="100"
+                       value="<?= esc($baris['nama_akun'] ?? '') ?>"
                        class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full lg:w-1/4 dark:border-gray-600 dark:text-white dark:bg-slate-800">
             </div>
 

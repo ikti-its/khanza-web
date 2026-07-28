@@ -23,6 +23,7 @@ final class SuplierModel extends ModelTemplate
                 'id_kota'     => ['nama_kota'],
                 'id_rekening' => [
                     'nomor_rekening',
+                    'nama_akun',
                     'bank' => ['nama_bank'],
                 ],
             ],
