@@ -151,6 +151,11 @@ final class PenerimaanBarangController extends ControllerTemplate
             'status'       => '-',
         ];
 
+        if (empty($postData['petugas'])) {
+            session()->setFlashdata('error', 'Penerima wajib diisi.');
+            return $this->home();
+        }
+
         helper('autonomor');
         $lastNo = $this->get_last('inventori_non_medis.penerimaan_barang', 'no_penerimaan', 'id_penerimaan');
         $postData['no_penerimaan']               = generateNextNoPenerimaanBarang($lastNo, $postData['tanggal'] ?? null);
@@ -281,6 +286,11 @@ final class PenerimaanBarangController extends ControllerTemplate
             'catatan'                     => $this->request->getPost('catatan') ?: null,
             'id_status_penerimaan_barang' => $new_status,
         ];
+
+        if (empty($postData['petugas'])) {
+            session()->setFlashdata('error', 'Penerima wajib diisi.');
+            return $this->home();
+        }
 
         // Generate no_masuk saat diterima
         if ($new_status === 2 && $current_status !== 2) {

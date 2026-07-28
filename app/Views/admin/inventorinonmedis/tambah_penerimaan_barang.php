@@ -56,7 +56,7 @@ $readonly = $readonly ?? false;
                 </div>
 
                 <label class="block mt-5 md:my-0 md:ml-10 mb-2 text-sm text-gray-900 dark:text-white w-1/5">
-                    Penerima
+                    Penerima<span class="text-red-600">*</span>
                 </label>
                 <div class="w-full lg:w-1/4 flex gap-x-2">
                     <input type="text" id="petugas_display"
@@ -64,7 +64,7 @@ $readonly = $readonly ?? false;
                            value="<?= $baris['nama'] ?? '' ?>"
                            onclick="open_modalPemohon()"
                            onkeydown="return false"
-                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-white">
+                           class="border border-gray-300 text-gray-900 text-sm rounded-lg p-2 w-full dark:border-gray-600 dark:text-white cursor-pointer bg-white" required>
                     <button type="button" onclick="open_modalPemohon()"
                             class="inline-flex justify-center items-center p-2 text-sm font-medium text-white bg-blue-600 rounded-lg border border-transparent hover:bg-blue-700 focus:outline-none transition-all w-10 h-[38px] flex-shrink-0 shadow-sm">
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -199,6 +199,11 @@ $readonly = $readonly ?? false;
 
         if (!document.getElementById('id_pengadaan').value) {
             Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'Pilih pengadaan terlebih dahulu.', confirmButtonText: 'Tutup', customClass: { confirmButton: 'bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] font-medium rounded-lg px-4 py-2' }, buttonsStyling: false });
+            return false;
+        }
+
+        if (!document.getElementById('petugas').value) {
+            Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'Pilih penerima terlebih dahulu.', confirmButtonText: 'Tutup', customClass: { confirmButton: 'bg-[#0A2D27] text-[#ACF2E7] hover:bg-[#13594E] font-medium rounded-lg px-4 py-2' }, buttonsStyling: false });
             return false;
         }
 
