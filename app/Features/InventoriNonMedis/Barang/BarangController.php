@@ -32,7 +32,6 @@ final class BarangController extends ControllerTemplate
                 [SHOW,       REQUIRED, I::SELECT,   'id_satuan',       'Satuan'],
                 [SHOW,       REQUIRED, I::SELECT,   'id_jenis_barang', 'Jenis'],
                 [TABLE_ONLY, OPTIONAL, I::NUMBER,   'stok',            'Stok'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'stok',            'Stok'],
                 [FORM_ONLY,  OPTIONAL, I::NUMBER,   'stok_minimum',    'Stok Minimum'],
                 [SHOW,       OPTIONAL, I::MONEY,    'harga_satuan',    'Harga Satuan'],
             ],
