@@ -1,7 +1,6 @@
 id_suplier,kode_suplier,nama_suplier,no_telp,id_kota,alamat,id_rekening
-0,-,-,-,0,-,0
 1,S0001,PT Sumber Makmur Abadi,081234567890,264,Jl. Raya Darmo No. 125,15
-2,S0002,CV Bersih Jaya,082145678901,0,-,0
-3,S0003,PT Lab Utama Sejahtera,083256789012,0,-,0
-4,S0004,PT Teknologi Kantor Indonesia,084367890123,0,-,0
-5,S0005,CV Umum Sentosa,085478901234,0,-,0
+2,S0002,CV Bersih Jaya,082145678901,242,Jl. Raya Sidoarjo No. 45,16
+3,S0003,PT Lab Utama Sejahtera,083256789012,259,Jl. Soekarno Hatta No. 88,17
+4,S0004,PT Teknologi Kantor Indonesia,084367890123,252,Jl. Dr. Wahidin Sudirohusodo No. 10,18
+5,S0005,CV Umum Sentosa,085478901234,262,Jl. Gajah Mada No. 22,19
