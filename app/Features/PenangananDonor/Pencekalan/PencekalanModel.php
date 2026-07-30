@@ -37,6 +37,7 @@ final class PencekalanModel extends ModelTemplate
 
     private const STATUS_AKTIF               = 1;
     private const STATUS_SELESAI             = 2;
+    private const STATUS_MENUNGGU_UJI_ULANG  = 3;
     private const JENIS_PENCEKALAN_SEMENTARA = 1;
     private const JENIS_PENCEKALAN_PERMANEN  = 2;
 
@@ -77,16 +78,32 @@ final class PencekalanModel extends ModelTemplate
     }
 
     /**
-     * Menyinkronkan status pencekalan menjadi selesai jika tanggal selesai sudah lewat
+     * Menyinkronkan status pencekalan yang tanggal selesainya sudah lewat
      */
     public function sinkronkanStatusPencekalan(): void
     {
+        $this->db->query("
+            UPDATE penanganan_donor.pencekalan pc
+            SET id_status_pencekalan = " . self::STATUS_MENUNGGU_UJI_ULANG . "
+            WHERE pc.tanggal_selesai IS NOT NULL
+              AND pc.tanggal_selesai < CURRENT_DATE
+              AND pc.id_status_pencekalan = " . self::STATUS_AKTIF . "
+              AND pc.id_jenis_pencekalan = " . self::JENIS_PENCEKALAN_SEMENTARA . "
+              AND EXISTS (
+                  SELECT 1
+                  FROM penanganan_donor.kasus_reaktif kr
+                  JOIN uji_darah.hasil_uji_saring hus ON hus.id_uji_saring = kr.id_uji_saring
+                  JOIN donor.pengambilan_darah pd ON pd.id_pengambilan_darah = hus.id_pengambilan_darah
+                  WHERE pd.id_kunjungan = pc.id_kunjungan
+              )
+        ");
+
         $this
             ->builder()
             ->set('id_status_pencekalan', self::STATUS_SELESAI)
             ->where('tanggal_selesai IS NOT NULL', null, false)
             ->where('tanggal_selesai <', date('Y-m-d'))
-            ->where('id_status_pencekalan !=', self::STATUS_SELESAI)
+            ->where('id_status_pencekalan', self::STATUS_AKTIF)
             ->update();
     }
 
@@ -100,14 +117,41 @@ final class PencekalanModel extends ModelTemplate
 
     /**
      * Menentukan status pencekalan berdasarkan tanggal selesai
+     * @param int|string|null $idPencekalan ID baris pencekalan yang sedang diubah (untuk cek asal kasus reaktif)
      */
-    public function tentukanStatusPencekalan(null|string $tanggalSelesai): int
+    public function tentukanStatusPencekalan(null|string $tanggalSelesai, null|int|string $idPencekalan = null): int
     {
         if ($tanggalSelesai === null || $tanggalSelesai === '') {
             return self::STATUS_AKTIF;
         }
 
-        return $tanggalSelesai < date('Y-m-d') ? self::STATUS_SELESAI : self::STATUS_AKTIF;
+        if ($tanggalSelesai >= date('Y-m-d')) {
+            return self::STATUS_AKTIF;
+        }
+
+        if ($idPencekalan !== null && $this->berasalDariKasusReaktif($idPencekalan)) {
+            return self::STATUS_MENUNGGU_UJI_ULANG;
+        }
+
+        return self::STATUS_SELESAI;
+    }
+
+    /**
+     * Mengecek apakah pencekalan berasal dari kasus reaktif (lewat kunjungan yang sama)
+     */
+    private function berasalDariKasusReaktif(int|string $idPencekalan): bool
+    {
+        $row = $this->find($idPencekalan);
+        if (!$row || empty($row['id_kunjungan'])) {
+            return false;
+        }
+
+        return $this->db
+            ->table('penanganan_donor.kasus_reaktif kr')
+            ->join('uji_darah.hasil_uji_saring hus', 'hus.id_uji_saring = kr.id_uji_saring', 'inner')
+            ->join('donor.pengambilan_darah pd', 'pd.id_pengambilan_darah = hus.id_pengambilan_darah', 'inner')
+            ->where('pd.id_kunjungan', $row['id_kunjungan'])
+            ->countAllResults() > 0;
     }
 
     /**
@@ -116,8 +160,9 @@ final class PencekalanModel extends ModelTemplate
     public function applyFilterStatus(string $filter): self
     {
         $statusMap = [
-            'aktif'   => 1,
-            'selesai' => 2,
+            'aktif'           => self::STATUS_AKTIF,
+            'menunggu_retest' => self::STATUS_MENUNGGU_UJI_ULANG,
+            'selesai'         => self::STATUS_SELESAI,
         ];
 
         if (isset($statusMap[$filter])) {
@@ -199,6 +244,47 @@ final class PencekalanModel extends ModelTemplate
         }
 
         return false;
+    }
+
+    /**
+     * Mencari pencekalan pendonor (lintas kunjungan) yang berstatus "Menunggu Uji Ulang"
+     * @param int|string $idPendonor
+     * @return array<string, mixed>|null
+     */
+    public function cariPencekalanSementaraByPendonor(int|string $idPendonor): null|array
+    {
+        return $this->db
+            ->table('penanganan_donor.pencekalan pc')
+            ->join('donor.kunjungan k', 'k.id_kunjungan = pc.id_kunjungan', 'inner')
+            ->where('k.id_pendonor', $idPendonor)
+            ->where('pc.id_status_pencekalan', self::STATUS_MENUNGGU_UJI_ULANG)
+            ->orderBy('pc.id_pencekalan', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRowArray();
+    }
+
+    /**
+     * Eskalasi pencekalan sementara menjadi permanen karena hasil uji saring ulang masih reaktif
+     */
+    public function eskalasiKePermanen(int|string $idPencekalan): void
+    {
+        $this->update($idPencekalan, [
+            'id_jenis_pencekalan'  => self::JENIS_PENCEKALAN_PERMANEN,
+            'tanggal_selesai'      => null,
+            'id_status_pencekalan' => self::STATUS_AKTIF,
+        ]);
+    }
+
+    /**
+     * Menyelesaikan pencekalan karena hasil uji saring ulang sudah nonreaktif
+     */
+    public function selesaikanKarenaUjiUlangBersih(int|string $idPencekalan, string $tanggalUji): void
+    {
+        $this->update($idPencekalan, [
+            'id_status_pencekalan' => self::STATUS_SELESAI,
+            'keterangan'           => "Pencekalan selesai — dikonfirmasi bersih lewat uji saring ulang pada {$tanggalUji}.",
+        ]);
     }
 
     /**

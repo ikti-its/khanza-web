@@ -58,8 +58,9 @@ final class PencekalanController extends ControllerTemplate
     public function index(): string
     {
         $this->filters = [
-            'aktif'   => 'Aktif',
-            'selesai' => 'Selesai',
+            'aktif'            => 'Aktif',
+            'menunggu_retest'  => 'Menunggu Uji Ulang',
+            'selesai'          => 'Selesai',
         ];
 
         $this->active_filter = $this->request->getGet('filter') ?: null;
@@ -380,6 +381,7 @@ final class PencekalanController extends ControllerTemplate
     {
         $postData['id_status_pencekalan'] = $this->model->tentukanStatusPencekalan(
             $postData['tanggal_selesai'] ?? null,
+            $id,
         );
     }
 

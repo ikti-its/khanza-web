@@ -141,12 +141,19 @@ final class HasilUjiSaringController extends ControllerTemplate
         $nomorPengambilan   = '';
         $daftarReaktif      = [];
         $pencekalanUrl      = null;
+        $idPendonor         = null;
 
         if ($idPengambilanDarah) {
             $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
             $dataPengambilan  = $modelPengambilan->find($idPengambilanDarah);
             if ($dataPengambilan) {
                 $nomorPengambilan = $dataPengambilan['nomor_pengambilan'] ?? '';
+
+                if (!empty($dataPengambilan['id_kunjungan'])) {
+                    $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
+                    $dataKunjungan  = $modelKunjungan->find($dataPengambilan['id_kunjungan']);
+                    $idPendonor     = $dataKunjungan['id_pendonor'] ?? null;
+                }
             }
         }
 
@@ -158,20 +165,59 @@ final class HasilUjiSaringController extends ControllerTemplate
             $this->model->insert($dataUjiSaring);
             $idUjiSaring = $this->model->getInsertID();
 
-            $daftarReaktif  = $this->getDaftarReaktif($rawPost);
-            $modelStokDarah = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
+            $daftarReaktif   = $this->getDaftarReaktif($rawPost);
+            $modelStokDarah  = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
+            $modelPencekalan = new \App\Features\PenangananDonor\Pencekalan\PencekalanModel();
+            $tanggalUji      = $dataUjiSaring['tanggal_uji'] ?? date('Y-m-d');
 
-            if (!empty($daftarReaktif)) {
+            $modelPencekalan->sinkronkanStatusPencekalan();
+
+            $pencekalanUjiUlang = $idPendonor !== null
+                ? $modelPencekalan->cariPencekalanSementaraByPendonor($idPendonor)
+                : null;
+
+            if ($pencekalanUjiUlang !== null) {
+                // Uji ulang pasca 6 bulan dari kasus reaktif sebelumnya - jalankan gateway sesuai SOP, bukan alur reaktif/nonreaktif biasa
+                if (!empty($daftarReaktif)) {
+                    $modelKasusReaktif = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
+
+                    $modelKasusReaktif->insert([
+                        'nomor_kasus'        => $modelKasusReaktif->generateNomorKasus($tanggalUji),
+                        'id_uji_saring'      => $idUjiSaring,
+                        'tanggal_ditetapkan' => $tanggalUji,
+                        'id_status_kasus'    => 1,
+                    ]);
+
+                    $modelPencekalan->eskalasiKePermanen($pencekalanUjiUlang['id_pencekalan']);
+
+                    if (!empty($nomorPengambilan)) {
+                        $modelStokDarah
+                            ->like('no_kantong', $nomorPengambilan, 'before')
+                            ->set(['id_status_stok' => 3])
+                            ->update();
+                    }
+
+                    $pesanUjiUlang = 'Data hasil uji saring berhasil disimpan. Hasil uji ulang masih reaktif — pencekalan donor dieskalasi menjadi PERMANEN.';
+                } else {
+                    $modelPencekalan->selesaikanKarenaUjiUlangBersih($pencekalanUjiUlang['id_pencekalan'], $tanggalUji);
+
+                    if (!empty($nomorPengambilan)) {
+                        $modelStokDarah
+                            ->like('no_kantong', $nomorPengambilan, 'before')
+                            ->set(['id_status_stok' => 2])
+                            ->update();
+                    }
+
+                    $pesanUjiUlang = 'Data hasil uji saring berhasil disimpan. Hasil uji ulang nonreaktif — pencekalan donor telah diselesaikan.';
+                }
+            } elseif (!empty($daftarReaktif)) {
                 $modelKasusReaktif = new \App\Features\PenangananDonor\KasusReaktif\KasusReaktifModel();
 
-                $tanggalDitetapkan = $dataUjiSaring['tanggal_uji'] ?? date('Y-m-d');
-                $idStatusKasus     = 1;
-
                 $modelKasusReaktif->insert([
-                    'nomor_kasus'        => $modelKasusReaktif->generateNomorKasus($tanggalDitetapkan),
+                    'nomor_kasus'        => $modelKasusReaktif->generateNomorKasus($tanggalUji),
                     'id_uji_saring'      => $idUjiSaring,
-                    'tanggal_ditetapkan' => $tanggalDitetapkan,
-                    'id_status_kasus'    => $idStatusKasus,
+                    'tanggal_ditetapkan' => $tanggalUji,
+                    'id_status_kasus'    => 1,
                 ]);
 
                 if (!empty($nomorPengambilan)) {
@@ -209,7 +255,9 @@ final class HasilUjiSaringController extends ControllerTemplate
                 throw new \RuntimeException('Gagal menyimpan data hasil uji saring.');
             }
 
-            if ($pencekalanUrl !== null) {
+            if (isset($pesanUjiUlang)) {
+                session()->setFlashdata('success', $pesanUjiUlang);
+            } elseif ($pencekalanUrl !== null) {
                 session()->set('pencekalan_url', $pencekalanUrl);
                 session()->set(
                     'pencekalan_message',
