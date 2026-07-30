@@ -20,10 +20,10 @@ final class JenisBarangController extends ControllerTemplate
             'Jenis Barang',
             [
                 A::READ,
-                // A::CREATE,
+                A::CREATE,
                 // A::AUDIT,
-                // A::UPDATE,
-                // A::DELETE,
+                A::UPDATE,
+                A::DELETE,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX, 'id_jenis_barang',   'ID'],

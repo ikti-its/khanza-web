@@ -24,6 +24,7 @@ final class StokOpnameController extends ControllerTemplate
                 A::CREATE,
                 A::AUDIT,
                 A::UPDATE,
+                A::DELETE,
             ],
             [
                 [HIDE, OPTIONAL, I::INDEX,  'id_opname',             'ID Opname'],
