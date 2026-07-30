@@ -46,23 +46,39 @@ final class HasilUjiSaringModel extends ModelTemplate
             ->where('id_pengambilan_darah', $idPengambilan)
             ->get()
             ->getRowArray();
+        
+        if (!$pengambilan || empty($pengambilan['tanggal_pengambilan'])) {
+            throw new \InvalidArgumentException(
+                'Gagal menyimpan! Tanggal pengambilan darah tidak ditemukan.',
+            );
+        }
 
-        if ($pengambilan && !empty($pengambilan['tanggal_pengambilan'])) {
-            $tglPengambilan = new \DateTime($pengambilan['tanggal_pengambilan']);
-            $tglUji         = new \DateTime($tanggalUjiInput);
-            $hariIni        = new \DateTime(date('Y-m-d'));
+        try {
+            $tglPengambilan = (new \DateTimeImmutable(
+                $pengambilan['tanggal_pengambilan']
+            ))->setTime(0, 0, 0);
 
-            if ($tglUji < $tglPengambilan) {
-                throw new \InvalidArgumentException(
-                    'Gagal menyimpan! Tanggal uji saring tidak boleh mendahului tanggal pengambilan darah.',
-                );
-            }
+            $tglUji = (new \DateTimeImmutable(
+                $tanggalUjiInput
+            ))->setTime(0, 0, 0);
 
-            if ($tglUji > $hariIni) {
-                throw new \InvalidArgumentException(
-                    'Gagal menyimpan! Tanggal uji saring tidak boleh melebihi tanggal hari ini.',
-                );
-            }
+            $hariIni = new \DateTimeImmutable('today');
+        } catch (\Exception) {
+            throw new \InvalidArgumentException(
+                'Gagal menyimpan! Format tanggal pengambilan darah atau tanggal uji saring tidak valid.',
+            );
+        }
+
+        if ($tglUji < $tglPengambilan) {
+            throw new \InvalidArgumentException(
+                'Gagal menyimpan! Tanggal uji saring tidak boleh mendahului tanggal pengambilan darah.',
+            );
+        }
+
+        if ($tglUji > $hariIni) {
+            throw new \InvalidArgumentException(
+                'Gagal menyimpan! Tanggal uji saring tidak boleh melebihi tanggal hari ini.',
+            );
         }
     }
 }

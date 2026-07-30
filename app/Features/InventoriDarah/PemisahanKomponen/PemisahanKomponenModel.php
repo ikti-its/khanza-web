@@ -73,6 +73,14 @@ final class PemisahanKomponenModel extends ModelTemplate
      */
     public function validasiTanggalPemisahan(string $idPengambilan, string $tanggalPemisahanInput): void
     {
+        if (trim((string) $idPengambilan) === '') {
+            throw new \InvalidArgumentException('Gagal menyimpan! Data pengambilan darah belum dipilih.');
+        }
+
+        if (trim($tanggalPemisahanInput) === '') {
+            throw new \InvalidArgumentException('Gagal menyimpan! Tanggal pemisahan komponen wajib diisi.');
+        }
+
         $pengambilan = $this->db
             ->table('donor.pengambilan_darah')
             ->select('tanggal_pengambilan')
@@ -80,15 +88,49 @@ final class PemisahanKomponenModel extends ModelTemplate
             ->get()
             ->getRowArray();
 
-        if ($pengambilan && !empty($pengambilan['tanggal_pengambilan'])) {
-            $tglPengambilan = new \DateTime($pengambilan['tanggal_pengambilan']);
-            $tglPemisahan   = new \DateTime($tanggalPemisahanInput);
+        if (!$pengambilan || empty($pengambilan['tanggal_pengambilan'])) {
+            throw new \InvalidArgumentException(
+                'Gagal menyimpan! Tanggal pengambilan darah tidak ditemukan.',
+            );
+        }
 
-            if ($tglPemisahan < $tglPengambilan) {
-                throw new \InvalidArgumentException(
-                    'Gagal Menyimpan! Tanggal pemisahan komponen tidak boleh mendahului tanggal pengambilan darah.',
-                );
+        try {
+            $tglPengambilan = (new \DateTimeImmutable((string) $pengambilan['tanggal_pengambilan']))
+                ->setTime(0, 0, 0);
+
+            $tglPemisahan = \DateTimeImmutable::createFromFormat(
+                '!Y-m-d',
+                substr(trim($tanggalPemisahanInput), 0, 10),
+            );
+
+            $parseErrors = \DateTimeImmutable::getLastErrors();
+            if (
+                $tglPemisahan === false
+                || ($parseErrors !== false && ($parseErrors['warning_count'] > 0 || $parseErrors['error_count'] > 0))
+            ) {
+                throw new \InvalidArgumentException('Format tanggal pemisahan komponen tidak valid.');
             }
+        } catch (\InvalidArgumentException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            throw new \InvalidArgumentException(
+                'Gagal menyimpan! Format tanggal pengambilan darah tidak valid.',
+                0,
+                $e,
+            );
+        }
+
+        if ($tglPemisahan < $tglPengambilan) {
+            throw new \InvalidArgumentException(
+                'Gagal menyimpan! Tanggal pemisahan komponen tidak boleh mendahului tanggal pengambilan darah.',
+            );
+        }
+
+        $hariIni = new \DateTimeImmutable('today');
+        if ($tglPemisahan > $hariIni) {
+            throw new \InvalidArgumentException(
+                'Gagal menyimpan! Tanggal pemisahan komponen tidak boleh melebihi tanggal hari ini.',
+            );
         }
     }
 
