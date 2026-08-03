@@ -63,6 +63,24 @@ final class SkriningDonorModel extends ModelTemplate
             ->getResultArray();
     }
 
+    private function toFloat(mixed $value): float
+    {
+        if (!is_numeric($value)) {
+            return 0.0;
+        }
+
+        return (float) $value;
+    }
+
+    private function toInt(mixed $value): int
+    {
+        if (!is_numeric($value)) {
+            return 0;
+        }
+
+        return (int) $value;
+    }
+
     /**
      * Menentukan status kelayakan donor berdasarkan Permenkes
      * @param array $rawPost
@@ -70,13 +88,13 @@ final class SkriningDonorModel extends ModelTemplate
      */
     public function hitungOtomatisStatusSkrining(array $rawPost): array
     {
-        $beratBadan = (float) ($rawPost['berat_badan'] ?? 0);
-        $sistolik   = (int) ($rawPost['sistolik'] ?? 0);
-        $diastolik  = (int) ($rawPost['diastolik'] ?? 0);
-        $nadi       = (int) ($rawPost['nadi'] ?? 0);
-        $suhu       = (float) ($rawPost['suhu_tubuh'] ?? 0);
-        $hb         = (float) ($rawPost['kadar_hemoglobin'] ?? 0);
-        $anamnesis  = (int) ($rawPost['id_hasil_anamnesis'] ?? 0);
+        $beratBadan = $this->toFloat($rawPost['berat_badan'] ?? null);
+        $sistolik   = $this->toInt($rawPost['sistolik'] ?? null);
+        $diastolik  = $this->toInt($rawPost['diastolik'] ?? null);
+        $nadi       = $this->toInt($rawPost['nadi'] ?? null);
+        $suhu       = $this->toFloat($rawPost['suhu_tubuh'] ?? null);
+        $hb         = $this->toFloat($rawPost['kadar_hemoglobin'] ?? null);
+        $anamnesis  = $this->toInt($rawPost['id_hasil_anamnesis'] ?? null);
 
         $alasanGagal = [];
 
@@ -89,7 +107,7 @@ final class SkriningDonorModel extends ModelTemplate
         if ($diastolik < 60 || $diastolik > 100) {
             $alasanGagal[] = 'Tekanan Diastolik';
         }
-        if (!empty($sistolik) && !empty($diastolik) && ($sistolik - $diastolik) <= 20) {
+        if ($sistolik !== 0 && $diastolik !== 0 && ($sistolik - $diastolik) <= 20) {
             $alasanGagal[] = 'Selisih Sistolik & Diastolik (wajib > 20 mmHg)';
         }
         if ($nadi < 50 || $nadi > 100) {
@@ -106,7 +124,7 @@ final class SkriningDonorModel extends ModelTemplate
             $alasanGagal[] = 'Hasil Wawancara Anamnesis';
         }
 
-        if (!empty($alasanGagal)) {
+        if ($alasanGagal !== []) {
             return [
                 'status' => 2,
                 'alasan' => $alasanGagal,
