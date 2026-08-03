@@ -233,7 +233,7 @@ final class PermintaanRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan permintaan radiologi.');
             }
 
@@ -316,7 +316,7 @@ final class PermintaanRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui permintaan radiologi.');
             }
 
@@ -358,7 +358,7 @@ final class PermintaanRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus permintaan radiologi.');
             }
 

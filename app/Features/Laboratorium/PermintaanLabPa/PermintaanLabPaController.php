@@ -382,7 +382,7 @@ final class PermintaanLabPaController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan permintaan lab PA.');
             }
 
@@ -441,7 +441,7 @@ final class PermintaanLabPaController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui permintaan lab PA.');
             }
 
@@ -482,7 +482,7 @@ final class PermintaanLabPaController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus permintaan lab PA.');
             }
 

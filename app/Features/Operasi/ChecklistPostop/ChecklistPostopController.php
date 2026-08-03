@@ -360,7 +360,7 @@ final class ChecklistPostopController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan checklist post operasi.');
             }
 
@@ -403,7 +403,7 @@ final class ChecklistPostopController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui checklist post operasi.');
             }
 
@@ -439,7 +439,7 @@ final class ChecklistPostopController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus checklist post operasi.');
             }
 

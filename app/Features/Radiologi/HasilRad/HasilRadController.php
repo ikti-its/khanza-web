@@ -450,7 +450,7 @@ final class HasilRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan hasil radiologi.');
             }
 
@@ -611,7 +611,7 @@ final class HasilRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui hasil radiologi.');
             }
 
@@ -658,7 +658,7 @@ final class HasilRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus hasil radiologi.');
             }
 

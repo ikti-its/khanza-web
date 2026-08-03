@@ -349,7 +349,7 @@ final class PenyerahanPasienController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan penyerahan pasien.');
             }
 
@@ -386,7 +386,7 @@ final class PenyerahanPasienController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui penyerahan pasien.');
             }
 
@@ -419,7 +419,7 @@ final class PenyerahanPasienController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus penyerahan pasien.');
             }
 

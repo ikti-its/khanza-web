@@ -301,7 +301,7 @@ final class PemisahanKomponenController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan data pemisahan komponen dan penggunaan BHP.');
             }
 
@@ -365,7 +365,7 @@ final class PemisahanKomponenController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus data pemisahan komponen dan penggunaan BHP.');
             }
 

@@ -339,7 +339,7 @@ final class HasilLabPaController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan hasil lab PA.');
             }
 
@@ -432,7 +432,7 @@ final class HasilLabPaController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui hasil lab PA.');
             }
 
@@ -484,7 +484,7 @@ final class HasilLabPaController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus hasil lab PA.');
             }
 

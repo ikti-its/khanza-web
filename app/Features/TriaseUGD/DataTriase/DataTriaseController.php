@@ -379,7 +379,7 @@ final class DataTriaseController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan data pemeriksaan triase pasien.');
             }
 
@@ -690,7 +690,7 @@ final class DataTriaseController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui data pemeriksaan triase pasien.');
             }
 
@@ -739,7 +739,7 @@ final class DataTriaseController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus data pemeriksaan triase pasien.');
             }
 

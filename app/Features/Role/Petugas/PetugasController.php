@@ -108,7 +108,7 @@ final class PetugasController extends ControllerTemplate
             }
 
             $db->transComplete();
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan data Petugas.');
             }
 
@@ -224,7 +224,7 @@ final class PetugasController extends ControllerTemplate
             $this->model->update($id, ['deskripsi' => $rawPost['deskripsi'] ?: null]);
 
             $db->transComplete();
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui data Petugas.');
             }
 
@@ -264,7 +264,7 @@ final class PetugasController extends ControllerTemplate
             }
 
             $db->transComplete();
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus data Petugas.');
             }
 

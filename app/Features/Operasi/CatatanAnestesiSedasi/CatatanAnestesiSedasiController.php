@@ -449,7 +449,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan catatan anestesi sedasi.');
             }
 
@@ -492,7 +492,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui catatan anestesi sedasi.');
             }
 
@@ -528,7 +528,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus catatan anestesi sedasi.');
             }
 

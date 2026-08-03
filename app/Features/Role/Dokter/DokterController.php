@@ -113,7 +113,7 @@ final class DokterController extends ControllerTemplate
             }
 
             $db->transComplete();
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan data Dokter.');
             }
 
@@ -232,7 +232,7 @@ final class DokterController extends ControllerTemplate
             ]);
 
             $db->transComplete();
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui data Dokter.');
             }
 
@@ -272,7 +272,7 @@ final class DokterController extends ControllerTemplate
             }
 
             $db->transComplete();
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus data Dokter.');
             }
 

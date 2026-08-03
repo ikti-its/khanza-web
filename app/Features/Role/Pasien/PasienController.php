@@ -137,7 +137,7 @@ final class PasienController extends ControllerTemplate
             }
 
             $db->transComplete();
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan data Pasien.');
             }
 
@@ -253,7 +253,7 @@ final class PasienController extends ControllerTemplate
             $this->model->update($id, ['nomor_rm' => $rawPost['nomor_rm'] ?? null]);
 
             $db->transComplete();
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui data Pasien.');
             }
 
@@ -293,7 +293,7 @@ final class PasienController extends ControllerTemplate
             }
 
             $db->transComplete();
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus data Pasien.');
             }
 

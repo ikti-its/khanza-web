@@ -118,7 +118,7 @@ final class MedisRusakController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan data kerusakan BHP medis.');
             }
 
@@ -160,7 +160,7 @@ final class MedisRusakController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus data kerusakan BHP medis.');
             }
 

@@ -389,16 +389,16 @@ final class TagihanOperasiController extends ControllerTemplate
 
             $idTagihan = $this->model->insert($data);
 
-            if ($this->model->db->transStatus() !== false) {
+            if ($this->model->db->transStatus() ) {
                 $this->savePaket((int) $idTagihan, $rawPost['paket'] ?? []);
             }
-            if ($this->model->db->transStatus() !== false) {
+            if ($this->model->db->transStatus() ) {
                 $this->saveObat((int) $idTagihan, $rawPost['obat'] ?? []);
             }
 
             // Ambil pesan error DB sebelum transComplete()/ROLLBACK menghapus jejaknya.
             $dbErrorMsg = null;
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 $dbErrorMsg = $this->model->db->error()['message'];
                 if (!$dbErrorMsg) {
                     $dbErrorMsg = 'Gagal menyimpan tagihan operasi.';
@@ -439,22 +439,22 @@ final class TagihanOperasiController extends ControllerTemplate
 
             $this->model->update($id, $data);
 
-            if ($this->model->db->transStatus() !== false) {
+            if ($this->model->db->transStatus() ) {
                 $this->model->db->table('operasi.tagihan_operasi_tindakan')->where('id_tagihan', $id)->delete();
             }
-            if ($this->model->db->transStatus() !== false) {
+            if ($this->model->db->transStatus() ) {
                 $this->savePaket((int) $id, $rawPost['paket'] ?? []);
             }
-            if ($this->model->db->transStatus() !== false) {
+            if ($this->model->db->transStatus() ) {
                 $this->model->db->table('operasi.tagihan_operasi_obat')->where('id_tagihan', $id)->delete();
             }
-            if ($this->model->db->transStatus() !== false) {
+            if ($this->model->db->transStatus() ) {
                 $this->saveObat((int) $id, $rawPost['obat'] ?? []);
             }
 
             // Ambil pesan error DB sebelum transComplete()/ROLLBACK menghapus jejaknya.
             $dbErrorMsg = null;
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 $dbErrorMsg = $this->model->db->error()['message'];
                 if (!$dbErrorMsg) {
                     $dbErrorMsg = 'Gagal memperbarui tagihan operasi.';
@@ -494,7 +494,7 @@ final class TagihanOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus tagihan operasi.');
             }
 
@@ -568,7 +568,7 @@ final class TagihanOperasiController extends ControllerTemplate
                     'id_tagihan' => $idTagihan,
                     'id_paket'   => (int) $paket['id_paket'],
                 ]);
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 return;
             }
         }
@@ -604,7 +604,7 @@ final class TagihanOperasiController extends ControllerTemplate
                     'id_barang'  => (int) $obat['id_barang'],
                     'jumlah'     => (int) $obat['jumlah'],
                 ]);
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 return;
             }
         }

@@ -517,7 +517,7 @@ final class JadwalOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan jadwal operasi.');
             }
 

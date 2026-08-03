@@ -294,7 +294,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan time out sebelum insisi.');
             }
 
@@ -331,7 +331,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui time out sebelum insisi.');
             }
 
@@ -366,7 +366,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus time out sebelum insisi.');
             }
 

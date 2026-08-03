@@ -255,7 +255,7 @@ final class PermintaanDarahController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan data permintaan darah.');
             }
 
@@ -459,7 +459,7 @@ final class PermintaanDarahController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui data permintaan darah.');
             }
 
@@ -501,7 +501,7 @@ final class PermintaanDarahController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus data permintaan darah.');
             }
 

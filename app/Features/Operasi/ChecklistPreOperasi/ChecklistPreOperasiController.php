@@ -328,7 +328,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan checklist pre operasi.');
             }
 
@@ -367,7 +367,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui checklist pre operasi.');
             }
 
@@ -400,7 +400,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus checklist pre operasi.');
             }
 

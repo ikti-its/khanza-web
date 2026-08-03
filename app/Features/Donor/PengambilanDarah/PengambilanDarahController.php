@@ -321,7 +321,7 @@ final class PengambilanDarahController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan data pengambilan darah dan BHP.');
             }
 
@@ -588,7 +588,7 @@ final class PengambilanDarahController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui data pengambilan darah dan logistik BHP.');
             }
 
@@ -634,7 +634,7 @@ final class PengambilanDarahController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \CodeIgniter\Database\Exceptions\DatabaseException('violates foreign key constraint');
             }
 

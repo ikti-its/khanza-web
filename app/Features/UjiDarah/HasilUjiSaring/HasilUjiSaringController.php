@@ -251,7 +251,7 @@ final class HasilUjiSaringController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan data hasil uji saring.');
             }
 
@@ -476,7 +476,7 @@ final class HasilUjiSaringController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui data hasil uji saring.');
             }
 
@@ -556,7 +556,7 @@ final class HasilUjiSaringController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus data hasil uji saring.');
             }
 

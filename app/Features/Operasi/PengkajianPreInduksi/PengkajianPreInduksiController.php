@@ -305,7 +305,7 @@ final class PengkajianPreInduksiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Transaksi gagal saat menyimpan pengkajian pre induksi.');
             }
 
@@ -344,7 +344,7 @@ final class PengkajianPreInduksiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Transaksi gagal saat memperbarui pengkajian pre induksi.');
             }
 
@@ -377,7 +377,7 @@ final class PengkajianPreInduksiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus pengkajian pre induksi.');
             }
 

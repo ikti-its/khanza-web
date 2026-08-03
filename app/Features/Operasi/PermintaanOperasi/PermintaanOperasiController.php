@@ -231,7 +231,7 @@ final class PermintaanOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan permintaan operasi.');
             }
 
@@ -319,7 +319,7 @@ final class PermintaanOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus permintaan operasi.');
             }
 

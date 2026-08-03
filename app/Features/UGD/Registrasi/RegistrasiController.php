@@ -279,7 +279,7 @@ final class RegistrasiController extends ControllerTemplate
             $this->model->insert($ugdData);
             $db->table('registrasi.registrasi')->insert($rmData);
 
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 $db->transRollback();
                 session()->setFlashdata('error', 'Gagal menyimpan data registrasi.');
                 return redirect()->back()->withInput();
@@ -322,7 +322,7 @@ final class RegistrasiController extends ControllerTemplate
             $this->model->update($id, $ugdData);
             $db->table('registrasi.registrasi')->where('nomor_reg', $current['nomor_reg'])->update($rmData);
 
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 $db->transRollback();
                 session()->setFlashdata('error', 'Gagal memperbarui data registrasi.');
                 return redirect()->back()->withInput();
@@ -355,7 +355,7 @@ final class RegistrasiController extends ControllerTemplate
             $db->table('registrasi.registrasi')->where('nomor_reg', $current['nomor_reg'])->delete();
             $this->model->delete($id);
 
-            if ($db->transStatus() === false) {
+            if (!$db->transStatus() ) {
                 $db->transRollback();
                 session()->setFlashdata('error', 'Gagal menghapus data registrasi.');
                 return $this->home();

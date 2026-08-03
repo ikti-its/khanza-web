@@ -119,7 +119,7 @@ final class PenunjangRusakController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan data kerusakan BHP non medis.');
             }
 
@@ -161,7 +161,7 @@ final class PenunjangRusakController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus data kerusakan BHP non medis.');
             }
 

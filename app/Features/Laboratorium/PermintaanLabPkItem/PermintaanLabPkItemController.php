@@ -414,7 +414,7 @@ final class PermintaanLabPkItemController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan permintaan lab PK.');
             }
 
@@ -471,7 +471,7 @@ final class PermintaanLabPkItemController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui permintaan lab PK.');
             }
 
@@ -511,7 +511,7 @@ final class PermintaanLabPkItemController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menghapus permintaan lab PK.');
             }
 

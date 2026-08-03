@@ -273,7 +273,7 @@ final class PendonorController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal menyimpan data pendonor.');
             }
 
@@ -473,7 +473,7 @@ final class PendonorController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \RuntimeException('Gagal memperbarui data ' . $this->title . '.');
             }
 
@@ -543,7 +543,7 @@ final class PendonorController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if ($this->model->db->transStatus() === false) {
+            if (!$this->model->db->transStatus() ) {
                 throw new \CodeIgniter\Database\Exceptions\DatabaseException('violates foreign key constraint');
             }
 
