@@ -10,7 +10,7 @@ class RouteTemplate
     public function __construct(
         /** @var non-empty-string $feature_group */
         public private(set) string $feature_group = '',
-        /** @var list<class-string<ControllerTemplate>> $feature_group */
+        /** @var array<int|class-string<ControllerTemplate>, class-string<ControllerTemplate>|'HIDE'> */
         public private(set) array $features = [],
         public private(set) string $icon = '',
     ) {}

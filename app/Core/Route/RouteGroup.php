@@ -25,10 +25,10 @@ class RouteGroup
         return $value;
     }
 
-    /** @return array<string, list<class-string<ControllerTemplate>>> */
+    /** @return array<string, array<int|class-string<ControllerTemplate>, class-string<ControllerTemplate>|'HIDE'>> */
     private function get_controler_classes(): array
     {
-        /** @var array<string, list<class-string<ControllerTemplate>>> */
+        /** @var array<string, array<int|class-string<ControllerTemplate>, class-string<ControllerTemplate>|'HIDE'>> */
         $all_routes = [];
         foreach ($this->routes as $route) {
             $r                             = new $route();
