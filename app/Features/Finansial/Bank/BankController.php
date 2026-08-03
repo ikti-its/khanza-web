@@ -39,15 +39,20 @@ final class BankController extends ControllerTemplate
         );
     }
 
+    /**
+     * @throws \CodeIgniter\Exceptions\ModelException
+     */
     public function list(): ResponseInterface
     {
-        $data = $this->model
+        $query = $this->model
             ->builder()
             ->select('id_bank, nama_bank')
             ->where('id_bank >', 0)
             ->orderBy('nama_bank', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->get();
+
+        /** @var array<int, array<string, mixed>> $data */
+        $data = $query !== false ? $query->getResultArray() : [];
 
         return $this->response->setJSON(['data' => $data]);
     }
