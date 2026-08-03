@@ -72,18 +72,21 @@ final class PengajuanBarangDetailController extends ControllerTemplate
     }
 
     // hitung subtotal
+    #[\Override]
     protected function before_create(array &$postData): void
     {
         $postData['subtotal'] = (float) ($postData['harga'] ?? 0) * (float) ($postData['qty'] ?? 0);
     }
 
     // hitung ulang subtotal
+    #[\Override]
     protected function before_update(array &$postData, int|string $id): void
     {
         $postData['subtotal'] = (float) ($postData['harga'] ?? 0) * (float) ($postData['qty'] ?? 0);
     }
 
     // lock check + duplikat check + update total_harga setelah tambah
+    #[\Override]
     public function create(): string|RedirectResponse
     {
         $id_pengajuan = (int) ($this->request->getPost('id_pengajuan') ?? 0);
@@ -119,6 +122,7 @@ final class PengajuanBarangDetailController extends ControllerTemplate
     }
 
     // lock check + update total_harga setelah ubah
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $row          = $this->model->find($id);
@@ -136,6 +140,7 @@ final class PengajuanBarangDetailController extends ControllerTemplate
     }
 
     // lock check + update total_harga setelah hapus
+    #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
         $row          = $this->model->find($id);

@@ -41,12 +41,14 @@ final class BarangController extends ControllerTemplate
     protected array $row_alert = ['value' => 'stok', 'threshold' => 'stok_minimum'];
 
     // urut berdasarkan nama A-Z
+    #[\Override]
     protected function before_read(): void
     {
         $this->model->set_order('nama_barang', 'ASC');
     }
 
     // form tambah custom dengan modal search satuan dan jenis barang
+    #[\Override]
     public function create_page(): string
     {
         return view('admin/inventorinonmedis/tambah_barang', [
@@ -58,6 +60,7 @@ final class BarangController extends ControllerTemplate
     }
 
     // tampilkan form ubah custom (reuse view tambah)
+    #[\Override]
     public function update_page(int|string $id): string
     {
         $baris = $this->model->find_one($id);
@@ -92,6 +95,7 @@ final class BarangController extends ControllerTemplate
 
     /** @param array<string, scalar|null> $postData */
     // stok awal = 0
+    #[\Override]
     protected function before_create(array &$postData): void
     {
         $postData['stok'] = 0;
@@ -108,6 +112,7 @@ final class BarangController extends ControllerTemplate
     // 'stok' bukan bagian dari form ubah (tampil readonly, tanpa name di form),
     // jadi get_post_data() akan mengirim null untuknya kalau tidak dibuang di sini —
     // dan itu melanggar constraint NOT NULL pada kolom stok.
+    #[\Override]
     protected function before_update(array &$postData, int|string $id): void
     {
         unset($postData['stok']);
@@ -120,6 +125,7 @@ final class BarangController extends ControllerTemplate
     }
 
     // form tambah gagal validasi: render ulang view custom yang sama, bukan layout generik
+    #[\Override]
     protected function create_view(array $baris = []): string
     {
         return view('admin/inventorinonmedis/tambah_barang', [
@@ -132,6 +138,7 @@ final class BarangController extends ControllerTemplate
     }
 
     // form ubah gagal validasi: render ulang view custom yang sama dengan input yang baru disubmit
+    #[\Override]
     protected function update_error_view(int|string $id, string $msg, array $postData = []): string
     {
         session()->setFlashdata('error', $msg);

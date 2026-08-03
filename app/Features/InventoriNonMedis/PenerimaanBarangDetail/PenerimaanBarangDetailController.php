@@ -44,6 +44,7 @@ final class PenerimaanBarangDetailController extends ControllerTemplate
     }
 
     // qty_diterima ga boleh lebih dari qty yang dipesan
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $row = $this->model->find($id);

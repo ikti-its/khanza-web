@@ -42,12 +42,14 @@ final class PenerimaanBarangController extends ControllerTemplate
         );
     }
 
+    #[\Override]
     protected function before_read(): void
     {
         $this->model->set_order('id_penerimaan', 'DESC');
     }
 
     // form tambah: 1-page header + detail
+    #[\Override]
     public function create_page(): string
     {
         return view('admin/inventorinonmedis/tambah_penerimaan_barang', [
@@ -84,6 +86,7 @@ final class PenerimaanBarangController extends ControllerTemplate
     }
 
     // form ubah: 1-page header + detail existing
+    #[\Override]
     public function update_page(int|string $id): string
     {
         $baris = $this->model->find_one($id);
@@ -139,6 +142,7 @@ final class PenerimaanBarangController extends ControllerTemplate
     }
 
     // simpan header + detail sekaligus
+    #[\Override]
     public function create(): string|RedirectResponse
     {
         $new_status = (int) ($this->request->getPost('id_status_penerimaan_barang') ?? 1);
@@ -268,6 +272,7 @@ final class PenerimaanBarangController extends ControllerTemplate
     }
 
     // update header + sync detail + handle status transitions
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $current        = $this->model->find((int) $id);

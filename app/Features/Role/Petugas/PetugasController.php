@@ -36,6 +36,7 @@ final class PetugasController extends ControllerTemplate
         );
     }
 
+    #[\Override]
     public function create_page(): string
     {
         $controllerOrang = new \App\Features\Person\Orang\OrangController();
@@ -75,6 +76,7 @@ final class PetugasController extends ControllerTemplate
         ]);
     }
 
+    #[\Override]
     public function create(): string|RedirectResponse
     {
         $orangModel = new OrangModel();

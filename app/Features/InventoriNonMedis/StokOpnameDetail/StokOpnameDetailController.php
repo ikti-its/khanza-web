@@ -56,6 +56,7 @@ final class StokOpnameDetailController extends ControllerTemplate
     }
 
     // format selisih: 0 → "-", positif → "+N", negatif tetap "-N"
+    #[\Override]
     protected function after_read(array &$data_tabel): void
     {
         foreach ($data_tabel as &$row) {
@@ -83,6 +84,7 @@ final class StokOpnameDetailController extends ControllerTemplate
     }
 
     // blok kalau opname induk udah Selesai, atau barang sudah ada
+    #[\Override]
     public function create(): string|RedirectResponse
     {
         $id_opname = (int) ($this->request->getPost('id_opname') ?? 0);
@@ -114,6 +116,7 @@ final class StokOpnameDetailController extends ControllerTemplate
     }
 
     // ambil stok_sistem dari barang, hitung selisih
+    #[\Override]
     protected function before_create(array &$postData): void
     {
         $id_barang   = (int) ($postData['id_barang'] ?? 0);
@@ -135,6 +138,7 @@ final class StokOpnameDetailController extends ControllerTemplate
     }
 
     // blok kalau opname induk udah Selesai
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $row       = $this->model->find((int) $id);
@@ -150,6 +154,7 @@ final class StokOpnameDetailController extends ControllerTemplate
     }
 
     // pakai stok_sistem lama, hitung ulang selisih
+    #[\Override]
     protected function before_update(array &$postData, int|string $id): void
     {
         $row         = $this->model->find((int) $id);

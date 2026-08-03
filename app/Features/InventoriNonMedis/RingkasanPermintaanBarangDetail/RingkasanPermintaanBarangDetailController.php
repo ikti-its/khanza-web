@@ -60,6 +60,7 @@ final class RingkasanPermintaanBarangDetailController extends ControllerTemplate
     }
 
     // qty_disetujui tidak bisa diubah jika sudah diproses, dan tidak boleh melebihi qty diminta
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $row = $this->model->find($id);

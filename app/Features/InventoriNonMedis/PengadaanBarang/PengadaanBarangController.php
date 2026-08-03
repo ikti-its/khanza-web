@@ -43,6 +43,7 @@ final class PengadaanBarangController extends ControllerTemplate
         );
     }
 
+    #[\Override]
     protected function before_read(): void
     {
         $this->model->set_order('id_pengadaan', 'DESC');
@@ -167,6 +168,7 @@ final class PengadaanBarangController extends ControllerTemplate
     }
 
     // form tambah: 1-page header + detail preview
+    #[\Override]
     public function create_page(): string
     {
         return view('admin/inventorinonmedis/tambah_pengadaan_barang', [
@@ -203,6 +205,7 @@ final class PengadaanBarangController extends ControllerTemplate
     }
 
     // form ubah: 1-page header + detail existing (hanya saat Proses Pengadaan)
+    #[\Override]
     public function update_page(int|string $id): string
     {
         $baris = $this->model->find_one($id);
@@ -233,6 +236,7 @@ final class PengadaanBarangController extends ControllerTemplate
     }
 
     // hapus header + detail sekaligus
+    #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);
@@ -298,6 +302,7 @@ final class PengadaanBarangController extends ControllerTemplate
     }
 
     // simpan header + detail sekaligus
+    #[\Override]
     public function create(): string|RedirectResponse
     {
         $new_status = (int) ($this->request->getPost('id_status_pengadaan_barang') ?? 1);
@@ -376,6 +381,7 @@ final class PengadaanBarangController extends ControllerTemplate
     }
 
     // update header + sync detail
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);
@@ -455,6 +461,7 @@ final class PengadaanBarangController extends ControllerTemplate
     }
 
     // cetak surat pemesanan
+    #[\Override]
     public function print(int|string $id): string
     {
         $db = $this->get_db();

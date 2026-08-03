@@ -63,6 +63,7 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
     }
 
     // jika id_barang sudah terpetakan, tampilkan nama_barang (readonly) bukan SELECT pemetaan
+    #[\Override]
     public function update_page(int|string $id): string
     {
         if ($id == 0)
@@ -95,6 +96,7 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
 
     // hitung ulang subtotal pakai harga existing × qty_disetujui
     // konversi id_barang SELECT kosong (0) → NULL, jangan overwrite jika sudah terpetakan
+    #[\Override]
     protected function before_update(array &$postData, int|string $id): void
     {
         $existing = $this->model->find($id);
@@ -116,6 +118,7 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
 
     // lock check: baris yang belum dipetakan (id_barang IS NULL) dikecualikan dari lock
     // update total setelah simpan
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $row          = $this->model->find($id);

@@ -34,6 +34,7 @@ final class TransaksiStokController extends ControllerTemplate
     }
 
     // data terbaru di atas
+    #[\Override]
     protected function before_read(): void
     {
         $this->model->set_order('id_transaksi', 'DESC');

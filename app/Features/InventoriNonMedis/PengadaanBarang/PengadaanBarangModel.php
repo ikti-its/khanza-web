@@ -29,6 +29,7 @@ final class PengadaanBarangModel extends ModelTemplate
 
     // hanya tampilkan pengajuan Disetujui yang masih punya sisa qty belum dipesan
     // dan tidak memiliki barang baru yang belum dipetakan ke master barang
+    #[\Override]
     public function get_all_options(): array
     {
         $options = parent::get_all_options();

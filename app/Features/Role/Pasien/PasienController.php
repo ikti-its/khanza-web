@@ -36,6 +36,7 @@ final class PasienController extends ControllerTemplate
         );
     }
 
+    #[\Override]
     public function create_page(): string
     {
         $controllerOrang = new \App\Features\Person\Orang\OrangController();
@@ -87,6 +88,7 @@ final class PasienController extends ControllerTemplate
         ]);
     }
 
+    #[\Override]
     public function create(): string|RedirectResponse
     {
         $alamatModel = new \App\Features\Lokasi\Alamat\AlamatModel();

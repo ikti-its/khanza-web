@@ -42,6 +42,7 @@ final class PengajuanBarangController extends ControllerTemplate
         );
     }
 
+    #[\Override]
     protected function before_read(): void
     {
         $this->model->set_order('id_pengajuan', 'DESC');
@@ -80,6 +81,7 @@ final class PengajuanBarangController extends ControllerTemplate
     }
 
     // form tambah: 1-page header + detail
+    #[\Override]
     public function create_page(): string
     {
         return view('admin/inventorinonmedis/tambah_pengajuan_barang', [
@@ -116,6 +118,7 @@ final class PengajuanBarangController extends ControllerTemplate
     }
 
     // form ubah: 1-page header + detail existing (hanya saat Draf)
+    #[\Override]
     public function update_page(int|string $id): string
     {
         $baris = $this->model->find_one($id);
@@ -146,6 +149,7 @@ final class PengajuanBarangController extends ControllerTemplate
     }
 
     // simpan header + detail sekaligus
+    #[\Override]
     public function create(): string|RedirectResponse
     {
         $postData = [
@@ -206,6 +210,7 @@ final class PengajuanBarangController extends ControllerTemplate
     }
 
     // hapus header + detail sekaligus
+    #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);
@@ -230,6 +235,7 @@ final class PengajuanBarangController extends ControllerTemplate
     }
 
     // update header + sync detail
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);

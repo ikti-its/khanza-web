@@ -43,6 +43,7 @@ final class PengadaanBarangDetailController extends ControllerTemplate
     }
 
     // hitung ulang subtotal
+    #[\Override]
     protected function before_update(array &$postData, int|string $id): void
     {
         $harga                = (float) ($postData['harga_satuan'] ?? 0);
@@ -51,6 +52,7 @@ final class PengadaanBarangDetailController extends ControllerTemplate
     }
 
     // validasi total qty seluruh pengadaan ≤ qty disetujui pengajuan, update total_harga pengadaan
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $row = $this->model->find($id);
@@ -118,6 +120,7 @@ final class PengadaanBarangDetailController extends ControllerTemplate
     }
 
     // update total_harga pengadaan setelah baris dihapus
+    #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
         $row    = $this->model->find($id);

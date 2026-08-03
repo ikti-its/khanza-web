@@ -493,6 +493,7 @@ final class PendonorController extends ControllerTemplate
     /**
      * OVERRIDE: Menghapus data pendonor
      */
+    #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
         if ($id == 0)

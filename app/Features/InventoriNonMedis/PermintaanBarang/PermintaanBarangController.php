@@ -43,12 +43,14 @@ final class PermintaanBarangController extends ControllerTemplate
     }
 
     // data terbaru di atas
+    #[\Override]
     protected function before_read(): void
     {
         $this->model->set_order('id_permintaan', 'DESC');
     }
 
     // Tambahkan kolom progress badge ke setiap baris di list
+    #[\Override]
     protected function after_read(array &$data_tabel): void
     {
         if (empty($data_tabel)) return;
@@ -67,6 +69,7 @@ final class PermintaanBarangController extends ControllerTemplate
     }
 
     // form tambah: 1-page header + detail
+    #[\Override]
     public function create_page(): string
     {
         return view('admin/inventorinonmedis/tambah_permintaan_barang', [
@@ -109,6 +112,7 @@ final class PermintaanBarangController extends ControllerTemplate
     }
 
     // form ubah: 1-page header + detail existing (hanya saat Draf)
+    #[\Override]
     public function update_page(int|string $id): string
     {
         $baris = $this->model->find_one($id);
@@ -145,6 +149,7 @@ final class PermintaanBarangController extends ControllerTemplate
     }
 
     // simpan header + detail sekaligus
+    #[\Override]
     public function create(): string|RedirectResponse
     {
         $postData = [
@@ -194,6 +199,7 @@ final class PermintaanBarangController extends ControllerTemplate
     }
 
     // hapus header + detail sekaligus
+    #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);
@@ -218,6 +224,7 @@ final class PermintaanBarangController extends ControllerTemplate
     }
 
     // update header + sync detail items
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);

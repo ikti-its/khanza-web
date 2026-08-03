@@ -39,6 +39,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
     }
 
     // hanya tampilkan Proses Pengajuan (4), Disetujui (2), Ditolak (3) — bukan Draf
+    #[\Override]
     protected function before_read(): void
     {
         $this->model->set_filter('id_status_pengajuan_barang', [2, 3, 4]);
@@ -46,6 +47,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
     }
 
     // hanya izinkan transisi ke Disetujui (2) atau Ditolak (3) dari Ringkasan
+    #[\Override]
     protected function before_update(array &$postData, int|string $id): void
     {
         $new_status = (int) ($postData['id_status_pengajuan_barang'] ?? 0);
@@ -94,6 +96,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
     }
 
     // form ubah: 1-page — redirect jika sudah diproses
+    #[\Override]
     public function update_page(int|string $id): string
     {
         if ($id == 0) return $this->index();
@@ -126,6 +129,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
     }
 
     // validasi atasan & qty sebelum approve, sync qty_disetujui
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $new_status     = (int) ($this->request->getPost('id_status_pengajuan_barang') ?? 0);

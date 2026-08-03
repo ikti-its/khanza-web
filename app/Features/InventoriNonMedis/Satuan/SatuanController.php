@@ -46,6 +46,7 @@ final class SatuanController extends ControllerTemplate
     }
 
     // urut berdasarkan nama A-Z
+    #[\Override]
     protected function before_read(): void
     {
         $this->model->set_order('nama_satuan', 'ASC');

@@ -29,6 +29,7 @@ final class PenerimaanBarangModel extends ModelTemplate
     }
 
     // hanya tampilkan pengadaan yang masih punya sisa qty belum diterima (status Lengkap = 2)
+    #[\Override]
     public function get_all_options(): array
     {
         $options = parent::get_all_options();

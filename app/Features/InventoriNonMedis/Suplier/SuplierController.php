@@ -40,6 +40,7 @@ final class SuplierController extends ControllerTemplate
     }
 
     // inject pilihan bank ke field id_bank pas render form
+    #[\Override]
     protected function get_fields_with_options(bool $include_pk = false, bool $is_form = false): array
     {
         $fields = parent::get_fields_with_options($include_pk, $is_form);
@@ -103,6 +104,7 @@ final class SuplierController extends ControllerTemplate
     }
 
     // custom view yang sama dengan tambah, dengan modal kota & bank (bukan dropdown generik)
+    #[\Override]
     public function update_page(int|string $id): string
     {
         if ($id == 0)
@@ -118,6 +120,7 @@ final class SuplierController extends ControllerTemplate
     }
 
     // form tambah gagal validasi: render ulang view custom yang sama, bukan layout generik
+    #[\Override]
     protected function create_view(array $baris = []): string
     {
         return view('admin/inventorinonmedis/tambah_suplier', [
@@ -131,6 +134,7 @@ final class SuplierController extends ControllerTemplate
     }
 
     // form ubah gagal validasi: render ulang view custom yang sama dengan input yang baru disubmit
+    #[\Override]
     protected function update_error_view(int|string $id, string $msg, array $postData = []): string
     {
         session()->setFlashdata('error', $msg);
@@ -158,12 +162,14 @@ final class SuplierController extends ControllerTemplate
     }
 
     // urut berdasarkan nama A-Z
+    #[\Override]
     protected function before_read(): void
     {
         $this->model->set_order('nama_suplier', 'ASC');
     }
 
     // pre-fill kode_suplier dengan kode otomatis, custom view dengan modal kota
+    #[\Override]
     public function create_page(): string
     {
         $banks = $this
@@ -198,6 +204,7 @@ final class SuplierController extends ControllerTemplate
     }
 
     // simpan rekening baru ke finansial.rekening, link id_rekening ke suplier
+    #[\Override]
     protected function before_create(array &$postData): void
     {
         $id_bank        = $postData['id_bank'] ?? null;
@@ -219,6 +226,7 @@ final class SuplierController extends ControllerTemplate
     }
 
     // update rekening yang sudah ada, atau insert baru kalau belum punya rekening
+    #[\Override]
     protected function before_update(array &$postData, int|string $id): void
     {
         $id_bank        = $postData['id_bank'] ?? null;

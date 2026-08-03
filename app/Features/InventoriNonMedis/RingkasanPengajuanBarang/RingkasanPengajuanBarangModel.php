@@ -29,6 +29,7 @@ final class RingkasanPengajuanBarangModel extends ModelTemplate
     }
 
     // Batasi pilihan status: Proses Pengajuan (4), Disetujui (2), Ditolak (3) — tanpa Draf
+    #[\Override]
     public function get_all_options(): array
     {
         $options = parent::get_all_options();

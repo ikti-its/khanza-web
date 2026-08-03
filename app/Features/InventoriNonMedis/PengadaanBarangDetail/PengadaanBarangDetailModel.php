@@ -63,6 +63,7 @@ final class PengadaanBarangDetailModel extends ModelTemplate
         return $result->getResultArray();
     }
 
+    #[\Override]
     public function find_one(int|string $id): array|null
     {
         $builder = $this->build_query();

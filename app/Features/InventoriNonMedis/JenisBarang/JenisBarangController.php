@@ -46,6 +46,7 @@ final class JenisBarangController extends ControllerTemplate
     }
 
     // urut berdasarkan nama A-Z
+    #[\Override]
     protected function before_read(): void
     {
         $this->model->set_order('nama_jenis_barang', 'ASC');

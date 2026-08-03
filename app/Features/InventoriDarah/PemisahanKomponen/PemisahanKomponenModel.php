@@ -73,7 +73,7 @@ final class PemisahanKomponenModel extends ModelTemplate
      */
     public function validasiTanggalPemisahan(string $idPengambilan, string $tanggalPemisahanInput): void
     {
-        if (trim((string) $idPengambilan) === '') {
+        if (trim( $idPengambilan) === '') {
             throw new \InvalidArgumentException('Gagal menyimpan! Data pengambilan darah belum dipilih.');
         }
 

@@ -70,6 +70,7 @@ final class PermintaanBarangDetailController extends ControllerTemplate
         return is_array($row) && (int) ($row['id_status_permintaan_barang'] ?? 0) !== 1;
     }
 
+    #[\Override]
     public function create(): string|RedirectResponse
     {
         $id_permintaan = (int) ($this->request->getPost('id_permintaan') ?? 0);
@@ -100,6 +101,7 @@ final class PermintaanBarangDetailController extends ControllerTemplate
         return parent::create();
     }
 
+    #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
         $detail        = $this->model->find((int) $id);
@@ -112,6 +114,7 @@ final class PermintaanBarangDetailController extends ControllerTemplate
         return parent::update($id);
     }
 
+    #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
         $detail        = $this->model->find((int) $id);
