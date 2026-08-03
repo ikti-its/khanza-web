@@ -34,16 +34,23 @@ final class AkunController extends ControllerTemplate
         );
     }
 
+    /**
+     * @param array<array-key, mixed> $postData
+     */
     #[\Override()]
     protected function before_create(array &$postData): void
     {
         $this->hash_password($postData);
     }
 
+    /**
+     * @param array<array-key, mixed> $postData
+     */
     #[\Override()]
     protected function before_update(array &$postData, int|string $id): void
     {
         // Password kosong pada form ubah berarti tidak diganti
+        /** @var string|null $password */
         $password = $postData['password'] ?? null;
         if ($password === null || $password === '') {
             unset($postData['password']);
@@ -52,8 +59,12 @@ final class AkunController extends ControllerTemplate
         $this->hash_password($postData);
     }
 
+    /**
+     * @param array<array-key, mixed> $postData
+     */
     private function hash_password(array &$postData): void
     {
+        /** @var string|null $password */
         $password = $postData['password'] ?? null;
         if (is_string($password) && $password !== '') {
             $postData['password'] = password_hash($password, PASSWORD_BCRYPT);
