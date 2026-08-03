@@ -56,15 +56,20 @@ final class DataBarangController extends ControllerTemplate
         );
     }
 
+    /**
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     public function list(): ResponseInterface
     {
-        $rows = $this->model
+        $query = $this->model
             ->db
             ->table('inventori_medis.data_barang')
             ->select(['id_barang', 'kode_barang', 'nama', 'h_dasar'])
             ->orderBy('nama', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->get();
+        
+        /** @var array<int, array<string, mixed>> $rows */
+        $rows = $query !== false ? $query->getResultArray() : [];
 
         return $this->response->setJSON(['data' => $rows]);
     }
