@@ -6,6 +6,7 @@ namespace App\Features\Radiologi\PermintaanRadItem;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class PermintaanRadItemController extends ControllerTemplate
 {
@@ -33,7 +34,7 @@ final class PermintaanRadItemController extends ControllerTemplate
         );
     }
 
-    public function list()
+    public function list(): ResponseInterface
     {
         $idPermintaan = $this->request->getGet('id_permintaan');
 

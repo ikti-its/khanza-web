@@ -6,6 +6,7 @@ namespace App\Features\Operasi\RefTindakanOperasi;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class RefTindakanOperasiController extends ControllerTemplate
 {
@@ -38,7 +39,7 @@ final class RefTindakanOperasiController extends ControllerTemplate
         );
     }
 
-    public function list()
+    public function list(): ResponseInterface
     {
         $rows = $this->model
             ->db

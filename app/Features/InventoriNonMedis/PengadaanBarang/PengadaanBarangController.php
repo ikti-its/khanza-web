@@ -7,6 +7,7 @@ use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class PengadaanBarangController extends ControllerTemplate
 {
@@ -55,7 +56,7 @@ final class PengadaanBarangController extends ControllerTemplate
      * - Dengan ?id_pengajuan=X: return detail items dari pengajuan (untuk preview saat buat pengadaan)
      * - Dengan ?id_pengadaan=X: return detail items dari pengadaan (untuk preview saat buat penerimaan)
      */
-    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    public function list(): ResponseInterface
     {
         $id_pengajuan = (int) ($this->request->getGet('id_pengajuan') ?? 0);
         $id_pengadaan = (int) ($this->request->getGet('id_pengadaan') ?? 0);

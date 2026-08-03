@@ -6,6 +6,7 @@ namespace App\Features\InventoriNonMedis\Suplier;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class SuplierController extends ControllerTemplate
 {
@@ -191,7 +192,7 @@ final class SuplierController extends ControllerTemplate
         ]);
     }
 
-    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    public function list(): ResponseInterface
     {
         $data = $this->model
             ->builder()

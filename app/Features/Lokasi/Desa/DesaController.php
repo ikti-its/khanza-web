@@ -6,6 +6,7 @@ namespace App\Features\Lokasi\Desa;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class DesaController extends ControllerTemplate
 {
@@ -99,7 +100,7 @@ final class DesaController extends ControllerTemplate
     /**
      * Menampilkan data modal wilayah gabungan
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         $tabel = $this->model->table;
 

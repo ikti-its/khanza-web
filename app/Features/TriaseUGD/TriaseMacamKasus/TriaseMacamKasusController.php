@@ -6,6 +6,7 @@ namespace App\Features\TriaseUGD\TriaseMacamKasus;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class TriaseMacamKasusController extends ControllerTemplate
 {
@@ -45,7 +46,7 @@ final class TriaseMacamKasusController extends ControllerTemplate
     /**
      * Menampilkan data modal triase macam kasus
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         $tabel = $this->model->table;
 

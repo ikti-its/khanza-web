@@ -6,6 +6,7 @@ namespace App\Features\LogistikUTD\PengambilanMedis;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class PengambilanMedisController extends ControllerTemplate
 {
@@ -42,7 +43,7 @@ final class PengambilanMedisController extends ControllerTemplate
     /**
      * Menampilkan data modal BHP medis ruangan UTD
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         $modelPengambilanMedis = new \App\Features\LogistikUTD\PengambilanMedis\PengambilanMedisModel();
         $rawMedis              = $modelPengambilanMedis->get_katalog_dan_stok_ruangan();

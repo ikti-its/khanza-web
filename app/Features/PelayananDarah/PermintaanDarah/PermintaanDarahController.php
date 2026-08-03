@@ -7,6 +7,7 @@ use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class PermintaanDarahController extends ControllerTemplate
 {
@@ -621,7 +622,7 @@ final class PermintaanDarahController extends ControllerTemplate
     /**
      * Menampilkan data modal permintaan darah
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         $data = $this->model->get_data_tabel(hanyaBelumTerpenuhi: true);
 

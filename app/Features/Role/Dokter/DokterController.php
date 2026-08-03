@@ -9,6 +9,7 @@ use App\Core\Controller\InputType as I;
 use App\Features\Person\Orang\OrangModel;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class DokterController extends ControllerTemplate
 {
@@ -286,7 +287,7 @@ final class DokterController extends ControllerTemplate
         return redirect()->to($this->get_uri_path() . '/data');
     }
 
-    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    public function list(): ResponseInterface
     {
         $rows = $this->model
             ->db

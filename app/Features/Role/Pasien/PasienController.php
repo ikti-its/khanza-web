@@ -9,6 +9,7 @@ use App\Core\Controller\InputType as I;
 use App\Features\Person\Orang\OrangModel;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class PasienController extends ControllerTemplate
 {
@@ -307,7 +308,7 @@ final class PasienController extends ControllerTemplate
         return redirect()->to($this->get_uri_path() . '/data');
     }
 
-    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    public function list(): ResponseInterface
     {
         $data = $this->pasien_query()->get()->getResultArray();
 

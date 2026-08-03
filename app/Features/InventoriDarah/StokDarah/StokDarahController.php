@@ -7,6 +7,7 @@ use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class StokDarahController extends ControllerTemplate
 {
@@ -266,7 +267,7 @@ final class StokDarahController extends ControllerTemplate
     /**
      * Menampilkan data modal stok darah
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         $hariIni = date('Y-m-d');
         $data    = $this->model->get_stok_siap_pakai($hariIni);

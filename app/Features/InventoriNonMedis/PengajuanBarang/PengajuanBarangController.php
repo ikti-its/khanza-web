@@ -7,6 +7,7 @@ use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class PengajuanBarangController extends ControllerTemplate
 {
@@ -49,7 +50,7 @@ final class PengajuanBarangController extends ControllerTemplate
     }
 
     // endpoint modal: pengajuan yang sudah disetujui dan masih punya sisa qty
-    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    public function list(): ResponseInterface
     {
         $data = $this->get_db()->query("
             SELECT DISTINCT pj.id_pengajuan, pj.no_pengajuan, TO_CHAR(pj.tanggal, 'YYYY-MM-DD HH24:MI') AS tanggal, o.nama

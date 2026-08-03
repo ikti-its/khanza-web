@@ -8,6 +8,7 @@ use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class RegistrasiController extends ControllerTemplate
 {
@@ -374,7 +375,7 @@ final class RegistrasiController extends ControllerTemplate
     // ──────────────────────────────────────────────────────────
     // List
     // ──────────────────────────────────────────────────────────
-    public function list()
+    public function list(): ResponseInterface
     {
         $tabel = $this->model->table;
 

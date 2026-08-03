@@ -8,6 +8,7 @@ use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class PendonorController extends ControllerTemplate
 {
@@ -634,7 +635,7 @@ final class PendonorController extends ControllerTemplate
     /**
      * Menampilkan data modal pendonor
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         $data = $this->model->get_data_tabel();
 

@@ -6,6 +6,7 @@ namespace App\Features\LogistikUTD\PengambilanPenunjang;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class PengambilanPenunjangController extends ControllerTemplate
 {
@@ -40,7 +41,7 @@ final class PengambilanPenunjangController extends ControllerTemplate
     /**
      * Menampilkan data modal BHP Non Medis (Penunjang) ruangan UTD
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         $modelPengambilanPenunjang = new \App\Features\LogistikUTD\PengambilanPenunjang\PengambilanPenunjangModel();
         $rawPenunjang              = $modelPengambilanPenunjang->get_katalog_dan_stok_ruangan();

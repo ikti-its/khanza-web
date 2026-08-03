@@ -6,6 +6,7 @@ namespace App\Features\PenangananDonor\KasusReaktif;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class KasusReaktifController extends ControllerTemplate
 {
@@ -163,7 +164,7 @@ final class KasusReaktifController extends ControllerTemplate
     /**
      * Menampilkan data modal kasus reaktif
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         $data = $this->model->get_data_tabel(null, 0, [
             'untuk_modal'      => true,

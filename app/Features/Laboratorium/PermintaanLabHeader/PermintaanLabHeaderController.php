@@ -6,6 +6,7 @@ namespace App\Features\Laboratorium\PermintaanLabHeader;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class PermintaanLabHeaderController extends ControllerTemplate
 {
@@ -76,7 +77,7 @@ final class PermintaanLabHeaderController extends ControllerTemplate
     // LIST — untuk modal pilih permintaan
     // ──────────────────────────────────────────────────────────
 
-    public function list()
+    public function list(): ResponseInterface
     {
         $builder = $this->baseListBuilder();
 

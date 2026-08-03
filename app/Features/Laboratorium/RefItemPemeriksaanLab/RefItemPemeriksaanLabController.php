@@ -6,6 +6,7 @@ namespace App\Features\Laboratorium\RefItemPemeriksaanLab;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class RefItemPemeriksaanLabController extends ControllerTemplate
 {
@@ -35,7 +36,7 @@ final class RefItemPemeriksaanLabController extends ControllerTemplate
         );
     }
 
-    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    public function list(): ResponseInterface
     {
         $idKategori = $this->request->getGet('id_kategori');
 

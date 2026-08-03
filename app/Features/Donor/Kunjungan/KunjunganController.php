@@ -7,6 +7,7 @@ use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class KunjunganController extends ControllerTemplate
 {
@@ -415,7 +416,7 @@ final class KunjunganController extends ControllerTemplate
     /**
      * Menampilkan data modal kunjungan
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         $filter = $this->request->getGet('filter');
 

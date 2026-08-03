@@ -6,6 +6,7 @@ namespace App\Features\Lokasi\Kecamatan;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class KecamatanController extends ControllerTemplate
 {
@@ -134,7 +135,7 @@ final class KecamatanController extends ControllerTemplate
     /**
      * Menampilkan data modal kecamatan
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         return $this->response->setJSON([
             'data' => $this->model->get_data_tabel(),

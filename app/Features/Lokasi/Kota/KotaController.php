@@ -6,6 +6,7 @@ namespace App\Features\Lokasi\Kota;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class KotaController extends ControllerTemplate
 {
@@ -37,7 +38,7 @@ final class KotaController extends ControllerTemplate
     /**
      * Menampilkan data modal kota
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         return $this->response->setJSON([
             'data' => $this->model->get_data_tabel(),

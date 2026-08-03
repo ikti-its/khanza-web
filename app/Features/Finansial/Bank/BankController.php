@@ -6,6 +6,7 @@ namespace App\Features\Finansial\Bank;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class BankController extends ControllerTemplate
 {
@@ -38,7 +39,7 @@ final class BankController extends ControllerTemplate
         );
     }
 
-    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    public function list(): ResponseInterface
     {
         $data = $this->model
             ->builder()

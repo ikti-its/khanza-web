@@ -7,6 +7,7 @@ use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use App\Features\Registrasi\Registrasi\RegistrasiModel;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class PoliRawatJalanController extends ControllerTemplate
 {
@@ -52,7 +53,7 @@ final class PoliRawatJalanController extends ControllerTemplate
         ]);
     }
 
-    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    public function list(): ResponseInterface
     {
         $idUnit = $this->request->getGet('id_unit');
         $dari   = $this->request->getGet('dari');

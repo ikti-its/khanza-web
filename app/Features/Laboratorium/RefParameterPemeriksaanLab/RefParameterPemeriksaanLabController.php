@@ -6,6 +6,7 @@ namespace App\Features\Laboratorium\RefParameterPemeriksaanLab;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class RefParameterPemeriksaanLabController extends ControllerTemplate
 {
@@ -36,7 +37,7 @@ final class RefParameterPemeriksaanLabController extends ControllerTemplate
         );
     }
 
-    public function list(): \CodeIgniter\HTTP\ResponseInterface
+    public function list(): ResponseInterface
     {
         $idItemLab = $this->request->getGet('id_item_lab');
 

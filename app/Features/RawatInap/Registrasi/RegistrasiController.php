@@ -6,6 +6,7 @@ namespace App\Features\RawatInap\Registrasi;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\ResponseInterface;
 
 final class RegistrasiController extends ControllerTemplate
 {
@@ -48,7 +49,7 @@ final class RegistrasiController extends ControllerTemplate
     /**
      * Menampilkan data modal registrasi rawat inap
      */
-    public function list()
+    public function list(): ResponseInterface
     {
         $tabel = $this->model->table;
 
