@@ -1,25 +1,25 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\InventoriNonMedis\RingkasanPermintaanBarangDetail;
+namespace App\Features\InventoriNonMedis\PersetujuanPermintaanBarangDetail;
 
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\HTTP\RedirectResponse;
 
-final class RingkasanPermintaanBarangDetailController extends ControllerTemplate
+final class PersetujuanPermintaanBarangDetailController extends ControllerTemplate
 {
     public function __construct()
     {
         parent::__construct(
-            new RingkasanPermintaanBarangDetailModel(),
+            new PersetujuanPermintaanBarangDetailModel(),
             [
-                ['Inventori Non Medis',         'inventori_non_medis'],
-                ['Ringkasan Permintaan Barang', 'ringkasan_permintaan_barang'],
-                ['Detail',                      'detail'],
+                ['Inventori Non Medis',          'inventori_non_medis'],
+                ['Persetujuan Permintaan Barang', 'persetujuan_permintaan_barang'],
+                ['Detail',                       'detail'],
             ],
-            'Ringkasan Permintaan Barang Detail',
+            'Persetujuan Permintaan Barang Detail',
             [
                 A::READ,
                 A::BACK,

@@ -36,7 +36,7 @@ final class PengajuanBarangController extends ControllerTemplate
                 [TABLE_ONLY, OPTIONAL, I::MONEY,    'total_harga',                'Total Harga'],
                 [SHOW,       OPTIONAL, I::SELECT,   'id_status_pengajuan_barang', 'Status'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',           'Tanggal Diproses'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'atasan_logistik_nama',       'Pengelola'],
+                [FORM_ONLY,  OPTIONAL, I::READONLY, 'atasan_logistik_nama',       'Atasan Logistik'],
             ],
             // child_path: '/inventori-non-medis/detail-pengajuan-barang',
             // child_fk: 'id_pengajuan',

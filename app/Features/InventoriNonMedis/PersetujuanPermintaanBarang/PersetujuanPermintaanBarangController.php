@@ -1,26 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\InventoriNonMedis\RingkasanPermintaanBarang;
+namespace App\Features\InventoriNonMedis\PersetujuanPermintaanBarang;
 
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\HTTP\RedirectResponse;
 
-final class RingkasanPermintaanBarangController extends ControllerTemplate
+final class PersetujuanPermintaanBarangController extends ControllerTemplate
 {
     private bool $pending_keluar = false;
 
     public function __construct()
     {
         parent::__construct(
-            new RingkasanPermintaanBarangModel(),
+            new PersetujuanPermintaanBarangModel(),
             [
-                ['Inventori Non Medis',         'inventori_non_medis'],
-                ['Ringkasan Permintaan Barang', 'ringkasan_permintaan_barang'],
+                ['Inventori Non Medis',          'inventori_non_medis'],
+                ['Persetujuan Permintaan Barang', 'persetujuan_permintaan_barang'],
             ],
-            'Ringkasan Permintaan Barang',
+            'Persetujuan Permintaan Barang',
             [
                 A::READ,
                 A::UPDATE,
@@ -33,10 +33,10 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',            'Tanggal Diproses'],
                 [TABLE_ONLY, OPTIONAL, I::READONLY, 'petugas',                     'Pemohon'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'nama_ruangan',                'Ruangan'],
-                [FORM_ONLY,       OPTIONAL, I::MODAL,   'petugas_gudang',              'Pengelola', ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pengelola...']],
+                [FORM_ONLY,       OPTIONAL, I::MODAL,   'petugas_gudang',              'Petugas Gudang', ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari petugas gudang...']],
                 [FORM_ONLY,       OPTIONAL, I::READONLY, 'no_keluar',                   'No. Keluar'],
             ],
-            // child_path: '/inventori-non-medis/ringkasan-permintaan-barang-detail',
+            // child_path: '/inventori-non-medis/persetujuan-permintaan-barang-detail',
             // child_fk: 'id_permintaan',
         );
     }
@@ -49,7 +49,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
         $this->model->set_order('id_permintaan', 'DESC');
     }
 
-    // hanya izinkan transisi ke Disetujui (2) atau Ditolak (3) dari Ringkasan
+    // hanya izinkan transisi ke Disetujui (2) atau Ditolak (3) dari Persetujuan
     #[\Override]
     protected function before_update(array &$postData, int|string $id): void
     {
@@ -99,7 +99,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
             ->groupEnd()
             ->get()->getResultArray();
 
-        return view('admin/inventorinonmedis/detail_ringkasan_permintaan_barang', [
+        return view('admin/inventorinonmedis/detail_persetujuan_permintaan_barang', [
             'judul'        => 'Detail ' . $this->title,
             'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Detail', 'icon' => 'detail']]),
             'modul_path'   => $this->get_uri_path(),
@@ -135,7 +135,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
             ->groupEnd()
             ->get()->getResultArray();
 
-        return view('admin/inventorinonmedis/ubah_ringkasan_permintaan_barang', [
+        return view('admin/inventorinonmedis/ubah_persetujuan_permintaan_barang', [
             'judul'        => 'Ubah ' . $this->title,
             'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
             'modul_path'   => $this->get_uri_path(),
@@ -387,9 +387,9 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
             ->join('ruangan.ruangan r', 'pb.master_ruangan = r.id_ruangan', 'left')
             ->join('role.petugas p_pemohon', 'pb.petugas = p_pemohon.id_petugas', 'left')
             ->join('person.orang o_pemohon', 'p_pemohon.id_orang = o_pemohon.id_orang', 'left')
-            ->join('role.petugas p_pengelola', 'pb.petugas_gudang = p_pengelola.id_petugas', 'left')
-            ->join('person.orang o_pengelola', 'p_pengelola.id_orang = o_pengelola.id_orang', 'left')
-            ->select('pb.no_permintaan, r.nama_ruangan, o_pemohon.nama AS nama_pemohon, o_pengelola.nama AS nama_pengelola')
+            ->join('role.petugas p_petugas_gudang', 'pb.petugas_gudang = p_petugas_gudang.id_petugas', 'left')
+            ->join('person.orang o_petugas_gudang', 'p_petugas_gudang.id_orang = o_petugas_gudang.id_orang', 'left')
+            ->select('pb.no_permintaan, r.nama_ruangan, o_pemohon.nama AS nama_pemohon, o_petugas_gudang.nama AS nama_petugas_gudang')
             ->where('pb.id_permintaan', $id)
             ->get()->getRowArray();
 
@@ -397,7 +397,7 @@ final class RingkasanPermintaanBarangController extends ControllerTemplate
             $row['no_permintaan'] ?? '',
             ($row['nama_ruangan'] ?? '') !== '' ? 'Ruangan ' . $row['nama_ruangan'] : '',
             ($row['nama_pemohon'] ?? '') !== '' ? 'Pemohon: ' . $row['nama_pemohon'] : '',
-            ($row['nama_pengelola'] ?? '') !== '' ? 'Pengelola: ' . $row['nama_pengelola'] : '',
+            ($row['nama_petugas_gudang'] ?? '') !== '' ? 'Petugas Gudang: ' . $row['nama_petugas_gudang'] : '',
         ])));
 
         $now = date('Y-m-d H:i:s');

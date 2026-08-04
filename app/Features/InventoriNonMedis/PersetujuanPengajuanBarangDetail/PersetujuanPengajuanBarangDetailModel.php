@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\InventoriNonMedis\RingkasanPengajuanBarangDetail;
+namespace App\Features\InventoriNonMedis\PersetujuanPengajuanBarangDetail;
 
 use App\Core\Model\ModelTemplate;
 use App\Core\Model\ValidationType as V;
 use App\Features\InventoriNonMedis\PengajuanBarangDetail\PengajuanBarangDetailDatabase;
 
-final class RingkasanPengajuanBarangDetailModel extends ModelTemplate
+final class PersetujuanPengajuanBarangDetailModel extends ModelTemplate
 {
     public function __construct()
     {

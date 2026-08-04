@@ -1,24 +1,24 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\InventoriNonMedis\RingkasanPengajuanBarang;
+namespace App\Features\InventoriNonMedis\PersetujuanPengajuanBarang;
 
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\HTTP\RedirectResponse;
 
-final class RingkasanPengajuanBarangController extends ControllerTemplate
+final class PersetujuanPengajuanBarangController extends ControllerTemplate
 {
     public function __construct()
     {
         parent::__construct(
-            new RingkasanPengajuanBarangModel(),
+            new PersetujuanPengajuanBarangModel(),
             [
-                ['Inventori Non Medis',        'inventori_non_medis'],
-                ['Ringkasan Pengajuan Barang', 'ringkasan_pengajuan_barang'],
+                ['Inventori Non Medis',         'inventori_non_medis'],
+                ['Persetujuan Pengajuan Barang', 'persetujuan_pengajuan_barang'],
             ],
-            'Ringkasan Pengajuan Barang',
+            'Persetujuan Pengajuan Barang',
             [
                 A::READ,
                 A::UPDATE,
@@ -31,9 +31,9 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'total_harga',    'Total Harga'],
                 [SHOW, REQUIRED, I::SELECT,   'id_status_pengajuan_barang', 'Status'],
                 [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',          'Tanggal Diproses'],
-                [FORM_ONLY, REQUIRED, I::MODAL,   'atasan_logistik',            'Pengelola', ['modal' => 'modalPemohon', 'display_column' => 'atasan_logistik_nama', 'placeholder' => 'Klik cari pengelola...']],
+                [FORM_ONLY, REQUIRED, I::MODAL,   'atasan_logistik',            'Atasan Logistik', ['modal' => 'modalPemohon', 'display_column' => 'atasan_logistik_nama', 'placeholder' => 'Klik cari atasan logistik...']],
             ],
-            // child_path: '/inventori-non-medis/ringkasan-pengajuan-barang-detail',
+            // child_path: '/inventori-non-medis/persetujuan-pengajuan-barang-detail',
             // child_fk: 'id_pengajuan',
         );
     }
@@ -46,7 +46,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
         $this->model->set_order('id_pengajuan', 'DESC');
     }
 
-    // hanya izinkan transisi ke Disetujui (2) atau Ditolak (3) dari Ringkasan
+    // hanya izinkan transisi ke Disetujui (2) atau Ditolak (3) dari Persetujuan
     #[\Override]
     protected function before_update(array &$postData, int|string $id): void
     {
@@ -86,7 +86,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
             ->where('d.id_barang >', 0)
             ->get()->getResultArray();
 
-        return view('admin/inventorinonmedis/detail_ringkasan_pengajuan_barang', [
+        return view('admin/inventorinonmedis/detail_persetujuan_pengajuan_barang', [
             'judul'        => 'Detail ' . $this->title,
             'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Detail', 'icon' => 'detail']]),
             'modul_path'   => $this->get_uri_path(),
@@ -118,7 +118,7 @@ final class RingkasanPengajuanBarangController extends ControllerTemplate
             ->where('d.id_barang >', 0)
             ->get()->getResultArray();
 
-        return view('admin/inventorinonmedis/ubah_ringkasan_pengajuan_barang', [
+        return view('admin/inventorinonmedis/ubah_persetujuan_pengajuan_barang', [
             'judul'        => 'Ubah ' . $this->title,
             'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Ubah', 'icon' => 'ubah']]),
             'modul_path'   => $this->get_uri_path(),

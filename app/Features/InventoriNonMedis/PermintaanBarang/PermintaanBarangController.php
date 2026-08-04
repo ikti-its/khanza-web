@@ -34,7 +34,7 @@ final class PermintaanBarangController extends ControllerTemplate
                 [SHOW, REQUIRED, I::MODAL, 'master_ruangan', 'Ruangan', ['modal' => 'modalPilihRuangan', 'display_column' => 'nama_ruangan', 'placeholder' => 'Klik cari ruangan...']],
                 [TABLE_ONLY, OPTIONAL, I::SELECT, 'progress', 'Progress'],
                 [FORM_ONLY, OPTIONAL, I::READONLY, 'tanggal_diproses', 'Tanggal Diproses'],
-                [FORM_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang_nama', 'Pengelola'],
+                [FORM_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang_nama', 'Petugas Gudang'],
                 [FORM_ONLY, OPTIONAL, I::READONLY, 'no_keluar', 'No. Keluar'],
             ],
             // child_path: '/inventori-non-medis/detail-permintaan-barang',

@@ -554,7 +554,7 @@ final class PenerimaanBarangController extends ControllerTemplate
         }
 
         // Ambil id_barang yang sudah pernah stok keluar untuk permintaan ini
-        // (item existing yang sudah di-fulfill saat approval di Ringkasan)
+        // (item existing yang sudah di-fulfill saat approval di Persetujuan)
         $already_fulfilled = $db->query("
             SELECT DISTINCT tsd.id_barang
             FROM inventori_non_medis.transaksi_stok_detail tsd

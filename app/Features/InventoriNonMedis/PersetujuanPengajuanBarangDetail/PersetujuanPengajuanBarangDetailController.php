@@ -1,25 +1,25 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Features\InventoriNonMedis\RingkasanPengajuanBarangDetail;
+namespace App\Features\InventoriNonMedis\PersetujuanPengajuanBarangDetail;
 
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
 use CodeIgniter\HTTP\RedirectResponse;
 
-final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
+final class PersetujuanPengajuanBarangDetailController extends ControllerTemplate
 {
     public function __construct()
     {
         parent::__construct(
-            new RingkasanPengajuanBarangDetailModel(),
+            new PersetujuanPengajuanBarangDetailModel(),
             [
-                ['Inventori Non Medis',        'inventori_non_medis'],
-                ['Ringkasan Pengajuan Barang', 'ringkasan_pengajuan_barang'],
-                ['Detail',                     'detail'],
+                ['Inventori Non Medis',         'inventori_non_medis'],
+                ['Persetujuan Pengajuan Barang', 'persetujuan_pengajuan_barang'],
+                ['Detail',                      'detail'],
             ],
-            'Ringkasan Pengajuan Barang Detail',
+            'Persetujuan Pengajuan Barang Detail',
             [
                 A::READ,
                 A::BACK,
@@ -133,7 +133,7 @@ final class RingkasanPengajuanBarangDetailController extends ControllerTemplate
 
         // Catatan: qty_disetujui boleh melebihi qty pengajuan (mis. konsolidasi
         // pembelian untuk stok) — validasi alasan dilakukan di aksi approve
-        // pada RingkasanPengajuanBarangController, bukan di editor per-baris ini.
+        // pada PersetujuanPengajuanBarangController, bukan di editor per-baris ini.
 
         $result = parent::update($id);
         if ($result instanceof RedirectResponse && $id_pengajuan > 0) {

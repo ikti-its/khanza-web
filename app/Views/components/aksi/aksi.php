@@ -63,7 +63,7 @@
         if ((isset($aksi['pisah']) && $aksi['pisah'] === true) || (isset($aksi['uji']) && $aksi['uji'] === true)) {
             echo view('components/aksi/proses_darah', array_merge($data, ['aksi' => $aksi]));
         }
-        $modul_draf_gate = ['pengadaan-barang', 'pengajuan-barang', 'permintaan-barang', 'penerimaan-barang', 'stok-opname', 'ringkasan-pengajuan-barang', 'ringkasan-permintaan-barang'];
+        $modul_draf_gate = ['pengadaan-barang', 'pengajuan-barang', 'permintaan-barang', 'penerimaan-barang', 'stok-opname', 'persetujuan-pengajuan-barang', 'persetujuan-permintaan-barang'];
         $is_modul_draf = str_starts_with($modul_path, '/inventori-non-medis/')
             && array_any($modul_draf_gate, fn($m) => str_contains($modul_path, $m));
 
@@ -110,7 +110,7 @@
                 foreach ($status_cols as $col) {
                     $val = strtolower(trim((string) ($baris[$col] ?? '')));
                     if ($val !== '' && $val !== '-' && !in_array($val, $editable_statuses)) {
-                        if (str_contains($modul_path, 'ringkasan') && in_array($val, ['proses permintaan', 'proses pengajuan', 'proses penerimaan'])) {
+                        if (str_contains($modul_path, 'persetujuan') && in_array($val, ['proses permintaan', 'proses pengajuan', 'proses penerimaan'])) {
                             continue;
                         }
                         $is_draf = false;
