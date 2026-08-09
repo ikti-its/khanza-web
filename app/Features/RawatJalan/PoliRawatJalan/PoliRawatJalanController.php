@@ -34,16 +34,17 @@ final class PoliRawatJalanController extends ControllerTemplate
         );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     final public function index(): string
     {
-        $unitList = $this->model
+        $builder = $this->model
             ->db
             ->table('unit.unit')
             ->select(['id_unit', 'nama_unit'])
-            ->orderBy('nama_unit', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('nama_unit', 'ASC');
+
+        $unitList = $this->model->guarded_get($builder, 'index')->getResultArray();
 
         return view('admin/rekam_medis/poli_rawat_jalan', [
             'judul'       => $this->title,
@@ -53,12 +54,13 @@ final class PoliRawatJalanController extends ControllerTemplate
         ]);
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $idUnit = $this->request->getGet('id_unit');
-        $dari   = $this->request->getGet('dari');
-        $sampai = $this->request->getGet('sampai');
-        $status = $this->request->getGet('status');
+        $idUnit = (string) ($this->request->getGet('id_unit') ?? '');
+        $dari   = (string) ($this->request->getGet('dari') ?? '');
+        $sampai = (string) ($this->request->getGet('sampai') ?? '');
+        $status = (string) ($this->request->getGet('status') ?? '');
 
         $builder = $this->model
             ->db
@@ -82,37 +84,43 @@ final class PoliRawatJalanController extends ControllerTemplate
             ->where('r.status_rawat', 2)
             ->orderBy('r.tanggal_reg', 'ASC');
 
-        if ($idUnit !== null && $idUnit !== '') {
+        if ($idUnit !== '') {
             $builder->where('r.unit', (int) $idUnit);
         }
 
-        if ($dari !== null && $dari !== '') {
+        if ($dari !== '') {
             $builder->where('DATE(r.tanggal_reg) >=', $dari);
         }
 
-        if ($sampai !== null && $sampai !== '') {
+        if ($sampai !== '') {
             $builder->where('DATE(r.tanggal_reg) <=', $sampai);
         }
 
-        if ($status !== null && $status !== '') {
+        if ($status !== '') {
             $builder->where('r.status_poli', (int) $status);
         }
 
-        return $this->response->setJSON(['data' => $builder->get()->getResultArray()]);
+        $data = $this->model->guarded_get($builder, 'list')->getResultArray();
+
+        return $this->response->setJSON(['data' => $data]);
     }
 
+    /**
+     * @throws \CodeIgniter\HTTP\Exceptions\HTTPException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     public function detail(int|string $id): string|\CodeIgniter\HTTP\ResponseInterface
     {
         if ($id !== 'skrining') {
             return $this->response->setStatusCode(404)->setJSON(['error' => 'not found']);
         }
 
-        $noRm = trim($this->request->getGet('no_rm') ?? '');
+        $noRm = trim((string) ($this->request->getGet('no_rm') ?? ''));
         if ($noRm === '') {
             return $this->response->setJSON(['data' => null]);
         }
 
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table('skrining_rawat_jalan.skrining_rawat_jalan s')
             ->select([
@@ -141,9 +149,9 @@ final class PoliRawatJalanController extends ControllerTemplate
             ->where('s.no_rm', $noRm)
             ->orderBy('s.tgl_skrining', 'DESC')
             ->orderBy('s.jam_skrining', 'DESC')
-            ->limit(1)
-            ->get()
-            ->getRowArray();
+            ->limit(1);
+
+        $row = $this->model->guarded_get($builder, 'detail')->getRowArray();
 
         return $this->response->setJSON(['data' => $row ?? null]);
     }
