@@ -7,7 +7,7 @@ stack-size  = 8388608
 [source]
 workspace   = "."
 paths       = ["app/Features", "app/Core",]
-includes    = ["vendor", "app/Config"]
+includes    = ["vendor", "app/Config", "app/Helpers"]
 excludes    = ["app/Views/admin", "app/Views/user"]
 extensions  = ["php"]
 

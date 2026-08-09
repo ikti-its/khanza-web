@@ -53,12 +53,14 @@ final class RegistrasiController extends ControllerTemplate
     // PRIVATE HELPERS
     // ──────────────────────────────────────────────────────────
 
+    /** @return list<array<int|string, mixed>> */
     private function getKonfig(): array
     {
+        /** @var list<array<int|string, mixed>> */
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn($f) => !in_array(
-                $f[2],
+            fn(array $f) => !in_array(
+                $f[2] ?? null,
                 [
                     'id_registrasi',
                     'nomor_reg',
@@ -75,68 +77,91 @@ final class RegistrasiController extends ControllerTemplate
         ));
     }
 
+    /**
+     * @throws DatabaseException
+     * @throws \CodeIgniter\Files\Exceptions\FileNotFoundException
+     */
     private function generateNomorReg(): string
     {
         helper('autonomor');
 
-        $lastNo = $this->model
+        $builder = $this->model
             ->db
             ->table('registrasi.registrasi')
             ->select('nomor_reg')
             ->like('nomor_reg', 'REG-' . date('Ymd'), 'after')
             ->orderBy('nomor_reg', 'DESC')
-            ->limit(1)
-            ->get()
-            ->getRowArray();
+            ->limit(1);
 
-        return generateNextNoRegistrasi($lastNo['nomor_reg'] ?? null);
+        $lastNo = $this->model->guarded_get($builder, 'generateNomorReg')->getRowArray();
+
+        return generateNextNoRegistrasi(is_string($lastNo['nomor_reg'] ?? null) ? $lastNo['nomor_reg'] : null);
     }
 
+    /**
+     * @throws DatabaseException
+     * @throws \CodeIgniter\Files\Exceptions\FileNotFoundException
+     */
     private function generateNomorRawat(): string
     {
         helper('autonomor');
 
-        $lastNo = $this->model
+        $builder = $this->model
             ->db
             ->table('registrasi.registrasi')
             ->select('nomor_rawat')
             ->orderBy('nomor_rawat', 'DESC')
-            ->limit(1)
-            ->get()
-            ->getRowArray();
+            ->limit(1);
 
-        return generateNextNoRawat($lastNo['nomor_rawat'] ?? null);
+        $lastNo = $this->model->guarded_get($builder, 'generateNomorRawat')->getRowArray();
+
+        return generateNextNoRawat(is_string($lastNo['nomor_rawat'] ?? null) ? $lastNo['nomor_rawat'] : null);
     }
 
+    /**
+     * @return array<string, mixed>|null
+     * @throws DatabaseException
+     */
     private function fetchPasienByRm(string $noRm): null|array
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table('role.pasien p')
             ->select('p.id_pasien, p.nomor_rm, o.nama')
             ->join('person.orang o', 'o.id_orang = p.id_orang')
-            ->where('p.nomor_rm', $noRm)
-            ->get()
-            ->getRowArray();
+            ->where('p.nomor_rm', $noRm);
 
+        $row = $this->model->guarded_get($builder, 'fetchPasienByRm')->getRowArray();
+
+        /** @var array<string, mixed>|null */
         return $row ?: null;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     * @throws DatabaseException
+     */
     private function fetchUnitById(int $id): null|array
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table('unit.unit')
             ->select('id_unit, nama_unit, biaya_registrasi_baru')
-            ->where('id_unit', $id)
-            ->get()
-            ->getRowArray();
+            ->where('id_unit', $id);
 
+        $row = $this->model->guarded_get($builder, 'fetchUnitById')->getRowArray();
+
+        /** @var array<string, mixed>|null */
         return $row ?: null;
     }
 
+    /** @return array<string, mixed> */
     private function buildPostData(): array
     {
+        $biayaRegistrasi  = (string) ($this->request->getPost('biaya_registrasi') ?? '');
+        $statusRegistrasi = (string) ($this->request->getPost('status_registrasi') ?? '');
+        $statusPoli       = (string) ($this->request->getPost('status_poli') ?? '');
+
         return [
             'nomor_reg'         => $this->request->getPost('nomor_reg'),
             'nomor_rawat'       => $this->request->getPost('nomor_rawat'),
@@ -148,11 +173,11 @@ final class RegistrasiController extends ControllerTemplate
             'id_alamat_pj'      => (int) $this->request->getPost('id_alamat_pj'),
             'hubungan_pj'       => (int) $this->request->getPost('hubungan_pj'),
             'no_telepon'        => $this->request->getPost('no_telepon') ?: null,
-            'biaya_registrasi'  => (float) $this->request->getPost('biaya_registrasi'),
+            'biaya_registrasi'  => is_numeric($biayaRegistrasi) ? (float) $biayaRegistrasi : 0.0,
             'jenis_bayar'       => (int) $this->request->getPost('jenis_bayar'),
-            'status_registrasi' => ($v = $this->request->getPost('status_registrasi')) ? (int) $v : null,
+            'status_registrasi' => $statusRegistrasi !== '' ? (int) $statusRegistrasi : null,
             'status_rawat'      => (int) $this->request->getPost('status_rawat'),
-            'status_poli'       => ($v = $this->request->getPost('status_poli')) ? (int) $v : null,
+            'status_poli'       => $statusPoli !== '' ? (int) $statusPoli : null,
             'status_bayar'      => (int) $this->request->getPost('status_bayar'),
         ];
     }
@@ -161,6 +186,10 @@ final class RegistrasiController extends ControllerTemplate
     // PAGES
     // ──────────────────────────────────────────────────────────
 
+    /**
+     * @throws DatabaseException
+     * @throws \CodeIgniter\Files\Exceptions\FileNotFoundException
+     */
     #[\Override]
     final public function create_page(): string
     {
@@ -182,13 +211,13 @@ final class RegistrasiController extends ControllerTemplate
 
         $baris['redirect_to'] = $this->request->getGet('redirect_to') ?? '';
 
-        $noRm = $this->request->getGet('no_rm') ?? '';
+        $noRm = (string) ($this->request->getGet('no_rm') ?? '');
         if ($noRm !== '') {
             $pasien = $this->fetchPasienByRm($noRm);
             if ($pasien) {
-                $baris['id_pasien']      = $pasien['id_pasien'];
-                $baris['nomor_rm']       = $pasien['nomor_rm'];
-                $baris['id_pasien_nama'] = $pasien['nama'];
+                $baris['id_pasien']      = $pasien['id_pasien'] ?? '';
+                $baris['nomor_rm']       = $pasien['nomor_rm'] ?? '';
+                $baris['id_pasien_nama'] = $pasien['nama'] ?? '';
             }
         }
 
@@ -196,9 +225,9 @@ final class RegistrasiController extends ControllerTemplate
         if ($unitId > 0) {
             $unit = $this->fetchUnitById($unitId);
             if ($unit) {
-                $baris['unit']             = $unit['id_unit'];
-                $baris['nama_unit']        = $unit['nama_unit'];
-                $baris['biaya_registrasi'] = $unit['biaya_registrasi_baru'];
+                $baris['unit']             = $unit['id_unit'] ?? '';
+                $baris['nama_unit']        = $unit['nama_unit'] ?? '';
+                $baris['biaya_registrasi'] = $unit['biaya_registrasi_baru'] ?? 0;
             }
         }
 
@@ -213,7 +242,7 @@ final class RegistrasiController extends ControllerTemplate
     }
 
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         if ($id == 0)
             return $this->index();
@@ -242,8 +271,8 @@ final class RegistrasiController extends ControllerTemplate
         try {
             $this->model->insert($this->buildPostData());
             session()->setFlashdata('success', 'Data ' . $this->title . ' berhasil disimpan.');
-            $redirect_to = $this->request->getPost('redirect_to');
-            return $redirect_to ? redirect()->to($redirect_to) : $this->home();
+            $redirect_to = (string) ($this->request->getPost('redirect_to') ?? '');
+            return $redirect_to !== '' ? redirect()->to($redirect_to) : $this->home();
         } catch (\ReflectionException|DatabaseException $e) {
             $msg = $e instanceof DatabaseException ? $this->friendly_db_error($e) : $e->getMessage();
             session()->setFlashdata('error', $msg);
@@ -268,11 +297,15 @@ final class RegistrasiController extends ControllerTemplate
         }
     }
 
+    /**
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws DatabaseException
+     */
     public function list(): ResponseInterface
     {
         $tabel = $this->model->table;
 
-        $data = $this->model
+        $builder = $this->model
             ->builder($tabel . ' r')
             ->select([
                 'r.id_registrasi',
@@ -291,9 +324,9 @@ final class RegistrasiController extends ControllerTemplate
             ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
             ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
             ->join('rawat_inap.registrasi ri', 'ri.id_registrasi = r.id_registrasi', 'left')
-            ->orderBy('r.tanggal_reg', 'DESC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('r.tanggal_reg', 'DESC');
+
+        $data = $this->model->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON(['data' => $data]);
     }
