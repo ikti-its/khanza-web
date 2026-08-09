@@ -48,12 +48,15 @@ final class RegistrasiController extends ControllerTemplate
 
     /**
      * Menampilkan data modal registrasi rawat inap
+     *
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      */
     public function list(): ResponseInterface
     {
         $tabel = $this->model->table;
 
-        $data = $this->model
+        $builder = $this->model
             ->builder()
             ->select("
                 {$tabel}.id_rawat_inap,
@@ -68,9 +71,9 @@ final class RegistrasiController extends ControllerTemplate
             ->join('role.pasien', 'role.pasien.id_pasien = registrasi.registrasi.id_pasien', 'inner')
             ->join('person.orang AS pasien_orang', 'pasien_orang.id_orang = role.pasien.id_orang', 'inner')
             ->join('role.dokter', "role.dokter.id_dokter = {$tabel}.dokter_pj", 'inner')
-            ->join('person.orang AS dokter_orang', 'dokter_orang.id_orang = role.dokter.id_orang', 'inner')
-            ->get()
-            ->getResultArray();
+            ->join('person.orang AS dokter_orang', 'dokter_orang.id_orang = role.dokter.id_orang', 'inner');
+
+        $data = $this->model->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON([
             'data' => $data,
