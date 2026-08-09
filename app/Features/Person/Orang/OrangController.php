@@ -6,6 +6,7 @@ namespace App\Features\Person\Orang;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 
 final class OrangController extends ControllerTemplate
@@ -77,24 +78,27 @@ final class OrangController extends ControllerTemplate
      * OVERRIDE: Menampilkan Halaman Ubah Data Orang
      */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         if ($id == 0) {
             return $this->index();
         }
 
         $baris = $this->model->find($id) ?? [];
+        if (!is_array($baris)) {
+            $baris = [];
+        }
 
         if (!empty($baris['id_alamat'])) {
             $alamatModel = new \App\Features\Lokasi\Alamat\AlamatModel();
-            $alamat      = $alamatModel->find($baris['id_alamat']) ?? [];
-            $baris['alamat_lengkap'] = $alamat['alamat_lengkap'] ?? '';
+            $alamat      = $alamatModel->find((string) $baris['id_alamat']) ?? [];
+            $baris['alamat_lengkap'] = is_array($alamat) ? ($alamat['alamat_lengkap'] ?? '') : '';
         }
 
         if (!empty($baris['tempat_lahir_kota'])) {
             $kotaModel = new \App\Features\Lokasi\Kota\KotaModel();
-            $kotaLahir = $kotaModel->find($baris['tempat_lahir_kota']);
-            if ($kotaLahir) {
+            $kotaLahir = $kotaModel->find((string) $baris['tempat_lahir_kota']);
+            if (is_array($kotaLahir)) {
                 $baris['nama_kota'] = $kotaLahir['nama_kota'] ?? '';
             }
         }
@@ -114,16 +118,17 @@ final class OrangController extends ControllerTemplate
         ]);
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $data = $this->model
+        $builder = $this->model
             ->db
             ->table('person.orang o')
             ->select('o.id_orang, o.nik, o.nama, o.id_alamat, a.alamat_lengkap')
             ->join('lokasi.alamat a', 'a.id_alamat = o.id_alamat', 'left')
-            ->orderBy('o.nama')
-            ->get()
-            ->getResultArray();
+            ->orderBy('o.nama');
+
+        $data = $this->model->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON(['data' => $data]);
     }
