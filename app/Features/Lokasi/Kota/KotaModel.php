@@ -25,12 +25,16 @@ final class KotaModel extends ModelTemplate
 
     /**
      * Mengambil data kota
+     *
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      */
     public function get_data_tabel(): array
     {
         $tabel = $this->table;
 
-        return $this
+        $builder = $this
             ->builder()
             ->select("
                 {$tabel}.id_kota,
@@ -40,8 +44,9 @@ final class KotaModel extends ModelTemplate
                 pr.nama_provinsi AS nama_provinsi
             ")
             ->join('lokasi.provinsi pr', "pr.id_provinsi = {$tabel}.id_provinsi", 'inner')
-            ->where("{$tabel}.id_kota >", 0)
-            ->get()
-            ->getResultArray();
+            ->where("{$tabel}.id_kota >", 0);
+
+        /** @var list<array<string, mixed>> */
+        return $this->guarded_get($builder, 'get_data_tabel')->getResultArray();
     }
 }

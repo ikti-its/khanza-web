@@ -6,6 +6,7 @@ namespace App\Features\Lokasi\Desa;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 
 final class DesaController extends ControllerTemplate
@@ -72,7 +73,7 @@ final class DesaController extends ControllerTemplate
      * OVERRIDE: Menampilkan Halaman Ubah Data Desa
      */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         if ($id == 0) {
             return $this->index();
@@ -99,6 +100,9 @@ final class DesaController extends ControllerTemplate
 
     /**
      * Menampilkan data modal wilayah gabungan
+     *
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      */
     public function list(): ResponseInterface
     {
@@ -143,7 +147,8 @@ final class DesaController extends ControllerTemplate
             $builder->like('kt.nama_kota', $namaKota, 'both', null, true);
         }
 
-        $data = $builder->orderBy("{$tabel}.nama_desa")->limit(100)->get()->getResultArray();
+        $builder->orderBy("{$tabel}.nama_desa")->limit(100);
+        $data = $this->model->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON([
             'data' => $data,

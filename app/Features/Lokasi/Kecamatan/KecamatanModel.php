@@ -26,6 +26,10 @@ final class KecamatanModel extends ModelTemplate
 
     /**
      * Mengambil data kecamatan
+     *
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      */
     public function get_data_tabel(null|int $limit = null, int $offset = 0): array
     {
@@ -54,17 +58,22 @@ final class KecamatanModel extends ModelTemplate
             $builder->limit($limit, $offset);
         }
 
-        return $builder->get()->getResultArray();
+        /** @var list<array<string, mixed>> */
+        return $this->guarded_get($builder, 'get_data_tabel')->getResultArray();
     }
 
     /**
      * Mengambil satu baris data detail kecamatan
+     *
+     * @return array<string, mixed>|null
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      */
     public function find_data(int|string $id): array|null
     {
         $tabel = $this->table;
 
-        $row = $this
+        $builder = $this
             ->builder()
             ->select("
                 {$tabel}.id_kecamatan,
@@ -81,10 +90,10 @@ final class KecamatanModel extends ModelTemplate
                 'inner',
             )
             ->join('lokasi.provinsi pr', "pr.id_provinsi = {$tabel}.id_provinsi", 'inner')
-            ->where("{$tabel}.id_kecamatan", $id)
-            ->get()
-            ->getRowArray();
+            ->where("{$tabel}.id_kecamatan", $id);
 
+        /** @var array<string, mixed>|null $row */
+        $row = $this->guarded_get($builder, 'find_data')->getRowArray();
         return $row ?: null;
     }
 }

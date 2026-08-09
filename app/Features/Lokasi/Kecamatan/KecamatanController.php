@@ -38,6 +38,9 @@ final class KecamatanController extends ControllerTemplate
 
     /**
      * OVERRIDE: Menampilkan Halaman Utama Kecamatan
+     *
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      */
     #[\Override]
     public function index(): string
@@ -65,7 +68,7 @@ final class KecamatanController extends ControllerTemplate
             'kolom_id'     => $this->primary_key,
             'konfig'       => $konfig,
             'aksi'         => $this->actions,
-            'tabel'        => $this->model->get_data_tabel($size, $offset),
+            'tabel'        => $this->model()->get_data_tabel($size, $offset),
             'row_alert'    => [],
             'child_link'   => null,
             'query_string' => '',
@@ -105,6 +108,9 @@ final class KecamatanController extends ControllerTemplate
 
     /**
      * OVERRIDE: Menampilkan Halaman Ubah Data Kecamatan
+     *
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      */
     #[\Override]
     public function update_page(int|string $id): string
@@ -113,7 +119,7 @@ final class KecamatanController extends ControllerTemplate
             return $this->index();
         }
 
-        $baris = $this->model->find_data($id);
+        $baris = $this->model()->find_data($id);
         if (!$baris) {
             $baris = [];
         }
@@ -134,11 +140,20 @@ final class KecamatanController extends ControllerTemplate
 
     /**
      * Menampilkan data modal kecamatan
+     *
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      */
     public function list(): ResponseInterface
     {
         return $this->response->setJSON([
-            'data' => $this->model->get_data_tabel(),
+            'data' => $this->model()->get_data_tabel(),
         ]);
+    }
+
+    private function model(): KecamatanModel
+    {
+        assert($this->model instanceof KecamatanModel);
+        return $this->model;
     }
 }

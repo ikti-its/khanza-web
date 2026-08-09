@@ -333,6 +333,20 @@ class ModelTemplate extends Model
     }
 
     /**
+     * Executes a builder query and asserts the result is a real `BaseResult`.
+     * Use this instead of chaining `->get()->getResultArray()` directly, since
+     * `BaseBuilder::get()` is typed as `BaseResult|false`.
+     *
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
+    public function guarded_get(\CodeIgniter\Database\BaseBuilder $builder, string $context = 'query'): BaseResult
+    {
+        $result = $builder->get();
+        assert($result instanceof BaseResult, "{$context} failed on table: {$this->table}");
+        return $result;
+    }
+
+    /**
      * Like find() but applies JOINs so display columns (e.g. nama_barang) are included.
      * Use this when the result is passed to a form view that needs joined column values.
      *

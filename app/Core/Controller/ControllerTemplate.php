@@ -445,7 +445,7 @@ class ControllerTemplate extends Controller
         return $this->create_view();
     }
 
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         if ($id == 0)
             return $this->index();

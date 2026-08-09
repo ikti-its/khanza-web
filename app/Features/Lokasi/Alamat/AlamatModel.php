@@ -29,11 +29,13 @@ final class AlamatModel extends ModelTemplate
 
     /**
      * Mengambil data alamat lengkap beserta nama wilayahnya
+     *
+     * @return array<string, mixed>|null
      */
     public function get_detail_wilayah(int|string $idAlamat): null|array
     {
         $alamat = $this->find($idAlamat);
-        if (!$alamat) {
+        if (!is_array($alamat)) {
             return null;
         }
 
@@ -48,8 +50,8 @@ final class AlamatModel extends ModelTemplate
             'id_kec_lokal'  => $alamat['id_kec_lokal'],
             'id_desa_lokal' => $alamat['id_desa_lokal'],
         ])->first();
-        if ($desa) {
-            $alamat['nama_desa'] = $desa['nama_desa'];
+        if (is_array($desa)) {
+            $alamat['nama_desa'] = $desa['nama_desa'] ?? '';
         }
 
         $kec = (new \App\Features\Lokasi\Kecamatan\KecamatanModel())->where([
@@ -57,23 +59,24 @@ final class AlamatModel extends ModelTemplate
             'id_kota_lokal' => $alamat['id_kota_lokal'],
             'id_kec_lokal'  => $alamat['id_kec_lokal'],
         ])->first();
-        if ($kec) {
-            $alamat['nama_kecamatan'] = $kec['nama_kecamatan'];
+        if (is_array($kec)) {
+            $alamat['nama_kecamatan'] = $kec['nama_kecamatan'] ?? '';
         }
 
         $kota = (new \App\Features\Lokasi\Kota\KotaModel())->where([
             'id_provinsi'   => $alamat['id_provinsi'],
             'id_kota_lokal' => $alamat['id_kota_lokal'],
         ])->first();
-        if ($kota) {
-            $alamat['nama_kota_wilayah'] = $kota['nama_kota'];
+        if (is_array($kota)) {
+            $alamat['nama_kota_wilayah'] = $kota['nama_kota'] ?? '';
         }
 
-        $prov = (new \App\Features\Lokasi\Provinsi\ProvinsiModel())->find($alamat['id_provinsi']);
-        if ($prov) {
-            $alamat['nama_provinsi'] = $prov['nama_provinsi'];
+        $prov = (new \App\Features\Lokasi\Provinsi\ProvinsiModel())->find((string) $alamat['id_provinsi']);
+        if (is_array($prov)) {
+            $alamat['nama_provinsi'] = (string) ($prov['nama_provinsi'] ?? '');
         }
 
+        /** @var array<string, mixed> */
         return $alamat;
     }
 }

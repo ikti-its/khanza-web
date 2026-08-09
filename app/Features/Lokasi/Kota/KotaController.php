@@ -37,11 +37,20 @@ final class KotaController extends ControllerTemplate
 
     /**
      * Menampilkan data modal kota
+     *
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      */
     public function list(): ResponseInterface
     {
         return $this->response->setJSON([
-            'data' => $this->model->get_data_tabel(),
+            'data' => $this->model()->get_data_tabel(),
         ]);
+    }
+
+    private function model(): KotaModel
+    {
+        assert($this->model instanceof KotaModel);
+        return $this->model;
     }
 }

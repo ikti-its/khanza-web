@@ -6,6 +6,7 @@ namespace App\Features\Lokasi\Alamat;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 
 final class AlamatController extends ControllerTemplate
@@ -74,13 +75,13 @@ final class AlamatController extends ControllerTemplate
      * OVERRIDE: Menampilkan Halaman Ubah Data Alamat
      */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         if ($id == 0) {
             return $this->index();
         }
 
-        $baris = $this->model->get_detail_wilayah($id) ?? [];
+        $baris = $this->model()->get_detail_wilayah($id) ?? [];
 
         $breadcrumbs = [
             ['title' => 'Ubah', 'icon' => 'Ubah'],
@@ -96,17 +97,24 @@ final class AlamatController extends ControllerTemplate
         ]);
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $data = $this->model
+        $builder = $this->model
             ->db
             ->table('lokasi.alamat a')
             ->select('a.id_alamat, k.nama_kota, a.alamat_lengkap')
             ->join('lokasi.kota k', 'k.id_provinsi = a.id_provinsi AND k.id_kota_lokal = a.id_kota_lokal', 'left')
-            ->orderBy('a.id_alamat')
-            ->get()
-            ->getResultArray();
+            ->orderBy('a.id_alamat');
+
+        $data = $this->model()->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON(['data' => $data]);
+    }
+
+    private function model(): AlamatModel
+    {
+        assert($this->model instanceof AlamatModel);
+        return $this->model;
     }
 }
