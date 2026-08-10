@@ -34,15 +34,16 @@ final class RuanganController extends ControllerTemplate
         );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('ruangan.ruangan')
             ->select(['id_ruangan', 'kode_ruangan', 'nama_ruangan', 'jenis_instalasi'])
-            ->orderBy('nama_ruangan', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('nama_ruangan', 'ASC');
+
+        $rows = $this->model->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }
