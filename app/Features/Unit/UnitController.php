@@ -34,6 +34,7 @@ final class UnitController extends ControllerTemplate
         );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
         $builder = $this->model
@@ -42,12 +43,14 @@ final class UnitController extends ControllerTemplate
             ->select('id_unit, kode_unit, nama_unit, biaya_registrasi_baru, biaya_registrasi_lama')
             ->orderBy('kode_unit');
 
-        $exclude = $this->request->getGet('exclude');
-        if ($exclude !== null && $exclude !== '') {
+        $exclude = (string) ($this->request->getGet('exclude') ?? '');
+        if ($exclude !== '') {
             $ids = array_map('intval', explode(',', $exclude));
             $builder->whereNotIn('id_unit', $ids);
         }
 
-        return $this->response->setJSON(['data' => $builder->get()->getResultArray()]);
+        $data = $this->model->guarded_get($builder, 'list')->getResultArray();
+
+        return $this->response->setJSON(['data' => $data]);
     }
 }
