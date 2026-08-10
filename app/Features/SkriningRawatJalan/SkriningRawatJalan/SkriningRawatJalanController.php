@@ -47,10 +47,15 @@ final class SkriningRawatJalanController extends ControllerTemplate
         $this->row_alert = ['value' => 'alert_igd', 'threshold' => 'alert_max'];
     }
 
+    /** @param array<array-key, mixed> $data_tabel */
     #[\Override]
     protected function after_read(array &$data_tabel): void
     {
+        /** @mago-expect analysis:mixed-assignment */
         foreach ($data_tabel as &$row) {
+            if (!is_array($row)) {
+                continue;
+            }
             $row['alert_igd'] = (int) ($row['id_keputusan'] ?? 1) === 2 ? 0 : 1;
             $row['alert_max'] = 1;
         }
@@ -60,33 +65,41 @@ final class SkriningRawatJalanController extends ControllerTemplate
     // PRIVATE HELPERS
     // ──────────────────────────────────────────────────────────
 
+    /** @return list<array<int|string, mixed>> */
     private function getKonfig(bool $isUpdate = false): array
     {
+        /** @var list<array<int|string, mixed>> */
         return array_values(array_filter(
             $this->get_fields_with_options($isUpdate, true),
-            static fn($f) => !in_array($f[2], ['id_skrining', 'no_rm', 'id_unit', 'id_petugas'], true),
+            static fn(array $f) => !in_array($f[2] ?? null, ['id_skrining', 'no_rm', 'id_unit', 'id_petugas'], true),
         ));
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchDataPasienByRm(string $noRm): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('role.pasien p')
             ->select('p.nomor_rm, o.nama, o.nik, o.tanggal_lahir, jk.nama_jenis_kelamin as jenis_kelamin')
             ->join('person.orang o', 'o.id_orang = p.id_orang')
             ->join('person.jenis_kelamin jk', 'jk.id_jenis_kelamin = o.id_jenis_kelamin', 'left')
-            ->where('p.nomor_rm', $noRm)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('p.nomor_rm', $noRm);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchDataPasienByRm')->getRowArray() ?? [];
     }
 
     // ──────────────────────────────────────────────────────────
     // PRINT
     // ──────────────────────────────────────────────────────────
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function print(int|string $id): string
+    public function print(int|string $id): string|\CodeIgniter\HTTP\RedirectResponse
     {
         $baris = $this->model->find_one($id);
         if (empty($baris)) {
@@ -94,7 +107,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
             return $this->index();
         }
 
-        $dataPasien = !empty($baris['no_rm']) ? $this->fetchDataPasienByRm($baris['no_rm']) : [];
+        $dataPasien = !empty($baris['no_rm']) ? $this->fetchDataPasienByRm((string) $baris['no_rm']) : [];
 
         return view('components/cetak/cetak_skrining_rawat_jalan', [
             'judul'      => 'Cetak Skrining Rawat Jalan',
@@ -139,8 +152,9 @@ final class SkriningRawatJalanController extends ControllerTemplate
         ]);
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|\CodeIgniter\HTTP\RedirectResponse
     {
         $baris = $this->model->find_one($id);
 
@@ -149,7 +163,7 @@ final class SkriningRawatJalanController extends ControllerTemplate
             return $this->index();
         }
 
-        $dataPasien = !empty($baris['no_rm']) ? $this->fetchDataPasienByRm($baris['no_rm']) : null;
+        $dataPasien = !empty($baris['no_rm']) ? $this->fetchDataPasienByRm((string) $baris['no_rm']) : null;
 
         return view('admin/skrining_rawat_jalan/tambah_skrining_rj', [
             'judul'       => 'Ubah ' . $this->title,

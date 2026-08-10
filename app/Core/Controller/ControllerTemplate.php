@@ -604,7 +604,7 @@ class ControllerTemplate extends Controller
         return $this->home();
     }
 
-    public function print(int|string $id): string
+    public function print(int|string $id): string|RedirectResponse
     {
         if (in_array(ActionType::PRINT, $this->actions, true)) {
             return view('components/cetak/template', ['id' => $id]);
