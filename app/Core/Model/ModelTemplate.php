@@ -18,6 +18,8 @@ class ModelTemplate extends Model
     public $primaryKey;
     /** @var string */
     public $table;
+    /** @var list<string> */
+    public $allowedFields;
 
     public private(set) DatabaseTemplate $database;
     /** @var 'BASE'| 'JOIN'| 'REFS' */

@@ -38,29 +38,37 @@ final class DokterController extends ControllerTemplate
         );
     }
 
-    #[\Override]
-    public function create_page(): string
+    /** @return list<array<int|string, mixed>> */
+    private function buildKonfigGabungan(): array
     {
         $controllerOrang = new \App\Features\Person\Orang\OrangController();
-        $konfigOrang      = $controllerOrang->get_fields_with_options(false, true);
-        $konfigDokter     = $this->get_fields_with_options(false, true);
+        /** @var list<array<int|string, mixed>> $konfigOrang */
+        $konfigOrang = $controllerOrang->get_fields_with_options(false, true);
+        /** @var list<array<int|string, mixed>> $konfigDokter */
+        $konfigDokter = $this->get_fields_with_options(false, true);
 
         $konfigGabungan = [];
         foreach ($konfigDokter as $field) {
-            if ($field[2] === 'id_orang') {
+            if (($field[2] ?? null) === 'id_orang') {
                 $konfigGabungan = array_merge($konfigGabungan, $konfigOrang);
                 continue;
             }
             $konfigGabungan[] = $field;
         }
 
+        return $konfigGabungan;
+    }
+
+    #[\Override]
+    public function create_page(): string
+    {
         $breadcrumbs = [['title' => 'Tambah', 'icon', 'tambah']];
         return view('/admin/role/tambah_dokter', [
             'judul'       => 'Tambah Dokter',
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->primary_key,
-            'konfig'      => $konfigGabungan,
+            'konfig'      => $this->buildKonfigGabungan(),
             'baris'       => [
                 'kode_dokter'       => '',
                 'spesialis'         => '',
@@ -79,19 +87,15 @@ final class DokterController extends ControllerTemplate
         ]);
     }
 
-    #[\Override]
-    public function create(): string|RedirectResponse
+    /**
+     * @param array<string, mixed> $rawPost
+     * @return array<string, mixed>
+     */
+    private function buildDataOrangFromPost(OrangModel $orangModel, array $rawPost): array
     {
-        $orangModel = new OrangModel();
-        $rawPost    = $this->request->getPost();
-        $dokterData = [
-            'kode_dokter' => $rawPost['kode_dokter'],
-            'spesialis'   => $rawPost['spesialis'],
-        ];
-
         $dataOrang = [];
         foreach ($orangModel->allowedFields as $field) {
-            $value = $rawPost[$field] ?? '';
+            $value = (string) ($rawPost[$field] ?? '');
             if ($value === '') {
                 $value = null;
             } elseif (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
@@ -100,6 +104,22 @@ final class DokterController extends ControllerTemplate
             $dataOrang[$field] = $value;
         }
 
+        return $dataOrang;
+    }
+
+    #[\Override]
+    public function create(): string|RedirectResponse
+    {
+        $orangModel = new OrangModel();
+        /** @var array<string, mixed> $rawPost */
+        $rawPost    = $this->request->getPost();
+        $dokterData = [
+            'kode_dokter' => $rawPost['kode_dokter'] ?? null,
+            'spesialis'   => $rawPost['spesialis'] ?? null,
+        ];
+
+        $dataOrang = $this->buildDataOrangFromPost($orangModel, $rawPost);
+
         $db = $this->model->db;
         $db->transStart();
 
@@ -107,7 +127,7 @@ final class DokterController extends ControllerTemplate
             if (!$orangModel->insert($dataOrang)) {
                 throw new \RuntimeException('Sistem gagal menyimpan identitas Orang.');
             }
-            $id_orang = $orangModel->insertID();
+            $id_orang = $orangModel->getInsertID();
 
             if (!$this->model->insert([...$dokterData, 'id_orang' => $id_orang])) {
                 throw new \RuntimeException('Sistem gagal menyimpan data Dokter.');
@@ -126,18 +146,18 @@ final class DokterController extends ControllerTemplate
             return $this->create_page();
         }
 
-        $redirect_to = $this->request->getPost('redirect_to');
-        return $redirect_to ? redirect()->to($redirect_to) : $this->home();
+        $redirect_to = (string) ($this->request->getPost('redirect_to') ?? '');
+        return $redirect_to !== '' ? redirect()->to($redirect_to) : $this->home();
     }
 
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         if ($id == 0)
             return $this->index();
 
         $dataDokter = $this->model->find($id);
-        if (!$dataDokter) {
+        if (!is_array($dataDokter)) {
             return $this->index();
         }
 
@@ -146,41 +166,30 @@ final class DokterController extends ControllerTemplate
 
         if (!empty($dataDokter['id_orang'])) {
             $orangModel = new OrangModel();
-            $dataOrang  = $orangModel->find($dataDokter['id_orang']) ?? [];
+            $foundOrang = $orangModel->find((string) $dataDokter['id_orang']);
+            $dataOrang  = is_array($foundOrang) ? $foundOrang : [];
 
             if (!empty($dataOrang['id_alamat'])) {
                 $alamatModel = new \App\Features\Lokasi\Alamat\AlamatModel();
-                $alamat      = $alamatModel->find($dataOrang['id_alamat']) ?? [];
+                $foundAlamat = $alamatModel->find((string) $dataOrang['id_alamat']);
+                $alamat      = is_array($foundAlamat) ? $foundAlamat : [];
                 $dataAlamat  = ['alamat_lengkap' => $alamat['alamat_lengkap'] ?? ''];
             }
 
             if (!empty($dataOrang['tempat_lahir_kota'])) {
                 $kotaModel = new \App\Features\Lokasi\Kota\KotaModel();
-                $kotaLahir = $kotaModel->find($dataOrang['tempat_lahir_kota']);
-                if ($kotaLahir) {
+                $kotaLahir = $kotaModel->find((string) $dataOrang['tempat_lahir_kota']);
+                if (is_array($kotaLahir)) {
                     $dataAlamat['nama_kota'] = $kotaLahir['nama_kota'] ?? '';
                 }
             }
         }
 
         $baris = array_merge($dataAlamat, $dataOrang, $dataDokter);
-        foreach ($baris as $key => $value) {
-            if ($value === null) {
+        foreach (array_keys($baris) as $key) {
+            if ($baris[$key] === null) {
                 $baris[$key] = '';
             }
-        }
-
-        $controllerOrang = new \App\Features\Person\Orang\OrangController();
-        $konfigOrang      = $controllerOrang->get_fields_with_options(false, true);
-        $konfigDokter     = $this->get_fields_with_options(false, true);
-
-        $konfigGabungan = [];
-        foreach ($konfigDokter as $field) {
-            if ($field[2] === 'id_orang') {
-                $konfigGabungan = array_merge($konfigGabungan, $konfigOrang);
-                continue;
-            }
-            $konfigGabungan[] = $field;
         }
 
         $breadcrumbs = [['title' => 'Ubah', 'icon', 'Ubah']];
@@ -189,7 +198,7 @@ final class DokterController extends ControllerTemplate
             'breadcrumbs' => array_merge($this->breadcrumbs, $breadcrumbs),
             'modul_path'  => $this->get_uri_path(),
             'kolom_id'    => $this->primary_key,
-            'konfig'      => $konfigGabungan,
+            'konfig'      => $this->buildKonfigGabungan(),
             'baris'       => $baris,
             'form_action' => '/submitedit/' . $id,
         ]);
@@ -202,29 +211,23 @@ final class DokterController extends ControllerTemplate
             return $this->home();
 
         $dataDokterLama = $this->model->find($id);
-        if (!$dataDokterLama) {
+        if (!is_array($dataDokterLama)) {
             session()->setFlashdata('error', 'Data Dokter tidak ditemukan.');
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
-        $idOrang    = $dataDokterLama['id_orang'];
+        $idOrang    = is_int($dataDokterLama['id_orang'] ?? null) || is_string($dataDokterLama['id_orang'] ?? null)
+            ? $dataDokterLama['id_orang']
+            : null;
         $orangModel = new OrangModel();
+        /** @var array<string, mixed> $rawPost */
         $rawPost    = $this->request->getPost();
 
         $db = $this->model->db;
         $db->transStart();
 
         try {
-            $dataOrang = [];
-            foreach ($orangModel->allowedFields as $field) {
-                $value = $rawPost[$field] ?? '';
-                if ($value === '') {
-                    $value = null;
-                } elseif (is_numeric($value) && (str_contains($field, 'id_') || $field === 'tempat_lahir_kota')) {
-                    $value = (int) $value;
-                }
-                $dataOrang[$field] = $value;
-            }
+            $dataOrang = $this->buildDataOrangFromPost($orangModel, $rawPost);
             $orangModel->update($idOrang, $dataOrang);
 
             $this->model->update($id, [
@@ -254,12 +257,14 @@ final class DokterController extends ControllerTemplate
             return $this->home();
 
         $dokter = $this->model->find($id);
-        if (!$dokter) {
+        if (!is_array($dokter)) {
             session()->setFlashdata('error', 'Data Dokter tidak ditemukan.');
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
-        $idOrang = $dokter['id_orang'] ?? null;
+        $idOrang = (is_int($dokter['id_orang'] ?? null) || is_string($dokter['id_orang'] ?? null))
+            ? $dokter['id_orang']
+            : null;
 
         $db = $this->model->db;
         $db->transStart();
@@ -287,9 +292,10 @@ final class DokterController extends ControllerTemplate
         return redirect()->to($this->get_uri_path() . '/data');
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('role.dokter')
             ->select([
@@ -299,9 +305,9 @@ final class DokterController extends ControllerTemplate
                 'role.dokter.spesialis',
             ])
             ->join('person.orang', 'person.orang.id_orang = role.dokter.id_orang')
-            ->orderBy('person.orang.nama', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('person.orang.nama', 'ASC');
+
+        $rows = $this->model->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }
