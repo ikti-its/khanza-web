@@ -36,19 +36,22 @@ final class RefItemPemeriksaanLabController extends ControllerTemplate
         );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $idKategori = $this->request->getGet('id_kategori');
+        $idKategori = (string) ($this->request->getGet('id_kategori') ?? '');
 
         $builder = $this->model
             ->db
             ->table('laboratorium.ref_item_pemeriksaan_lab')
             ->select(['id_item_lab', 'kode_periksa', 'nama_item', 'tarif']);
 
-        if ($idKategori) {
+        if ($idKategori !== '' && $idKategori !== '0') {
             $builder->where('id_kategori', (int) $idKategori);
         }
 
-        return $this->response->setJSON(['data' => $builder->get()->getResultArray()]);
+        $rows = $this->model->guarded_get($builder, 'list')->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
     }
 }

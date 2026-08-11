@@ -37,9 +37,10 @@ final class RefParameterPemeriksaanLabController extends ControllerTemplate
         );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $idItemLab = $this->request->getGet('id_item_lab');
+        $idItemLab = (string) ($this->request->getGet('id_item_lab') ?? '');
 
         $builder = $this->model
             ->db
@@ -53,11 +54,11 @@ final class RefParameterPemeriksaanLabController extends ControllerTemplate
                 'biaya_item',
             ]);
 
-        if ($idItemLab !== null) {
+        if ($idItemLab !== '') {
             $builder->where('id_item_lab', (int) $idItemLab);
         }
 
-        $rows = $builder->orderBy('id_parameter', 'ASC')->get()->getResultArray();
+        $rows = $this->model->guarded_get($builder->orderBy('id_parameter', 'ASC'), 'list')->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }

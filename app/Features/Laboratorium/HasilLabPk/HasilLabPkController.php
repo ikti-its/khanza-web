@@ -44,12 +44,14 @@ final class HasilLabPkController extends ControllerTemplate
     // PRIVATE HELPERS
     // ──────────────────────────────────────────────────────────
 
+    /** @return list<array<int|string, mixed>> */
     private function getKonfig(): array
     {
+        /** @var list<array<int|string, mixed>> */
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            static fn($f) => !in_array(
-                $f[2],
+            fn(array $f) => !in_array(
+                $f[2] ?? null,
                 [
                     'id_hasil_pk',
                     'id_permintaan_lab',
@@ -62,9 +64,13 @@ final class HasilLabPkController extends ControllerTemplate
         ));
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchHeaderPermintaan(int $idPermintaanLab): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_header plh')
             ->select([
@@ -80,42 +86,49 @@ final class HasilLabPkController extends ControllerTemplate
             ->join('person.orang o', 'o.id_orang  = p.id_orang', 'left')
             ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
             ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
-            ->where('plh.id_permintaan', $idPermintaanLab)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('plh.id_permintaan', $idPermintaanLab);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchHeaderPermintaan')->getRowArray() ?? [];
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchNamaDokterPj(int $idDokterPj): null|string
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table('role.dokter d')
             ->select(['o.nama AS nama_dokter_pj'])
             ->join('person.orang o', 'o.id_orang = d.id_orang')
-            ->where('d.id_dokter', $idDokterPj)
-            ->get()
-            ->getRowArray();
+            ->where('d.id_dokter', $idDokterPj);
 
-        return $row['nama_dokter_pj'] ?? null;
+        $row = $this->model->guarded_get($builder, 'fetchNamaDokterPj')->getRowArray();
+
+        return is_string($row['nama_dokter_pj'] ?? null) ? $row['nama_dokter_pj'] : null;
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchNamaPetugas(int $idPetugas): null|string
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table('role.petugas p')
             ->select(['o.nama AS nama_petugas'])
             ->join('person.orang o', 'o.id_orang = p.id_orang')
-            ->where('p.id_petugas', $idPetugas)
-            ->get()
-            ->getRowArray();
+            ->where('p.id_petugas', $idPetugas);
 
-        return $row['nama_petugas'] ?? null;
+        $row = $this->model->guarded_get($builder, 'fetchNamaPetugas')->getRowArray();
+
+        return is_string($row['nama_petugas'] ?? null) ? $row['nama_petugas'] : null;
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchItemTerpilih(int $idPermintaanLab): array
     {
-        $hasilRows = $this->model
+        $builderHasil = $this->model
             ->db
             ->table('laboratorium.hasil_lab_pk h')
             ->select([
@@ -128,17 +141,18 @@ final class HasilLabPkController extends ControllerTemplate
             ->join('laboratorium.permintaan_lab_pk_item pi', 'pi.id_permintaan_pk_item = h.id_permintaan_pk_item')
             ->join('laboratorium.ref_item_pemeriksaan_lab ri', 'ri.id_item_lab = pi.id_item_pemeriksaan')
             ->where('h.id_permintaan_lab', $idPermintaanLab)
-            ->orderBy('h.id_permintaan_pk_item', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('h.id_permintaan_pk_item', 'ASC');
 
-        if (empty($hasilRows)) {
+        /** @var list<array<string, mixed>> $hasilRows */
+        $hasilRows = $this->model->guarded_get($builderHasil, 'fetchItemTerpilih')->getResultArray();
+
+        if ($hasilRows === []) {
             return [];
         }
 
         $idHasilPkList = array_column($hasilRows, 'id_hasil_pk');
 
-        $parameters = $this->model
+        $builderParam = $this->model
             ->db
             ->table('laboratorium.hasil_lab_pk_parameter hp')
             ->select([
@@ -153,25 +167,32 @@ final class HasilLabPkController extends ControllerTemplate
             ])
             ->join('laboratorium.ref_parameter_pemeriksaan_lab rp', 'rp.id_parameter = hp.id_parameter')
             ->whereIn('hp.id_hasil_pk', $idHasilPkList)
-            ->orderBy('rp.id_parameter', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('rp.id_parameter', 'ASC');
+
+        /** @var list<array<string, mixed>> $parameters */
+        $parameters = $this->model->guarded_get($builderParam, 'fetchItemTerpilih')->getResultArray();
 
         $groupedParams = [];
         foreach ($parameters as $param) {
-            $groupedParams[$param['id_hasil_pk']][] = $param;
+            $idHasilPk                   = (string) ($param['id_hasil_pk'] ?? '');
+            $groupedParams[$idHasilPk][] = $param;
         }
 
         foreach ($hasilRows as &$row) {
-            $row['parameter'] = $groupedParams[$row['id_hasil_pk']] ?? [];
+            $row['parameter'] = $groupedParams[(string) ($row['id_hasil_pk'] ?? '')] ?? [];
         }
+        unset($row);
 
         return $hasilRows;
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchItemUntukForm(int $idPermintaanLab): array
     {
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_pk_item pki')
             ->select([
@@ -203,36 +224,42 @@ final class HasilLabPkController extends ControllerTemplate
             )
             ->where('pki.id_permintaan_lab', $idPermintaanLab)
             ->orderBy('pki.id_permintaan_pk_item', 'ASC')
-            ->orderBy('pkp.id_parameter', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('pkp.id_parameter', 'ASC');
+
+        /** @var list<array<string, mixed>> $rows */
+        $rows = $this->model->guarded_get($builder, 'fetchItemUntukForm')->getResultArray();
 
         $items = [];
         foreach ($rows as $row) {
-            $idItem = (int) $row['id_permintaan_pk_item'];
+            $idItem = (int) ($row['id_permintaan_pk_item'] ?? 0);
 
             if (!array_key_exists($idItem, $items)) {
                 $items[$idItem] = [
                     'id_permintaan_pk_item' => $idItem,
-                    'kode_periksa'          => $row['kode_periksa'],
-                    'nama_item'             => $row['nama_item'],
+                    'kode_periksa'          => $row['kode_periksa'] ?? null,
+                    'nama_item'             => $row['nama_item'] ?? null,
                     'parameter'             => [],
                 ];
             }
 
             $items[$idItem]['parameter'][] = [
-                'id_parameter'     => $row['id_parameter'],
-                'nama_parameter'   => $row['nama_parameter'],
-                'satuan'           => $row['satuan'],
-                'nilai_rujukan'    => $row['nilai_rujukan'],
-                'nilai_hasil'      => $row['nilai_hasil'],
-                'keterangan_hasil' => $row['keterangan_hasil'],
+                'id_parameter'     => $row['id_parameter'] ?? null,
+                'nama_parameter'   => $row['nama_parameter'] ?? null,
+                'satuan'           => $row['satuan'] ?? null,
+                'nilai_rujukan'    => $row['nilai_rujukan'] ?? null,
+                'nilai_hasil'      => $row['nilai_hasil'] ?? null,
+                'keterangan_hasil' => $row['keterangan_hasil'] ?? null,
             ];
         }
 
         return array_values($items);
     }
 
+    /**
+     * @param list<array<string, mixed>> $hasilList
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \ReflectionException
+     */
     private function upsertHasilPkItems(
         array $hasilList,
         int $idPermintaanLab,
@@ -242,6 +269,7 @@ final class HasilLabPkController extends ControllerTemplate
         null|int $idKategoriUsia,
         \App\Features\Laboratorium\HasilLabPkParameter\HasilLabPkParameterModel $modelParam,
     ): void {
+        /** @var array<int, array<string, mixed>> $existingByItem */
         $existingByItem = array_column(
             $this->model->set_filter('id_permintaan_lab', $idPermintaanLab)->findAll(),
             null,
@@ -254,17 +282,21 @@ final class HasilLabPkController extends ControllerTemplate
                 continue;
             }
 
-            $params        = $item['parameter'] ?? [];
+            /** @var list<array<string, mixed>> $params */
+            $params        = is_array($item['parameter'] ?? null) ? $item['parameter'] : [];
             $existingHasil = $existingByItem[$idItem] ?? null;
 
-            $adaNilaiTerisi = array_any($params, static fn($p) => trim($p['nilai_hasil'] ?? '') !== '');
+            $adaNilaiTerisi = array_any(
+                $params,
+                static fn(array $p) => trim((string) ($p['nilai_hasil'] ?? '')) !== '',
+            );
             if (!$adaNilaiTerisi && $existingHasil === null) {
                 continue;
             }
 
             $idHasilPk = $existingHasil !== null
                 ? $this->updateHasilPkHeader(
-                    (int) $existingHasil['id_hasil_pk'],
+                    (int) ($existingHasil['id_hasil_pk'] ?? 0),
                     $idDokterPj,
                     $idPetugasLab,
                     $tglJamHasil,
@@ -280,6 +312,7 @@ final class HasilLabPkController extends ControllerTemplate
                 );
             $existingByItem[$idItem] = ['id_hasil_pk' => $idHasilPk];
 
+            /** @var array<int, array<string, mixed>> $existingParamByParam */
             $existingParamByParam = array_column(
                 $modelParam->set_filter('id_hasil_pk', $idHasilPk)->findAll(),
                 null,
@@ -292,6 +325,7 @@ final class HasilLabPkController extends ControllerTemplate
         }
     }
 
+    /** @throws \ReflectionException */
     private function insertHasilPkHeader(
         int $idPermintaanLab,
         int $idItem,
@@ -311,6 +345,7 @@ final class HasilLabPkController extends ControllerTemplate
         return (int) $this->model->getInsertID();
     }
 
+    /** @throws \ReflectionException */
     private function updateHasilPkHeader(
         int $idHasilPk,
         null|int $idDokterPj,
@@ -327,7 +362,14 @@ final class HasilLabPkController extends ControllerTemplate
         return $idHasilPk;
     }
 
-    /** Simpan nilai parameter jika terisi; hapus baris lama jika nilainya dikosongkan kembali. */
+    /**
+     * Simpan nilai parameter jika terisi; hapus baris lama jika nilainya dikosongkan kembali.
+     *
+     * @param array<int, array<string, mixed>> $existingParamByParam
+     * @param array<string, mixed>             $param
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \ReflectionException
+     */
     private function syncHasilPkParameter(
         \App\Features\Laboratorium\HasilLabPkParameter\HasilLabPkParameterModel $modelParam,
         array $existingParamByParam,
@@ -340,16 +382,16 @@ final class HasilLabPkController extends ControllerTemplate
         }
 
         $existingParam = $existingParamByParam[$idParameter] ?? null;
-        $nilaiHasil    = trim($param['nilai_hasil'] ?? '');
+        $nilaiHasil    = trim((string) ($param['nilai_hasil'] ?? ''));
 
         if ($nilaiHasil === '') {
             if ($existingParam !== null) {
-                $modelParam->delete((int) $existingParam['id_hasil_pk_parameter']);
+                $modelParam->delete((int) ($existingParam['id_hasil_pk_parameter'] ?? 0));
             }
             return;
         }
 
-        $keteranganHasil = trim($param['keterangan_hasil'] ?? '');
+        $keteranganHasil = trim((string) ($param['keterangan_hasil'] ?? ''));
 
         $paramData = [
             'nilai_hasil'      => $nilaiHasil,
@@ -357,12 +399,13 @@ final class HasilLabPkController extends ControllerTemplate
         ];
 
         if ($existingParam !== null) {
-            $modelParam->update((int) $existingParam['id_hasil_pk_parameter'], $paramData);
+            $modelParam->update((int) ($existingParam['id_hasil_pk_parameter'] ?? 0), $paramData);
             return;
         }
         $modelParam->insert($paramData + ['id_hasil_pk' => $idHasilPk, 'id_parameter' => $idParameter]);
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function recomputeStatusPermintaan(int $idPermintaanLab): void
     {
         $total = $this->model
@@ -390,11 +433,14 @@ final class HasilLabPkController extends ControllerTemplate
             ->update();
     }
 
+    /** @param list<array<string, mixed>> $hasilList */
     private function validateHasilList(array $hasilList): null|string
     {
         foreach ($hasilList as $item) {
-            foreach ($item['parameter'] ?? [] as $param) {
-                if (trim($param['nilai_hasil'] ?? '') !== '') {
+            /** @var list<array<string, mixed>> $params */
+            $params = is_array($item['parameter'] ?? null) ? $item['parameter'] : [];
+            foreach ($params as $param) {
+                if (trim((string) ($param['nilai_hasil'] ?? '')) !== '') {
                     return null;
                 }
             }
@@ -402,22 +448,25 @@ final class HasilLabPkController extends ControllerTemplate
         return 'Isi minimal satu hasil pemeriksaan sebelum menyimpan.';
     }
 
+    /**
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \ReflectionException
+     */
     private function deleteHasilPkByPermintaan(
         int $idPermintaanLab,
         \App\Features\Laboratorium\HasilLabPkParameter\HasilLabPkParameterModel $modelParam,
     ): void {
-        $idHasilLama = array_column(
-            $this->model
-                ->db
-                ->table('laboratorium.hasil_lab_pk')
-                ->select('id_hasil_pk')
-                ->where('id_permintaan_lab', $idPermintaanLab)
-                ->get()
-                ->getResultArray(),
-            'id_hasil_pk',
-        );
+        $builder = $this->model
+            ->db
+            ->table('laboratorium.hasil_lab_pk')
+            ->select('id_hasil_pk')
+            ->where('id_permintaan_lab', $idPermintaanLab);
 
-        if (!empty($idHasilLama)) {
+        /** @var list<array<string, mixed>> $rowsHasilLama */
+        $rowsHasilLama = $this->model->guarded_get($builder, 'deleteHasilPkByPermintaan')->getResultArray();
+        $idHasilLama   = array_column($rowsHasilLama, 'id_hasil_pk');
+
+        if ($idHasilLama !== []) {
             $modelParam->whereIn('id_hasil_pk', $idHasilLama)->delete();
         }
 
@@ -456,6 +505,7 @@ final class HasilLabPkController extends ControllerTemplate
     // HALAMAN UBAH
     // ──────────────────────────────────────────────────────────
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function update_page(int|string $id): string
     {
@@ -467,6 +517,7 @@ final class HasilLabPkController extends ControllerTemplate
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
+        assert(is_array($baris));
 
         $baris = array_merge($baris, $this->fetchHeaderPermintaan($idPermintaanLab));
 
@@ -506,6 +557,7 @@ final class HasilLabPkController extends ControllerTemplate
     /** Alur simpan yang sama persis dipakai create() dan update(); hanya pesan sukses/gagal yang beda. */
     private function submitHasil(string $successMsg, string $failMsg): string|RedirectResponse
     {
+        /** @var array<string, mixed> $rawPost */
         $rawPost = $this->request->getPost();
 
         $idPermintaanLab = (int) ($rawPost['id_permintaan_lab'] ?? 0)
@@ -513,9 +565,11 @@ final class HasilLabPkController extends ControllerTemplate
             : null;
         $idDokterPj     = (int) ($rawPost['id_dokter_pj'] ?? 0) ? (int) ($rawPost['id_dokter_pj'] ?? 0) : null;
         $idPetugasLab   = (int) ($rawPost['id_petugas_lab'] ?? 0) ? (int) ($rawPost['id_petugas_lab'] ?? 0) : null;
-        $tglJamHasil    = $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s');
+        $tglJamHasil    = (string) ($rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s'));
         $idKategoriUsia = (int) ($rawPost['id_kategori_usia'] ?? 0) ? (int) ($rawPost['id_kategori_usia'] ?? 0) : null;
-        $hasilList      = $rawPost['hasil'] ?? [];
+
+        /** @var list<array<string, mixed>> $hasilList */
+        $hasilList = is_array($rawPost['hasil'] ?? null) ? $rawPost['hasil'] : [];
 
         if (!$idPermintaanLab) {
             session()->setFlashdata('error', 'Permintaan laboratorium wajib dipilih.');
@@ -566,6 +620,7 @@ final class HasilLabPkController extends ControllerTemplate
     // MODAL LIST — item+parameter permintaan digabung dengan hasil yang sudah ada
     // ──────────────────────────────────────────────────────────
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
         $idPermintaanLab = (int) ($this->request->getGet('id_permintaan') ?? 0);
@@ -579,6 +634,7 @@ final class HasilLabPkController extends ControllerTemplate
     // DELETE — cascade hapus parameter lalu header
     // ──────────────────────────────────────────────────────────
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
@@ -620,6 +676,7 @@ final class HasilLabPkController extends ControllerTemplate
     // INDEX — satu baris per permintaan yang sudah ada hasilnya
     // ──────────────────────────────────────────────────────────
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function index(): string
     {
@@ -628,7 +685,7 @@ final class HasilLabPkController extends ControllerTemplate
             . ' FROM laboratorium.hasil_lab_pk'
             . ' ORDER BY id_permintaan_lab, tgl_jam_hasil DESC) h';
 
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_header plh')
             ->select([
@@ -648,9 +705,10 @@ final class HasilLabPkController extends ControllerTemplate
             ->join($hasilSub, 'h.id_permintaan_lab = plh.id_permintaan')
             ->join('role.dokter dpj', 'dpj.id_dokter = h.id_dokter_pj', 'left')
             ->join('person.orang opj', 'opj.id_orang  = dpj.id_orang', 'left')
-            ->orderBy('h.tgl_jam_hasil', 'DESC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('h.tgl_jam_hasil', 'DESC');
+
+        /** @var list<array<string, mixed>> $rows */
+        $rows = $this->model->guarded_get($builder, 'index')->getResultArray();
 
         $konfig = [
             [1, 'No. Permintaan', 'no_permintaan',  'teks',    0],
@@ -680,6 +738,7 @@ final class HasilLabPkController extends ControllerTemplate
     // CETAK
     // ──────────────────────────────────────────────────────────
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function print(int|string $id): string
     {
@@ -692,7 +751,7 @@ final class HasilLabPkController extends ControllerTemplate
             return $this->index();
         }
 
-        $header = $this->model
+        $builder = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_header plh')
             ->select([
@@ -708,9 +767,9 @@ final class HasilLabPkController extends ControllerTemplate
             ->join('person.orang o', 'o.id_orang  = p.id_orang', 'left')
             ->join('role.dokter d', 'd.id_dokter = plh.id_dokter_perujuk', 'left')
             ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
-            ->where('plh.id_permintaan', $idPermintaanLab)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('plh.id_permintaan', $idPermintaanLab);
+
+        $header = $this->model->guarded_get($builder, 'print')->getRowArray() ?? [];
 
         return view('Views/components/cetak/cetak_hasil_lab_pk', [
             'header'         => $header,

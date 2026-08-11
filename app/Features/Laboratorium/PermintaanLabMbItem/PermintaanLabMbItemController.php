@@ -43,32 +43,38 @@ final class PermintaanLabMbItemController extends ControllerTemplate
     // Private Helpers
     // -------------------------------------------------------------------------
 
+    /**
+     * @throws \CodeIgniter\Files\Exceptions\FileNotFoundException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function generateNomorPermintaan(): string
     {
         helper('autonomor');
 
-        $lastNo = $this->model
+        $builder = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_header')
             ->select('no_permintaan')
             ->like('no_permintaan', 'MB' . date('Ymd'), 'after')
             ->orderBy('no_permintaan', 'DESC')
-            ->limit(1)
-            ->get()
-            ->getRowArray();
+            ->limit(1);
 
-        return generateNextNoPermintaanMb($lastNo['no_permintaan'] ?? null);
+        $lastNo = $this->model->guarded_get($builder, 'generateNomorPermintaan')->getRowArray();
+
+        return generateNextNoPermintaanMb(is_string($lastNo['no_permintaan'] ?? null) ? $lastNo['no_permintaan'] : null);
     }
 
+    /** @return list<array<int|string, mixed>> */
     private function filterKonfig(): array
     {
+        /** @var list<array<int|string, mixed>> */
         return array_values(array_filter(
             (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderController())->get_fields_with_options(
                 false,
                 true,
             ),
-            static fn($f) => !in_array(
-                $f[2],
+            fn(array $f) => !in_array(
+                $f[2] ?? null,
                 [
                     'id_permintaan',
                     'no_permintaan',
@@ -83,9 +89,13 @@ final class PermintaanLabMbItemController extends ControllerTemplate
         ));
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchRegistrasi(string $nomorReg): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('registrasi.registrasi r')
             ->select([
@@ -100,26 +110,36 @@ final class PermintaanLabMbItemController extends ControllerTemplate
             ->join('person.orang o', 'o.id_orang  = p.id_orang')
             ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
             ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
-            ->where('r.nomor_reg', $nomorReg)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('r.nomor_reg', $nomorReg);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchRegistrasi')->getRowArray() ?? [];
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchDokter(string|int $idDokter): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('role.dokter d')
             ->select(['d.kode_dokter', 'o.nama AS nama_dokter'])
             ->join('person.orang o', 'o.id_orang = d.id_orang')
-            ->where('d.id_dokter', (int) $idDokter)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('d.id_dokter', (int) $idDokter);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchDokter')->getRowArray() ?? [];
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchItemTerpilih(int $idPermintaanLab): array
     {
-        $items = $this->model
+        $builderItems = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_mb_item mbi')
             ->select([
@@ -131,18 +151,19 @@ final class PermintaanLabMbItemController extends ControllerTemplate
             ])
             ->join('laboratorium.ref_item_pemeriksaan_lab i', 'i.id_item_lab = mbi.id_item_pemeriksaan')
             ->where('mbi.id_permintaan_lab', $idPermintaanLab)
-            ->orderBy('mbi.id_permintaan_mb_item', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('mbi.id_permintaan_mb_item', 'ASC');
 
-        if (empty($items)) {
+        /** @var list<array<string, mixed>> $items */
+        $items = $this->model->guarded_get($builderItems, 'fetchItemTerpilih')->getResultArray();
+
+        if ($items === []) {
             return [];
         }
 
         // Mengambil semua parameter sekaligus menggunakan whereIn
         $itemIds = array_column($items, 'id_permintaan_mb_item');
 
-        $parameters = $this->model
+        $builderParams = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_mb_parameter mbp')
             ->select([
@@ -156,36 +177,46 @@ final class PermintaanLabMbItemController extends ControllerTemplate
             ])
             ->join('laboratorium.ref_parameter_pemeriksaan_lab p', 'p.id_parameter = mbp.id_parameter')
             ->whereIn('mbp.id_permintaan_mb_item', $itemIds)
-            ->orderBy('mbp.id_parameter', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('mbp.id_parameter', 'ASC');
+
+        /** @var list<array<string, mixed>> $parameters */
+        $parameters = $this->model->guarded_get($builderParams, 'fetchItemTerpilih')->getResultArray();
 
         // Kelompokkan parameter berdasarkan id_permintaan_mb_item
         $groupedParams = [];
         foreach ($parameters as $param) {
-            $groupedParams[$param['id_permintaan_mb_item']][] = $param;
+            $idItem                   = (string) ($param['id_permintaan_mb_item'] ?? '');
+            $groupedParams[$idItem][] = $param;
         }
 
         foreach ($items as &$item) {
-            $item['parameter'] = $groupedParams[$item['id_permintaan_mb_item']] ?? [];
+            $item['parameter'] = $groupedParams[(string) ($item['id_permintaan_mb_item'] ?? '')] ?? [];
         }
+        unset($item);
 
         return $items;
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function isEditable(int $idPermintaanLab): bool
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_header')
             ->select('id_status_permintaan')
-            ->where('id_permintaan', $idPermintaanLab)
-            ->get()
-            ->getRowArray();
+            ->where('id_permintaan', $idPermintaanLab);
+
+        $row = $this->model->guarded_get($builder, 'isEditable')->getRowArray();
 
         return in_array((int) ($row['id_status_permintaan'] ?? 0), [1, 2], true);
     }
 
+    /**
+     * @param list<mixed>             $idItems
+     * @param array<array-key, mixed> $idParameters
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \ReflectionException
+     */
     private function insertItemsAndParameters(
         int $idPermintaanLab,
         array $idItems,
@@ -193,6 +224,7 @@ final class PermintaanLabMbItemController extends ControllerTemplate
         \App\Features\Laboratorium\PermintaanLabMbItem\PermintaanLabMbItemModel $modelItem,
         \App\Features\Laboratorium\PermintaanLabMbParameter\PermintaanLabMbParameterModel $modelParameter,
     ): void {
+        /** @mago-expect analysis:mixed-assignment */
         foreach ($idItems as $idItem) {
             $modelItem->insert([
                 'id_permintaan_lab'   => $idPermintaanLab,
@@ -200,7 +232,11 @@ final class PermintaanLabMbItemController extends ControllerTemplate
             ]);
             $idMbItem = $modelItem->getInsertID();
 
-            foreach ($idParameters[(string) $idItem] ?? [] as $idParam) {
+            /** @var list<mixed> $paramsForItem */
+            $paramsForItem = is_array($idParameters[(string) $idItem] ?? null) ? $idParameters[(string) $idItem] : [];
+
+            /** @mago-expect analysis:mixed-assignment */
+            foreach ($paramsForItem as $idParam) {
                 $modelParameter->insert([
                     'id_permintaan_mb_item' => $idMbItem,
                     'id_parameter'          => (int) $idParam,
@@ -209,28 +245,33 @@ final class PermintaanLabMbItemController extends ControllerTemplate
         }
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function deleteItemsAndParameters(
         int $idPermintaanLab,
         \App\Features\Laboratorium\PermintaanLabMbItem\PermintaanLabMbItemModel $modelItem,
         \App\Features\Laboratorium\PermintaanLabMbParameter\PermintaanLabMbParameterModel $modelParameter,
     ): void {
-        $oldItems = $this->model
+        $builder = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_mb_item')
             ->select('id_permintaan_mb_item')
-            ->where('id_permintaan_lab', $idPermintaanLab)
-            ->get()
-            ->getResultArray();
+            ->where('id_permintaan_lab', $idPermintaanLab);
 
+        /** @var list<array<string, mixed>> $oldItems */
+        $oldItems   = $this->model->guarded_get($builder, 'deleteItemsAndParameters')->getResultArray();
         $oldItemIds = array_column($oldItems, 'id_permintaan_mb_item');
 
-        if (!empty($oldItemIds)) {
+        if ($oldItemIds !== []) {
             $modelParameter->whereIn('id_permintaan_mb_item', $oldItemIds)->delete();
         }
 
         $modelItem->where('id_permintaan_lab', $idPermintaanLab)->delete();
     }
 
+    /**
+     * @param array<string, mixed> $rawPost
+     * @return array<string, mixed>
+     */
     private function buildHeaderData(array $rawPost, bool $withStatus = false): array
     {
         return array_merge(
@@ -238,7 +279,7 @@ final class PermintaanLabMbItemController extends ControllerTemplate
                 'no_permintaan'      => $rawPost['no_permintaan'] ?? '',
                 'nomor_reg'          => $rawPost['nomor_reg'] ?? '',
                 'id_kategori_lab'    => ID_KATEGORI_MB,
-                'id_dokter_perujuk'  => trim($rawPost['id_dokter_perujuk'] ?? ''),
+                'id_dokter_perujuk'  => trim((string) ($rawPost['id_dokter_perujuk'] ?? '')),
                 'tgl_permintaan'     => $rawPost['tgl_permintaan'] ?? date('Y-m-d H:i:s'),
                 'indikasi_klinis'    => $rawPost['indikasi_klinis'] ?? '',
                 'informasi_tambahan' => $rawPost['informasi_tambahan'] ?? '',
@@ -247,7 +288,10 @@ final class PermintaanLabMbItemController extends ControllerTemplate
         );
     }
 
-    // Centralize query for index() and list()
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchPermintaanLabHeaders(null|int $idStatus = null): array
     {
         $builder = $this->model
@@ -278,35 +322,45 @@ final class PermintaanLabMbItemController extends ControllerTemplate
             $builder->where('h.id_status_permintaan', $idStatus);
         }
 
-        return $builder->orderBy('h.tgl_permintaan', 'DESC')->get()->getResultArray();
+        /** @var list<array<string, mixed>> */
+        return $this->model
+            ->guarded_get($builder->orderBy('h.tgl_permintaan', 'DESC'), 'fetchPermintaanLabHeaders')
+            ->getResultArray();
     }
 
-    // Jumlah data per status (untuk filter)
+    /**
+     * @return array<string, string>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchStatusFilters(): array
     {
-        $countMap = array_column(
-            $this->model
-                ->db
-                ->table('laboratorium.permintaan_lab_header')
-                ->select('id_status_permintaan, COUNT(*) AS jumlah')
-                ->where('id_kategori_lab', ID_KATEGORI_MB)
-                ->groupBy('id_status_permintaan')
-                ->get()
-                ->getResultArray(),
-            'jumlah',
-            'id_status_permintaan',
-        );
+        $builderCount = $this->model
+            ->db
+            ->table('laboratorium.permintaan_lab_header')
+            ->select('id_status_permintaan, COUNT(*) AS jumlah')
+            ->where('id_kategori_lab', ID_KATEGORI_MB)
+            ->groupBy('id_status_permintaan');
 
-        $filters = [];
-        foreach ($this->model
+        /** @var list<array<string, mixed>> $countRows */
+        $countRows = $this->model->guarded_get($builderCount, 'fetchStatusFilters')->getResultArray();
+
+        /** @var array<int, mixed> $countMap */
+        $countMap = array_column($countRows, 'jumlah', 'id_status_permintaan');
+
+        $builderStatus = $this->model
             ->db
             ->table('laboratorium.ref_status_permintaan')
             ->select('id_status, nama_status')
-            ->orderBy('id_status')
-            ->get()
-            ->getResultArray() as $row) {
-            $filters[(string) $row['id_status']] =
-                $row['nama_status'] . ' (' . ($countMap[$row['id_status']] ?? 0) . ')';
+            ->orderBy('id_status');
+
+        /** @var list<array<string, mixed>> $statusRows */
+        $statusRows = $this->model->guarded_get($builderStatus, 'fetchStatusFilters')->getResultArray();
+
+        $filters = [];
+        foreach ($statusRows as $row) {
+            $idStatus            = (int) ($row['id_status'] ?? 0);
+            $filters[(string) $idStatus] =
+                (string) ($row['nama_status'] ?? '') . ' (' . (string) ($countMap[$idStatus] ?? 0) . ')';
         }
 
         return $filters;
@@ -316,6 +370,10 @@ final class PermintaanLabMbItemController extends ControllerTemplate
     // Pages
     // -------------------------------------------------------------------------
 
+    /**
+     * @throws \CodeIgniter\Files\Exceptions\FileNotFoundException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     #[\Override]
     public function create_page(): string
     {
@@ -332,12 +390,13 @@ final class PermintaanLabMbItemController extends ControllerTemplate
         ]);
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function update_page(int|string $id): string
     {
         $idPermintaanLab = (int) $id;
 
-        $baris = $this->model
+        $builder = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_header h')
             ->select([
@@ -350,16 +409,17 @@ final class PermintaanLabMbItemController extends ControllerTemplate
                 'h.informasi_tambahan',
                 'h.id_status_permintaan',
             ])
-            ->where('h.id_permintaan', $idPermintaanLab)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('h.id_permintaan', $idPermintaanLab);
+
+        /** @var array<string, mixed> $baris */
+        $baris = $this->model->guarded_get($builder, 'update_page')->getRowArray() ?? [];
 
         if (!empty($baris['nomor_reg'])) {
-            $baris = array_merge($baris, $this->fetchRegistrasi($baris['nomor_reg']));
+            $baris = array_merge($baris, $this->fetchRegistrasi((string) $baris['nomor_reg']));
         }
 
         if (!empty($baris['id_dokter_perujuk'])) {
-            $baris = array_merge($baris, $this->fetchDokter($baris['id_dokter_perujuk']));
+            $baris = array_merge($baris, $this->fetchDokter((string) $baris['id_dokter_perujuk']));
         }
 
         return view('admin/laboratorium/tambah_permintaan_mb', [
@@ -379,20 +439,32 @@ final class PermintaanLabMbItemController extends ControllerTemplate
     // CRUD
     // -------------------------------------------------------------------------
 
+    /**
+     * @throws \CodeIgniter\Files\Exceptions\FileNotFoundException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \ReflectionException
+     */
     #[\Override]
     public function create(): string|RedirectResponse
     {
-        $rawPost      = $this->request->getPost();
-        $idItems      = $this->request->getPost('id_item') ?? [];
-        $idParameters = $this->request->getPost('id_parameter') ?? [];
+        /** @var array<string, mixed> $rawPost */
+        $rawPost = $this->request->getPost();
 
-        if (empty($idItems)) {
+        /** @mago-expect analysis:mixed-assignment */
+        $idItemsRaw = $this->request->getPost('id_item');
+        $idItems    = is_array($idItemsRaw) ? array_values($idItemsRaw) : [];
+
+        /** @mago-expect analysis:mixed-assignment */
+        $idParametersRaw = $this->request->getPost('id_parameter');
+        $idParameters    = is_array($idParametersRaw) ? $idParametersRaw : [];
+
+        if ($idItems === []) {
             session()->setFlashdata('error', 'Pilih minimal satu item pemeriksaan.');
             return redirect()->back()->withInput();
         }
 
         $noPermintaan = !empty($rawPost['no_permintaan'])
-            ? $rawPost['no_permintaan']
+            ? (string) $rawPost['no_permintaan']
             : $this->generateNomorPermintaan();
 
         $header = array_merge($this->buildHeaderData($rawPost, true), [
@@ -408,7 +480,7 @@ final class PermintaanLabMbItemController extends ControllerTemplate
         try {
             $modelHeader->insert($header);
             $this->insertItemsAndParameters(
-                $modelHeader->getInsertID(),
+                (int) $modelHeader->getInsertID(),
                 $idItems,
                 $idParameters,
                 $modelItem,
@@ -433,6 +505,10 @@ final class PermintaanLabMbItemController extends ControllerTemplate
         }
     }
 
+    /**
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \ReflectionException
+     */
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
@@ -451,13 +527,21 @@ final class PermintaanLabMbItemController extends ControllerTemplate
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
-        $idItems      = $this->request->getPost('id_item') ?? [];
-        $idParameters = $this->request->getPost('id_parameter') ?? [];
+        /** @mago-expect analysis:mixed-assignment */
+        $idItemsRaw = $this->request->getPost('id_item');
+        $idItems    = is_array($idItemsRaw) ? array_values($idItemsRaw) : [];
 
-        if (empty($idItems)) {
+        /** @mago-expect analysis:mixed-assignment */
+        $idParametersRaw = $this->request->getPost('id_parameter');
+        $idParameters    = is_array($idParametersRaw) ? $idParametersRaw : [];
+
+        if ($idItems === []) {
             session()->setFlashdata('error', 'Pilih minimal satu item pemeriksaan.');
             return redirect()->back()->withInput();
         }
+
+        /** @var array<string, mixed> $postData */
+        $postData = $this->request->getPost();
 
         $modelHeader    = new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel();
         $modelItem      = new \App\Features\Laboratorium\PermintaanLabMbItem\PermintaanLabMbItemModel();
@@ -466,7 +550,7 @@ final class PermintaanLabMbItemController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
-            $modelHeader->update($idPermintaanLab, $this->buildHeaderData($this->request->getPost()));
+            $modelHeader->update($idPermintaanLab, $this->buildHeaderData($postData));
 
             $this->deleteItemsAndParameters($idPermintaanLab, $modelItem, $modelParameter);
             $this->insertItemsAndParameters($idPermintaanLab, $idItems, $idParameters, $modelItem, $modelParameter);
@@ -489,6 +573,7 @@ final class PermintaanLabMbItemController extends ControllerTemplate
         }
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
@@ -534,6 +619,7 @@ final class PermintaanLabMbItemController extends ControllerTemplate
     // Sampel
     // -------------------------------------------------------------------------
 
+    /** @throws \ReflectionException */
     public function sampel(int|string $id): RedirectResponse
     {
         if ((int) $id === 0) {
@@ -546,10 +632,10 @@ final class PermintaanLabMbItemController extends ControllerTemplate
         }
 
         try {
+            $tglJamSampel = (string) ($this->request->getPost('tgl_jam_sampel') ?? '');
+
             (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel())->update($idPermintaanLab, [
-                'tgl_jam_sampel'       => $this->request->getPost('tgl_jam_sampel')
-                    ? $this->request->getPost('tgl_jam_sampel')
-                    : date('Y-m-d H:i:s'),
+                'tgl_jam_sampel'       => ($tglJamSampel !== '' && $tglJamSampel !== '0') ? $tglJamSampel : date('Y-m-d H:i:s'),
                 'id_status_permintaan' => 2,
             ]);
             session()->setFlashdata('success', 'Waktu pengambilan sampel berhasil dicatat.');
@@ -564,10 +650,12 @@ final class PermintaanLabMbItemController extends ControllerTemplate
     // Index
     // -------------------------------------------------------------------------
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function index(): string
     {
-        $activeFilter = $this->request->getGet('filter') ? $this->request->getGet('filter') : null;
+        $filter       = (string) ($this->request->getGet('filter') ?? '');
+        $activeFilter = ($filter !== '' && $filter !== '0') ? $filter : null;
         $rows         = $this->fetchPermintaanLabHeaders($activeFilter !== null ? (int) $activeFilter : null);
 
         $konfig = [
@@ -601,12 +689,13 @@ final class PermintaanLabMbItemController extends ControllerTemplate
     // Cetak
     // -------------------------------------------------------------------------
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function print(int|string $id): string
     {
         $idPermintaanLab = (int) $id;
 
-        $header = $this->model
+        $builder = $this->model
             ->db
             ->table('laboratorium.permintaan_lab_header plh')
             ->select([
@@ -626,11 +715,11 @@ final class PermintaanLabMbItemController extends ControllerTemplate
             ->join('person.orang o', 'o.id_orang        = p.id_orang', 'left')
             ->join('role.dokter d', 'd.id_dokter       = plh.id_dokter_perujuk', 'left')
             ->join('person.orang od', 'od.id_orang       = d.id_orang', 'left')
-            ->where('plh.id_permintaan', $idPermintaanLab)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('plh.id_permintaan', $idPermintaanLab);
 
-        if (empty($header)) {
+        $header = $this->model->guarded_get($builder, 'print')->getRowArray() ?? [];
+
+        if ($header === []) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
@@ -645,6 +734,7 @@ final class PermintaanLabMbItemController extends ControllerTemplate
     // List
     // -------------------------------------------------------------------------
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
         $idPermintaan = (int) ($this->request->getGet('id_permintaan') ?? 0);

@@ -46,6 +46,7 @@ final class PermintaanLabHeaderController extends ControllerTemplate
     // PRIVATE HELPERS
     // ──────────────────────────────────────────────────────────
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function baseListBuilder(): \CodeIgniter\Database\BaseBuilder
     {
         return $this->model
@@ -77,12 +78,13 @@ final class PermintaanLabHeaderController extends ControllerTemplate
     // LIST — untuk modal pilih permintaan
     // ──────────────────────────────────────────────────────────
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
         $builder = $this->baseListBuilder();
 
-        $status = $this->request->getGet('status');
-        if ($status !== null) {
+        $status = (string) ($this->request->getGet('status') ?? '');
+        if ($status !== '') {
             $builder->where('plh.id_status_permintaan', (int) $status);
         }
 
@@ -105,6 +107,8 @@ final class PermintaanLabHeaderController extends ControllerTemplate
             )");
         }
 
-        return $this->response->setJSON(['data' => $builder->get()->getResultArray()]);
+        $rows = $this->model->guarded_get($builder, 'list')->getResultArray();
+
+        return $this->response->setJSON(['data' => $rows]);
     }
 }
