@@ -34,11 +34,12 @@ final class PermintaanRadItemController extends ControllerTemplate
         );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $idPermintaan = $this->request->getGet('id_permintaan');
+        $idPermintaan = (string) ($this->request->getGet('id_permintaan') ?? '');
 
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('radiologi.permintaan_rad_item pri')
             ->select([
@@ -50,9 +51,9 @@ final class PermintaanRadItemController extends ControllerTemplate
                 'r.tarif_dasar',
             ])
             ->join('radiologi.ref_item_rad r', 'r.id_item = pri.id_item')
-            ->where('pri.id_permintaan', $idPermintaan)
-            ->get()
-            ->getResultArray();
+            ->where('pri.id_permintaan', $idPermintaan);
+
+        $rows = $this->model->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }

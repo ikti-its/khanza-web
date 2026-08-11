@@ -39,6 +39,10 @@ final class HasilRadController extends ControllerTemplate
         );
     }
 
+    /**
+     * @param array<array-key, mixed> $data_tabel
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     #[\Override]
     protected function after_read(array &$data_tabel): void
     {
@@ -46,20 +50,28 @@ final class HasilRadController extends ControllerTemplate
             return;
         }
 
-        $ids      = array_column($data_tabel, 'id_permintaan_rad');
-        $statuses = $this->model
+        /** @var list<array<string, mixed>> $rows */
+        $rows = array_filter($data_tabel, 'is_array');
+        $ids  = array_column($rows, 'id_permintaan_rad');
+
+        $builder = $this->model
             ->db
             ->table('radiologi.permintaan_rad pr')
             ->select(['pr.id_permintaan', 's.nama_status'])
             ->join('radiologi.ref_status_permintaan_rad s', 's.id_status = pr.id_status_permintaan', 'left')
-            ->whereIn('pr.id_permintaan', $ids)
-            ->get()
-            ->getResultArray();
+            ->whereIn('pr.id_permintaan', $ids);
+
+        /** @var list<array<string, mixed>> $statuses */
+        $statuses = $this->model->guarded_get($builder, 'after_read')->getResultArray();
 
         $map = array_column($statuses, 'nama_status', 'id_permintaan');
 
+        /** @mago-expect analysis:mixed-assignment */
         foreach ($data_tabel as &$row) {
-            $row['nama_status'] = $map[$row['id_permintaan_rad']] ?? null;
+            if (!is_array($row)) {
+                continue;
+            }
+            $row['nama_status'] = $map[$row['id_permintaan_rad'] ?? null] ?? null;
         }
     }
 
@@ -67,12 +79,14 @@ final class HasilRadController extends ControllerTemplate
     // PRIVATE HELPERS
     // ──────────────────────────────────────────────────────────
 
+    /** @return list<array<int|string, mixed>> */
     private function getKonfig(): array
     {
+        /** @var list<array<int|string, mixed>> */
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            static fn($f) => !in_array(
-                $f[2],
+            static fn(array $f) => !in_array(
+                $f[2] ?? null,
                 [
                     'id_hasil_rad',
                     'id_permintaan_rad',
@@ -85,37 +99,51 @@ final class HasilRadController extends ControllerTemplate
         ));
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchTemplateRad(): array
     {
-        $templates = $this->model
+        $builder = $this->model
             ->db
             ->table('radiologi.ref_template_rad')
             ->select(['id_template', 'nama_template', 'isi_teks_ekspertise'])
-            ->orderBy('nama_template', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('nama_template', 'ASC');
 
-        return array_map(static function ($t) {
-            $t['isi_teks_ekspertise'] = str_replace('\n', "\n", $t['isi_teks_ekspertise']);
+        /** @var list<array<string, mixed>> $templates */
+        $templates = $this->model->guarded_get($builder, 'fetchTemplateRad')->getResultArray();
+
+        return array_map(static function (array $t): array {
+            $t['isi_teks_ekspertise'] = str_replace('\n', "\n", (string) ($t['isi_teks_ekspertise'] ?? ''));
             return $t;
         }, $templates);
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchBarangNonMedis(): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('inventori_non_medis.barang b')
             ->select(['b.id_barang', 'b.kode_barang', 'b.nama_barang', 'b.stok', 's.nama_satuan'])
             ->join('inventori_non_medis.satuan s', 's.id_satuan = b.id_satuan', 'left')
-            ->orderBy('b.nama_barang', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('b.nama_barang', 'ASC');
+
+        /** @var list<array<string, mixed>> */
+        return $this->model->guarded_get($builder, 'fetchBarangNonMedis')->getResultArray();
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchDetailPermintaan(int $idPermintaanRad): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('radiologi.permintaan_rad pr')
             ->select([
@@ -131,25 +159,28 @@ final class HasilRadController extends ControllerTemplate
             ->join('person.orang o', 'o.id_orang    = p.id_orang', 'left')
             ->join('role.dokter d', 'd.id_dokter   = r.id_dokter', 'left')
             ->join('person.orang od', 'od.id_orang   = d.id_orang', 'left')
-            ->where('pr.id_permintaan', $idPermintaanRad)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('pr.id_permintaan', $idPermintaanRad);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchDetailPermintaan')->getRowArray() ?? [];
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue, string $aliasKolom): null|string
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table("role.{$tabel} t")
             ->select(["o.nama AS {$aliasKolom}"])
             ->join('person.orang o', 'o.id_orang = t.id_orang')
-            ->where("t.{$idKolom}", $idValue)
-            ->get()
-            ->getRowArray();
+            ->where("t.{$idKolom}", $idValue);
 
-        return $row[$aliasKolom] ?? null;
+        $row = $this->model->guarded_get($builder, 'fetchNamaRole')->getRowArray();
+
+        return is_string($row[$aliasKolom] ?? null) ? $row[$aliasKolom] : null;
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function adjustStok(int $idBarang, int $jumlah, string $operator = '-'): void
     {
         $this->model
@@ -160,35 +191,60 @@ final class HasilRadController extends ControllerTemplate
             ->update();
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchStokBarang(int $idBarang): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('inventori_non_medis.barang')
             ->select(['nama_barang', 'stok'])
-            ->where('id_barang', $idBarang)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('id_barang', $idBarang);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchStokBarang')->getRowArray() ?? [];
     }
 
+    /** @throws \ReflectionException */
     private function processFotoUpload(int $idHasilRad): void
     {
         $fotoModel = new \App\Features\Radiologi\HasilRadFoto\HasilRadFotoModel();
-        foreach ($this->request->getFiles()['foto'] ?? [] as $file) {
+
+        /** @mago-expect analysis:mixed-assignment */
+        $request = $this->request;
+        assert($request instanceof \CodeIgniter\HTTP\IncomingRequest);
+
+        $rawFiles = $request->getFiles()['foto'] ?? [];
+        $rawFiles = is_array($rawFiles) ? $rawFiles : [$rawFiles];
+
+        $files = array_values(array_filter(
+            $rawFiles,
+            static fn($f) => $f instanceof \CodeIgniter\HTTP\Files\UploadedFile,
+        ));
+
+        foreach ($files as $file) {
             if (!$this->upload_valid($file, ['jpg', 'jpeg', 'png', 'webp'], 5 * 1024 * 1024)) {
                 continue;
             }
 
             $newName = $file->getRandomName();
+            $konten  = file_get_contents($file->getTempName());
+            if ($konten === false) {
+                continue;
+            }
+
             $fotoModel->insert([
                 'id_hasil_rad' => $idHasilRad,
                 'nama_file'    => $newName,
-                'konten_file'  => '\x' . bin2hex(file_get_contents($file->getTempName())),
+                'konten_file'  => '\x' . bin2hex($konten),
                 'tgl_upload'   => date('Y-m-d H:i:s'),
             ]);
         }
     }
 
+    /** @param array<string, mixed> $tindakan */
     private function tindakanKosong(array $tindakan): bool
     {
         $fieldTeks = [
@@ -210,7 +266,14 @@ final class HasilRadController extends ControllerTemplate
         return empty($tindakan['id_template_rad']);
     }
 
-    /** Simpan hasil tindakan jika ada field terisi; hapus baris lama jika semua field dikosongkan kembali. */
+    /**
+     * Simpan hasil tindakan jika ada field terisi; hapus baris lama jika semua field dikosongkan kembali.
+     *
+     * @param array<int, array<string, mixed>> $existingByItem
+     * @param array<string, mixed> $tindakan
+     * @throws \ReflectionException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function syncTindakan(
         \App\Features\Radiologi\HasilRadTindakan\HasilRadTindakanModel $modelTindakan,
         array $existingByItem,
@@ -226,41 +289,39 @@ final class HasilRadController extends ControllerTemplate
 
         if ($this->tindakanKosong($tindakan)) {
             if ($existing !== null) {
-                $modelTindakan->delete((int) $existing['id_hasil_tindakan']);
+                $modelTindakan->delete((int) ($existing['id_hasil_tindakan'] ?? 0));
             }
             return;
         }
 
+        $proyeksi         = (string) ($tindakan['proyeksi'] ?? '');
+        $kilovoltage      = (string) ($tindakan['kilovoltage_kv'] ?? '');
+        $mas              = (string) ($tindakan['milliampere_second_mas'] ?? '');
+        $ffd              = (string) ($tindakan['focus_film_distance_ffd'] ?? '');
+        $bsf              = (string) ($tindakan['back_scatter_factor_bsf'] ?? '');
+        $inaktivasi       = (string) ($tindakan['inaktivasi'] ?? '');
+        $jumlahPenyinaran = (string) ($tindakan['jumlah_penyinaran'] ?? '');
+        $dosisRadiasi     = (string) ($tindakan['dosis_radiasi'] ?? '');
+        $hasilEkspertise  = (string) ($tindakan['hasil_ekspertise'] ?? '');
+
         $data = [
             'id_permintaan_item'      => $idItem,
-            'proyeksi'                => $tindakan['proyeksi'] ?? '' ? $tindakan['proyeksi'] ?? '' : null,
-            'kilovoltage_kv'          => ($tindakan['kilovoltage_kv'] ?? '') !== ''
-                ? (float) $tindakan['kilovoltage_kv']
-                : null,
-            'milliampere_second_mas'  => ($tindakan['milliampere_second_mas'] ?? '') !== ''
-                ? (float) $tindakan['milliampere_second_mas']
-                : null,
-            'focus_film_distance_ffd' => ($tindakan['focus_film_distance_ffd'] ?? '') !== ''
-                ? (float) $tindakan['focus_film_distance_ffd']
-                : null,
-            'back_scatter_factor_bsf' => ($tindakan['back_scatter_factor_bsf'] ?? '') !== ''
-                ? (float) $tindakan['back_scatter_factor_bsf']
-                : null,
-            'inaktivasi'              => $tindakan['inaktivasi'] ?? '' ? $tindakan['inaktivasi'] ?? '' : null,
-            'jumlah_penyinaran'       => ($tindakan['jumlah_penyinaran'] ?? '') !== ''
-                ? (int) $tindakan['jumlah_penyinaran']
-                : null,
-            'dosis_radiasi'           => $tindakan['dosis_radiasi'] ?? '' ? $tindakan['dosis_radiasi'] ?? '' : null,
-            'hasil_ekspertise'        => $tindakan['hasil_ekspertise'] ?? ''
-                ? $tindakan['hasil_ekspertise'] ?? ''
-                : null,
+            'proyeksi'                => $proyeksi !== '' ? $proyeksi : null,
+            'kilovoltage_kv'          => is_numeric($kilovoltage) ? (float) $kilovoltage : null,
+            'milliampere_second_mas'  => is_numeric($mas) ? (float) $mas : null,
+            'focus_film_distance_ffd' => is_numeric($ffd) ? (float) $ffd : null,
+            'back_scatter_factor_bsf' => is_numeric($bsf) ? (float) $bsf : null,
+            'inaktivasi'              => $inaktivasi !== '' ? $inaktivasi : null,
+            'jumlah_penyinaran'       => $jumlahPenyinaran !== '' ? (int) $jumlahPenyinaran : null,
+            'dosis_radiasi'           => $dosisRadiasi !== '' ? $dosisRadiasi : null,
+            'hasil_ekspertise'        => $hasilEkspertise !== '' ? $hasilEkspertise : null,
             'id_template_rad'         => !empty($tindakan['id_template_rad'])
                 ? (int) $tindakan['id_template_rad']
                 : null,
         ];
 
         if ($existing !== null) {
-            $modelTindakan->update((int) $existing['id_hasil_tindakan'], $data);
+            $modelTindakan->update((int) ($existing['id_hasil_tindakan'] ?? 0), $data);
             return;
         }
         $modelTindakan->insert($data + ['id_hasil_rad' => $idHasilRad]);
@@ -270,6 +331,12 @@ final class HasilRadController extends ControllerTemplate
      * Simpan/hapus satu baris BHP dan sesuaikan stok hanya sebesar selisihnya
      * (bukan kembalikan-semua-lalu-kurangi-semua), termasuk saat baris dihapus
      * user dari form (jumlah_pakai kosong) atau baris lama sudah tidak dikirim lagi.
+     *
+     * @param array<int, array<string, mixed>> $existingByBarang
+     * @param array<string, mixed> $bhp
+     * @throws \ReflectionException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \RuntimeException
      */
     private function syncBhp(
         \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel $modelBhp,
@@ -282,7 +349,7 @@ final class HasilRadController extends ControllerTemplate
             return;
         }
 
-        $rawJumlah = $bhp['jumlah_pakai'] ?? 0;
+        $rawJumlah = (string) ($bhp['jumlah_pakai'] ?? 0);
         if (!is_numeric($rawJumlah)) {
             throw new \RuntimeException('Jumlah pakai BHP harus berupa angka.');
         }
@@ -296,29 +363,29 @@ final class HasilRadController extends ControllerTemplate
 
         if ($jumlahBaru === 0) {
             if ($existing !== null) {
-                $this->adjustStok($idBarang, (int) $existing['jumlah_pakai'], '+');
-                $modelBhp->delete((int) $existing['id_rad_bhp']);
+                $this->adjustStok($idBarang, (int) ($existing['jumlah_pakai'] ?? 0), '+');
+                $modelBhp->delete((int) ($existing['id_rad_bhp'] ?? 0));
             }
             return;
         }
 
         $barang       = $this->fetchStokBarang($idBarang);
-        $stokTersedia = (int) ($barang['stok'] ?? 0) + ($existing !== null ? (int) $existing['jumlah_pakai'] : 0);
+        $stokTersedia = (int) ($barang['stok'] ?? 0) + ($existing !== null ? (int) ($existing['jumlah_pakai'] ?? 0) : 0);
         if ($jumlahBaru > $stokTersedia) {
             throw new \RuntimeException(sprintf(
                 'Jumlah pakai BHP "%s" (%d) melebihi stok tersedia (%d).',
-                $barang['nama_barang'] ?? $idBarang,
+                (string) ($barang['nama_barang'] ?? $idBarang),
                 $jumlahBaru,
                 $stokTersedia,
             ));
         }
 
         if ($existing !== null) {
-            $selisih = $jumlahBaru - (int) $existing['jumlah_pakai'];
+            $selisih = $jumlahBaru - (int) ($existing['jumlah_pakai'] ?? 0);
             if ($selisih !== 0) {
                 $this->adjustStok($idBarang, abs($selisih), $selisih > 0 ? '-' : '+');
             }
-            $modelBhp->update((int) $existing['id_rad_bhp'], ['jumlah_pakai' => $jumlahBaru]);
+            $modelBhp->update((int) ($existing['id_rad_bhp'] ?? 0), ['jumlah_pakai' => $jumlahBaru]);
             return;
         }
         $modelBhp->insert([
@@ -329,9 +396,17 @@ final class HasilRadController extends ControllerTemplate
         $this->adjustStok($idBarang, $jumlahBaru, '-');
     }
 
+    /**
+     * @param list<array<string, mixed>> $tindakanList
+     * @param array<int|string, array<string, mixed>> $bhpList
+     * @throws \ReflectionException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \RuntimeException
+     */
     private function upsertTindakanAndBhp(int $idHasilRad, array $tindakanList, array $bhpList): void
     {
-        $modelTindakan          = new \App\Features\Radiologi\HasilRadTindakan\HasilRadTindakanModel();
+        $modelTindakan = new \App\Features\Radiologi\HasilRadTindakan\HasilRadTindakanModel();
+        /** @var array<int, array<string, mixed>> $existingTindakanByItem */
         $existingTindakanByItem = array_column(
             $modelTindakan->set_filter('id_hasil_rad', $idHasilRad)->findAll(),
             null,
@@ -342,7 +417,8 @@ final class HasilRadController extends ControllerTemplate
             $this->syncTindakan($modelTindakan, $existingTindakanByItem, $tindakan, $idHasilRad);
         }
 
-        $modelBhp            = new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel();
+        $modelBhp = new \App\Features\Radiologi\HasilRadBhp\HasilRadBhpModel();
+        /** @var array<int, array<string, mixed>> $existingBhpByBarang */
         $existingBhpByBarang = array_column(
             $modelBhp->set_filter('id_hasil_rad', $idHasilRad)->findAll(),
             null,
@@ -361,11 +437,12 @@ final class HasilRadController extends ControllerTemplate
             if (array_key_exists((int) $idBarang, $submittedBarangIds)) {
                 continue;
             }
-            $this->adjustStok((int) $lama['id_barang'], (int) $lama['jumlah_pakai'], '+');
-            $modelBhp->delete((int) $lama['id_rad_bhp']);
+            $this->adjustStok((int) ($lama['id_barang'] ?? 0), (int) ($lama['jumlah_pakai'] ?? 0), '+');
+            $modelBhp->delete((int) ($lama['id_rad_bhp'] ?? 0));
         }
     }
 
+    /** @param list<array<string, mixed>> $tindakanList */
     private function tentukanStatusPermintaan(array $tindakanList): int
     {
         // Selesai (3) hanya jika semua tindakan sudah punya hasil ekspertise;
@@ -375,7 +452,7 @@ final class HasilRadController extends ControllerTemplate
         }
 
         foreach ($tindakanList as $tindakan) {
-            if (trim($tindakan['hasil_ekspertise'] ?? '') === '') {
+            if (trim((string) ($tindakan['hasil_ekspertise'] ?? '')) === '') {
                 return 2;
             }
         }
@@ -387,6 +464,7 @@ final class HasilRadController extends ControllerTemplate
     // HALAMAN TAMBAH
     // ──────────────────────────────────────────────────────────
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function create_page(): string
     {
@@ -408,9 +486,14 @@ final class HasilRadController extends ControllerTemplate
     // PROSES SIMPAN
     // ──────────────────────────────────────────────────────────
 
+    /**
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \ReflectionException
+     */
     #[\Override]
     public function create(): string|RedirectResponse
     {
+        /** @var array<string, mixed> $rawPost */
         $rawPost = $this->request->getPost();
 
         $dataHeader = [
@@ -421,19 +504,24 @@ final class HasilRadController extends ControllerTemplate
             'id_petugas_rad'    => (int) ($rawPost['id_petugas_rad'] ?? 0)
                 ? (int) ($rawPost['id_petugas_rad'] ?? 0)
                 : null,
-            'tgl_jam_hasil'     => $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s'),
-            'catatan'           => $rawPost['catatan'] ?? '',
+            'tgl_jam_hasil'     => (string) ($rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s')),
+            'catatan'           => (string) ($rawPost['catatan'] ?? ''),
         ];
 
-        $tindakanList = $rawPost['tindakan'] ?? [];
-        $bhpList      = $rawPost['bhp'] ?? [];
+        $tindakanListRaw = is_array($rawPost['tindakan'] ?? null) ? array_values($rawPost['tindakan']) : [];
+        /** @var list<array<string, mixed>> $tindakanList */
+        $tindakanList = array_filter($tindakanListRaw, 'is_array');
+
+        $bhpListRaw = is_array($rawPost['bhp'] ?? null) ? $rawPost['bhp'] : [];
+        /** @var array<int|string, array<string, mixed>> $bhpList */
+        $bhpList = array_filter($bhpListRaw, 'is_array');
 
         $this->model->db->transStart();
 
         try {
             // 1. Insert header
             $this->model->insert($dataHeader);
-            $idHasilRad = $this->model->getInsertID();
+            $idHasilRad = (int) $this->model->getInsertID();
 
             // 2. Insert tindakan dan BHP
             $this->upsertTindakanAndBhp($idHasilRad, $tindakanList, $bhpList);
@@ -472,12 +560,13 @@ final class HasilRadController extends ControllerTemplate
     // HALAMAN UBAH
     // ──────────────────────────────────────────────────────────
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         $baris = $this->model->find($id);
 
-        if (empty($baris)) {
+        if (!is_array($baris)) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
@@ -496,7 +585,7 @@ final class HasilRadController extends ControllerTemplate
                 $this->fetchNamaRole('petugas', 'id_petugas', (int) $baris['id_petugas_rad'], 'nama_petugas') ?? '';
         }
 
-        $itemTerpilih = $this->model
+        $itemTerpilihBuilder = $this->model
             ->db
             ->table('radiologi.hasil_rad_tindakan hrt')
             ->select([
@@ -518,11 +607,11 @@ final class HasilRadController extends ControllerTemplate
             ])
             ->join('radiologi.permintaan_rad_item pri', 'pri.id_permintaan_item = hrt.id_permintaan_item')
             ->join('radiologi.ref_item_rad r', 'r.id_item = pri.id_item')
-            ->where('hrt.id_hasil_rad', $id)
-            ->get()
-            ->getResultArray();
+            ->where('hrt.id_hasil_rad', $id);
 
-        $bhpTerpilih = $this->model
+        $itemTerpilih = $this->model->guarded_get($itemTerpilihBuilder, 'update_page')->getResultArray();
+
+        $bhpTerpilihBuilder = $this->model
             ->db
             ->table('radiologi.hasil_rad_bhp hrb')
             ->select([
@@ -535,18 +624,18 @@ final class HasilRadController extends ControllerTemplate
             ])
             ->join('inventori_non_medis.barang b', 'b.id_barang  = hrb.id_barang')
             ->join('inventori_non_medis.satuan s', 's.id_satuan  = b.id_satuan', 'left')
-            ->where('hrb.id_hasil_rad', $id)
-            ->get()
-            ->getResultArray();
+            ->where('hrb.id_hasil_rad', $id);
 
-        $fotoTerpilih = $this->model
+        $bhpTerpilih = $this->model->guarded_get($bhpTerpilihBuilder, 'update_page')->getResultArray();
+
+        $fotoTerpilihBuilder = $this->model
             ->db
             ->table('radiologi.hasil_rad_foto')
             ->select(['id_rad_foto', 'nama_file'])
             ->where('id_hasil_rad', $id)
-            ->orderBy('tgl_upload', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('tgl_upload', 'ASC');
+
+        $fotoTerpilih = $this->model->guarded_get($fotoTerpilihBuilder, 'update_page')->getResultArray();
 
         return view('admin/radiologi/tambah_hasil_rad', [
             'judul'            => 'Ubah ' . $this->title,
@@ -569,6 +658,10 @@ final class HasilRadController extends ControllerTemplate
     // PROSES UPDATE
     // ──────────────────────────────────────────────────────────
 
+    /**
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \ReflectionException
+     */
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
@@ -576,6 +669,7 @@ final class HasilRadController extends ControllerTemplate
             return $this->home();
         }
 
+        /** @var array<string, mixed> $rawPost */
         $rawPost = $this->request->getPost();
 
         $dataHeader = [
@@ -586,12 +680,17 @@ final class HasilRadController extends ControllerTemplate
             'id_petugas_rad'    => (int) ($rawPost['id_petugas_rad'] ?? 0)
                 ? (int) ($rawPost['id_petugas_rad'] ?? 0)
                 : null,
-            'tgl_jam_hasil'     => $rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s'),
-            'catatan'           => $rawPost['catatan'] ?? '',
+            'tgl_jam_hasil'     => (string) ($rawPost['tgl_jam_hasil'] ?? date('Y-m-d H:i:s')),
+            'catatan'           => (string) ($rawPost['catatan'] ?? ''),
         ];
 
-        $tindakanList = $rawPost['tindakan'] ?? [];
-        $bhpList      = $rawPost['bhp'] ?? [];
+        $tindakanListRaw = is_array($rawPost['tindakan'] ?? null) ? array_values($rawPost['tindakan']) : [];
+        /** @var list<array<string, mixed>> $tindakanList */
+        $tindakanList = array_filter($tindakanListRaw, 'is_array');
+
+        $bhpListRaw = is_array($rawPost['bhp'] ?? null) ? $rawPost['bhp'] : [];
+        /** @var array<int|string, array<string, mixed>> $bhpList */
+        $bhpList = array_filter($bhpListRaw, 'is_array');
 
         $this->model->db->transStart();
 
@@ -631,6 +730,10 @@ final class HasilRadController extends ControllerTemplate
     // DELETE — cascade hapus tindakan & BHP
     // ──────────────────────────────────────────────────────────
 
+    /**
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \CodeIgniter\Exceptions\ModelException
+     */
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
@@ -650,7 +753,7 @@ final class HasilRadController extends ControllerTemplate
                 ->delete();
 
             foreach ($bhpLama as $lama) {
-                $this->adjustStok((int) $lama['id_barang'], (int) $lama['jumlah_pakai'], '+');
+                $this->adjustStok((int) ($lama['id_barang'] ?? 0), (int) ($lama['jumlah_pakai'] ?? 0), '+');
             }
             $modelBhp->where('id_hasil_rad', $id)->delete();
 
@@ -678,12 +781,13 @@ final class HasilRadController extends ControllerTemplate
     // CETAK HASIL EKSPERTISE
     // ──────────────────────────────────────────────────────────
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function print(int|string $id): string
+    public function print(int|string $id): string|RedirectResponse
     {
         $hasilRad = $this->model->find($id);
 
-        if (empty($hasilRad)) {
+        if (!is_array($hasilRad)) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
@@ -696,15 +800,15 @@ final class HasilRadController extends ControllerTemplate
             ? $this->fetchNamaRole('dokter', 'id_dokter', (int) $hasilRad['id_dokter_pj'], 'nama_dokter_pj')
             : null;
 
-        $tindakanList = $this->model
+        $tindakanBuilder = $this->model
             ->db
             ->table('radiologi.hasil_rad_tindakan hrt')
             ->select(['r.kode_periksa', 'r.nama_pemeriksaan', 'hrt.hasil_ekspertise'])
             ->join('radiologi.permintaan_rad_item pri', 'pri.id_permintaan_item = hrt.id_permintaan_item')
             ->join('radiologi.ref_item_rad r', 'r.id_item = pri.id_item')
-            ->where('hrt.id_hasil_rad', $id)
-            ->get()
-            ->getResultArray();
+            ->where('hrt.id_hasil_rad', $id);
+
+        $tindakanList = $this->model->guarded_get($tindakanBuilder, 'print')->getResultArray();
 
         // $organisasi = $this->model->db->table('ref.organisasi')->get()->getRowArray() ?? [];
 

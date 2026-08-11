@@ -36,15 +36,16 @@ final class RefItemRadController extends ControllerTemplate
         );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('radiologi.ref_item_rad')
             ->select(['id_item', 'kode_periksa', 'nama_pemeriksaan', 'tarif_dasar', 'tarif_baca'])
-            ->orderBy('kode_periksa', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('kode_periksa', 'ASC');
+
+        $rows = $this->model->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }

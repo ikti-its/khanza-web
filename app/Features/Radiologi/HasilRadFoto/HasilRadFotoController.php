@@ -35,23 +35,45 @@ final class HasilRadFotoController extends ControllerTemplate
         );
     }
 
-    // Simpan satu atau lebih file gambar sebagai bytea di database;
-    // penyajiannya lewat route tampil/(:num) yang dijaga auth
+    /**
+     * Simpan satu atau lebih file gambar sebagai bytea di database;
+     * penyajiannya lewat route tampil/(:num) yang dijaga auth
+     *
+     * @throws \ReflectionException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     public function upload(int $idHasilRad): ResponseInterface
     {
         $uploaded = [];
 
-        foreach ($this->request->getFiles()['foto'] ?? [] as $file) {
+        $request = $this->request;
+        assert($request instanceof \CodeIgniter\HTTP\IncomingRequest);
+
+        /** @mago-expect analysis:mixed-assignment */
+        $rawFiles = $request->getFiles()['foto'] ?? [];
+        $rawFiles = is_array($rawFiles) ? $rawFiles : [$rawFiles];
+
+        $files = array_values(array_filter(
+            $rawFiles,
+            static fn($f) => $f instanceof \CodeIgniter\HTTP\Files\UploadedFile,
+        ));
+
+        foreach ($files as $file) {
             if (!$this->upload_valid($file, ['jpg', 'jpeg', 'png', 'webp'], 5 * 1024 * 1024)) {
                 continue;
             }
 
             $newName = $file->getRandomName();
 
+            $konten = file_get_contents($file->getTempName());
+            if ($konten === false) {
+                continue;
+            }
+
             $this->model->insert([
                 'id_hasil_rad' => $idHasilRad,
                 'nama_file'    => $newName,
-                'konten_file'  => '\x' . bin2hex(file_get_contents($file->getTempName())),
+                'konten_file'  => '\x' . bin2hex($konten),
                 'tgl_upload'   => date('Y-m-d H:i:s'),
             ]);
 
@@ -67,7 +89,11 @@ final class HasilRadFotoController extends ControllerTemplate
         return $this->response->setJSON(['success' => true, 'data' => $uploaded]);
     }
 
-    // Hapus record foto; isi filenya ikut terhapus karena tersimpan di DB
+    /**
+     * Hapus record foto; isi filenya ikut terhapus karena tersimpan di DB
+     *
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     public function hapusFoto(int $id): ResponseInterface
     {
         if ($this->model->find($id)) {
