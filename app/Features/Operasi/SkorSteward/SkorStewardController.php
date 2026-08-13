@@ -95,9 +95,18 @@ final class SkorStewardController extends ControllerTemplate
     {
         $db = $this->model->db;
 
-        $kesadaranBuilder = $db->table('operasi.ref_steward_kesadaran')->select('id_kesadaran, nama_skala, nilai')->orderBy('nilai');
-        $respirasiBuilder = $db->table('operasi.ref_steward_respirasi')->select('id_respirasi, nama_skala, nilai')->orderBy('nilai');
-        $motorikBuilder   = $db->table('operasi.ref_steward_motorik')->select('id_motorik, nama_skala, nilai')->orderBy('nilai');
+        $kesadaranBuilder = $db
+            ->table('operasi.ref_steward_kesadaran')
+            ->select('id_kesadaran, nama_skala, nilai')
+            ->orderBy('nilai');
+        $respirasiBuilder = $db
+            ->table('operasi.ref_steward_respirasi')
+            ->select('id_respirasi, nama_skala, nilai')
+            ->orderBy('nilai');
+        $motorikBuilder   = $db
+            ->table('operasi.ref_steward_motorik')
+            ->select('id_motorik, nama_skala, nilai')
+            ->orderBy('nilai');
 
         /** @var array<string, list<array<string, mixed>>> */
         return [

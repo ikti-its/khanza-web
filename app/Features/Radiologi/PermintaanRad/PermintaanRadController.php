@@ -65,7 +65,9 @@ final class PermintaanRadController extends ControllerTemplate
 
         $lastNo = $this->model->guarded_get($builder, 'generateNomorPermintaan')->getRowArray();
 
-        return generateNextNoPermintaanRad(is_string($lastNo['no_permintaan'] ?? null) ? $lastNo['no_permintaan'] : null);
+        return generateNextNoPermintaanRad(
+            is_string($lastNo['no_permintaan'] ?? null) ? $lastNo['no_permintaan'] : null,
+        );
     }
 
     /** @return list<array<int|string, mixed>> */
@@ -214,7 +216,7 @@ final class PermintaanRadController extends ControllerTemplate
                 (string) ($row['nama_status'] ?? '') . ' (' . (string) ($row['jumlah'] ?? 0) . ')';
         }
 
-        $filter = (string) ($this->request->getGet('filter') ?? '');
+        $filter              = (string) ($this->request->getGet('filter') ?? '');
         $this->active_filter = $filter !== '' ? $filter : null;
         if ($this->active_filter !== null) {
             $this->model->set_filter('id_status_permintaan', (int) $this->active_filter);
@@ -282,7 +284,7 @@ final class PermintaanRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menyimpan permintaan radiologi.');
             }
 
@@ -378,7 +380,7 @@ final class PermintaanRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal memperbarui permintaan radiologi.');
             }
 
@@ -421,7 +423,7 @@ final class PermintaanRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus permintaan radiologi.');
             }
 

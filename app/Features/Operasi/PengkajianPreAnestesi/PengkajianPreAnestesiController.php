@@ -127,8 +127,8 @@ final class PengkajianPreAnestesiController extends ControllerTemplate
         $db = $this->model->db;
 
         $rencanaBuilder = $db->table('operasi.ref_rencana_anestesi')->select('id_rencana_anestesi, nama_rencana');
-        $asaBuilder      = $db->table('operasi.ref_angka_asa')->select('id_asa, nama_asa');
-        $obatBuilder     = $db->table('operasi.ref_obat_bebas')->select('id_obat_bebas, nama_kategori');
+        $asaBuilder     = $db->table('operasi.ref_angka_asa')->select('id_asa, nama_asa');
+        $obatBuilder    = $db->table('operasi.ref_obat_bebas')->select('id_obat_bebas, nama_kategori');
 
         /** @var array<string, list<array<string, mixed>>> */
         return [

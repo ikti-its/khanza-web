@@ -106,12 +106,10 @@ final class SigninSebelumAnestesiController extends ControllerTemplate
     {
         $db = $this->model->db;
 
-        $ketersediaanBuilder = $db
-            ->table('operasi.ref_ketersediaan_status')
-            ->select('id_ketersediaan_status, nama_ketersediaan');
-        $kesiapanBuilder = $db
-            ->table('operasi.ref_kesiapan_anestesi')
-            ->select('id_kesiapan, nama_kesiapan');
+        $ketersediaanBuilder = $db->table('operasi.ref_ketersediaan_status')->select(
+            'id_ketersediaan_status, nama_ketersediaan',
+        );
+        $kesiapanBuilder = $db->table('operasi.ref_kesiapan_anestesi')->select('id_kesiapan, nama_kesiapan');
 
         /** @var array<string, list<array<string, mixed>>> */
         return [

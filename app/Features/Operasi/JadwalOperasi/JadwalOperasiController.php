@@ -59,7 +59,7 @@ final class JadwalOperasiController extends ControllerTemplate
             'dibatalkan'  => 'Dibatalkan',
         ];
 
-        $filterGet = (string) ($this->request->getGet('filter') ?? '');
+        $filterGet           = (string) ($this->request->getGet('filter') ?? '');
         $this->active_filter = $filterGet !== '' ? $filterGet : null;
 
         match ($this->active_filter) {
@@ -135,11 +135,7 @@ final class JadwalOperasiController extends ControllerTemplate
     /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchNamaRuangan(int $idRuangan): string
     {
-        $builder = $this->model
-            ->db
-            ->table('ruangan.ruangan')
-            ->select('nama_ruangan')
-            ->where('id_ruangan', $idRuangan);
+        $builder = $this->model->db->table('ruangan.ruangan')->select('nama_ruangan')->where('id_ruangan', $idRuangan);
 
         $row = $this->model->guarded_get($builder, 'fetchNamaRuangan')->getRowArray();
         return (string) ($row['nama_ruangan'] ?? '');
@@ -179,7 +175,7 @@ final class JadwalOperasiController extends ControllerTemplate
                     ['role.dokter d',  'd.id_dokter = j.id_dokter_bedah'],
                     ['person.orang o', 'o.id_orang = d.id_orang'],
                 ],
-                'label'  => static fn(array $r) => "Dokter Bedah " . (string) ($r['nama'] ?? ''),
+                'label'  => static fn(array $r) => 'Dokter Bedah ' . (string) ($r['nama'] ?? ''),
                 'select' => "{$kolomWaktu}, o.nama",
             ],
             [
@@ -188,13 +184,13 @@ final class JadwalOperasiController extends ControllerTemplate
                     ['role.dokter d',  'd.id_dokter = j.id_dokter_anestesi'],
                     ['person.orang o', 'o.id_orang = d.id_orang'],
                 ],
-                'label'  => static fn(array $r) => "Dokter Anestesi " . (string) ($r['nama'] ?? ''),
+                'label'  => static fn(array $r) => 'Dokter Anestesi ' . (string) ($r['nama'] ?? ''),
                 'select' => "{$kolomWaktu}, o.nama",
             ],
             [
                 'col'    => 'id_ruangan',
                 'join'   => [['ruangan.ruangan r', 'r.id_ruangan = j.id_ruangan']],
-                'label'  => static fn(array $r) => "Ruangan " . (string) ($r['nama_ruangan'] ?? ''),
+                'label'  => static fn(array $r) => 'Ruangan ' . (string) ($r['nama_ruangan'] ?? ''),
                 'select' => "{$kolomWaktu}, r.nama_ruangan",
             ],
         ];
@@ -295,10 +291,7 @@ final class JadwalOperasiController extends ControllerTemplate
      */
     private function fetchPeranJenis(): array
     {
-        $builder = $this->model
-            ->db
-            ->table('operasi.ref_peran_tim_medis')
-            ->select(['id_peran', 'jenis']);
+        $builder = $this->model->db->table('operasi.ref_peran_tim_medis')->select(['id_peran', 'jenis']);
 
         /** @var list<array<string, mixed>> $rows */
         $rows = $this->model->guarded_get($builder, 'fetchPeranJenis')->getResultArray();
@@ -432,7 +425,7 @@ final class JadwalOperasiController extends ControllerTemplate
     {
         helper('autonomor');
 
-        $timestamp = strtotime($tanggal);
+        $timestamp  = strtotime($tanggal);
         $tanggalYmd = $timestamp !== false ? date('Ymd', $timestamp) : date('Ymd');
 
         $builder = $this->model
@@ -443,7 +436,7 @@ final class JadwalOperasiController extends ControllerTemplate
             ->orderBy('nomor_operasi', 'DESC')
             ->limit(1);
 
-        $lastNo = $this->model->guarded_get($builder, 'generateNomorOperasi')->getRowArray();
+        $lastNo      = $this->model->guarded_get($builder, 'generateNomorOperasi')->getRowArray();
         $lastNoValue = ($lastNo['nomor_operasi'] ?? null) !== null ? (string) $lastNo['nomor_operasi'] : null;
 
         return generateNextNoOperasi($lastNoValue, $tanggal);
@@ -541,7 +534,9 @@ final class JadwalOperasiController extends ControllerTemplate
         $waktuMulai          = ($rawPost['waktu_mulai'] ?? null) !== null ? (string) $rawPost['waktu_mulai'] : null;
         $waktuSelesaiInput   = ($rawPost['waktu_selesai'] ?? null) !== null ? (string) $rawPost['waktu_selesai'] : null;
         $waktuSelesai        = $waktuSelesaiInput !== null && $waktuSelesaiInput !== '' ? $waktuSelesaiInput : null;
-        $tanggalSelesaiInput = ($rawPost['tanggal_selesai'] ?? null) !== null ? (string) $rawPost['tanggal_selesai'] : null;
+        $tanggalSelesaiInput = ($rawPost['tanggal_selesai'] ?? null) !== null
+            ? (string) $rawPost['tanggal_selesai']
+            : null;
         $tanggalSelesai      = $this->resolveTanggalSelesai(
             $tanggal,
             $waktuMulai,
@@ -596,7 +591,7 @@ final class JadwalOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menyimpan jadwal operasi.');
             }
 

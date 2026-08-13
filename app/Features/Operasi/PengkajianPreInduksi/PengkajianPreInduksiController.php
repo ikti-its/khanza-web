@@ -118,10 +118,10 @@ final class PengkajianPreInduksiController extends ControllerTemplate
     {
         $db = $this->model->db;
 
-        $airwayBuilder = $db->table('operasi.ref_jenis_airway')->select('id_jenis, nama_jenis');
-        $posisiBuilder = $db->table('operasi.ref_posisi_pasien')->select('id_posisi, nama_posisi');
+        $airwayBuilder      = $db->table('operasi.ref_jenis_airway')->select('id_jenis, nama_jenis');
+        $posisiBuilder      = $db->table('operasi.ref_posisi_pasien')->select('id_posisi, nama_posisi');
         $premedikasiBuilder = $db->table('operasi.ref_premedikasi')->select('id_premedikasi, nama_premedikasi');
-        $induksiBuilder = $db->table('operasi.ref_induksi')->select('id_induksi, nama_induksi');
+        $induksiBuilder     = $db->table('operasi.ref_induksi')->select('id_induksi, nama_induksi');
 
         /** @var array<string, list<array<string, mixed>>> */
         return [
@@ -322,7 +322,7 @@ final class PengkajianPreInduksiController extends ControllerTemplate
     public function create(): string|RedirectResponse
     {
         /** @var array<string, mixed> $rawPost */
-        $rawPost = $this->request->getPost();
+        $rawPost    = $this->request->getPost();
         $dataHeader = $this->buildHeaderData($rawPost);
         /** @var list<array<string, mixed>> $airwayList */
         $airwayList = $rawPost['airway'] ?? [];
@@ -337,7 +337,7 @@ final class PengkajianPreInduksiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Transaksi gagal saat menyimpan pengkajian pre induksi.');
             }
 
@@ -360,7 +360,7 @@ final class PengkajianPreInduksiController extends ControllerTemplate
         }
 
         /** @var array<string, mixed> $rawPost */
-        $rawPost = $this->request->getPost();
+        $rawPost    = $this->request->getPost();
         $dataHeader = $this->buildHeaderData($rawPost);
         /** @var list<array<string, mixed>> $airwayList */
         $airwayList = $rawPost['airway'] ?? [];
@@ -378,7 +378,7 @@ final class PengkajianPreInduksiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Transaksi gagal saat memperbarui pengkajian pre induksi.');
             }
 
@@ -411,7 +411,7 @@ final class PengkajianPreInduksiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus pengkajian pre induksi.');
             }
 

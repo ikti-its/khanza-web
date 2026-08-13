@@ -133,13 +133,13 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
     {
         $db = $this->model->db;
 
-        $kesadaranBuilder = $db->table('operasi.ref_kesadaran')->select('id_kesadaran, nama_kesadaran');
-        $golDarahBuilder = $db->table('darah.golongan_darah')->select('id_golongan_darah, nama_golongan_darah');
-        $rhesusBuilder = $db->table('darah.rhesus')->select('id_rhesus, kode_rhesus');
-        $asaBuilder = $db->table('operasi.ref_angka_asa')->select('id_asa, nama_asa');
+        $kesadaranBuilder   = $db->table('operasi.ref_kesadaran')->select('id_kesadaran, nama_kesadaran');
+        $golDarahBuilder    = $db->table('darah.golongan_darah')->select('id_golongan_darah, nama_golongan_darah');
+        $rhesusBuilder      = $db->table('darah.rhesus')->select('id_rhesus, kode_rhesus');
+        $asaBuilder         = $db->table('operasi.ref_angka_asa')->select('id_asa, nama_asa');
         $jenisSedasiBuilder = $db->table('operasi.ref_jenis_sedasi')->select('id_jenis_sedasi, nama_sedasi');
-        $alatBuilder = $db->table('operasi.ref_alat_anestesi')->select('id_alat, nama_alat');
-        $monitoringBuilder = $db->table('operasi.ref_monitoring_anestesi')->select('id_monitoring, nama_monitoring');
+        $alatBuilder        = $db->table('operasi.ref_alat_anestesi')->select('id_alat, nama_alat');
+        $monitoringBuilder  = $db->table('operasi.ref_monitoring_anestesi')->select('id_monitoring, nama_monitoring');
 
         /** @var array<string, list<array<string, mixed>>> */
         return [
@@ -465,7 +465,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
     public function create(): string|RedirectResponse
     {
         /** @var array<string, mixed> $rawPost */
-        $rawPost = $this->request->getPost();
+        $rawPost    = $this->request->getPost();
         $dataHeader = $this->buildHeaderData($rawPost);
         /** @var list<array<string, mixed>> $alatList */
         $alatList = $rawPost['alat'] ?? [];
@@ -481,7 +481,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menyimpan catatan anestesi sedasi.');
             }
 
@@ -504,7 +504,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
         }
 
         /** @var array<string, mixed> $rawPost */
-        $rawPost = $this->request->getPost();
+        $rawPost    = $this->request->getPost();
         $dataHeader = $this->buildHeaderData($rawPost);
         /** @var list<array<string, mixed>> $alatList */
         $alatList = $rawPost['alat'] ?? [];
@@ -527,7 +527,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal memperbarui catatan anestesi sedasi.');
             }
 
@@ -563,7 +563,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus catatan anestesi sedasi.');
             }
 

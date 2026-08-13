@@ -370,7 +370,8 @@ final class HasilRadController extends ControllerTemplate
         }
 
         $barang       = $this->fetchStokBarang($idBarang);
-        $stokTersedia = (int) ($barang['stok'] ?? 0) + ($existing !== null ? (int) ($existing['jumlah_pakai'] ?? 0) : 0);
+        $stokTersedia = (int) ($barang['stok'] ?? 0)
+        + ($existing !== null ? (int) ($existing['jumlah_pakai'] ?? 0) : 0);
         if ($jumlahBaru > $stokTersedia) {
             throw new \RuntimeException(sprintf(
                 'Jumlah pakai BHP "%s" (%d) melebihi stok tersedia (%d).',
@@ -538,7 +539,7 @@ final class HasilRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menyimpan hasil radiologi.');
             }
 
@@ -710,7 +711,7 @@ final class HasilRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal memperbarui hasil radiologi.');
             }
 
@@ -761,7 +762,7 @@ final class HasilRadController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus hasil radiologi.');
             }
 

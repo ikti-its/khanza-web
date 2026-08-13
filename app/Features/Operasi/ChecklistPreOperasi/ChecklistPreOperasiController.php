@@ -106,10 +106,10 @@ final class ChecklistPreOperasiController extends ControllerTemplate
     {
         $db = $this->model->db;
 
-        $keadaanBuilder = $db->table('operasi.ref_keadaan_umum')->select('id_keadaan_umum, nama_keadaan');
-        $ketersediaanBuilder = $db
-            ->table('operasi.ref_ketersediaan_status')
-            ->select('id_ketersediaan_status, nama_ketersediaan');
+        $keadaanBuilder      = $db->table('operasi.ref_keadaan_umum')->select('id_keadaan_umum, nama_keadaan');
+        $ketersediaanBuilder = $db->table('operasi.ref_ketersediaan_status')->select(
+            'id_ketersediaan_status, nama_ketersediaan',
+        );
         $jenisPenunjangBuilder = $db->table('operasi.ref_jenis_penunjang')->select('id_jenis_penunjang, nama_jenis');
 
         /** @var array<string, list<array<string, mixed>>> */
@@ -350,7 +350,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
     public function create(): string|RedirectResponse
     {
         /** @var array<string, mixed> $rawPost */
-        $rawPost = $this->request->getPost();
+        $rawPost    = $this->request->getPost();
         $dataHeader = $this->buildHeaderData($rawPost);
         /** @var list<array<string, mixed>> $penunjangList */
         $penunjangList = $rawPost['penunjang'] ?? [];
@@ -365,7 +365,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menyimpan checklist pre operasi.');
             }
 
@@ -388,7 +388,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
         }
 
         /** @var array<string, mixed> $rawPost */
-        $rawPost = $this->request->getPost();
+        $rawPost    = $this->request->getPost();
         $dataHeader = $this->buildHeaderData($rawPost);
         /** @var list<array<string, mixed>> $penunjangList */
         $penunjangList = $rawPost['penunjang'] ?? [];
@@ -406,7 +406,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal memperbarui checklist pre operasi.');
             }
 
@@ -439,7 +439,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus checklist pre operasi.');
             }
 

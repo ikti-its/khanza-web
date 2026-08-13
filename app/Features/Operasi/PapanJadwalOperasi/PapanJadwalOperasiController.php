@@ -53,10 +53,7 @@ final class PapanJadwalOperasiController extends ControllerTemplate
      */
     private function fetchSlots(): array
     {
-        $builder = $this->model
-            ->db
-            ->table('operasi.ref_slot_operasi')
-            ->orderBy('id_slot', 'ASC');
+        $builder = $this->model->db->table('operasi.ref_slot_operasi')->orderBy('id_slot', 'ASC');
 
         /** @var list<array<string, mixed>> */
         return $this->model->guarded_get($builder, 'fetchSlots')->getResultArray();
@@ -142,8 +139,8 @@ final class PapanJadwalOperasiController extends ControllerTemplate
         $grid = [];
         foreach ($jadwals as $j) {
             $idRuangan  = (int) ($j['id_ruangan'] ?? 0);
-            $startBound = (string) (($j['is_start_day'] ?? false) ? ($j['waktu_mulai'] ?? '00:00:00') : '00:00:00');
-            $endBound   = ($j['is_end_day'] ?? false) ? (string) ($j['waktu_selesai'] ?? '23:59:59') : null;
+            $startBound = (string) ($j['is_start_day'] ?? false ? $j['waktu_mulai'] ?? '00:00:00' : '00:00:00');
+            $endBound   = $j['is_end_day'] ?? false ? (string) ($j['waktu_selesai'] ?? '23:59:59') : null;
 
             foreach ($slots as $slot) {
                 $waktuSlot = (string) ($slot['waktu_slot'] ?? '');

@@ -112,11 +112,11 @@ final class PenyerahanPasienController extends ControllerTemplate
     {
         $db = $this->model->db;
 
-        $indikasiBuilder = $db->table('operasi.ref_indikasi_pindah')->select('id_indikasi, nama_indikasi');
-        $metodeBuilder = $db->table('operasi.ref_metode_transfer')->select('id_metode, nama_metode');
+        $indikasiBuilder  = $db->table('operasi.ref_indikasi_pindah')->select('id_indikasi, nama_indikasi');
+        $metodeBuilder    = $db->table('operasi.ref_metode_transfer')->select('id_metode, nama_metode');
         $peralatanBuilder = $db->table('operasi.ref_peralatan_transfer')->select('id_peralatan, nama_peralatan');
-        $keadaanBuilder = $db->table('operasi.ref_keadaan_umum_transfer')->select('id_keadaan_umum, nama_keadaan');
-        $hubunganBuilder = $db->table('operasi.ref_hubungan_keluarga')->select('id_hubungan_keluarga, nama_hubungan');
+        $keadaanBuilder   = $db->table('operasi.ref_keadaan_umum_transfer')->select('id_keadaan_umum, nama_keadaan');
+        $hubunganBuilder  = $db->table('operasi.ref_hubungan_keluarga')->select('id_hubungan_keluarga, nama_hubungan');
 
         /** @var array<string, list<array<string, mixed>>> */
         return [
@@ -150,11 +150,7 @@ final class PenyerahanPasienController extends ControllerTemplate
     /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchRuanganName(int $idRuangan): string
     {
-        $builder = $this->model
-            ->db
-            ->table('ruangan.ruangan')
-            ->select('nama_ruangan')
-            ->where('id_ruangan', $idRuangan);
+        $builder = $this->model->db->table('ruangan.ruangan')->select('nama_ruangan')->where('id_ruangan', $idRuangan);
 
         $row = $this->model->guarded_get($builder, 'fetchRuanganName')->getRowArray();
         return (string) ($row['nama_ruangan'] ?? '');
@@ -379,7 +375,7 @@ final class PenyerahanPasienController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menyimpan penyerahan pasien.');
             }
 
@@ -418,7 +414,7 @@ final class PenyerahanPasienController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal memperbarui penyerahan pasien.');
             }
 
@@ -451,7 +447,7 @@ final class PenyerahanPasienController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus penyerahan pasien.');
             }
 

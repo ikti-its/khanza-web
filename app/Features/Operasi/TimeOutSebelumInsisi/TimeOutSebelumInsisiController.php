@@ -102,22 +102,24 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
     {
         $db = $this->model->db;
 
-        $ketersediaanBuilder = $db
-            ->table('operasi.ref_ketersediaan_status')
-            ->select('id_ketersediaan_status, nama_ketersediaan');
+        $ketersediaanBuilder = $db->table('operasi.ref_ketersediaan_status')->select(
+            'id_ketersediaan_status, nama_ketersediaan',
+        );
         $jenisPenunjangBuilder = $db
             ->table('operasi.ref_jenis_penunjang')
             ->select('id_jenis_penunjang, nama_jenis')
             ->whereIn('nama_jenis', ['Radiologi', 'CT Scan', 'MRI']);
-        $statusPenayanganBuilder = $db
-            ->table('operasi.ref_status_penayangan')
-            ->select('id_status_penayangan, nama_status');
+        $statusPenayanganBuilder = $db->table('operasi.ref_status_penayangan')->select(
+            'id_status_penayangan, nama_status',
+        );
 
         /** @var array<string, list<array<string, mixed>>> */
         return [
             'ketersediaan'      => $this->model->guarded_get($ketersediaanBuilder, 'fetchOptions')->getResultArray(),
             'jenis_penunjang'   => $this->model->guarded_get($jenisPenunjangBuilder, 'fetchOptions')->getResultArray(),
-            'status_penayangan' => $this->model->guarded_get($statusPenayanganBuilder, 'fetchOptions')->getResultArray(),
+            'status_penayangan' => $this->model
+                ->guarded_get($statusPenayanganBuilder, 'fetchOptions')
+                ->getResultArray(),
         ];
     }
 
@@ -195,7 +197,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
             'perkiraan_waktu_jam'     => $rawPost['perkiraan_waktu_jam'] ?? null,
             'is_antibiotik'           => $rawPost['is_antibiotik'] ?? null,
             'nama_antibiotik'         => $rawPost['nama_antibiotik'] ?? null,
-            'waktu_antibiotik'        => ($rawPost['waktu_antibiotik'] ?? null) ? $rawPost['waktu_antibiotik'] : null,
+            'waktu_antibiotik'        => $rawPost['waktu_antibiotik'] ?? null ? $rawPost['waktu_antibiotik'] : null,
             'antisipasi_hilang_darah' => $rawPost['antisipasi_hilang_darah'] ?? null,
             'id_hal_khusus'           => (int) ($rawPost['id_hal_khusus'] ?? 0)
                 ? (int) ($rawPost['id_hal_khusus'] ?? 0)
@@ -336,7 +338,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menyimpan time out sebelum insisi.');
             }
 
@@ -378,7 +380,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal memperbarui time out sebelum insisi.');
             }
 
@@ -413,7 +415,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus time out sebelum insisi.');
             }
 

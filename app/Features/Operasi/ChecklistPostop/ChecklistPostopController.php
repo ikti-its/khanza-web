@@ -105,11 +105,11 @@ final class ChecklistPostopController extends ControllerTemplate
     {
         $db = $this->model->db;
 
-        $kesadaranBuilder = $db->table('operasi.ref_kesadaran_pascaop')->select('id_kesadaran, nama_kesadaran');
-        $ketersediaanBuilder = $db
-            ->table('operasi.ref_ketersediaan_status')
-            ->select('id_ketersediaan_status, nama_ketersediaan');
-        $warnaBuilder = $db->table('operasi.ref_warna_urine')->select('id_warna_urine, nama_warna');
+        $kesadaranBuilder    = $db->table('operasi.ref_kesadaran_pascaop')->select('id_kesadaran, nama_kesadaran');
+        $ketersediaanBuilder = $db->table('operasi.ref_ketersediaan_status')->select(
+            'id_ketersediaan_status, nama_ketersediaan',
+        );
+        $warnaBuilder          = $db->table('operasi.ref_warna_urine')->select('id_warna_urine, nama_warna');
         $jenisPenunjangBuilder = $db->table('operasi.ref_jenis_penunjang')->select('id_jenis_penunjang, nama_jenis');
 
         /** @var array<string, list<array<string, mixed>>> */
@@ -386,7 +386,7 @@ final class ChecklistPostopController extends ControllerTemplate
     public function create(): string|RedirectResponse
     {
         /** @var array<string, mixed> $rawPost */
-        $rawPost = $this->request->getPost();
+        $rawPost    = $this->request->getPost();
         $dataHeader = $this->buildHeaderData($rawPost);
         /** @var list<array<string, mixed>> $drainList */
         $drainList = $rawPost['drain'] ?? [];
@@ -403,7 +403,7 @@ final class ChecklistPostopController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menyimpan checklist post operasi.');
             }
 
@@ -426,7 +426,7 @@ final class ChecklistPostopController extends ControllerTemplate
         }
 
         /** @var array<string, mixed> $rawPost */
-        $rawPost = $this->request->getPost();
+        $rawPost    = $this->request->getPost();
         $dataHeader = $this->buildHeaderData($rawPost);
         /** @var list<array<string, mixed>> $drainList */
         $drainList = $rawPost['drain'] ?? [];
@@ -449,7 +449,7 @@ final class ChecklistPostopController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal memperbarui checklist post operasi.');
             }
 
@@ -485,7 +485,7 @@ final class ChecklistPostopController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus checklist post operasi.');
             }
 

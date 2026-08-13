@@ -97,11 +97,26 @@ final class SkorAldretteController extends ControllerTemplate
     {
         $db = $this->model->db;
 
-        $aktivitasBuilder = $db->table('operasi.ref_aldrette_aktivitas')->select('id_aktivitas, nama_skala, nilai')->orderBy('nilai');
-        $respirasiBuilder = $db->table('operasi.ref_aldrette_respirasi')->select('id_respirasi, nama_skala, nilai')->orderBy('nilai');
-        $tdBuilder        = $db->table('operasi.ref_aldrette_tekanan_darah')->select('id_td, nama_skala, nilai')->orderBy('nilai');
-        $kesadaranBuilder = $db->table('operasi.ref_aldrette_kesadaran')->select('id_kesadaran, nama_skala, nilai')->orderBy('nilai');
-        $warnaBuilder     = $db->table('operasi.ref_aldrette_warna_kulit')->select('id_warna, nama_skala, nilai')->orderBy('nilai');
+        $aktivitasBuilder = $db
+            ->table('operasi.ref_aldrette_aktivitas')
+            ->select('id_aktivitas, nama_skala, nilai')
+            ->orderBy('nilai');
+        $respirasiBuilder = $db
+            ->table('operasi.ref_aldrette_respirasi')
+            ->select('id_respirasi, nama_skala, nilai')
+            ->orderBy('nilai');
+        $tdBuilder        = $db
+            ->table('operasi.ref_aldrette_tekanan_darah')
+            ->select('id_td, nama_skala, nilai')
+            ->orderBy('nilai');
+        $kesadaranBuilder = $db
+            ->table('operasi.ref_aldrette_kesadaran')
+            ->select('id_kesadaran, nama_skala, nilai')
+            ->orderBy('nilai');
+        $warnaBuilder     = $db
+            ->table('operasi.ref_aldrette_warna_kulit')
+            ->select('id_warna, nama_skala, nilai')
+            ->orderBy('nilai');
 
         /** @var array<string, list<array<string, mixed>>> */
         return [

@@ -600,7 +600,7 @@ final class HasilLabPkController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException($failMsg);
             }
 
@@ -656,7 +656,7 @@ final class HasilLabPkController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus hasil lab PK.');
             }
 

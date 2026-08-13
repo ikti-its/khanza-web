@@ -67,7 +67,9 @@ final class PermintaanLabPaController extends ControllerTemplate
 
         $lastNo = $this->model->guarded_get($builder, 'generateNomorPermintaan')->getRowArray();
 
-        return generateNextNoPermintaanPa(is_string($lastNo['no_permintaan'] ?? null) ? $lastNo['no_permintaan'] : null);
+        return generateNextNoPermintaanPa(
+            is_string($lastNo['no_permintaan'] ?? null) ? $lastNo['no_permintaan'] : null,
+        );
     }
 
     /** @return list<array<int|string, mixed>> */
@@ -315,9 +317,11 @@ final class PermintaanLabPaController extends ControllerTemplate
 
         $filters = [];
         foreach ($statusRows as $row) {
-            $idStatus            = (int) ($row['id_status'] ?? 0);
-            $filters[(string) $idStatus] =
-                (string) ($row['nama_status'] ?? '') . ' (' . (string) ($countMap[$idStatus] ?? 0) . ')';
+            $idStatus                    = (int) ($row['id_status'] ?? 0);
+            $filters[(string) $idStatus] = (string) ($row['nama_status'] ?? '')
+            . ' ('
+            . (string) ($countMap[$idStatus] ?? 0)
+            . ')';
         }
 
         return $filters;
@@ -378,7 +382,9 @@ final class PermintaanLabPaController extends ControllerTemplate
             assert(is_array($paRow));
 
             $baris = array_merge($baris, [
-                'tgl_pengambilan_bahan'       => $this->formatTglPengambilanBahan($paRow['tgl_pengambilan_bahan'] ?? null),
+                'tgl_pengambilan_bahan'       => $this->formatTglPengambilanBahan(
+                    $paRow['tgl_pengambilan_bahan'] ?? null,
+                ),
                 'metode_diperoleh'            => $paRow['metode_diperoleh'] ?? '',
                 'lokasi_jaringan'             => $paRow['lokasi_jaringan'] ?? '',
                 'bahan_pengawet'              => $paRow['bahan_pengawet'] ?? '',
@@ -454,7 +460,7 @@ final class PermintaanLabPaController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menyimpan permintaan lab PA.');
             }
 
@@ -521,7 +527,7 @@ final class PermintaanLabPaController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal memperbarui permintaan lab PA.');
             }
 
@@ -563,7 +569,7 @@ final class PermintaanLabPaController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus permintaan lab PA.');
             }
 
@@ -599,7 +605,9 @@ final class PermintaanLabPaController extends ControllerTemplate
             $tglJamSampel = (string) ($this->request->getPost('tgl_jam_sampel') ?? '');
 
             (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel())->update($idPermintaanLab, [
-                'tgl_jam_sampel'       => ($tglJamSampel !== '' && $tglJamSampel !== '0') ? $tglJamSampel : date('Y-m-d H:i:s'),
+                'tgl_jam_sampel'       => $tglJamSampel !== '' && $tglJamSampel !== '0'
+                    ? $tglJamSampel
+                    : date('Y-m-d H:i:s'),
                 'id_status_permintaan' => 2,
             ]);
             session()->setFlashdata('success', 'Waktu pengambilan sampel berhasil dicatat.');
@@ -619,7 +627,7 @@ final class PermintaanLabPaController extends ControllerTemplate
     public function index(): string
     {
         $filter       = (string) ($this->request->getGet('filter') ?? '');
-        $activeFilter = ($filter !== '' && $filter !== '0') ? $filter : null;
+        $activeFilter = $filter !== '' && $filter !== '0' ? $filter : null;
         $rows         = $this->fetchPermintaanLabHeaders($activeFilter !== null ? (int) $activeFilter : null);
 
         $konfig = [

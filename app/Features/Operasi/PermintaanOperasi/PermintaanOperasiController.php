@@ -252,7 +252,7 @@ final class PermintaanOperasiController extends ControllerTemplate
     {
         /** @var array<string, mixed> $rawPost */
         $rawPost = $this->request->getPost();
-        $data = $this->buildHeaderData($rawPost, true);
+        $data    = $this->buildHeaderData($rawPost, true);
 
         $this->model->db->transStart();
 
@@ -268,7 +268,7 @@ final class PermintaanOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menyimpan permintaan operasi.');
             }
 
@@ -293,7 +293,7 @@ final class PermintaanOperasiController extends ControllerTemplate
 
         /** @var array<string, mixed> $rawPost */
         $rawPost = $this->request->getPost();
-        $data = $this->buildHeaderData($rawPost, false);
+        $data    = $this->buildHeaderData($rawPost, false);
 
         try {
             $this->model->update($id, $data);
@@ -359,7 +359,7 @@ final class PermintaanOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus permintaan operasi.');
             }
 

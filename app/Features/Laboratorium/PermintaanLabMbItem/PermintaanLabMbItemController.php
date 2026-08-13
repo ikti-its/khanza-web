@@ -61,7 +61,9 @@ final class PermintaanLabMbItemController extends ControllerTemplate
 
         $lastNo = $this->model->guarded_get($builder, 'generateNomorPermintaan')->getRowArray();
 
-        return generateNextNoPermintaanMb(is_string($lastNo['no_permintaan'] ?? null) ? $lastNo['no_permintaan'] : null);
+        return generateNextNoPermintaanMb(
+            is_string($lastNo['no_permintaan'] ?? null) ? $lastNo['no_permintaan'] : null,
+        );
     }
 
     /** @return list<array<int|string, mixed>> */
@@ -358,9 +360,11 @@ final class PermintaanLabMbItemController extends ControllerTemplate
 
         $filters = [];
         foreach ($statusRows as $row) {
-            $idStatus            = (int) ($row['id_status'] ?? 0);
-            $filters[(string) $idStatus] =
-                (string) ($row['nama_status'] ?? '') . ' (' . (string) ($countMap[$idStatus] ?? 0) . ')';
+            $idStatus                    = (int) ($row['id_status'] ?? 0);
+            $filters[(string) $idStatus] = (string) ($row['nama_status'] ?? '')
+            . ' ('
+            . (string) ($countMap[$idStatus] ?? 0)
+            . ')';
         }
 
         return $filters;
@@ -489,7 +493,7 @@ final class PermintaanLabMbItemController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menyimpan permintaan lab MB.');
             }
 
@@ -557,7 +561,7 @@ final class PermintaanLabMbItemController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal memperbarui permintaan lab MB.');
             }
 
@@ -599,7 +603,7 @@ final class PermintaanLabMbItemController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus permintaan lab MB.');
             }
 
@@ -635,7 +639,9 @@ final class PermintaanLabMbItemController extends ControllerTemplate
             $tglJamSampel = (string) ($this->request->getPost('tgl_jam_sampel') ?? '');
 
             (new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel())->update($idPermintaanLab, [
-                'tgl_jam_sampel'       => ($tglJamSampel !== '' && $tglJamSampel !== '0') ? $tglJamSampel : date('Y-m-d H:i:s'),
+                'tgl_jam_sampel'       => $tglJamSampel !== '' && $tglJamSampel !== '0'
+                    ? $tglJamSampel
+                    : date('Y-m-d H:i:s'),
                 'id_status_permintaan' => 2,
             ]);
             session()->setFlashdata('success', 'Waktu pengambilan sampel berhasil dicatat.');
@@ -655,7 +661,7 @@ final class PermintaanLabMbItemController extends ControllerTemplate
     public function index(): string
     {
         $filter       = (string) ($this->request->getGet('filter') ?? '');
-        $activeFilter = ($filter !== '' && $filter !== '0') ? $filter : null;
+        $activeFilter = $filter !== '' && $filter !== '0' ? $filter : null;
         $rows         = $this->fetchPermintaanLabHeaders($activeFilter !== null ? (int) $activeFilter : null);
 
         $konfig = [

@@ -104,10 +104,7 @@ final class SignoutSebelumTutupLukaController extends ControllerTemplate
      */
     private function fetchOptions(): array
     {
-        $builder = $this->model
-            ->db
-            ->table('operasi.ref_status_spesimen')
-            ->select('id_status_spesimen, nama_status');
+        $builder = $this->model->db->table('operasi.ref_status_spesimen')->select('id_status_spesimen, nama_status');
 
         /** @var array<string, list<array<string, mixed>>> */
         return [

@@ -249,7 +249,8 @@ final class TagihanOperasiController extends ControllerTemplate
             /** @var list<array<string, mixed>> $hargaRows */
             $hargaRows = $this->model->guarded_get($hargaBuilder, 'computeTotal')->getResultArray();
             foreach ($hargaRows as $row) {
-                $totalObat += (is_numeric($row['h_dasar'] ?? null) ? (float) $row['h_dasar'] : 0.0)
+                $totalObat +=
+                    (is_numeric($row['h_dasar'] ?? null) ? (float) $row['h_dasar'] : 0.0)
                     * $jumlahByBarang[(int) ($row['id_barang'] ?? 0)];
             }
         }
@@ -330,14 +331,10 @@ final class TagihanOperasiController extends ControllerTemplate
 
         $names = [];
         foreach ($dokterCols as $col) {
-            $names['nama_' . substr($col, 3)] = !empty($baris[$col])
-                ? $dokterNames[(int) $baris[$col]] ?? ''
-                : '';
+            $names['nama_' . substr($col, 3)] = !empty($baris[$col]) ? $dokterNames[(int) $baris[$col]] ?? '' : '';
         }
         foreach ($petugasCols as $col) {
-            $names['nama_' . substr($col, 3)] = !empty($baris[$col])
-                ? $petugasNames[(int) $baris[$col]] ?? ''
-                : '';
+            $names['nama_' . substr($col, 3)] = !empty($baris[$col]) ? $petugasNames[(int) $baris[$col]] ?? '' : '';
         }
 
         return $names;
@@ -359,7 +356,7 @@ final class TagihanOperasiController extends ControllerTemplate
             $jadwal['tanggal_mulai'] = (string) $jadwal['tanggal'] . ' ' . (string) $jadwal['waktu_mulai'];
         }
         if (!empty($jadwal['tanggal']) && !empty($jadwal['waktu_selesai'])) {
-            $tanggalSelesai = ($jadwal['jadwal_tanggal_selesai'] ?? null)
+            $tanggalSelesai = $jadwal['jadwal_tanggal_selesai'] ?? null
                 ? (string) $jadwal['jadwal_tanggal_selesai']
                 : (string) $jadwal['tanggal'];
             $jadwal['tanggal_selesai'] = $tanggalSelesai . ' ' . (string) $jadwal['waktu_selesai'];
@@ -383,9 +380,9 @@ final class TagihanOperasiController extends ControllerTemplate
                 if ($peran === '') {
                     continue;
                 }
-                $jadwal['id_' . $peran]   = !empty($anggota['id_dokter'])
+                $jadwal['id_' . $peran] = !empty($anggota['id_dokter'])
                     ? $anggota['id_dokter']
-                    : ($anggota['id_petugas'] ?? null);
+                    : $anggota['id_petugas'] ?? null;
                 $jadwal['nama_' . $peran] = $anggota['nama'] ?? '';
             }
         }
@@ -455,16 +452,16 @@ final class TagihanOperasiController extends ControllerTemplate
 
             $idTagihan = $this->model->insert($data);
 
-            if ($this->model->db->transStatus() ) {
+            if ($this->model->db->transStatus()) {
                 $this->savePaket((int) $idTagihan, $paketList);
             }
-            if ($this->model->db->transStatus() ) {
+            if ($this->model->db->transStatus()) {
                 $this->saveObat((int) $idTagihan, $obatList);
             }
 
             // Ambil pesan error DB sebelum transComplete()/ROLLBACK menghapus jejaknya.
             $dbErrorMsg = null;
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 $dbErrorMsg = $this->model->db->error()['message'] ?? '';
                 if ($dbErrorMsg === '') {
                     $dbErrorMsg = 'Gagal menyimpan tagihan operasi.';
@@ -510,22 +507,22 @@ final class TagihanOperasiController extends ControllerTemplate
 
             $this->model->update($id, $data);
 
-            if ($this->model->db->transStatus() ) {
+            if ($this->model->db->transStatus()) {
                 $this->model->db->table('operasi.tagihan_operasi_tindakan')->where('id_tagihan', $id)->delete();
             }
-            if ($this->model->db->transStatus() ) {
+            if ($this->model->db->transStatus()) {
                 $this->savePaket((int) $id, $paketList);
             }
-            if ($this->model->db->transStatus() ) {
+            if ($this->model->db->transStatus()) {
                 $this->model->db->table('operasi.tagihan_operasi_obat')->where('id_tagihan', $id)->delete();
             }
-            if ($this->model->db->transStatus() ) {
+            if ($this->model->db->transStatus()) {
                 $this->saveObat((int) $id, $obatList);
             }
 
             // Ambil pesan error DB sebelum transComplete()/ROLLBACK menghapus jejaknya.
             $dbErrorMsg = null;
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 $dbErrorMsg = $this->model->db->error()['message'] ?? '';
                 if ($dbErrorMsg === '') {
                     $dbErrorMsg = 'Gagal memperbarui tagihan operasi.';
@@ -565,7 +562,7 @@ final class TagihanOperasiController extends ControllerTemplate
 
             $this->model->db->transComplete();
 
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 throw new \RuntimeException('Gagal menghapus tagihan operasi.');
             }
 
@@ -598,38 +595,38 @@ final class TagihanOperasiController extends ControllerTemplate
             'id_jadwal'           => $post['id_jadwal'] ?? null,
             'id_kategori'         => $post['id_kategori'] ?? null,
             'jenis_anestesi'      => $post['jenis_anestesi'] ?? null,
-            'tanggal_mulai'       => ($post['tanggal_mulai'] ?? null) ? $post['tanggal_mulai'] : null,
-            'tanggal_selesai'     => ($post['tanggal_selesai'] ?? null) ? $post['tanggal_selesai'] : null,
+            'tanggal_mulai'       => $post['tanggal_mulai'] ?? null ? $post['tanggal_mulai'] : null,
+            'tanggal_selesai'     => $post['tanggal_selesai'] ?? null ? $post['tanggal_selesai'] : null,
             'total_tagihan'       => $this->computeTotal($paketList, $obatList),
             'diagnosis_pre'       => $post['diagnosis_pre'] ?? null,
             'diagnosis_post'      => $post['diagnosis_post'] ?? null,
             'jaringan'            => $post['jaringan'] ?? null,
             'laporan'             => $post['laporan'] ?? null,
-            'id_template_laporan' => ($post['id_template_laporan'] ?? null) ? $post['id_template_laporan'] : null,
+            'id_template_laporan' => $post['id_template_laporan'] ?? null ? $post['id_template_laporan'] : null,
             'is_pa'               => array_key_exists('is_pa', $post),
-            'id_operator_1'       => ($post['id_operator_1'] ?? null) ? $post['id_operator_1'] : null,
-            'id_operator_2'       => ($post['id_operator_2'] ?? null) ? $post['id_operator_2'] : null,
-            'id_operator_3'       => ($post['id_operator_3'] ?? null) ? $post['id_operator_3'] : null,
-            'id_dokter_anestesi'  => ($post['id_dokter_anestesi'] ?? null) ? $post['id_dokter_anestesi'] : null,
-            'id_dokter_anak'      => ($post['id_dokter_anak'] ?? null) ? $post['id_dokter_anak'] : null,
-            'id_dokter_pj_anak'   => ($post['id_dokter_pj_anak'] ?? null) ? $post['id_dokter_pj_anak'] : null,
-            'id_dokter_umum'      => ($post['id_dokter_umum'] ?? null) ? $post['id_dokter_umum'] : null,
-            'id_ast_operator_1'   => ($post['id_ast_operator_1'] ?? null) ? $post['id_ast_operator_1'] : null,
-            'id_ast_operator_2'   => ($post['id_ast_operator_2'] ?? null) ? $post['id_ast_operator_2'] : null,
-            'id_ast_operator_3'   => ($post['id_ast_operator_3'] ?? null) ? $post['id_ast_operator_3'] : null,
-            'id_bidan_1'          => ($post['id_bidan_1'] ?? null) ? $post['id_bidan_1'] : null,
-            'id_bidan_2'          => ($post['id_bidan_2'] ?? null) ? $post['id_bidan_2'] : null,
-            'id_bidan_3'          => ($post['id_bidan_3'] ?? null) ? $post['id_bidan_3'] : null,
-            'id_perawat_luar'     => ($post['id_perawat_luar'] ?? null) ? $post['id_perawat_luar'] : null,
-            'id_instrumen'        => ($post['id_instrumen'] ?? null) ? $post['id_instrumen'] : null,
-            'id_ast_anestesi_1'   => ($post['id_ast_anestesi_1'] ?? null) ? $post['id_ast_anestesi_1'] : null,
-            'id_ast_anestesi_2'   => ($post['id_ast_anestesi_2'] ?? null) ? $post['id_ast_anestesi_2'] : null,
-            'id_perawat_resus'    => ($post['id_perawat_resus'] ?? null) ? $post['id_perawat_resus'] : null,
-            'id_onloop_1'         => ($post['id_onloop_1'] ?? null) ? $post['id_onloop_1'] : null,
-            'id_onloop_2'         => ($post['id_onloop_2'] ?? null) ? $post['id_onloop_2'] : null,
-            'id_onloop_3'         => ($post['id_onloop_3'] ?? null) ? $post['id_onloop_3'] : null,
-            'id_onloop_4'         => ($post['id_onloop_4'] ?? null) ? $post['id_onloop_4'] : null,
-            'id_onloop_5'         => ($post['id_onloop_5'] ?? null) ? $post['id_onloop_5'] : null,
+            'id_operator_1'       => $post['id_operator_1'] ?? null ? $post['id_operator_1'] : null,
+            'id_operator_2'       => $post['id_operator_2'] ?? null ? $post['id_operator_2'] : null,
+            'id_operator_3'       => $post['id_operator_3'] ?? null ? $post['id_operator_3'] : null,
+            'id_dokter_anestesi'  => $post['id_dokter_anestesi'] ?? null ? $post['id_dokter_anestesi'] : null,
+            'id_dokter_anak'      => $post['id_dokter_anak'] ?? null ? $post['id_dokter_anak'] : null,
+            'id_dokter_pj_anak'   => $post['id_dokter_pj_anak'] ?? null ? $post['id_dokter_pj_anak'] : null,
+            'id_dokter_umum'      => $post['id_dokter_umum'] ?? null ? $post['id_dokter_umum'] : null,
+            'id_ast_operator_1'   => $post['id_ast_operator_1'] ?? null ? $post['id_ast_operator_1'] : null,
+            'id_ast_operator_2'   => $post['id_ast_operator_2'] ?? null ? $post['id_ast_operator_2'] : null,
+            'id_ast_operator_3'   => $post['id_ast_operator_3'] ?? null ? $post['id_ast_operator_3'] : null,
+            'id_bidan_1'          => $post['id_bidan_1'] ?? null ? $post['id_bidan_1'] : null,
+            'id_bidan_2'          => $post['id_bidan_2'] ?? null ? $post['id_bidan_2'] : null,
+            'id_bidan_3'          => $post['id_bidan_3'] ?? null ? $post['id_bidan_3'] : null,
+            'id_perawat_luar'     => $post['id_perawat_luar'] ?? null ? $post['id_perawat_luar'] : null,
+            'id_instrumen'        => $post['id_instrumen'] ?? null ? $post['id_instrumen'] : null,
+            'id_ast_anestesi_1'   => $post['id_ast_anestesi_1'] ?? null ? $post['id_ast_anestesi_1'] : null,
+            'id_ast_anestesi_2'   => $post['id_ast_anestesi_2'] ?? null ? $post['id_ast_anestesi_2'] : null,
+            'id_perawat_resus'    => $post['id_perawat_resus'] ?? null ? $post['id_perawat_resus'] : null,
+            'id_onloop_1'         => $post['id_onloop_1'] ?? null ? $post['id_onloop_1'] : null,
+            'id_onloop_2'         => $post['id_onloop_2'] ?? null ? $post['id_onloop_2'] : null,
+            'id_onloop_3'         => $post['id_onloop_3'] ?? null ? $post['id_onloop_3'] : null,
+            'id_onloop_4'         => $post['id_onloop_4'] ?? null ? $post['id_onloop_4'] : null,
+            'id_onloop_5'         => $post['id_onloop_5'] ?? null ? $post['id_onloop_5'] : null,
         ];
     }
 
@@ -650,7 +647,7 @@ final class TagihanOperasiController extends ControllerTemplate
                     'id_tagihan' => $idTagihan,
                     'id_paket'   => (int) $paket['id_paket'],
                 ]);
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 return;
             }
         }
@@ -693,7 +690,7 @@ final class TagihanOperasiController extends ControllerTemplate
                     'id_barang'  => (int) $obat['id_barang'],
                     'jumlah'     => (int) $obat['jumlah'],
                 ]);
-            if (!$this->model->db->transStatus() ) {
+            if (!$this->model->db->transStatus()) {
                 return;
             }
         }
