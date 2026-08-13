@@ -80,9 +80,13 @@ final class PengkajianPreInduksiController extends ControllerTemplate
         return redirect()->to($this->get_uri_path() . '/data');
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
@@ -100,63 +104,70 @@ final class PengkajianPreInduksiController extends ControllerTemplate
             ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
             ->join('role.dokter da', 'da.id_dokter     = j.id_dokter_anestesi', 'left')
             ->join('person.orang oa', 'oa.id_orang      = da.id_orang', 'left')
-            ->where('j.id_jadwal', $idJadwal)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('j.id_jadwal', $idJadwal);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchJadwal')->getRowArray() ?? [];
     }
 
+    /**
+     * @return array<string, list<array<string, mixed>>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchOptions(): array
     {
         $db = $this->model->db;
+
+        $airwayBuilder = $db->table('operasi.ref_jenis_airway')->select('id_jenis, nama_jenis');
+        $posisiBuilder = $db->table('operasi.ref_posisi_pasien')->select('id_posisi, nama_posisi');
+        $premedikasiBuilder = $db->table('operasi.ref_premedikasi')->select('id_premedikasi, nama_premedikasi');
+        $induksiBuilder = $db->table('operasi.ref_induksi')->select('id_induksi, nama_induksi');
+
+        /** @var array<string, list<array<string, mixed>>> */
         return [
-            'jenis_airway' => $db
-                ->table('operasi.ref_jenis_airway')
-                ->select('id_jenis, nama_jenis')
-                ->get()
-                ->getResultArray(),
-            'posisi'       => $db
-                ->table('operasi.ref_posisi_pasien')
-                ->select('id_posisi, nama_posisi')
-                ->get()
-                ->getResultArray(),
-            'premedikasi'  => $db
-                ->table('operasi.ref_premedikasi')
-                ->select('id_premedikasi, nama_premedikasi')
-                ->get()
-                ->getResultArray(),
-            'induksi'      => $db
-                ->table('operasi.ref_induksi')
-                ->select('id_induksi, nama_induksi')
-                ->get()
-                ->getResultArray(),
+            'jenis_airway' => $this->model->guarded_get($airwayBuilder, 'fetchOptions')->getResultArray(),
+            'posisi'       => $this->model->guarded_get($posisiBuilder, 'fetchOptions')->getResultArray(),
+            'premedikasi'  => $this->model->guarded_get($premedikasiBuilder, 'fetchOptions')->getResultArray(),
+            'induksi'      => $this->model->guarded_get($induksiBuilder, 'fetchOptions')->getResultArray(),
         ];
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchAirway(int $idPengkajian): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.pengkajian_pre_induksi_airway')
             ->select('id_jenis_airway, nomor, jenis, fiksasi_cm, keterangan')
-            ->where('id_pengkajian', $idPengkajian)
-            ->get()
-            ->getResultArray();
+            ->where('id_pengkajian', $idPengkajian);
+
+        /** @var list<array<string, mixed>> */
+        return $this->model->guarded_get($builder, 'fetchAirway')->getResultArray();
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): string
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table("role.{$tabel} t")
             ->select('o.nama')
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
-            ->where("t.{$idKolom}", $idValue)
-            ->get()
-            ->getRowArray();
-        return $row['nama'] ?? '';
+            ->where("t.{$idKolom}", $idValue);
+
+        $row = $this->model->guarded_get($builder, 'fetchNamaRole')->getRowArray();
+        return (string) ($row['nama'] ?? '');
     }
 
-    // Data Mapper for header
+    /**
+     * Data Mapper for header.
+     *
+     * @param array<string, mixed> $rawPost
+     * @return array<string, mixed>
+     */
     private function buildHeaderData(array $rawPost): array
     {
         return [
@@ -197,7 +208,12 @@ final class PengkajianPreInduksiController extends ControllerTemplate
         ];
     }
 
-    // Batch Insert for airway
+    /**
+     * Batch Insert for airway.
+     *
+     * @param list<array<string, mixed>> $airwayList
+     * @throws \ReflectionException
+     */
     private function insertAirwayList(int $idPengkajian, array $airwayList): void
     {
         $batchAirway = [];
@@ -210,10 +226,10 @@ final class PengkajianPreInduksiController extends ControllerTemplate
             $batchAirway[] = [
                 'id_pengkajian'   => $idPengkajian,
                 'id_jenis_airway' => $idJenis,
-                'nomor'           => ($row['nomor'] ?? '') !== '' ? $row['nomor'] : null,
-                'jenis'           => ($row['jenis'] ?? '') !== '' ? $row['jenis'] : null,
-                'fiksasi_cm'      => ($row['fiksasi_cm'] ?? '') !== '' ? $row['fiksasi_cm'] : null,
-                'keterangan'      => ($row['keterangan'] ?? '') !== '' ? $row['keterangan'] : null,
+                'nomor'           => ($row['nomor'] ?? '') !== '' ? $row['nomor'] ?? null : null,
+                'jenis'           => ($row['jenis'] ?? '') !== '' ? $row['jenis'] ?? null : null,
+                'fiksasi_cm'      => ($row['fiksasi_cm'] ?? '') !== '' ? $row['fiksasi_cm'] ?? null : null,
+                'keterangan'      => ($row['keterangan'] ?? '') !== '' ? $row['keterangan'] ?? null : null,
             ];
         }
 
@@ -224,6 +240,13 @@ final class PengkajianPreInduksiController extends ControllerTemplate
         }
     }
 
+    /**
+     * @param array<string, mixed> $jadwal
+     * @param array<string, mixed> $record
+     * @param list<array<string, mixed>> $airway
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function buildViewData(array $jadwal, array $record, string $formAction, array $airway = []): array
     {
         $isCreate = $formAction === '/submittambah/';
@@ -246,6 +269,7 @@ final class PengkajianPreInduksiController extends ControllerTemplate
     // Pages
     // -------------------------------------------------------------------------
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function create_page(): string
     {
@@ -264,10 +288,16 @@ final class PengkajianPreInduksiController extends ControllerTemplate
         ));
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
-        $record   = $this->model->find_one($id);
+        $record = $this->model->find_one($id);
+        if (!is_array($record)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
+        }
+
         $idJadwal = (int) ($record['id_jadwal'] ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
@@ -291,8 +321,10 @@ final class PengkajianPreInduksiController extends ControllerTemplate
     #[\Override]
     public function create(): string|RedirectResponse
     {
-        $rawPost    = $this->request->getPost();
+        /** @var array<string, mixed> $rawPost */
+        $rawPost = $this->request->getPost();
         $dataHeader = $this->buildHeaderData($rawPost);
+        /** @var list<array<string, mixed>> $airwayList */
         $airwayList = $rawPost['airway'] ?? [];
 
         $this->model->db->transStart();
@@ -327,8 +359,10 @@ final class PengkajianPreInduksiController extends ControllerTemplate
             return $this->home();
         }
 
-        $rawPost    = $this->request->getPost();
+        /** @var array<string, mixed> $rawPost */
+        $rawPost = $this->request->getPost();
         $dataHeader = $this->buildHeaderData($rawPost);
+        /** @var list<array<string, mixed>> $airwayList */
         $airwayList = $rawPost['airway'] ?? [];
 
         $this->model->db->transStart();

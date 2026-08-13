@@ -34,15 +34,16 @@ final class RefSlotOperasiController extends ControllerTemplate
         );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.ref_slot_operasi')
             ->select(['id_slot', 'nama_slot', 'waktu_slot'])
-            ->orderBy('id_slot', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('id_slot', 'ASC');
+
+        $rows = $this->model->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }

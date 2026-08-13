@@ -62,9 +62,13 @@ final class ChecklistPostopController extends ControllerTemplate
         return redirect()->to($this->get_uri_path() . '/data');
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
@@ -87,87 +91,102 @@ final class ChecklistPostopController extends ControllerTemplate
             ->join('person.orang ob', 'ob.id_orang      = db.id_orang', 'left')
             ->join('role.dokter da', 'da.id_dokter     = j.id_dokter_anestesi', 'left')
             ->join('person.orang oa', 'oa.id_orang      = da.id_orang', 'left')
-            ->where('j.id_jadwal', $idJadwal)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('j.id_jadwal', $idJadwal);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchJadwal')->getRowArray() ?? [];
     }
 
+    /**
+     * @return array<string, list<array<string, mixed>>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchOptions(): array
     {
         $db = $this->model->db;
+
+        $kesadaranBuilder = $db->table('operasi.ref_kesadaran_pascaop')->select('id_kesadaran, nama_kesadaran');
+        $ketersediaanBuilder = $db
+            ->table('operasi.ref_ketersediaan_status')
+            ->select('id_ketersediaan_status, nama_ketersediaan');
+        $warnaBuilder = $db->table('operasi.ref_warna_urine')->select('id_warna_urine, nama_warna');
+        $jenisPenunjangBuilder = $db->table('operasi.ref_jenis_penunjang')->select('id_jenis_penunjang, nama_jenis');
+
+        /** @var array<string, list<array<string, mixed>>> */
         return [
-            'kesadaran_pascaop' => $db
-                ->table('operasi.ref_kesadaran_pascaop')
-                ->select('id_kesadaran, nama_kesadaran')
-                ->get()
-                ->getResultArray(),
-            'ketersediaan'      => $db
-                ->table('operasi.ref_ketersediaan_status')
-                ->select('id_ketersediaan_status, nama_ketersediaan')
-                ->get()
-                ->getResultArray(),
-            'warna_urine'       => $db
-                ->table('operasi.ref_warna_urine')
-                ->select('id_warna_urine, nama_warna')
-                ->get()
-                ->getResultArray(),
-            'jenis_penunjang'   => $db
-                ->table('operasi.ref_jenis_penunjang')
-                ->select('id_jenis_penunjang, nama_jenis')
-                ->get()
-                ->getResultArray(),
+            'kesadaran_pascaop' => $this->model->guarded_get($kesadaranBuilder, 'fetchOptions')->getResultArray(),
+            'ketersediaan'      => $this->model->guarded_get($ketersediaanBuilder, 'fetchOptions')->getResultArray(),
+            'warna_urine'       => $this->model->guarded_get($warnaBuilder, 'fetchOptions')->getResultArray(),
+            'jenis_penunjang'   => $this->model->guarded_get($jenisPenunjangBuilder, 'fetchOptions')->getResultArray(),
         ];
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchDrains(int $idChecklistPost): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.checklist_postop_drain d')
             ->select('d.id_drain, d.id_ketersediaan, d.jumlah, d.letak, d.warna, k.nama_ketersediaan')
             ->join('operasi.ref_ketersediaan_status k', 'k.id_ketersediaan_status = d.id_ketersediaan', 'left')
-            ->where('d.id_checklist_post', $idChecklistPost)
-            ->get()
-            ->getResultArray();
+            ->where('d.id_checklist_post', $idChecklistPost);
+
+        /** @var list<array<string, mixed>> */
+        return $this->model->guarded_get($builder, 'fetchDrains')->getResultArray();
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchPenunjang(int $idChecklistPost): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.checklist_postop_penunjang p')
             ->select('p.id_penunjang, p.id_jenis_penunjang, p.id_ketersediaan, p.keterangan')
-            ->where('p.id_checklist_post', $idChecklistPost)
-            ->get()
-            ->getResultArray();
+            ->where('p.id_checklist_post', $idChecklistPost);
+
+        /** @var list<array<string, mixed>> */
+        return $this->model->guarded_get($builder, 'fetchPenunjang')->getResultArray();
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): string
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table("role.{$tabel} t")
             ->select('o.nama')
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
-            ->where("t.{$idKolom}", $idValue)
-            ->get()
-            ->getRowArray();
-        return $row['nama'] ?? '';
+            ->where("t.{$idKolom}", $idValue);
+
+        $row = $this->model->guarded_get($builder, 'fetchNamaRole')->getRowArray();
+        return (string) ($row['nama'] ?? '');
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchTindakanName(int $idTindakan): string
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.ref_tindakan_operasi')
             ->select('nama_tindakan')
-            ->where('id_tindakan', $idTindakan)
-            ->get()
-            ->getRowArray();
-        return $row['nama_tindakan'] ?? '';
+            ->where('id_tindakan', $idTindakan);
+
+        $row = $this->model->guarded_get($builder, 'fetchTindakanName')->getRowArray();
+        return (string) ($row['nama_tindakan'] ?? '');
     }
 
-    // Data Mapper for header
+    /**
+     * Data Mapper for header.
+     *
+     * @param array<string, mixed> $rawPost
+     * @return array<string, mixed>
+     */
     private function buildHeaderData(array $rawPost): array
     {
         return [
@@ -208,7 +227,13 @@ final class ChecklistPostopController extends ControllerTemplate
         ];
     }
 
-    // Batch Insert helper for drain and penunjang
+    /**
+     * Batch Insert helper for drain and penunjang.
+     *
+     * @param list<array<string, mixed>> $drainList
+     * @param list<array<string, mixed>> $penunjangList
+     * @throws \ReflectionException
+     */
     private function insertDrainAndPenunjang(int $idChecklistPost, array $drainList, array $penunjangList): void
     {
         $batchDrain = [];
@@ -253,6 +278,14 @@ final class ChecklistPostopController extends ControllerTemplate
         }
     }
 
+    /**
+     * @param array<string, mixed> $jadwal
+     * @param array<string, mixed> $record
+     * @param list<array<string, mixed>> $drain
+     * @param list<array<string, mixed>> $penunjang
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function buildViewData(
         array $jadwal,
         array $record,
@@ -281,6 +314,7 @@ final class ChecklistPostopController extends ControllerTemplate
     // Pages
     // -------------------------------------------------------------------------
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function create_page(): string
     {
@@ -302,10 +336,16 @@ final class ChecklistPostopController extends ControllerTemplate
         ));
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
-        $record          = $this->model->find_one($id);
+        $record = $this->model->find_one($id);
+        if (!is_array($record)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
+        }
+
         $idJadwal        = (int) ($record['id_jadwal'] ?? 0);
         $jadwal          = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
         $idChecklistPost = (int) $id;
@@ -345,9 +385,12 @@ final class ChecklistPostopController extends ControllerTemplate
     #[\Override]
     public function create(): string|RedirectResponse
     {
-        $rawPost       = $this->request->getPost();
-        $dataHeader    = $this->buildHeaderData($rawPost);
-        $drainList     = $rawPost['drain'] ?? [];
+        /** @var array<string, mixed> $rawPost */
+        $rawPost = $this->request->getPost();
+        $dataHeader = $this->buildHeaderData($rawPost);
+        /** @var list<array<string, mixed>> $drainList */
+        $drainList = $rawPost['drain'] ?? [];
+        /** @var list<array<string, mixed>> $penunjangList */
         $penunjangList = $rawPost['penunjang'] ?? [];
 
         $this->model->db->transStart();
@@ -382,9 +425,12 @@ final class ChecklistPostopController extends ControllerTemplate
             return $this->home();
         }
 
-        $rawPost       = $this->request->getPost();
-        $dataHeader    = $this->buildHeaderData($rawPost);
-        $drainList     = $rawPost['drain'] ?? [];
+        /** @var array<string, mixed> $rawPost */
+        $rawPost = $this->request->getPost();
+        $dataHeader = $this->buildHeaderData($rawPost);
+        /** @var list<array<string, mixed>> $drainList */
+        $drainList = $rawPost['drain'] ?? [];
+        /** @var list<array<string, mixed>> $penunjangList */
         $penunjangList = $rawPost['penunjang'] ?? [];
 
         $this->model->db->transStart();

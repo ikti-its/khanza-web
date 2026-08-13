@@ -43,12 +43,14 @@ final class PermintaanOperasiController extends ControllerTemplate
     // Private Helpers
     // -------------------------------------------------------------------------
 
+    /** @return list<array<int|string, mixed>> */
     private function filterKonfig(): array
     {
+        /** @var list<array<int|string, mixed>> */
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            static fn($f) => !in_array(
-                $f[2],
+            static fn(array $f) => !in_array(
+                $f[2] ?? null,
                 [
                     'id_permintaan',
                     'nomor_reg',
@@ -61,9 +63,13 @@ final class PermintaanOperasiController extends ControllerTemplate
         ));
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchRegistrasi(string $nomorReg): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('registrasi.registrasi r')
             ->select([
@@ -78,34 +84,49 @@ final class PermintaanOperasiController extends ControllerTemplate
             ->join('person.orang o', 'o.id_orang  = p.id_orang')
             ->join('role.dokter d', 'd.id_dokter = r.id_dokter', 'left')
             ->join('person.orang od', 'od.id_orang = d.id_orang', 'left')
-            ->where('r.nomor_reg', $nomorReg)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('r.nomor_reg', $nomorReg);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchRegistrasi')->getRowArray() ?? [];
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table("role.{$tabel} t")
             ->select(['t.id_dokter', 't.kode_dokter', 'o.nama AS nama_dokter'])
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
-            ->where("t.{$idKolom}", $idValue)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where("t.{$idKolom}", $idValue);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchNamaRole')->getRowArray() ?? [];
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchTindakan(int $idTindakan): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.ref_tindakan_operasi')
             ->select(['id_tindakan', 'nama_tindakan'])
-            ->where('id_tindakan', $idTindakan)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('id_tindakan', $idTindakan);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchTindakan')->getRowArray() ?? [];
     }
 
+    /**
+     * @param array<string, mixed> $rawPost
+     * @return array<string, mixed>
+     */
     private function buildHeaderData(array $rawPost, bool $isCreate = false): array
     {
         $data = [
@@ -134,6 +155,10 @@ final class PermintaanOperasiController extends ControllerTemplate
         $this->model->set_order('is_cito', 'DESC');
     }
 
+    /**
+     * @param array<array-key, mixed> $data_tabel
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     #[\Override]
     protected function after_read(array &$data_tabel): void
     {
@@ -141,25 +166,29 @@ final class PermintaanOperasiController extends ControllerTemplate
             return;
         }
 
-        $ids = array_column($data_tabel, 'id_permintaan');
+        /** @var list<array<string, mixed>> $rows */
+        $rows = $data_tabel;
+        $ids  = array_column($rows, 'id_permintaan');
 
-        $jadwals = $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.jadwal_operasi')
             ->select(['id_permintaan', 'id_jadwal', 'id_status'])
-            ->whereIn('id_permintaan', $ids)
-            ->get()
-            ->getResultArray();
+            ->whereIn('id_permintaan', $ids);
+
+        /** @var list<array<string, mixed>> $jadwals */
+        $jadwals = $this->model->guarded_get($builder, 'after_read')->getResultArray();
 
         $map = [];
         foreach ($jadwals as $j) {
-            $map[$j['id_permintaan']] = $j;
+            $map[(int) ($j['id_permintaan'] ?? 0)] = $j;
         }
 
-        foreach ($data_tabel as &$row) {
-            $j                = $map[$row['id_permintaan']] ?? null;
+        foreach ($rows as $key => $row) {
+            $j                = $map[(int) ($row['id_permintaan'] ?? 0)] ?? null;
             $row['id_jadwal'] = $j['id_jadwal'] ?? null;
             $row['id_status'] = $j['id_status'] ?? null;
+            $data_tabel[$key] = $row;
         }
     }
 
@@ -181,13 +210,18 @@ final class PermintaanOperasiController extends ControllerTemplate
         ]);
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
-        $baris = $this->model->find($id) ?? [];
+        $baris = $this->model->find_one($id);
+        if (!is_array($baris)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
+        }
 
         if (!empty($baris['nomor_reg'])) {
-            $baris = array_merge($baris, $this->fetchRegistrasi($baris['nomor_reg']));
+            $baris = array_merge($baris, $this->fetchRegistrasi((string) $baris['nomor_reg']));
         }
 
         if (!empty($baris['id_dokter'])) {
@@ -216,7 +250,9 @@ final class PermintaanOperasiController extends ControllerTemplate
     #[\Override]
     public function create(): string|RedirectResponse
     {
-        $data = $this->buildHeaderData($this->request->getPost(), true);
+        /** @var array<string, mixed> $rawPost */
+        $rawPost = $this->request->getPost();
+        $data = $this->buildHeaderData($rawPost, true);
 
         $this->model->db->transStart();
 
@@ -255,7 +291,9 @@ final class PermintaanOperasiController extends ControllerTemplate
             return $this->home();
         }
 
-        $data = $this->buildHeaderData($this->request->getPost(), false);
+        /** @var array<string, mixed> $rawPost */
+        $rawPost = $this->request->getPost();
+        $data = $this->buildHeaderData($rawPost, false);
 
         try {
             $this->model->update($id, $data);
@@ -271,9 +309,10 @@ final class PermintaanOperasiController extends ControllerTemplate
         }
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.permintaan_operasi po')
             ->select([
@@ -296,9 +335,9 @@ final class PermintaanOperasiController extends ControllerTemplate
             ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
             ->join('operasi.jadwal_operasi jo', 'jo.id_permintaan = po.id_permintaan', 'left')
             ->orderBy('po.is_cito', 'DESC')
-            ->orderBy('po.tanggal_minta', 'DESC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('po.tanggal_minta', 'DESC');
+
+        $rows = $this->model->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }

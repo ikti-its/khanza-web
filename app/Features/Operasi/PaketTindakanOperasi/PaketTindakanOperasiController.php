@@ -39,6 +39,7 @@ final class PaketTindakanOperasiController extends ControllerTemplate
         );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
         $idTindakan = (int) $this->request->getGet('id_tindakan');
@@ -46,23 +47,24 @@ final class PaketTindakanOperasiController extends ControllerTemplate
             return $this->response->setJSON(['data' => []]);
         }
 
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.paket_tindakan_operasi p')
             ->select(['p.id_paket', 'p.id_tindakan', 'k.nama_komponen', 'p.tarif_kelas_3 AS tarif', 'ti.nama_tindakan'])
             ->join('operasi.ref_komponen_jasa k', 'k.id_komponen  = p.id_komponen', 'left')
             ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan = p.id_tindakan', 'left')
             ->where('p.id_tindakan', $idTindakan)
-            ->orderBy('p.id_komponen', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('p.id_komponen', 'ASC');
+
+        $rows = $this->model->guarded_get($builder, 'list')->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }
 
-    public function listByTindakan(int $idTindakan)
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    public function listByTindakan(int $idTindakan): ResponseInterface
     {
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.paket_tindakan_operasi p')
             ->select([
@@ -76,9 +78,9 @@ final class PaketTindakanOperasiController extends ControllerTemplate
             ])
             ->join('operasi.ref_komponen_jasa rk', 'rk.id_komponen = p.id_komponen', 'left')
             ->where('p.id_tindakan', $idTindakan)
-            ->orderBy('p.id_komponen', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('p.id_komponen', 'ASC');
+
+        $rows = $this->model->guarded_get($builder, 'listByTindakan')->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }

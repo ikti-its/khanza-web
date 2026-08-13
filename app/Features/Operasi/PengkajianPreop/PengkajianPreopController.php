@@ -56,9 +56,13 @@ final class PengkajianPreopController extends ControllerTemplate
         return redirect()->to($this->get_uri_path() . '/data');
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
@@ -76,11 +80,17 @@ final class PengkajianPreopController extends ControllerTemplate
             ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
             ->join('role.dokter db', 'db.id_dokter     = j.id_dokter_bedah', 'left')
             ->join('person.orang ob', 'ob.id_orang      = db.id_orang', 'left')
-            ->where('j.id_jadwal', $idJadwal)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('j.id_jadwal', $idJadwal);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchJadwal')->getRowArray() ?? [];
     }
 
+    /**
+     * @param array<string, mixed> $jadwal
+     * @param array<string, mixed> $record
+     * @return array<string, mixed>
+     */
     private function buildViewData(array $jadwal, array $record, string $formAction): array
     {
         $isCreate = $formAction === '/submittambah/';
@@ -101,6 +111,7 @@ final class PengkajianPreopController extends ControllerTemplate
     // Pages
     // -------------------------------------------------------------------------
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function create_page(): string
     {
@@ -119,6 +130,7 @@ final class PengkajianPreopController extends ControllerTemplate
         ));
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function update_page(int|string $id): string
     {

@@ -23,13 +23,15 @@ final class PapanJadwalOperasiController extends ControllerTemplate
         );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function index(): string|RedirectResponse
     {
-        $tanggal  = $this->request->getGet('tanggal') ? $this->request->getGet('tanggal') : date('Y-m-d');
-        $slots    = $this->fetchSlots();
-        $ruangans = $this->fetchRuangans();
-        $jadwals  = $this->fetchJadwals($tanggal);
+        $tanggalGet = (string) ($this->request->getGet('tanggal') ?? '');
+        $tanggal    = $tanggalGet !== '' ? $tanggalGet : date('Y-m-d');
+        $slots      = $this->fetchSlots();
+        $ruangans   = $this->fetchRuangans();
+        $jadwals    = $this->fetchJadwals($tanggal);
 
         $grid  = $this->buildGrid($jadwals, $slots);
         $spans = $this->buildSpans($ruangans, $slots, $grid);
@@ -45,35 +47,48 @@ final class PapanJadwalOperasiController extends ControllerTemplate
         ]);
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchSlots(): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.ref_slot_operasi')
-            ->orderBy('id_slot', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('id_slot', 'ASC');
+
+        /** @var list<array<string, mixed>> */
+        return $this->model->guarded_get($builder, 'fetchSlots')->getResultArray();
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchRuangans(): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('ruangan.ruangan')
             ->select(['id_ruangan', 'nama_ruangan', 'kode_ruangan'])
             ->like('kode_ruangan', 'OK', 'after')
-            ->orderBy('kode_ruangan', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('kode_ruangan', 'ASC');
+
+        /** @var list<array<string, mixed>> */
+        return $this->model->guarded_get($builder, 'fetchRuangans')->getResultArray();
     }
 
     /**
      * Ambil jadwal yang masih berlangsung di $tanggal (bukan cuma yang mulai di situ),
      * lalu tandai is_start_day/is_end_day untuk buildGrid() dan badge di view.
+     *
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      **/
     private function fetchJadwals(string $tanggal): array
     {
-        $jadwals = $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
@@ -102,13 +117,14 @@ final class PapanJadwalOperasiController extends ControllerTemplate
             ->join('person.orang oa', 'oa.id_orang      = da.id_orang', 'left')
             ->where('j.tanggal <=', $tanggal)
             ->where('COALESCE(j.tanggal_selesai, j.tanggal) >=', $tanggal)
-            ->where('j.id_status !=', 5)
-            ->get()
-            ->getResultArray();
+            ->where('j.id_status !=', 5);
+
+        /** @var list<array<string, mixed>> $jadwals */
+        $jadwals = $this->model->guarded_get($builder, 'fetchJadwals')->getResultArray();
 
         return array_map(static function (array $j) use ($tanggal): array {
-            $j['is_start_day'] = $j['tanggal'] === $tanggal;
-            $j['is_end_day']   = ($j['tanggal_selesai'] ?? $j['tanggal']) === $tanggal;
+            $j['is_start_day'] = ($j['tanggal'] ?? null) === $tanggal;
+            $j['is_end_day']   = ($j['tanggal_selesai'] ?? $j['tanggal'] ?? null) === $tanggal;
             return $j;
         }, $jadwals);
     }
@@ -116,24 +132,28 @@ final class PapanJadwalOperasiController extends ControllerTemplate
     /**
      * grid[id_slot][id_ruangan] = jadwal. Slot dihitung langsung dari waktu
      * per hari (bukan tabel lookup) karena satu jadwal bisa lewat tengah malam.
+     *
+     * @param list<array<string, mixed>> $jadwals
+     * @param list<array<string, mixed>> $slots
+     * @return array<int, array<int, array<string, mixed>>>
      **/
     private function buildGrid(array $jadwals, array $slots): array
     {
         $grid = [];
         foreach ($jadwals as $j) {
-            $idRuangan  = (int) $j['id_ruangan'];
-            $startBound = $j['is_start_day'] ? $j['waktu_mulai'] : '00:00:00';
-            $endBound   = $j['is_end_day'] ? $j['waktu_selesai'] ?? '23:59:59' : null;
+            $idRuangan  = (int) ($j['id_ruangan'] ?? 0);
+            $startBound = (string) (($j['is_start_day'] ?? false) ? ($j['waktu_mulai'] ?? '00:00:00') : '00:00:00');
+            $endBound   = ($j['is_end_day'] ?? false) ? (string) ($j['waktu_selesai'] ?? '23:59:59') : null;
 
             foreach ($slots as $slot) {
-                $waktuSlot = $slot['waktu_slot'];
+                $waktuSlot = (string) ($slot['waktu_slot'] ?? '');
                 if ($waktuSlot < $startBound) {
                     continue;
                 }
                 if ($endBound !== null && $waktuSlot >= $endBound) {
                     continue;
                 }
-                $grid[(int) $slot['id_slot']][$idRuangan] = $j;
+                $grid[(int) ($slot['id_slot'] ?? 0)][$idRuangan] = $j;
             }
         }
         return $grid;
@@ -141,21 +161,26 @@ final class PapanJadwalOperasiController extends ControllerTemplate
 
     /**
      * Slot berurutan milik jadwal yang sama di ruangan yang sama digabung jadi satu rowspan.
+     *
+     * @param list<array<string, mixed>> $ruangans
+     * @param list<array<string, mixed>> $slots
+     * @param array<int, array<int, array<string, mixed>>> $grid
+     * @return array<int, array<int, int>>
      **/
     private function buildSpans(array $ruangans, array $slots, array $grid): array
     {
         $spans = [];
         foreach ($ruangans as $ruangan) {
-            $idRuangan  = (int) $ruangan['id_ruangan'];
+            $idRuangan  = (int) ($ruangan['id_ruangan'] ?? 0);
             $prevJadwal = null;
             $firstSlot  = null;
 
             foreach ($slots as $slot) {
-                $idSlot   = (int) $slot['id_slot'];
+                $idSlot   = (int) ($slot['id_slot'] ?? 0);
                 $jadwal   = $grid[$idSlot][$idRuangan] ?? null;
-                $idJadwal = $jadwal !== null ? (int) $jadwal['id_jadwal'] : null;
+                $idJadwal = $jadwal !== null ? (int) ($jadwal['id_jadwal'] ?? 0) : null;
 
-                if ($idJadwal !== null && $idJadwal === $prevJadwal) {
+                if ($idJadwal !== null && $idJadwal === $prevJadwal && $firstSlot !== null) {
                     $spans[$firstSlot][$idRuangan]++;
                     $spans[$idSlot][$idRuangan] = 0;
                     continue;

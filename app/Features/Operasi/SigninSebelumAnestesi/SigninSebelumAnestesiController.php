@@ -63,9 +63,13 @@ final class SigninSebelumAnestesiController extends ControllerTemplate
         return redirect()->to($this->get_uri_path() . '/data');
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
@@ -88,53 +92,67 @@ final class SigninSebelumAnestesiController extends ControllerTemplate
             ->join('person.orang ob', 'ob.id_orang      = db.id_orang', 'left')
             ->join('role.dokter da', 'da.id_dokter     = j.id_dokter_anestesi', 'left')
             ->join('person.orang oa', 'oa.id_orang      = da.id_orang', 'left')
-            ->where('j.id_jadwal', $idJadwal)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('j.id_jadwal', $idJadwal);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchJadwal')->getRowArray() ?? [];
     }
 
+    /**
+     * @return array<string, list<array<string, mixed>>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchOptions(): array
     {
         $db = $this->model->db;
+
+        $ketersediaanBuilder = $db
+            ->table('operasi.ref_ketersediaan_status')
+            ->select('id_ketersediaan_status, nama_ketersediaan');
+        $kesiapanBuilder = $db
+            ->table('operasi.ref_kesiapan_anestesi')
+            ->select('id_kesiapan, nama_kesiapan');
+
+        /** @var array<string, list<array<string, mixed>>> */
         return [
-            'ketersediaan'      => $db
-                ->table('operasi.ref_ketersediaan_status')
-                ->select('id_ketersediaan_status, nama_ketersediaan')
-                ->get()
-                ->getResultArray(),
-            'kesiapan_anestesi' => $db
-                ->table('operasi.ref_kesiapan_anestesi')
-                ->select('id_kesiapan, nama_kesiapan')
-                ->get()
-                ->getResultArray(),
+            'ketersediaan'      => $this->model->guarded_get($ketersediaanBuilder, 'fetchOptions')->getResultArray(),
+            'kesiapan_anestesi' => $this->model->guarded_get($kesiapanBuilder, 'fetchOptions')->getResultArray(),
         ];
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): string
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table("role.{$tabel} t")
             ->select('o.nama')
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
-            ->where("t.{$idKolom}", $idValue)
-            ->get()
-            ->getRowArray();
-        return $row['nama'] ?? '';
+            ->where("t.{$idKolom}", $idValue);
+
+        $row = $this->model->guarded_get($builder, 'fetchNamaRole')->getRowArray();
+        return (string) ($row['nama'] ?? '');
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchTindakanName(int $idTindakan): string
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.ref_tindakan_operasi')
             ->select('nama_tindakan')
-            ->where('id_tindakan', $idTindakan)
-            ->get()
-            ->getRowArray();
-        return $row['nama_tindakan'] ?? '';
+            ->where('id_tindakan', $idTindakan);
+
+        $row = $this->model->guarded_get($builder, 'fetchTindakanName')->getRowArray();
+        return (string) ($row['nama_tindakan'] ?? '');
     }
 
+    /**
+     * @param array<string, mixed> $jadwal
+     * @param array<string, mixed> $record
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function buildViewData(array $jadwal, array $record, string $formAction): array
     {
         $isCreate = $formAction === '/submittambah/';
@@ -156,6 +174,7 @@ final class SigninSebelumAnestesiController extends ControllerTemplate
     // Pages
     // -------------------------------------------------------------------------
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function create_page(): string
     {
@@ -177,10 +196,16 @@ final class SigninSebelumAnestesiController extends ControllerTemplate
         ));
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
-        $record   = $this->model->find_one($id);
+        $record = $this->model->find_one($id);
+        if (!is_array($record)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
+        }
+
         $idJadwal = (int) ($record['id_jadwal'] ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 

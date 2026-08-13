@@ -59,7 +59,8 @@ final class JadwalOperasiController extends ControllerTemplate
             'dibatalkan'  => 'Dibatalkan',
         ];
 
-        $this->active_filter = $this->request->getGet('filter') ? $this->request->getGet('filter') : null;
+        $filterGet = (string) ($this->request->getGet('filter') ?? '');
+        $this->active_filter = $filterGet !== '' ? $filterGet : null;
 
         match ($this->active_filter) {
             'menunggu'    => $this->model->set_filter('id_status', 1),
@@ -87,9 +88,13 @@ final class JadwalOperasiController extends ControllerTemplate
     // Private Helpers
     // -------------------------------------------------------------------------
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchPermintaan(int $idPermintaan): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.permintaan_operasi po')
             ->select([
@@ -107,43 +112,51 @@ final class JadwalOperasiController extends ControllerTemplate
             ->join('role.dokter d', 'd.id_dokter    = po.id_dokter', 'left')
             ->join('person.orang od', 'od.id_orang    = d.id_orang', 'left')
             ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan = po.id_tindakan', 'left')
-            ->where('po.id_permintaan', $idPermintaan)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('po.id_permintaan', $idPermintaan);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchPermintaan')->getRowArray() ?? [];
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchNamaRole(string $tabel, string $idKolom, int $idValue): string
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table("role.{$tabel} t")
             ->select('o.nama')
             ->join('person.orang o', 'o.id_orang = t.id_orang', 'left')
-            ->where("t.{$idKolom}", $idValue)
-            ->get()
-            ->getRowArray();
-        return $row['nama'] ?? '';
+            ->where("t.{$idKolom}", $idValue);
+
+        $row = $this->model->guarded_get($builder, 'fetchNamaRole')->getRowArray();
+        return (string) ($row['nama'] ?? '');
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function fetchNamaRuangan(int $idRuangan): string
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table('ruangan.ruangan')
             ->select('nama_ruangan')
-            ->where('id_ruangan', $idRuangan)
-            ->get()
-            ->getRowArray();
-        return $row['nama_ruangan'] ?? '';
+            ->where('id_ruangan', $idRuangan);
+
+        $row = $this->model->guarded_get($builder, 'fetchNamaRuangan')->getRowArray();
+        return (string) ($row['nama_ruangan'] ?? '');
     }
 
-    /** Bentrok dibandingkan sebagai timestamp tanggal+waktu penuh supaya operasi lewat tengah malam terdeteksi benar. */
+    /**
+     * Bentrok dibandingkan sebagai timestamp tanggal+waktu penuh supaya operasi lewat tengah malam terdeteksi benar.
+     *
+     * @param array<string, mixed> $data
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function checkConflict(int $excludeId, array $data): null|string
     {
-        $tanggal        = $data['tanggal'];
-        $tanggalSelesai = $data['tanggal_selesai'] ?? $tanggal;
-        $waktuMulai     = $data['waktu_mulai'];
-        $waktuSelesai   = $data['waktu_selesai'] ?? '23:59:59';
+        $tanggal        = (string) ($data['tanggal'] ?? '');
+        $tanggalSelesai = (string) ($data['tanggal_selesai'] ?? $tanggal);
+        $waktuMulai     = (string) ($data['waktu_mulai'] ?? '');
+        $waktuSelesai   = (string) ($data['waktu_selesai'] ?? '23:59:59');
 
         $mulaiTs       = $this->model->db->escape("{$tanggal} {$waktuMulai}");
         $selesaiTs     = $this->model->db->escape("{$tanggalSelesai} {$waktuSelesai}");
@@ -151,14 +164,22 @@ final class JadwalOperasiController extends ControllerTemplate
         . " OVERLAPS ({$mulaiTs}::timestamp, {$selesaiTs}::timestamp)";
 
         $kolomWaktu = 'j.tanggal, j.waktu_mulai, j.tanggal_selesai, j.waktu_selesai';
-        $checks     = [
+        /**
+         * @var list<array{
+         *     col: string,
+         *     join: list<array{0: string, 1: string}>,
+         *     label: callable(array<string, mixed>): string,
+         *     select: string,
+         * }> $checks
+         */
+        $checks = [
             [
                 'col'    => 'id_dokter_bedah',
                 'join'   => [
                     ['role.dokter d',  'd.id_dokter = j.id_dokter_bedah'],
                     ['person.orang o', 'o.id_orang = d.id_orang'],
                 ],
-                'label'  => static fn(array $r) => "Dokter Bedah {$r['nama']}",
+                'label'  => static fn(array $r) => "Dokter Bedah " . (string) ($r['nama'] ?? ''),
                 'select' => "{$kolomWaktu}, o.nama",
             ],
             [
@@ -167,13 +188,13 @@ final class JadwalOperasiController extends ControllerTemplate
                     ['role.dokter d',  'd.id_dokter = j.id_dokter_anestesi'],
                     ['person.orang o', 'o.id_orang = d.id_orang'],
                 ],
-                'label'  => static fn(array $r) => "Dokter Anestesi {$r['nama']}",
+                'label'  => static fn(array $r) => "Dokter Anestesi " . (string) ($r['nama'] ?? ''),
                 'select' => "{$kolomWaktu}, o.nama",
             ],
             [
                 'col'    => 'id_ruangan',
                 'join'   => [['ruangan.ruangan r', 'r.id_ruangan = j.id_ruangan']],
-                'label'  => static fn(array $r) => "Ruangan {$r['nama_ruangan']}",
+                'label'  => static fn(array $r) => "Ruangan " . (string) ($r['nama_ruangan'] ?? ''),
                 'select' => "{$kolomWaktu}, r.nama_ruangan",
             ],
         ];
@@ -198,8 +219,9 @@ final class JadwalOperasiController extends ControllerTemplate
                 $builder->join($table, $cond, 'left');
             }
 
-            $hit = $builder->get()->getRowArray();
+            $hit = $this->model->guarded_get($builder, 'checkConflict')->getRowArray();
             if ($hit) {
+                /** @var array<string, mixed> $hit */
                 $label = $check['label']($hit);
                 return "{$label} sudah terjadwal operasi di waktu yang sama ({$this->formatRentangWaktu($hit)}).";
             }
@@ -208,22 +230,30 @@ final class JadwalOperasiController extends ControllerTemplate
         return null;
     }
 
+    /** @param array<string, mixed> $jadwal */
     private function formatRentangWaktu(array $jadwal): string
     {
-        $tanggalSelesai = $jadwal['tanggal_selesai'] ?? $jadwal['tanggal'];
-        if ($jadwal['tanggal'] === $tanggalSelesai) {
-            return "{$jadwal['waktu_mulai']}–{$jadwal['waktu_selesai']}";
+        $tanggal        = (string) ($jadwal['tanggal'] ?? '');
+        $tanggalSelesai = (string) ($jadwal['tanggal_selesai'] ?? $tanggal);
+        $waktuMulai     = (string) ($jadwal['waktu_mulai'] ?? '');
+        $waktuSelesai   = (string) ($jadwal['waktu_selesai'] ?? '');
+        if ($tanggal === $tanggalSelesai) {
+            return "{$waktuMulai}–{$waktuSelesai}";
         }
-        return "{$jadwal['tanggal']} {$jadwal['waktu_mulai']} – {$tanggalSelesai} {$jadwal['waktu_selesai']}";
+        return "{$tanggal} {$waktuMulai} – {$tanggalSelesai} {$waktuSelesai}";
     }
 
     // -------------------------------------------------------------------------
     // Pages
     // -------------------------------------------------------------------------
 
+    /**
+     * @return list<array<string, mixed>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchTimTerpilih(int $idJadwal): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.jadwal_operasi_tim jt')
             ->select('jt.id_dokter, jt.id_petugas, jt.id_peran, COALESCE(od.nama, op.nama) AS nama', false)
@@ -231,45 +261,61 @@ final class JadwalOperasiController extends ControllerTemplate
             ->join('person.orang od', 'od.id_orang   = d.id_orang', 'left')
             ->join('role.petugas pt', 'pt.id_petugas = jt.id_petugas', 'left')
             ->join('person.orang op', 'op.id_orang   = pt.id_orang', 'left')
-            ->where('jt.id_jadwal', $idJadwal)
-            ->get()
-            ->getResultArray();
+            ->where('jt.id_jadwal', $idJadwal);
+
+        /** @var list<array<string, mixed>> */
+        return $this->model->guarded_get($builder, 'fetchTimTerpilih')->getResultArray();
     }
 
+    /**
+     * @return array<int, string>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchPeranTim(): array
     {
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.ref_peran_tim_medis')
             ->select(['id_peran', 'nama_peran'])
-            ->orderBy('id_peran', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->orderBy('id_peran', 'ASC');
+
+        /** @var list<array<string, mixed>> $rows */
+        $rows = $this->model->guarded_get($builder, 'fetchPeranTim')->getResultArray();
 
         $peran = [];
         foreach ($rows as $row) {
-            $peran[(int) $row['id_peran']] = $row['nama_peran'];
+            $peran[(int) ($row['id_peran'] ?? 0)] = (string) ($row['nama_peran'] ?? '');
         }
         return $peran;
     }
 
+    /**
+     * @return array<int, string>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchPeranJenis(): array
     {
-        $rows = $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.ref_peran_tim_medis')
-            ->select(['id_peran', 'jenis'])
-            ->get()
-            ->getResultArray();
+            ->select(['id_peran', 'jenis']);
+
+        /** @var list<array<string, mixed>> $rows */
+        $rows = $this->model->guarded_get($builder, 'fetchPeranJenis')->getResultArray();
 
         $jenis = [];
         foreach ($rows as $row) {
-            $jenis[(int) $row['id_peran']] = $row['jenis'];
+            $jenis[(int) ($row['id_peran'] ?? 0)] = (string) ($row['jenis'] ?? '');
         }
         return $jenis;
     }
 
-    /** Cegah petugas ditempatkan di peran khusus dokter (atau sebaliknya) sebelum data disimpan. */
+    /**
+     * Cegah petugas ditempatkan di peran khusus dokter (atau sebaliknya) sebelum data disimpan.
+     *
+     * @param list<array<string, mixed>> $tim
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function validateTim(array $tim): null|string
     {
         $peranValid = $this->fetchPeranTim();
@@ -296,6 +342,10 @@ final class JadwalOperasiController extends ControllerTemplate
         return null;
     }
 
+    /**
+     * @param list<array<string, mixed>> $tim
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function saveTim(int $idJadwal, array $tim): void
     {
         $this->model->db->table('operasi.jadwal_operasi_tim')->where('id_jadwal', $idJadwal)->delete();
@@ -332,10 +382,15 @@ final class JadwalOperasiController extends ControllerTemplate
         $this->model->db->table('operasi.jadwal_operasi_tim')->insertBatch($rows);
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
-        $baris = $this->model->find($id) ?? [];
+        $baris = $this->model->find_one($id);
+        if (!is_array($baris)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
+        }
 
         if (!empty($baris['id_permintaan'])) {
             $baris = array_merge($baris, $this->fetchPermintaan((int) $baris['id_permintaan']));
@@ -369,21 +424,29 @@ final class JadwalOperasiController extends ControllerTemplate
     // CRUD
     // -------------------------------------------------------------------------
 
+    /**
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     * @throws \CodeIgniter\Files\Exceptions\FileNotFoundException
+     */
     private function generateNomorOperasi(string $tanggal): string
     {
         helper('autonomor');
 
-        $lastNo = $this->model
+        $timestamp = strtotime($tanggal);
+        $tanggalYmd = $timestamp !== false ? date('Ymd', $timestamp) : date('Ymd');
+
+        $builder = $this->model
             ->db
             ->table('operasi.jadwal_operasi')
             ->select('nomor_operasi')
-            ->like('nomor_operasi', 'OP' . date('Ymd', strtotime($tanggal)), 'after')
+            ->like('nomor_operasi', 'OP' . $tanggalYmd, 'after')
             ->orderBy('nomor_operasi', 'DESC')
-            ->limit(1)
-            ->get()
-            ->getRowArray();
+            ->limit(1);
 
-        return generateNextNoOperasi($lastNo['nomor_operasi'] ?? null, $tanggal);
+        $lastNo = $this->model->guarded_get($builder, 'generateNomorOperasi')->getRowArray();
+        $lastNoValue = ($lastNo['nomor_operasi'] ?? null) !== null ? (string) $lastNo['nomor_operasi'] : null;
+
+        return generateNextNoOperasi($lastNoValue, $tanggal);
     }
 
     /**
@@ -401,7 +464,12 @@ final class JadwalOperasiController extends ControllerTemplate
         }
 
         $lewatTengahMalam = $waktuMulai !== null && $waktuSelesai !== null && $waktuSelesai < $waktuMulai;
-        return $lewatTengahMalam ? date('Y-m-d', strtotime("{$tanggal} +1 day")) : $tanggal;
+        if (!$lewatTengahMalam) {
+            return $tanggal;
+        }
+
+        $timestamp = strtotime("{$tanggal} +1 day");
+        return $timestamp !== false ? date('Y-m-d', $timestamp) : $tanggal;
     }
 
     /** Dibandingkan sebagai timestamp penuh, bukan cuma tanggal, supaya rentang terbalik (tanggal sama tapi waktu_selesai < waktu_mulai) ikut tertangkap. */
@@ -417,7 +485,14 @@ final class JadwalOperasiController extends ControllerTemplate
         if ($waktuMulai === null || $waktuSelesai === null) {
             return $tanggalSelesai < $tanggal;
         }
-        return strtotime("{$tanggalSelesai} {$waktuSelesai}") <= strtotime("{$tanggal} {$waktuMulai}");
+
+        $selesaiTs = strtotime("{$tanggalSelesai} {$waktuSelesai}");
+        $mulaiTs   = strtotime("{$tanggal} {$waktuMulai}");
+        if ($selesaiTs === false || $mulaiTs === false) {
+            return $tanggalSelesai < $tanggal;
+        }
+
+        return $selesaiTs <= $mulaiTs;
     }
 
     #[\Override]
@@ -427,8 +502,8 @@ final class JadwalOperasiController extends ControllerTemplate
             return $this->home();
         }
 
-        $existing = $this->model->find($id);
-        if (!$existing) {
+        $existing = $this->model->find_one($id);
+        if (!is_array($existing)) {
             return $this->home();
         }
 
@@ -460,18 +535,20 @@ final class JadwalOperasiController extends ControllerTemplate
             return $this->home();
         }
 
+        /** @var array<string, mixed> $rawPost */
         $rawPost             = $this->request->getPost();
-        $tanggal             = $rawPost['tanggal'] ?? null;
-        $waktuMulai          = $rawPost['waktu_mulai'] ?? null;
-        $waktuSelesaiInput   = $rawPost['waktu_selesai'] ?? null;
-        $waktuSelesai        = $waktuSelesaiInput ? $waktuSelesaiInput : null;
-        $tanggalSelesaiInput = $rawPost['tanggal_selesai'] ?? null;
+        $tanggal             = ($rawPost['tanggal'] ?? null) !== null ? (string) $rawPost['tanggal'] : null;
+        $waktuMulai          = ($rawPost['waktu_mulai'] ?? null) !== null ? (string) $rawPost['waktu_mulai'] : null;
+        $waktuSelesaiInput   = ($rawPost['waktu_selesai'] ?? null) !== null ? (string) $rawPost['waktu_selesai'] : null;
+        $waktuSelesai        = $waktuSelesaiInput !== null && $waktuSelesaiInput !== '' ? $waktuSelesaiInput : null;
+        $tanggalSelesaiInput = ($rawPost['tanggal_selesai'] ?? null) !== null ? (string) $rawPost['tanggal_selesai'] : null;
         $tanggalSelesai      = $this->resolveTanggalSelesai(
             $tanggal,
             $waktuMulai,
             $waktuSelesai,
-            $tanggalSelesaiInput ? $tanggalSelesaiInput : null,
+            $tanggalSelesaiInput !== null && $tanggalSelesaiInput !== '' ? $tanggalSelesaiInput : null,
         );
+        /** @var list<array<string, mixed>> $tim */
         $tim = $this->request->getPost('tim') ?? [];
 
         if ($this->rentangSelesaiTidakValid($tanggal, $waktuMulai, $tanggalSelesai, $waktuSelesai)) {
@@ -479,31 +556,33 @@ final class JadwalOperasiController extends ControllerTemplate
             return redirect()->back()->withInput();
         }
 
-        $timError = $this->validateTim($tim);
-        if ($timError !== null) {
-            session()->setFlashdata('error', $timError);
-            return redirect()->back()->withInput();
-        }
-
-        $existing     = $this->model->find($id);
-        $nomorOperasi = $existing['nomor_operasi'] ?? null;
-        if ($nomorOperasi === null && $tanggal !== null) {
-            $nomorOperasi = $this->generateNomorOperasi($tanggal);
-        }
-
-        $data = [
-            'nomor_operasi'      => $nomorOperasi,
-            'id_ruangan'         => $rawPost['id_ruangan'] ?? null,
-            'id_dokter_bedah'    => $rawPost['id_dokter_bedah'] ?? null,
-            'id_dokter_anestesi' => $rawPost['id_dokter_anestesi'] ?? null,
-            'tanggal'            => $tanggal,
-            'waktu_mulai'        => $waktuMulai,
-            'waktu_selesai'      => $waktuSelesai,
-            'tanggal_selesai'    => $tanggalSelesai,
-            'id_status'          => 2,
-        ];
-
         try {
+            $timError = $this->validateTim($tim);
+            if ($timError !== null) {
+                session()->setFlashdata('error', $timError);
+                return redirect()->back()->withInput();
+            }
+
+            $existing     = $this->model->find_one($id);
+            $nomorOperasi = is_array($existing) && ($existing['nomor_operasi'] ?? null) !== null
+                ? (string) $existing['nomor_operasi']
+                : null;
+            if ($nomorOperasi === null && $tanggal !== null) {
+                $nomorOperasi = $this->generateNomorOperasi($tanggal);
+            }
+
+            $data = [
+                'nomor_operasi'      => $nomorOperasi,
+                'id_ruangan'         => $rawPost['id_ruangan'] ?? null,
+                'id_dokter_bedah'    => $rawPost['id_dokter_bedah'] ?? null,
+                'id_dokter_anestesi' => $rawPost['id_dokter_anestesi'] ?? null,
+                'tanggal'            => $tanggal,
+                'waktu_mulai'        => $waktuMulai,
+                'waktu_selesai'      => $waktuSelesai,
+                'tanggal_selesai'    => $tanggalSelesai,
+                'id_status'          => 2,
+            ];
+
             $conflict = $this->checkConflict((int) $id, $data);
             if ($conflict !== null) {
                 session()->setFlashdata('error', $conflict);

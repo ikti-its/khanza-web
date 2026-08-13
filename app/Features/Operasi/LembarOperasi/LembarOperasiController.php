@@ -27,9 +27,13 @@ final class LembarOperasiController extends ControllerTemplate
     // Private Helpers
     // -------------------------------------------------------------------------
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
@@ -65,24 +69,30 @@ final class LembarOperasiController extends ControllerTemplate
             ->join('role.dokter da', 'da.id_dokter     = j.id_dokter_anestesi', 'left')
             ->join('person.orang oa', 'oa.id_orang      = da.id_orang', 'left')
             ->join('operasi.ref_status_operasi rs', 'rs.id_status     = j.id_status', 'left')
-            ->where('j.id_jadwal', $idJadwal)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('j.id_jadwal', $idJadwal);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchJadwal')->getRowArray() ?? [];
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function fetchTagihanId(int $idJadwal): null|int
     {
-        $row = $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.tagihan_operasi')
             ->select('id_tagihan')
-            ->where('id_jadwal', $idJadwal)
-            ->get()
-            ->getRowArray();
+            ->where('id_jadwal', $idJadwal);
 
-        return $row ? (int) $row['id_tagihan'] : null;
+        $row = $this->model->guarded_get($builder, 'fetchTagihanId')->getRowArray();
+
+        return $row ? (int) ($row['id_tagihan'] ?? 0) : null;
     }
 
+    /**
+     * @return array<string, list<array<string, mixed>>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function buildForms(int $idJadwal): array
     {
         $sql = 'SELECT
@@ -101,8 +111,12 @@ final class LembarOperasiController extends ControllerTemplate
             (SELECT id_skor_bromage     FROM operasi.skor_bromage              WHERE id_jadwal = ?) AS skor_bromage,
             (SELECT id_penyerahan       FROM operasi.penyerahan_pasien         WHERE id_jadwal = ?) AS penyerahan_pasien';
 
-        $bindings        = array_fill(0, 14, $idJadwal);
-        $existingRecords = $this->model->db->query($sql, $bindings)->getRowArray() ?? [];
+        $bindings = array_fill(0, 14, $idJadwal);
+        $result   = $this->model->db->query($sql, $bindings);
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'buildForms query failed');
+
+        /** @var array<string, mixed> $existingRecords */
+        $existingRecords = $result->getRowArray() ?? [];
 
         // Helper mapper untuk array
         $entry = static fn(string $label, string $slug, string $table): array => [
@@ -144,6 +158,7 @@ final class LembarOperasiController extends ControllerTemplate
     // Pages
     // -------------------------------------------------------------------------
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function index(): string|RedirectResponse
     {

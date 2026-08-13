@@ -87,9 +87,13 @@ final class PengkajianPreAnestesiController extends ControllerTemplate
         return redirect()->to($this->get_uri_path() . '/data');
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchJadwal(int $idJadwal): array
     {
-        return $this->model
+        $builder = $this->model
             ->db
             ->table('operasi.jadwal_operasi j')
             ->select([
@@ -108,87 +112,38 @@ final class PengkajianPreAnestesiController extends ControllerTemplate
             ->join('operasi.ref_tindakan_operasi ti', 'ti.id_tindakan   = po.id_tindakan', 'left')
             ->join('role.dokter da', 'da.id_dokter     = j.id_dokter_anestesi', 'left')
             ->join('person.orang oa', 'oa.id_orang      = da.id_orang', 'left')
-            ->where('j.id_jadwal', $idJadwal)
-            ->get()
-            ->getRowArray() ?? [];
+            ->where('j.id_jadwal', $idJadwal);
+
+        /** @var array<string, mixed> */
+        return $this->model->guarded_get($builder, 'fetchJadwal')->getRowArray() ?? [];
     }
 
+    /**
+     * @return array<string, list<array<string, mixed>>>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function fetchOptions(): array
     {
         $db = $this->model->db;
+
+        $rencanaBuilder = $db->table('operasi.ref_rencana_anestesi')->select('id_rencana_anestesi, nama_rencana');
+        $asaBuilder      = $db->table('operasi.ref_angka_asa')->select('id_asa, nama_asa');
+        $obatBuilder     = $db->table('operasi.ref_obat_bebas')->select('id_obat_bebas, nama_kategori');
+
+        /** @var array<string, list<array<string, mixed>>> */
         return [
-            'rencana_anestesi' => $db
-                ->table('operasi.ref_rencana_anestesi')
-                ->select('id_rencana_anestesi, nama_rencana')
-                ->get()
-                ->getResultArray(),
-            'asa'              => $db
-                ->table('operasi.ref_angka_asa')
-                ->select('id_asa, nama_asa')
-                ->get()
-                ->getResultArray(),
-            'obat_bebas'       => $db
-                ->table('operasi.ref_obat_bebas')
-                ->select('id_obat_bebas, nama_kategori')
-                ->get()
-                ->getResultArray(),
+            'rencana_anestesi' => $this->model->guarded_get($rencanaBuilder, 'fetchOptions')->getResultArray(),
+            'asa'              => $this->model->guarded_get($asaBuilder, 'fetchOptions')->getResultArray(),
+            'obat_bebas'       => $this->model->guarded_get($obatBuilder, 'fetchOptions')->getResultArray(),
         ];
     }
 
-    // Data Mapper for header
-    private function buildHeaderData(array $rawPost): array
-    {
-        return [
-            'id_jadwal'            => (int) ($rawPost['id_jadwal'] ?? 0) ? (int) ($rawPost['id_jadwal'] ?? 0) : null,
-            'id_dokter_anestesi'   => (int) ($rawPost['id_dokter_anestesi'] ?? 0)
-                ? (int) ($rawPost['id_dokter_anestesi'] ?? 0)
-                : null,
-            'waktu_pengkajian'     => $rawPost['waktu_pengkajian'] ?? null,
-            'diagnosa'             => $rawPost['diagnosa'] ?? null,
-            'rencana_tindakan'     => $rawPost['rencana_tindakan'] ?? null,
-            'tanggal_operasi'      => $rawPost['tanggal_operasi'] ?? null,
-            'tinggi_badan'         => $rawPost['tinggi_badan'] ?? null,
-            'berat_badan'          => $rawPost['berat_badan'] ?? null,
-            'sistolik'             => $rawPost['sistolik'] ?? null,
-            'diastolik'            => $rawPost['diastolik'] ?? null,
-            'saturasi_o2'          => $rawPost['saturasi_o2'] ?? null,
-            'nadi'                 => $rawPost['nadi'] ?? null,
-            'suhu'                 => $rawPost['suhu'] ?? null,
-            'pernapasan'           => $rawPost['pernapasan'] ?? null,
-            'fisik_cardiovascular' => $rawPost['fisik_cardiovascular'] ?? null,
-            'fisik_paru'           => $rawPost['fisik_paru'] ?? null,
-            'fisik_abdomen'        => $rawPost['fisik_abdomen'] ?? null,
-            'fisik_extrimitas'     => $rawPost['fisik_extrimitas'] ?? null,
-            'fisik_endokrin'       => $rawPost['fisik_endokrin'] ?? null,
-            'fisik_ginjal'         => $rawPost['fisik_ginjal'] ?? null,
-            'fisik_obat_obatan'    => $rawPost['fisik_obat_obatan'] ?? null,
-            'fisik_laboratorium'   => $rawPost['fisik_laboratorium'] ?? null,
-            'fisik_penunjang'      => $rawPost['fisik_penunjang'] ?? null,
-            'alergi_obat'          => $rawPost['alergi_obat'] ?? null,
-            'alergi_lainnya'       => $rawPost['alergi_lainnya'] ?? null,
-            'riwayat_terapi'       => $rawPost['riwayat_terapi'] ?? null,
-            'is_merokok'           => $rawPost['is_merokok'] ?? null,
-            'jumlah_rokok'         => $rawPost['jumlah_rokok'] ?? null,
-            'is_alkohol'           => $rawPost['is_alkohol'] ?? null,
-            'jumlah_alkohol'       => $rawPost['jumlah_alkohol'] ?? null,
-            'id_obat_bebas'        => (int) ($rawPost['id_obat_bebas'] ?? 0)
-                ? (int) ($rawPost['id_obat_bebas'] ?? 0)
-                : null,
-            'ket_obat'             => $rawPost['ket_obat'] ?? null,
-            'rw_cardiovascular'    => $rawPost['rw_cardiovascular'] ?? null,
-            'rw_respiratory'       => $rawPost['rw_respiratory'] ?? null,
-            'rw_endocrine'         => $rawPost['rw_endocrine'] ?? null,
-            'rw_lainnya'           => $rawPost['rw_lainnya'] ?? null,
-            'id_rencana_anestesi'  => (int) ($rawPost['id_rencana_anestesi'] ?? 0)
-                ? (int) ($rawPost['id_rencana_anestesi'] ?? 0)
-                : null,
-            'id_asa'               => (int) ($rawPost['id_asa'] ?? 0) ? (int) ($rawPost['id_asa'] ?? 0) : null,
-            'waktu_puasa'          => $rawPost['waktu_puasa'] ?? null,
-            'rencana_perawatan'    => $rawPost['rencana_perawatan'] ?? null,
-            'catatan_khusus'       => $rawPost['catatan_khusus'] ?? null,
-        ];
-    }
-
+    /**
+     * @param array<string, mixed> $jadwal
+     * @param array<string, mixed> $record
+     * @return array<string, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function buildViewData(array $jadwal, array $record, string $formAction): array
     {
         $isCreate = $formAction === '/submittambah/';
@@ -210,6 +165,7 @@ final class PengkajianPreAnestesiController extends ControllerTemplate
     // Pages
     // -------------------------------------------------------------------------
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function create_page(): string
     {
@@ -229,10 +185,16 @@ final class PengkajianPreAnestesiController extends ControllerTemplate
         ));
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
-        $record   = $this->model->find_one($id);
+        $record = $this->model->find_one($id);
+        if (!is_array($record)) {
+            session()->setFlashdata('error', 'Data tidak ditemukan.');
+            return $this->index();
+        }
+
         $idJadwal = (int) ($record['id_jadwal'] ?? 0);
         $jadwal   = $idJadwal > 0 ? $this->fetchJadwal($idJadwal) : [];
 
