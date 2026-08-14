@@ -54,7 +54,7 @@ final class HasilLabPaController extends ControllerTemplate
         /** @var list<array<int|string, mixed>> */
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn(array $f) => !in_array(
+            static fn(array $f) => !in_array(
                 $f[2] ?? null,
                 [
                     'id_hasil_pa',
@@ -400,20 +400,19 @@ final class HasilLabPaController extends ControllerTemplate
 
         $baris = $this->model->where('id_permintaan_lab', $idPermintaanLab)->first();
 
-        if (empty($baris)) {
+        if (!is_array($baris) || $baris === []) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
-        assert(is_array($baris));
 
         $baris = array_merge($baris, $this->fetchHeaderPermintaan($idPermintaanLab));
 
-        if (!empty($baris['id_dokter_pj'])) {
-            $baris['nama_dokter_pj'] = $this->fetchNamaDokterPj((int) $baris['id_dokter_pj']) ?? '';
+        if ((int) ($baris['id_dokter_pj'] ?? 0) > 0) {
+            $baris['nama_dokter_pj'] = $this->fetchNamaDokterPj((int) ($baris['id_dokter_pj'] ?? 0)) ?? '';
         }
 
-        if (!empty($baris['id_petugas_lab'])) {
-            $baris['nama_petugas'] = $this->fetchNamaPetugas((int) $baris['id_petugas_lab']) ?? '';
+        if ((int) ($baris['id_petugas_lab'] ?? 0) > 0) {
+            $baris['nama_petugas'] = $this->fetchNamaPetugas((int) ($baris['id_petugas_lab'] ?? 0)) ?? '';
         }
 
         return view('admin/laboratorium/tambah_hasil_pa', [
@@ -614,7 +613,7 @@ final class HasilLabPaController extends ControllerTemplate
 
         $firstHasil = $this->model->where('id_permintaan_lab', $idPermintaanLab)->first();
 
-        if (empty($firstHasil)) {
+        if (!is_array($firstHasil) || $firstHasil === []) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
@@ -643,11 +642,11 @@ final class HasilLabPaController extends ControllerTemplate
             'header'         => $header,
             'items'          => $this->fetchItemTerpilih($idPermintaanLab),
             'tgl_jam_hasil'  => $firstHasil['tgl_jam_hasil'] ?? '',
-            'nama_dokter_pj' => !empty($firstHasil['id_dokter_pj'])
-                ? $this->fetchNamaDokterPj((int) $firstHasil['id_dokter_pj'])
+            'nama_dokter_pj' => (int) ($firstHasil['id_dokter_pj'] ?? 0) > 0
+                ? $this->fetchNamaDokterPj((int) ($firstHasil['id_dokter_pj'] ?? 0))
                 : null,
-            'nama_petugas'   => !empty($firstHasil['id_petugas_lab'])
-                ? $this->fetchNamaPetugas((int) $firstHasil['id_petugas_lab'])
+            'nama_petugas'   => (int) ($firstHasil['id_petugas_lab'] ?? 0) > 0
+                ? $this->fetchNamaPetugas((int) ($firstHasil['id_petugas_lab'] ?? 0))
                 : null,
         ]);
     }

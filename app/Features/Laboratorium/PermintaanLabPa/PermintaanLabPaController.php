@@ -81,7 +81,7 @@ final class PermintaanLabPaController extends ControllerTemplate
                 false,
                 true,
             ),
-            fn(array $f) => !in_array(
+            static fn(array $f) => !in_array(
                 $f[2] ?? null,
                 [
                     'id_permintaan',
@@ -191,20 +191,26 @@ final class PermintaanLabPaController extends ControllerTemplate
      * @param array<string, mixed> $rawPost
      * @return array<string, mixed>
      */
-    private function buildHeaderData(array $rawPost, bool $withStatus = false): array
+    private function buildHeaderData(array $rawPost): array
     {
-        return array_merge(
-            [
-                'no_permintaan'      => $rawPost['no_permintaan'] ?? '',
-                'nomor_reg'          => $rawPost['nomor_reg'] ?? '',
-                'id_kategori_lab'    => ID_KATEGORI_PA,
-                'id_dokter_perujuk'  => trim((string) ($rawPost['id_dokter_perujuk'] ?? '')),
-                'tgl_permintaan'     => $rawPost['tgl_permintaan'] ?? date('Y-m-d H:i:s'),
-                'indikasi_klinis'    => $rawPost['indikasi_klinis'] ?? '',
-                'informasi_tambahan' => $rawPost['informasi_tambahan'] ?? '',
-            ],
-            $withStatus ? ['id_status_permintaan' => 1] : [],
-        );
+        return [
+            'no_permintaan'      => $rawPost['no_permintaan'] ?? '',
+            'nomor_reg'          => $rawPost['nomor_reg'] ?? '',
+            'id_kategori_lab'    => ID_KATEGORI_PA,
+            'id_dokter_perujuk'  => trim((string) ($rawPost['id_dokter_perujuk'] ?? '')),
+            'tgl_permintaan'     => $rawPost['tgl_permintaan'] ?? date('Y-m-d H:i:s'),
+            'indikasi_klinis'    => $rawPost['indikasi_klinis'] ?? '',
+            'informasi_tambahan' => $rawPost['informasi_tambahan'] ?? '',
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $rawPost
+     * @return array<string, mixed>
+     */
+    private function buildHeaderDataForCreate(array $rawPost): array
+    {
+        return array_merge($this->buildHeaderData($rawPost), ['id_status_permintaan' => 1]);
     }
 
     /**
@@ -378,9 +384,7 @@ final class PermintaanLabPaController extends ControllerTemplate
         $baris = $this->model->guarded_get($builder, 'update_page')->getRowArray() ?? [];
 
         // Penggabungan $baris dengan format data PA yang lebih bersih
-        if (!empty($paRow)) {
-            assert(is_array($paRow));
-
+        if (is_array($paRow) && $paRow !== []) {
             $baris = array_merge($baris, [
                 'tgl_pengambilan_bahan'       => $this->formatTglPengambilanBahan(
                     $paRow['tgl_pengambilan_bahan'] ?? null,
@@ -395,12 +399,12 @@ final class PermintaanLabPaController extends ControllerTemplate
             ]);
         }
 
-        if (!empty($baris['nomor_reg'])) {
-            $baris = array_merge($baris, $this->fetchRegistrasi((string) $baris['nomor_reg']));
+        if (($baris['nomor_reg'] ?? '') !== '') {
+            $baris = array_merge($baris, $this->fetchRegistrasi((string) ($baris['nomor_reg'] ?? '')));
         }
 
-        if (!empty($baris['id_dokter_perujuk'])) {
-            $baris = array_merge($baris, $this->fetchDokter((string) $baris['id_dokter_perujuk']));
+        if ((int) ($baris['id_dokter_perujuk'] ?? 0) > 0) {
+            $baris = array_merge($baris, $this->fetchDokter((string) ($baris['id_dokter_perujuk'] ?? '')));
         }
 
         return view('admin/laboratorium/tambah_permintaan_pa', [
@@ -440,11 +444,12 @@ final class PermintaanLabPaController extends ControllerTemplate
             return redirect()->back()->withInput();
         }
 
-        $noPermintaan = !empty($rawPost['no_permintaan'])
-            ? (string) $rawPost['no_permintaan']
+        $noPermintaanInput = (string) ($rawPost['no_permintaan'] ?? '');
+        $noPermintaan      = $noPermintaanInput !== '' && $noPermintaanInput !== '0'
+            ? $noPermintaanInput
             : $this->generateNomorPermintaan();
 
-        $header      = array_merge($this->buildHeaderData($rawPost, true), ['no_permintaan' => $noPermintaan]);
+        $header      = array_merge($this->buildHeaderDataForCreate($rawPost), ['no_permintaan' => $noPermintaan]);
         $spesimen    = $this->buildSpesimenData($rawPost);
         $modelHeader = new \App\Features\Laboratorium\PermintaanLabHeader\PermintaanLabHeaderModel();
         $modelItem   = new \App\Features\Laboratorium\PermintaanLabPaItem\PermintaanLabPaItemModel();

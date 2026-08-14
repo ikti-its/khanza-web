@@ -50,7 +50,7 @@ final class HasilLabPkController extends ControllerTemplate
         /** @var list<array<int|string, mixed>> */
         return array_values(array_filter(
             $this->get_fields_with_options(false, true),
-            fn(array $f) => !in_array(
+            static fn(array $f) => !in_array(
                 $f[2] ?? null,
                 [
                     'id_hasil_pk',
@@ -257,18 +257,23 @@ final class HasilLabPkController extends ControllerTemplate
 
     /**
      * @param list<array<string, mixed>> $hasilList
+     * @param array{
+     *     id_permintaan_lab: int,
+     *     id_dokter_pj: null|int,
+     *     id_petugas_lab: null|int,
+     *     tgl_jam_hasil: string,
+     *     id_kategori_usia: null|int,
+     * } $header
      * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      * @throws \ReflectionException
      */
     private function upsertHasilPkItems(
         array $hasilList,
-        int $idPermintaanLab,
-        null|int $idDokterPj,
-        null|int $idPetugasLab,
-        string $tglJamHasil,
-        null|int $idKategoriUsia,
+        array $header,
         \App\Features\Laboratorium\HasilLabPkParameter\HasilLabPkParameterModel $modelParam,
     ): void {
+        $idPermintaanLab = $header['id_permintaan_lab'];
+
         /** @var array<int, array<string, mixed>> $existingByItem */
         $existingByItem = array_column(
             $this->model->set_filter('id_permintaan_lab', $idPermintaanLab)->findAll(),
@@ -295,21 +300,8 @@ final class HasilLabPkController extends ControllerTemplate
             }
 
             $idHasilPk = $existingHasil !== null
-                ? $this->updateHasilPkHeader(
-                    (int) ($existingHasil['id_hasil_pk'] ?? 0),
-                    $idDokterPj,
-                    $idPetugasLab,
-                    $tglJamHasil,
-                    $idKategoriUsia,
-                )
-                : $this->insertHasilPkHeader(
-                    $idPermintaanLab,
-                    $idItem,
-                    $idDokterPj,
-                    $idPetugasLab,
-                    $tglJamHasil,
-                    $idKategoriUsia,
-                );
+                ? $this->updateHasilPkHeader((int) ($existingHasil['id_hasil_pk'] ?? 0), $header)
+                : $this->insertHasilPkHeader($idItem, $header);
             $existingByItem[$idItem] = ['id_hasil_pk' => $idHasilPk];
 
             /** @var array<int, array<string, mixed>> $existingParamByParam */
@@ -325,39 +317,46 @@ final class HasilLabPkController extends ControllerTemplate
         }
     }
 
-    /** @throws \ReflectionException */
-    private function insertHasilPkHeader(
-        int $idPermintaanLab,
-        int $idItem,
-        null|int $idDokterPj,
-        null|int $idPetugasLab,
-        string $tglJamHasil,
-        null|int $idKategoriUsia,
-    ): int {
+    /**
+     * @param array{
+     *     id_permintaan_lab: int,
+     *     id_dokter_pj: null|int,
+     *     id_petugas_lab: null|int,
+     *     tgl_jam_hasil: string,
+     *     id_kategori_usia: null|int,
+     * } $header
+     * @throws \ReflectionException
+     */
+    private function insertHasilPkHeader(int $idItem, array $header): int
+    {
         $this->model->insert([
-            'id_dokter_pj'          => $idDokterPj,
-            'id_petugas_lab'        => $idPetugasLab,
-            'tgl_jam_hasil'         => $tglJamHasil,
-            'id_kategori_usia'      => $idKategoriUsia,
-            'id_permintaan_lab'     => $idPermintaanLab,
+            'id_dokter_pj'          => $header['id_dokter_pj'],
+            'id_petugas_lab'        => $header['id_petugas_lab'],
+            'tgl_jam_hasil'         => $header['tgl_jam_hasil'],
+            'id_kategori_usia'      => $header['id_kategori_usia'],
+            'id_permintaan_lab'     => $header['id_permintaan_lab'],
             'id_permintaan_pk_item' => $idItem,
         ]);
         return (int) $this->model->getInsertID();
     }
 
-    /** @throws \ReflectionException */
-    private function updateHasilPkHeader(
-        int $idHasilPk,
-        null|int $idDokterPj,
-        null|int $idPetugasLab,
-        string $tglJamHasil,
-        null|int $idKategoriUsia,
-    ): int {
+    /**
+     * @param array{
+     *     id_permintaan_lab: int,
+     *     id_dokter_pj: null|int,
+     *     id_petugas_lab: null|int,
+     *     tgl_jam_hasil: string,
+     *     id_kategori_usia: null|int,
+     * } $header
+     * @throws \ReflectionException
+     */
+    private function updateHasilPkHeader(int $idHasilPk, array $header): int
+    {
         $this->model->update($idHasilPk, [
-            'id_dokter_pj'     => $idDokterPj,
-            'id_petugas_lab'   => $idPetugasLab,
-            'tgl_jam_hasil'    => $tglJamHasil,
-            'id_kategori_usia' => $idKategoriUsia,
+            'id_dokter_pj'     => $header['id_dokter_pj'],
+            'id_petugas_lab'   => $header['id_petugas_lab'],
+            'tgl_jam_hasil'    => $header['tgl_jam_hasil'],
+            'id_kategori_usia' => $header['id_kategori_usia'],
         ]);
         return $idHasilPk;
     }
@@ -513,20 +512,19 @@ final class HasilLabPkController extends ControllerTemplate
 
         $baris = $this->model->where('id_permintaan_lab', $idPermintaanLab)->first();
 
-        if (empty($baris)) {
+        if (!is_array($baris) || $baris === []) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
-        assert(is_array($baris));
 
         $baris = array_merge($baris, $this->fetchHeaderPermintaan($idPermintaanLab));
 
-        if (!empty($baris['id_dokter_pj'])) {
-            $baris['nama_dokter_pj'] = $this->fetchNamaDokterPj((int) $baris['id_dokter_pj']) ?? '';
+        if ((int) ($baris['id_dokter_pj'] ?? 0) > 0) {
+            $baris['nama_dokter_pj'] = $this->fetchNamaDokterPj((int) ($baris['id_dokter_pj'] ?? 0)) ?? '';
         }
 
-        if (!empty($baris['id_petugas_lab'])) {
-            $baris['nama_petugas'] = $this->fetchNamaPetugas((int) $baris['id_petugas_lab']) ?? '';
+        if ((int) ($baris['id_petugas_lab'] ?? 0) > 0) {
+            $baris['nama_petugas'] = $this->fetchNamaPetugas((int) ($baris['id_petugas_lab'] ?? 0)) ?? '';
         }
 
         return view('admin/laboratorium/tambah_hasil_pk', [
@@ -589,11 +587,13 @@ final class HasilLabPkController extends ControllerTemplate
         try {
             $this->upsertHasilPkItems(
                 $hasilList,
-                $idPermintaanLab,
-                $idDokterPj,
-                $idPetugasLab,
-                $tglJamHasil,
-                $idKategoriUsia,
+                [
+                    'id_permintaan_lab' => $idPermintaanLab,
+                    'id_dokter_pj'      => $idDokterPj,
+                    'id_petugas_lab'    => $idPetugasLab,
+                    'tgl_jam_hasil'     => $tglJamHasil,
+                    'id_kategori_usia'  => $idKategoriUsia,
+                ],
                 $modelParam,
             );
             $this->recomputeStatusPermintaan($idPermintaanLab);
@@ -746,7 +746,7 @@ final class HasilLabPkController extends ControllerTemplate
 
         $firstHasil = $this->model->where('id_permintaan_lab', $idPermintaanLab)->first();
 
-        if (empty($firstHasil)) {
+        if (!is_array($firstHasil) || $firstHasil === []) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
@@ -775,11 +775,11 @@ final class HasilLabPkController extends ControllerTemplate
             'header'         => $header,
             'items'          => $this->fetchItemTerpilih($idPermintaanLab),
             'tgl_jam_hasil'  => $firstHasil['tgl_jam_hasil'] ?? '',
-            'nama_dokter_pj' => !empty($firstHasil['id_dokter_pj'])
-                ? $this->fetchNamaDokterPj((int) $firstHasil['id_dokter_pj'])
+            'nama_dokter_pj' => (int) ($firstHasil['id_dokter_pj'] ?? 0) > 0
+                ? $this->fetchNamaDokterPj((int) ($firstHasil['id_dokter_pj'] ?? 0))
                 : null,
-            'nama_petugas'   => !empty($firstHasil['id_petugas_lab'])
-                ? $this->fetchNamaPetugas((int) $firstHasil['id_petugas_lab'])
+            'nama_petugas'   => (int) ($firstHasil['id_petugas_lab'] ?? 0) > 0
+                ? $this->fetchNamaPetugas((int) ($firstHasil['id_petugas_lab'] ?? 0))
                 : null,
         ]);
     }
