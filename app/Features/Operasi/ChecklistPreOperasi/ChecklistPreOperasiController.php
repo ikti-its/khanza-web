@@ -241,7 +241,7 @@ final class ChecklistPreOperasiController extends ControllerTemplate
             ];
         }
 
-        if (!empty($batchPenunjang)) {
+        if ($batchPenunjang !== []) {
             (new \App\Features\Operasi\ChecklistPreOperasiPenunjang\ChecklistPreOperasiPenunjangModel())->insertBatch(
                 $batchPenunjang,
             );

@@ -351,7 +351,7 @@ final class PenyerahanPasienController extends ControllerTemplate
             ];
         }
 
-        if (!empty($batchData)) {
+        if ($batchData !== []) {
             $model->insertBatch($batchData);
         }
     }

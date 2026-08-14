@@ -251,7 +251,7 @@ final class ChecklistPostopController extends ControllerTemplate
                 'warna'             => $row['warna'] ?? '',
             ];
         }
-        if (!empty($batchDrain)) {
+        if ($batchDrain !== []) {
             (new \App\Features\Operasi\ChecklistPostopDrain\ChecklistPostopDrainModel())->insertBatch($batchDrain);
         }
 
@@ -271,7 +271,7 @@ final class ChecklistPostopController extends ControllerTemplate
                 'keterangan'         => $row['keterangan'] ?? '',
             ];
         }
-        if (!empty($batchPenunjang)) {
+        if ($batchPenunjang !== []) {
             (new \App\Features\Operasi\ChecklistPostopPenunjang\ChecklistPostopPenunjangModel())->insertBatch(
                 $batchPenunjang,
             );

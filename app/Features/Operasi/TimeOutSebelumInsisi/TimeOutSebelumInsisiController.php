@@ -227,7 +227,7 @@ final class TimeOutSebelumInsisiController extends ControllerTemplate
                 'id_status'          => (int) ($row['id_status'] ?? 0) ? (int) ($row['id_status'] ?? 0) : null,
             ];
         }
-        if (!empty($batch)) {
+        if ($batch !== []) {
             (new \App\Features\Operasi\TimeOutSebelumInsisiPenunjang\TimeOutSebelumInsisiPenunjangModel())->insertBatch(
                 $batch,
             );

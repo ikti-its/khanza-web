@@ -125,7 +125,7 @@ final class LembarOperasiController extends ControllerTemplate
             'ubah'       => "/operasi/{$slug}/edit",
             'modul_path' => "/operasi/{$slug}",
             'table'      => $table,
-            'record_id'  => !empty($existingRecords[$table]) ? (int) $existingRecords[$table] : null,
+            'record_id'  => (int) ($existingRecords[$table] ?? 0) > 0 ? (int) $existingRecords[$table] : null,
         ];
 
         return [
@@ -170,7 +170,7 @@ final class LembarOperasiController extends ControllerTemplate
 
         $jadwal = $this->fetchJadwal($idJadwal);
 
-        if (empty($jadwal)) {
+        if ($jadwal === []) {
             session()->setFlashdata('error', 'Jadwal operasi tidak ditemukan.');
             return redirect()->to('/operasi/jadwal-operasi/data');
         }

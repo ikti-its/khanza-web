@@ -196,7 +196,7 @@ final class JadwalOperasiController extends ControllerTemplate
         ];
 
         foreach ($checks as $check) {
-            if (empty($data[$check['col']])) {
+            if ((int) ($data[$check['col']] ?? 0) <= 0) {
                 continue;
             }
 
@@ -357,7 +357,8 @@ final class JadwalOperasiController extends ControllerTemplate
             $idPeran = (int) ($anggota['id_peran'] ?? 0);
             if (!array_key_exists($idPeran, $peranValid) || array_key_exists($idPeran, $peranTerpakai)) {
                 $idPeran = 0;
-            } else {
+            }
+            if ($idPeran !== 0) {
                 $peranTerpakai[$idPeran] = true;
             }
 
@@ -369,7 +370,7 @@ final class JadwalOperasiController extends ControllerTemplate
             ];
         }
 
-        if (empty($rows)) {
+        if ($rows === []) {
             return;
         }
         $this->model->db->table('operasi.jadwal_operasi_tim')->insertBatch($rows);
@@ -385,8 +386,8 @@ final class JadwalOperasiController extends ControllerTemplate
             return $this->index();
         }
 
-        if (!empty($baris['id_permintaan'])) {
-            $baris = array_merge($baris, $this->fetchPermintaan((int) $baris['id_permintaan']));
+        if ((int) ($baris['id_permintaan'] ?? 0) > 0) {
+            $baris = array_merge($baris, $this->fetchPermintaan((int) ($baris['id_permintaan'] ?? 0)));
         }
 
         if (($idDb = (int) ($baris['id_dokter_bedah'] ?? 0)) > 0) {

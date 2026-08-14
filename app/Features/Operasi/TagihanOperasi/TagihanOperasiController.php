@@ -232,10 +232,10 @@ final class TagihanOperasiController extends ControllerTemplate
 
         $jumlahByBarang = [];
         foreach ($obatList as $obat) {
-            if (empty($obat['id_barang']) || empty($obat['jumlah'])) {
+            if ((int) ($obat['id_barang'] ?? 0) <= 0 || (int) ($obat['jumlah'] ?? 0) <= 0) {
                 continue;
             }
-            $jumlahByBarang[(int) $obat['id_barang']] = (int) $obat['jumlah'];
+            $jumlahByBarang[(int) ($obat['id_barang'] ?? 0)] = (int) ($obat['jumlah'] ?? 0);
         }
 
         $totalObat = 0.0;
@@ -331,10 +331,14 @@ final class TagihanOperasiController extends ControllerTemplate
 
         $names = [];
         foreach ($dokterCols as $col) {
-            $names['nama_' . substr($col, 3)] = !empty($baris[$col]) ? $dokterNames[(int) $baris[$col]] ?? '' : '';
+            $names['nama_' . substr($col, 3)] = (int) ($baris[$col] ?? 0) > 0
+                ? $dokterNames[(int) $baris[$col]] ?? ''
+                : '';
         }
         foreach ($petugasCols as $col) {
-            $names['nama_' . substr($col, 3)] = !empty($baris[$col]) ? $petugasNames[(int) $baris[$col]] ?? '' : '';
+            $names['nama_' . substr($col, 3)] = (int) ($baris[$col] ?? 0) > 0
+                ? $petugasNames[(int) $baris[$col]] ?? ''
+                : '';
         }
 
         return $names;
@@ -352,20 +356,20 @@ final class TagihanOperasiController extends ControllerTemplate
         $jadwal   = $idJadwal ? $this->fetchJadwal($idJadwal) : [];
 
         // Pre-fill tanggal mulai/selesai dari jadwal (tanggal + jam), tetap bisa diedit user
-        if (!empty($jadwal['tanggal']) && !empty($jadwal['waktu_mulai'])) {
-            $jadwal['tanggal_mulai'] = (string) $jadwal['tanggal'] . ' ' . (string) $jadwal['waktu_mulai'];
+        if (($jadwal['tanggal'] ?? '') !== '' && ($jadwal['waktu_mulai'] ?? '') !== '') {
+            $jadwal['tanggal_mulai'] = (string) ($jadwal['tanggal'] ?? '') . ' ' . (string) ($jadwal['waktu_mulai'] ?? '');
         }
-        if (!empty($jadwal['tanggal']) && !empty($jadwal['waktu_selesai'])) {
+        if (($jadwal['tanggal'] ?? '') !== '' && ($jadwal['waktu_selesai'] ?? '') !== '') {
             $tanggalSelesai = $jadwal['jadwal_tanggal_selesai'] ?? null
                 ? (string) $jadwal['jadwal_tanggal_selesai']
-                : (string) $jadwal['tanggal'];
-            $jadwal['tanggal_selesai'] = $tanggalSelesai . ' ' . (string) $jadwal['waktu_selesai'];
+                : (string) ($jadwal['tanggal'] ?? '');
+            $jadwal['tanggal_selesai'] = $tanggalSelesai . ' ' . (string) ($jadwal['waktu_selesai'] ?? '');
         }
 
         // Pre-fill paket komponen dari tindakan utama jadwal
         $paketTerpilih = [];
-        if (!empty($jadwal['id_tindakan'])) {
-            $paketTerpilih = $this->fetchPaketByTindakan((int) $jadwal['id_tindakan']);
+        if ((int) ($jadwal['id_tindakan'] ?? 0) > 0) {
+            $paketTerpilih = $this->fetchPaketByTindakan((int) ($jadwal['id_tindakan'] ?? 0));
         }
 
         // Mapping dokter jadwal → field tagihan
@@ -380,9 +384,9 @@ final class TagihanOperasiController extends ControllerTemplate
                 if ($peran === '') {
                     continue;
                 }
-                $jadwal['id_' . $peran] = !empty($anggota['id_dokter'])
-                    ? $anggota['id_dokter']
-                    : $anggota['id_petugas'] ?? null;
+                $jadwal['id_' . $peran] = (int) ($anggota['id_dokter'] ?? 0) > 0
+                    ? ($anggota['id_dokter'] ?? null)
+                    : ($anggota['id_petugas'] ?? null);
                 $jadwal['nama_' . $peran] = $anggota['nama'] ?? '';
             }
         }
@@ -410,8 +414,8 @@ final class TagihanOperasiController extends ControllerTemplate
             return $this->index();
         }
 
-        if (!empty($baris['id_jadwal'])) {
-            $jadwal = $this->fetchJadwal((int) $baris['id_jadwal']);
+        if ((int) ($baris['id_jadwal'] ?? 0) > 0) {
+            $jadwal = $this->fetchJadwal((int) ($baris['id_jadwal'] ?? 0));
             $names  = $this->resolveTimMedisNames($baris);
             $baris  = [...$baris, ...$jadwal, ...$names];
         }
@@ -637,7 +641,7 @@ final class TagihanOperasiController extends ControllerTemplate
     private function savePaket(int $idTagihan, array $paketList): void
     {
         foreach ($paketList as $paket) {
-            if (empty($paket['id_paket'])) {
+            if ((int) ($paket['id_paket'] ?? 0) <= 0) {
                 continue;
             }
             $this->model
@@ -645,7 +649,7 @@ final class TagihanOperasiController extends ControllerTemplate
                 ->table('operasi.tagihan_operasi_tindakan')
                 ->insert([
                     'id_tagihan' => $idTagihan,
-                    'id_paket'   => (int) $paket['id_paket'],
+                    'id_paket'   => (int) ($paket['id_paket'] ?? 0),
                 ]);
             if (!$this->model->db->transStatus()) {
                 return;
@@ -660,7 +664,7 @@ final class TagihanOperasiController extends ControllerTemplate
     private function validateObatList(array $obatList): void
     {
         foreach ($obatList as $obat) {
-            if (empty($obat['id_barang'])) {
+            if ((int) ($obat['id_barang'] ?? 0) <= 0) {
                 continue;
             }
             if (($obat['jumlah'] ?? null) === null || $obat['jumlah'] === '') {
@@ -679,7 +683,7 @@ final class TagihanOperasiController extends ControllerTemplate
     private function saveObat(int $idTagihan, array $obatList): void
     {
         foreach ($obatList as $obat) {
-            if (empty($obat['id_barang']) || empty($obat['jumlah'])) {
+            if ((int) ($obat['id_barang'] ?? 0) <= 0 || (int) ($obat['jumlah'] ?? 0) <= 0) {
                 continue;
             }
             $this->model
@@ -687,8 +691,8 @@ final class TagihanOperasiController extends ControllerTemplate
                 ->table('operasi.tagihan_operasi_obat')
                 ->insert([
                     'id_tagihan' => $idTagihan,
-                    'id_barang'  => (int) $obat['id_barang'],
-                    'jumlah'     => (int) $obat['jumlah'],
+                    'id_barang'  => (int) ($obat['id_barang'] ?? 0),
+                    'jumlah'     => (int) ($obat['jumlah'] ?? 0),
                 ]);
             if (!$this->model->db->transStatus()) {
                 return;

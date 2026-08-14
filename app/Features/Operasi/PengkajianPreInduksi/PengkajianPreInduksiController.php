@@ -233,7 +233,7 @@ final class PengkajianPreInduksiController extends ControllerTemplate
             ];
         }
 
-        if (!empty($batchAirway)) {
+        if ($batchAirway !== []) {
             (new \App\Features\Operasi\PengkajianPreInduksiAirway\PengkajianPreInduksiAirwayModel())->insertBatch(
                 $batchAirway,
             );

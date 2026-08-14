@@ -127,22 +127,25 @@ final class PermintaanOperasiController extends ControllerTemplate
      * @param array<string, mixed> $rawPost
      * @return array<string, mixed>
      */
-    private function buildHeaderData(array $rawPost, bool $isCreate = false): array
+    private function buildHeaderData(array $rawPost): array
     {
-        $data = [
+        return [
             'nomor_reg'   => $rawPost['nomor_reg'] ?? '',
             'id_dokter'   => $rawPost['id_dokter'] ?? '',
             'id_tindakan' => $rawPost['id_tindakan'] ?? '',
             'is_cito'     => $rawPost['is_cito'] ?? 0,
         ];
+    }
 
+    /**
+     * @param array<string, mixed> $rawPost
+     * @return array<string, mixed>
+     */
+    private function buildHeaderDataForCreate(array $rawPost): array
+    {
         // tanggal_minta mencatat kapan permintaan dibuat, jadi diisi server
         // saat create dan tidak pernah diubah lagi lewat update.
-        if ($isCreate) {
-            $data['tanggal_minta'] = date('Y-m-d H:i:s');
-        }
-
-        return $data;
+        return array_merge($this->buildHeaderData($rawPost), ['tanggal_minta' => date('Y-m-d H:i:s')]);
     }
 
     // -------------------------------------------------------------------------
@@ -162,7 +165,7 @@ final class PermintaanOperasiController extends ControllerTemplate
     #[\Override]
     protected function after_read(array &$data_tabel): void
     {
-        if (empty($data_tabel)) {
+        if ($data_tabel === []) {
             return;
         }
 
@@ -220,16 +223,16 @@ final class PermintaanOperasiController extends ControllerTemplate
             return $this->index();
         }
 
-        if (!empty($baris['nomor_reg'])) {
-            $baris = array_merge($baris, $this->fetchRegistrasi((string) $baris['nomor_reg']));
+        if (($baris['nomor_reg'] ?? '') !== '') {
+            $baris = array_merge($baris, $this->fetchRegistrasi((string) ($baris['nomor_reg'] ?? '')));
         }
 
-        if (!empty($baris['id_dokter'])) {
-            $baris = array_merge($baris, $this->fetchNamaRole('dokter', 'id_dokter', (int) $baris['id_dokter']));
+        if ((int) ($baris['id_dokter'] ?? 0) > 0) {
+            $baris = array_merge($baris, $this->fetchNamaRole('dokter', 'id_dokter', (int) ($baris['id_dokter'] ?? 0)));
         }
 
-        if (!empty($baris['id_tindakan'])) {
-            $baris = array_merge($baris, $this->fetchTindakan((int) $baris['id_tindakan']));
+        if ((int) ($baris['id_tindakan'] ?? 0) > 0) {
+            $baris = array_merge($baris, $this->fetchTindakan((int) ($baris['id_tindakan'] ?? 0)));
         }
 
         return view('admin/operasi/tambah_permintaan_operasi', [
@@ -252,7 +255,7 @@ final class PermintaanOperasiController extends ControllerTemplate
     {
         /** @var array<string, mixed> $rawPost */
         $rawPost = $this->request->getPost();
-        $data    = $this->buildHeaderData($rawPost, true);
+        $data    = $this->buildHeaderDataForCreate($rawPost);
 
         $this->model->db->transStart();
 
@@ -293,7 +296,7 @@ final class PermintaanOperasiController extends ControllerTemplate
 
         /** @var array<string, mixed> $rawPost */
         $rawPost = $this->request->getPost();
-        $data    = $this->buildHeaderData($rawPost, false);
+        $data    = $this->buildHeaderData($rawPost);
 
         try {
             $this->model->update($id, $data);

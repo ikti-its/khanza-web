@@ -327,7 +327,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
                 'keterangan'          => $keterangan,
             ];
         }
-        if (!empty($batchAlat)) {
+        if ($batchAlat !== []) {
             (new \App\Features\Operasi\CatatanAnestesiSedasiAlat\CatatanAnestesiSedasiAlatModel())->insertBatch(
                 $batchAlat,
             );
@@ -351,7 +351,7 @@ final class CatatanAnestesiSedasiController extends ControllerTemplate
                 'keterangan'          => $keterangan,
             ];
         }
-        if (!empty($batchMonitoring)) {
+        if ($batchMonitoring !== []) {
             (new \App\Features\Operasi\CatatanAnestesiSedasiMonitoring\CatatanAnestesiSedasiMonitoringModel())->insertBatch(
                 $batchMonitoring,
             );
