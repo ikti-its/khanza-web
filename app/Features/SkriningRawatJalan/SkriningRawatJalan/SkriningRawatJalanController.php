@@ -102,12 +102,12 @@ final class SkriningRawatJalanController extends ControllerTemplate
     public function print(int|string $id): string|\CodeIgniter\HTTP\RedirectResponse
     {
         $baris = $this->model->find_one($id);
-        if (empty($baris)) {
+        if (!is_array($baris)) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
 
-        $dataPasien = !empty($baris['no_rm']) ? $this->fetchDataPasienByRm((string) $baris['no_rm']) : [];
+        $dataPasien = ($baris['no_rm'] ?? '') !== '' ? $this->fetchDataPasienByRm((string) ($baris['no_rm'] ?? '')) : [];
 
         return view('components/cetak/cetak_skrining_rawat_jalan', [
             'judul'      => 'Cetak Skrining Rawat Jalan',
@@ -158,12 +158,12 @@ final class SkriningRawatJalanController extends ControllerTemplate
     {
         $baris = $this->model->find_one($id);
 
-        if (empty($baris)) {
+        if (!is_array($baris)) {
             session()->setFlashdata('error', 'Data tidak ditemukan.');
             return $this->index();
         }
 
-        $dataPasien = !empty($baris['no_rm']) ? $this->fetchDataPasienByRm((string) $baris['no_rm']) : null;
+        $dataPasien = ($baris['no_rm'] ?? '') !== '' ? $this->fetchDataPasienByRm((string) ($baris['no_rm'] ?? '')) : null;
 
         return view('admin/skrining_rawat_jalan/tambah_skrining_rj', [
             'judul'       => 'Ubah ' . $this->title,
