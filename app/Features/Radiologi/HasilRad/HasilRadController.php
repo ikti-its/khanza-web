@@ -46,7 +46,7 @@ final class HasilRadController extends ControllerTemplate
     #[\Override]
     protected function after_read(array &$data_tabel): void
     {
-        if (empty($data_tabel)) {
+        if ($data_tabel === []) {
             return;
         }
 
@@ -214,7 +214,7 @@ final class HasilRadController extends ControllerTemplate
 
         /** @mago-expect analysis:mixed-assignment */
         $request = $this->request;
-        assert($request instanceof \CodeIgniter\HTTP\IncomingRequest);
+        assert($request instanceof \CodeIgniter\HTTP\IncomingRequest, 'Request harus berupa IncomingRequest.');
 
         $rawFiles = $request->getFiles()['foto'] ?? [];
         $rawFiles = is_array($rawFiles) ? $rawFiles : [$rawFiles];
@@ -263,7 +263,7 @@ final class HasilRadController extends ControllerTemplate
                 return false;
             }
         }
-        return empty($tindakan['id_template_rad']);
+        return (int) ($tindakan['id_template_rad'] ?? 0) <= 0;
     }
 
     /**
@@ -294,6 +294,21 @@ final class HasilRadController extends ControllerTemplate
             return;
         }
 
+        $data = $this->buildTindakanData($idItem, $tindakan);
+
+        if ($existing !== null) {
+            $modelTindakan->update((int) ($existing['id_hasil_tindakan'] ?? 0), $data);
+            return;
+        }
+        $modelTindakan->insert($data + ['id_hasil_rad' => $idHasilRad]);
+    }
+
+    /**
+     * @param array<string, mixed> $tindakan
+     * @return array<string, mixed>
+     */
+    private function buildTindakanData(int $idItem, array $tindakan): array
+    {
         $proyeksi         = (string) ($tindakan['proyeksi'] ?? '');
         $kilovoltage      = (string) ($tindakan['kilovoltage_kv'] ?? '');
         $mas              = (string) ($tindakan['milliampere_second_mas'] ?? '');
@@ -303,8 +318,9 @@ final class HasilRadController extends ControllerTemplate
         $jumlahPenyinaran = (string) ($tindakan['jumlah_penyinaran'] ?? '');
         $dosisRadiasi     = (string) ($tindakan['dosis_radiasi'] ?? '');
         $hasilEkspertise  = (string) ($tindakan['hasil_ekspertise'] ?? '');
+        $idTemplateRad    = (int) ($tindakan['id_template_rad'] ?? 0);
 
-        $data = [
+        return [
             'id_permintaan_item'      => $idItem,
             'proyeksi'                => $proyeksi !== '' ? $proyeksi : null,
             'kilovoltage_kv'          => is_numeric($kilovoltage) ? (float) $kilovoltage : null,
@@ -315,16 +331,8 @@ final class HasilRadController extends ControllerTemplate
             'jumlah_penyinaran'       => $jumlahPenyinaran !== '' ? (int) $jumlahPenyinaran : null,
             'dosis_radiasi'           => $dosisRadiasi !== '' ? $dosisRadiasi : null,
             'hasil_ekspertise'        => $hasilEkspertise !== '' ? $hasilEkspertise : null,
-            'id_template_rad'         => !empty($tindakan['id_template_rad'])
-                ? (int) $tindakan['id_template_rad']
-                : null,
+            'id_template_rad'         => $idTemplateRad > 0 ? $idTemplateRad : null,
         ];
-
-        if ($existing !== null) {
-            $modelTindakan->update((int) ($existing['id_hasil_tindakan'] ?? 0), $data);
-            return;
-        }
-        $modelTindakan->insert($data + ['id_hasil_rad' => $idHasilRad]);
     }
 
     /**
@@ -443,12 +451,37 @@ final class HasilRadController extends ControllerTemplate
         }
     }
 
+    /**
+     * @param array<array-key, mixed> $baris
+     * @return array<array-key, mixed>
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
+    private function enrichBarisWithRelasi(array $baris): array
+    {
+        $idPermintaanRad = (int) ($baris['id_permintaan_rad'] ?? 0);
+        if ($idPermintaanRad > 0) {
+            $baris = array_merge($baris, $this->fetchDetailPermintaan($idPermintaanRad));
+        }
+
+        $idDokterPj = (int) ($baris['id_dokter_pj'] ?? 0);
+        if ($idDokterPj > 0) {
+            $baris['nama_dokter_pj'] = $this->fetchNamaRole('dokter', 'id_dokter', $idDokterPj, 'nama_dokter_pj') ?? '';
+        }
+
+        $idPetugasRad = (int) ($baris['id_petugas_rad'] ?? 0);
+        if ($idPetugasRad > 0) {
+            $baris['nama_petugas'] = $this->fetchNamaRole('petugas', 'id_petugas', $idPetugasRad, 'nama_petugas') ?? '';
+        }
+
+        return $baris;
+    }
+
     /** @param list<array<string, mixed>> $tindakanList */
     private function tentukanStatusPermintaan(array $tindakanList): int
     {
         // Selesai (3) hanya jika semua tindakan sudah punya hasil ekspertise;
         // selain itu tetap Sedang Diproses (2) menunggu bacaan dokter.
-        if (empty($tindakanList)) {
+        if ($tindakanList === []) {
             return 2;
         }
 
@@ -528,7 +561,7 @@ final class HasilRadController extends ControllerTemplate
             $this->upsertTindakanAndBhp($idHasilRad, $tindakanList, $bhpList);
 
             // 3. Update status permintaan sesuai kelengkapan ekspertise
-            if (!empty($dataHeader['id_permintaan_rad'])) {
+            if ((int) ($dataHeader['id_permintaan_rad'] ?? 0) > 0) {
                 $this->model
                     ->db
                     ->table('radiologi.permintaan_rad')
@@ -572,19 +605,7 @@ final class HasilRadController extends ControllerTemplate
             return $this->index();
         }
 
-        if (!empty($baris['id_permintaan_rad'])) {
-            $baris = array_merge($baris, $this->fetchDetailPermintaan((int) $baris['id_permintaan_rad']));
-        }
-
-        if (!empty($baris['id_dokter_pj'])) {
-            $baris['nama_dokter_pj'] =
-                $this->fetchNamaRole('dokter', 'id_dokter', (int) $baris['id_dokter_pj'], 'nama_dokter_pj') ?? '';
-        }
-
-        if (!empty($baris['id_petugas_rad'])) {
-            $baris['nama_petugas'] =
-                $this->fetchNamaRole('petugas', 'id_petugas', (int) $baris['id_petugas_rad'], 'nama_petugas') ?? '';
-        }
+        $baris = $this->enrichBarisWithRelasi($baris);
 
         $itemTerpilihBuilder = $this->model
             ->db
@@ -700,7 +721,7 @@ final class HasilRadController extends ControllerTemplate
 
             $this->upsertTindakanAndBhp((int) $id, $tindakanList, $bhpList);
 
-            if (!empty($dataHeader['id_permintaan_rad'])) {
+            if ((int) ($dataHeader['id_permintaan_rad'] ?? 0) > 0) {
                 $this->model
                     ->db
                     ->table('radiologi.permintaan_rad')
@@ -793,12 +814,12 @@ final class HasilRadController extends ControllerTemplate
             return $this->index();
         }
 
-        $detailPermintaan = !empty($hasilRad['id_permintaan_rad'])
-            ? $this->fetchDetailPermintaan((int) $hasilRad['id_permintaan_rad'])
-            : [];
+        $idPermintaanRad  = (int) ($hasilRad['id_permintaan_rad'] ?? 0);
+        $detailPermintaan = $idPermintaanRad > 0 ? $this->fetchDetailPermintaan($idPermintaanRad) : [];
 
-        $namaDokterPj = !empty($hasilRad['id_dokter_pj'])
-            ? $this->fetchNamaRole('dokter', 'id_dokter', (int) $hasilRad['id_dokter_pj'], 'nama_dokter_pj')
+        $idDokterPj   = (int) ($hasilRad['id_dokter_pj'] ?? 0);
+        $namaDokterPj = $idDokterPj > 0
+            ? $this->fetchNamaRole('dokter', 'id_dokter', $idDokterPj, 'nama_dokter_pj')
             : null;
 
         $tindakanBuilder = $this->model

@@ -136,30 +136,43 @@ final class PermintaanRadController extends ControllerTemplate
      * @throws \CodeIgniter\Files\Exceptions\FileNotFoundException
      * @throws \CodeIgniter\Database\Exceptions\DatabaseException
      */
-    private function buildHeaderData(array $rawPost, bool $isCreate = false): array
+    private function buildHeaderDataForCreate(array $rawPost): array
     {
         $noPermintaan = (string) ($rawPost['no_permintaan'] ?? '');
-        if ($noPermintaan === '' && $isCreate) {
+        if ($noPermintaan === '') {
             $noPermintaan = $this->generateNomorPermintaan();
         }
+
+        return $this->buildHeaderData($rawPost, $noPermintaan) + ['id_status_permintaan' => 1];
+    }
+
+    /**
+     * @param array<string, mixed> $rawPost
+     * @return array<string, mixed>
+     */
+    private function buildHeaderDataForUpdate(array $rawPost): array
+    {
+        return $this->buildHeaderData($rawPost, (string) ($rawPost['no_permintaan'] ?? ''));
+    }
+
+    /**
+     * @param array<string, mixed> $rawPost
+     * @return array<string, mixed>
+     */
+    private function buildHeaderData(array $rawPost, string $noPermintaan): array
+    {
         $tglPermintaan = (string) ($rawPost['tgl_jam_permintaan'] ?? '');
         if ($tglPermintaan === '') {
             $tglPermintaan = date('Y-m-d H:i:s');
         }
 
-        $data = [
+        return [
             'no_permintaan'      => $noPermintaan,
             'nomor_reg'          => $rawPost['nomor_reg'] ?? '',
             'tgl_jam_permintaan' => $tglPermintaan,
             'informasi_tambahan' => $rawPost['informasi_tambahan'] ?? '',
             'indikasi_klinis'    => $rawPost['indikasi_klinis'] ?? '',
         ];
-
-        if ($isCreate) {
-            $data['id_status_permintaan'] = 1;
-        }
-
-        return $data;
     }
 
     /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
@@ -178,7 +191,7 @@ final class PermintaanRadController extends ControllerTemplate
      */
     private function insertItems(int $idPermintaan, array $idItems, array $bacaSajaMap): void
     {
-        if (empty($idItems)) {
+        if ($idItems === []) {
             return;
         }
 
@@ -267,14 +280,14 @@ final class PermintaanRadController extends ControllerTemplate
         $bacaSajaMapRaw = $this->request->getPost('is_baca_saja');
         $bacaSajaMap    = is_array($bacaSajaMapRaw) ? $bacaSajaMapRaw : [];
 
-        if (empty($idItems)) {
+        if ($idItems === []) {
             session()->setFlashdata('error', 'Pilih minimal satu item radiologi.');
             return redirect()->back()->withInput();
         }
 
         /** @var array<string, mixed> $postData */
         $postData = $this->request->getPost();
-        $data     = $this->buildHeaderData($postData, true);
+        $data     = $this->buildHeaderDataForCreate($postData);
 
         $this->model->db->transStart();
 
@@ -315,8 +328,9 @@ final class PermintaanRadController extends ControllerTemplate
             return $this->index();
         }
 
-        if (!empty($baris['nomor_reg'])) {
-            $baris = array_merge($baris, $this->fetchDetailRegistrasi((string) $baris['nomor_reg']));
+        $nomorReg = (string) ($baris['nomor_reg'] ?? '');
+        if ($nomorReg !== '') {
+            $baris = array_merge($baris, $this->fetchDetailRegistrasi($nomorReg));
         }
 
         return view('admin/radiologi/tambah_permintaan_rad', [
@@ -360,14 +374,14 @@ final class PermintaanRadController extends ControllerTemplate
         $bacaSajaMapRaw = $this->request->getPost('is_baca_saja');
         $bacaSajaMap    = is_array($bacaSajaMapRaw) ? $bacaSajaMapRaw : [];
 
-        if (empty($idItems)) {
+        if ($idItems === []) {
             session()->setFlashdata('error', 'Pilih minimal satu item radiologi.');
             return redirect()->back()->withInput();
         }
 
         /** @var array<string, mixed> $postData */
         $postData = $this->request->getPost();
-        $data     = $this->buildHeaderData($postData, false);
+        $data     = $this->buildHeaderDataForUpdate($postData);
 
         $this->model->db->transStart();
 
@@ -481,9 +495,8 @@ final class PermintaanRadController extends ControllerTemplate
             return $this->index();
         }
 
-        $detailRegistrasi = !empty($permintaan['nomor_reg'])
-            ? $this->fetchDetailRegistrasi((string) $permintaan['nomor_reg'])
-            : [];
+        $nomorReg         = (string) ($permintaan['nomor_reg'] ?? '');
+        $detailRegistrasi = $nomorReg !== '' ? $this->fetchDetailRegistrasi($nomorReg) : [];
 
         $itemList = $this->fetchItemTerpilih((int) $id);
 

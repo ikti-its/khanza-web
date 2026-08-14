@@ -47,7 +47,7 @@ final class HasilRadFotoController extends ControllerTemplate
         $uploaded = [];
 
         $request = $this->request;
-        assert($request instanceof \CodeIgniter\HTTP\IncomingRequest);
+        assert($request instanceof \CodeIgniter\HTTP\IncomingRequest, 'Request harus berupa IncomingRequest.');
 
         /** @mago-expect analysis:mixed-assignment */
         $rawFiles = $request->getFiles()['foto'] ?? [];
