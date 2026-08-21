@@ -11,6 +11,13 @@
 </head>
 
 <body>
+    <!-- Modal helper: dimuat sekali di sini (paling awal di body), bukan per-
+         komponen modal, supaya halaman dengan >1 modal picker (mis.
+         modalPengajuan + modalSuplier) tidak me-redeclare `const modalConfigs`
+         dua kali. Harus dimuat SEBELUM section 'content' supaya autofillFields
+         generik di sini kalah timpa oleh override khusus tiap halaman -->
+    <script src="<?= base_url('js/modal-helper.js') ?>?v=<?= filemtime(FCPATH . 'js/modal-helper.js') ?>"></script>
+
     <?= $this->include('components/header') ?>
     <div class="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 md:px-8 lg:hidden dark:bg-gray-800 dark:border-gray-700">
         <div class="flex items-center py-4">

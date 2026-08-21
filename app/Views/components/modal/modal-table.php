@@ -82,5 +82,6 @@
     </div>
 </div>
 
-<!-- Load helper hanya sekali di layout utama, bukan di setiap modal -->
-<script src="<?= base_url('js/modal-helper.js') ?>?v=<?= filemtime(FCPATH . 'js/modal-helper.js') ?>"></script>
+<!-- modal-helper.js dimuat sekali di layouts/template.php, tidak di sini —
+     komponen ini di-include berkali-kali (satu per modal picker) dalam satu
+     halaman, jadi script tag di sini akan ter-duplikasi kalau tetap ada. -->

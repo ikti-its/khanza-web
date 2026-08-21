@@ -111,6 +111,7 @@ $readonly = $readonly ?? false;
                                 <th class="p-3 border text-center font-semibold w-24">Sudah Dipesan</th>
                                 <th class="p-3 border text-center font-semibold w-28">Qty Pesan</th>
                                 <th class="p-3 border text-center font-semibold w-36">Harga Satuan</th>
+                                <th class="p-3 border text-center font-semibold w-20">Hapus</th>
                             </tr>
                         </thead>
                         <tbody id="detailTableBody">
@@ -131,10 +132,15 @@ $readonly = $readonly ?? false;
                                         <input type="number" name="detail_harga[]" value="<?= $item['harga_satuan'] ?? 0 ?>" min="0" step="any"
                                                class="border border-gray-300 rounded-lg p-1 w-full text-center text-sm" <?= $readonly ? 'disabled' : '' ?>>
                                     </td>
+                                    <td class="p-3 border text-center">
+                                        <?php if (!$readonly): ?>
+                                        <button type="button" onclick="hapusItem(this)" class="text-red-600 hover:underline text-sm">Hapus</button>
+                                        <?php endif; ?>
+                                    </td>
                                 </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <tr id="emptyRow"><td colspan="7" class="p-4 text-center text-gray-400 italic">Pilih pengajuan untuk menampilkan item</td></tr>
+                                <tr id="emptyRow"><td colspan="8" class="p-4 text-center text-gray-400 italic">Pilih pengajuan untuk menampilkan item</td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
@@ -178,14 +184,14 @@ $readonly = $readonly ?? false;
 
     function loadPengajuanItems(idPengajuan) {
         var tbody = document.getElementById('detailTableBody');
-        tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-gray-500">Memuat item...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-gray-500">Memuat item...</td></tr>';
 
         fetch('<?= site_url('inventori-non-medis/pengadaan-barang/modal/list') ?>?id_pengajuan=' + idPengajuan)
             .then(r => r.json())
             .then(json => {
                 var data = json.data || [];
                 if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-gray-400 italic">Tidak ada item pada pengajuan ini</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-gray-400 italic">Tidak ada item pada pengajuan ini</td></tr>';
                     return;
                 }
                 tbody.innerHTML = '';
@@ -207,13 +213,24 @@ $readonly = $readonly ?? false;
                         <td class="p-3 border text-center">
                             <input type="number" name="detail_harga[]" value="${item.harga ?? 0}" min="0" step="any"
                                    class="border border-gray-300 rounded-lg p-1 w-full text-center text-sm">
+                        </td>
+                        <td class="p-3 border text-center">
+                            <button type="button" onclick="hapusItem(this)" class="text-red-600 hover:underline text-sm">Hapus</button>
                         </td>`;
                     tbody.appendChild(tr);
                 });
             })
             .catch(() => {
-                tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-red-500">Gagal memuat item</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-red-500">Gagal memuat item</td></tr>';
             });
+    }
+
+    function hapusItem(btn) {
+        btn.closest('tr').remove();
+        var tbody = document.getElementById('detailTableBody');
+        if (tbody.querySelectorAll('tr[data-id]').length === 0) {
+            tbody.innerHTML = '<tr id="emptyRow"><td colspan="8" class="p-4 text-center text-gray-400 italic">Belum ada item dipilih</td></tr>';
+        }
     }
 
     function validateForm() {
