@@ -139,7 +139,6 @@ if (!function_exists('_step_permintaan_direct')) {
     function _step_permintaan_direct(array $p, int $st): array
     {
         if ($st === 1) return _s('Permintaan', 'active', 'Draft', $p['tanggal'], $p['nama_pemohon']);
-        if ($st === 4) return _s('Permintaan', 'active', 'Menunggu Persetujuan', $p['tanggal'], $p['nama_pemohon']);
         if ($st === 3) return _s('Permintaan', 'failed', 'Ditolak', $p['tanggal'], $p['nama_pemohon']);
         return _s('Permintaan', 'done', 'Diajukan', $p['tanggal'], $p['nama_pemohon']);
     }
@@ -163,7 +162,6 @@ if (!function_exists('_step_permintaan_proc')) {
     function _step_permintaan_proc(array $p, int $st): array
     {
         if ($st === 1) return _s('Permintaan', 'active', 'Draft', $p['tanggal'], $p['nama_pemohon']);
-        if ($st === 4) return _s('Permintaan', 'active', 'Menunggu Persetujuan', $p['tanggal'], $p['nama_pemohon']);
         return _s('Permintaan', 'done', 'Diajukan', $p['tanggal'], $p['nama_pemohon']);
     }
 }
