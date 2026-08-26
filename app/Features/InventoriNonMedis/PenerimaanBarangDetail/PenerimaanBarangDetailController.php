@@ -43,7 +43,17 @@ final class PenerimaanBarangDetailController extends ControllerTemplate
         );
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // qty_diterima ga boleh lebih dari qty yang dipesan
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
@@ -54,19 +64,20 @@ final class PenerimaanBarangDetailController extends ControllerTemplate
             $qty_diterima  = (float) ($this->request->getPost('qty_diterima') ?? 0);
 
             if ($id_penerimaan > 0 && $id_barang > 0 && $qty_diterima > 0) {
-                $limit = $this
-                    ->get_db()
-                    ->table('inventori_non_medis.penerimaan_barang pb')
-                    ->join(
-                        'inventori_non_medis.pengadaan_barang_detail pbd',
-                        'pb.id_pengadaan = pbd.id_pengadaan',
-                        'left',
-                    )
-                    ->select('pbd.qty')
-                    ->where('pb.id_penerimaan', $id_penerimaan)
-                    ->where('pbd.id_barang', $id_barang)
-                    ->get()
-                    ->getRowArray();
+                $limit = $this->guarded(
+                    $this
+                        ->get_db()
+                        ->table('inventori_non_medis.penerimaan_barang pb')
+                        ->join(
+                            'inventori_non_medis.pengadaan_barang_detail pbd',
+                            'pb.id_pengadaan = pbd.id_pengadaan',
+                            'left',
+                        )
+                        ->select('pbd.qty')
+                        ->where('pb.id_penerimaan', $id_penerimaan)
+                        ->where('pbd.id_barang', $id_barang)
+                        ->get(),
+                )->getRowArray();
 
                 if (is_array($limit) && (float) ($limit['qty'] ?? 0) > 0) {
                     if ($qty_diterima > (float) $limit['qty']) {

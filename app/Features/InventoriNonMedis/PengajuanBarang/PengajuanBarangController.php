@@ -49,10 +49,20 @@ final class PengajuanBarangController extends ControllerTemplate
         $this->model->set_order('id_pengajuan', 'DESC');
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // endpoint modal: pengajuan yang sudah disetujui dan masih punya sisa qty
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     public function list(): ResponseInterface
     {
-        $data = $this->get_db()->query("
+        $data = $this->guarded($this->get_db()->query("
             SELECT DISTINCT pj.id_pengajuan, pj.no_pengajuan, TO_CHAR(pj.tanggal, 'YYYY-MM-DD HH24:MI') AS tanggal, o.nama
             FROM inventori_non_medis.pengajuan_barang pj
             JOIN inventori_non_medis.pengajuan_barang_detail pjd ON pj.id_pengajuan = pjd.id_pengajuan
@@ -76,7 +86,7 @@ final class PengajuanBarangController extends ControllerTemplate
                   AND unmapped.qty_disetujui > 0
               )
             ORDER BY pj.no_pengajuan DESC
-        ")->getResultArray();
+        "))->getResultArray();
 
         return $this->response->setJSON(['data' => $data]);
     }
@@ -94,20 +104,25 @@ final class PengajuanBarangController extends ControllerTemplate
     }
 
     // halaman detail (readonly) — view terpisah tanpa form
-    public function detail(int|string $id): string
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    public function detail(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $baris = $this->model->find_one($id);
 
-        $detail_items = $this->get_db()
-            ->table('inventori_non_medis.pengajuan_barang_detail d')
-            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-            ->select('d.id_barang, d.qty, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
-            ->where('d.id_pengajuan', (int) $id)
-            ->where('d.id_barang >', 0)
-            ->get()->getResultArray();
+        $detail_items = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.pengajuan_barang_detail d')
+                ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+                ->select('d.id_barang, d.qty, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
+                ->where('d.id_pengajuan', (int) $id)
+                ->where('d.id_barang >', 0)
+                ->get(),
+        )->getResultArray();
 
         return view('admin/inventorinonmedis/detail_pengajuan_barang', [
             'judul'        => 'Detail ' . $this->title,
@@ -119,8 +134,9 @@ final class PengajuanBarangController extends ControllerTemplate
     }
 
     // form ubah: 1-page header + detail existing (hanya saat Draf)
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         $baris = $this->model->find_one($id);
 
@@ -129,14 +145,17 @@ final class PengajuanBarangController extends ControllerTemplate
             return $this->detail($id);
         }
 
-        $detail_items = $this->get_db()
-            ->table('inventori_non_medis.pengajuan_barang_detail d')
-            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-            ->select('d.id_detail, d.id_barang, d.qty, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
-            ->where('d.id_pengajuan', (int) $id)
-            ->where('d.id_barang >', 0)
-            ->get()->getResultArray();
+        $detail_items = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.pengajuan_barang_detail d')
+                ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+                ->select('d.id_detail, d.id_barang, d.qty, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
+                ->where('d.id_pengajuan', (int) $id)
+                ->where('d.id_barang >', 0)
+                ->get(),
+        )->getResultArray();
 
         return view('admin/inventorinonmedis/tambah_pengajuan_barang', [
             'judul'        => 'Ubah ' . $this->title,
@@ -150,6 +169,7 @@ final class PengajuanBarangController extends ControllerTemplate
     }
 
     // simpan header + detail sekaligus
+    /** @throws \CodeIgniter\Files\Exceptions\FileNotFoundException */
     #[\Override]
     public function create(): string|RedirectResponse
     {
@@ -159,8 +179,11 @@ final class PengajuanBarangController extends ControllerTemplate
         ];
 
         helper('autonomor');
-        $lastNo = $this->get_last('inventori_non_medis.pengajuan_barang', 'no_pengajuan', 'id_pengajuan');
-        $postData['no_pengajuan']               = generateNextNoPengajuanBarang($lastNo, $postData['tanggal'] ?? null);
+        /** @var string|null $lastNo */
+        $lastNo           = $this->get_last('inventori_non_medis.pengajuan_barang', 'no_pengajuan', 'id_pengajuan');
+        $tanggalPengajuan = $postData['tanggal'] ?? null;
+        /** @var string|null $tanggalPengajuan */
+        $postData['no_pengajuan']               = generateNextNoPengajuanBarang($lastNo, $tanggalPengajuan);
         $postData['id_status_pengajuan_barang'] = (int) ($this->request->getPost('id_status_pengajuan_barang') ?? 1);
 
         $db = $this->get_db();
@@ -171,17 +194,20 @@ final class PengajuanBarangController extends ControllerTemplate
             $this->model->insert($postData);
             $id_pengajuan = (int) $db->insertID();
 
-            $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
-            $detail_qty   = $this->request->getPost('detail_qty') ?? [];
+            $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+            /** @var array<array-key, mixed> $detail_ids */
+            $detail_qty = $this->request->getPost('detail_qty') ?? [];
+            /** @var array<array-key, mixed> $detail_qty */
             $detail_harga = $this->request->getPost('detail_harga') ?? [];
-            $total_harga  = 0;
+            /** @var array<array-key, mixed> $detail_harga */
+            $total_harga = 0;
 
             for ($i = 0; $i < count($detail_ids); $i++) {
                 $id_barang = (int) ($detail_ids[$i] ?? 0);
                 $qty       = (int) ($detail_qty[$i] ?? 0);
                 $harga     = (float) ($detail_harga[$i] ?? 0);
                 if ($id_barang > 0 && $qty > 0) {
-                    $subtotal = $qty * $harga;
+                    $subtotal    = $qty * $harga;
                     $total_harga += $subtotal;
                     $db->table('inventori_non_medis.pengajuan_barang_detail')->insert([
                         'id_pengajuan' => $id_pengajuan,
@@ -195,7 +221,8 @@ final class PengajuanBarangController extends ControllerTemplate
 
             // update total_harga di header
             if ($total_harga > 0) {
-                $db->table('inventori_non_medis.pengajuan_barang')
+                $db
+                    ->table('inventori_non_medis.pengajuan_barang')
                     ->where('id_pengajuan', $id_pengajuan)
                     ->update(['total_harga' => $total_harga]);
             }
@@ -223,7 +250,10 @@ final class PengajuanBarangController extends ControllerTemplate
         $db = $this->get_db();
         try {
             $db->transBegin();
-            $db->table('inventori_non_medis.pengajuan_barang_detail')->where('id_pengajuan', (int) $id)->delete();
+            $db
+                ->table('inventori_non_medis.pengajuan_barang_detail')
+                ->where('id_pengajuan', (int) $id)
+                ->delete();
             $this->model->delete($id);
             $db->transCommit();
             session()->setFlashdata('success', 'Data berhasil dihapus.');
@@ -246,9 +276,9 @@ final class PengajuanBarangController extends ControllerTemplate
         }
 
         $postData = [
-            'tanggal'                     => $this->request->getPost('tanggal'),
-            'petugas_gudang'              => $this->request->getPost('petugas_gudang') ?: null,
-            'id_status_pengajuan_barang'  => $this->request->getPost('id_status_pengajuan_barang') ?? 1,
+            'tanggal'                    => $this->request->getPost('tanggal'),
+            'petugas_gudang'             => $this->request->getPost('petugas_gudang') ?: null,
+            'id_status_pengajuan_barang' => $this->request->getPost('id_status_pengajuan_barang') ?? 1,
         ];
 
         $new_status = (int) ($postData['id_status_pengajuan_barang'] ?? 0);
@@ -257,7 +287,8 @@ final class PengajuanBarangController extends ControllerTemplate
         }
 
         $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
-        if ($new_status === 4 && empty($detail_ids)) {
+        /** @var array<array-key, mixed> $detail_ids */
+        if ($new_status === 4 && count($detail_ids) === 0) {
             session()->setFlashdata('error', 'Tambahkan detail barang terlebih dahulu sebelum mengajukan.');
             return $this->home();
         }
@@ -268,20 +299,23 @@ final class PengajuanBarangController extends ControllerTemplate
             $db->transBegin();
 
             // sync detail: hapus semua lalu insert ulang
-            $db->table('inventori_non_medis.pengajuan_barang_detail')
+            $db
+                ->table('inventori_non_medis.pengajuan_barang_detail')
                 ->where('id_pengajuan', (int) $id)
                 ->delete();
 
-            $detail_qty   = $this->request->getPost('detail_qty') ?? [];
+            $detail_qty = $this->request->getPost('detail_qty') ?? [];
+            /** @var array<array-key, mixed> $detail_qty */
             $detail_harga = $this->request->getPost('detail_harga') ?? [];
-            $total_harga  = 0;
+            /** @var array<array-key, mixed> $detail_harga */
+            $total_harga = 0;
 
             for ($i = 0; $i < count($detail_ids); $i++) {
                 $id_barang = (int) ($detail_ids[$i] ?? 0);
                 $qty       = (int) ($detail_qty[$i] ?? 0);
                 $harga     = (float) ($detail_harga[$i] ?? 0);
                 if ($id_barang > 0 && $qty > 0) {
-                    $subtotal = $qty * $harga;
+                    $subtotal    = $qty * $harga;
                     $total_harga += $subtotal;
                     $db->table('inventori_non_medis.pengajuan_barang_detail')->insert([
                         'id_pengajuan' => (int) $id,

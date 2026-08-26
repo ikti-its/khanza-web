@@ -30,6 +30,7 @@ final class PengadaanBarangDetailModel extends ModelTemplate
         );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function build_query(): BaseBuilder
     {
         return $this->db
@@ -48,6 +49,7 @@ final class PengadaanBarangDetailModel extends ModelTemplate
             );
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function findAll(int|null $limit = 10, int $offset = 0): array
     {
@@ -60,9 +62,11 @@ final class PengadaanBarangDetailModel extends ModelTemplate
         }
         $result = $builder->get();
         assert($result instanceof BaseResult);
+        /** @var list<array<string, mixed>> */
         return $result->getResultArray();
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function find_one(int|string $id): array|null
     {
@@ -71,6 +75,7 @@ final class PengadaanBarangDetailModel extends ModelTemplate
         $result = $builder->get();
         assert($result instanceof BaseResult);
         $row = $result->getRowArray();
+        /** @var array<string, mixed>|null */
         return is_array($row) ? $row : null;
     }
 }

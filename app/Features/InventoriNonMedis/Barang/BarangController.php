@@ -27,19 +27,28 @@ final class BarangController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE,       OPTIONAL, I::INDEX,    'id_barang',       'ID Barang'],
-                [SHOW,       REQUIRED, I::TEXT,     'kode_barang',     'Kode Barang'],
-                [SHOW,       REQUIRED, I::NAME,     'nama_barang',     'Nama Barang'],
-                [SHOW,       REQUIRED, I::SELECT,   'id_satuan',       'Satuan'],
-                [SHOW,       REQUIRED, I::SELECT,   'id_jenis_barang', 'Jenis'],
-                [TABLE_ONLY, OPTIONAL, I::NUMBER,   'stok',            'Stok'],
-                [FORM_ONLY,  OPTIONAL, I::NUMBER,   'stok_minimum',    'Stok Minimum'],
-                [SHOW,       OPTIONAL, I::MONEY,    'harga_satuan',    'Harga Satuan'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_barang',       'ID Barang'],
+                [SHOW,       REQUIRED, I::TEXT,   'kode_barang',     'Kode Barang'],
+                [SHOW,       REQUIRED, I::NAME,   'nama_barang',     'Nama Barang'],
+                [SHOW,       REQUIRED, I::SELECT, 'id_satuan',       'Satuan'],
+                [SHOW,       REQUIRED, I::SELECT, 'id_jenis_barang', 'Jenis'],
+                [TABLE_ONLY, OPTIONAL, I::NUMBER, 'stok',            'Stok'],
+                [FORM_ONLY,  OPTIONAL, I::NUMBER, 'stok_minimum',    'Stok Minimum'],
+                [SHOW,       OPTIONAL, I::MONEY,  'harga_satuan',    'Harga Satuan'],
             ],
         );
     }
 
     protected array $row_alert = ['value' => 'stok', 'threshold' => 'stok_minimum'];
+
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
 
     // urut berdasarkan nama A-Z
     #[\Override]
@@ -75,26 +84,31 @@ final class BarangController extends ControllerTemplate
         ]);
     }
 
+    /**
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     public function list(): ResponseInterface
     {
-        $rows = $this->model
-            ->builder()
-            ->join(
-                'inventori_non_medis.satuan',
-                'inventori_non_medis.satuan.id_satuan = inventori_non_medis.barang.id_satuan',
-                'left',
-            )
-            ->select(
-                'inventori_non_medis.barang.id_barang, inventori_non_medis.barang.kode_barang, inventori_non_medis.barang.nama_barang, inventori_non_medis.satuan.nama_satuan, inventori_non_medis.barang.stok, inventori_non_medis.barang.harga_satuan',
-            )
-            ->orderBy('inventori_non_medis.barang.nama_barang', 'ASC')
-            ->get()
-            ->getResultArray();
+        $rows = $this->guarded(
+            $this->model
+                ->builder()
+                ->join(
+                    'inventori_non_medis.satuan',
+                    'inventori_non_medis.satuan.id_satuan = inventori_non_medis.barang.id_satuan',
+                    'left',
+                )
+                ->select(
+                    'inventori_non_medis.barang.id_barang, inventori_non_medis.barang.kode_barang, inventori_non_medis.barang.nama_barang, inventori_non_medis.satuan.nama_satuan, inventori_non_medis.barang.stok, inventori_non_medis.barang.harga_satuan',
+                )
+                ->orderBy('inventori_non_medis.barang.nama_barang', 'ASC')
+                ->get(),
+        )->getResultArray();
 
         return $this->response->setJSON(['data' => $rows]);
     }
 
-    /** @param array<string, scalar|null> $postData */
+    /** @param array<array-key, mixed> $postData */
     // stok awal = 0
     #[\Override]
     protected function before_create(array &$postData): void
@@ -109,7 +123,7 @@ final class BarangController extends ControllerTemplate
         }
     }
 
-    /** @param array<string, scalar|null> $postData */
+    /** @param array<array-key, mixed> $postData */
     // 'stok' bukan bagian dari form ubah (tampil readonly, tanpa name di form),
     // jadi get_post_data() akan mengirim null untuknya kalau tidak dibuang di sini —
     // dan itu melanggar constraint NOT NULL pada kolom stok.

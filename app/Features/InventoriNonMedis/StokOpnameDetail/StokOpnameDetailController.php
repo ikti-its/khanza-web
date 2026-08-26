@@ -55,11 +55,21 @@ final class StokOpnameDetailController extends ControllerTemplate
         );
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // format selisih: 0 → "-", positif → "+N", negatif tetap "-N"
     #[\Override]
     protected function after_read(array &$data_tabel): void
     {
         foreach ($data_tabel as &$row) {
+            /** @var array<string, mixed> $row */
             $val = (int) ($row['selisih'] ?? 0);
             if ($val === 0) {
                 $row['selisih'] = '-';
@@ -71,19 +81,22 @@ final class StokOpnameDetailController extends ControllerTemplate
     }
 
     // ambil status opname induk
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function get_parent_status(int $id_opname): int
     {
-        $row = $this
-            ->get_db()
-            ->table('inventori_non_medis.stok_opname')
-            ->select('id_status_stok_opname')
-            ->where('id_opname', $id_opname)
-            ->get()
-            ->getRowArray();
+        $row = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.stok_opname')
+                ->select('id_status_stok_opname')
+                ->where('id_opname', $id_opname)
+                ->get(),
+        )->getRowArray();
         return (int) ($row['id_status_stok_opname'] ?? 0);
     }
 
     // blok kalau opname induk udah Selesai, atau barang sudah ada
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function create(): string|RedirectResponse
     {
@@ -116,6 +129,7 @@ final class StokOpnameDetailController extends ControllerTemplate
     }
 
     // ambil stok_sistem dari barang, hitung selisih
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     protected function before_create(array &$postData): void
     {
@@ -123,13 +137,14 @@ final class StokOpnameDetailController extends ControllerTemplate
         $stok_sistem = 0;
 
         if ($id_barang > 0) {
-            $row = $this
-                ->get_db()
-                ->table('inventori_non_medis.barang')
-                ->select('stok')
-                ->where('id_barang', $id_barang)
-                ->get()
-                ->getRowArray();
+            $row = $this->guarded(
+                $this
+                    ->get_db()
+                    ->table('inventori_non_medis.barang')
+                    ->select('stok')
+                    ->where('id_barang', $id_barang)
+                    ->get(),
+            )->getRowArray();
             $stok_sistem = (int) ($row['stok'] ?? 0);
         }
 
@@ -138,6 +153,7 @@ final class StokOpnameDetailController extends ControllerTemplate
     }
 
     // blok kalau opname induk udah Selesai
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {

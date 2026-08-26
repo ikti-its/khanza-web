@@ -30,8 +30,26 @@ final class PermintaanBarangController extends ControllerTemplate
                 [HIDE, OPTIONAL, I::INDEX, 'id_permintaan', 'ID'],
                 [SHOW, OPTIONAL, I::READONLY, 'no_permintaan', 'No. Permintaan'],
                 [SHOW, REQUIRED, I::DTIME, 'tanggal', 'Tanggal Permintaan'],
-                [SHOW, REQUIRED, I::MODAL, 'petugas', 'Pemohon', ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pemohon...']],
-                [SHOW, REQUIRED, I::MODAL, 'master_ruangan', 'Ruangan', ['modal' => 'modalPilihRuangan', 'display_column' => 'nama_ruangan', 'placeholder' => 'Klik cari ruangan...']],
+                [
+                    SHOW,
+                    REQUIRED,
+                    I::MODAL,
+                    'petugas',
+                    'Pemohon',
+                    ['modal' => 'modalPemohon', 'display_column' => 'nama', 'placeholder' => 'Klik cari pemohon...'],
+                ],
+                [
+                    SHOW,
+                    REQUIRED,
+                    I::MODAL,
+                    'master_ruangan',
+                    'Ruangan',
+                    [
+                        'modal'          => 'modalPilihRuangan',
+                        'display_column' => 'nama_ruangan',
+                        'placeholder'    => 'Klik cari ruangan...',
+                    ],
+                ],
                 [TABLE_ONLY, OPTIONAL, I::SELECT, 'progress', 'Progress'],
                 [FORM_ONLY, OPTIONAL, I::READONLY, 'tanggal_diproses', 'Tanggal Diproses'],
                 [FORM_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang_nama', 'Petugas Gudang'],
@@ -49,21 +67,33 @@ final class PermintaanBarangController extends ControllerTemplate
         $this->model->set_order('id_permintaan', 'DESC');
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // Tambahkan kolom progress badge ke setiap baris di list
+    /** @throws \CodeIgniter\Files\Exceptions\FileNotFoundException */
     #[\Override]
     protected function after_read(array &$data_tabel): void
     {
-        if (empty($data_tabel)) return;
+        if (count($data_tabel) === 0)
+            return;
 
         helper('tracking');
         foreach ($data_tabel as &$row) {
+            /** @var array<string, mixed> $row */
             $id = (int) ($row['id_permintaan'] ?? 0);
             if ($id === 0) {
                 $row['progress'] = '-';
                 continue;
             }
 
-            $tracking = get_permintaan_tracking($id);
+            $tracking        = get_permintaan_tracking($id);
             $row['progress'] = $tracking['progress_label'];
         }
     }
@@ -83,24 +113,31 @@ final class PermintaanBarangController extends ControllerTemplate
     }
 
     // halaman detail (readonly) — view terpisah tanpa form
-    public function detail(int|string $id): string
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    public function detail(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $baris = $this->model->find_one($id);
 
-        $detail_items = $this->get_db()
-            ->table('inventori_non_medis.permintaan_barang_detail d')
-            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-            ->join('inventori_non_medis.satuan s2', 'd.id_satuan_baru = s2.id_satuan', 'left')
-            ->select('d.id_detail, d.id_barang, d.qty, d.nama_barang_baru, d.id_satuan_baru, d.id_jenis_barang_baru, b.kode_barang, b.nama_barang, COALESCE(s.nama_satuan, s2.nama_satuan) AS nama_satuan')
-            ->where('d.id_permintaan', (int) $id)
-            ->groupStart()
+        $detail_items = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.permintaan_barang_detail d')
+                ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+                ->join('inventori_non_medis.satuan s2', 'd.id_satuan_baru = s2.id_satuan', 'left')
+                ->select(
+                    'd.id_detail, d.id_barang, d.qty, d.nama_barang_baru, d.id_satuan_baru, d.id_jenis_barang_baru, b.kode_barang, b.nama_barang, COALESCE(s.nama_satuan, s2.nama_satuan) AS nama_satuan',
+                )
+                ->where('d.id_permintaan', (int) $id)
+                ->groupStart()
                 ->where('d.id_barang >', 0)
                 ->orWhere('d.nama_barang_baru IS NOT NULL')
-            ->groupEnd()
-            ->get()->getResultArray();
+                ->groupEnd()
+                ->get(),
+        )->getResultArray();
 
         return view('admin/inventorinonmedis/detail_permintaan_barang', [
             'judul'        => 'Detail ' . $this->title,
@@ -112,8 +149,9 @@ final class PermintaanBarangController extends ControllerTemplate
     }
 
     // form ubah: 1-page header + detail existing (hanya saat Draf)
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         $baris = $this->model->find_one($id);
 
@@ -122,18 +160,23 @@ final class PermintaanBarangController extends ControllerTemplate
             return $this->detail($id);
         }
 
-        $detail_items = $this->get_db()
-            ->table('inventori_non_medis.permintaan_barang_detail d')
-            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-            ->join('inventori_non_medis.satuan s2', 'd.id_satuan_baru = s2.id_satuan', 'left')
-            ->select('d.id_detail, d.id_barang, d.qty, d.nama_barang_baru, d.id_satuan_baru, d.id_jenis_barang_baru, b.kode_barang, b.nama_barang, COALESCE(s.nama_satuan, s2.nama_satuan) AS nama_satuan')
-            ->where('d.id_permintaan', (int) $id)
-            ->groupStart()
+        $detail_items = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.permintaan_barang_detail d')
+                ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+                ->join('inventori_non_medis.satuan s2', 'd.id_satuan_baru = s2.id_satuan', 'left')
+                ->select(
+                    'd.id_detail, d.id_barang, d.qty, d.nama_barang_baru, d.id_satuan_baru, d.id_jenis_barang_baru, b.kode_barang, b.nama_barang, COALESCE(s.nama_satuan, s2.nama_satuan) AS nama_satuan',
+                )
+                ->where('d.id_permintaan', (int) $id)
+                ->groupStart()
                 ->where('d.id_barang >', 0)
                 ->orWhere('d.nama_barang_baru IS NOT NULL')
-            ->groupEnd()
-            ->get()->getResultArray();
+                ->groupEnd()
+                ->get(),
+        )->getResultArray();
 
         return view('admin/inventorinonmedis/tambah_permintaan_barang', [
             'judul'          => 'Ubah ' . $this->title,
@@ -149,6 +192,7 @@ final class PermintaanBarangController extends ControllerTemplate
     }
 
     // simpan header + detail sekaligus
+    /** @throws \CodeIgniter\Files\Exceptions\FileNotFoundException */
     #[\Override]
     public function create(): string|RedirectResponse
     {
@@ -159,14 +203,19 @@ final class PermintaanBarangController extends ControllerTemplate
         ];
 
         helper('autonomor');
-        $lastNo = $this->get_last('inventori_non_medis.permintaan_barang', 'no_permintaan', 'id_permintaan');
-        $postData['no_permintaan']               = generateNextNoPermintaanBarang($lastNo, $postData['tanggal'] ?? null);
+        /** @var string|null $lastNo */
+        $lastNo            = $this->get_last('inventori_non_medis.permintaan_barang', 'no_permintaan', 'id_permintaan');
+        $tanggalPermintaan = $postData['tanggal'] ?? null;
+        /** @var string|null $tanggalPermintaan */
+        $postData['no_permintaan']               = generateNextNoPermintaanBarang($lastNo, $tanggalPermintaan);
         $postData['id_status_permintaan_barang'] = (int) ($this->request->getPost('id_status_permintaan_barang') ?? 1);
 
         // validasi: jika status Proses Permintaan (4), item wajib ada
-        $detail_ids   = $this->request->getPost('detail_id_barang') ?? [];
-        $detail_baru  = $this->request->getPost('detail_is_baru') ?? [];
-        $has_items    = false;
+        $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+        /** @var array<array-key, mixed> $detail_ids */
+        $detail_baru = $this->request->getPost('detail_is_baru') ?? [];
+        /** @var array<array-key, mixed> $detail_baru */
+        $has_items = false;
         for ($i = 0; $i < count($detail_ids); $i++) {
             if (($detail_baru[$i] ?? '0') === '1' || (int) ($detail_ids[$i] ?? 0) > 0) {
                 $has_items = true;
@@ -211,7 +260,10 @@ final class PermintaanBarangController extends ControllerTemplate
         $db = $this->get_db();
         try {
             $db->transBegin();
-            $db->table('inventori_non_medis.permintaan_barang_detail')->where('id_permintaan', (int) $id)->delete();
+            $db
+                ->table('inventori_non_medis.permintaan_barang_detail')
+                ->where('id_permintaan', (int) $id)
+                ->delete();
             $this->model->delete($id);
             $db->transCommit();
             session()->setFlashdata('success', 'Data berhasil dihapus.');
@@ -234,10 +286,10 @@ final class PermintaanBarangController extends ControllerTemplate
         }
 
         $postData = [
-            'tanggal'                       => $this->request->getPost('tanggal'),
-            'petugas'                       => $this->request->getPost('petugas') ?: null,
-            'master_ruangan'                => $this->request->getPost('master_ruangan') ?: null,
-            'id_status_permintaan_barang'   => $this->request->getPost('id_status_permintaan_barang') ?? 1,
+            'tanggal'                     => $this->request->getPost('tanggal'),
+            'petugas'                     => $this->request->getPost('petugas') ?: null,
+            'master_ruangan'              => $this->request->getPost('master_ruangan') ?: null,
+            'id_status_permintaan_barang' => $this->request->getPost('id_status_permintaan_barang') ?? 1,
         ];
 
         // validasi status
@@ -247,9 +299,11 @@ final class PermintaanBarangController extends ControllerTemplate
         }
 
         // cek detail sebelum proses permintaan
-        $detail_ids  = $this->request->getPost('detail_id_barang') ?? [];
+        $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+        /** @var array<array-key, mixed> $detail_ids */
         $detail_baru = $this->request->getPost('detail_is_baru') ?? [];
-        $has_items   = false;
+        /** @var array<array-key, mixed> $detail_baru */
+        $has_items = false;
         for ($i = 0; $i < count($detail_ids); $i++) {
             if (($detail_baru[$i] ?? '0') === '1' || (int) ($detail_ids[$i] ?? 0) > 0) {
                 $has_items = true;
@@ -269,7 +323,8 @@ final class PermintaanBarangController extends ControllerTemplate
             $this->model->update($id, $postData);
 
             // sync detail: hapus semua lalu insert ulang
-            $db->table('inventori_non_medis.permintaan_barang_detail')
+            $db
+                ->table('inventori_non_medis.permintaan_barang_detail')
                 ->where('id_permintaan', (int) $id)
                 ->delete();
 
@@ -287,18 +342,25 @@ final class PermintaanBarangController extends ControllerTemplate
 
     // ========= PRIVATE HELPERS =========
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function save_detail_items(\CodeIgniter\Database\BaseConnection $db, int $id_permintaan): void
     {
-        $detail_ids        = $this->request->getPost('detail_id_barang') ?? [];
-        $detail_qty        = $this->request->getPost('detail_qty') ?? [];
-        $detail_is_baru    = $this->request->getPost('detail_is_baru') ?? [];
-        $detail_nama_baru  = $this->request->getPost('detail_nama_baru') ?? [];
-        $detail_satuan     = $this->request->getPost('detail_satuan_baru') ?? [];
-        $detail_jenis      = $this->request->getPost('detail_jenis_baru') ?? [];
+        $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+        /** @var array<array-key, mixed> $detail_ids */
+        $detail_qty = $this->request->getPost('detail_qty') ?? [];
+        /** @var array<array-key, mixed> $detail_qty */
+        $detail_is_baru = $this->request->getPost('detail_is_baru') ?? [];
+        /** @var array<array-key, mixed> $detail_is_baru */
+        $detail_nama_baru = $this->request->getPost('detail_nama_baru') ?? [];
+        /** @var array<array-key, mixed> $detail_nama_baru */
+        $detail_satuan = $this->request->getPost('detail_satuan_baru') ?? [];
+        /** @var array<array-key, mixed> $detail_satuan */
+        $detail_jenis = $this->request->getPost('detail_jenis_baru') ?? [];
+        /** @var array<array-key, mixed> $detail_jenis */
 
         for ($i = 0; $i < count($detail_qty); $i++) {
-            $qty      = (int) ($detail_qty[$i] ?? 0);
-            $is_baru  = ($detail_is_baru[$i] ?? '0') === '1';
+            $qty     = (int) ($detail_qty[$i] ?? 0);
+            $is_baru = ($detail_is_baru[$i] ?? '0') === '1';
 
             if ($is_baru) {
                 $nama = trim((string) ($detail_nama_baru[$i] ?? ''));
@@ -307,8 +369,8 @@ final class PermintaanBarangController extends ControllerTemplate
                         'id_permintaan'        => $id_permintaan,
                         'id_barang'            => null,
                         'nama_barang_baru'     => $nama,
-                        'id_satuan_baru'       => ((int) ($detail_satuan[$i] ?? 0)) > 0 ? (int) $detail_satuan[$i] : null,
-                        'id_jenis_barang_baru' => ((int) ($detail_jenis[$i] ?? 0)) > 0 ? (int) $detail_jenis[$i] : null,
+                        'id_satuan_baru'       => (int) ($detail_satuan[$i] ?? 0) > 0 ? (int) $detail_satuan[$i] : null,
+                        'id_jenis_barang_baru' => (int) ($detail_jenis[$i] ?? 0) > 0 ? (int) $detail_jenis[$i] : null,
                         'qty'                  => $qty,
                     ]);
                 }
@@ -328,11 +390,14 @@ final class PermintaanBarangController extends ControllerTemplate
     private function get_options_satuan(): array
     {
         try {
-            return $this->get_db()
-                ->table('inventori_non_medis.satuan')
-                ->select('id_satuan, nama_satuan')
-                ->orderBy('nama_satuan', 'ASC')
-                ->get()->getResultArray();
+            return $this->guarded(
+                $this
+                    ->get_db()
+                    ->table('inventori_non_medis.satuan')
+                    ->select('id_satuan, nama_satuan')
+                    ->orderBy('nama_satuan', 'ASC')
+                    ->get(),
+            )->getResultArray();
         } catch (\Throwable) {
             return [];
         }
@@ -341,11 +406,14 @@ final class PermintaanBarangController extends ControllerTemplate
     private function get_options_jenis(): array
     {
         try {
-            return $this->get_db()
-                ->table('inventori_non_medis.jenis_barang')
-                ->select('id_jenis_barang, nama_jenis_barang')
-                ->orderBy('nama_jenis_barang', 'ASC')
-                ->get()->getResultArray();
+            return $this->guarded(
+                $this
+                    ->get_db()
+                    ->table('inventori_non_medis.jenis_barang')
+                    ->select('id_jenis_barang, nama_jenis_barang')
+                    ->orderBy('nama_jenis_barang', 'ASC')
+                    ->get(),
+            )->getResultArray();
         } catch (\Throwable) {
             return [];
         }

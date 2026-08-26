@@ -15,7 +15,7 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
         parent::__construct(
             new PersetujuanPengajuanBarangModel(),
             [
-                ['Inventori Non Medis',         'inventori_non_medis'],
+                ['Inventori Non Medis',          'inventori_non_medis'],
                 ['Persetujuan Pengajuan Barang', 'persetujuan_pengajuan_barang'],
             ],
             'Persetujuan Pengajuan Barang',
@@ -24,14 +24,25 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
                 A::UPDATE,
             ],
             [
-                [HIDE,       OPTIONAL, I::INDEX,    'id_pengajuan',               'ID'],
-                [SHOW,       OPTIONAL, I::READONLY, 'no_pengajuan',               'No. Pengajuan'],
-                [TABLE_ONLY, OPTIONAL, I::DTIME,    'tanggal',                    'Tanggal Pengajuan'],
+                [HIDE, OPTIONAL, I::INDEX, 'id_pengajuan', 'ID'],
+                [SHOW, OPTIONAL, I::READONLY, 'no_pengajuan', 'No. Pengajuan'],
+                [TABLE_ONLY, OPTIONAL, I::DTIME, 'tanggal', 'Tanggal Pengajuan'],
                 [TABLE_ONLY, OPTIONAL, I::READONLY, 'petugas_gudang', 'Pemohon'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'total_harga',    'Total Harga'],
-                [SHOW, REQUIRED, I::SELECT,   'id_status_pengajuan_barang', 'Status'],
-                [FORM_ONLY,  OPTIONAL, I::READONLY, 'tanggal_diproses',          'Tanggal Diproses'],
-                [FORM_ONLY, REQUIRED, I::MODAL,   'atasan_logistik',            'Atasan Logistik', ['modal' => 'modalPemohon', 'display_column' => 'atasan_logistik_nama', 'placeholder' => 'Klik cari atasan logistik...']],
+                [FORM_ONLY, OPTIONAL, I::READONLY, 'total_harga', 'Total Harga'],
+                [SHOW, REQUIRED, I::SELECT, 'id_status_pengajuan_barang', 'Status'],
+                [FORM_ONLY, OPTIONAL, I::READONLY, 'tanggal_diproses', 'Tanggal Diproses'],
+                [
+                    FORM_ONLY,
+                    REQUIRED,
+                    I::MODAL,
+                    'atasan_logistik',
+                    'Atasan Logistik',
+                    [
+                        'modal'          => 'modalPemohon',
+                        'display_column' => 'atasan_logistik_nama',
+                        'placeholder'    => 'Klik cari atasan logistik...',
+                    ],
+                ],
             ],
             // child_path: '/inventori-non-medis/persetujuan-pengajuan-barang-detail',
             // child_fk: 'id_pengajuan',
@@ -44,6 +55,15 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
     {
         $this->model->set_filter('id_status_pengajuan_barang', [2, 3, 4]);
         $this->model->set_order('id_pengajuan', 'DESC');
+    }
+
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
     }
 
     // hanya izinkan transisi ke Disetujui (2) atau Ditolak (3) dari Persetujuan
@@ -71,20 +91,25 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
     }
 
     // halaman detail (readonly)
-    public function detail(int|string $id): string
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    public function detail(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $baris = $this->model->find_one($id);
 
-        $detail_items = $this->get_db()
-            ->table('inventori_non_medis.pengajuan_barang_detail d')
-            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-            ->select('d.id_barang, d.qty, d.qty_disetujui, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
-            ->where('d.id_pengajuan', (int) $id)
-            ->where('d.id_barang >', 0)
-            ->get()->getResultArray();
+        $detail_items = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.pengajuan_barang_detail d')
+                ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+                ->select('d.id_barang, d.qty, d.qty_disetujui, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
+                ->where('d.id_pengajuan', (int) $id)
+                ->where('d.id_barang >', 0)
+                ->get(),
+        )->getResultArray();
 
         return view('admin/inventorinonmedis/detail_persetujuan_pengajuan_barang', [
             'judul'        => 'Detail ' . $this->title,
@@ -96,10 +121,12 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
     }
 
     // form ubah: 1-page — redirect jika sudah diproses
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $baris = $this->model->find_one($id);
 
@@ -109,14 +136,17 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
             return $this->detail($id);
         }
 
-        $detail_items = $this->get_db()
-            ->table('inventori_non_medis.pengajuan_barang_detail d')
-            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-            ->select('d.id_barang, d.qty, d.qty_disetujui, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
-            ->where('d.id_pengajuan', (int) $id)
-            ->where('d.id_barang >', 0)
-            ->get()->getResultArray();
+        $detail_items = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.pengajuan_barang_detail d')
+                ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+                ->select('d.id_barang, d.qty, d.qty_disetujui, d.harga, b.kode_barang, b.nama_barang, s.nama_satuan')
+                ->where('d.id_pengajuan', (int) $id)
+                ->where('d.id_barang >', 0)
+                ->get(),
+        )->getResultArray();
 
         return view('admin/inventorinonmedis/ubah_persetujuan_pengajuan_barang', [
             'judul'        => 'Ubah ' . $this->title,
@@ -129,6 +159,7 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
     }
 
     // validasi atasan & qty sebelum approve, sync qty_disetujui
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
@@ -145,7 +176,7 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
         $is_new_approval = $new_status === 2 && $current_status !== 2;
 
         if ($is_new_approval) {
-            if (empty($this->request->getPost('atasan_logistik'))) {
+            if (!$this->request->getPost('atasan_logistik')) {
                 session()->setFlashdata('error', 'Atasan logistik wajib diisi sebelum menyetujui pengajuan.');
                 return $this->home();
             }
@@ -153,14 +184,17 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
 
         // sync qty_disetujui from form
         $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+        /** @var array<array-key, mixed> $detail_ids */
         $detail_qty_disetujui = $this->request->getPost('detail_qty_disetujui') ?? [];
+        /** @var array<array-key, mixed> $detail_qty_disetujui */
 
         $db = $this->get_db();
         for ($i = 0; $i < count($detail_ids); $i++) {
             $id_barang = (int) ($detail_ids[$i] ?? 0);
-            $qty_d = (int) ($detail_qty_disetujui[$i] ?? 0);
+            $qty_d     = (int) ($detail_qty_disetujui[$i] ?? 0);
             if ($id_barang > 0) {
-                $db->table('inventori_non_medis.pengajuan_barang_detail')
+                $db
+                    ->table('inventori_non_medis.pengajuan_barang_detail')
                     ->where('id_pengajuan', (int) $id)
                     ->where('id_barang', $id_barang)
                     ->update(['qty_disetujui' => $qty_d]);
@@ -168,14 +202,17 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
         }
 
         if ($is_new_approval) {
-            $detail_items_check = $db->table('inventori_non_medis.pengajuan_barang_detail')
-                ->select('id_barang, qty, qty_disetujui')
-                ->where('id_pengajuan', (int) $id)
-                ->where('id_barang >', 0)
-                ->where('qty_disetujui >', 0)
-                ->get()->getResultArray();
+            $detail_items_check = $this->guarded(
+                $db
+                    ->table('inventori_non_medis.pengajuan_barang_detail')
+                    ->select('id_barang, qty, qty_disetujui')
+                    ->where('id_pengajuan', (int) $id)
+                    ->where('id_barang >', 0)
+                    ->where('qty_disetujui >', 0)
+                    ->get(),
+            )->getResultArray();
 
-            $has_approved = !empty($detail_items_check);
+            $has_approved = count($detail_items_check) > 0;
             if (!$has_approved) {
                 session()->setFlashdata('error', 'Isi qty disetujui pada detail pengajuan sebelum menyetujui.');
                 return $this->home();

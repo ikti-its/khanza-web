@@ -27,15 +27,25 @@ final class PengadaanBarangModel extends ModelTemplate
         );
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // hanya tampilkan pengajuan Disetujui yang masih punya sisa qty belum dipesan
     // dan tidak memiliki barang baru yang belum dipetakan ke master barang
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function get_all_options(): array
     {
         $options = parent::get_all_options();
 
         if (isset($options['id_pengajuan'])) {
-            $rows = $this->db->query('
+            $rows = $this->guarded($this->db->query('
                 SELECT DISTINCT pjd.id_pengajuan
                 FROM inventori_non_medis.pengajuan_barang_detail pjd
                 JOIN inventori_non_medis.pengajuan_barang pj ON pjd.id_pengajuan = pj.id_pengajuan
@@ -56,7 +66,7 @@ final class PengadaanBarangModel extends ModelTemplate
                       AND unmapped.id_barang IS NULL
                       AND unmapped.qty_disetujui > 0
                   )
-            ')->getResultArray();
+            '))->getResultArray();
 
             $available = array_map(fn(array $r) => (string) $r['id_pengajuan'], $rows);
 

@@ -15,9 +15,9 @@ final class PersetujuanPermintaanBarangDetailController extends ControllerTempla
         parent::__construct(
             new PersetujuanPermintaanBarangDetailModel(),
             [
-                ['Inventori Non Medis',          'inventori_non_medis'],
+                ['Inventori Non Medis',           'inventori_non_medis'],
                 ['Persetujuan Permintaan Barang', 'persetujuan_permintaan_barang'],
-                ['Detail',                       'detail'],
+                ['Detail',                        'detail'],
             ],
             'Persetujuan Permintaan Barang Detail',
             [
@@ -44,22 +44,34 @@ final class PersetujuanPermintaanBarangDetailController extends ControllerTempla
         );
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // true jika permintaan sudah final: Disetujui (2, legacy)/Ditolak (3)/Menunggu Pengadaan (5)/Selesai (6) — qty tidak bisa diubah lagi
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function is_locked(int $id_permintaan): bool
     {
         if ($id_permintaan <= 0)
             return false;
-        $row = $this
-            ->get_db()
-            ->table('inventori_non_medis.permintaan_barang')
-            ->select('id_status_permintaan_barang')
-            ->where('id_permintaan', $id_permintaan)
-            ->get()
-            ->getRowArray();
+        $row = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.permintaan_barang')
+                ->select('id_status_permintaan_barang')
+                ->where('id_permintaan', $id_permintaan)
+                ->get(),
+        )->getRowArray();
         return is_array($row) && in_array((int) ($row['id_status_permintaan_barang'] ?? 0), [2, 3, 5, 6], true);
     }
 
     // qty_disetujui tidak bisa diubah jika sudah diproses, dan tidak boleh melebihi qty diminta
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {

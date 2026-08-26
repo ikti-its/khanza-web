@@ -6,6 +6,7 @@ namespace App\Features\InventoriNonMedis\TransaksiStok;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 
 final class TransaksiStokController extends ControllerTemplate
 {
@@ -23,12 +24,12 @@ final class TransaksiStokController extends ControllerTemplate
                 A::DETAIL,
             ],
             [
-                [HIDE,       OPTIONAL, I::INDEX, 'id_transaksi',             'ID'],
-                [TABLE_ONLY, OPTIONAL, I::SELECT,  'nama_tipe_transaksi_stok', 'Tipe'],
-                [SHOW,       REQUIRED, I::DTIME, 'tanggal',                  'Tanggal'],
-                [HIDE, OPTIONAL, I::TEXT,  'no_keluar',                'No. Keluar'],
-                [HIDE, OPTIONAL, I::TEXT,  'no_masuk',                 'No. Masuk'],
-                [SHOW,       OPTIONAL, I::TEXT,  'keterangan',               'Keterangan'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_transaksi',             'ID'],
+                [TABLE_ONLY, OPTIONAL, I::SELECT, 'nama_tipe_transaksi_stok', 'Tipe'],
+                [SHOW,       REQUIRED, I::DTIME,  'tanggal',                  'Tanggal'],
+                [HIDE,       OPTIONAL, I::TEXT,   'no_keluar',                'No. Keluar'],
+                [HIDE,       OPTIONAL, I::TEXT,   'no_masuk',                 'No. Masuk'],
+                [SHOW,       OPTIONAL, I::TEXT,   'keterangan',               'Keterangan'],
             ],
         );
     }
@@ -40,29 +41,53 @@ final class TransaksiStokController extends ControllerTemplate
         $this->model->set_order('id_transaksi', 'DESC');
     }
 
-    // halaman detail (readonly) — custom view konsisten dengan modul lain
-    public function detail(int|string $id): string
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
     {
-        if ($id == 0) return $this->index();
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
+    // halaman detail (readonly) — custom view konsisten dengan modul lain
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    public function detail(int|string $id): string|RedirectResponse
+    {
+        if ($id == 0)
+            return $this->index();
 
         $db = $this->get_db();
 
-        $baris = $db->table('inventori_non_medis.transaksi_stok ts')
-            ->join('inventori_non_medis.tipe_transaksi_stok tts', 'ts.id_tipe_transaksi_stok = tts.id_tipe_transaksi_stok', 'left')
-            ->join('inventori_non_medis.penerimaan_barang pnb', 'ts.id_penerimaan = pnb.id_penerimaan', 'left')
-            ->join('inventori_non_medis.permintaan_barang pmb', 'ts.id_permintaan = pmb.id_permintaan', 'left')
-            ->select('ts.*, tts.nama_tipe_transaksi_stok, pnb.no_masuk, pmb.no_keluar')
-            ->where('ts.id_transaksi', (int) $id)
-            ->get()->getRowArray();
+        $baris = $this->guarded(
+            $db
+                ->table('inventori_non_medis.transaksi_stok ts')
+                ->join(
+                    'inventori_non_medis.tipe_transaksi_stok tts',
+                    'ts.id_tipe_transaksi_stok = tts.id_tipe_transaksi_stok',
+                    'left',
+                )
+                ->join('inventori_non_medis.penerimaan_barang pnb', 'ts.id_penerimaan = pnb.id_penerimaan', 'left')
+                ->join('inventori_non_medis.permintaan_barang pmb', 'ts.id_permintaan = pmb.id_permintaan', 'left')
+                ->select('ts.*, tts.nama_tipe_transaksi_stok, pnb.no_masuk, pmb.no_keluar')
+                ->where('ts.id_transaksi', (int) $id)
+                ->get(),
+        )->getRowArray();
 
-        if (empty($baris)) return $this->index();
+        if ($baris === null)
+            return $this->index();
 
-        $detail_items = $db->table('inventori_non_medis.transaksi_stok_detail d')
-            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-            ->select('d.id_barang, d.qty, d.harga_satuan, d.stok_sebelum, d.stok_sesudah, b.kode_barang, b.nama_barang, s.nama_satuan')
-            ->where('d.id_transaksi', (int) $id)
-            ->get()->getResultArray();
+        $detail_items = $this->guarded(
+            $db
+                ->table('inventori_non_medis.transaksi_stok_detail d')
+                ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+                ->select(
+                    'd.id_barang, d.qty, d.harga_satuan, d.stok_sebelum, d.stok_sesudah, b.kode_barang, b.nama_barang, s.nama_satuan',
+                )
+                ->where('d.id_transaksi', (int) $id)
+                ->get(),
+        )->getResultArray();
 
         return view('admin/inventorinonmedis/detail_transaksi_stok', [
             'judul'        => 'Detail ' . $this->title,

@@ -55,21 +55,33 @@ final class PermintaanBarangDetailController extends ControllerTemplate
         );
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // true jika status permintaan bukan Draf (1) — detail tidak boleh diubah
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function is_locked(int $id_permintaan): bool
     {
         if ($id_permintaan <= 0)
             return false;
-        $row = $this
-            ->get_db()
-            ->table('inventori_non_medis.permintaan_barang')
-            ->select('id_status_permintaan_barang')
-            ->where('id_permintaan', $id_permintaan)
-            ->get()
-            ->getRowArray();
+        $row = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.permintaan_barang')
+                ->select('id_status_permintaan_barang')
+                ->where('id_permintaan', $id_permintaan)
+                ->get(),
+        )->getRowArray();
         return is_array($row) && (int) ($row['id_status_permintaan_barang'] ?? 0) !== 1;
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function create(): string|RedirectResponse
     {
@@ -101,6 +113,7 @@ final class PermintaanBarangDetailController extends ControllerTemplate
         return parent::create();
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
@@ -114,6 +127,7 @@ final class PermintaanBarangDetailController extends ControllerTemplate
         return parent::update($id);
     }
 
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {

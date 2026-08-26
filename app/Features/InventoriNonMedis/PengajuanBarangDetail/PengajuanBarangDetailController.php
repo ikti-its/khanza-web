@@ -56,18 +56,29 @@ final class PengajuanBarangDetailController extends ControllerTemplate
         );
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // true jika status pengajuan bukan Draf (1) — detail tidak boleh diubah
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function is_locked(int $id_pengajuan): bool
     {
         if ($id_pengajuan <= 0)
             return false;
-        $row = $this
-            ->get_db()
-            ->table('inventori_non_medis.pengajuan_barang')
-            ->select('id_status_pengajuan_barang')
-            ->where('id_pengajuan', $id_pengajuan)
-            ->get()
-            ->getRowArray();
+        $row = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.pengajuan_barang')
+                ->select('id_status_pengajuan_barang')
+                ->where('id_pengajuan', $id_pengajuan)
+                ->get(),
+        )->getRowArray();
         return is_array($row) && (int) ($row['id_status_pengajuan_barang'] ?? 0) !== 1;
     }
 
@@ -86,6 +97,7 @@ final class PengajuanBarangDetailController extends ControllerTemplate
     }
 
     // lock check + duplikat check + update total_harga setelah tambah
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function create(): string|RedirectResponse
     {
@@ -122,6 +134,7 @@ final class PengajuanBarangDetailController extends ControllerTemplate
     }
 
     // lock check + update total_harga setelah ubah
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
@@ -140,6 +153,7 @@ final class PengajuanBarangDetailController extends ControllerTemplate
     }
 
     // lock check + update total_harga setelah hapus
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
@@ -157,15 +171,17 @@ final class PengajuanBarangDetailController extends ControllerTemplate
     }
 
     // jumlah subtotal → update total_harga pengajuan
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function recalculate_total(int $id_pengajuan): void
     {
         $db  = $this->get_db();
-        $row = $db
-            ->table('inventori_non_medis.pengajuan_barang_detail')
-            ->selectSum('subtotal')
-            ->where('id_pengajuan', $id_pengajuan)
-            ->get()
-            ->getRowArray();
+        $row = $this->guarded(
+            $db
+                ->table('inventori_non_medis.pengajuan_barang_detail')
+                ->selectSum('subtotal')
+                ->where('id_pengajuan', $id_pengajuan)
+                ->get(),
+        )->getRowArray();
 
         $db
             ->table('inventori_non_medis.pengajuan_barang')

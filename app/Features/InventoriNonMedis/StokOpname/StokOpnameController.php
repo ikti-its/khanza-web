@@ -27,10 +27,10 @@ final class StokOpnameController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE, OPTIONAL, I::INDEX,  'id_opname',             'ID Opname'],
-                [SHOW, REQUIRED, I::DTIME,  'tanggal',               'Tanggal'],
-                [SHOW, OPTIONAL, I::SELECT, 'id_status_stok_opname', 'Status'],
-                [SHOW, REQUIRED, I::SELECT, 'id_petugas',            'Pelaksana'],
+                [HIDE,      OPTIONAL, I::INDEX,  'id_opname',             'ID Opname'],
+                [SHOW,      REQUIRED, I::DTIME,  'tanggal',               'Tanggal'],
+                [SHOW,      OPTIONAL, I::SELECT, 'id_status_stok_opname', 'Status'],
+                [SHOW,      REQUIRED, I::SELECT, 'id_petugas',            'Pelaksana'],
                 [FORM_ONLY, REQUIRED, I::TEXT,   'catatan',               'Catatan'],
             ],
             // child_path: '/inventori-non-medis/detail-stok-opname',
@@ -42,6 +42,15 @@ final class StokOpnameController extends ControllerTemplate
     protected function before_read(): void
     {
         $this->model->set_order('id_opname', 'DESC');
+    }
+
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
     }
 
     // form tambah: 1-page header + detail
@@ -57,20 +66,25 @@ final class StokOpnameController extends ControllerTemplate
     }
 
     // halaman detail (readonly) — view terpisah tanpa form
-    public function detail(int|string $id): string
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    public function detail(int|string $id): string|RedirectResponse
     {
-        if ($id == 0) return $this->index();
+        if ($id == 0)
+            return $this->index();
 
         $baris = $this->model->find_one($id);
 
-        $detail_items = $this->get_db()
-            ->table('inventori_non_medis.stok_opname_detail d')
-            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-            ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, s.nama_satuan')
-            ->where('d.id_opname', (int) $id)
-            ->where('d.id_barang >', 0)
-            ->get()->getResultArray();
+        $detail_items = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.stok_opname_detail d')
+                ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+                ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, s.nama_satuan')
+                ->where('d.id_opname', (int) $id)
+                ->where('d.id_barang >', 0)
+                ->get(),
+        )->getResultArray();
 
         return view('admin/inventorinonmedis/detail_stok_opname', [
             'judul'        => 'Detail ' . $this->title,
@@ -82,8 +96,9 @@ final class StokOpnameController extends ControllerTemplate
     }
 
     // form ubah: 1-page header + detail existing (hanya saat Proses)
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         $baris = $this->model->find_one($id);
 
@@ -92,14 +107,17 @@ final class StokOpnameController extends ControllerTemplate
             return $this->detail($id);
         }
 
-        $detail_items = $this->get_db()
-            ->table('inventori_non_medis.stok_opname_detail d')
-            ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
-            ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-            ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, s.nama_satuan')
-            ->where('d.id_opname', (int) $id)
-            ->where('d.id_barang >', 0)
-            ->get()->getResultArray();
+        $detail_items = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.stok_opname_detail d')
+                ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
+                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+                ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, s.nama_satuan')
+                ->where('d.id_opname', (int) $id)
+                ->where('d.id_barang >', 0)
+                ->get(),
+        )->getResultArray();
 
         return view('admin/inventorinonmedis/tambah_stok_opname', [
             'judul'        => 'Ubah ' . $this->title,
@@ -125,7 +143,10 @@ final class StokOpnameController extends ControllerTemplate
         $db = $this->get_db();
         try {
             $db->transBegin();
-            $db->table('inventori_non_medis.stok_opname_detail')->where('id_opname', (int) $id)->delete();
+            $db
+                ->table('inventori_non_medis.stok_opname_detail')
+                ->where('id_opname', (int) $id)
+                ->delete();
             $this->model->delete($id);
             $db->transCommit();
             session()->setFlashdata('success', 'Data berhasil dihapus.');
@@ -142,9 +163,9 @@ final class StokOpnameController extends ControllerTemplate
     public function create(): string|RedirectResponse
     {
         $postData = [
-            'tanggal'              => $this->request->getPost('tanggal'),
-            'id_petugas'           => $this->request->getPost('id_petugas') ?: null,
-            'catatan'              => $this->request->getPost('catatan'),
+            'tanggal'               => $this->request->getPost('tanggal'),
+            'id_petugas'            => $this->request->getPost('id_petugas') ?: null,
+            'catatan'               => $this->request->getPost('catatan'),
             'id_status_stok_opname' => (int) ($this->request->getPost('id_status_stok_opname') ?? 1),
         ];
 
@@ -156,23 +177,24 @@ final class StokOpnameController extends ControllerTemplate
             $this->model->insert($postData);
             $id_opname = (int) $db->insertID();
 
-            $detail_ids  = $this->request->getPost('detail_id_barang') ?? [];
+            $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+            /** @var array<array-key, mixed> $detail_ids */
             $detail_stok = $this->request->getPost('detail_stok_fisik') ?? [];
+            /** @var array<array-key, mixed> $detail_stok */
 
             for ($i = 0; $i < count($detail_ids); $i++) {
                 $id_barang  = (int) ($detail_ids[$i] ?? 0);
                 $stok_fisik = (int) ($detail_stok[$i] ?? 0);
                 if ($id_barang > 0) {
                     // ambil stok sistem saat ini
-                    $row = $db->table('inventori_non_medis.barang')
-                        ->select('stok')
-                        ->where('id_barang', $id_barang)
-                        ->get()->getRowArray();
+                    $row = $this->guarded(
+                        $db->table('inventori_non_medis.barang')->select('stok')->where('id_barang', $id_barang)->get(),
+                    )->getRowArray();
                     $stok_sistem = (int) ($row['stok'] ?? 0);
 
                     $db->table('inventori_non_medis.stok_opname_detail')->insert([
-                        'id_opname'  => $id_opname,
-                        'id_barang'  => $id_barang,
+                        'id_opname'   => $id_opname,
+                        'id_barang'   => $id_barang,
                         'stok_sistem' => $stok_sistem,
                         'stok_fisik'  => $stok_fisik,
                         'selisih'     => $stok_fisik - $stok_sistem,
@@ -195,7 +217,8 @@ final class StokOpnameController extends ControllerTemplate
     public function update(int|string $id): string|RedirectResponse
     {
         $current = $this->model->find((int) $id);
-        if (!is_array($current)) return $this->home();
+        if (!is_array($current))
+            return $this->home();
 
         $current_status = (int) ($current['id_status_stok_opname'] ?? 0);
         if ($current_status === 2) {
@@ -212,12 +235,17 @@ final class StokOpnameController extends ControllerTemplate
             'id_status_stok_opname' => $new_status,
         ];
 
-        $detail_ids  = $this->request->getPost('detail_id_barang') ?? [];
+        $detail_ids = $this->request->getPost('detail_id_barang') ?? [];
+        /** @var array<array-key, mixed> $detail_ids */
         $detail_stok = $this->request->getPost('detail_stok_fisik') ?? [];
+        /** @var array<array-key, mixed> $detail_stok */
 
         // validasi sebelum Selesai
-        if ($new_status === 2 && empty($detail_ids)) {
-            session()->setFlashdata('error', 'Isi detail stok opname terlebih dahulu sebelum mengubah status menjadi Selesai.');
+        if ($new_status === 2 && count($detail_ids) === 0) {
+            session()->setFlashdata(
+                'error',
+                'Isi detail stok opname terlebih dahulu sebelum mengubah status menjadi Selesai.',
+            );
             return $this->home();
         }
 
@@ -227,7 +255,8 @@ final class StokOpnameController extends ControllerTemplate
             $db->transBegin();
 
             // sync detail
-            $db->table('inventori_non_medis.stok_opname_detail')
+            $db
+                ->table('inventori_non_medis.stok_opname_detail')
                 ->where('id_opname', (int) $id)
                 ->delete();
 
@@ -235,10 +264,9 @@ final class StokOpnameController extends ControllerTemplate
                 $id_barang  = (int) ($detail_ids[$i] ?? 0);
                 $stok_fisik = (int) ($detail_stok[$i] ?? 0);
                 if ($id_barang > 0) {
-                    $row = $db->table('inventori_non_medis.barang')
-                        ->select('stok')
-                        ->where('id_barang', $id_barang)
-                        ->get()->getRowArray();
+                    $row = $this->guarded(
+                        $db->table('inventori_non_medis.barang')->select('stok')->where('id_barang', $id_barang)->get(),
+                    )->getRowArray();
                     $stok_sistem = (int) ($row['stok'] ?? 0);
 
                     $db->table('inventori_non_medis.stok_opname_detail')->insert([
@@ -256,13 +284,16 @@ final class StokOpnameController extends ControllerTemplate
             $db->transCommit();
 
             // buat transaksi stok opname jika status → Selesai
-            $is_new_selesai = ($new_status === 2 && $current_status !== 2);
+            $is_new_selesai = $new_status === 2 && $current_status !== 2;
             if ($is_new_selesai) {
                 try {
                     $this->create_transaksi_stok_opname((int) $id);
                 } catch (\Throwable $e) {
                     log_message('error', '[StokOpname] create_transaksi_stok_opname: ' . $e->getMessage());
-                    session()->setFlashdata('error', 'Status berhasil diubah, namun gagal membuat transaksi stok: ' . $e->getMessage());
+                    session()->setFlashdata(
+                        'error',
+                        'Status berhasil diubah, namun gagal membuat transaksi stok: ' . $e->getMessage(),
+                    );
                     return $this->home();
                 }
             }
@@ -277,18 +308,24 @@ final class StokOpnameController extends ControllerTemplate
     }
 
     // catat penyesuaian stok, update stok barang ke nilai fisik (hanya yang ada selisih)
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function create_transaksi_stok_opname(int $id_opname): void
     {
         $db = $this->get_db();
 
-        $details = $db->table('inventori_non_medis.stok_opname_detail')
-            ->select('id_barang, stok_sistem, stok_fisik, selisih')
-            ->where('id_opname', $id_opname)
-            ->where('id_barang >', 0)
-            ->where('selisih !=', 0)
-            ->get()->getResultArray();
+        $details = $this->guarded(
+            $db
+                ->table('inventori_non_medis.stok_opname_detail')
+                ->select('id_barang, stok_sistem, stok_fisik, selisih')
+                ->where('id_opname', $id_opname)
+                ->where('id_barang >', 0)
+                ->where('selisih !=', 0)
+                ->get(),
+        )->getResultArray();
+        /** @var list<array<string, mixed>> $details */
 
-        if (empty($details)) return;
+        if (count($details) === 0)
+            return;
 
         $now = date('Y-m-d H:i:s');
         $db->transBegin();
@@ -314,7 +351,8 @@ final class StokOpnameController extends ControllerTemplate
                 'stok_sesudah' => $stok_fisik,
             ]);
 
-            $db->table('inventori_non_medis.barang')
+            $db
+                ->table('inventori_non_medis.barang')
                 ->where('id_barang', (int) $d['id_barang'])
                 ->set('stok', $stok_fisik)
                 ->update();

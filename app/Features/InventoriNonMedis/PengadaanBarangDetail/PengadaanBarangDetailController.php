@@ -42,6 +42,15 @@ final class PengadaanBarangDetailController extends ControllerTemplate
         );
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // hitung ulang subtotal
     #[\Override]
     protected function before_update(array &$postData, int|string $id): void
@@ -52,6 +61,7 @@ final class PengadaanBarangDetailController extends ControllerTemplate
     }
 
     // validasi total qty seluruh pengadaan ≤ qty disetujui pengajuan, update total_harga pengadaan
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
@@ -61,19 +71,20 @@ final class PengadaanBarangDetailController extends ControllerTemplate
             $id_barang    = (int) ($row['id_barang'] ?? 0);
             if ($id_pengadaan > 0 && $id_barang > 0) {
                 $db    = $this->get_db();
-                $limit = $db
-                    ->table('inventori_non_medis.pengadaan_barang pb')
-                    ->join(
-                        'inventori_non_medis.pengajuan_barang_detail pjd',
-                        'pb.id_pengajuan = pjd.id_pengajuan',
-                        'left',
-                    )
-                    ->select('pb.id_pengajuan, pjd.qty_disetujui')
-                    ->where('pb.id_pengadaan', $id_pengadaan)
-                    ->where('pb.id_pengajuan >', 0)
-                    ->where('pjd.id_barang', $id_barang)
-                    ->get()
-                    ->getRowArray();
+                $limit = $this->guarded(
+                    $db
+                        ->table('inventori_non_medis.pengadaan_barang pb')
+                        ->join(
+                            'inventori_non_medis.pengajuan_barang_detail pjd',
+                            'pb.id_pengajuan = pjd.id_pengajuan',
+                            'left',
+                        )
+                        ->select('pb.id_pengajuan, pjd.qty_disetujui')
+                        ->where('pb.id_pengadaan', $id_pengadaan)
+                        ->where('pb.id_pengajuan >', 0)
+                        ->where('pjd.id_barang', $id_barang)
+                        ->get(),
+                )->getRowArray();
 
                 if (is_array($limit)) {
                     $qty_disetujui = (float) ($limit['qty_disetujui'] ?? 0);
@@ -83,19 +94,20 @@ final class PengadaanBarangDetailController extends ControllerTemplate
                     if ($qty_disetujui > 0 && $id_pengajuan > 0) {
                         // total qty di semua pengadaan lain untuk pengajuan+barang yang sama
                         $already = (float) (
-                            $db
-                                ->table('inventori_non_medis.pengadaan_barang_detail pbd')
-                                ->join(
-                                    'inventori_non_medis.pengadaan_barang pb2',
-                                    'pbd.id_pengadaan = pb2.id_pengadaan',
-                                    'left',
-                                )
-                                ->selectSum('pbd.qty', 'total')
-                                ->where('pb2.id_pengajuan', $id_pengajuan)
-                                ->where('pbd.id_barang', $id_barang)
-                                ->where('pbd.id_detail !=', (int) $id)
-                                ->get()
-                                ->getRowArray()['total'] ?? 0
+                            $this->guarded(
+                                $db
+                                    ->table('inventori_non_medis.pengadaan_barang_detail pbd')
+                                    ->join(
+                                        'inventori_non_medis.pengadaan_barang pb2',
+                                        'pbd.id_pengadaan = pb2.id_pengadaan',
+                                        'left',
+                                    )
+                                    ->selectSum('pbd.qty', 'total')
+                                    ->where('pb2.id_pengajuan', $id_pengajuan)
+                                    ->where('pbd.id_barang', $id_barang)
+                                    ->where('pbd.id_detail !=', (int) $id)
+                                    ->get(),
+                            )->getRowArray()['total'] ?? 0
                         );
 
                         if (($qty_new + $already) > $qty_disetujui) {
@@ -120,6 +132,7 @@ final class PengadaanBarangDetailController extends ControllerTemplate
     }
 
     // update total_harga pengadaan setelah baris dihapus
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function delete(int|string $id): string|RedirectResponse
     {
@@ -134,15 +147,17 @@ final class PengadaanBarangDetailController extends ControllerTemplate
     }
 
     // jumlah subtotal → update total_harga pengadaan
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function recalculate_total(int $id_pengadaan): void
     {
         $db  = $this->get_db();
-        $row = $db
-            ->table('inventori_non_medis.pengadaan_barang_detail')
-            ->selectSum('subtotal')
-            ->where('id_pengadaan', $id_pengadaan)
-            ->get()
-            ->getRowArray();
+        $row = $this->guarded(
+            $db
+                ->table('inventori_non_medis.pengadaan_barang_detail')
+                ->selectSum('subtotal')
+                ->where('id_pengadaan', $id_pengadaan)
+                ->get(),
+        )->getRowArray();
 
         $db
             ->table('inventori_non_medis.pengadaan_barang')

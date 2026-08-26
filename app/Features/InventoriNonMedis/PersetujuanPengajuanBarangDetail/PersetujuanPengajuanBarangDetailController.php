@@ -15,9 +15,9 @@ final class PersetujuanPengajuanBarangDetailController extends ControllerTemplat
         parent::__construct(
             new PersetujuanPengajuanBarangDetailModel(),
             [
-                ['Inventori Non Medis',         'inventori_non_medis'],
+                ['Inventori Non Medis',          'inventori_non_medis'],
                 ['Persetujuan Pengajuan Barang', 'persetujuan_pengajuan_barang'],
-                ['Detail',                      'detail'],
+                ['Detail',                       'detail'],
             ],
             'Persetujuan Pengajuan Barang Detail',
             [
@@ -47,24 +47,35 @@ final class PersetujuanPengajuanBarangDetailController extends ControllerTemplat
         );
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // true jika pengajuan sudah Disetujui (2) atau Ditolak (3) — qty tidak bisa diubah lagi
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function is_locked(int $id_pengajuan): bool
     {
         if ($id_pengajuan <= 0)
             return false;
-        $row = $this
-            ->get_db()
-            ->table('inventori_non_medis.pengajuan_barang')
-            ->select('id_status_pengajuan_barang')
-            ->where('id_pengajuan', $id_pengajuan)
-            ->get()
-            ->getRowArray();
+        $row = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.pengajuan_barang')
+                ->select('id_status_pengajuan_barang')
+                ->where('id_pengajuan', $id_pengajuan)
+                ->get(),
+        )->getRowArray();
         return is_array($row) && in_array((int) ($row['id_status_pengajuan_barang'] ?? 0), [2, 3], true);
     }
 
     // jika id_barang sudah terpetakan, tampilkan nama_barang (readonly) bukan SELECT pemetaan
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         if ($id == 0)
             return $this->index();
@@ -74,6 +85,7 @@ final class PersetujuanPengajuanBarangDetailController extends ControllerTemplat
 
         if (is_array($data) && (int) ($data['id_barang'] ?? 0) > 0) {
             foreach ($konfig as &$field) {
+                /** @var array<int, mixed> $field */
                 if (($field[2] ?? '') === 'id_barang') {
                     $field[2] = 'nama_barang';
                     $field[3] = 'readonly';
@@ -118,6 +130,7 @@ final class PersetujuanPengajuanBarangDetailController extends ControllerTemplat
 
     // lock check: baris yang belum dipetakan (id_barang IS NULL) dikecualikan dari lock
     // update total setelah simpan
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
     {
@@ -143,15 +156,17 @@ final class PersetujuanPengajuanBarangDetailController extends ControllerTemplat
     }
 
     // jumlah subtotal → update total_harga pengajuan
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function recalculate_total(int $id_pengajuan): void
     {
         $db  = $this->get_db();
-        $row = $db
-            ->table('inventori_non_medis.pengajuan_barang_detail')
-            ->selectSum('subtotal')
-            ->where('id_pengajuan', $id_pengajuan)
-            ->get()
-            ->getRowArray();
+        $row = $this->guarded(
+            $db
+                ->table('inventori_non_medis.pengajuan_barang_detail')
+                ->selectSum('subtotal')
+                ->where('id_pengajuan', $id_pengajuan)
+                ->get(),
+        )->getRowArray();
 
         $db
             ->table('inventori_non_medis.pengajuan_barang')

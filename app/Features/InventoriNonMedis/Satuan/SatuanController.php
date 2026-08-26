@@ -34,14 +34,28 @@ final class SatuanController extends ControllerTemplate
         );
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
+    /**
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     public function list(): ResponseInterface
     {
-        $data = $this->model
-            ->builder()
-            ->select('id_satuan, kode_satuan, nama_satuan')
-            ->orderBy('nama_satuan', 'ASC')
-            ->get()
-            ->getResultArray();
+        $data = $this->guarded(
+            $this->model
+                ->builder()
+                ->select('id_satuan, kode_satuan, nama_satuan')
+                ->orderBy('nama_satuan', 'ASC')
+                ->get(),
+        )->getResultArray();
 
         return $this->response->setJSON(['data' => $data]);
     }

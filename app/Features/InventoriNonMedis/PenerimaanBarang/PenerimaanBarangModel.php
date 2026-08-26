@@ -28,14 +28,24 @@ final class PenerimaanBarangModel extends ModelTemplate
         );
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // hanya tampilkan pengadaan yang masih punya sisa qty belum diterima (status Lengkap = 2)
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function get_all_options(): array
     {
         $options = parent::get_all_options();
 
         if (isset($options['id_pengadaan'])) {
-            $rows = $this->db->query('
+            $rows = $this->guarded($this->db->query('
                 SELECT DISTINCT pbd.id_pengadaan
                 FROM inventori_non_medis.pengadaan_barang_detail pbd
                 WHERE pbd.id_barang > 0
@@ -48,7 +58,7 @@ final class PenerimaanBarangModel extends ModelTemplate
                       AND prbd.id_barang = pbd.id_barang
                       AND prb.id_status_penerimaan_barang = 2
                   ) < pbd.qty
-            ')->getResultArray();
+            '))->getResultArray();
 
             $available = array_map(fn(array $r) => (string) $r['id_pengadaan'], $rows);
 

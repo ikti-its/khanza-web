@@ -6,6 +6,7 @@ namespace App\Features\InventoriNonMedis\Suplier;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 
 final class SuplierController extends ControllerTemplate
@@ -40,7 +41,17 @@ final class SuplierController extends ControllerTemplate
         );
     }
 
+    // narrows the query-result union (bool|Query|BaseResult) that mago infers
+    // for ->get()/->query(), matching ModelTemplate::guarded_get() convention.
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function guarded(mixed $result): \CodeIgniter\Database\BaseResult
+    {
+        assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
+        return $result;
+    }
+
     // inject pilihan bank ke field id_bank pas render form
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     protected function get_fields_with_options(bool $include_pk = false, bool $is_form = false): array
     {
@@ -48,14 +59,14 @@ final class SuplierController extends ControllerTemplate
         if (!$is_form)
             return $fields;
 
-        $banks = $this
-            ->get_db()
-            ->query('SELECT id_bank, nama_bank FROM finansial.bank WHERE id_bank > 0 ORDER BY nama_bank')
-            ->getResultArray();
+        $banks = $this->guarded($this->get_db()->query(
+            'SELECT id_bank, nama_bank FROM finansial.bank WHERE id_bank > 0 ORDER BY nama_bank',
+        ))->getResultArray();
 
         $bank_options = array_map(fn(array $b): array => [$b['nama_bank'] ?? '-', (string) $b['id_bank']], $banks);
 
         foreach ($fields as &$field) {
+            /** @var array<int, mixed> $field */
             if ($field[2] === 'id_bank') {
                 $field[5] = $bank_options;
             }
@@ -65,36 +76,42 @@ final class SuplierController extends ControllerTemplate
         return $fields;
     }
 
-    /** Ambil data suplier + nama kota & data rekening (bank, nomor, nama akun) untuk prefill form custom */
+    /**
+     * Ambil data suplier + nama kota & data rekening (bank, nomor, nama akun) untuk prefill form custom
+     *
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     private function get_baris_with_relasi(int|string $id): array|null
     {
         $data = $this->model->find($id);
         if (!is_array($data))
             return null;
 
-        $data += ['id_bank' => null, 'nomor_rekening' => null, 'nama_akun' => null, 'nama_bank' => null, 'nama_kota' => null];
+        $data += [
+            'id_bank'        => null,
+            'nomor_rekening' => null,
+            'nama_akun'      => null,
+            'nama_bank'      => null,
+            'nama_kota'      => null,
+        ];
 
-        if (!empty($data['id_kota'])) {
-            $kota = $this->get_db()->query(
-                'SELECT nama_kota FROM lokasi.kota WHERE id_kota = ?',
-                [(int) $data['id_kota']],
-            )->getRowArray();
+        if ($data['id_kota']) {
+            $kota = $this->guarded($this->get_db()->query('SELECT nama_kota FROM lokasi.kota WHERE id_kota = ?', [
+                (int) $data['id_kota'],
+            ]))->getRowArray();
             if (is_array($kota)) {
                 $data['nama_kota'] = $kota['nama_kota'];
             }
         }
 
-        if (!empty($data['id_rekening'])) {
-            $rekening = $this
-                ->get_db()
-                ->query(
-                    'SELECT r.bank AS id_bank, r.nomor_rekening, r.nama_akun, b.nama_bank
+        if ($data['id_rekening']) {
+            $rekening = $this->guarded($this->get_db()->query(
+                'SELECT r.bank AS id_bank, r.nomor_rekening, r.nama_akun, b.nama_bank
                      FROM finansial.rekening r
                      LEFT JOIN finansial.bank b ON b.id_bank = r.bank
                      WHERE r.id_rekening = ?',
-                    [(int) $data['id_rekening']],
-                )
-                ->getRowArray();
+                [(int) $data['id_rekening']],
+            ))->getRowArray();
 
             if (is_array($rekening)) {
                 $data = array_merge($data, $rekening);
@@ -105,8 +122,9 @@ final class SuplierController extends ControllerTemplate
     }
 
     // custom view yang sama dengan tambah, dengan modal kota & bank (bukan dropdown generik)
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
-    public function update_page(int|string $id): string
+    public function update_page(int|string $id): string|RedirectResponse
     {
         if ($id == 0)
             return $this->index();
@@ -121,6 +139,7 @@ final class SuplierController extends ControllerTemplate
     }
 
     // form tambah gagal validasi: render ulang view custom yang sama, bukan layout generik
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     protected function create_view(array $baris = []): string
     {
@@ -135,6 +154,7 @@ final class SuplierController extends ControllerTemplate
     }
 
     // form ubah gagal validasi: render ulang view custom yang sama dengan input yang baru disubmit
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     protected function update_error_view(int|string $id, string $msg, array $postData = []): string
     {
@@ -152,11 +172,14 @@ final class SuplierController extends ControllerTemplate
     }
 
     // generate kode suplier format S0001, S0002, dst
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     private function generate_kode(): string
     {
-        $row = $this->get_db()->query("SELECT MAX(CAST(SUBSTRING(TRIM(kode_suplier) FROM 2) AS INTEGER)) AS max_num
+        $row = $this->guarded($this->get_db()->query(
+            "SELECT MAX(CAST(SUBSTRING(TRIM(kode_suplier) FROM 2) AS INTEGER)) AS max_num
                  FROM inventori_non_medis.suplier
-                 WHERE TRIM(kode_suplier) ~ '^S[0-9]+$'")->getRowArray();
+                 WHERE TRIM(kode_suplier) ~ '^S[0-9]+$'",
+        ))->getRowArray();
 
         $next = (int) ($row['max_num'] ?? 0) + 1;
         return 'S' . str_pad((string) $next, 4, '0', STR_PAD_LEFT);
@@ -170,17 +193,19 @@ final class SuplierController extends ControllerTemplate
     }
 
     // pre-fill kode_suplier dengan kode otomatis, custom view dengan modal kota
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function create_page(): string
     {
-        $banks = $this
-            ->get_db()
-            ->table('finansial.bank')
-            ->select('id_bank, nama_bank')
-            ->where('id_bank >', 0)
-            ->orderBy('nama_bank', 'ASC')
-            ->get()
-            ->getResultArray();
+        $banks = $this->guarded(
+            $this
+                ->get_db()
+                ->table('finansial.bank')
+                ->select('id_bank, nama_bank')
+                ->where('id_bank >', 0)
+                ->orderBy('nama_bank', 'ASC')
+                ->get(),
+        )->getResultArray();
 
         return view('admin/inventorinonmedis/tambah_suplier', [
             'judul'        => 'Tambah ' . $this->title,
@@ -192,19 +217,25 @@ final class SuplierController extends ControllerTemplate
         ]);
     }
 
+    /**
+     * @throws \CodeIgniter\Exceptions\ModelException
+     * @throws \CodeIgniter\Database\Exceptions\DatabaseException
+     */
     public function list(): ResponseInterface
     {
-        $data = $this->model
-            ->builder()
-            ->select('id_suplier, kode_suplier, nama_suplier')
-            ->orderBy('nama_suplier', 'ASC')
-            ->get()
-            ->getResultArray();
+        $data = $this->guarded(
+            $this->model
+                ->builder()
+                ->select('id_suplier, kode_suplier, nama_suplier')
+                ->orderBy('nama_suplier', 'ASC')
+                ->get(),
+        )->getResultArray();
 
         return $this->response->setJSON(['data' => $data]);
     }
 
     // simpan rekening baru ke finansial.rekening, link id_rekening ke suplier
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     protected function before_create(array &$postData): void
     {
@@ -227,6 +258,7 @@ final class SuplierController extends ControllerTemplate
     }
 
     // update rekening yang sudah ada, atau insert baru kalau belum punya rekening
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     protected function before_update(array &$postData, int|string $id): void
     {
