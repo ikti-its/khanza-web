@@ -162,11 +162,13 @@ final class StokOpnameController extends ControllerTemplate
     #[\Override]
     public function create(): string|RedirectResponse
     {
+        $new_status = (int) ($this->request->getPost('id_status_stok_opname') ?? 1);
+
         $postData = [
             'tanggal'               => $this->request->getPost('tanggal'),
             'id_petugas'            => $this->request->getPost('id_petugas') ?: null,
             'catatan'               => $this->request->getPost('catatan'),
-            'id_status_stok_opname' => (int) ($this->request->getPost('id_status_stok_opname') ?? 1),
+            'id_status_stok_opname' => $new_status,
         ];
 
         $db = $this->get_db();
@@ -203,6 +205,21 @@ final class StokOpnameController extends ControllerTemplate
             }
 
             $db->transCommit();
+
+            // buat transaksi stok opname jika langsung disimpan sebagai Selesai
+            if ($new_status === 2) {
+                try {
+                    $this->create_transaksi_stok_opname($id_opname);
+                } catch (\Throwable $e) {
+                    log_message('error', '[StokOpname::create] create_transaksi_stok_opname: ' . $e->getMessage());
+                    session()->setFlashdata(
+                        'error',
+                        'Data tersimpan, namun gagal membuat transaksi stok: ' . $e->getMessage(),
+                    );
+                    return $this->home();
+                }
+            }
+
             session()->setFlashdata('success', 'Data Stok Opname berhasil disimpan.');
         } catch (\Throwable $e) {
             $db->transRollback();
