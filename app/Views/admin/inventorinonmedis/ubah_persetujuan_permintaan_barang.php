@@ -89,6 +89,7 @@
                                 <th class="p-3 border text-center font-semibold">Kode</th>
                                 <th class="p-3 border text-center font-semibold">Nama Barang</th>
                                 <th class="p-3 border text-center font-semibold">Satuan</th>
+                                <th class="p-3 border text-center font-semibold w-24">Stok Saat Ini</th>
                                 <th class="p-3 border text-center font-semibold w-28">Qty Diminta</th>
                                 <th class="p-3 border text-center font-semibold w-32">Qty Disetujui</th>
                             </tr>
@@ -107,6 +108,7 @@
                                     </td>
                                     <td class="p-3 border"><?= esc($isBaru ? $item['nama_barang_baru'] : ($item['nama_barang'] ?? '-')) ?></td>
                                     <td class="p-3 border text-center"><?= esc($item['nama_satuan'] ?? '-') ?></td>
+                                    <td class="p-3 border text-center"><?= isset($item['stok']) ? esc((string) $item['stok']) : '-' ?></td>
                                     <td class="p-3 border text-center"><?= $item['qty'] ?? 0 ?></td>
                                     <td class="p-3 border text-center">
                                         <input type="number" name="detail_qty_disetujui[]" value="<?= $item['qty_disetujui'] ?? $item['qty'] ?? 0 ?>" min="0" max="<?= $item['qty'] ?? 0 ?>"
@@ -118,7 +120,7 @@
                                 </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <tr><td colspan="5" class="p-4 text-center text-gray-400 italic">Tidak ada detail barang.</td></tr>
+                                <tr><td colspan="6" class="p-4 text-center text-gray-400 italic">Tidak ada detail barang.</td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>

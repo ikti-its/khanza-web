@@ -89,6 +89,7 @@
                                 <th class="p-3 border text-center font-semibold">Kode</th>
                                 <th class="p-3 border text-center font-semibold">Nama Barang</th>
                                 <th class="p-3 border text-center font-semibold">Satuan</th>
+                                <th class="p-3 border text-center font-semibold w-24">Stok Saat Ini</th>
                                 <th class="p-3 border text-center font-semibold w-24">Qty</th>
                                 <th class="p-3 border text-center font-semibold w-28">Harga</th>
                                 <th class="p-3 border text-center font-semibold w-32">Qty Disetujui</th>
@@ -101,6 +102,7 @@
                                     <td class="p-3 border text-center"><?= esc($item['kode_barang'] ?? '-') ?></td>
                                     <td class="p-3 border"><?= esc($item['nama_barang'] ?? '-') ?></td>
                                     <td class="p-3 border text-center"><?= esc($item['nama_satuan'] ?? '-') ?></td>
+                                    <td class="p-3 border text-center"><?= isset($item['stok']) ? esc((string) $item['stok']) : '-' ?></td>
                                     <td class="p-3 border text-center"><?= $item['qty'] ?? 0 ?></td>
                                     <td class="p-3 border text-right"><?= number_format((float)($item['harga'] ?? 0), 0, ',', '.') ?></td>
                                     <td class="p-3 border text-center">
@@ -111,7 +113,7 @@
                                 </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <tr><td colspan="6" class="p-4 text-center text-gray-400 italic">Tidak ada detail barang.</td></tr>
+                                <tr><td colspan="7" class="p-4 text-center text-gray-400 italic">Tidak ada detail barang.</td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>

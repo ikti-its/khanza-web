@@ -91,6 +91,7 @@
                         <th class="text-left py-2 font-medium">Kode</th>
                         <th class="text-left py-2 font-medium">Nama Barang</th>
                         <th class="text-center py-2 font-medium">Satuan</th>
+                        <th class="text-center py-2 font-medium">Stok Saat Ini</th>
                         <th class="text-center py-2 font-medium">Qty Diminta</th>
                         <th class="text-center py-2 font-medium">Qty Disetujui</th>
                     </tr>
@@ -108,6 +109,7 @@
                         </td>
                         <td class="py-2 font-semibold"><?= esc($isBaru ? $item['nama_barang_baru'] : ($item['nama_barang'] ?? '-')) ?></td>
                         <td class="py-2 text-center"><?= esc($item['nama_satuan'] ?? '-') ?></td>
+                        <td class="py-2 text-center"><?= isset($item['stok']) ? esc((string) $item['stok']) : '-' ?></td>
                         <td class="py-2 text-center font-semibold"><?= $item['qty'] ?? 0 ?></td>
                         <td class="py-2 text-center font-semibold"><?= $item['qty_disetujui'] ?? 0 ?></td>
                     </tr>

@@ -118,7 +118,7 @@ final class PersetujuanPermintaanBarangController extends ControllerTemplate
                 ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
                 ->join('inventori_non_medis.satuan s2', 'd.id_satuan_baru = s2.id_satuan', 'left')
                 ->select(
-                    'd.id_detail, d.id_barang, d.qty, d.qty_disetujui, d.nama_barang_baru, d.id_satuan_baru, d.id_jenis_barang_baru, b.kode_barang, b.nama_barang, COALESCE(s.nama_satuan, s2.nama_satuan) AS nama_satuan',
+                    'd.id_detail, d.id_barang, d.qty, d.qty_disetujui, d.nama_barang_baru, d.id_satuan_baru, d.id_jenis_barang_baru, b.kode_barang, b.nama_barang, b.stok, COALESCE(s.nama_satuan, s2.nama_satuan) AS nama_satuan',
                 )
                 ->where('d.id_permintaan', (int) $id)
                 ->groupStart()
@@ -161,7 +161,7 @@ final class PersetujuanPermintaanBarangController extends ControllerTemplate
                 ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
                 ->join('inventori_non_medis.satuan s2', 'd.id_satuan_baru = s2.id_satuan', 'left')
                 ->select(
-                    'd.id_detail, d.id_barang, d.qty, d.qty_disetujui, d.nama_barang_baru, d.id_satuan_baru, d.id_jenis_barang_baru, b.kode_barang, b.nama_barang, COALESCE(s.nama_satuan, s2.nama_satuan) AS nama_satuan',
+                    'd.id_detail, d.id_barang, d.qty, d.qty_disetujui, d.nama_barang_baru, d.id_satuan_baru, d.id_jenis_barang_baru, b.kode_barang, b.nama_barang, b.stok, COALESCE(s.nama_satuan, s2.nama_satuan) AS nama_satuan',
                 )
                 ->where('d.id_permintaan', (int) $id)
                 ->groupStart()

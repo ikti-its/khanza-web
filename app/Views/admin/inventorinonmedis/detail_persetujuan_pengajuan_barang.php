@@ -83,6 +83,7 @@
                         <th class="text-left py-2 font-medium">Kode</th>
                         <th class="text-left py-2 font-medium">Nama Barang</th>
                         <th class="text-center py-2 font-medium">Satuan</th>
+                        <th class="text-center py-2 font-medium">Stok Saat Ini</th>
                         <th class="text-center py-2 font-medium">Qty</th>
                         <th class="text-right py-2 font-medium">Harga</th>
                         <th class="text-center py-2 font-medium">Qty Disetujui</th>
@@ -94,6 +95,7 @@
                         <td class="py-2 font-mono text-sm"><?= esc($item['kode_barang'] ?? '-') ?></td>
                         <td class="py-2 font-semibold"><?= esc($item['nama_barang'] ?? '-') ?></td>
                         <td class="py-2 text-center"><?= esc($item['nama_satuan'] ?? '-') ?></td>
+                        <td class="py-2 text-center"><?= isset($item['stok']) ? esc((string) $item['stok']) : '-' ?></td>
                         <td class="py-2 text-center font-semibold"><?= $item['qty'] ?? 0 ?></td>
                         <td class="py-2 text-right font-semibold"><?= number_format((float)($item['harga'] ?? 0), 0, ',', '.') ?></td>
                         <td class="py-2 text-center font-semibold"><?= $item['qty_disetujui'] ?? 0 ?></td>
