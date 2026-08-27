@@ -31,6 +31,7 @@ final class StokOpnameController extends ControllerTemplate
                 [SHOW,      REQUIRED, I::DTIME,  'tanggal',               'Tanggal'],
                 [SHOW,      OPTIONAL, I::SELECT, 'id_status_stok_opname', 'Status'],
                 [SHOW,      REQUIRED, I::SELECT, 'id_petugas',            'Pelaksana'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,  'total_nominal',         'Total Nominal'],
                 [FORM_ONLY, REQUIRED, I::TEXT,   'catatan',               'Catatan'],
             ],
             // child_path: '/inventori-non-medis/detail-stok-opname',
@@ -51,6 +52,48 @@ final class StokOpnameController extends ControllerTemplate
     {
         assert($result instanceof \CodeIgniter\Database\BaseResult, 'Query gagal dieksekusi.');
         return $result;
+    }
+
+    // tambahkan kolom total nominal (selisih x harga_satuan) per opname untuk laporan bulanan
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    #[\Override]
+    protected function after_read(array &$data_tabel): void
+    {
+        if (count($data_tabel) === 0)
+            return;
+
+        $db = $this->get_db();
+        foreach ($data_tabel as &$row) {
+            /** @var array<string, mixed> $row */
+            $id = (int) ($row['id_opname'] ?? 0);
+            if ($id === 0) {
+                $row['total_nominal'] = '-';
+                continue;
+            }
+
+            $total = (float) ($this->guarded($db->query(
+                'SELECT COALESCE(SUM(d.selisih * COALESCE(b.harga_satuan, 0)), 0) AS total
+                 FROM inventori_non_medis.stok_opname_detail d
+                 LEFT JOIN inventori_non_medis.barang b ON d.id_barang = b.id_barang
+                 WHERE d.id_opname = ?',
+                [$id],
+            ))->getRowArray()['total'] ?? 0);
+
+            $row['total_nominal'] = $this->format_nominal($total);
+        }
+        unset($row);
+    }
+
+    // format nominal rupiah dengan pewarnaan: biru = kelebihan, merah = kekurangan, abu-abu = pas
+    private function format_nominal(float $nominal): string
+    {
+        $formatted = 'Rp ' . number_format(abs($nominal), 0, ',', '.');
+
+        if ($nominal > 0)
+            return '<span class="text-blue-600 font-semibold">+' . $formatted . '</span>';
+        if ($nominal < 0)
+            return '<span class="text-red-600 font-semibold">-' . $formatted . '</span>';
+        return '<span class="text-gray-400 font-semibold">' . $formatted . '</span>';
     }
 
     // form tambah: 1-page header + detail
@@ -80,7 +123,7 @@ final class StokOpnameController extends ControllerTemplate
                 ->table('inventori_non_medis.stok_opname_detail d')
                 ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
                 ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-                ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, s.nama_satuan')
+                ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, b.harga_satuan, s.nama_satuan')
                 ->where('d.id_opname', (int) $id)
                 ->where('d.id_barang >', 0)
                 ->get(),
@@ -113,7 +156,7 @@ final class StokOpnameController extends ControllerTemplate
                 ->table('inventori_non_medis.stok_opname_detail d')
                 ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
                 ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-                ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, s.nama_satuan')
+                ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, b.harga_satuan, s.nama_satuan')
                 ->where('d.id_opname', (int) $id)
                 ->where('d.id_barang >', 0)
                 ->get(),
