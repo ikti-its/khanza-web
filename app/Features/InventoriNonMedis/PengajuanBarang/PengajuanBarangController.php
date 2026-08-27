@@ -127,7 +127,9 @@ final class PengajuanBarangController extends ControllerTemplate
                 ->get_db()
                 ->table('inventori_non_medis.barang b')
                 ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-                ->select('b.id_barang, b.kode_barang, b.nama_barang, s.nama_satuan, b.harga_satuan, b.stok, b.stok_minimum')
+                ->select(
+                    'b.id_barang, b.kode_barang, b.nama_barang, s.nama_satuan, b.harga_satuan, b.stok, b.stok_minimum',
+                )
                 ->whereIn('b.id_barang', $ids)
                 ->get(),
         )->getResultArray();

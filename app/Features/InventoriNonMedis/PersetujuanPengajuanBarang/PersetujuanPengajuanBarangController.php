@@ -105,7 +105,9 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
                 ->table('inventori_non_medis.pengajuan_barang_detail d')
                 ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
                 ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-                ->select('d.id_barang, d.qty, d.qty_disetujui, d.harga, b.kode_barang, b.nama_barang, b.stok, s.nama_satuan')
+                ->select(
+                    'd.id_barang, d.qty, d.qty_disetujui, d.harga, b.kode_barang, b.nama_barang, b.stok, s.nama_satuan',
+                )
                 ->where('d.id_pengajuan', (int) $id)
                 ->where('d.id_barang >', 0)
                 ->get(),
@@ -142,7 +144,9 @@ final class PersetujuanPengajuanBarangController extends ControllerTemplate
                 ->table('inventori_non_medis.pengajuan_barang_detail d')
                 ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
                 ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-                ->select('d.id_barang, d.qty, d.qty_disetujui, d.harga, b.kode_barang, b.nama_barang, b.stok, s.nama_satuan')
+                ->select(
+                    'd.id_barang, d.qty, d.qty_disetujui, d.harga, b.kode_barang, b.nama_barang, b.stok, s.nama_satuan',
+                )
                 ->where('d.id_pengajuan', (int) $id)
                 ->where('d.id_barang >', 0)
                 ->get(),

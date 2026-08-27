@@ -27,12 +27,12 @@ final class StokOpnameController extends ControllerTemplate
                 A::DELETE,
             ],
             [
-                [HIDE,      OPTIONAL, I::INDEX,  'id_opname',             'ID Opname'],
-                [SHOW,      REQUIRED, I::DTIME,  'tanggal',               'Tanggal'],
-                [SHOW,      OPTIONAL, I::SELECT, 'id_status_stok_opname', 'Status'],
-                [SHOW,      REQUIRED, I::SELECT, 'id_petugas',            'Pelaksana'],
-                [TABLE_ONLY, OPTIONAL, I::TEXT,  'total_nominal',         'Total Nominal'],
-                [FORM_ONLY, REQUIRED, I::TEXT,   'catatan',               'Catatan'],
+                [HIDE,       OPTIONAL, I::INDEX,  'id_opname',             'ID Opname'],
+                [SHOW,       REQUIRED, I::DTIME,  'tanggal',               'Tanggal'],
+                [SHOW,       OPTIONAL, I::SELECT, 'id_status_stok_opname', 'Status'],
+                [SHOW,       REQUIRED, I::SELECT, 'id_petugas',            'Pelaksana'],
+                [TABLE_ONLY, OPTIONAL, I::TEXT,   'total_nominal',         'Total Nominal'],
+                [FORM_ONLY,  REQUIRED, I::TEXT,   'catatan',               'Catatan'],
             ],
             // child_path: '/inventori-non-medis/detail-stok-opname',
             // child_fk: 'id_opname',
@@ -71,13 +71,12 @@ final class StokOpnameController extends ControllerTemplate
                 continue;
             }
 
-            $total = (float) ($this->guarded($db->query(
-                'SELECT COALESCE(SUM(d.selisih * COALESCE(b.harga_satuan, 0)), 0) AS total
+            $total = (float) (
+                $this->guarded($db->query('SELECT COALESCE(SUM(d.selisih * COALESCE(b.harga_satuan, 0)), 0) AS total
                  FROM inventori_non_medis.stok_opname_detail d
                  LEFT JOIN inventori_non_medis.barang b ON d.id_barang = b.id_barang
-                 WHERE d.id_opname = ?',
-                [$id],
-            ))->getRowArray()['total'] ?? 0);
+                 WHERE d.id_opname = ?', [$id]))->getRowArray()['total'] ?? 0
+            );
 
             $row['total_nominal'] = $this->format_nominal($total);
         }
@@ -123,7 +122,9 @@ final class StokOpnameController extends ControllerTemplate
                 ->table('inventori_non_medis.stok_opname_detail d')
                 ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
                 ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-                ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, b.harga_satuan, s.nama_satuan')
+                ->select(
+                    'd.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, b.harga_satuan, s.nama_satuan',
+                )
                 ->where('d.id_opname', (int) $id)
                 ->where('d.id_barang >', 0)
                 ->get(),
@@ -156,7 +157,9 @@ final class StokOpnameController extends ControllerTemplate
                 ->table('inventori_non_medis.stok_opname_detail d')
                 ->join('inventori_non_medis.barang b', 'd.id_barang = b.id_barang', 'left')
                 ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
-                ->select('d.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, b.harga_satuan, s.nama_satuan')
+                ->select(
+                    'd.id_barang, d.stok_sistem, d.stok_fisik, b.kode_barang, b.nama_barang, b.harga_satuan, s.nama_satuan',
+                )
                 ->where('d.id_opname', (int) $id)
                 ->where('d.id_barang >', 0)
                 ->get(),
