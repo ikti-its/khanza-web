@@ -6,6 +6,7 @@ namespace App\Features\InventoriNonMedis\Barang;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 
 final class BarangController extends ControllerTemplate
@@ -55,6 +56,47 @@ final class BarangController extends ControllerTemplate
     protected function before_read(): void
     {
         $this->model->set_order('nama_barang', 'ASC');
+    }
+
+    // tabel kustom: tambah kolom checkbox "pengajuan cepat" untuk barang di bawah stok minimum,
+    // tanpa mengubah components/tabel/data.php atau td.php (dipakai semua modul lain)
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    #[\Override]
+    public function index(): string|RedirectResponse
+    {
+        $page = max(1, (int) ($this->request->getGet('page') ?? 1));
+        $size = max(1, (int) ($this->request->getGet('size') ?? $this->meta_data['size']));
+
+        $this->model->exclude_zero_pk();
+        $total_rows  = $this->model->count_filtered();
+        $total_pages = $total_rows > 0 ? (int) ceil($total_rows / $size) : 1;
+        $page        = min($page, $total_pages);
+        $offset      = ($page - 1) * $size;
+
+        $data_tabel = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.barang b')
+                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+                ->join('inventori_non_medis.jenis_barang j', 'b.id_jenis_barang = j.id_jenis_barang', 'left')
+                ->select(
+                    'b.id_barang, b.kode_barang, b.nama_barang, s.nama_satuan, j.nama_jenis_barang, b.stok, b.stok_minimum, b.harga_satuan',
+                )
+                ->where('b.id_barang !=', 0)
+                ->orderBy('b.nama_barang', 'ASC')
+                ->limit($size, $offset)
+                ->get(),
+        )->getResultArray();
+
+        return view('admin/inventorinonmedis/daftar_barang', [
+            'judul'       => $this->title,
+            'breadcrumbs' => $this->breadcrumbs,
+            'meta_data'   => ['page' => $page, 'size' => $size, 'total' => $total_pages],
+            'modul_path'  => $this->get_uri_path(),
+            'kolom_id'    => $this->primary_key,
+            'aksi'        => $this->actions,
+            'tabel'       => $data_tabel,
+        ]);
     }
 
     // form tambah custom dengan modal search satuan dan jenis barang

@@ -95,7 +95,7 @@ $readonly = $readonly ?? false;
                             </tr>
                         </thead>
                         <tbody id="detailTableBody">
-                            <?php if ($isEdit && !empty($detail_items ?? [])): ?>
+                            <?php if (!empty($detail_items ?? [])): ?>
                                 <?php foreach ($detail_items as $item): ?>
                                 <tr data-id="<?= $item['id_barang'] ?>">
                                     <td class="p-3 border text-center"><?= esc($item['kode_barang'] ?? '-') ?></td>

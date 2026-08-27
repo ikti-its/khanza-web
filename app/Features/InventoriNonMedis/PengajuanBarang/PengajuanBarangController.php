@@ -92,15 +92,60 @@ final class PengajuanBarangController extends ControllerTemplate
     }
 
     // form tambah: 1-page header + detail
+    // (opsional: detail_items ter-prefill dari checkbox "Ajukan Pengajuan" di halaman Barang,
+    // lewat query param prefill_barang — lihat get_prefill_items())
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
     #[\Override]
     public function create_page(): string
     {
         return view('admin/inventorinonmedis/tambah_pengajuan_barang', [
-            'judul'       => 'Tambah ' . $this->title,
-            'breadcrumbs' => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
-            'modul_path'  => $this->get_uri_path(),
-            'form_action' => '/submittambah/',
+            'judul'        => 'Tambah ' . $this->title,
+            'breadcrumbs'  => array_merge($this->breadcrumbs, [['title' => 'Tambah', 'icon' => 'tambah']]),
+            'modul_path'   => $this->get_uri_path(),
+            'form_action'  => '/submittambah/',
+            'detail_items' => $this->get_prefill_items(),
         ]);
+    }
+
+    // ambil barang dari query param prefill_barang (id_barang dipisah koma), qty default = selisih ke stok_minimum
+    /** @throws \CodeIgniter\Database\Exceptions\DatabaseException */
+    private function get_prefill_items(): array
+    {
+        $raw = (string) ($this->request->getGet('prefill_barang') ?? '');
+        if ($raw === '')
+            return [];
+
+        $ids = array_values(array_unique(array_filter(
+            array_map('intval', explode(',', $raw)),
+            fn(int $id): bool => $id > 0,
+        )));
+        if (count($ids) === 0)
+            return [];
+
+        $rows = $this->guarded(
+            $this
+                ->get_db()
+                ->table('inventori_non_medis.barang b')
+                ->join('inventori_non_medis.satuan s', 'b.id_satuan = s.id_satuan', 'left')
+                ->select('b.id_barang, b.kode_barang, b.nama_barang, s.nama_satuan, b.harga_satuan, b.stok, b.stok_minimum')
+                ->whereIn('b.id_barang', $ids)
+                ->get(),
+        )->getResultArray();
+        /** @var list<array<string, mixed>> $rows */
+
+        return array_map(static function (array $r): array {
+            $stok         = (int) ($r['stok'] ?? 0);
+            $stok_minimum = (int) ($r['stok_minimum'] ?? 0);
+
+            return [
+                'id_barang'   => $r['id_barang'],
+                'kode_barang' => $r['kode_barang'],
+                'nama_barang' => $r['nama_barang'],
+                'nama_satuan' => $r['nama_satuan'],
+                'harga'       => $r['harga_satuan'],
+                'qty'         => max(1, $stok_minimum - $stok),
+            ];
+        }, $rows);
     }
 
     // halaman detail (readonly) — view terpisah tanpa form
