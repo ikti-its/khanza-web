@@ -5,6 +5,7 @@ namespace App\Features\Donor\SkriningDonor;
 
 use App\Core\Model\ModelTemplate;
 use App\Core\Model\ValidationType as V;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 
 final class SkriningDonorModel extends ModelTemplate
 {
@@ -41,10 +42,12 @@ final class SkriningDonorModel extends ModelTemplate
      * @param int $limit
      * @param int $offset
      * @return list<array<string, mixed>>
+     * 
+     * @throws DatabaseException
      */
     public function get_data_tabel(int $limit, int $offset): array
     {
-        return $this->db
+        $query = $this->db
             ->table('donor.skrining_donor sd')
             ->select([
                 'sd.id_skrining',
@@ -59,8 +62,16 @@ final class SkriningDonorModel extends ModelTemplate
             ->join('donor.status_skrining ss', 'ss.id_status_skrining = sd.id_status_skrining', 'left')
             ->orderBy('k.tanggal_kunjungan', 'DESC')
             ->limit($limit, $offset)
-            ->get()
-            ->getResultArray();
+            ->get();
+        
+        if ($query === false) {
+            throw new DatabaseException('Gagal menjalankan query skrining donor.');
+        }
+
+        /** @var list<array<string, mixed>> $data */
+        $data = $query->getResultArray();
+
+        return $data;
     }
 
     private function toFloat(mixed $value): float
@@ -83,8 +94,8 @@ final class SkriningDonorModel extends ModelTemplate
 
     /**
      * Menentukan status kelayakan donor berdasarkan Permenkes
-     * @param array $rawPost
-     * @return array ['status' => int, 'alasan' => array]
+     * @param array<string, mixed> $rawPost
+     * @return array{status: int, alasan: list<string>}
      */
     public function hitungOtomatisStatusSkrining(array $rawPost): array
     {

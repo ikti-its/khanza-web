@@ -6,6 +6,7 @@ namespace App\Features\Donor\SkriningDonor;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\HTTP\RedirectResponse;
 
 final class SkriningDonorController extends ControllerTemplate
@@ -45,6 +46,8 @@ final class SkriningDonorController extends ControllerTemplate
 
     /**
      * OVERRIDE: Halaman Utama Skrining Donor
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     final public function index(): string
@@ -54,7 +57,9 @@ final class SkriningDonorController extends ControllerTemplate
         $offset      = ($currentPage - 1) * $perPage;
 
         $totalRows  = $this->model->count_filtered();
-        $data_tabel = $this->model->get_data_tabel($perPage, $offset);
+
+        $skriningModel = new SkriningDonorModel();
+        $data_tabel    = $skriningModel->get_data_tabel($perPage, $offset);
 
         $konfig = [
             [1, 'Nomor Kunjungan', 'nomor_kunjungan',      'teks',   0],
@@ -96,6 +101,7 @@ final class SkriningDonorController extends ControllerTemplate
         $controllerPendonor  = new \App\Features\Role\Pendonor\PendonorController();
         $controllerOrang     = new \App\Features\Person\Orang\OrangController();
 
+        /** @var list<array<int, mixed>> $konfigSkrining */
         $konfigSkrining  = $this->get_fields_with_options(false, true);
         $konfigKunjungan = $controllerKunjungan->fields;
         $konfigPendonor  = $controllerPendonor->fields;
@@ -105,7 +111,11 @@ final class SkriningDonorController extends ControllerTemplate
         $konfigGabungan = [];
 
         foreach ($konfigSkrining as $fieldSkrining) {
-            $columnSkrining = $fieldSkrining[2];
+            if (!isset($fieldSkrining[2])) {
+                continue;
+            }
+
+            $columnSkrining = (string) $fieldSkrining[2];
 
             if ($columnSkrining === 'id_skrining') {
                 continue;
@@ -160,10 +170,13 @@ final class SkriningDonorController extends ControllerTemplate
     #[\Override]
     final public function create(): string|RedirectResponse
     {
+        /** @var array<string, mixed> $rawPost */
         $rawPost  = $this->request->getPost();
-        $jawabanQ = $rawPost['q'] ?? [];
+        $jawabanQ = isset($rawPost['q']) && is_array($rawPost['q']) ? $rawPost['q'] : [];
 
-        $hasilSkrining    = $this->model->hitungOtomatisStatusSkrining($rawPost);
+        /** @var array{status: int, alasan: list<string>} $hasilSkrining */
+        $skriningModel    = new SkriningDonorModel();
+        $hasilSkrining    = $skriningModel->hitungOtomatisStatusSkrining($rawPost);
         $idStatusSkrining = $hasilSkrining['status'];
         $daftarAlasan     = $hasilSkrining['alasan'];
 
@@ -179,7 +192,9 @@ final class SkriningDonorController extends ControllerTemplate
         $dataSkrining['jawaban_kuesioner']  = !empty($jawabanQ) ? json_encode($jawabanQ) : null;
 
         $anamnesisTidakMemenuhiSyarat = (int) ($rawPost['id_hasil_anamnesis'] ?? 0) !== 1;
-        $idKunjungan                  = $dataSkrining['id_kunjungan'] ?? null;
+        $idKunjungan                  = !empty($dataSkrining['id_kunjungan']) 
+            ? (int) $dataSkrining['id_kunjungan'] 
+            : null;
         $pencekalanUrl                = null;
 
         $this->model->db->transStart();
@@ -214,7 +229,7 @@ final class SkriningDonorController extends ControllerTemplate
             }
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+            $errMsg = $e instanceof DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -225,6 +240,8 @@ final class SkriningDonorController extends ControllerTemplate
 
     /**
      * OVERRIDE: Menampilkan Halaman Ubah Data Skrining Donor
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     public function update_page(int|string $id): string
@@ -233,7 +250,7 @@ final class SkriningDonorController extends ControllerTemplate
             return $this->index();
 
         $dataSkrining = $this->model->find($id);
-        if (!$dataSkrining) {
+        if (!is_array($dataSkrining)) {
             $dataSkrining = [];
         }
 
@@ -243,15 +260,24 @@ final class SkriningDonorController extends ControllerTemplate
 
         if (!empty($dataSkrining['id_kunjungan'])) {
             $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
-            $dataKunjungan  = $modelKunjungan->find($dataSkrining['id_kunjungan']) ?? [];
+            $dataKunjungan  = $modelKunjungan->find((int) $dataSkrining['id_kunjungan']);
+            if (!is_array($dataKunjungan)) {
+                $dataKunjungan = [];
+            }
 
             if (!empty($dataKunjungan['id_pendonor'])) {
                 $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
-                $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']) ?? [];
+                $dataPendonor  = $modelPendonor->find((int) $dataKunjungan['id_pendonor']);
+                if (!is_array($dataPendonor)) {
+                    $dataPendonor = [];
+                }
 
                 if (!empty($dataPendonor['id_orang'])) {
                     $modelOrang = new \App\Features\Person\Orang\OrangModel();
-                    $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                    $dataOrang  = $modelOrang->find((int) $dataPendonor['id_orang']);
+                    if (!is_array($dataOrang)) {
+                        $dataOrang = [];
+                    }
                 }
             }
         }
@@ -262,6 +288,7 @@ final class SkriningDonorController extends ControllerTemplate
         $controllerPendonor  = new \App\Features\Role\Pendonor\PendonorController();
         $controllerOrang     = new \App\Features\Person\Orang\OrangController();
 
+        /** @var list<array<int, mixed>> $konfigSkrining */
         $konfigSkrining  = $this->get_fields_with_options(false, true);
         $konfigKunjungan = $controllerKunjungan->fields;
         $konfigPendonor  = $controllerPendonor->fields;
@@ -270,7 +297,11 @@ final class SkriningDonorController extends ControllerTemplate
         $konfigGabungan = [];
 
         foreach ($konfigSkrining as $fieldSkrining) {
-            $columnSkrining = $fieldSkrining[2];
+            if (!isset($fieldSkrining[2])) {
+                continue;
+            }
+
+            $columnSkrining = (string) $fieldSkrining[2];
 
             if ($columnSkrining === 'id_skrining') {
                 continue;
@@ -304,7 +335,7 @@ final class SkriningDonorController extends ControllerTemplate
         }
 
         foreach ($konfigGabungan as $field) {
-            $namaKolom = $field[2];
+            $namaKolom = (string) $field[2];
             if (($baris[$namaKolom] ?? null) === null) {
                 $baris[$namaKolom] = '';
             }
@@ -327,17 +358,23 @@ final class SkriningDonorController extends ControllerTemplate
 
     /**
      * OVERRIDE: Mengeksekusi Simpan Perubahan Data Skrining Donor
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     final public function update(int|string $id): string|RedirectResponse
     {
-        if ($id == 0)
+        if ($id == 0) {
             return $this->index();
+        }
 
+        /** @var array<string, mixed> $rawPost */
         $rawPost  = $this->request->getPost();
-        $jawabanQ = $rawPost['q'] ?? [];
+        $jawabanQ = isset($rawPost['q']) && is_array($rawPost['q']) ? $rawPost['q'] : [];
 
-        $hasilSkrining    = $this->model->hitungOtomatisStatusSkrining($rawPost);
+        /** @var array{status: int, alasan: list<string>} $hasilSkrining */
+        $skriningModel    = new SkriningDonorModel();
+        $hasilSkrining    = $skriningModel->hitungOtomatisStatusSkrining($rawPost);
         $idStatusSkrining = $hasilSkrining['status'];
         $daftarAlasan     = $hasilSkrining['alasan'];
 
@@ -353,7 +390,9 @@ final class SkriningDonorController extends ControllerTemplate
         $dataSkrining['jawaban_kuesioner']  = !empty($jawabanQ) ? json_encode($jawabanQ) : null;
 
         $anamnesisTidakMemenuhiSyarat = (int) ($rawPost['id_hasil_anamnesis'] ?? 0) !== 1;
-        $idKunjungan                  = $dataSkrining['id_kunjungan'] ?? null;
+        $idKunjungan                  = !empty($dataSkrining['id_kunjungan']) 
+            ? (int) $dataSkrining['id_kunjungan'] 
+            : null;
         $pencekalanUrl                = null;
 
         $this->model->db->transStart();
@@ -397,7 +436,7 @@ final class SkriningDonorController extends ControllerTemplate
             }
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+            $errMsg = $e instanceof DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -408,6 +447,8 @@ final class SkriningDonorController extends ControllerTemplate
 
     /**
      * Menampilkan Halaman Detail Skrining Donor
+     * 
+     * @throws DatabaseException
      */
     public function detail(int|string $id): string
     {
@@ -416,21 +457,34 @@ final class SkriningDonorController extends ControllerTemplate
 
         $dataSkrining = $this->model->find($id);
 
+        if (!is_array($dataSkrining)) {
+            $dataSkrining = [];
+        }
+
         $dataKunjungan = [];
         $dataPendonor  = [];
         $dataOrang     = [];
 
         if (!empty($dataSkrining['id_kunjungan'])) {
             $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
-            $dataKunjungan  = $modelKunjungan->find($dataSkrining['id_kunjungan']) ?? [];
+            $dataKunjungan  = $modelKunjungan->find((int) $dataSkrining['id_kunjungan']);
+            if (!is_array($dataKunjungan)) {
+                $dataKunjungan = [];
+            }
 
             if (!empty($dataKunjungan['id_pendonor'])) {
                 $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
-                $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']) ?? [];
+                $dataPendonor  = $modelPendonor->find((int) $dataKunjungan['id_pendonor']);
+                if (!is_array($dataPendonor)) {
+                    $dataPendonor = [];
+                }
 
                 if (!empty($dataPendonor['id_orang'])) {
                     $modelOrang = new \App\Features\Person\Orang\OrangModel();
-                    $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                    $dataOrang  = $modelOrang->find((int) $dataPendonor['id_orang']);
+                    if (!is_array($dataOrang)) {
+                        $dataOrang = [];
+                    }
                 }
             }
         }
@@ -448,23 +502,34 @@ final class SkriningDonorController extends ControllerTemplate
 
         $konfigGabungan = array_merge($konfigOrang, $konfigPendonor, $konfigKunjungan, $konfigSkrining);
 
-        foreach ($konfigGabungan as $field) {
-            $colName = $field[2];
-            $options = $field[5] ?? [];
+        /** @var list<array<int, mixed>> $fieldsList */
+        $fieldsList = array_values(array_filter($konfigGabungan, 'is_array'));
+
+        foreach ($fieldsList as $field) {
+            if (!isset($field[2])) {
+                continue;
+            }
+
+            $colName = (string) $field[2];
+            $options = is_array($field[5] ?? null) ? $field[5] : [];
 
             if (!empty($options) && isset($baris[$colName])) {
-                $idMentah = $baris[$colName];
-                foreach ($options as $opt) {
-                    if ((string) $opt[1] === (string) $idMentah) {
-                        $baris[$colName] = $opt[0];
+                $idMentah = (string) $baris[$colName];
+
+                /** @var list<array<int, mixed>> $optionsList */
+                $optionsList = array_values(array_filter($options, 'is_array'));
+
+                foreach ($optionsList as $opt) {
+                    if ((string) ($opt[1] ?? '') === $idMentah) {
+                        $baris[$colName] = $opt[0] ?? '';
                         break;
                     }
                 }
             }
         }
 
-        foreach ($baris as $key => $value) {
-            if ($value === null) {
+        foreach (array_keys($baris) as $key) {
+            if ($baris[$key] === null) {
                 $baris[$key] = '';
             }
         }
@@ -509,6 +574,8 @@ final class SkriningDonorController extends ControllerTemplate
 
     /**
      * Menghapus pencekalan karena hasil anamnesis sudah memenuhi syarat
+     * 
+     * @throws DatabaseException
      */
     private function hapusPencekalan(int|string $idKunjungan): void
     {

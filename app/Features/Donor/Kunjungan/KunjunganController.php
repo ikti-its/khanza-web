@@ -6,6 +6,7 @@ namespace App\Features\Donor\Kunjungan;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 
@@ -39,6 +40,8 @@ final class KunjunganController extends ControllerTemplate
 
     /**
      * OVERRIDE: Halaman Utama Registrasi Kunjungan
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     final public function index(): string
@@ -48,7 +51,9 @@ final class KunjunganController extends ControllerTemplate
         $offset      = ($currentPage - 1) * $perPage;
 
         $totalRows  = $this->model->count_filtered();
-        $data_tabel = $this->model->get_data_tabel($perPage, $offset);
+
+        $kunjunganModel = new KunjunganModel();
+        $data_tabel     = $kunjunganModel->get_data_tabel($perPage, $offset);
 
         $konfig = [
             [1, 'Nomor Kunjungan',   'nomor_kunjungan',   'teks',        0],
@@ -78,6 +83,8 @@ final class KunjunganController extends ControllerTemplate
 
     /**
      * OVERRIDE: Menampilkan Form Registrasi Kunjungan
+     *
+     * @throws DatabaseException
      */
     #[\Override]
     final public function create_page(): string
@@ -96,7 +103,7 @@ final class KunjunganController extends ControllerTemplate
 
         $tanggalHariIni = date('Y-m-d H:i:s');
 
-        $jumlahKunjunganHariIni = $this->model
+        $jumlahKunjunganHariIni = (int) $this->model
             ->db
             ->table('donor.kunjungan')
             ->where('DATE(tanggal_kunjungan)', $tanggalHariIni)
@@ -152,18 +159,22 @@ final class KunjunganController extends ControllerTemplate
 
     /**
      * OVERRIDE: Memproses simpan data registrasi kunjungan
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     final public function create(): string|RedirectResponse
     {
+        /** @var array<string, mixed> $rawPost */
         $rawPost           = $this->request->getPost();
-        $idPendonor        = $rawPost['id_pendonor'] ?? null;
-        $tglKunjunganInput = $rawPost['tanggal_kunjungan'] ?? date('Y-m-d H:i:s');
+        $idPendonor        = !empty($rawPost['id_pendonor']) ? (int) $rawPost['id_pendonor'] : null;
+        $tglKunjunganInput = (string) ($rawPost['tanggal_kunjungan'] ?? date('Y-m-d H:i:s'));
 
-        $validasiRegistrasi = $this->model->cekSyaratRegistrasiKunjungan($idPendonor, $tglKunjunganInput);
+        $kunjunganModel     = new KunjunganModel();
+        $validasiRegistrasi = $kunjunganModel->cekSyaratRegistrasiKunjungan($idPendonor, $tglKunjunganInput);
 
-        if ($validasiRegistrasi['status'] === false) {
-            session()->setFlashdata('error', $validasiRegistrasi['message']);
+        if (($validasiRegistrasi['status'] ?? true) === false) {
+            session()->setFlashdata('error', (string) ($validasiRegistrasi['message'] ?? 'Syarat registrasi kunjungan tidak terpenuhi.'));
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
@@ -200,6 +211,8 @@ final class KunjunganController extends ControllerTemplate
 
     /**
      * OVERRIDE: Menampilkan Halaman Ubah Data Kunjungan
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     final public function update_page(int|string $id): string
@@ -208,43 +221,64 @@ final class KunjunganController extends ControllerTemplate
             return $this->index();
 
         $dataKunjungan = $this->model->find($id);
-        if (!$dataKunjungan) {
+        if (!is_array($dataKunjungan)) {
             $dataKunjungan = [];
         }
 
         $dataOrang    = [];
         $dataPendonor = [];
+
         if (!empty($dataKunjungan['id_pendonor'])) {
             $pendonorModel = new \App\Features\Role\Pendonor\PendonorModel();
-            $dataPendonor  = $pendonorModel->find($dataKunjungan['id_pendonor']) ?? [];
+            $dataPendonor  = $pendonorModel->find((int) $dataKunjungan['id_pendonor']);
+            if (!is_array($dataPendonor)) {
+                $dataPendonor = [];
+            }
 
             if (!empty($dataPendonor['id_orang'])) {
                 $modelOrang = new \App\Features\Person\Orang\OrangModel();
-                $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                $dataOrang  = $modelOrang->find((int) $dataPendonor['id_orang']);
+                if (!is_array($dataOrang)) {
+                    $dataOrang = [];
+                }
             }
         }
 
         $baris = array_merge($dataOrang, $dataPendonor, $dataKunjungan);
 
         if (!empty($baris['tanggal_kunjungan'])) {
-            $baris['tanggal_kunjungan'] = date('Y-m-d H:i:s', strtotime($baris['tanggal_kunjungan']));
+            $timestampKunjungan         = strtotime((string) $baris['tanggal_kunjungan']);
+            $baris['tanggal_kunjungan'] = date('Y-m-d H:i:s', $timestampKunjungan !== false ? $timestampKunjungan : time());
         }
 
         $controllerOrang    = new \App\Features\Person\Orang\OrangController();
         $controllerPendonor = new \App\Features\Role\Pendonor\PendonorController();
 
+        /** @var list<array<int, mixed>> $konfigOrang */
         $konfigOrang     = $controllerOrang->get_fields_with_options(false, true);
+
+        /** @var list<array<int, mixed>> $konfigPendonor */
         $konfigPendonor  = $controllerPendonor->get_fields_with_options(false, true);
+
+        /** @var list<array<int, mixed>> $konfigKunjungan */
         $konfigKunjungan = $this->get_fields_with_options(false, true);
 
         $konfigGabungan = [];
 
         foreach ($konfigKunjungan as $fieldKunjungan) {
-            $kolomKunjungan = $fieldKunjungan[2];
+            if (!isset($fieldKunjungan[2])) {
+                continue;
+            }
+
+            $kolomKunjungan = (string) $fieldKunjungan[2];
 
             if ($kolomKunjungan === 'id_pendonor') {
                 foreach ($konfigPendonor as $fieldPendonor) {
-                    $kolomPendonor = $fieldPendonor[2];
+                    if (!isset($fieldPendonor[2])) {
+                        continue;
+                    }
+
+                    $kolomPendonor = (string) $fieldPendonor[2];
 
                     if ($kolomPendonor === 'id_orang') {
                         $konfigGabungan = array_merge($konfigGabungan, $konfigOrang);
@@ -259,15 +293,23 @@ final class KunjunganController extends ControllerTemplate
 
         $card = $baris;
         foreach ($konfigGabungan as $field) {
-            $namaKolom = $field[2];
-            $tipeField = $field[3];
-            $options   = $field[5] ?? [];
+            if (!isset($field[2])) {
+                continue;
+            }
+
+            $namaKolom = (string) $field[2];
+            $tipeField = (string) ($field[3] ?? '');
+            $options   = is_array($field[5] ?? null) ? $field[5] : [];
 
             if ($tipeField === 'status' && !empty($options) && isset($card[$namaKolom])) {
-                $idMentah = $card[$namaKolom];
-                foreach ($options as $opt) {
-                    if ((string) $opt[1] === (string) $idMentah) {
-                        $card[$namaKolom] = $opt[0];
+                $idMentah = (string) $card[$namaKolom];
+
+                /** @var list<array<int, mixed>> $optionsList */
+                $optionsList = array_values(array_filter($options, 'is_array'));
+
+                foreach ($optionsList as $opt) {
+                    if ((string) ($opt[1] ?? '') === $idMentah) {
+                        $card[$namaKolom] = $opt[0] ?? '';
                         break;
                     }
                 }
@@ -275,7 +317,11 @@ final class KunjunganController extends ControllerTemplate
         }
 
         foreach ($konfigGabungan as $field) {
-            $namaKolom = $field[2];
+            if (!isset($field[2])) {
+                continue;
+            }
+
+            $namaKolom = (string) $field[2];
             if (($baris[$namaKolom] ?? null) === null) {
                 $baris[$namaKolom] = '';
             }
@@ -299,6 +345,8 @@ final class KunjunganController extends ControllerTemplate
 
     /**
      * OVERRIDE: Mengeksekusi Simpan Perubahan Data Registrasi Kunjungan
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     final public function update(int|string $id): string|RedirectResponse
@@ -314,20 +362,26 @@ final class KunjunganController extends ControllerTemplate
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
+        /** @var array<string, mixed> $rawPost */
         $rawPost = $this->request->getPost();
 
-        $idPendonorLama = $dataLama['id_pendonor'] ?? null;
-        $idPendonorBaru = $rawPost['id_pendonor'] ?? null;
+        $idPendonorLama = !empty($dataLama['id_pendonor']) ? (int) $dataLama['id_pendonor'] : null;
+        $idPendonorBaru = !empty($rawPost['id_pendonor']) ? (int) $rawPost['id_pendonor'] : null;
 
         $pendonorBerubah = (string) $idPendonorLama !== (string) $idPendonorBaru;
 
-        $tanggalLama = date('Y-m-d H:i:s', strtotime($dataLama['tanggal_kunjungan']));
-        $tanggalBaru = date('Y-m-d H:i:s', strtotime($rawPost['tanggal_kunjungan'] ?? $dataLama['tanggal_kunjungan']));
+        $timestampLama = strtotime((string) ($dataLama['tanggal_kunjungan'] ?? ''));
+        $tanggalLama   = date('Y-m-d H:i:s', $timestampLama !== false ? $timestampLama : time());
+
+        $timestampBaru = strtotime((string) ($rawPost['tanggal_kunjungan'] ?? $dataLama['tanggal_kunjungan'] ?? ''));
+        $tanggalBaru   = date('Y-m-d H:i:s', $timestampBaru !== false ? $timestampBaru : time());
 
         $tanggalKunjunganBerubah = $tanggalLama !== $tanggalBaru;
 
         if ($pendonorBerubah || $tanggalKunjunganBerubah) {
-            if ($this->model->kunjunganSudahDiproses($id)) {
+            $kunjunganModel = new KunjunganModel();
+
+            if ($kunjunganModel->kunjunganSudahDiproses($id)) {
                 session()->setFlashdata(
                     'error',
                     'Nomor pendonor atau tanggal kunjungan tidak dapat diubah karena kunjungan sudah diproses.',
@@ -335,10 +389,10 @@ final class KunjunganController extends ControllerTemplate
                 return redirect()->to($this->get_uri_path() . '/data');
             }
 
-            $validasiRegistrasi = $this->model->cekSyaratRegistrasiKunjungan($idPendonorBaru, $tanggalBaru);
+            $validasiRegistrasi = $kunjunganModel->cekSyaratRegistrasiKunjungan($idPendonorBaru, $tanggalBaru);
 
-            if ($validasiRegistrasi['status'] === false) {
-                session()->setFlashdata('error', $validasiRegistrasi['message']);
+            if (($validasiRegistrasi['status'] ?? true) === false) {
+                session()->setFlashdata('error', (string) ($validasiRegistrasi['message'] ?? 'Syarat registrasi kunjungan tidak terpenuhi.'));
                 return redirect()->to($this->get_uri_path() . '/data');
             }
         }
@@ -348,6 +402,8 @@ final class KunjunganController extends ControllerTemplate
 
     /**
      * Menampilkan Halaman Detail Registrasi Kunjungan
+     * 
+     * @throws DatabaseException
      */
     public function detail(int|string $id): string
     {
@@ -356,16 +412,28 @@ final class KunjunganController extends ControllerTemplate
 
         $dataKunjungan = $this->model->find($id);
 
+        if (!is_array($dataKunjungan)) {
+            $dataKunjungan = [];
+        }
+
         $dataPendonor = [];
         $dataOrang    = [];
 
         if (!empty($dataKunjungan['id_pendonor'])) {
             $pendonorModel = new \App\Features\Role\Pendonor\PendonorModel();
-            $dataPendonor  = $pendonorModel->find($dataKunjungan['id_pendonor']) ?? [];
+            $dataPendonor = $pendonorModel->find((int) $dataKunjungan['id_pendonor']);
+
+            if (!is_array($dataPendonor)) {
+                $dataPendonor = [];
+            }
 
             if (!empty($dataPendonor['id_orang'])) {
                 $modelOrang = new \App\Features\Person\Orang\OrangModel();
-                $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                $dataOrang  = $modelOrang->find((int) $dataPendonor['id_orang']);
+
+                if (!is_array($dataOrang)) {
+                    $dataOrang = [];
+                }
             }
         }
 
@@ -380,23 +448,34 @@ final class KunjunganController extends ControllerTemplate
 
         $konfigGabungan = array_merge($konfigOrang, $konfigPendonor, $konfigKunjungan);
 
-        foreach ($konfigGabungan as $field) {
-            $colName = $field[2];
-            $options = $field[5] ?? [];
+        /** @var list<array<int, mixed>> $fieldsList */
+        $fieldsList = array_values(array_filter($konfigGabungan, 'is_array'));
+
+        foreach ($fieldsList as $field) {
+            if (!isset($field[2])) {
+                continue;
+            }
+
+            $colName = (string) $field[2];
+            $options = is_array($field[5] ?? null) ? $field[5] : [];
 
             if (!empty($options) && isset($baris[$colName])) {
-                $idMentah = $baris[$colName];
-                foreach ($options as $opt) {
-                    if ((string) $opt[1] === (string) $idMentah) {
-                        $baris[$colName] = $opt[0];
+                $idMentah = (string) $baris[$colName];
+
+                /** @var list<array<int, mixed>> $optionsList */
+                $optionsList = array_values(array_filter($options, 'is_array'));
+
+                foreach ($optionsList as $opt) {
+                    if ((string) ($opt[1] ?? '') === $idMentah) {
+                        $baris[$colName] = $opt[0] ?? '';
                         break;
                     }
                 }
             }
         }
 
-        foreach ($baris as $key => $value) {
-            if ($value === null) {
+        foreach (array_keys($baris) as $key) {
+            if ($baris[$key] === null) {
                 $baris[$key] = '';
             }
         }
@@ -415,12 +494,15 @@ final class KunjunganController extends ControllerTemplate
 
     /**
      * Menampilkan data modal kunjungan
+     * 
+     * @throws DatabaseException
      */
     public function list(): ResponseInterface
     {
-        $filter = $this->request->getGet('filter');
+        $filter = (string) $this->request->getGet('filter');
 
-        $data = $this->model->get_data_tabel(null, 0, $filter);
+        $kunjunganModel = new KunjunganModel();
+        $data           = $kunjunganModel->get_data_tabel(null, 0, $filter);
 
         return $this->response->setJSON([
             'data' => $data,

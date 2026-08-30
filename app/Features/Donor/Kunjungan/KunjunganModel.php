@@ -5,6 +5,7 @@ namespace App\Features\Donor\Kunjungan;
 
 use App\Core\Model\ModelTemplate;
 use App\Core\Model\ValidationType as V;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 
 final class KunjunganModel extends ModelTemplate
 {
@@ -39,6 +40,8 @@ final class KunjunganModel extends ModelTemplate
      * @param int $offset
      * @param string|null $filter
      * @return list<array<string, mixed>>
+     * 
+     * @throws DatabaseException
      */
     public function get_data_tabel(null|int $limit = null, int $offset = 0, null|string $filter = null): array
     {
@@ -67,7 +70,16 @@ final class KunjunganModel extends ModelTemplate
             $builder->limit($limit, $offset);
         }
 
-        return $builder->get()->getResultArray();
+        $query = $builder->get();
+
+        if ($query === false) {
+            return [];
+        }
+
+        /** @var list<array<string, mixed>> $data */
+        $data = $query->getResultArray();
+
+        return $data;
     }
 
     /**
@@ -83,7 +95,7 @@ final class KunjunganModel extends ModelTemplate
         $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
         $dataPendonor  = $modelPendonor->find($idPendonor);
 
-        if ($dataPendonor && !empty($dataPendonor['tanggal_donor_terakhir'])) {
+        if (is_array($dataPendonor) && isset($dataPendonor['tanggal_donor_terakhir']) && is_string($dataPendonor['tanggal_donor_terakhir']) && $dataPendonor['tanggal_donor_terakhir'] !== '') {
             $tglDonorTerakhir = new \DateTime($dataPendonor['tanggal_donor_terakhir']);
             $tglKunjunganBaru = new \DateTime($tglKunjunganInput);
 
@@ -108,10 +120,12 @@ final class KunjunganModel extends ModelTemplate
      * Memeriksa apakah pendonor memiliki pencekalan aktif
      * @param int|string $idPendonor
      * @return array ['status' => bool, 'message' => string]
+     * 
+     * @throws DatabaseException
      */
     private function cekPencekalanAktif(int|string $idPendonor): array
     {
-        $dataPencekalan = $this->db
+        $query = $this->db
             ->table('penanganan_donor.pencekalan pc')
             ->select([
                 'pc.id_pencekalan',
@@ -122,17 +136,33 @@ final class KunjunganModel extends ModelTemplate
             ->join('donor.kunjungan k', 'k.id_kunjungan = pc.id_kunjungan', 'inner')
             ->where('k.id_pendonor', $idPendonor)
             ->where('pc.id_status_pencekalan', 1)
-            ->get()
-            ->getRowArray();
+            ->get();
+        
+        if ($query === false) {
+            return ['status' => true, 'message' => ''];
+        }
+
+        /** @var array<string, mixed> $dataPencekalan */
+        $dataPencekalan = $query->getRowArray();
 
         if (!empty($dataPencekalan)) {
-            $tanggalSelesai = !empty($dataPencekalan['tanggal_selesai'])
-                ? date('d-m-Y', strtotime($dataPencekalan['tanggal_selesai']))
-                : 'belum ditentukan';
+            $tanggalSelesai = 'belum ditentukan';
+
+            if (!empty($dataPencekalan['tanggal_selesai']) && is_string($dataPencekalan['tanggal_selesai'])) {
+                $timestamp = strtotime($dataPencekalan['tanggal_selesai']);
+
+                if ($timestamp !== false) {
+                    $tanggalSelesai = date('d-m-Y', $timestamp);
+                }
+            }
+
+            $nomorKunjungan = is_string($dataPencekalan['nomor_kunjungan'] ?? null)
+                ? $dataPencekalan['nomor_kunjungan']
+                : '-';
 
             return [
                 'status'  => false,
-                'message' => "Gagal Mendaftarkan Kunjungan! Pendonor masih memiliki pencekalan aktif pada kunjungan {$dataPencekalan['nomor_kunjungan']}. Tanggal selesai pencekalan: {$tanggalSelesai}.",
+                'message' => "Gagal Mendaftarkan Kunjungan! Pendonor masih memiliki pencekalan aktif pada kunjungan {$nomorKunjungan}. Tanggal selesai pencekalan: {$tanggalSelesai}.",
             ];
         }
 
@@ -144,6 +174,8 @@ final class KunjunganModel extends ModelTemplate
      * @param int|string|null $idPendonor
      * @param string $tglKunjunganInput
      * @return array ['status' => bool, 'message' => string]
+     * 
+     * @throws DatabaseException
      */
     public function cekSyaratRegistrasiKunjungan(int|string|null $idPendonor, string $tglKunjunganInput): array
     {
@@ -159,13 +191,13 @@ final class KunjunganModel extends ModelTemplate
 
         $validasiPencekalan = $this->cekPencekalanAktif($idPendonor);
 
-        if ($validasiPencekalan['status'] === false) {
+        if (($validasiPencekalan['status'] ?? true) === false) {
             return $validasiPencekalan;
         }
 
         $validasiInterval = $this->cekIntervalMedis($idPendonor, $tglKunjunganInput);
 
-        if ($validasiInterval['status'] === false) {
+        if (($validasiInterval['status'] ?? true) === false) {
             return $validasiInterval;
         }
 
@@ -174,6 +206,8 @@ final class KunjunganModel extends ModelTemplate
 
     /**
      * Memeriksa apakah kunjungan sudah digunakan pada proses lanjutan
+     * 
+     * @throws DatabaseException
      */
     public function kunjunganSudahDiproses(int|string $idKunjungan): bool
     {

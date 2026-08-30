@@ -6,6 +6,7 @@ namespace App\Features\Donor\PengambilanDarah;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\HTTP\RedirectResponse;
 
 final class PengambilanDarahController extends ControllerTemplate
@@ -47,6 +48,8 @@ final class PengambilanDarahController extends ControllerTemplate
 
     /**
      * OVERRIDE: Halaman Utama Pengambilan Darah
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     final public function index(): string
@@ -56,7 +59,9 @@ final class PengambilanDarahController extends ControllerTemplate
         $offset      = ($currentPage - 1) * $perPage;
 
         $totalRows  = $this->model->count_filtered();
-        $data_tabel = $this->model->get_data_tabel($perPage, $offset);
+
+        $pengambilanDarahModel = new PengambilanDarahModel();
+        $data_tabel            = $pengambilanDarahModel->get_data_tabel($perPage, $offset);
 
         $this->after_read($data_tabel);
 
@@ -89,21 +94,35 @@ final class PengambilanDarahController extends ControllerTemplate
 
     /**
      * Menginjeksikan status alur kerja (workflow state) eksternal ke data tabel
+     * @param array<array-key, mixed> $data_tabel
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     protected function after_read(array &$data_tabel): void
     {
-        foreach ($data_tabel as $index => $baris) {
-            $idPengambilan = $baris['id_pengambilan_darah'];
+        $pengambilanDarahModel = new PengambilanDarahModel();
 
-            $data_tabel[$index]['sudah_dipisahkan'] = $this->model->apakahSudahDipisahkan($idPengambilan);
+        foreach (array_keys($data_tabel) as $index) {
+            /** @var array<string, mixed> $baris */
+            $baris = $data_tabel[$index];
+            if (!isset($baris['id_pengambilan_darah'])) {
+                continue;
+            }
 
-            $data_tabel[$index]['sudah_diuji'] = $this->model->apakahSudahDiuji($idPengambilan);
+            $idPengambilan = (int) $baris['id_pengambilan_darah'];
+
+            $baris['sudah_dipisahkan'] = $pengambilanDarahModel->apakahSudahDipisahkan($idPengambilan);
+            $baris['sudah_diuji']      = $pengambilanDarahModel->apakahSudahDiuji($idPengambilan);
+
+            $data_tabel[$index] = $baris;
         }
     }
 
     /**
      * OVERRIDE: Menampilkan Form Pengambilan Darah & Penggunaan BHP
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     final public function create_page(): string
@@ -112,14 +131,20 @@ final class PengambilanDarahController extends ControllerTemplate
             ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
+        /** @var list<array<int, mixed>> $konfigPengambilan */
         $konfigPengambilan = $this->get_fields_with_options(false, true);
 
         $controllerKunjungan = new \App\Features\Donor\Kunjungan\KunjunganController();
         $controllerPendonor  = new \App\Features\Role\Pendonor\PendonorController();
         $controllerOrang     = new \App\Features\Person\Orang\OrangController();
 
+        /** @var list<array<int, string>> $konfigKunjungan */
         $konfigKunjungan = $controllerKunjungan->get_fields_with_options(false, true);
+
+        /** @var list<array<int, string>> $konfigPendonor */
         $konfigPendonor  = $controllerPendonor->get_fields_with_options(false, true);
+
+        /** @var list<array<int, string>> $konfigOrang */
         $konfigOrang     = $controllerOrang->get_fields_with_options(false, true);
 
         $modelBhpMedis    = new \App\Features\LogistikUTD\PengambilanMedis\PengambilanMedisModel();
@@ -131,16 +156,16 @@ final class PengambilanDarahController extends ControllerTemplate
         $masterBhpMedis = [];
         foreach ($rawMedis as $row) {
             $sisaStok =
-                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
-                    - (int) $row['total_terpakai_penyerahan']
-                - (int) $row['total_rusak'];
+                (int) ($row['total_masuk'] ?? 0) - (int) ($row['total_terpakai_donor'] ?? 0) - (int) ($row['total_terpakai_pemisahan'] ?? 0)
+                    - (int) ($row['total_terpakai_penyerahan'] ?? 0)
+                - (int) ($row['total_rusak'] ?? 0);
 
-            if ((int) $row['total_masuk'] > 0) {
+            if ((int) ($row['total_masuk'] ?? 0) > 0) {
                 $masterBhpMedis[] = [
-                    'id_barang'   => $row['id_barang'],
-                    'kode_barang' => $row['kode_barang'],
-                    'nama_barang' => $row['nama_barang'],
-                    'harga'       => $row['harga'],
+                    'id_barang'   => $row['id_barang'] ?? 0,
+                    'kode_barang' => $row['kode_barang'] ?? '-',
+                    'nama_barang' => $row['nama_barang'] ?? '-',
+                    'harga'       => $row['harga'] ?? 0,
                     'stok'        => $sisaStok,
                 ];
             }
@@ -149,16 +174,16 @@ final class PengambilanDarahController extends ControllerTemplate
         $masterBhpNonMedis = [];
         foreach ($rawPenunjang as $row) {
             $sisaStokNon =
-                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
-                    - (int) $row['total_terpakai_penyerahan']
-                - (int) $row['total_rusak'];
+                (int) ($row['total_masuk'] ?? 0) - (int) ($row['total_terpakai_donor'] ?? 0) - (int) ($row['total_terpakai_pemisahan'] ?? 0)
+                - (int) ($row['total_terpakai_penyerahan'] ?? 0)
+                - (int) ($row['total_rusak'] ?? 0);
 
-            if ((int) $row['total_masuk'] > 0) {
+            if ((int) ($row['total_masuk'] ?? 0) > 0) {
                 $masterBhpNonMedis[] = [
-                    'id_barang'   => $row['id_barang'],
-                    'kode_barang' => $row['kode_barang'],
-                    'nama_barang' => $row['nama_barang'],
-                    'harga'       => $row['harga'],
+                    'id_barang'   => $row['id_barang'] ?? 0,
+                    'kode_barang' => $row['kode_barang'] ?? '-',
+                    'nama_barang' => $row['nama_barang'] ?? '-',
+                    'harga'       => $row['harga'] ?? 0,
                     'stok'        => $sisaStokNon,
                 ];
             }
@@ -166,30 +191,36 @@ final class PengambilanDarahController extends ControllerTemplate
 
         $prefiksNomorBulanIni = date('Y') . '-' . date('m') . '-UTD';
 
-        $nomorTerakhir = $this->model
+        $query = $this->model
             ->db
             ->table('donor.pengambilan_darah')
             ->select('nomor_pengambilan')
             ->like('nomor_pengambilan', $prefiksNomorBulanIni, 'after')
             ->orderBy('nomor_pengambilan', 'DESC')
             ->limit(1)
-            ->get()
-            ->getRowArray();
+            ->get();
+
+        $nomorTerakhir = $query ? $query->getRowArray() : null;
 
         $nextUrutanUTD = $nomorTerakhir
-            ? ((int) substr($nomorTerakhir['nomor_pengambilan'], strlen($prefiksNomorBulanIni)) + 1)
+            ? ((int) substr((string) ($nomorTerakhir['nomor_pengambilan'] ?? ''), strlen($prefiksNomorBulanIni)) + 1)
             : 1;
         $nomorUrutPad  = str_pad((string) $nextUrutanUTD, 4, '0', STR_PAD_LEFT);
 
         $nomorPengambilanOtomatis = $prefiksNomorBulanIni . $nomorUrutPad;
 
-        $daftarNoBag = $this->model->getDaftarNoBagTerpakai();
+        $pengambilanDarahModel = new PengambilanDarahModel();
+        $daftarNoBag           = $pengambilanDarahModel->getDaftarNoBagTerpakai();
 
         $mockBaris      = [];
         $konfigGabungan = [];
 
         foreach ($konfigPengambilan as $fieldPengambilan) {
-            $columnPengambilan = $fieldPengambilan[2];
+            if (!isset($fieldPengambilan[2])) {
+                continue;
+            }
+
+            $columnPengambilan = (string) $fieldPengambilan[2];
 
             if ($columnPengambilan === 'id_pengambilan_darah') {
                 continue;
@@ -205,7 +236,7 @@ final class PengambilanDarahController extends ControllerTemplate
 
             if ($columnPengambilan === 'id_kunjungan') {
                 foreach ($konfigKunjungan as $fieldKunjungan) {
-                    if ($fieldKunjungan[2] === 'nomor_kunjungan') {
+                    if (($fieldKunjungan[2] ?? '') === 'nomor_kunjungan') {
                         $mockBaris['nomor_kunjungan'] = '';
                         $konfigGabungan[]             = $fieldKunjungan;
                         break;
@@ -213,7 +244,7 @@ final class PengambilanDarahController extends ControllerTemplate
                 }
 
                 foreach ($konfigPendonor as $fieldPendonor) {
-                    if ($fieldPendonor[2] === 'nomor_pendonor') {
+                    if (($fieldPendonor[2] ?? '') === 'nomor_pendonor') {
                         $mockBaris['nomor_pendonor'] = '';
                         $konfigGabungan[]            = $fieldPendonor;
                         break;
@@ -221,7 +252,7 @@ final class PengambilanDarahController extends ControllerTemplate
                 }
 
                 foreach ($konfigOrang as $fieldOrang) {
-                    if ($fieldOrang[2] === 'nama') {
+                    if (($fieldOrang[2] ?? '') === 'nama') {
                         $mockBaris['nama'] = '';
                         $konfigGabungan[]  = $fieldOrang;
                         break;
@@ -253,12 +284,18 @@ final class PengambilanDarahController extends ControllerTemplate
     #[\Override]
     final public function create(): string|RedirectResponse
     {
+        /** @var array<string, mixed> $rawPost */
         $rawPost = $this->request->getPost();
 
-        $bhpMedis      = $this->request->getPost('id_medis_donor');
-        $hargaMedis    = $this->request->getPost('harga_medis');
-        $bhpNonMedis   = $this->request->getPost('id_penunjang_donor');
-        $hargaNonMedis = $this->request->getPost('harga_penunjang');
+        /** @var array<array-key, int|string> $bhpMedis */
+        $bhpMedis      = is_array($rawPost['id_medis_donor'] ?? null) ? $rawPost['id_medis_donor'] : [];
+        /** @var array<array-key, float|int|numeric-string> $hargaMedis */
+        $hargaMedis    = is_array($rawPost['harga_medis'] ?? null) ? $rawPost['harga_medis'] : [];
+
+        /** @var array<array-key, int|string> $bhpNonMedis */
+        $bhpNonMedis   = is_array($rawPost['id_penunjang_donor'] ?? null) ? $rawPost['id_penunjang_donor'] : [];
+        /** @var array<array-key, float|int|numeric-string> $hargaNonMedis */
+        $hargaNonMedis = is_array($rawPost['harga_penunjang'] ?? null) ? $rawPost['harga_penunjang'] : [];
 
         $dataPengambilan = [];
 
@@ -277,14 +314,16 @@ final class PengambilanDarahController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            $pengambilanDarahModel = new PengambilanDarahModel();
+
             if (!empty($dataPengambilan['tanggal_pengambilan'])) {
-                $this->model->validasiTanggalOperasional($dataPengambilan['tanggal_pengambilan']);
+                $pengambilanDarahModel->validasiTanggalOperasional((string) $dataPengambilan['tanggal_pengambilan']);
             }
 
             $this->model->insert($dataPengambilan);
             $idPengambilan = $this->model->getInsertID();
 
-            if (!empty($bhpMedis) && is_array($bhpMedis)) {
+            if (!empty($bhpMedis)) {
                 $modelMedisDonor = new \App\Features\LogistikUTD\MedisDonor\MedisDonorModel();
 
                 foreach ($bhpMedis as $idBarang => $jumlah) {
@@ -300,7 +339,7 @@ final class PengambilanDarahController extends ControllerTemplate
                 }
             }
 
-            if (!empty($bhpNonMedis) && is_array($bhpNonMedis)) {
+            if (!empty($bhpNonMedis)) {
                 $modelPenunjangDonor = new \App\Features\LogistikUTD\PenunjangDonor\PenunjangDonorModel();
 
                 foreach ($bhpNonMedis as $idBarang => $jumlah) {
@@ -317,7 +356,7 @@ final class PengambilanDarahController extends ControllerTemplate
             }
 
             $idStatus = (int) ($dataPengambilan['id_status_pengambilan'] ?? 0);
-            $this->model->syncTanggalDonorTerakhir($idStatus, $dataPengambilan);
+            $pengambilanDarahModel->syncTanggalDonorTerakhir($idStatus, $dataPengambilan);
 
             $this->model->db->transComplete();
 
@@ -328,7 +367,7 @@ final class PengambilanDarahController extends ControllerTemplate
             session()->setFlashdata('success', 'Data pengambilan darah dan BHP berhasil disimpan.');
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+            $errMsg = $e instanceof DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -339,6 +378,8 @@ final class PengambilanDarahController extends ControllerTemplate
 
     /**
      * OVERRIDE: Menampilkan Halaman Ubah Data Pengambilan Darah & Penggunaan BHP
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     public function update_page(int|string $id): string
@@ -347,7 +388,7 @@ final class PengambilanDarahController extends ControllerTemplate
             return $this->index();
 
         $dataPengambilan = $this->model->find($id);
-        if (!$dataPengambilan) {
+        if (!is_array($dataPengambilan)) {
             $dataPengambilan = [];
         }
 
@@ -358,26 +399,35 @@ final class PengambilanDarahController extends ControllerTemplate
 
         if (!empty($dataPengambilan['id_kunjungan'])) {
             $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
-            $dataKunjungan  = $modelKunjungan->find($dataPengambilan['id_kunjungan']) ?? [];
+            $dataKunjungan  = $modelKunjungan->find((int) $dataPengambilan['id_kunjungan']);
+            if (!is_array($dataKunjungan)) {
+                $dataKunjungan = [];
+            }
 
             if (!empty($dataKunjungan['id_pendonor'])) {
                 $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
-                $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']) ?? [];
+                $dataPendonor  = $modelPendonor->find((int) $dataKunjungan['id_pendonor']);
+                if (!is_array($dataPendonor)) {
+                    $dataPendonor = [];
+                }
 
                 if (!empty($dataPendonor['id_orang'])) {
                     $modelOrang = new \App\Features\Person\Orang\OrangModel();
-                    $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                    $dataOrang  = $modelOrang->find((int) $dataPendonor['id_orang']);
+                    if (!is_array($dataOrang)) {
+                        $dataOrang = [];
+                    }
                 }
             }
         }
 
         if (!empty($dataPengambilan['id_petugas'])) {
             $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
-            $petugasRow   = $modelPetugas->find($dataPengambilan['id_petugas']) ?? [];
+            $petugasRow   = $modelPetugas->find((int) $dataPengambilan['id_petugas']) ?? [];
 
             if (!empty($petugasRow['id_orang'])) {
                 $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
-                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+                $orangPetugasRow   = $modelOrangPetugas->find((int) $petugasRow['id_orang']) ?? [];
 
                 if (isset($orangPetugasRow['nama'])) {
                     $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
@@ -385,8 +435,9 @@ final class PengambilanDarahController extends ControllerTemplate
             }
         }
 
-        $savedBhpMedis    = $this->model->getBhpMedisDetail($id);
-        $savedBhpNonMedis = $this->model->getBhpPenunjangDetail($id);
+        $pengambilanDarahModel = new PengambilanDarahModel();
+        $savedBhpMedis         = $pengambilanDarahModel->getBhpMedisDetail($id);
+        $savedBhpNonMedis      = $pengambilanDarahModel->getBhpPenunjangDetail($id);
 
         $baris = array_merge($dataOrang, $dataPendonor, $dataKunjungan, $dataPetugasMedis, $dataPengambilan);
 
@@ -394,9 +445,16 @@ final class PengambilanDarahController extends ControllerTemplate
         $controllerPendonor  = new \App\Features\Role\Pendonor\PendonorController();
         $controllerOrang     = new \App\Features\Person\Orang\OrangController();
 
+        /** @var list<array<int, mixed>> $konfigPengambilan */
         $konfigPengambilan = $this->get_fields_with_options(false, true);
+
+        /** @var list<array<int, string>> $konfigKunjungan */
         $konfigKunjungan   = $controllerKunjungan->get_fields_with_options(false, true);
+
+        /** @var list<array<int, string>> $konfigPendonor */
         $konfigPendonor    = $controllerPendonor->get_fields_with_options(false, true);
+
+        /** @var list<array<int, string>> $konfigOrang */
         $konfigOrang       = $controllerOrang->get_fields_with_options(false, true);
 
         $modelBhpMedis    = new \App\Features\LogistikUTD\PengambilanMedis\PengambilanMedisModel();
@@ -408,15 +466,16 @@ final class PengambilanDarahController extends ControllerTemplate
         $masterBhpMedis = [];
         foreach ($rawMedis as $row) {
             $sisaStok =
-                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
-                    - (int) $row['total_terpakai_penyerahan']
-                - (int) $row['total_rusak'];
-            if ((int) $row['total_masuk'] > 0) {
+                (int) ($row['total_masuk'] ?? 0) - (int) ($row['total_terpakai_donor'] ?? 0) - (int) ($row['total_terpakai_pemisahan'] ?? 0)
+                - (int) ($row['total_terpakai_penyerahan'] ?? 0)
+                - (int) ($row['total_rusak'] ?? 0);
+
+            if ((int) ($row['total_masuk'] ?? 0) > 0) {
                 $masterBhpMedis[] = [
-                    'id_barang'   => $row['id_barang'],
-                    'kode_barang' => $row['kode_barang'],
-                    'nama_barang' => $row['nama_barang'],
-                    'harga'       => $row['harga'],
+                    'id_barang'   => $row['id_barang'] ?? 0,
+                    'kode_barang' => $row['kode_barang'] ?? '-',
+                    'nama_barang' => $row['nama_barang'] ?? '-',
+                    'harga'       => $row['harga'] ?? 0,
                     'stok'        => $sisaStok,
                 ];
             }
@@ -425,15 +484,16 @@ final class PengambilanDarahController extends ControllerTemplate
         $masterBhpNonMedis = [];
         foreach ($rawPenunjang as $row) {
             $sisaStokNon =
-                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
-                    - (int) $row['total_terpakai_penyerahan']
-                - (int) $row['total_rusak'];
-            if ((int) $row['total_masuk'] > 0) {
+                (int) ($row['total_masuk'] ?? 0) - (int) ($row['total_terpakai_donor'] ?? 0) - (int) ($row['total_terpakai_pemisahan'] ?? 0)
+                - (int) ($row['total_terpakai_penyerahan'] ?? 0)
+                - (int) ($row['total_rusak'] ?? 0);
+
+            if ((int) ($row['total_masuk'] ?? 0) > 0) {
                 $masterBhpNonMedis[] = [
-                    'id_barang'   => $row['id_barang'],
-                    'kode_barang' => $row['kode_barang'],
-                    'nama_barang' => $row['nama_barang'],
-                    'harga'       => $row['harga'],
+                    'id_barang'   => $row['id_barang'] ?? 0,
+                    'kode_barang' => $row['kode_barang'] ?? '-',
+                    'nama_barang' => $row['nama_barang'] ?? '-',
+                    'harga'       => $row['harga'] ?? 0,
                     'stok'        => $sisaStokNon,
                 ];
             }
@@ -442,7 +502,11 @@ final class PengambilanDarahController extends ControllerTemplate
         $konfigGabungan = [];
 
         foreach ($konfigPengambilan as $fieldPengambilan) {
-            $columnPengambilan = $fieldPengambilan[2];
+            if (!isset($fieldPengambilan[2])) {
+                continue;
+            }
+
+            $columnPengambilan = (string) $fieldPengambilan[2];
 
             if ($columnPengambilan === 'id_pengambilan_darah') {
                 continue;
@@ -450,21 +514,21 @@ final class PengambilanDarahController extends ControllerTemplate
 
             if ($columnPengambilan === 'id_kunjungan') {
                 foreach ($konfigKunjungan as $fieldKunjungan) {
-                    if ($fieldKunjungan[2] === 'nomor_kunjungan') {
+                    if (($fieldKunjungan[2] ?? '') === 'nomor_kunjungan') {
                         $konfigGabungan[] = $fieldKunjungan;
                         break;
                     }
                 }
 
                 foreach ($konfigPendonor as $fieldPendonor) {
-                    if ($fieldPendonor[2] === 'nomor_pendonor') {
+                    if (($fieldPendonor[2] ?? '') === 'nomor_pendonor') {
                         $konfigGabungan[] = $fieldPendonor;
                         break;
                     }
                 }
 
                 foreach ($konfigOrang as $fieldOrang) {
-                    if ($fieldOrang[2] === 'nama') {
+                    if (($fieldOrang[2] ?? '') === 'nama') {
                         $konfigGabungan[] = $fieldOrang;
                         break;
                     }
@@ -476,17 +540,21 @@ final class PengambilanDarahController extends ControllerTemplate
         }
 
         foreach ($konfigGabungan as $field) {
-            $namaKolom = $field[2];
+            if (!isset($field[2])) {
+                continue;
+            }
+            
+            $namaKolom = (string) $field[2];
             if (($baris[$namaKolom] ?? null) === null) {
                 $baris[$namaKolom] = '';
             }
         }
 
+        $daftarNoBag = $pengambilanDarahModel->getDaftarNoBagTerpakai($id);
+
         $breadcrumbs = [
             ['title' => 'Ubah', 'icon' => 'Ubah'],
         ];
-
-        $daftarNoBag = $this->model->getDaftarNoBagTerpakai($id);
 
         return view('/admin/donor/tambah_pengambilandarah', [
             'judul'             => 'Ubah ' . $this->title,
@@ -506,6 +574,8 @@ final class PengambilanDarahController extends ControllerTemplate
 
     /**
      * OVERRIDE: Mengeksekusi Simpan Perubahan Data Pengambilan Darah & Penggunaan BHP
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     public function update(int|string $id): string|RedirectResponse
@@ -513,6 +583,7 @@ final class PengambilanDarahController extends ControllerTemplate
         if ($id == 0)
             return $this->index();
 
+        /** @var array<string, mixed> $rawPost */
         $rawPost             = $this->request->getPost();
         $dataPengambilanLama = $this->model->find($id);
 
@@ -521,10 +592,17 @@ final class PengambilanDarahController extends ControllerTemplate
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
-        $bhpMedisUpdate     = $this->request->getPost('id_medis_donor');
-        $hargaMedis         = $this->request->getPost('harga_medis');
-        $bhpPenunjangUpdate = $this->request->getPost('id_penunjang_donor');
-        $hargaPenunjang     = $this->request->getPost('harga_penunjang');
+        /** @var array<string, mixed> $dataPengambilanLama */
+
+        /** @var array<array-key, int|string> $bhpMedisUpdate */
+        $bhpMedisUpdate     = is_array($rawPost['id_medis_donor'] ?? null) ? $rawPost['id_medis_donor'] : [];
+        /** @var array<array-key, float|int|numeric-string> $hargaMedis */
+        $hargaMedis         = is_array($rawPost['harga_medis'] ?? null) ? $rawPost['harga_medis'] : [];
+
+        /** @var array<array-key, int|string> $bhpPenunjangUpdate */
+        $bhpPenunjangUpdate = is_array($rawPost['id_penunjang_donor'] ?? null) ? $rawPost['id_penunjang_donor'] : [];
+        /** @var array<array-key, float|int|numeric-string> $hargaPenunjang */
+        $hargaPenunjang     = is_array($rawPost['harga_penunjang'] ?? null) ? $rawPost['harga_penunjang'] : [];
 
         $dataPengambilan = [];
         foreach ($this->fields as $field) {
@@ -541,8 +619,10 @@ final class PengambilanDarahController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
+            $pengambilanDarahModel = new PengambilanDarahModel();
+
             if (!empty($dataPengambilan['tanggal_pengambilan'])) {
-                $this->model->validasiTanggalOperasional($dataPengambilan['tanggal_pengambilan']);
+                $pengambilanDarahModel->validasiTanggalOperasional((string) $dataPengambilan['tanggal_pengambilan']);
             }
 
             $this->model->update($id, $dataPengambilan);
@@ -551,7 +631,7 @@ final class PengambilanDarahController extends ControllerTemplate
 
             $modelMedisDonor->where('id_pengambilan_darah', $id)->delete();
 
-            if (!empty($bhpMedisUpdate) && is_array($bhpMedisUpdate)) {
+            if (!empty($bhpMedisUpdate)) {
                 foreach ($bhpMedisUpdate as $idBarang => $jumlah) {
                     if ((int) $jumlah <= 0)
                         continue;
@@ -569,7 +649,7 @@ final class PengambilanDarahController extends ControllerTemplate
 
             $modelPenunjangDonor->where('id_pengambilan_darah', $id)->delete();
 
-            if (!empty($bhpPenunjangUpdate) && is_array($bhpPenunjangUpdate)) {
+            if (!empty($bhpPenunjangUpdate)) {
                 foreach ($bhpPenunjangUpdate as $idBarang => $jumlah) {
                     if ((int) $jumlah <= 0)
                         continue;
@@ -584,7 +664,7 @@ final class PengambilanDarahController extends ControllerTemplate
             }
 
             $idStatus = (int) ($dataPengambilan['id_status_pengambilan'] ?? 0);
-            $this->model->syncTanggalDonorTerakhir($idStatus, $dataPengambilan, $dataPengambilanLama);
+            $pengambilanDarahModel->syncTanggalDonorTerakhir($idStatus, $dataPengambilan, $dataPengambilanLama);
 
             $this->model->db->transComplete();
 
@@ -595,7 +675,7 @@ final class PengambilanDarahController extends ControllerTemplate
             session()->setFlashdata('success', 'Data pengambilan darah dan penggunaan BHP berhasil diperbarui.');
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+            $errMsg = $e instanceof DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -619,6 +699,7 @@ final class PengambilanDarahController extends ControllerTemplate
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
+        /** @var array<string, mixed> $dataPengambilan */
         $this->model->db->transStart();
 
         try {
@@ -628,18 +709,19 @@ final class PengambilanDarahController extends ControllerTemplate
             $modelMedisDonor->where('id_pengambilan_darah', $id)->delete();
             $modelPenunjangDonor->where('id_pengambilan_darah', $id)->delete();
 
-            $this->model->syncTanggalDonorTerakhir(0, $dataPengambilan);
+            $pengambilanDarahModel = new PengambilanDarahModel();
+            $pengambilanDarahModel->syncTanggalDonorTerakhir(0, $dataPengambilan);
 
             $this->model->delete($id);
 
             $this->model->db->transComplete();
 
             if (!$this->model->db->transStatus() ) {
-                throw new \CodeIgniter\Database\Exceptions\DatabaseException('violates foreign key constraint');
+                throw new DatabaseException('violates foreign key constraint');
             }
 
             session()->setFlashdata('success', 'Data pengambilan darah dan penggunaan BHP berhasil dihapus.');
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (DatabaseException $e) {
             $this->model->db->transRollback();
             session()->setFlashdata('error', $this->friendly_db_error($e));
         } catch (\Exception $e) {
@@ -652,6 +734,8 @@ final class PengambilanDarahController extends ControllerTemplate
 
     /**
      * Menampilkan Halaman Detail Pengambilan Darah & Penggunaan BHP
+     * 
+     * @throws DatabaseException
      */
     public function detail(int|string $id): string
     {
@@ -659,6 +743,9 @@ final class PengambilanDarahController extends ControllerTemplate
             return $this->index();
 
         $dataPengambilan = $this->model->find($id);
+        if (!is_array($dataPengambilan)) {
+            $dataPengambilan = [];
+        }
 
         $dataKunjungan    = [];
         $dataPendonor     = [];
@@ -667,26 +754,35 @@ final class PengambilanDarahController extends ControllerTemplate
 
         if (!empty($dataPengambilan['id_kunjungan'])) {
             $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
-            $dataKunjungan  = $modelKunjungan->find($dataPengambilan['id_kunjungan']) ?? [];
+            $dataKunjungan  = $modelKunjungan->find((int) $dataPengambilan['id_kunjungan']);
+            if (!is_array($dataKunjungan)) {
+                $dataKunjungan = [];
+            }
 
             if (!empty($dataKunjungan['id_pendonor'])) {
                 $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
-                $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']) ?? [];
+                $dataPendonor  = $modelPendonor->find((int) $dataKunjungan['id_pendonor']);
+                if (!is_array($dataPendonor)) {
+                    $dataPendonor = [];
+                }
 
                 if (!empty($dataPendonor['id_orang'])) {
                     $modelOrang = new \App\Features\Person\Orang\OrangModel();
-                    $dataOrang  = $modelOrang->find($dataPendonor['id_orang']) ?? [];
+                    $dataOrang  = $modelOrang->find((int) $dataPendonor['id_orang']);
+                    if (!is_array($dataOrang)) {
+                        $dataOrang = [];
+                    }
                 }
             }
         }
 
         if (!empty($dataPengambilan['id_petugas'])) {
             $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
-            $petugasRow   = $modelPetugas->find($dataPengambilan['id_petugas']) ?? [];
+            $petugasRow   = $modelPetugas->find((int) $dataPengambilan['id_petugas']) ?? [];
 
             if (!empty($petugasRow['id_orang'])) {
                 $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
-                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+                $orangPetugasRow   = $modelOrangPetugas->find((int) $petugasRow['id_orang']) ?? [];
 
                 if (isset($orangPetugasRow['nama'])) {
                     $dataPetugasMedis['nama_petugas'] = $orangPetugasRow['nama'];
@@ -694,22 +790,34 @@ final class PengambilanDarahController extends ControllerTemplate
             }
         }
 
-        $bhpMedis     = $this->model->getBhpMedisDetail($id);
-        $bhpPenunjang = $this->model->getBhpPenunjangDetail($id);
+        $pengambilanDarahModel = new PengambilanDarahModel();
+        $bhpMedis              = $pengambilanDarahModel->getBhpMedisDetail($id);
+        $bhpPenunjang          = $pengambilanDarahModel->getBhpPenunjangDetail($id);
 
         $baris = array_merge($dataOrang, $dataPendonor, $dataKunjungan, $dataPetugasMedis, $dataPengambilan);
 
         $optionsFields = $this->get_fields_with_options(false, true);
-        foreach ($optionsFields as $field) {
-            $colName = $field[2];
-            $options = $field[5] ?? [];
+
+        /** @var list<array<int, mixed>> $fieldsList */
+        $fieldsList = array_values(array_filter($optionsFields, 'is_array'));
+
+        foreach ($fieldsList as $field) {
+            if (!isset($field[2])) {
+                continue;
+            }
+
+            $colName = (string) $field[2];
+            $options = is_array($field[5] ?? null) ? $field[5] : [];
 
             if (!empty($options) && isset($baris[$colName])) {
-                $idMentah = $baris[$colName];
+                $idMentah = (string) $baris[$colName];
 
-                foreach ($options as $opt) {
-                    if ((string) $opt[1] === (string) $idMentah) {
-                        $baris[$colName] = $opt[0];
+                /** @var list<array<int, mixed>> $optionsList */
+                $optionsList = array_values(array_filter($options, 'is_array'));
+
+                foreach ($optionsList as $opt) {
+                    if ((string) ($opt[1] ?? '') === $idMentah) {
+                        $baris[$colName] = $opt[0] ?? '';
                         break;
                     }
                 }

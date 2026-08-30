@@ -5,6 +5,7 @@ namespace App\Features\Donor\PengambilanDarah;
 
 use App\Core\Model\ModelTemplate;
 use App\Core\Model\ValidationType as V;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 
 final class PengambilanDarahModel extends ModelTemplate
 {
@@ -37,10 +38,12 @@ final class PengambilanDarahModel extends ModelTemplate
      * @param int $limit
      * @param int $offset
      * @return list<array<string, mixed>>
+     * 
+     * @throws DatabaseException
      */
     public function get_data_tabel(int $limit, int $offset): array
     {
-        return $this->db
+        $query = $this->db
             ->table('donor.pengambilan_darah pd')
             ->select([
                 'pd.id_pengambilan_darah',
@@ -59,8 +62,16 @@ final class PengambilanDarahModel extends ModelTemplate
             ->join('donor.status_pengambilan sp', 'sp.id_status_pengambilan = pd.id_status_pengambilan', 'left')
             ->orderBy('pd.tanggal_pengambilan', 'DESC')
             ->limit($limit, $offset)
-            ->get()
-            ->getResultArray();
+            ->get();
+        
+        if ($query === false) {
+            return [];
+        }
+
+        /** @var list<array<string, mixed>> $data */
+        $data = $query->getResultArray();
+
+        return $data;
     }
 
     /**
@@ -83,15 +94,15 @@ final class PengambilanDarahModel extends ModelTemplate
     /**
      * Memperbarui tanggal donor terakhir pendonor berdasarkan status pengambilan
      * @param int $idStatusPengambilan
-     * @param array $dataPengambilan
-     * @param array|null $dataPengambilanSebelumnya
+     * @param array<string, mixed> $dataPengambilan
+     * @param array<string, mixed>|null $dataPengambilanSebelumnya
      */
     public function syncTanggalDonorTerakhir(
         int $idStatusPengambilan,
         array $dataPengambilan,
         null|array $dataPengambilanSebelumnya = null,
     ): void {
-        $idKunjungan = $dataPengambilan['id_kunjungan'] ?? $dataPengambilanSebelumnya['id_kunjungan'] ?? null;
+        $idKunjungan = (int) ($dataPengambilan['id_kunjungan'] ?? $dataPengambilanSebelumnya['id_kunjungan'] ?? 0);
 
         if (empty($idKunjungan)) {
             return;
@@ -104,13 +115,25 @@ final class PengambilanDarahModel extends ModelTemplate
             return;
         }
 
-        $idPendonor    = $kunjunganRow['id_pendonor'];
+        $idPendonor    = (int) $kunjunganRow['id_pendonor'];
         $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
         $dataPendonor  = $modelPendonor->find($idPendonor) ?? [];
 
-        $tanggalAktif       = $this->normalisasiTanggal($dataPendonor['tanggal_donor_terakhir'] ?? null);
-        $tanggalPengambilan = $this->normalisasiTanggal($dataPengambilan['tanggal_pengambilan'] ?? null);
-        $tanggalSebelumnya  = $this->normalisasiTanggal($dataPengambilanSebelumnya['tanggal_pengambilan'] ?? null);
+        $tanggalAktif = null;
+        if (isset($dataPendonor['tanggal_donor_terakhir']) && is_string($dataPendonor['tanggal_donor_terakhir'])) {
+            $tanggalAktif   = $this->normalisasiTanggal($dataPendonor['tanggal_donor_terakhir']);
+        }
+
+        $tanggalPengambilan = null;
+        if (isset($dataPengambilan['tanggal_pengambilan']) && is_string($dataPengambilan['tanggal_pengambilan'])) {
+            $tanggalPengambilan   = $this->normalisasiTanggal($dataPengambilan['tanggal_pengambilan']);
+        }
+
+        $tanggalSebelumnya = null;
+        if (isset($dataPengambilanSebelumnya['tanggal_pengambilan']) && is_string($dataPengambilanSebelumnya['tanggal_pengambilan'])) {
+            $tanggalSebelumnya   = $this->normalisasiTanggal($dataPengambilanSebelumnya['tanggal_pengambilan']);
+        }
+
         $statusSebelumnya   = (int) (
             $dataPengambilanSebelumnya['id_status_pengambilan'] ?? $dataPengambilan['id_status_pengambilan'] ?? 0
         );
@@ -145,13 +168,21 @@ final class PengambilanDarahModel extends ModelTemplate
             return null;
         }
 
-        return date('Y-m-d', strtotime($tanggal));
+        $timestamp = strtotime($tanggal);
+
+        if ($timestamp === false) {
+            return null;
+        }
+
+        return date('Y-m-d', $timestamp);
     }
 
     /**
      * Memeriksa apakah kantong darah sudah pernah dipisahkan
      * @param string|int $idPengambilanDarah
      * @return bool
+     * 
+     * @throws DatabaseException
      */
     public function apakahSudahDipisahkan(string|int $idPengambilanDarah): bool
     {
@@ -167,6 +198,8 @@ final class PengambilanDarahModel extends ModelTemplate
      * Memeriksa apakah kantong darah sudah pernah melalui Uji Saring IMLTD
      * @param string|int $idPengambilanDarah
      * @return bool
+     * 
+     * @throws DatabaseException
      */
     public function apakahSudahDiuji(string|int $idPengambilanDarah): bool
     {
@@ -182,6 +215,8 @@ final class PengambilanDarahModel extends ModelTemplate
      * Mengambil daftar nomor bag yang sudah terpakai
      * @param int|string|null $excludeId ID pengambilan darah yang dikecualikan (dipakai saat mode ubah)
      * @return list<string>
+     * 
+     * @throws DatabaseException
      */
     public function getDaftarNoBagTerpakai(null|int|string $excludeId = null): array
     {
@@ -193,25 +228,60 @@ final class PengambilanDarahModel extends ModelTemplate
             $builder->where('id_pengambilan_darah !=', $excludeId);
         }
 
-        return array_column($builder->get()->getResultArray(), 'no_bag');
+        $query = $builder->get();
+
+        if ($query === false) {
+            return [];
+        }
+
+        /** @var list<array<string, mixed>> $rows */
+        $rows = $query->getResultArray();
+
+        $noBagTerpakai = [];
+
+        foreach ($rows as $row) {
+            if (isset($row['no_bag']) && is_string($row['no_bag'])) {
+                $noBagTerpakai[] = $row['no_bag'];
+            }
+        }
+
+        return $noBagTerpakai;
     }
 
     /**
      * Mengambil data penggunaan BHP medis donor
+     * @return list<array<string, mixed>>
+     * 
+     * @throws DatabaseException
      */
     public function getBhpMedisDetail(int|string $idPengambilan): array
     {
-        $bhpMedis = $this->db
+        $query = $this->db
             ->table('logistik_utd.medis_donor')
             ->where('id_pengambilan_darah', $idPengambilan)
-            ->get()
-            ->getResultArray();
+            ->get();
+        
+        if ($query === false) {
+            return [];
+        }
+
+        /** @var list<array<string, mixed>> $bhpMedis */
+        $bhpMedis = $query->getResultArray();
 
         $modelMasterMedis = new \App\Features\InventoriMedis\DataBarang\DataBarangModel();
         foreach ($bhpMedis as $k => $v) {
-            $masterItem                  = $modelMasterMedis->find($v['id_barang']);
+            $idBarang = isset($v['id_barang']) ? (int) $v['id_barang'] : null;
+            if (!is_int($idBarang)) {
+                continue;
+            }
+
+            $masterItem = $modelMasterMedis->find($idBarang);
+            if (!is_array($masterItem)) {
+                continue;
+            }
+
             $bhpMedis[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
-            $bhpMedis[$k]['nama_barang'] = $masterItem['nama'];
+            $bhpMedis[$k]['nama_barang'] = $masterItem['nama'] ?? '-';
         }
 
         return $bhpMedis;
@@ -219,20 +289,38 @@ final class PengambilanDarahModel extends ModelTemplate
 
     /**
      * Mengambil data penggunaan BHP non medis donor
+     * @return list<array<string, mixed>>
+     *
+     * @throws DatabaseException
      */
     public function getBhpPenunjangDetail(int|string $idPengambilan): array
     {
-        $bhpPenunjang = $this->db
+        $query = $this->db
             ->table('logistik_utd.penunjang_donor')
             ->where('id_pengambilan_darah', $idPengambilan)
-            ->get()
-            ->getResultArray();
+            ->get();
+        
+        if ($query === false) {
+            return [];
+        }
+
+        /** @var list<array<string, mixed>> $bhpPenunjang */
+        $bhpPenunjang = $query->getResultArray();
 
         $modelMasterPenunjang = new \App\Features\InventoriNonMedis\Barang\BarangModel();
         foreach ($bhpPenunjang as $k => $v) {
-            $masterItem                      = $modelMasterPenunjang->find($v['id_barang']);
+            $idBarang = isset($v['id_barang']) ? (int) $v['id_barang'] : null;
+            if (!is_int($idBarang)) {
+                continue;
+            }
+
+            $masterItem = $modelMasterPenunjang->find($idBarang);
+            if (!is_array($masterItem)) {
+                continue;
+            }
+
             $bhpPenunjang[$k]['kode_barang'] = $masterItem['kode_barang'] ?? '-';
-            $bhpPenunjang[$k]['nama_barang'] = $masterItem['nama_barang'];
+            $bhpPenunjang[$k]['nama_barang'] = $masterItem['nama_barang'] ?? '-';
         }
 
         return $bhpPenunjang;

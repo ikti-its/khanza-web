@@ -30,6 +30,7 @@ final class PengambilanPenunjangModel extends ModelTemplate
 
     /**
      * Mengambil katalog barang non medis beserta akumulasi total mutasi masuk, penggunaan, dan rusak
+     * @return list<array<string, mixed>>
      */
     public function get_katalog_dan_stok_ruangan(): array
     {
