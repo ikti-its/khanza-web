@@ -5,6 +5,8 @@ namespace App\Features\InventoriDarah\StokDarah;
 
 use App\Core\Model\ModelTemplate;
 use App\Core\Model\ValidationType as V;
+use CodeIgniter\Database\Exceptions\DatabaseException;
+use CodeIgniter\Exceptions\ModelException;
 
 final class StokDarahModel extends ModelTemplate
 {
@@ -30,6 +32,9 @@ final class StokDarahModel extends ModelTemplate
 
     /**
      * Auto-update status kantong darah yang kadaluwarsa menjadi tidak layak
+     * 
+     * @throws ModelException
+     * @throws DatabaseException
      */
     public function updateStatusKadaluarsa(string $hariIni): void
     {
@@ -47,10 +52,13 @@ final class StokDarahModel extends ModelTemplate
 
     /**
      * Mengambil data stok darah siap pakai
+     * @return list<array<string, mixed>>
+     * 
+     * @throws ModelException
      */
     public function get_stok_siap_pakai(string $hariIni): array
     {
-        return $this
+        $query = $this
             ->builder()
             ->select("
                 {$this->table}.id_stok_darah,
@@ -67,8 +75,16 @@ final class StokDarahModel extends ModelTemplate
             ->where($this->table . '.tanggal_kadaluarsa >=', $hariIni)
             ->where($this->table . '.id_status_stok', 2)
             ->orderBy($this->table . '.tanggal_kadaluarsa', 'ASC')
-            ->get()
-            ->getResultArray();
+            ->get();
+        
+        if ($query === false) {
+            return [];
+        }
+
+        /** @var list<array<string, mixed>> $data */
+        $data = $query->getResultArray();
+
+        return $data;
     }
 
     /**

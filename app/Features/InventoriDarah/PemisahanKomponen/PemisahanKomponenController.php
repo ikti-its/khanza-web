@@ -6,7 +6,9 @@ namespace App\Features\InventoriDarah\PemisahanKomponen;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\HTTP\RedirectResponse;
+use ReflectionException;
 
 final class PemisahanKomponenController extends ControllerTemplate
 {
@@ -39,6 +41,8 @@ final class PemisahanKomponenController extends ControllerTemplate
 
     /**
      * OVERRIDE: Halaman Utama Pemisahan Komponen
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     final public function index(): string
@@ -48,7 +52,9 @@ final class PemisahanKomponenController extends ControllerTemplate
         $offset      = ($currentPage - 1) * $perPage;
 
         $totalRows  = $this->model->count_filtered();
-        $data_tabel = $this->model->get_data_tabel($perPage, $offset);
+
+        $pemisahanKomponenModel = new PemisahanKomponenModel();
+        $data_tabel             = $pemisahanKomponenModel->get_data_tabel($perPage, $offset);
 
         $konfig = [
             [1, 'No. Pengambilan',   'nomor_pengambilan', 'teks',    0],
@@ -79,6 +85,8 @@ final class PemisahanKomponenController extends ControllerTemplate
 
     /**
      * OVERRIDE: Menampilkan Form Pemisahan Komponen & Penggunaan BHP
+     * 
+     * @throws DatabaseException
      */
     #[\Override]
     public function create_page(): string
@@ -87,9 +95,11 @@ final class PemisahanKomponenController extends ControllerTemplate
             ['title' => 'Tambah', 'icon' => 'tambah'],
         ];
 
+        /** @var list<array<int, mixed>> $fieldsWithOptions */
         $fieldsWithOptions = $this->get_fields_with_options(false, true);
 
         $controllerPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahController();
+        /** @var list<array<int, string>> $konfigPengambilan */
         $konfigPengambilan     = $controllerPengambilan->get_fields_with_options(false, true);
 
         $modelKomponen  = new \App\Features\InventoriDarah\KomponenDarah\KomponenDarahModel();
@@ -104,16 +114,16 @@ final class PemisahanKomponenController extends ControllerTemplate
         $masterBhpMedis = [];
         foreach ($rawMedis as $row) {
             $sisaStok =
-                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
-                    - (int) $row['total_terpakai_penyerahan']
-                - (int) $row['total_rusak'];
+                (int) ($row['total_masuk'] ?? 0) - (int) ($row['total_terpakai_donor'] ?? 0) - (int) ($row['total_terpakai_pemisahan'] ?? 0)
+                - (int) ($row['total_terpakai_penyerahan'] ?? 0)
+                - (int) ($row['total_rusak'] ?? 0);
 
-            if ((int) $row['total_masuk'] > 0) {
+            if ((int) ($row['total_masuk'] ?? 0) > 0) {
                 $masterBhpMedis[] = [
-                    'id_barang'   => $row['id_barang'],
-                    'kode_barang' => $row['kode_barang'],
-                    'nama_barang' => $row['nama_barang'],
-                    'harga'       => $row['harga'],
+                    'id_barang'   => $row['id_barang'] ?? 0,
+                    'kode_barang' => $row['kode_barang'] ?? '-',
+                    'nama_barang' => $row['nama_barang'] ?? '-',
+                    'harga'       => $row['harga'] ?? 0,
                     'stok'        => $sisaStok,
                 ];
             }
@@ -122,16 +132,16 @@ final class PemisahanKomponenController extends ControllerTemplate
         $masterBhpNonMedis = [];
         foreach ($rawPenunjang as $row) {
             $sisaStokNon =
-                (int) $row['total_masuk'] - (int) $row['total_terpakai_donor'] - (int) $row['total_terpakai_pemisahan']
-                    - (int) $row['total_terpakai_penyerahan']
-                - (int) $row['total_rusak'];
+                (int) ($row['total_masuk'] ?? 0) - (int) ($row['total_terpakai_donor'] ?? 0) - (int) ($row['total_terpakai_pemisahan'] ?? 0)
+                - (int) ($row['total_terpakai_penyerahan'] ?? 0)
+                - (int) ($row['total_rusak'] ?? 0);
 
-            if ((int) $row['total_masuk'] > 0) {
+            if ((int) ($row['total_masuk'] ?? 0) > 0) {
                 $masterBhpNonMedis[] = [
-                    'id_barang'   => $row['id_barang'],
-                    'kode_barang' => $row['kode_barang'],
-                    'nama_barang' => $row['nama_barang'],
-                    'harga'       => $row['harga'],
+                    'id_barang'   => $row['id_barang'] ?? 0,
+                    'kode_barang' => $row['kode_barang'] ?? '-',
+                    'nama_barang' => $row['nama_barang'] ?? '-',
+                    'harga'       => $row['harga'] ?? 0,
                     'stok'        => $sisaStokNon,
                 ];
             }
@@ -141,7 +151,11 @@ final class PemisahanKomponenController extends ControllerTemplate
         $konfigGabungan = [];
 
         foreach ($fieldsWithOptions as $field) {
-            $namaKolom = $field[2];
+            if (!isset($field[2])) {
+                continue;
+            }
+
+            $namaKolom = (string) $field[2];
 
             if ($namaKolom === 'id_pemisahan') {
                 continue;
@@ -152,7 +166,7 @@ final class PemisahanKomponenController extends ControllerTemplate
 
             if ($namaKolom === 'id_pengambilan_darah') {
                 foreach ($konfigPengambilan as $fPengambilan) {
-                    if ($fPengambilan[2] === 'nomor_pengambilan') {
+                    if (($fPengambilan[2] ?? '') === 'nomor_pengambilan') {
                         $mockBaris['nomor_pengambilan'] = '';
                         $konfigGabungan[]               = $fPengambilan;
                         break;
@@ -164,17 +178,20 @@ final class PemisahanKomponenController extends ControllerTemplate
             $konfigGabungan[] = $field;
         }
 
+        /** @var string|null $id_pengambilan */
         $id_pengambilan = $this->request->getGet('pengambilan');
         $batasKomponen  = ['nama_jenis_bag' => '-', 'batas' => null];
 
         if ($id_pengambilan !== null && is_numeric($id_pengambilan)) {
             $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
-            $dataPengambilan  = $modelPengambilan->find($id_pengambilan);
+            $dataPengambilan  = $modelPengambilan->find((int) $id_pengambilan);
 
             if ($dataPengambilan) {
-                $mockBaris['id_pengambilan_darah'] = $dataPengambilan['id_pengambilan_darah'];
-                $mockBaris['nomor_pengambilan']    = $dataPengambilan['nomor_pengambilan'];
-                $batasKomponen                     = $this->model->getBatasKomponen($id_pengambilan);
+                $mockBaris['id_pengambilan_darah'] = $dataPengambilan['id_pengambilan_darah'] ?? '';
+                $mockBaris['nomor_pengambilan']    = $dataPengambilan['nomor_pengambilan'] ?? '';
+
+                $pemisahanKomponenModel = new PemisahanKomponenModel();
+                $batasKomponen          = $pemisahanKomponenModel->getBatasKomponen($id_pengambilan);
             }
         }
 
@@ -199,15 +216,22 @@ final class PemisahanKomponenController extends ControllerTemplate
     #[\Override]
     final public function create(): string|RedirectResponse
     {
+        /** @var array<string, mixed> $rawPost */
         $rawPost = $this->request->getPost();
 
+        /** @var list<int|string>|null $komponenTerpilih */
         $komponenTerpilih = $this->request->getPost('id_komponen');
-        $nomorPengambilan = $this->request->getPost('nomor_pengambilan');
+        $nomorPengambilan = (string) ($this->request->getPost('nomor_pengambilan') ?? '');
 
-        $bhpMedis      = $this->request->getPost('id_medis_donor');
-        $hargaMedis    = $this->request->getPost('harga_medis');
-        $bhpNonMedis   = $this->request->getPost('id_penunjang_donor');
-        $hargaNonMedis = $this->request->getPost('harga_penunjang');
+        /** @var array<array-key, int|string> $bhpMedis */
+        $bhpMedis      = is_array($rawPost['id_medis_donor'] ?? null) ? $rawPost['id_medis_donor'] : [];
+        /** @var array<array-key, float|int|numeric-string> $hargaMedis */
+        $hargaMedis    = is_array($rawPost['harga_medis'] ?? null) ? $rawPost['harga_medis'] : [];
+
+        /** @var array<array-key, int|string> $bhpNonMedis */
+        $bhpNonMedis   = is_array($rawPost['id_penunjang_donor'] ?? null) ? $rawPost['id_penunjang_donor'] : [];
+        /** @var array<array-key, float|int|numeric-string> $hargaNonMedis */
+        $hargaNonMedis = is_array($rawPost['harga_penunjang'] ?? null) ? $rawPost['harga_penunjang'] : [];
 
         $dataPemisahan = [];
         foreach ($this->fields as $field) {
@@ -220,34 +244,47 @@ final class PemisahanKomponenController extends ControllerTemplate
         $this->model->db->transStart();
 
         try {
-            $this->model->validasiTanggalPemisahan($rawPost['id_pengambilan_darah'], $rawPost['tanggal_pemisahan']);
-            $this->model->validasiJumlahKomponen(
-                $rawPost['id_pengambilan_darah'],
+            $idPengambilanDarah = (int) ($rawPost['id_pengambilan_darah'] ?? 0);
+            $tanggalPemisahan   = (string) ($rawPost['tanggal_pemisahan'] ?? date('Y-m-d'));
+
+            $pemisahanKomponenModel = new PemisahanKomponenModel();
+            $pemisahanKomponenModel->validasiTanggalPemisahan($idPengambilanDarah, $tanggalPemisahan);
+            $pemisahanKomponenModel->validasiJumlahKomponen(
+                $idPengambilanDarah,
                 is_array($komponenTerpilih) ? $komponenTerpilih : [],
             );
 
             $this->model->insert($dataPemisahan);
             $idPemisahan = $this->model->getInsertID();
 
-            if (!empty($komponenTerpilih) && is_array($komponenTerpilih)) {
+            if (!empty($komponenTerpilih)) {
+                /** @var list<int|string> $komponenTerpilih */
                 $modelKompDetail = new \App\Features\InventoriDarah\PemisahanKomponenDetail\PemisahanKomponenDetailModel();
                 $modelMasterKomp = new \App\Features\InventoriDarah\KomponenDarah\KomponenDarahModel();
 
-                $idPengambilan    = $dataPemisahan['id_pengambilan_darah'];
+                $idPengambilan    = (int) ($dataPemisahan['id_pengambilan_darah'] ?? 0);
                 $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
-                $dataPengambilan  = $modelPengambilan->find($idPengambilan);
+                $dataPengambilan  = $modelPengambilan->find((int) $idPengambilan);
 
-                $tanggalPengambilan = $dataPengambilan['tanggal_pengambilan'] ?? date('Y-m-d');
+                if (!is_array($dataPengambilan)) {
+                    $dataPengambilan = [];
+                }
+
+                $tanggalPengambilan = isset($dataPengambilan['tanggal_pengambilan'])
+                    ? (string) $dataPengambilan['tanggal_pengambilan']
+                    : date('Y-m-d');
 
                 foreach ($komponenTerpilih as $idKomponen) {
                     $masterKomp = $modelMasterKomp->find($idKomponen);
-                    if (!$masterKomp)
+                    if (!is_array($masterKomp)) {
                         continue;
+                    }
 
-                    $lamaHari          = (int) $masterKomp['masa_berlaku_hari'];
-                    $tanggalKadaluarsa = date('Y-m-d', strtotime($tanggalPengambilan . ' + ' . $lamaHari . ' days'));
+                    $lamaHari          = (int) ($masterKomp['masa_berlaku_hari'] ?? 0);
+                    $timestampExp      = strtotime($tanggalPengambilan . ' + ' . $lamaHari . ' days');
+                    $tanggalKadaluarsa = date('Y-m-d', $timestampExp !== false ? $timestampExp : time());
 
-                    $kodeKomponen = $masterKomp['kode_komponen'];
+                    $kodeKomponen = (string) ($masterKomp['kode_komponen'] ?? '');
                     $noKantong    = $kodeKomponen . $nomorPengambilan;
 
                     $modelKompDetail->insert([
@@ -267,7 +304,7 @@ final class PemisahanKomponenController extends ControllerTemplate
                 }
             }
 
-            if (!empty($bhpMedis) && is_array($bhpMedis)) {
+            if (!empty($bhpMedis)) {
                 $modelMedisPemisahan = new \App\Features\LogistikUTD\MedisPemisahan\MedisPemisahanModel();
 
                 foreach ($bhpMedis as $idBarang => $jumlah) {
@@ -283,7 +320,7 @@ final class PemisahanKomponenController extends ControllerTemplate
                 }
             }
 
-            if (!empty($bhpNonMedis) && is_array($bhpNonMedis)) {
+            if (!empty($bhpNonMedis)) {
                 $modelPenunjangPemisahan = new \App\Features\LogistikUTD\PenunjangPemisahan\PenunjangPemisahanModel();
 
                 foreach ($bhpNonMedis as $idBarang => $jumlah) {
@@ -308,7 +345,7 @@ final class PemisahanKomponenController extends ControllerTemplate
             session()->setFlashdata('success', 'Data pemisahan komponen dan penggunaan BHP berhasil disimpan.');
         } catch (\Exception $e) {
             $this->model->db->transRollback();
-            $errMsg = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+            $errMsg = $e instanceof DatabaseException
                 ? $this->friendly_db_error($e)
                 : $e->getMessage();
             session()->setFlashdata('error', $errMsg);
@@ -333,14 +370,14 @@ final class PemisahanKomponenController extends ControllerTemplate
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
-        $idPengambilanDarah = $dataPemisahan['id_pengambilan_darah'] ?? null;
+        $idPengambilanDarah = (int) ($dataPemisahan['id_pengambilan_darah'] ?? 0);
         $nomorPengambilan   = '';
 
         if ($idPengambilanDarah) {
             $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
-            $dataPengambilan  = $modelPengambilan->find($idPengambilanDarah);
+            $dataPengambilan  = $modelPengambilan->find((int) $idPengambilanDarah);
             if ($dataPengambilan) {
-                $nomorPengambilan = $dataPengambilan['nomor_pengambilan'] ?? '';
+                $nomorPengambilan = (string) ($dataPengambilan['nomor_pengambilan'] ?? '');
             }
         }
 
@@ -370,7 +407,7 @@ final class PemisahanKomponenController extends ControllerTemplate
             }
 
             session()->setFlashdata('success', 'Data pemisahan komponen dan penggunaan BHP berhasil dihapus.');
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (DatabaseException $e) {
             $this->model->db->transRollback();
             session()->setFlashdata('error', $this->friendly_db_error($e));
         } catch (\Exception $e) {
@@ -383,13 +420,16 @@ final class PemisahanKomponenController extends ControllerTemplate
 
     /**
      * HELPER: Penyimpanan stok darah dengan status karantina
+     * @param array<array-key, mixed> $dataPengambilan
+     * 
+     * @throws ReflectionException
      */
     private function stok_karantina(
         string $noKantong,
-        $idKomponen,
+        int|string $idKomponen,
         string $tanggalPengambilan,
         string $tanggalKadaluarsa,
-        null|array $dataPengambilan,
+        array $dataPengambilan,
     ): void {
         $modelStokDarah = new \App\Features\InventoriDarah\StokDarah\StokDarahModel();
 
@@ -400,21 +440,25 @@ final class PemisahanKomponenController extends ControllerTemplate
 
         if (!empty($dataPengambilan['id_kunjungan'])) {
             $modelKunjungan = new \App\Features\Donor\Kunjungan\KunjunganModel();
-            $dataKunjungan  = $modelKunjungan->find($dataPengambilan['id_kunjungan']);
+            $dataKunjungan  = $modelKunjungan->find((int) $dataPengambilan['id_kunjungan']);
 
             if (!empty($dataKunjungan['id_pendonor'])) {
                 $modelPendonor = new \App\Features\Role\Pendonor\PendonorModel();
-                $dataPendonor  = $modelPendonor->find($dataKunjungan['id_pendonor']);
+                $dataPendonor  = $modelPendonor->find((int) $dataKunjungan['id_pendonor']);
 
                 if (!empty($dataPendonor)) {
-                    $idRhesus = $dataPendonor['id_rhesus'] ?? null;
+                    $idRhesus = isset($dataPendonor['id_rhesus']) && is_numeric($dataPendonor['id_rhesus'])
+                        ? (int) $dataPendonor['id_rhesus']
+                        : null;
 
                     if (!empty($dataPendonor['id_orang'])) {
                         $modelOrang = new \App\Features\Person\Orang\OrangModel();
-                        $dataOrang  = $modelOrang->find($dataPendonor['id_orang']);
+                        $dataOrang  = $modelOrang->find((int) $dataPendonor['id_orang']);
 
                         if (!empty($dataOrang)) {
-                            $idGolonganDarah = $dataOrang['id_golongan_darah'] ?? null;
+                            $idGolonganDarah = isset($dataOrang['id_golongan_darah']) && is_numeric($dataOrang['id_golongan_darah'])
+                                ? (int) $dataOrang['id_golongan_darah']
+                                : null;
                         }
                     }
                 }
@@ -435,6 +479,8 @@ final class PemisahanKomponenController extends ControllerTemplate
 
     /**
      * Menampilkan Halaman Detail Pemisahan Komponen
+     * 
+     * @throws DatabaseException
      */
     final public function detail(int|string $id): string
     {
@@ -442,7 +488,7 @@ final class PemisahanKomponenController extends ControllerTemplate
             return $this->index();
 
         $dataPemisahan = $this->model->find($id);
-        if (!$dataPemisahan) {
+        if (!is_array($dataPemisahan)) {
             $dataPemisahan = [];
         }
 
@@ -451,7 +497,7 @@ final class PemisahanKomponenController extends ControllerTemplate
 
         if (!empty($dataPemisahan['id_pengambilan_darah'])) {
             $modelPengambilan = new \App\Features\Donor\PengambilanDarah\PengambilanDarahModel();
-            $rawPengambilan   = $modelPengambilan->find($dataPemisahan['id_pengambilan_darah']) ?? [];
+            $rawPengambilan   = $modelPengambilan->find((int) $dataPemisahan['id_pengambilan_darah']) ?? [];
 
             $dataPengambilan = [
                 'nomor_pengambilan' => $rawPengambilan['nomor_pengambilan'] ?? '',
@@ -461,11 +507,11 @@ final class PemisahanKomponenController extends ControllerTemplate
 
         if (!empty($dataPemisahan['id_petugas'])) {
             $modelPetugas = new \App\Features\Role\Petugas\PetugasModel();
-            $petugasRow   = $modelPetugas->find($dataPemisahan['id_petugas']) ?? [];
+            $petugasRow   = $modelPetugas->find((int) $dataPemisahan['id_petugas']) ?? [];
 
             if (!empty($petugasRow['id_orang'])) {
                 $modelOrangPetugas = new \App\Features\Person\Orang\OrangModel();
-                $orangPetugasRow   = $modelOrangPetugas->find($petugasRow['id_orang']) ?? [];
+                $orangPetugasRow   = $modelOrangPetugas->find((int) $petugasRow['id_orang']) ?? [];
 
                 if (isset($orangPetugasRow['nama'])) {
                     $dataPetugas['nama_petugas'] = $orangPetugasRow['nama'];
@@ -473,32 +519,43 @@ final class PemisahanKomponenController extends ControllerTemplate
             }
         }
 
-        $komponenTerpilih = $this->model->getHasilPemisahan($id);
-
-        $bhpMedis     = $this->model->getBhpMedisDetail($id);
-        $bhpPenunjang = $this->model->getBhpPenunjangDetail($id);
+        $pemisahanKomponenModel = new PemisahanKomponenModel();
+        $komponenTerpilih       = $pemisahanKomponenModel->getHasilPemisahan($id);
+        $bhpMedis               = $pemisahanKomponenModel->getBhpMedisDetail($id);
+        $bhpPenunjang           = $pemisahanKomponenModel->getBhpPenunjangDetail($id);
 
         $baris = array_merge($dataPengambilan, $dataPemisahan, $dataPetugas);
 
         $konfigPemisahan = $this->get_fields_with_options(false, true);
 
-        foreach ($konfigPemisahan as $field) {
-            $colName = $field[2];
-            $options = $field[5] ?? [];
+        /** @var list<array<int, mixed>> $fieldsList */
+        $fieldsList = array_values(array_filter($konfigPemisahan, 'is_array'));
+
+        foreach ($fieldsList as $field) {
+            if (!isset($field[2])) {
+                continue;
+            }
+
+            $colName = (string) $field[2];
+            $options = is_array($field[5] ?? null) ? $field[5] : [];
 
             if (!empty($options) && isset($baris[$colName])) {
-                $idMentah = $baris[$colName];
-                foreach ($options as $opt) {
-                    if ((string) $opt[1] === (string) $idMentah) {
-                        $baris[$colName] = $opt[0];
+                $idMentah = (string) $baris[$colName];
+
+                /** @var list<array<int, mixed>> $optionsList */
+                $optionsList = array_values(array_filter($options, 'is_array'));
+
+                foreach ($optionsList as $opt) {
+                    if ((string) ($opt[1] ?? '') === $idMentah) {
+                        $baris[$colName] = $opt[0] ?? '';
                         break;
                     }
                 }
             }
         }
 
-        foreach ($baris as $key => $value) {
-            if ($value === null) {
+        foreach (array_keys($baris) as $key) {
+            if ($baris[$key] === null) {
                 $baris[$key] = '';
             }
         }

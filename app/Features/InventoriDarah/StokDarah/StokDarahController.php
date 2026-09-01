@@ -6,6 +6,7 @@ namespace App\Features\InventoriDarah\StokDarah;
 use App\Core\Controller\ActionType as A;
 use App\Core\Controller\ControllerTemplate;
 use App\Core\Controller\InputType as I;
+use CodeIgniter\Exceptions\ModelException;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 
@@ -49,6 +50,7 @@ final class StokDarahController extends ControllerTemplate
     #[\Override]
     protected function before_read(): void
     {
+        /** @mago-expect analysis:non-documented-method */
         $this->model->updateStatusKadaluarsa(date('Y-m-d'));
         $this->model->set_order('tanggal_kadaluarsa', 'ASC');
     }
@@ -57,7 +59,7 @@ final class StokDarahController extends ControllerTemplate
      * OVERRIDE: Menampilkan Halaman Utama Data Stok Darah
      */
     #[\Override]
-    public function index(): string
+    public function index(): string|RedirectResponse
     {
         $this->filters = [
             'karantina'     => 'Karantina',
@@ -66,9 +68,13 @@ final class StokDarahController extends ControllerTemplate
             'terdistribusi' => 'Terdistribusi',
         ];
 
-        $this->active_filter = $this->request->getGet('filter') ?: null;
+        /** @var null|string $filter */
+        $filter = $this->request->getGet('filter') ?: null;
+
+        $this->active_filter = $filter;
 
         if ($this->active_filter !== null && array_key_exists($this->active_filter, $this->filters)) {
+            /** @mago-expect analysis:non-documented-method */
             $this->model->applyFilter($this->active_filter);
         }
 
@@ -113,7 +119,8 @@ final class StokDarahController extends ControllerTemplate
     #[\Override]
     final public function create(): string|RedirectResponse
     {
-        $dataStok                   = $this->request->getPost();
+        /** @var array<string, mixed> $dataStok */
+        $dataStok = $this->request->getPost();
         $dataStok['id_status_stok'] = 2;
 
         $this->model->db->transStart();
@@ -143,13 +150,13 @@ final class StokDarahController extends ControllerTemplate
      * OVERRIDE: Menampilkan Halaman Ubah Data Stok Darah
      */
     #[\Override]
-    final public function update_page(int|string $id): string
+    final public function update_page(int|string $id): string|RedirectResponse
     {
         if ($id == 0)
             return $this->index();
 
         $baris = $this->model->find($id);
-        if (!$baris) {
+        if (!is_array($baris)) {
             $baris = [];
         }
 
@@ -187,12 +194,15 @@ final class StokDarahController extends ControllerTemplate
             return $this->index();
 
         $dataLama = $this->model->find($id);
-        if (!$dataLama) {
+        if (!is_array($dataLama)) {
             session()->setFlashdata('error', 'Gagal memperbarui. Data stok darah tidak ditemukan.');
             return redirect()->to($this->get_uri_path() . '/data');
         }
 
-        $dataStok                   = $this->request->getPost();
+        /** @var array{id_status_stok: mixed} $dataLama */
+        
+        /** @var array<string, mixed> $dataStok */
+        $dataStok = $this->request->getPost();
         $dataStok['id_status_stok'] = $dataLama['id_status_stok'];
 
         $this->model->db->transStart();
@@ -221,33 +231,47 @@ final class StokDarahController extends ControllerTemplate
     /**
      * Menampilkan Halaman Detail Stok Darah
      */
-    public function detail(int|string $id): string
+    public function detail(int|string $id): string|RedirectResponse
     {
         if ($id == 0)
             return $this->index();
 
         $dataStok = $this->model->find($id);
+        if (!is_array($dataStok)) {
+            $dataStok = [];
+        }
 
         $baris        = $dataStok;
         $konfigFields = $this->get_fields_with_options(false, true);
 
-        foreach ($konfigFields as $field) {
-            $colName = $field[2];
-            $options = $field[5] ?? [];
+        /** @var list<array<int, mixed>> $fieldsList */
+        $fieldsList = array_values(array_filter($konfigFields, 'is_array'));
+
+        foreach ($fieldsList as $field) {
+            if (!isset($field[2])) {
+                continue;
+            }
+
+            $colName = (string) $field[2];
+            $options = is_array($field[5] ?? null) ? $field[5] : [];
 
             if (!empty($options) && isset($baris[$colName])) {
-                $idMentah = $baris[$colName];
-                foreach ($options as $opt) {
-                    if ((string) $opt[1] === (string) $idMentah) {
-                        $baris[$colName] = $opt[0];
+                $idMentah = (string) $baris[$colName];
+
+                /** @var list<array<int, mixed>> $optionsList */
+                $optionsList = array_values(array_filter($options, 'is_array'));
+
+                foreach ($optionsList as $opt) {
+                    if ((string) ($opt[1] ?? '') === $idMentah) {
+                        $baris[$colName] = $opt[0] ?? '';
                         break;
                     }
                 }
             }
         }
 
-        foreach ($baris as $key => $value) {
-            if ($value === null) {
+        foreach (array_keys($baris) as $key) {
+            if ($baris[$key] === null) {
                 $baris[$key] = '';
             }
         }
@@ -266,15 +290,22 @@ final class StokDarahController extends ControllerTemplate
 
     /**
      * Menampilkan data modal stok darah
+     * 
+     * @throws ModelException
      */
     public function list(): ResponseInterface
     {
-        $hariIni = date('Y-m-d');
-        $data    = $this->model->get_stok_siap_pakai($hariIni);
+        $hariIni        = date('Y-m-d');
+        $stokDarahModel = new StokDarahModel();
+        $data           = $stokDarahModel->get_stok_siap_pakai($hariIni);
 
         foreach ($data as &$row) {
-            $row['tanggal_kadaluarsa'] = date('d-m-Y', strtotime($row['tanggal_kadaluarsa']));
+            $timestamp = strtotime((string) ($row['tanggal_kadaluarsa'] ?? ''));
+            if ($timestamp !== false) {
+                $row['tanggal_kadaluarsa'] = date('d-m-Y', $timestamp);
+            }
         }
+        unset($row);
 
         return $this->response->setJSON([
             'data' => $data,
