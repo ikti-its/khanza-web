@@ -5,6 +5,7 @@ namespace App\Features\LogistikUTD\PengambilanPenunjang;
 
 use App\Core\Model\ModelTemplate;
 use App\Core\Model\ValidationType as V;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 
 final class PengambilanPenunjangModel extends ModelTemplate
 {
@@ -31,12 +32,14 @@ final class PengambilanPenunjangModel extends ModelTemplate
     /**
      * Mengambil katalog barang non medis beserta akumulasi total mutasi masuk, penggunaan, dan rusak
      * @return list<array<string, mixed>>
+     * 
+     * @throws DatabaseException
      */
     public function get_katalog_dan_stok_ruangan(): array
     {
         $tabelMasterBarang = 'inventori_non_medis.barang';
 
-        return $this->db
+        $query = $this->db
             ->table($tabelMasterBarang)
             ->select(
                 $tabelMasterBarang
@@ -75,7 +78,11 @@ final class PengambilanPenunjangModel extends ModelTemplate
             ->select('(SELECT COALESCE(SUM(pr.jumlah), 0) 
                   FROM logistik_utd.penunjang_rusak_detail pr
                   WHERE pr.id_barang = ' . $tabelMasterBarang . '.id_barang) AS total_rusak')
-            ->get()
-            ->getResultArray();
+            ->get();
+        
+        /** @var list<array<string, mixed>> $data */
+        $data = $query !== false ? $query->getResultArray() : [];
+
+        return $data;
     }
 }
